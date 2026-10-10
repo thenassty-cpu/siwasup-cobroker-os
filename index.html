@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Siwasup Co-Broker Demo - ศิวาทรัพย์ แอสเซท</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Tahoma&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Kanit', 'Tahoma', sans-serif; -webkit-tap-highlight-color: transparent; }
+    .badge-fomo { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .75; } }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-800 pb-20">
+
+  <!-- Mobile Container (Max 480px like LINE in-app browser) -->
+  <div class="max-w-md mx-auto bg-white min-h-screen shadow-lg relative flex flex-col">
+    
+    <!-- Top Header & View Toggle -->
+    <header class="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
+      <div class="bg-gradient-to-r from-red-600 to-red-800 text-white px-4 py-2.5 flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <div class="w-7 h-7 bg-white rounded-full flex items-center justify-center text-red-600 font-bold text-xs">S</div>
+          <div>
+            <h1 class="text-sm font-semibold leading-tight">ศิวาทรัพย์ แอสเซท</h1>
+            <p class="text-[10px] text-red-100">Co-Broker & Renovation Hub</p>
+          </div>
+        </div>
+        <span class="text-[11px] bg-red-900 bg-opacity-60 px-2 py-0.5 rounded-full border border-red-400">LINE LIFF</span>
+      </div>
+
+      <!-- Mode Switcher (The 3-Way Magic Feature) -->
+      <div class="bg-amber-50 p-2 border-b border-amber-200">
+        <div class="flex items-center justify-between text-xs mb-1">
+          <span class="font-medium text-amber-900 flex items-center gap-1">
+            <span id="mode-icon">👑</span> กำลังดูในโหมด: <strong id="mode-text" class="text-purple-700 underline">เจ้าของ/แอดมิน (บัว & กูล)</strong>
+          </span>
+          <span class="text-[10px] text-gray-500">จำลองสลับ 3 มุมมอง</span>
+        </div>
+        <div class="grid grid-cols-3 gap-1 bg-amber-200 bg-opacity-60 p-1 rounded-lg text-[11px]">
+          <button id="btn-owner-mode" onclick="setMode('owner')" class="py-1.5 font-bold rounded-md transition-all bg-purple-700 text-white shadow text-center">
+            👑 เจ้าของ (บัว&กูล)
+          </button>
+          <button id="btn-agent-mode" onclick="setMode('agent')" class="py-1.5 font-medium rounded-md transition-all text-gray-700 hover:text-gray-900 text-center">
+            👔 เอเจนต์ (คอม 5%)
+          </button>
+          <button id="btn-client-mode" onclick="setMode('client')" class="py-1.5 font-medium rounded-md transition-all text-gray-700 hover:text-gray-900 text-center">
+            👤 ลูกค้า (ปิดเบอร์)
+          </button>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex gap-2 overflow-x-auto px-3 py-2 scrollbar-none text-xs bg-gray-50 border-b border-gray-200">
+        <button onclick="filterCategory('all')" class="cat-pill active px-3 py-1 rounded-full bg-gray-800 text-white font-medium whitespace-nowrap">ทั้งหมด (<span id="count-all">0</span>)</button>
+        <button onclick="filterCategory('ทาวน์โฮม')" class="cat-pill px-3 py-1 rounded-full bg-gray-200 text-gray-700 font-medium whitespace-nowrap">ทาวน์โฮม</button>
+        <button onclick="filterCategory('คอนโด')" class="cat-pill px-3 py-1 rounded-full bg-gray-200 text-gray-700 font-medium whitespace-nowrap">คอนโด</button>
+        <button onclick="filterCategory('บ้านเดี่ยว')" class="cat-pill px-3 py-1 rounded-full bg-gray-200 text-gray-700 font-medium whitespace-nowrap">บ้านเดี่ยว</button>
+        <button onclick="filterCategory('ที่ดิน')" class="cat-pill px-3 py-1 rounded-full bg-gray-200 text-gray-700 font-medium whitespace-nowrap">ที่ดิน</button>
+      </div>
+    </header>
+
+    <!-- Property Cards Stream -->
+    <main class="p-3 space-y-4 flex-1" id="property-list">
+      <!-- Loading state or injected by JS -->
+      <div class="text-center py-10 text-gray-400">กำลังโหลดคลังทรัพย์ศิวาทรัพย์...</div>
+    </main>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center border-b pb-2">
+          <h3 class="font-bold text-base text-gray-800 flex items-center gap-1.5">
+            📝 แจ้งหลักฐานการจอง (วางมัดจำ)
+          </h3>
+          <button onclick="closeBookingModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+        </div>
+        <div id="booking-property-info" class="bg-gray-50 p-2.5 rounded-lg text-xs space-y-1"></div>
+        <form onsubmit="handleBookingSubmit(event)" class="space-y-3 text-xs">
+          <div>
+            <label class="block font-medium mb-1">ชื่อเอเจนต์ผู้พาจอง <span class="text-red-500">*</span></label>
+            <input type="text" required placeholder="เช่น คุณกานต์ หรือ บัวไหล" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 outline-none">
+          </div>
+          <div>
+            <label class="block font-medium mb-1">เบอร์โทรเอเจนต์ <span class="text-red-500">*</span></label>
+            <input type="tel" required placeholder="08x-xxx-xxxx" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 outline-none">
+          </div>
+          <div>
+            <label class="block font-medium mb-1">ชื่อลูกค้าผู้จอง <span class="text-red-500">*</span></label>
+            <input type="text" required placeholder="เช่น คุณสมชาย (นัดทำสัญญา 15 ต.ค.)" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 outline-none">
+          </div>
+          <div>
+            <label class="block font-medium mb-1">แนบสลิปเงินมัดจำ (เข้าบัญชีเจี๊ยบ) <span class="text-red-500">*</span></label>
+            <input type="file" accept="image/*" class="w-full border rounded-lg p-2 bg-gray-50">
+            <p class="text-[10px] text-gray-400 mt-0.5">ยอดมัดจำขั้นต่ำ 10,000 บาท</p>
+          </div>
+          <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-sm shadow">
+            ยืนยันส่งข้อมูลให้แอดมิน (เจี๊ยบ/บัว) ตรวจสอบ
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Admin Notification Toast (Simulate 1-Click Approval) -->
+    <div id="admin-toast" class="hidden fixed top-4 inset-x-4 max-w-sm mx-auto z-50 bg-gray-900 text-white p-3 rounded-xl shadow-2xl border border-gray-700 text-xs space-y-2">
+      <div class="flex items-center justify-between font-bold text-emerald-400">
+        <span>🔔 แจ้งเตือนแอดมิน (เจี๊ยบ/บัว)</span>
+        <span class="text-[10px] text-gray-400">เมื่อสักครู่</span>
+      </div>
+      <p id="admin-toast-body" class="text-gray-200 text-[11px]"></p>
+      <div class="flex gap-2 pt-1">
+        <button onclick="adminApproveBooking()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 rounded text-center">
+          ✅ กดอนุมัติการจอง (1-Click)
+        </button>
+        <button onclick="document.getElementById('admin-toast').classList.add('hidden')" class="px-3 bg-gray-700 text-gray-300 rounded">
+          ปิด
+        </button>
+      </div>
+    </div>
+
+    <!-- Copy Share Toast -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-4 py-2 rounded-full shadow-lg opacity-0 transition-opacity pointer-events-none z-50">
+      ก๊อปปี้ลิงก์ White-Label เรียบร้อย!
+    </div>
+
+  </div>
+
+  <script src="siwasup_all_properties.js"></script>
+  <script>
+    let currentMode = 'agent';
+    let currentCategory = 'all';
+    let allProperties = [];
+    let pendingBookingId = null;
+
+    // Load data from JS bundle or fetch or fallback
+    async function loadProperties() {
+      if (window.SIWASUP_PROPERTIES && window.SIWASUP_PROPERTIES.length > 0) {
+        allProperties = window.SIWASUP_PROPERTIES;
+      } else {
+        try {
+          const resp = await fetch('siwasup_all_properties.json');
+          if (resp.ok) {
+            allProperties = await resp.json();
+          }
+        } catch (e) {
+          console.log("Using fallback sample properties");
+        }
+      }
+
+      if (!allProperties || allProperties.length === 0) {
+        // High quality fallback samples from Siwasup real assets
+        allProperties = [
+          {
+            id: "patio-bangyai",
+            title: "ทาวน์โฮม 3 ชั้น พาทิโอ กาญจนาภิเษก-บางใหญ่",
+            category: "ทาวน์โฮม",
+            price: "3,590,000 บาท",
+            main_image: "https://www.allabout-assets.com/images/banner/crop-1753250280224.jpg",
+            description: "รีโนเวทใหม่ทั้งหลัง พร้อมอยู่ 3 ห้องนอน 3 ห้องน้ำ 2 ที่จอดรถ เนื้อที่ 18.5 ตร.ว. พื้นที่ใช้สอย 143.5 ตร.ม. สุขภัณฑ์ใหม่ แอร์ครบ ทำเลติดถนนใหญ่ ใกล้ MRT",
+            status: "available",
+            commission: "5% (179,500 บาท)"
+          },
+          {
+            id: "1334412",
+            title: "คอนโด IDEO พระราม 9 - อโศก",
+            category: "คอนโด",
+            price: "11,000,000 บาท",
+            main_image: "https://www.allabout-assets.com/images/banner/crop-1753242466424.png",
+            description: "ห้องสวย ชั้นสูง วิวเมืองสุดหรู ติด MRT พระราม 9 และเซ็นทรัลพระราม 9 เหมาะทั้งอยู่เองและปล่อยเช่าผลตอบแทนสูง",
+            status: "available",
+            commission: "5% (550,000 บาท)"
+          },
+          {
+            id: "fahpiyaram-klong6",
+            title: "ทาวน์เฮ้าส์ 2 ชั้น ฟ้าปิยรมย์ ลำลูกกา คลอง 6",
+            category: "ทาวน์โฮม",
+            price: "1,690,000 บาท",
+            main_image: "https://www.allabout-assets.com/images/banner/crop-1753242466429.png",
+            description: "เนื้อที่ 18 ตร.ว. รีโนเวทใหม่ทั้งหลัง ทาสีใหม่ ปูกระเบื้องใหม่ ต่อเติมโรงรถและครัวเรียบร้อย ผ่อนสบายล้านละ 3,xxx บาท",
+            status: "available",
+            commission: "5% (84,500 บาท)"
+          }
+        ];
+      }
+
+      document.getElementById('count-all').textContent = allProperties.length;
+      renderProperties();
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      const btnOwner = document.getElementById('btn-owner-mode');
+      const btnAgent = document.getElementById('btn-agent-mode');
+      const btnClient = document.getElementById('btn-client-mode');
+      const modeText = document.getElementById('mode-text');
+      const modeIcon = document.getElementById('mode-icon');
+
+      btnOwner.className = "py-1.5 font-medium rounded-md transition-all text-gray-700 hover:text-gray-900 text-center text-[11px]";
+      btnAgent.className = "py-1.5 font-medium rounded-md transition-all text-gray-700 hover:text-gray-900 text-center text-[11px]";
+      btnClient.className = "py-1.5 font-medium rounded-md transition-all text-gray-700 hover:text-gray-900 text-center text-[11px]";
+
+      if (mode === 'owner') {
+        btnOwner.className = "py-1.5 font-bold rounded-md transition-all bg-purple-700 text-white shadow text-center text-[11px]";
+        modeText.textContent = "เจ้าของ/แอดมิน (บัว & กูล)";
+        modeText.className = "text-purple-700 underline";
+        modeIcon.textContent = "👑";
+      } else if (mode === 'agent') {
+        btnAgent.className = "py-1.5 font-bold rounded-md transition-all bg-amber-500 text-gray-950 shadow text-center text-[11px]";
+        modeText.textContent = "เอเจนต์ (เห็นค่าคอม 5%)";
+        modeText.className = "text-amber-800 underline";
+        modeIcon.textContent = "👔";
+      } else {
+        btnClient.className = "py-1.5 font-bold rounded-md transition-all bg-emerald-600 text-white shadow text-center text-[11px]";
+        modeText.textContent = "ลูกค้า (White-Label ปิดเบอร์)";
+        modeText.className = "text-emerald-700 underline";
+        modeIcon.textContent = "👤";
+      }
+      renderProperties();
+    }
+
+    function updateStatus(id, newStatus) {
+      const p = allProperties.find(x => x.id === id);
+      if (p) {
+        p.status = newStatus;
+        renderProperties();
+        const statusThai = newStatus === 'available' ? 'พร้อมขาย' : (newStatus === 'booked' ? 'ติดจอง' : 'ขายแล้ว');
+        showToast(`👑 บัว/เจี๊ยบ เปลี่ยนสถานะ "${p.title}" เป็น [${statusThai}] เรียบร้อย!`);
+      }
+    }
+
+    function filterCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.cat-pill').forEach(b => {
+        b.className = "cat-pill px-3 py-1 rounded-full bg-gray-200 text-gray-700 font-medium whitespace-nowrap text-xs";
+      });
+      event.target.className = "cat-pill active px-3 py-1 rounded-full bg-gray-800 text-white font-medium whitespace-nowrap text-xs";
+      renderProperties();
+    }
+
+    function renderProperties() {
+      const container = document.getElementById('property-list');
+      const filtered = allProperties.filter(p => {
+        if (currentCategory === 'all') return true;
+        return (p.category || '').includes(currentCategory);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="text-center py-10 text-gray-400">ไม่พบทรัพย์ในหมวดหมู่นี้</div>`;
+        return;
+      }
+
+      // Count stats for Owner View
+      const totalCount = allProperties.length;
+      const bookedCount = allProperties.filter(x => x.status === 'booked').length;
+      const soldCount = allProperties.filter(x => x.status === 'sold').length;
+      const availCount = totalCount - bookedCount - soldCount;
+
+      let ownerHeaderHtml = '';
+      if (currentMode === 'owner') {
+        ownerHeaderHtml = `
+          <div class="bg-gradient-to-r from-purple-900 to-indigo-900 text-white p-3 rounded-xl shadow-md space-y-2 mb-3">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-xs flex items-center gap-1.5">
+                👑 แผงควบคุมเจ้าของ (บัว & กูล)
+              </span>
+              <span class="text-[10px] bg-purple-800 px-2 py-0.5 rounded-full border border-purple-500">Real-time Control</span>
+            </div>
+            <div class="grid grid-cols-4 gap-1.5 text-center text-[10px]">
+              <div class="bg-black bg-opacity-30 p-1.5 rounded">
+                <div class="text-gray-300">ทั้งหมด</div>
+                <div class="font-extrabold text-sm">${totalCount}</div>
+              </div>
+              <div class="bg-emerald-950 bg-opacity-60 p-1.5 rounded border border-emerald-700">
+                <div class="text-emerald-300">พร้อมขาย</div>
+                <div class="font-extrabold text-sm text-emerald-400">${availCount}</div>
+              </div>
+              <div class="bg-amber-950 bg-opacity-60 p-1.5 rounded border border-amber-700">
+                <div class="text-amber-300">ติดจอง</div>
+                <div class="font-extrabold text-sm text-amber-400">${bookedCount}</div>
+              </div>
+              <div class="bg-red-950 bg-opacity-60 p-1.5 rounded border border-red-700">
+                <div class="text-red-300">ขายแล้ว</div>
+                <div class="font-extrabold text-sm text-red-400">${soldCount}</div>
+              </div>
+            </div>
+            <p class="text-[10px] text-purple-200">
+              💡 คลิกปุ่มเปลี่ยนสถานะบนการ์ดแต่ละห้องได้ทันทีโดยไม่ต้องเปิด Excel
+            </p>
+          </div>
+        `;
+      }
+
+      container.innerHTML = ownerHeaderHtml + filtered.map(p => {
+        const isBooked = p.status === 'booked';
+        const isSold = p.status === 'sold';
+        const img = p.main_image || "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600";
+        
+        let comText = p.commission || "รับ Agent คอม 5%";
+        let comAmount = "";
+        if (p.price) {
+          const num = parseInt(p.price.replace(/[^\d]/g, ''));
+          if (num > 100000) {
+            comAmount = `${(num * 0.05).toLocaleString()} บ.`;
+            comText = `รับ Agent คอม 5% (${comAmount})`;
+          }
+        }
+
+        return `
+          <div class="bg-white rounded-xl overflow-hidden border border-gray-200 shadow-sm transition-all hover:shadow-md">
+            
+            <!-- Image & Badges -->
+            <div class="relative h-48 bg-gray-200 overflow-hidden">
+              <img src="${img}" alt="${p.title}" class="w-full h-full object-cover">
+              
+              <!-- Category Badge -->
+              <div class="absolute top-2.5 left-2.5 bg-black bg-opacity-70 text-white text-[10px] font-semibold px-2 py-0.5 rounded">
+                ${p.category || 'อสังหาฯ'}
+              </div>
+
+              <!-- Status Badge -->
+              ${isSold ? `
+                <div class="absolute top-2.5 right-2.5 bg-red-600 text-white text-[11px] font-bold px-2.5 py-0.5 rounded shadow">
+                  🔴 ขายแล้ว (Sold Out)
+                </div>
+              ` : isBooked ? `
+                <div class="absolute top-2.5 right-2.5 bg-amber-500 text-white text-[11px] font-bold px-2.5 py-0.5 rounded shadow badge-fomo">
+                  🟠 ติดจองแล้ว (Under Contract)
+                </div>
+              ` : `
+                <div class="absolute top-2.5 right-2.5 bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-0.5 rounded shadow">
+                  🟢 พร้อมขาย
+                </div>
+              `}
+
+              ${currentMode === 'agent' ? `
+                <div class="absolute bottom-2 left-2 right-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-gray-950 font-bold px-2.5 py-1 rounded text-xs shadow flex items-center justify-between">
+                  <span>💰 ${comText}</span>
+                  <span class="text-[10px] bg-black bg-opacity-15 px-1.5 py-0.5 rounded font-normal">รวมโอน</span>
+                </div>
+              ` : ''}
+
+              ${currentMode === 'owner' ? `
+                <div class="absolute bottom-2 left-2 right-2 bg-purple-950 bg-opacity-90 text-purple-200 text-[10px] px-2.5 py-1 rounded shadow flex items-center justify-between">
+                  <span>💰 เตรียมจ่ายคอม 5%: <strong class="text-amber-400 font-bold">${comAmount || '5%'}</strong></span>
+                  <span>👁️ เอเจนต์ดู 28 คน</span>
+                </div>
+              ` : ''}
+            </div>
+
+            <!-- Content -->
+            <div class="p-3.5 space-y-2">
+              <h3 class="font-bold text-sm text-gray-900 leading-snug line-clamp-2">${p.title}</h3>
+              <p class="text-xs text-gray-500 line-clamp-2">${p.description || 'สเปกห้องและทำเลทอง สนใจนัดชมล่วงหน้าได้เลย'}</p>
+              
+              <div class="flex items-baseline justify-between pt-1 border-t border-gray-100">
+                <span class="text-[11px] text-gray-500">ราคาขายพิเศษ</span>
+                <span class="text-base font-extrabold text-red-600">${p.price || 'ติดต่อสอบถาม'}</span>
+              </div>
+
+              <!-- ACTION BUTTONS ACCORDING TO 3 MODES -->
+              <div class="pt-2">
+                ${currentMode === 'owner' ? `
+                  <!-- 👑 OWNER CONTROLS (BUA & GOOL) -->
+                  <div class="bg-purple-50 p-2.5 rounded-lg border border-purple-200 space-y-2">
+                    <div class="text-[11px] font-bold text-purple-900 flex justify-between">
+                      <span>🎛️ เปลี่ยนสถานะห้อง (1-Click):</span>
+                      <span class="text-purple-600 font-normal">บัว/เจี๊ยบ กดได้เลย</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-1">
+                      <button onclick="updateStatus('${p.id}', 'available')" class="py-1 px-1 rounded text-[10px] font-bold ${!isBooked && !isSold ? 'bg-emerald-600 text-white shadow' : 'bg-white text-gray-700 border border-gray-300'}">
+                        🟢 พร้อมขาย
+                      </button>
+                      <button onclick="updateStatus('${p.id}', 'booked')" class="py-1 px-1 rounded text-[10px] font-bold ${isBooked ? 'bg-amber-500 text-white shadow' : 'bg-white text-gray-700 border border-gray-300'}">
+                        🟠 ติดจอง
+                      </button>
+                      <button onclick="updateStatus('${p.id}', 'sold')" class="py-1 px-1 rounded text-[10px] font-bold ${isSold ? 'bg-red-600 text-white shadow' : 'bg-white text-gray-700 border border-gray-300'}">
+                        🔴 ขายแล้ว
+                      </button>
+                    </div>
+                    <div class="flex gap-1.5 pt-1">
+                      <a href="${p.url || '#'}" target="_blank" class="flex-1 bg-white hover:bg-gray-100 text-gray-800 text-[10px] font-medium py-1 px-2 rounded border border-gray-300 text-center">
+                        📂 ดูรูปเดิมในเว็บ
+                      </a>
+                      <button onclick="showToast('เชื่อมต่อ Google Drive คลังรูปของบัว')" class="flex-1 bg-white hover:bg-gray-100 text-gray-800 text-[10px] font-medium py-1 px-2 rounded border border-gray-300 text-center">
+                        📁 โฟลเดอร์ Drive
+                      </button>
+                    </div>
+                  </div>
+                ` : currentMode === 'agent' ? `
+                  <!-- 👔 AGENT ACTIONS -->
+                  <div class="space-y-1.5">
+                    <div class="grid grid-cols-2 gap-1.5">
+                      <button onclick="shareWhiteLabel('${p.id}', '${p.title}')" class="bg-gray-900 hover:bg-black text-white text-[11px] font-semibold py-2 px-2 rounded-lg flex items-center justify-center gap-1 shadow-sm">
+                        <span>🔗</span> แชร์ให้ลูกค้า (ตัดเบอร์)
+                      </button>
+                      <a href="${p.url || '#'}" target="_blank" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-semibold py-2 px-2 rounded-lg flex items-center justify-center gap-1 text-center border border-gray-300">
+                        <span>📷</span> ขอรูปดิบ High-Res
+                      </a>
+                    </div>
+                    ${!isBooked && !isSold ? `
+                      <button onclick="openBookingModal('${p.id}', '${p.title}', '${p.price}')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 rounded-lg flex items-center justify-center gap-1 shadow">
+                        <span>📝</span> แจ้งวางเงินจอง (ส่งสลิปให้เจี๊ยบ/บัว)
+                      </button>
+                    ` : `
+                      <button class="w-full bg-gray-200 text-gray-500 text-xs font-medium py-2 rounded-lg cursor-not-allowed">
+                        🔒 ${isSold ? 'ขายแล้ว' : 'ติดจองแล้ว (คลิกเพื่อลงชื่อต่อคิวสำรอง)'}
+                      </button>
+                    `}
+                  </div>
+                ` : `
+                  <!-- 👤 CLIENT ACTIONS (WHITE-LABEL: NO CONTACT OF SIWASUP!) -->
+                  <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-2 text-center">
+                    <p class="text-[11px] text-emerald-800 font-medium mb-1">สนใจห้องนี้ หรือต้องการนัดหมายชมห้องจริง</p>
+                    <a href="tel:0891786351" class="w-full inline-block bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 rounded-lg shadow text-center">
+                      📞 ติดต่อเอเจนต์ดูแลห้องนี้ทันที
+                    </a>
+                  </div>
+                `}
+              </div>
+
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    function shareWhiteLabel(id, title) {
+      const dummyUrl = window.location.href.split('?')[0] + `?view=client&prop=${id}`;
+      navigator.clipboard.writeText(dummyUrl).then(() => {
+        showToast(`ก๊อปปี้ลิงก์ White-Label ของ "${title}" เรียบร้อย!`);
+      }).catch(() => {
+        showToast(`ลิงก์ถูกสร้างแล้ว: ${dummyUrl}`);
+      });
+    }
+
+    function openBookingModal(id, title, price) {
+      pendingBookingId = id;
+      document.getElementById('booking-property-info').innerHTML = `
+        <div class="font-bold text-gray-800">${title}</div>
+        <div class="text-red-600 font-semibold">${price}</div>
+      `;
+      document.getElementById('booking-modal').classList.remove('hidden');
+    }
+
+    function closeBookingModal() {
+      document.getElementById('booking-modal').classList.add('hidden');
+    }
+
+    function handleBookingSubmit(e) {
+      e.preventDefault();
+      closeBookingModal();
+      
+      const prop = allProperties.find(p => p.id === pendingBookingId);
+      const propTitle = prop ? prop.title : "ห้องนี้";
+
+      // Show Admin notification toast (Simulate what Jeab/Bua sees in LINE)
+      document.getElementById('admin-toast-body').innerHTML = `
+        มีสลิปเงินมัดจำส่งเข้ามาสำหรับ:<br>
+        <strong>${propTitle}</strong><br>
+        โดยเอเจนต์ผู้พาจอง (ยอดเงิน 10,000 บ.)
+      `;
+      document.getElementById('admin-toast').classList.remove('hidden');
+    }
+
+    function adminApproveBooking() {
+      document.getElementById('admin-toast').classList.add('hidden');
+      if (pendingBookingId) {
+        const prop = allProperties.find(p => p.id === pendingBookingId);
+        if (prop) {
+          prop.status = 'booked';
+          renderProperties();
+          showToast(`✅ เจี๊ยบ/บัว กดยืนยันแล้ว! "${prop.title}" เปลี่ยนสถานะเป็นติดจองแล้ว!`);
+        }
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.remove('opacity-0');
+      setTimeout(() => {
+        toast.classList.add('opacity-0');
+      }, 3000);
+    }
+
+    // Auto-run
+    loadProperties();
+  </script>
+</body>
+</html>
