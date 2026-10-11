@@ -51,15 +51,66 @@
         </div>
       </div>
 
-      <!-- Category Filter Pills -->
-      <div class="flex gap-2 overflow-x-auto px-3 py-2 scrollbar-none text-xs bg-gray-50 border-b border-gray-200">
-        <button onclick="filterCategory('all')" class="cat-pill active px-3 py-1 rounded-full bg-gray-800 text-white font-medium whitespace-nowrap">ทั้งหมด (<span id="count-all">0</span>)</button>
-        <button onclick="filterCategory('ทาวน์โฮม')" class="cat-pill px-3 py-1 rounded-full bg-gray-200 text-gray-700 font-medium whitespace-nowrap">ทาวน์โฮม</button>
-        <button onclick="filterCategory('คอนโด')" class="cat-pill px-3 py-1 rounded-full bg-gray-200 text-gray-700 font-medium whitespace-nowrap">คอนโด</button>
-        <button onclick="filterCategory('บ้านเดี่ยว')" class="cat-pill px-3 py-1 rounded-full bg-gray-200 text-gray-700 font-medium whitespace-nowrap">บ้านเดี่ยว</button>
-        <button onclick="filterCategory('ที่ดิน')" class="cat-pill px-3 py-1 rounded-full bg-gray-200 text-gray-700 font-medium whitespace-nowrap">ที่ดิน</button>
+      <!-- ⚡ 3-Finger Quick Filter Bar (คัดทรัพย์ด่วน 3 วินาที) -->
+      <div class="p-2.5 bg-gray-50 border-b border-gray-200 space-y-2 text-xs">
+        <!-- Search Keyword -->
+        <div class="relative">
+          <input type="text" id="search-input" oninput="applyAllFilters()" 
+                 placeholder="🔍 พิมพ์ค้นหา: ทำเล, โครงการ, #ผ่อนล้านละ3พัน..." 
+                 class="w-full bg-white border border-gray-300 rounded-lg pl-8 pr-3 py-1.5 text-xs outline-none focus:ring-2 focus:ring-amber-500 shadow-2xs">
+          <span class="absolute left-2.5 top-2 text-gray-400 text-xs">🔍</span>
+          <button id="btn-clear-search" onclick="clearFilters()" class="hidden absolute right-2.5 top-1.5 text-gray-400 hover:text-gray-600 text-xs font-bold">&times;</button>
+        </div>
+
+        <!-- 3 Quick Dropdowns -->
+        <div class="grid grid-cols-3 gap-1.5 text-[11px]">
+          <!-- 📍 ทำเล -->
+          <select id="filter-location" onchange="applyAllFilters()" class="bg-white border border-gray-300 rounded-lg p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-amber-500">
+            <option value="all">📍 ทุกทำเล</option>
+            <option value="บางใหญ่">บางใหญ่/นนทบุรี</option>
+            <option value="ลำลูกกา">ลำลูกกา/ปทุมธานี</option>
+            <option value="พระราม 9">รัชดา/พระราม 9</option>
+            <option value="บางนา">บางนา/สมุทรปราการ</option>
+            <option value="วิภาวดี">วิภาวดี/รัชโยธิน</option>
+            <option value="ลาดกระบัง">ลาดกระบัง/สุวินทวงศ์</option>
+            <option value="บางขุนเทียน">พระราม 2/บางขุนเทียน</option>
+          </select>
+
+          <!-- 💰 งบประมาณ -->
+          <select id="filter-budget" onchange="applyAllFilters()" class="bg-white border border-gray-300 rounded-lg p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-amber-500">
+            <option value="all">💰 ทุกช่วงราคา</option>
+            <option value="under2m">ต่ำกว่า 2 ล้าน</option>
+            <option value="2to3.5m">2 - 3.5 ล้าน</option>
+            <option value="3.5to5m">3.5 - 5 ล้าน</option>
+            <option value="above5m">มากกว่า 5 ล้าน</option>
+          </select>
+
+          <!-- 🏠 ประเภท -->
+          <select id="filter-category" onchange="applyAllFilters()" class="bg-white border border-gray-300 rounded-lg p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-amber-500">
+            <option value="all">🏠 ทุกประเภท</option>
+            <option value="ทาวน์โฮม">ทาวน์โฮม</option>
+            <option value="คอนโด">คอนโด</option>
+            <option value="บ้านเดี่ยว">บ้านเดี่ยว</option>
+            <option value="ที่ดิน">ที่ดิน</option>
+          </select>
+        </div>
       </div>
     </header>
+
+    <!-- VIP Micro-Catalog Banner (เมื่อลูกค้าเปิดดูมัดรวมเฉพาะบุคคล) -->
+    <div id="vip-bundle-banner" class="hidden mx-3 mt-3 bg-gradient-to-r from-amber-600 via-amber-700 to-yellow-600 text-white p-3.5 rounded-xl shadow-md text-xs space-y-1">
+      <div class="flex items-center justify-between font-bold">
+        <span class="flex items-center gap-1.5 text-sm">👑 <span id="vip-client-title">รายการทรัพย์คัดสรรเฉพาะสำหรับคุณ</span></span>
+        <span class="text-[10px] bg-black bg-opacity-25 px-2 py-0.5 rounded-full border border-amber-300">VIP Curated</span>
+      </div>
+      <p class="text-[11px] text-amber-100 leading-snug">
+        ศิวาทรัพย์ แอสเซท คัดเลือกบ้านรีโนเวทคุณภาพตรงตามความต้องการของคุณมาให้ชมโดยเฉพาะ สามารถนัดชมห้องจริงได้ทันทีค่ะ
+      </p>
+      <div class="pt-1 flex items-center justify-between text-[10px] text-amber-200">
+        <span id="vip-agent-info">ดูแลโดย: ศิวาทรัพย์ แอสเซท</span>
+        <a href="index.html" class="underline text-white font-semibold">ดูทรัพย์ทั้งหมดในระบบ &rarr;</a>
+      </div>
+    </div>
 
     <!-- Property Cards Stream -->
     <main class="p-3 space-y-4 flex-1" id="property-list">
@@ -102,6 +153,164 @@
       </div>
     </div>
 
+    <!-- Smart Share Center Modal (Omni-Channel Share) -->
+    <div id="share-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center border-b pb-2">
+          <h3 class="font-bold text-base text-gray-800 flex items-center gap-1.5">
+            🚀 Smart Share Center (เลือกช่องทางโปรโมท)
+          </h3>
+          <button onclick="closeShareModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+        </div>
+        
+        <div id="share-prop-info" class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-xs space-y-0.5"></div>
+
+        <div>
+          <label class="block font-medium text-xs mb-1 text-gray-700">
+            👤 รหัส / ชื่อเอเจนต์ของคุณ (สำหรับล็อกค่าคอม 5%):
+          </label>
+          <input type="text" id="agent-ref-input" value="AG-บัวรา" oninput="updateShareUrls()" 
+                 class="w-full border rounded-lg p-2 text-xs font-semibold focus:ring-2 focus:ring-amber-500 outline-none bg-gray-50">
+          <p class="text-[10px] text-gray-400 mt-0.5">ระบบจะฝังรหัสนี้ไว้ในลิงก์และจำไว้ในเครื่องลูกค้า 60 วัน</p>
+        </div>
+
+        <div class="space-y-2 text-xs pt-1">
+          <div class="font-bold text-gray-800 flex justify-between items-center">
+            <span>📲 กดคัดลอกลิงก์เฉพาะช่องทาง:</span>
+            <span class="text-[10px] text-emerald-600 font-normal">ระบบดักจับและล็อกสิทธิ์ให้ 100%</span>
+          </div>
+
+          <!-- Channel 1: Facebook -->
+          <div class="flex items-center justify-between p-2 rounded-lg border border-blue-200 bg-blue-50/60">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs">f</span>
+              <div>
+                <div class="font-bold text-blue-950 text-xs">Facebook (Marketplace / กลุ่ม)</div>
+                <div class="text-[10px] text-blue-700">ดักจับ Lead จากโพสต์ & แคปชั่น FB</div>
+              </div>
+            </div>
+            <button onclick="copyChannelLink('facebook')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs">
+              คัดลอกลิงก์
+            </button>
+          </div>
+
+          <!-- Channel 2: TikTok / Reels -->
+          <div class="flex items-center justify-between p-2 rounded-lg border border-gray-300 bg-gray-50">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-gray-900 text-white flex items-center justify-center font-bold text-xs">♪</span>
+              <div>
+                <div class="font-bold text-gray-950 text-xs">TikTok / Reels / Shorts</div>
+                <div class="text-[10px] text-gray-600">สำหรับแปะ Bio หรือใต้คอมเมนต์คลิป</div>
+              </div>
+            </div>
+            <button onclick="copyChannelLink('tiktok')" class="bg-gray-900 hover:bg-black text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs">
+              คัดลอกลิงก์
+            </button>
+          </div>
+
+          <!-- Channel 3: LINE -->
+          <div class="flex items-center justify-between p-2 rounded-lg border border-emerald-200 bg-emerald-50/60">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs">L</span>
+              <div>
+                <div class="font-bold text-emerald-950 text-xs">LINE (แชตส่วนตัว / กลุ่ม)</div>
+                <div class="text-[10px] text-emerald-700">ส่งต่อให้คนรู้จัก หรือกลุ่มนักลงทุน</div>
+              </div>
+            </div>
+            <button onclick="copyChannelLink('line')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs">
+              คัดลอกลิงก์
+            </button>
+          </div>
+
+          <!-- Channel 4: General Web / Forum -->
+          <div class="flex items-center justify-between p-2 rounded-lg border border-purple-200 bg-purple-50/60">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-xs">🌐</span>
+              <div>
+                <div class="font-bold text-purple-950 text-xs">เว็บบอร์ด / LivingInsider / DDprop</div>
+                <div class="text-[10px] text-purple-700">ลิงก์กลางสำหรับโพสต์ลงเว็บไซต์</div>
+              </div>
+            </div>
+            <button onclick="copyChannelLink('web')" class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs">
+              คัดลอกลิงก์
+            </button>
+          </div>
+
+          <!-- Channel 5: QR Code Generator -->
+          <div class="border border-gray-200 rounded-lg p-2.5 bg-gray-50 space-y-2 text-center">
+            <div class="flex justify-between items-center text-left">
+              <div>
+                <div class="font-bold text-gray-900 text-xs">📷 QR Code สำหรับป้ายหน้าบ้าน / ใบปลิว</div>
+                <div class="text-[10px] text-gray-500">ใครสแกนป้าย จะตกเป็นลูกค้าของคุณทันที</div>
+              </div>
+              <button onclick="toggleQrView()" class="text-xs text-amber-700 font-bold underline">
+                <span id="qr-toggle-text">เปิดดู QR</span>
+              </button>
+            </div>
+            <div id="qr-container" class="hidden pt-2 flex flex-col items-center">
+              <img id="qr-image" src="" alt="QR Code" class="w-36 h-36 border p-1 bg-white rounded-lg shadow-sm">
+              <p class="text-[10px] text-gray-500 mt-1">คลิกขวาหรือกดค้างเพื่อบันทึกรูป QR Code</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Client Call Discount Modal (Click to Call) -->
+    <div id="call-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
+      <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-3 text-center shadow-xl">
+        <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mx-auto">
+          🎁
+        </div>
+        <h3 class="font-bold text-base text-gray-900">รับสิทธิพิเศษสำหรับคุณ!</h3>
+        <p class="text-xs text-gray-600">
+          แจ้งรหัสอ้างอิงนี้กับเจ้าหน้าที่ฝ่ายขาย เพื่อรับ <strong class="text-red-600">สิทธิ์ฟรีค่าโอนกรรมสิทธิ์ / ส่วนลดพิเศษ</strong>
+        </p>
+        <div class="bg-amber-50 border-2 border-dashed border-amber-300 rounded-xl p-2.5 text-center">
+          <span class="text-[11px] text-amber-800">รหัสส่วนลดของคุณ:</span>
+          <div id="call-discount-code" class="text-xl font-extrabold text-amber-900 tracking-wider">SS-09</div>
+        </div>
+        <div class="pt-2 flex gap-2">
+          <a id="btn-actual-call" href="tel:0944629796" onclick="logCallLead()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs shadow text-center">
+            📞 โทรติดต่อเจ้าหน้าที่ทันที
+          </a>
+          <button onclick="closeCallModal()" class="px-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl text-xs">
+            ปิด
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Client Inquiry Modal (Appointment / Callback) -->
+    <div id="inquiry-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
+      <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-3 shadow-xl">
+        <div class="flex justify-between items-center border-b pb-2">
+          <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
+            📅 ขอนัดหมายเข้าชมห้องจริง / ปรึกษาสินเชื่อ
+          </h3>
+          <button onclick="closeInquiryModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+        </div>
+        <div id="inquiry-prop-info" class="bg-gray-50 p-2 rounded-lg text-xs font-medium text-gray-700"></div>
+        <form onsubmit="handleInquirySubmit(event)" class="space-y-2.5 text-xs">
+          <div>
+            <label class="block font-medium mb-1">ชื่อของคุณ <span class="text-red-500">*</span></label>
+            <input type="text" id="inquiry-name" required placeholder="เช่น คุณวิชัย" class="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div>
+            <label class="block font-medium mb-1">เบอร์โทรศัพท์ติดต่อสะดวก <span class="text-red-500">*</span></label>
+            <input type="tel" id="inquiry-phone" required placeholder="08x-xxx-xxxx" class="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div>
+            <label class="block font-medium mb-1">วันที่สะดวกเข้าชม (โดยประมาณ)</label>
+            <input type="text" id="inquiry-date" placeholder="เช่น เสาร์นี้ ช่วงบ่าย" class="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow text-xs mt-2">
+            ยืนยันส่งข้อมูลนัดหมาย
+          </button>
+        </form>
+      </div>
+    </div>
+
     <!-- Admin Notification Toast (Simulate 1-Click Approval) -->
     <div id="admin-toast" class="hidden fixed top-4 inset-x-4 max-w-sm mx-auto z-50 bg-gray-900 text-white p-3 rounded-xl shadow-2xl border border-gray-700 text-xs space-y-2">
       <div class="flex items-center justify-between font-bold text-emerald-400">
@@ -119,9 +328,74 @@
       </div>
     </div>
 
+    <!-- 📦 Instant Bundle Floating Action Bar (แสดงเมื่อติ๊กเลือกบ้าน 1 หลังขึ้นไป) -->
+    <div id="bundle-bar" class="hidden fixed bottom-0 inset-x-0 max-w-md mx-auto bg-gradient-to-r from-gray-950 via-gray-900 to-black text-white p-3 z-40 shadow-2xl flex items-center justify-between border-t-2 border-amber-500">
+      <div>
+        <div class="font-extrabold text-xs text-amber-400 flex items-center gap-1.5">
+          <span>📦</span> มัดรวมส่งลูกค้า (<span id="bundle-count">0</span> หลัง)
+        </div>
+        <div class="text-[10px] text-gray-300">สร้างหน้าเว็บ VIP + แคปชั่นส่งในไลน์</div>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button onclick="clearBundleSelection()" class="text-[11px] text-gray-400 hover:text-white px-2 py-1">
+          ล้าง
+        </button>
+        <button onclick="openBundleModal()" class="bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-gray-950 font-extrabold py-1.5 px-3 rounded-lg text-xs shadow-md">
+          ส่งลูกค้าทันที ✨
+        </button>
+      </div>
+    </div>
+
+    <!-- 📦 Instant Bundle Modal (มัดรวมส่งลูกค้า) -->
+    <div id="bundle-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center border-b pb-2">
+          <h3 class="font-bold text-base text-gray-800 flex items-center gap-1.5">
+            📦 มัดรวมส่งลูกค้า (VIP Micro-Catalog)
+          </h3>
+          <button onclick="closeBundleModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+        </div>
+
+        <div>
+          <label class="block font-medium text-xs mb-1 text-gray-700">
+            👤 ชื่อลูกค้าผู้รับ (ใส่เพื่อเพิ่มความประทับใจ VIP):
+          </label>
+          <input type="text" id="bundle-client-name" value="คุณวิชัย" oninput="updateBundlePreview()"
+                 placeholder="เช่น คุณวิชัย, คุณสมชาย" 
+                 class="w-full border rounded-lg p-2 text-xs font-semibold focus:ring-2 focus:ring-amber-500 outline-none bg-gray-50">
+        </div>
+
+        <!-- Selected Properties List Preview -->
+        <div class="space-y-1.5">
+          <div class="text-xs font-bold text-gray-800">
+            🏠 รายการทรัพย์ที่คัดสรร (<span id="bundle-modal-count">0</span> หลัง):
+          </div>
+          <div id="bundle-selected-list" class="max-h-40 overflow-y-auto space-y-1.5 pr-1"></div>
+        </div>
+
+        <!-- Generated Text Preview for LINE -->
+        <div class="space-y-1.5">
+          <div class="text-xs font-bold text-gray-800 flex justify-between items-center">
+            <span>💬 ข้อความแคปชั่นพร้อมส่งใน LINE:</span>
+            <span class="text-[10px] text-emerald-600 font-normal">จัดหน้าสวยงามพร้อมลิงก์</span>
+          </div>
+          <div class="bg-gray-100 border border-gray-300 rounded-lg p-2.5 text-[11px] text-gray-700 whitespace-pre-wrap font-sans leading-relaxed select-all" id="bundle-text-preview"></div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <button onclick="copyBundleMessage()" class="bg-gray-900 hover:bg-black text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow flex items-center justify-center gap-1">
+            <span>📋</span> คัดลอกข้อความ
+          </button>
+          <button onclick="sendBundleToLine()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow flex items-center justify-center gap-1">
+            <span>📲</span> ส่งเข้าแอป LINE
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Copy Share Toast -->
     <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-4 py-2 rounded-full shadow-lg opacity-0 transition-opacity pointer-events-none z-50">
-      ก๊อปปี้ลิงก์ White-Label เรียบร้อย!
+      ก๊อปปี้เรียบร้อย!
     </div>
 
   </div>
@@ -238,15 +512,113 @@
       renderProperties();
     }
 
+    // Filter & Bundle states
+    let selectedBundleIds = new Set();
+    let activeBundleFilter = null;
+    let activeClientName = null;
+
+    function parsePriceNumber(priceStr) {
+      if (!priceStr) return 0;
+      const num = parseInt(priceStr.replace(/[^\d]/g, ''));
+      return isNaN(num) ? 0 : num;
+    }
+
+    function applyAllFilters() {
+      renderProperties();
+    }
+
+    function clearFilters() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('filter-location').value = 'all';
+      document.getElementById('filter-budget').value = 'all';
+      document.getElementById('filter-category').value = 'all';
+      applyAllFilters();
+    }
+
+    function toggleBundleItem(id) {
+      if (selectedBundleIds.has(id)) {
+        selectedBundleIds.delete(id);
+      } else {
+        selectedBundleIds.add(id);
+      }
+      updateBundleBar();
+      renderProperties();
+    }
+
+    function updateBundleBar() {
+      const bar = document.getElementById('bundle-bar');
+      const countSpan = document.getElementById('bundle-count');
+      countSpan.textContent = selectedBundleIds.size;
+      if (selectedBundleIds.size > 0 && currentMode !== 'client') {
+        bar.classList.remove('hidden');
+      } else {
+        bar.classList.add('hidden');
+      }
+    }
+
+    function clearBundleSelection() {
+      selectedBundleIds.clear();
+      updateBundleBar();
+      renderProperties();
+    }
+
     function renderProperties() {
       const container = document.getElementById('property-list');
+      const query = (document.getElementById('search-input') ? document.getElementById('search-input').value : '').trim().toLowerCase();
+      const loc = document.getElementById('filter-location') ? document.getElementById('filter-location').value : 'all';
+      const budget = document.getElementById('filter-budget') ? document.getElementById('filter-budget').value : 'all';
+      const cat = document.getElementById('filter-category') ? document.getElementById('filter-category').value : 'all';
+
+      const btnClear = document.getElementById('btn-clear-search');
+      if (btnClear) {
+        if (query) btnClear.classList.remove('hidden');
+        else btnClear.classList.add('hidden');
+      }
+
       const filtered = allProperties.filter(p => {
-        if (currentCategory === 'all') return true;
-        return (p.category || '').includes(currentCategory);
+        // 1. VIP Bundle Filter if active
+        if (activeBundleFilter && activeBundleFilter.length > 0) {
+          if (!activeBundleFilter.includes(p.id)) return false;
+        }
+
+        // 2. Category
+        if (cat !== 'all') {
+          if (!(p.category || '').includes(cat)) return false;
+        }
+
+        // 3. Location
+        if (loc !== 'all') {
+          const haystack = ((p.title || '') + ' ' + (p.description || '') + ' ' + (p.location || '')).toLowerCase();
+          if (!haystack.includes(loc.toLowerCase())) return false;
+        }
+
+        // 4. Budget
+        if (budget !== 'all') {
+          const priceNum = parsePriceNumber(p.price);
+          if (budget === 'under2m' && priceNum > 2000000) return false;
+          if (budget === '2to3.5m' && (priceNum < 2000000 || priceNum > 3500000)) return false;
+          if (budget === '3.5to5m' && (priceNum < 3500000 || priceNum > 5000000)) return false;
+          if (budget === 'above5m' && priceNum < 5000000) return false;
+        }
+
+        // 5. Keyword search
+        if (query) {
+          const text = ((p.title || '') + ' ' + (p.description || '') + ' ' + (p.price || '') + ' ' + (p.category || '')).toLowerCase();
+          if (!text.includes(query)) return false;
+        }
+
+        return true;
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="text-center py-10 text-gray-400">ไม่พบทรัพย์ในหมวดหมู่นี้</div>`;
+        container.innerHTML = `
+          <div class="text-center py-12 text-gray-400 space-y-2">
+            <div class="text-3xl">🔍</div>
+            <div class="font-bold text-gray-600">ไม่พบทรัพย์ที่ตรงกับเงื่อนไข</div>
+            <p class="text-xs text-gray-400">ลองล้างตัวกรอง หรือค้นหาด้วยคำอื่นดูนะคะ</p>
+            <button onclick="clearFilters()" class="text-xs bg-amber-100 text-amber-800 font-bold px-3 py-1.5 rounded-lg">ล้างตัวกรองทั้งหมด</button>
+          </div>
+        `;
         return;
       }
 
@@ -294,20 +666,19 @@
       container.innerHTML = ownerHeaderHtml + filtered.map(p => {
         const isBooked = p.status === 'booked';
         const isSold = p.status === 'sold';
+        const isSelected = selectedBundleIds.has(p.id);
         const img = p.main_image || "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600";
         
         let comText = p.commission || "รับ Agent คอม 5%";
         let comAmount = "";
-        if (p.price) {
-          const num = parseInt(p.price.replace(/[^\d]/g, ''));
-          if (num > 100000) {
-            comAmount = `${(num * 0.05).toLocaleString()} บ.`;
-            comText = `รับ Agent คอม 5% (${comAmount})`;
-          }
+        const num = parsePriceNumber(p.price);
+        if (num > 100000) {
+          comAmount = `${(num * 0.05).toLocaleString()} บ.`;
+          comText = `รับ Agent คอม 5% (${comAmount})`;
         }
 
         return `
-          <div class="bg-white rounded-xl overflow-hidden border border-gray-200 shadow-sm transition-all hover:shadow-md">
+          <div class="bg-white rounded-xl overflow-hidden border ${isSelected ? 'border-amber-400 ring-2 ring-amber-400' : 'border-gray-200'} shadow-sm transition-all hover:shadow-md relative">
             
             <!-- Image & Badges -->
             <div class="relative h-48 bg-gray-200 overflow-hidden">
@@ -317,6 +688,13 @@
               <div class="absolute top-2.5 left-2.5 bg-black bg-opacity-70 text-white text-[10px] font-semibold px-2 py-0.5 rounded">
                 ${p.category || 'อสังหาฯ'}
               </div>
+
+              <!-- Bundle Select Button (for Agent & Owner) -->
+              ${currentMode !== 'client' ? `
+                <button onclick="toggleBundleItem('${p.id}')" class="absolute top-2.5 left-20 z-10 text-[10px] font-bold px-2 py-0.5 rounded shadow flex items-center gap-1 transition-all ${isSelected ? 'bg-amber-400 text-gray-950 ring-2 ring-white scale-105' : 'bg-white/90 hover:bg-white text-gray-800'}">
+                  <span>${isSelected ? '✓ ในมัดรวม' : '+ มัดรวม'}</span>
+                </button>
+              ` : ''}
 
               <!-- Status Badge -->
               ${isSold ? `
@@ -391,8 +769,8 @@
                   <!-- 👔 AGENT ACTIONS -->
                   <div class="space-y-1.5">
                     <div class="grid grid-cols-2 gap-1.5">
-                      <button onclick="shareWhiteLabel('${p.id}', '${p.title}')" class="bg-gray-900 hover:bg-black text-white text-[11px] font-semibold py-2 px-2 rounded-lg flex items-center justify-center gap-1 shadow-sm">
-                        <span>🔗</span> แชร์ให้ลูกค้า (ตัดเบอร์)
+                      <button onclick="openSmartShare('${p.id}', '${p.title}')" class="bg-gradient-to-r from-gray-900 to-black hover:from-black hover:to-gray-900 text-white text-[11px] font-bold py-2 px-2 rounded-lg flex items-center justify-center gap-1 shadow-sm">
+                        <span>🚀</span> แชร์เลือกช่องทาง (FB/TikTok/LINE)
                       </button>
                       <a href="${p.url || '#'}" target="_blank" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-semibold py-2 px-2 rounded-lg flex items-center justify-center gap-1 text-center border border-gray-300">
                         <span>📷</span> ขอรูปดิบ High-Res
@@ -409,12 +787,20 @@
                     `}
                   </div>
                 ` : `
-                  <!-- 👤 CLIENT ACTIONS (WHITE-LABEL: NO CONTACT OF SIWASUP!) -->
-                  <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-2 text-center">
-                    <p class="text-[11px] text-emerald-800 font-medium mb-1">สนใจห้องนี้ หรือต้องการนัดหมายชมห้องจริง</p>
-                    <a href="tel:0891786351" class="w-full inline-block bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 rounded-lg shadow text-center">
-                      📞 ติดต่อเอเจนต์ดูแลห้องนี้ทันที
-                    </a>
+                  <!-- 👤 CLIENT ACTIONS (OMNI-CHANNEL LEAD CAPTURE) -->
+                  <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-2.5 space-y-1.5 text-center">
+                    <p class="text-[11px] text-emerald-900 font-semibold">สนใจห้องนี้ หรือต้องการนัดหมายชมห้องจริง</p>
+                    <div class="grid grid-cols-2 gap-1.5 pt-0.5">
+                      <button onclick="contactViaLine('${p.id}', '${p.title}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold py-2 px-1 rounded-lg shadow-xs flex items-center justify-center gap-1 text-center">
+                        <span>📱</span> ทัก LINE นัดหมาย
+                      </button>
+                      <button onclick="openCallModal('${p.id}', '${p.title}')" class="bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold py-2 px-1 rounded-lg shadow-xs flex items-center justify-center gap-1 text-center">
+                        <span>📞</span> โทรรับสิทธิ์พิเศษ
+                      </button>
+                    </div>
+                    <button onclick="openInquiryModal('${p.id}', '${p.title}', '${p.price}')" class="w-full bg-white hover:bg-emerald-100 text-emerald-800 text-[10px] font-semibold py-1.5 rounded border border-emerald-300 shadow-2xs">
+                      📅 ขอนัดหมายเข้าชมห้องจริง / ปรึกษาสินเชื่อ
+                    </button>
                   </div>
                 `}
               </div>
@@ -426,15 +812,138 @@
       }).join('');
     }
 
-    function shareWhiteLabel(id, title) {
-      const dummyUrl = window.location.href.split('?')[0] + `?view=client&prop=${id}`;
-      navigator.clipboard.writeText(dummyUrl).then(() => {
-        showToast(`ก๊อปปี้ลิงก์ White-Label ของ "${title}" เรียบร้อย!`);
+    // --- SMART SHARE CENTER FUNCTIONS ---
+    let currentShareProp = null;
+
+    function openSmartShare(id, title) {
+      currentShareProp = { id, title };
+      const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'AG-บัวรา';
+      document.getElementById('agent-ref-input').value = savedRef;
+      document.getElementById('share-prop-info').innerHTML = `
+        <div class="font-bold text-gray-900">🏠 ${title}</div>
+        <div class="text-[10px] text-gray-600">รหัสทรัพย์: <span class="font-mono text-amber-800 font-bold">${id}</span></div>
+      `;
+      document.getElementById('qr-container').classList.add('hidden');
+      document.getElementById('qr-toggle-text').textContent = "เปิดดู QR";
+      document.getElementById('share-modal').classList.remove('hidden');
+      updateShareUrls();
+    }
+
+    function closeShareModal() {
+      document.getElementById('share-modal').classList.add('hidden');
+    }
+
+    function getBaseUrl() {
+      return window.location.href.split('?')[0];
+    }
+
+    function updateShareUrls() {
+      if (!currentShareProp) return;
+      const ref = encodeURIComponent(document.getElementById('agent-ref-input').value.trim() || 'AG-บัวรา');
+      localStorage.setItem('siwasup_my_agent_ref', document.getElementById('agent-ref-input').value.trim() || 'AG-บัวรา');
+      
+      const qrUrl = `${getBaseUrl()}?view=client&prop=${currentShareProp.id}&ref=${ref}&src=qr_sign`;
+      document.getElementById('qr-image').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrUrl)}`;
+    }
+
+    function copyChannelLink(channel) {
+      if (!currentShareProp) return;
+      const ref = encodeURIComponent(document.getElementById('agent-ref-input').value.trim() || 'AG-บัวรา');
+      const targetUrl = `${getBaseUrl()}?view=client&prop=${currentShareProp.id}&ref=${ref}&src=${channel}`;
+      
+      navigator.clipboard.writeText(targetUrl).then(() => {
+        const channelThai = channel === 'facebook' ? 'Facebook' : (channel === 'tiktok' ? 'TikTok' : (channel === 'line' ? 'LINE' : 'ทั่วไป'));
+        showToast(`✅ คัดลอกลิงก์สำหรับ ${channelThai} แล้ว (ล็อกสิทธิ์ ${ref})`);
+        closeShareModal();
       }).catch(() => {
-        showToast(`ลิงก์ถูกสร้างแล้ว: ${dummyUrl}`);
+        showToast(`ลิงก์พร้อมใช้: ${targetUrl}`);
       });
     }
 
+    function toggleQrView() {
+      const container = document.getElementById('qr-container');
+      const toggleText = document.getElementById('qr-toggle-text');
+      if (container.classList.contains('hidden')) {
+        updateShareUrls();
+        container.classList.remove('hidden');
+        toggleText.textContent = "ซ่อน QR";
+      } else {
+        container.classList.add('hidden');
+        toggleText.textContent = "เปิดดู QR";
+      }
+    }
+
+    // --- CLIENT VIEW INTERACTION FUNCTIONS ---
+    function getStoredAgentRef() {
+      return localStorage.getItem('siwasup_referred_by') || 'AG-09';
+    }
+
+    function getStoredSource() {
+      return localStorage.getItem('siwasup_referred_source') || 'direct';
+    }
+
+    function openCallModal(id, title) {
+      const ref = getStoredAgentRef();
+      document.getElementById('call-discount-code').textContent = `SS-${ref.replace(/[^\w\u0E00-\u0E7F]/g, '')}`;
+      document.getElementById('call-modal').classList.remove('hidden');
+    }
+
+    function closeCallModal() {
+      document.getElementById('call-modal').classList.add('hidden');
+    }
+
+    function logCallLead() {
+      const ref = getStoredAgentRef();
+      const src = getStoredSource();
+      console.log(`Lead calling with ref: ${ref}, source: ${src}`);
+      showToast(`📞 กำลังโทรออก... แจ้งรหัส SS-${ref} กับเจ้าหน้าที่เพื่อรับสิทธิพิเศษ`);
+    }
+
+    function contactViaLine(id, title) {
+      const ref = getStoredAgentRef();
+      const src = getStoredSource();
+      const msg = `สวัสดีครับ สนใจทรัพย์: ${title} (รหัส ${id}) [ผู้แนะนำ: ${ref} | ช่องทาง: ${src}]`;
+      const lineUrl = `https://line.me/R/oaMessage/@siwasup/?${encodeURIComponent(msg)}`;
+      window.open(lineUrl, '_blank');
+    }
+
+    let pendingInquiryProp = null;
+    function openInquiryModal(id, title, price) {
+      pendingInquiryProp = { id, title, price };
+      document.getElementById('inquiry-prop-info').innerHTML = `
+        <strong>${title}</strong><br>
+        <span class="text-red-600 font-bold">${price}</span>
+      `;
+      document.getElementById('inquiry-modal').classList.remove('hidden');
+    }
+
+    function closeInquiryModal() {
+      document.getElementById('inquiry-modal').classList.add('hidden');
+    }
+
+    function handleInquirySubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('inquiry-name').value;
+      const phone = document.getElementById('inquiry-phone').value;
+      const date = document.getElementById('inquiry-date').value;
+      const ref = getStoredAgentRef();
+      const src = getStoredSource();
+
+      closeInquiryModal();
+
+      // Show Admin notification toast (Simulate Bua seeing in LINE)
+      document.getElementById('admin-toast-body').innerHTML = `
+        📅 <strong>ลูกค้านัดดูห้องใหม่!</strong><br>
+        • ทรัพย์: ${pendingInquiryProp ? pendingInquiryProp.title : '-'}<br>
+        • ลูกค้า: คุณ${name} (${phone})<br>
+        • วันที่สะดวก: ${date || 'เร็วที่สุด'}<br>
+        • <span class="text-amber-300 font-bold">เอเจนต์ผู้แนะนำ: ${ref} (จาก ${src})</span>
+      `;
+      document.getElementById('admin-toast').classList.remove('hidden');
+      showToast(`✅ ส่งข้อมูลนัดหมายเรียบร้อย เจ้าหน้าที่จะติดต่อกลับที่เบอร์ ${phone} ครับ`);
+    }
+
+    // --- BOOKING MODAL & 1-CLICK APPROVAL ---
     function openBookingModal(id, title, price) {
       pendingBookingId = id;
       document.getElementById('booking-property-info').innerHTML = `
@@ -485,7 +994,151 @@
       }, 3000);
     }
 
+    // --- INSTANT BUNDLE (มัดรวมส่งลูกค้า) FUNCTIONS ---
+    function openBundleModal() {
+      if (selectedBundleIds.size === 0) {
+        showToast("กรุณาเลือกทรัพย์อย่างน้อย 1 หลังเพื่อมัดรวม");
+        return;
+      }
+      document.getElementById('bundle-modal-count').textContent = selectedBundleIds.size;
+      renderBundleSelectedList();
+      updateBundlePreview();
+      document.getElementById('bundle-modal').classList.remove('hidden');
+    }
+
+    function closeBundleModal() {
+      document.getElementById('bundle-modal').classList.add('hidden');
+    }
+
+    function removeBundleItemFromModal(id) {
+      selectedBundleIds.delete(id);
+      updateBundleBar();
+      renderProperties();
+      if (selectedBundleIds.size === 0) {
+        closeBundleModal();
+      } else {
+        document.getElementById('bundle-modal-count').textContent = selectedBundleIds.size;
+        renderBundleSelectedList();
+        updateBundlePreview();
+      }
+    }
+
+    function renderBundleSelectedList() {
+      const listEl = document.getElementById('bundle-selected-list');
+      const items = allProperties.filter(p => selectedBundleIds.has(p.id));
+      listEl.innerHTML = items.map(p => {
+        const img = p.main_image || "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=120";
+        return `
+          <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-200 text-xs">
+            <div class="flex items-center gap-2 overflow-hidden pr-2">
+              <img src="${img}" class="w-10 h-10 rounded object-cover flex-shrink-0">
+              <div class="truncate">
+                <div class="font-bold text-gray-800 truncate">${p.title}</div>
+                <div class="text-[10px] text-red-600 font-bold">${p.price}</div>
+              </div>
+            </div>
+            <button onclick="removeBundleItemFromModal('${p.id}')" class="text-gray-400 hover:text-red-500 font-bold px-1.5 py-0.5 rounded text-xs">
+              ✕
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function getBundleMessageText() {
+      const clientName = (document.getElementById('bundle-client-name').value || 'คุณลูกค้า').trim();
+      const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'AG-บัวรา';
+      const items = allProperties.filter(p => selectedBundleIds.has(p.id));
+      const bundleIds = Array.from(selectedBundleIds).join(',');
+      const bundleUrl = `${getBaseUrl()}?bundle=${bundleIds}&for=${encodeURIComponent(clientName)}&ref=${encodeURIComponent(savedRef)}&src=bundle_line`;
+
+      let text = `สวัสดีครับ ${clientName} 🌟\n`;
+      text += `ตามที่ได้คุยกันเรื่องมองหาบ้าน/คอนโด วันนี้ผมคัดสรรทรัพย์พิเศษที่คุ้มค่า น่าอยู่ และตรงโจทย์มาให้ชม ${items.length} หลังครับ:\n\n`;
+
+      items.forEach((p, idx) => {
+        text += `${idx + 1}. 🏠 ${p.title}\n`;
+        text += `   💰 ราคา: ${p.price}\n`;
+        if (p.category) text += `   🏷️ ประเภท: ${p.category}\n`;
+        text += `\n`;
+      });
+
+      text += `✨ ดูรูปภาพ แปลนห้อง และรายละเอียดเต็มของทั้ง ${items.length} หลัง ในหน้า VIP ของคุณ ${clientName} ได้ที่ลิงก์นี้เลยครับ:\n`;
+      text += `👉 ${bundleUrl}\n\n`;
+      text += `(หากสนใจหลังไหนเป็นพิเศษ แจ้งผมเพื่อนัดชมห้องจริงได้เลยนะครับ ยินดีช่วยดูแลเรื่องยื่นกู้สินเชื่อฟรีทุกขั้นตอนครับ 😊)`;
+
+      return text;
+    }
+
+    function updateBundlePreview() {
+      const previewEl = document.getElementById('bundle-text-preview');
+      if (previewEl) {
+        previewEl.textContent = getBundleMessageText();
+      }
+    }
+
+    function copyBundleMessage() {
+      const msg = getBundleMessageText();
+      navigator.clipboard.writeText(msg).then(() => {
+        showToast("✅ คัดลอกข้อความแคปชั่นพร้อมส่ง LINE แล้ว!");
+        closeBundleModal();
+      }).catch(() => {
+        showToast("คัดลอกไม่สำเร็จ กรุณาลองอีกครั้ง");
+      });
+    }
+
+    function sendBundleToLine() {
+      const msg = getBundleMessageText();
+      const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(msg)}`;
+      window.open(lineUrl, '_blank');
+      showToast("🚀 เปิดแอป LINE เพื่อส่งข้อความมัดรวมเรียบร้อย");
+      closeBundleModal();
+    }
+
+    // --- INIT & URL QUERY PARSER ---
+    function checkUrlParameters() {
+      const params = new URLSearchParams(window.location.search);
+      
+      // Store ref & source into memory
+      if (params.has('ref')) {
+        localStorage.setItem('siwasup_referred_by', params.get('ref'));
+      }
+      if (params.has('src')) {
+        localStorage.setItem('siwasup_referred_source', params.get('src'));
+      }
+
+      // Check VIP Bundle Parameter (?bundle=id1,id2&for=ชื่อลูกค้า)
+      if (params.has('bundle')) {
+        const rawBundle = params.get('bundle');
+        activeBundleFilter = rawBundle.split(',').map(s => s.trim()).filter(Boolean);
+        activeClientName = params.get('for') || 'คุณลูกค้า';
+
+        const vipBanner = document.getElementById('vip-bundle-banner');
+        const vipTitle = document.getElementById('vip-client-title');
+        const vipAgentInfo = document.getElementById('vip-agent-info');
+
+        if (vipBanner && vipTitle) {
+          vipTitle.textContent = `รายการทรัพย์คัดสรรเฉพาะสำหรับ ${activeClientName}`;
+          if (vipAgentInfo) {
+            const agentRef = params.get('ref') || 'ศิวาทรัพย์ แอสเซท';
+            vipAgentInfo.textContent = `ผู้ดูแลและให้คำปรึกษา: ${agentRef}`;
+          }
+          vipBanner.classList.remove('hidden');
+        }
+      }
+
+      // Check view mode
+      const view = params.get('view');
+      if (view === 'client' || (params.has('ref') && !view) || params.has('bundle')) {
+        setMode('client');
+      } else if (view === 'owner') {
+        setMode('owner');
+      } else {
+        setMode('agent');
+      }
+    }
+
     // Auto-run
+    checkUrlParameters();
     loadProperties();
   </script>
 </body>
