@@ -43,3 +43,8 @@
 ### 🖨️ Phase 3: Scale & Production Tools
 - [ ] **Auto PDF Vinyl Sign Generator:** เจนไฟล์ PDF พิมพ์ป้ายไวนิลหน้าบ้านขนาดจริงพร้อม Dynamic QR Code ด้วย `pdf-lib`
 - [ ] **GPS & OCR Proof of Work:** ระบบถ่ายรูปตรวจเช็กพิกัด GPS ติดป้ายหน้าบ้านจริง
+
+### 🧩 Architectural Optimization & Token Economy
+- [ ] **Modal Component Extraction:** แยก Template ของ Modals ทั้ง 6 ตัวออกจาก `index.html` เป็นไฟล์ HTML Components หรือ JS Modules ย่อย เพื่อให้โค้ดหลักเบาลง
+- [ ] **Global CSS Style Presets:** กำหนด Class Utility กลาง เช่น `.capsule-glass-20` (`rounded-full bg-white/20 backdrop-blur-md border border-white/40`) เพื่อให้การปรับจูนสไตล์ในอนาคตแก้ที่จุดเดียวแล้วมีผลทั่วทั้งระบบ ช่วยประหยัด Token สูงสุด
+
