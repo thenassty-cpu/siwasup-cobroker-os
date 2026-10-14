@@ -1149,10 +1149,10 @@
 
               <div class="flex items-baseline justify-between pt-1 border-t border-gray-100">
                 <span class="text-[11px] text-gray-500">ราคาขายพิเศษ</span>
-                <div class="flex items-center gap-1.5">
+                <div class="flex items-center gap-2">
                   <span class="text-base font-extrabold text-red-600">${p.price || 'ติดต่อสอบถาม'}</span>
                   ${currentMode === 'owner' ? `
-                    <button onclick="openEditPriceModal('${p.id}', '${p.title}', '${p.price}')" class="text-[10px] bg-purple-100 hover:bg-purple-200 text-purple-800 font-bold px-1.5 py-0.5 rounded border border-purple-300 flex items-center gap-0.5 shadow-2xs" title="คลิกเพื่อแก้ราคา">
+                    <button onclick="openEditPriceModal('${p.id}')" class="text-[11px] bg-purple-700 hover:bg-purple-800 text-white font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center gap-1 active:scale-95 transition-all" title="คลิกเพื่อแก้ราคา">
                       <span>✏️</span> แก้ราคา
                     </button>
                   ` : ''}
@@ -1180,7 +1180,7 @@
                       </button>
                     </div>
                     <div class="grid grid-cols-2 gap-1.5 pt-1">
-                      <button onclick="openEditPriceModal('${p.id}', '${p.title}', '${p.price}')" class="bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white text-[10px] font-bold py-1.5 px-2 rounded shadow flex items-center justify-center gap-1">
+                      <button onclick="openEditPriceModal('${p.id}')" class="bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white text-[11px] font-bold py-1.5 px-2 rounded-lg shadow flex items-center justify-center gap-1 active:scale-95 transition-all">
                         <span>✏️</span> แก้ไขราคาขาย
                       </button>
                       <button onclick="openOfferModal('${p.id}', '${p.title}', '${p.price}')" class="bg-white hover:bg-gray-100 text-gray-800 text-[10px] font-medium py-1.5 px-2 rounded border border-gray-300 text-center">
@@ -1434,21 +1434,25 @@
     // 5. Owner Edit Price Functions (พร้อมระบบ Smart Guardrails ป้องกันการเปลี่ยนราคาผิดจังหวะ)
     let pendingEditPriceProp = null;
 
-    function openEditPriceModal(id, title, price) {
+    function openEditPriceModal(id) {
       const prop = allProperties.find(p => p.id === id);
+      if (!prop) {
+        showToast("ไม่พบข้อมูลทรัพย์");
+        return;
+      }
       
       // กฎเหล็กที่ 1: ห้ามแก้ราคาเมื่อติดจองหรือขายแล้วเด็ดขาด
-      if (prop && (prop.status === 'booked' || prop.status === 'sold')) {
+      if (prop.status === 'booked' || prop.status === 'sold') {
         const stText = prop.status === 'booked' ? 'ติดจองแล้ว' : 'ขายแล้ว (SOLD OUT)';
         showToast(`❌ ไม่อนุญาตให้แก้ราคา: ทรัพย์นี้อยู่ในสถานะ [${stText}] มีสัญญาแล้ว ห้ามแก้ราคาเด็ดขาด!`);
         return;
       }
 
-      pendingEditPriceProp = { id, title, price };
-      const currentNum = parsePriceNumber(price);
+      pendingEditPriceProp = prop;
+      const currentNum = parsePriceNumber(prop.price);
       document.getElementById('edit-price-prop-info').innerHTML = `
-        <div class="font-bold text-purple-950">🏠 ${title}</div>
-        <div class="text-[11px] text-purple-800">ราคาปัจจุบัน: <strong class="text-red-600">${price}</strong> (รหัส: ${id})</div>
+        <div class="font-bold text-purple-950">🏠 ${prop.title}</div>
+        <div class="text-[11px] text-purple-800">ราคาปัจจุบัน: <strong class="text-red-600 font-extrabold text-sm">${prop.price}</strong> (รหัส: ${prop.id})</div>
         <div class="mt-1.5 p-2 bg-amber-50 border border-amber-300 rounded-lg text-[10px] text-amber-950 leading-snug">
           ⚠️ <strong>จิตวิทยาการขาย:</strong> หากมีลูกค้ากำลังนัดชมหรือคุยอยู่ การลดราคาอาจทำให้ลูกค้าชะงัก (คิดว่าบ้านมีตำหนิหรือรอให้ลดอีก) และเอเจนต์จะเสียหน้า ควรปรับลดเฉพาะกรณี <strong>"ทรัพย์นิ่งเกิน 14 วัน"</strong> หรือธนาคารมีรอบลดราคาเท่านั้น!
         </div>
@@ -1819,10 +1823,10 @@
         setMode('owner');
       } else if (view === 'employee') {
         setMode('employee');
-      } else if (view === 'trainee') {
-        setMode('trainee');
-      } else {
+      } else if (view === 'free_agent') {
         setMode('free_agent');
+      } else {
+        setMode('owner'); // ตั้งต้นที่โหมดเจ้าของ เพื่อให้เห็นปุ่มแก้ราคาและแผงควบคุมทันที
       }
     }
 
