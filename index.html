@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Siwasup Co-Broker Demo - ศิวาทรัพย์ แอสเซท</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Tahoma&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Kanit', 'Tahoma', sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -17,6 +18,18 @@
     .text-siwasup-gold { color: #C2A460; }
     .text-siwasup-gold-light { color: #D4BA7A; }
     .border-siwasup-gold { border-color: #C2A460; }
+
+    /* ⚪ White line icon on dark grey transparent circular background (Lucide 1.25-1.5px) */
+    .icon-circle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+      background-color: rgba(17, 24, 39, 0.45);
+      color: #ffffff;
+      flex-shrink: 0;
+      backdrop-filter: blur(2px);
+    }
   </style>
 </head>
 <body class="bg-[#fafbfc] min-h-screen text-gray-800 pb-20">
@@ -39,8 +52,9 @@
         </div>
         <div class="flex items-center gap-1.5">
           <!-- Public Consignment Button (Gold 10% - Satin Architectural Gold Lead Magnet) -->
-          <button onclick="openConsignModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold text-[10px] px-2.5 py-1 rounded-full shadow-xs flex items-center gap-1 transition-transform active:scale-95">
-            <span>🏷️</span> ฝากขายฟรี
+          <button onclick="openConsignModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold text-[10px] px-2.5 py-1 rounded-full shadow-xs flex items-center gap-1.5 transition-transform active:scale-95">
+            <span class="icon-circle w-4 h-4"><i data-lucide="tag" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>ฝากขายฟรี</span>
           </button>
           <span class="text-[10px] bg-black/25 px-2 py-0.5 rounded-full border border-white/20 text-gray-200">LIFF</span>
         </div>
@@ -49,26 +63,33 @@
       <!-- Mode Switcher (Clean White 60% + Red 30% Active Selection) -->
       <div class="bg-white px-3 py-2 border-b border-gray-100">
         <div class="flex items-center justify-between text-xs mb-1.5">
-          <span class="font-medium text-gray-600 flex items-center gap-1 text-[11px]">
-            <span id="mode-icon">👑</span> โหมด: <strong id="mode-text" class="text-[#990000] font-bold">เจ้าของ/แอดมิน (บัว & กูล)</strong>
+          <span class="font-medium text-gray-600 flex items-center gap-1.5 text-[11px]">
+            <span id="mode-icon" class="icon-circle w-4 h-4"><i data-lucide="crown" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>โหมด:</span>
+            <strong id="mode-text" class="text-[#990000] font-bold">เจ้าของ/แอดมิน (บัว & กูล)</strong>
           </span>
           <span class="text-[10px] text-gray-400 font-normal">สลับมุมมองสิทธิ์</span>
         </div>
         <div class="grid grid-cols-5 gap-1 bg-gray-50 p-1 rounded-xl border border-gray-100 text-[10px]">
-          <button id="btn-owner-mode" onclick="setMode('owner')" class="py-1 font-bold rounded-lg transition-all bg-[#990000] text-white shadow-xs text-center">
-            👑 เจ้าของ
+          <button id="btn-owner-mode" onclick="setMode('owner')" class="py-1 font-bold rounded-lg transition-all bg-[#990000] text-white shadow-xs flex items-center justify-center gap-1">
+            <span class="icon-circle w-3.5 h-3.5"><i data-lucide="crown" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>เจ้าของ</span>
           </button>
-          <button id="btn-freeagent-mode" onclick="setMode('free_agent')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 text-center">
-            👔 Free
+          <button id="btn-freeagent-mode" onclick="setMode('free_agent')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1">
+            <span class="icon-circle w-3.5 h-3.5"><i data-lucide="briefcase" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>Free</span>
           </button>
-          <button id="btn-employee-mode" onclick="setMode('employee')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 text-center">
-            💼 พนักงาน
+          <button id="btn-employee-mode" onclick="setMode('employee')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1">
+            <span class="icon-circle w-3.5 h-3.5"><i data-lucide="building" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>พนักงาน</span>
           </button>
-          <button id="btn-trainee-mode" onclick="setMode('trainee')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 text-center">
-            🎓 ฝึกหัด
+          <button id="btn-trainee-mode" onclick="setMode('trainee')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1">
+            <span class="icon-circle w-3.5 h-3.5"><i data-lucide="graduation-cap" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>ฝึกหัด</span>
           </button>
-          <button id="btn-client-mode" onclick="setMode('client')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 text-center">
-            👤 ลูกค้า
+          <button id="btn-client-mode" onclick="setMode('client')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1">
+            <span class="icon-circle w-3.5 h-3.5"><i data-lucide="users" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>ลูกค้า</span>
           </button>
         </div>
       </div>
@@ -78,29 +99,31 @@
         <!-- Search Keyword -->
         <div class="relative">
           <input type="text" id="search-input" oninput="applyAllFilters()" 
-                 placeholder="🔍 ค้นหา: ทำเล, โครงการ, รหัส NPA, #ผ่อนล้านละ3พัน..." 
+                 placeholder="ค้นหา: ทำเล, โครงการ, รหัส NPA, #ผ่อนล้านละ3พัน..." 
                  class="w-full bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl pl-8 pr-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700 transition-all">
-          <span class="absolute left-2.5 top-2 text-gray-400 text-xs">🔍</span>
+          <span class="absolute left-2.5 top-2 icon-circle w-4 h-4">
+            <i data-lucide="search" class="w-2.5 h-2.5 stroke-[1.5]"></i>
+          </span>
           <button id="btn-clear-search" onclick="clearFilters()" class="hidden absolute right-2.5 top-1.5 text-gray-400 hover:text-gray-600 text-xs font-bold">&times;</button>
         </div>
 
         <!-- 4 Quick Dropdowns including Bank NPA Source -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[11px]">
-          <!-- 🏦 สถาบัน/ธนาคาร NPA -->
+          <!-- สถาบัน/ธนาคาร NPA -->
           <select id="filter-bank" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
-            <option value="all">🏦 ทุกสถาบัน/ธนาคาร</option>
-            <option value="Siwasup">⭐ ศิวาทรัพย์ (รีโนเวท)</option>
-            <option value="SAM">🏛️ SAM (บสส.)</option>
-            <option value="SCB">🟣 SCB (ไทยพาณิชย์)</option>
-            <option value="KBANK">🟢 KBank (กสิกรไทย)</option>
-            <option value="TTB">🔵 TTB (ทีเอ็มบีธนชาต)</option>
-            <option value="KTB">💠 KTB (กรุงไทย)</option>
-            <option value="GSB">🌸 GSB (ออมสิน)</option>
+            <option value="all">ทุกสถาบัน/ธนาคาร</option>
+            <option value="Siwasup">ศิวาทรัพย์ (รีโนเวท)</option>
+            <option value="SAM">SAM (บสส.)</option>
+            <option value="SCB">SCB (ไทยพาณิชย์)</option>
+            <option value="KBANK">KBank (กสิกรไทย)</option>
+            <option value="TTB">TTB (ทีเอ็มบีธนชาต)</option>
+            <option value="KTB">KTB (กรุงไทย)</option>
+            <option value="GSB">GSB (ออมสิน)</option>
           </select>
 
-          <!-- 📍 ทำเล -->
+          <!-- ทำเล -->
           <select id="filter-location" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
-            <option value="all">📍 ทุกทำเล</option>
+            <option value="all">ทุกทำเล</option>
             <option value="บางใหญ่">บางใหญ่/นนทบุรี</option>
             <option value="ลำลูกกา">ลำลูกกา/ปทุมธานี</option>
             <option value="พระราม 9">รัชดา/พระราม 9</option>
@@ -110,18 +133,18 @@
             <option value="บางขุนเทียน">พระราม 2/บางขุนเทียน</option>
           </select>
 
-          <!-- 💰 งบประมาณ -->
+          <!-- งบประมาณ -->
           <select id="filter-budget" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
-            <option value="all">💰 ทุกช่วงราคา</option>
+            <option value="all">ทุกช่วงราคา</option>
             <option value="under2m">ต่ำกว่า 2 ล้าน</option>
             <option value="2to3.5m">2 - 3.5 ล้าน</option>
             <option value="3.5to5m">3.5 - 5 ล้าน</option>
             <option value="above5m">มากกว่า 5 ล้าน</option>
           </select>
 
-          <!-- 🏠 ประเภท -->
+          <!-- ประเภท -->
           <select id="filter-category" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
-            <option value="all">🏠 ทุกประเภท</option>
+            <option value="all">ทุกประเภท</option>
             <option value="ทาวน์โฮม">ทาวน์โฮม</option>
             <option value="คอนโด">คอนโด</option>
             <option value="บ้านเดี่ยว">บ้านเดี่ยว</option>
@@ -135,7 +158,10 @@
     <!-- VIP Micro-Catalog Banner (Clean White 60% + Satin Gold 10% Accent) -->
     <div id="vip-bundle-banner" class="hidden mx-3 mt-3 bg-white text-gray-800 p-3.5 rounded-xl shadow-xs text-xs space-y-1.5 border border-gray-200 border-l-4 border-siwasup-gold">
       <div class="flex items-center justify-between font-bold">
-        <span class="flex items-center gap-1.5 text-sm text-gray-900">👑 <span id="vip-client-title">รายการทรัพย์คัดสรรเฉพาะสำหรับคุณ</span></span>
+        <span class="flex items-center gap-1.5 text-sm text-gray-900">
+          <span class="icon-circle w-5 h-5"><i data-lucide="crown" class="w-3 h-3 stroke-[1.5]"></i></span>
+          <span id="vip-client-title">รายการทรัพย์คัดสรรเฉพาะสำหรับคุณ</span>
+        </span>
         <span class="text-[10px] bg-amber-50 text-amber-800 px-2 py-0.5 rounded-full border border-amber-200/80 font-medium">VIP Curated</span>
       </div>
       <p class="text-[11px] text-gray-500 leading-snug">
@@ -147,11 +173,12 @@
       </div>
     </div>
 
-    <!-- 🎓 Trainee Agent Onboarding Challenge Banner (Clean White 60% + Satin Gold 10% Progress) -->
+    <!-- Trainee Agent Onboarding Challenge Banner (Clean White 60% + Satin Gold 10% Progress) -->
     <div id="trainee-challenge-banner" class="hidden mx-3 mt-3 bg-white text-gray-800 p-3.5 rounded-xl shadow-xs text-xs space-y-2 border border-gray-200 border-l-4 border-siwasup-gold">
       <div class="flex items-center justify-between font-bold">
         <span class="flex items-center gap-1.5 text-sm text-gray-900">
-          <span>🎓</span> ภารกิจปลดล็อกสู่ Free Agent
+          <span class="icon-circle w-5 h-5"><i data-lucide="graduation-cap" class="w-3 h-3 stroke-[1.5]"></i></span>
+          <span>ภารกิจปลดล็อกสู่ Free Agent</span>
         </span>
         <span class="text-[10px] bg-amber-50 text-amber-800 px-2 py-0.5 rounded-full border border-amber-200 font-medium">Onboarding Challenge</span>
       </div>
@@ -172,32 +199,35 @@
 
       <div class="pt-1 flex items-center justify-between text-[11px]">
         <span class="text-gray-400 text-[10px]">ส่งอีก 2 หลังเพื่อปลดล็อกลิงก์แชร์</span>
-        <button onclick="openConsignModal(true)" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold px-3 py-1 rounded-lg text-xs shadow-xs flex items-center gap-1">
-          <span>➕</span> ส่งทรัพย์เพิ่ม
+        <button onclick="openConsignModal(true)" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold px-3 py-1 rounded-lg text-xs shadow-xs flex items-center gap-1.5">
+          <span class="icon-circle w-4 h-4"><i data-lucide="plus" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+          <span>ส่งทรัพย์เพิ่ม</span>
         </button>
       </div>
     </div>
 
-    <!-- 🤝 Agent MGM Banner (Clean White 60% + Satin Gold 10% CTA) -->
+    <!-- Agent MGM Banner (Clean White 60% + Satin Gold 10% CTA) -->
     <div id="agent-mgm-banner" class="hidden mx-3 mt-3 bg-white text-gray-900 p-3 rounded-xl shadow-xs text-xs flex items-center justify-between border border-gray-200">
       <div>
-        <div class="font-bold text-gray-900 flex items-center gap-1 text-xs">
-          <span>🤝</span> ชวนเพื่อนมาเป็น Agent (MGM)
+        <div class="font-bold text-gray-900 flex items-center gap-1.5 text-xs">
+          <span class="icon-circle w-5 h-5"><i data-lucide="users" class="w-3 h-3 stroke-[1.5]"></i></span>
+          <span>ชวนเพื่อนมาเป็น Agent (MGM)</span>
         </div>
         <div class="text-[10px] text-gray-500">รับแต้มสะสม + ค่าบริหารทีม 0.5% ทุกดีลที่เพื่อนปิดได้</div>
       </div>
-      <button onclick="openMgmModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold px-2.5 py-1.5 rounded-lg text-[11px] shadow-xs whitespace-nowrap active:scale-95 transition-transform">
-        รับลิงก์ชวนเพื่อน ✨
+      <button onclick="openMgmModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold px-2.5 py-1.5 rounded-lg text-[11px] shadow-xs whitespace-nowrap active:scale-95 transition-transform flex items-center gap-1.5">
+        <span class="icon-circle w-4 h-4"><i data-lucide="sparkles" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+        <span>รับลิงก์ชวนเพื่อน</span>
       </button>
     </div>
 
-    <!-- 📥 Owner Leads Alert Bar (Clean White 60% + Red 30% Accent) -->
+    <!-- Owner Leads Alert Bar (Clean White 60% + Red 30% Accent) -->
     <div id="owner-leads-bar" class="hidden mx-3 mt-3 bg-white text-gray-800 p-2.5 rounded-xl border border-gray-200 shadow-xs flex items-center justify-between text-xs border-l-4 border-[#990000]">
       <div class="flex items-center gap-2">
-        <span class="text-base">📬</span>
+        <span class="icon-circle w-6 h-6"><i data-lucide="inbox" class="w-3.5 h-3.5 stroke-[1.5]"></i></span>
         <div>
           <span class="font-bold text-gray-900">มีทรัพย์ฝากขายใหม่ (<span id="consign-count-badge" class="text-[#990000]">1</span> รายการ)</span>
-          <div class="text-[10px] text-gray-500">กดเพื่อโทรหาเจ้าของบ้านชวนเป็น Free Agent</div>
+          <div class="text-[10px] text-gray-500">โทรหาเจ้าของบ้านชวนเป็น Free Agent</div>
         </div>
       </div>
       <button onclick="openOwnerLeadsModal()" class="bg-[#990000] hover:bg-red-800 text-white font-bold px-2.5 py-1 rounded-lg text-[10px] shadow-xs">
@@ -216,7 +246,8 @@
       <div class="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-4 max-h-[90vh] overflow-y-auto">
         <div class="flex justify-between items-center border-b pb-2">
           <h3 class="font-bold text-base text-gray-800 flex items-center gap-1.5">
-            📝 แจ้งหลักฐานการจอง (วางมัดจำ)
+            <span class="icon-circle w-5 h-5"><i data-lucide="file-text" class="w-3 h-3 stroke-[1.5]"></i></span>
+            <span>แจ้งหลักฐานการจอง (วางมัดจำ)</span>
           </h3>
           <button onclick="closeBookingModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
         </div>
@@ -239,8 +270,9 @@
             <input type="file" accept="image/*" class="w-full border rounded-lg p-2 bg-gray-50">
             <p class="text-[10px] text-gray-400 mt-0.5">ยอดมัดจำขั้นต่ำ 10,000 บาท</p>
           </div>
-          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-lg text-sm shadow-xs">
-            ยืนยันส่งข้อมูลให้แอดมิน (เจี๊ยบ/บัว) ตรวจสอบ
+          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-lg text-sm shadow-xs flex items-center justify-center gap-1.5">
+            <span class="icon-circle w-4 h-4"><i data-lucide="check" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>ยืนยันส่งข้อมูลให้แอดมิน (เจี๊ยบ/บัว) ตรวจสอบ</span>
           </button>
         </form>
       </div>
@@ -251,7 +283,8 @@
       <div class="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-4 max-h-[90vh] overflow-y-auto">
         <div class="flex justify-between items-center border-b pb-2">
           <h3 class="font-bold text-base text-gray-800 flex items-center gap-1.5">
-            🚀 Smart Share Center (เลือกช่องทางโปรโมท)
+            <span class="icon-circle w-5 h-5"><i data-lucide="share-2" class="w-3 h-3 stroke-[1.5]"></i></span>
+            <span>Smart Share Center (เลือกช่องทางโปรโมท)</span>
           </h3>
           <button onclick="closeShareModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
         </div>
@@ -259,8 +292,9 @@
         <div id="share-prop-info" class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-xs space-y-0.5"></div>
 
         <div>
-          <label class="block font-medium text-xs mb-1 text-gray-700">
-            👤 รหัส / ชื่อเอเจนต์ของคุณ (สำหรับล็อกค่าคอม 5%):
+          <label class="block font-medium text-xs mb-1 text-gray-700 flex items-center gap-1.5">
+            <span class="icon-circle w-4 h-4"><i data-lucide="user" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>รหัส / ชื่อเอเจนต์ของคุณ (สำหรับล็อกค่าคอม 5%):</span>
           </label>
           <input type="text" id="agent-ref-input" value="AG-บัวรา" oninput="updateShareUrls()" 
                  class="w-full border rounded-lg p-2 text-xs font-semibold focus:ring-2 focus:ring-amber-500 outline-none bg-gray-50">
@@ -269,7 +303,10 @@
 
         <div class="space-y-2 text-xs pt-1">
           <div class="font-bold text-gray-800 flex justify-between items-center">
-            <span>📲 กดคัดลอกลิงก์เฉพาะช่องทาง:</span>
+            <span class="flex items-center gap-1.5">
+              <span class="icon-circle w-4 h-4"><i data-lucide="link" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+              <span>กดคัดลอกลิงก์เฉพาะช่องทาง:</span>
+            </span>
             <span class="text-[10px] text-emerald-600 font-normal">ระบบดักจับและล็อกสิทธิ์ให้ 100%</span>
           </div>
 
@@ -318,7 +355,7 @@
           <!-- Channel 4: General Web / Forum -->
           <div class="flex items-center justify-between p-2 rounded-lg border border-gray-200 bg-gray-50/70">
             <div class="flex items-center gap-2">
-              <span class="w-6 h-6 rounded-full bg-gray-800 text-white flex items-center justify-center font-bold text-xs">🌐</span>
+              <span class="icon-circle w-6 h-6 bg-gray-800 text-white"><i data-lucide="globe" class="w-3.5 h-3.5 stroke-[1.5]"></i></span>
               <div>
                 <div class="font-bold text-gray-900 text-xs">เว็บบอร์ด / LivingInsider / DDprop</div>
                 <div class="text-[10px] text-gray-500">ลิงก์กลางสำหรับโพสต์ลงเว็บไซต์</div>
@@ -333,7 +370,10 @@
           <div class="border border-gray-200 rounded-lg p-2.5 bg-gray-50 space-y-2 text-center">
             <div class="flex justify-between items-center text-left">
               <div>
-                <div class="font-bold text-gray-900 text-xs">📷 QR Code สำหรับป้ายหน้าบ้าน / ใบปลิว</div>
+                <div class="font-bold text-gray-900 text-xs flex items-center gap-1.5">
+                  <span class="icon-circle w-4 h-4"><i data-lucide="qr-code" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                  <span>QR Code สำหรับป้ายหน้าบ้าน / ใบปลิว</span>
+                </div>
                 <div class="text-[10px] text-gray-500">ใครสแกนป้าย จะตกเป็นลูกค้าของคุณทันที</div>
               </div>
               <button onclick="toggleQrView()" class="text-xs text-amber-700 font-bold underline">
@@ -352,8 +392,8 @@
     <!-- Client Call Discount Modal (Click to Call) -->
     <div id="call-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
       <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-3 text-center shadow-xl">
-        <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mx-auto">
-          🎁
+        <div class="icon-circle w-12 h-12 bg-amber-900/60 text-[#D4AF37] mx-auto">
+          <i data-lucide="gift" class="w-6 h-6 stroke-[1.5]"></i>
         </div>
         <h3 class="font-bold text-base text-gray-900">รับสิทธิพิเศษสำหรับคุณ!</h3>
         <p class="text-xs text-gray-600">
@@ -364,8 +404,9 @@
           <div id="call-discount-code" class="text-xl font-extrabold text-amber-900 tracking-wider">SS-09</div>
         </div>
         <div class="pt-2 flex gap-2">
-          <a id="btn-actual-call" href="tel:0944629796" onclick="logCallLead()" class="flex-1 bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold py-2.5 rounded-xl text-xs shadow-xs text-center">
-            📞 โทรติดต่อเจ้าหน้าที่ทันที
+          <a id="btn-actual-call" href="tel:0944629796" onclick="logCallLead()" class="flex-1 bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold py-2.5 rounded-xl text-xs shadow-xs text-center flex items-center justify-center gap-1.5">
+            <span class="icon-circle w-4 h-4"><i data-lucide="phone" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>โทรติดต่อเจ้าหน้าที่ทันที</span>
           </a>
           <button onclick="closeCallModal()" class="px-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl text-xs border border-gray-200">
             ปิด
@@ -379,7 +420,8 @@
       <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-3 shadow-xl">
         <div class="flex justify-between items-center border-b pb-2">
           <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
-            📅 ขอนัดหมายเข้าชมห้องจริง / ปรึกษาสินเชื่อ
+            <span class="icon-circle w-5 h-5"><i data-lucide="calendar" class="w-3 h-3 stroke-[1.5]"></i></span>
+            <span>ขอนัดหมายเข้าชมห้องจริง / ปรึกษาสินเชื่อ</span>
           </h3>
           <button onclick="closeInquiryModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
         </div>
@@ -397,8 +439,9 @@
             <label class="block font-medium mb-1">วันที่สะดวกเข้าชม (โดยประมาณ)</label>
             <input type="text" id="inquiry-date" placeholder="เช่น เสาร์นี้ ช่วงบ่าย" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
           </div>
-          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2">
-            ยืนยันส่งข้อมูลนัดหมาย
+          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2 flex items-center justify-center gap-1.5">
+            <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>ยืนยันส่งข้อมูลนัดหมาย</span>
           </button>
         </form>
       </div>
@@ -407,13 +450,17 @@
     <!-- Admin Notification Toast (Simulate 1-Click Approval) -->
     <div id="admin-toast" class="hidden fixed top-4 inset-x-4 max-w-sm mx-auto z-50 bg-gray-900 text-white p-3 rounded-xl shadow-2xl border border-gray-700 text-xs space-y-2 border-l-4 border-amber-400">
       <div class="flex items-center justify-between font-bold text-amber-300">
-        <span>🔔 แจ้งเตือนแอดมิน (เจี๊ยบ/บัว)</span>
+        <span class="flex items-center gap-1.5">
+          <span class="icon-circle w-4 h-4"><i data-lucide="bell" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+          <span>แจ้งเตือนแอดมิน (เจี๊ยบ/บัว)</span>
+        </span>
         <span class="text-[10px] text-gray-400">เมื่อสักครู่</span>
       </div>
       <p id="admin-toast-body" class="text-gray-200 text-[11px]"></p>
       <div class="flex gap-2 pt-1">
-        <button onclick="adminApproveBooking()" class="flex-1 bg-[#D4AF37] hover:bg-[#c49f2b] text-gray-950 font-bold py-1.5 rounded text-center shadow-xs">
-          ✅ กดอนุมัติการจอง (1-Click)
+        <button onclick="adminApproveBooking()" class="flex-1 bg-[#D4AF37] hover:bg-[#c49f2b] text-gray-950 font-bold py-1.5 rounded text-center shadow-xs flex items-center justify-center gap-1.5">
+          <span class="icon-circle w-4 h-4"><i data-lucide="check" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+          <span>กดอนุมัติการจอง (1-Click)</span>
         </button>
         <button onclick="document.getElementById('admin-toast').classList.add('hidden')" class="px-3 bg-gray-800 text-gray-300 rounded border border-gray-700">
           ปิด
@@ -427,7 +474,8 @@
         <div class="flex justify-between items-center border-b pb-2">
           <div>
             <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5" id="consign-modal-title">
-              🏡 ฝากขายบ้าน/คอนโด/ที่ดิน กับศิวาทรัพย์
+              <span class="icon-circle w-5 h-5"><i data-lucide="building" class="w-3 h-3 stroke-[1.5]"></i></span>
+              <span>ฝากขายบ้าน/คอนโด/ที่ดิน กับศิวาทรัพย์</span>
             </h3>
             <p class="text-[10px] text-emerald-600 font-semibold" id="consign-modal-sub">
               ฟรี! ไม่มีค่าแรกเข้า • เข้าถึงเครือข่ายเอเจนต์ทั่วประเทศ
@@ -437,7 +485,8 @@
         </div>
 
         <div class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-[11px] text-amber-900 leading-snug">
-          💡 <strong>สิทธิประโยชน์พิเศษ:</strong> หลังลงทะเบียน เจ้าหน้าที่จะติดต่อประเมินราคา และท่านสามารถเลือกรับสิทธิ์เป็น <strong>Free Agent</strong> เพื่อรับค่าคอมมิชชั่นของตัวเองเต็มๆ ได้ทันที!
+          <span class="icon-circle w-3.5 h-3.5 inline-flex mr-1 align-middle"><i data-lucide="sparkles" class="w-2 h-2 stroke-[1.5]"></i></span>
+          <strong>สิทธิประโยชน์พิเศษ:</strong> หลังลงทะเบียน เจ้าหน้าที่จะติดต่อประเมินราคา และท่านสามารถเลือกรับสิทธิ์เป็น <strong>Free Agent</strong> เพื่อรับค่าคอมมิชชั่นของตัวเองเต็มๆ ได้ทันที!
         </div>
 
         <form onsubmit="handleConsignSubmit(event)" class="space-y-2.5 text-xs">
@@ -485,8 +534,9 @@
             <p class="text-[10px] text-gray-400 mt-0.5">แนบรูปช่วยให้ประเมินราคาและปล่อยขายได้ไวยิ่งขึ้น</p>
           </div>
 
-          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2">
-            🚀 ยืนยันส่งข้อมูลฝากขาย (ฟรี)
+          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2 flex items-center justify-center gap-1.5">
+            <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>ยืนยันส่งข้อมูลฝากขาย (ฟรี)</span>
           </button>
         </form>
       </div>
@@ -497,14 +547,16 @@
       <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-3.5 shadow-2xl">
         <div class="flex justify-between items-center border-b pb-2">
           <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
-            <span>🤝</span> ชวนเพื่อนมาเป็น Agent (MGM)
+            <span class="icon-circle w-5 h-5"><i data-lucide="users" class="w-3 h-3 stroke-[1.5]"></i></span>
+            <span>ชวนเพื่อนมาเป็น Agent (MGM)</span>
           </h3>
           <button onclick="closeMgmModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
         </div>
 
         <div class="bg-gray-50 border border-gray-200 p-2.5 rounded-xl text-xs space-y-1 text-gray-800 border-l-4 border-[#D4AF37]">
-          <div class="font-bold flex items-center gap-1 text-gray-900">
-            <span>💰</span> สิทธิประโยชน์ผู้ชวน:
+          <div class="font-bold flex items-center gap-1.5 text-gray-900">
+            <span class="icon-circle w-4 h-4"><i data-lucide="coins" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>สิทธิประโยชน์ผู้ชวน:</span>
           </div>
           <p class="text-[11px] leading-relaxed text-gray-600">
             1. รับ <strong class="text-[#990000]">100 แต้มสะสม</strong> เมื่อเพื่อนส่งทรัพย์ครบ 3 หลัง<br>
@@ -517,8 +569,9 @@
           <div class="flex gap-1.5">
             <input type="text" id="mgm-link-input" readonly value="https://thenassty-cpu.github.io/siwasup-cobroker-os/?join_ref=AG-บัวรา" 
                    class="flex-1 bg-gray-100 border rounded-lg px-2.5 py-1.5 text-[11px] font-mono text-gray-700 outline-none">
-            <button onclick="copyMgmLink()" class="bg-[#990000] hover:bg-red-800 text-white font-bold px-3 py-1.5 rounded-lg text-xs whitespace-nowrap shadow-xs">
-              คัดลอก
+            <button onclick="copyMgmLink()" class="bg-[#990000] hover:bg-red-800 text-white font-bold px-3 py-1.5 rounded-lg text-xs whitespace-nowrap shadow-xs flex items-center gap-1">
+              <span class="icon-circle w-3.5 h-3.5"><i data-lucide="copy" class="w-2 h-2 stroke-[1.5]"></i></span>
+              <span>คัดลอก</span>
             </button>
           </div>
         </div>
@@ -537,7 +590,8 @@
       <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-3 shadow-2xl">
         <div class="flex justify-between items-center border-b pb-2">
           <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
-            <span>🤝</span> ยื่นข้อเสนอซื้อ / ต่อรองราคาธนาคาร
+            <span class="icon-circle w-5 h-5"><i data-lucide="handshake" class="w-3 h-3 stroke-[1.5]"></i></span>
+            <span>ยื่นข้อเสนอซื้อ / ต่อรองราคาธนาคาร</span>
           </h3>
           <button onclick="closeOfferModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
         </div>
@@ -561,8 +615,9 @@
             <label class="block font-medium mb-1">เงื่อนไขเพิ่มเติม (เช่น กู้ธนาคาร 100%, ซื้อสด)</label>
             <input type="text" id="offer-terms" placeholder="เช่น พร้อมทำสัญญาใน 7 วัน" class="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-blue-500">
           </div>
-          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl shadow text-xs mt-2">
-            ส่งเรื่องให้แอดมิน (บัว) ดำเนินการต่อรองธนาคาร
+          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl shadow text-xs mt-2 flex items-center justify-center gap-1.5">
+            <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>ส่งเรื่องให้แอดมิน (บัว) ดำเนินการต่อรองธนาคาร</span>
           </button>
         </form>
       </div>
@@ -573,7 +628,8 @@
       <div class="bg-white w-full max-w-md rounded-2xl p-5 space-y-3.5 max-h-[88vh] overflow-y-auto shadow-2xl">
         <div class="flex justify-between items-center border-b pb-2">
           <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
-            <span>📬</span> รายการทรัพย์ฝากขายใหม่ (Lead Magnet)
+            <span class="icon-circle w-5 h-5"><i data-lucide="inbox" class="w-3 h-3 stroke-[1.5]"></i></span>
+            <span>รายการทรัพย์ฝากขายใหม่ (Lead Magnet)</span>
           </h3>
           <button onclick="closeOwnerLeadsModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
         </div>
@@ -589,7 +645,8 @@
       <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-3.5 shadow-2xl">
         <div class="flex justify-between items-center border-b pb-2">
           <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
-            <span>✏️</span> แก้ไขราคาขาย (แอดมิน บัว & กูล)
+            <span class="icon-circle w-5 h-5"><i data-lucide="edit-3" class="w-3 h-3 stroke-[1.5]"></i></span>
+            <span>แก้ไขราคาขาย (แอดมิน บัว & กูล)</span>
           </h3>
           <button onclick="closeEditPriceModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
         </div>
@@ -606,23 +663,26 @@
 
           <div class="flex items-center gap-2 p-2 bg-amber-50 rounded-lg border border-amber-200">
             <input type="checkbox" id="mark-hot-deal" class="rounded text-amber-600 focus:ring-amber-500">
-            <label for="mark-hot-deal" class="text-[11px] font-bold text-amber-900 cursor-pointer">
-              🔥 แปะป้าย "ลดราคาพิเศษ (Hot Deal)"
+            <label for="mark-hot-deal" class="text-[11px] font-bold text-amber-900 cursor-pointer flex items-center gap-1.5">
+              <span class="icon-circle w-3.5 h-3.5"><i data-lucide="flame" class="w-2 h-2 stroke-[1.5]"></i></span>
+              <span>แปะป้าย "ลดราคาพิเศษ (Hot Deal)"</span>
             </label>
           </div>
 
-          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-xl shadow-xs text-xs">
-            💾 บันทึกราคาใหม่ทันที
+          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-xl shadow-xs text-xs flex items-center justify-center gap-1.5">
+            <span class="icon-circle w-4 h-4"><i data-lucide="save" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>บันทึกราคาใหม่ทันที</span>
           </button>
         </form>
       </div>
     </div>
 
-    <!-- 📦 Instant Bundle Floating Action Bar (White 60% Glassmorphism + Satin Gold 10%) -->
+    <!-- Instant Bundle Floating Action Bar (White 60% Glassmorphism + Satin Gold 10%) -->
     <div id="bundle-bar" class="hidden fixed bottom-0 inset-x-0 max-w-md mx-auto bg-white/95 backdrop-blur-md text-gray-900 p-3 z-40 shadow-xl flex items-center justify-between border-t-2 border-[#C2A460] border-x border-b border-gray-200 rounded-t-xl">
       <div>
         <div class="font-extrabold text-xs text-gray-900 flex items-center gap-1.5">
-          <span>📦</span> มัดรวมส่งลูกค้า (<span id="bundle-count" class="text-[#990000]">0</span> หลัง)
+          <span class="icon-circle w-5 h-5"><i data-lucide="package" class="w-3 h-3 stroke-[1.5]"></i></span>
+          <span>มัดรวมส่งลูกค้า (<span id="bundle-count" class="text-[#990000]">0</span> หลัง)</span>
         </div>
         <div class="text-[10px] text-gray-500">สร้างหน้าเว็บ VIP + แคปชั่นส่งในไลน์</div>
       </div>
@@ -630,8 +690,9 @@
         <button onclick="clearBundleSelection()" class="text-[11px] text-gray-400 hover:text-gray-700 px-2 py-1">
           ล้าง
         </button>
-        <button onclick="openBundleModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold py-1.5 px-3 rounded-lg text-xs shadow-xs">
-          ส่งลูกค้าทันที ✨
+        <button onclick="openBundleModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold py-1.5 px-3 rounded-lg text-xs shadow-xs flex items-center gap-1.5">
+          <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+          <span>ส่งลูกค้าทันที</span>
         </button>
       </div>
     </div>
@@ -641,14 +702,16 @@
       <div class="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-4 max-h-[90vh] overflow-y-auto">
         <div class="flex justify-between items-center border-b pb-2">
           <h3 class="font-bold text-base text-gray-800 flex items-center gap-1.5">
-            📦 มัดรวมส่งลูกค้า (VIP Micro-Catalog)
+            <span class="icon-circle w-5 h-5"><i data-lucide="package" class="w-3 h-3 stroke-[1.5]"></i></span>
+            <span>มัดรวมส่งลูกค้า (VIP Micro-Catalog)</span>
           </h3>
           <button onclick="closeBundleModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
         </div>
 
         <div>
-          <label class="block font-medium text-xs mb-1 text-gray-700">
-            👤 ชื่อลูกค้าผู้รับ (ใส่เพื่อเพิ่มความประทับใจ VIP):
+          <label class="block font-medium text-xs mb-1 text-gray-700 flex items-center gap-1.5">
+            <span class="icon-circle w-4 h-4"><i data-lucide="user" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>ชื่อลูกค้าผู้รับ (ใส่เพื่อเพิ่มความประทับใจ VIP):</span>
           </label>
           <input type="text" id="bundle-client-name" value="คุณวิชัย" oninput="updateBundlePreview()"
                  placeholder="เช่น คุณวิชัย, คุณสมชาย" 
@@ -657,8 +720,9 @@
 
         <!-- Selected Properties List Preview -->
         <div class="space-y-1.5">
-          <div class="text-xs font-bold text-gray-800">
-            🏠 รายการทรัพย์ที่คัดสรร (<span id="bundle-modal-count">0</span> หลัง):
+          <div class="text-xs font-bold text-gray-800 flex items-center gap-1.5">
+            <span class="icon-circle w-4 h-4"><i data-lucide="home" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>รายการทรัพย์ที่คัดสรร (<span id="bundle-modal-count">0</span> หลัง):</span>
           </div>
           <div id="bundle-selected-list" class="max-h-40 overflow-y-auto space-y-1.5 pr-1"></div>
         </div>
@@ -666,18 +730,23 @@
         <!-- Generated Text Preview for LINE -->
         <div class="space-y-1.5">
           <div class="text-xs font-bold text-gray-800 flex justify-between items-center">
-            <span>💬 ข้อความแคปชั่นพร้อมส่งใน LINE:</span>
+            <span class="flex items-center gap-1.5">
+              <span class="icon-circle w-4 h-4"><i data-lucide="message-square" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+              <span>ข้อความแคปชั่นพร้อมส่งใน LINE:</span>
+            </span>
             <span class="text-[10px] text-gray-500 font-normal">จัดหน้าสวยงามพร้อมลิงก์</span>
           </div>
           <div class="bg-gray-100 border border-gray-300 rounded-lg p-2.5 text-[11px] text-gray-700 whitespace-pre-wrap font-sans leading-relaxed select-all" id="bundle-text-preview"></div>
         </div>
 
         <div class="grid grid-cols-2 gap-2 pt-1">
-          <button onclick="copyBundleMessage()" class="bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1">
-            <span>📋</span> คัดลอกข้อความ
+          <button onclick="copyBundleMessage()" class="bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5">
+            <span class="icon-circle w-4 h-4"><i data-lucide="copy" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>คัดลอกข้อความ</span>
           </button>
-          <button onclick="sendBundleToLine()" class="bg-[#06C755] hover:bg-[#05b34c] text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1">
-            <span>📲</span> ส่งเข้าแอป LINE
+          <button onclick="sendBundleToLine()" class="bg-[#06C755] hover:bg-[#05b34c] text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5">
+            <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>ส่งเข้าแอป LINE</span>
           </button>
         </div>
       </div>
@@ -811,7 +880,7 @@
       const mgmBanner = document.getElementById('agent-mgm-banner');
       const ownerLeadsBar = document.getElementById('owner-leads-bar');
 
-      const defaultBtnClass = "py-1 font-medium rounded-lg transition-all text-gray-500 hover:text-gray-800 text-center text-[10px]";
+      const defaultBtnClass = "py-1 font-medium rounded-lg transition-all text-gray-500 hover:text-gray-800 flex items-center justify-center gap-1 text-[10px]";
       btnOwner.className = defaultBtnClass;
       btnFreeAgent.className = defaultBtnClass;
       btnEmployee.className = defaultBtnClass;
@@ -822,40 +891,41 @@
       mgmBanner.classList.add('hidden');
       ownerLeadsBar.classList.add('hidden');
 
-      const activeBtnClass = "py-1 font-bold rounded-lg transition-all bg-[#990000] text-white shadow-xs text-center text-[10px]";
+      const activeBtnClass = "py-1 font-bold rounded-lg transition-all bg-[#990000] text-white shadow-xs flex items-center justify-center gap-1 text-[10px]";
 
       if (mode === 'owner') {
         btnOwner.className = activeBtnClass;
         modeText.textContent = "เจ้าของ/แอดมิน (บัว & กูล)";
         modeText.className = "text-[#990000] font-bold";
-        modeIcon.textContent = "👑";
+        modeIcon.innerHTML = `<i data-lucide="crown" class="w-2.5 h-2.5 stroke-[1.5]"></i>`;
         if (consignments.length > 0) ownerLeadsBar.classList.remove('hidden');
       } else if (mode === 'free_agent') {
         btnFreeAgent.className = activeBtnClass;
         modeText.textContent = "Free Agent (คอม 3-5% อิสระ)";
         modeText.className = "text-[#990000] font-bold";
-        modeIcon.textContent = "👔";
+        modeIcon.innerHTML = `<i data-lucide="briefcase" class="w-2.5 h-2.5 stroke-[1.5]"></i>`;
         mgmBanner.classList.remove('hidden');
       } else if (mode === 'employee') {
         btnEmployee.className = activeBtnClass;
         modeText.textContent = "พนักงานประจำ (คอม 1% มีเงินเดือน)";
         modeText.className = "text-gray-800 font-bold";
-        modeIcon.textContent = "💼";
+        modeIcon.innerHTML = `<i data-lucide="building" class="w-2.5 h-2.5 stroke-[1.5]"></i>`;
         mgmBanner.classList.remove('hidden');
       } else if (mode === 'trainee') {
         btnTrainee.className = activeBtnClass;
         modeText.textContent = "เด็กฝึกหัด (ส่งทรัพย์ 1/3 หลัง)";
         modeText.className = "text-amber-800 font-bold";
-        modeIcon.textContent = "🎓";
+        modeIcon.innerHTML = `<i data-lucide="graduation-cap" class="w-2.5 h-2.5 stroke-[1.5]"></i>`;
         traineeBanner.classList.remove('hidden');
       } else {
         btnClient.className = activeBtnClass;
         modeText.textContent = "ลูกค้า (White-Label ไม่เห็นค่าคอม)";
         modeText.className = "text-[#990000] font-bold";
-        modeIcon.textContent = "👤";
+        modeIcon.innerHTML = `<i data-lucide="users" class="w-2.5 h-2.5 stroke-[1.5]"></i>`;
       }
 
       renderProperties();
+      if (window.lucide) { lucide.createIcons(); }
     }
 
     function updateStatus(id, newStatus) {
@@ -867,7 +937,7 @@
         }
         renderProperties();
         const statusThai = newStatus === 'available' ? 'พร้อมขาย' : (newStatus === 'booked' ? 'ติดจอง' : 'ขายแล้ว (SOLD OUT)');
-        showToast(`👑 บัว/เจี๊ยบ อัปเดต "${p.title}" เป็น [${statusThai}] เรียบร้อย!`);
+        showToast(`บัว/เจี๊ยบ อัปเดต "${p.title}" เป็น [${statusThai}] เรียบร้อย!`);
       }
     }
 
@@ -914,6 +984,7 @@
       } else {
         bar.classList.add('hidden');
       }
+      if (window.lucide) { lucide.createIcons(); }
     }
 
     function clearBundleSelection() {
@@ -922,27 +993,27 @@
       renderProperties();
     }
 
-    // 🏦 NPA Bank Badges (Pastel Aesthetic retaining Authentic Bank CI)
+    // 🏦 NPA Bank Badges (Clean Pastel Aesthetic without Emojis)
     function getBankBadge(bankSource) {
       const b = (bankSource || 'Siwasup').toUpperCase();
       if (b === 'SAM') {
-        return `<span class="bg-indigo-50/95 text-indigo-700 border border-indigo-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs backdrop-blur-xs">🏛️ SAM</span>`;
+        return `<span class="bg-indigo-50/95 text-indigo-700 border border-indigo-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">SAM</span>`;
       } else if (b === 'SCB') {
-        return `<span class="bg-purple-50/95 text-purple-700 border border-purple-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs backdrop-blur-xs">🟣 SCB</span>`;
+        return `<span class="bg-purple-50/95 text-purple-700 border border-purple-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">SCB</span>`;
       } else if (b === 'KBANK') {
-        return `<span class="bg-emerald-50/95 text-emerald-700 border border-emerald-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs backdrop-blur-xs">🟢 KBank</span>`;
+        return `<span class="bg-emerald-50/95 text-emerald-700 border border-emerald-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">KBank</span>`;
       } else if (b === 'TTB') {
-        return `<span class="bg-blue-50/95 text-blue-700 border border-blue-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs backdrop-blur-xs">🔵 TTB</span>`;
+        return `<span class="bg-blue-50/95 text-blue-700 border border-blue-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">TTB</span>`;
       } else if (b === 'KTB') {
-        return `<span class="bg-cyan-50/95 text-cyan-700 border border-cyan-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs backdrop-blur-xs">💠 กรุงไทย</span>`;
+        return `<span class="bg-cyan-50/95 text-cyan-700 border border-cyan-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">กรุงไทย</span>`;
       } else if (b === 'GSB') {
-        return `<span class="bg-pink-50/95 text-pink-700 border border-pink-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs backdrop-blur-xs">🌸 ออมสิน</span>`;
+        return `<span class="bg-pink-50/95 text-pink-700 border border-pink-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">ออมสิน</span>`;
       } else if (b === 'GHB') {
-        return `<span class="bg-orange-50/95 text-orange-700 border border-orange-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs backdrop-blur-xs">🏠 ธอส.</span>`;
+        return `<span class="bg-orange-50/95 text-orange-700 border border-orange-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">ธอส.</span>`;
       } else if (b === 'BBL') {
-        return `<span class="bg-slate-100/95 text-slate-700 border border-slate-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs backdrop-blur-xs">🔷 กรุงเทพ</span>`;
+        return `<span class="bg-slate-100/95 text-slate-700 border border-slate-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">กรุงเทพ</span>`;
       } else {
-        return `<span class="bg-amber-50/95 text-[#8C6D23] border border-amber-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs backdrop-blur-xs">⭐ ศิวาทรัพย์</span>`;
+        return `<span class="bg-amber-50/95 text-[#8C6D23] border border-amber-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">ศิวาทรัพย์</span>`;
       }
     }
 
@@ -1005,12 +1076,15 @@
       if (filtered.length === 0) {
         container.innerHTML = `
           <div class="text-center py-12 text-gray-400 space-y-2">
-            <div class="text-3xl">🔍</div>
+            <div class="inline-flex items-center justify-center icon-circle w-10 h-10 mb-1">
+              <i data-lucide="search" class="w-5 h-5 stroke-[1.5]"></i>
+            </div>
             <div class="font-bold text-gray-600">ไม่พบทรัพย์ที่ตรงกับเงื่อนไข</div>
             <p class="text-xs text-gray-400">ลองล้างตัวกรอง หรือค้นหาธนาคารอื่นดูนะคะ</p>
             <button onclick="clearFilters()" class="text-xs bg-amber-100 text-amber-800 font-bold px-3 py-1.5 rounded-lg shadow-xs">ล้างตัวกรองทั้งหมด</button>
           </div>
         `;
+        if (window.lucide) { lucide.createIcons(); }
         return;
       }
 
@@ -1026,7 +1100,8 @@
           <div class="bg-white p-3.5 rounded-xl shadow-xs space-y-2 mb-3 border border-gray-200 border-l-4 border-[#990000]">
             <div class="flex justify-between items-center">
               <span class="font-bold text-xs flex items-center gap-1.5 text-gray-800">
-                👑 แผงควบคุมเจ้าของ (บัว & กูล)
+                <span class="icon-circle w-5 h-5"><i data-lucide="crown" class="w-3 h-3 stroke-[1.5]"></i></span>
+                <span>แผงควบคุมเจ้าของ (บัว & กูล)</span>
               </span>
               <span class="text-[10px] bg-gray-50 text-gray-600 px-2 py-0.5 rounded-full border border-gray-200 font-medium">Real-time DB</span>
             </div>
@@ -1049,9 +1124,10 @@
               </div>
             </div>
             <div class="flex items-center justify-between text-[10px] text-gray-500 pt-1 border-t border-gray-100">
-              <span>💡 สลับสถานะทรัพย์ได้ทันที</span>
-              <button onclick="openOwnerLeadsModal()" class="text-[#990000] font-bold hover:underline flex items-center gap-1">
-                📬 ดูคลังฝากขาย (${consignments.length})
+              <span>สลับสถานะทรัพย์ได้ทันที</span>
+              <button onclick="openOwnerLeadsModal()" class="text-[#990000] font-bold hover:underline flex items-center gap-1.5">
+                <span class="icon-circle w-4 h-4"><i data-lucide="inbox" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                <span>ดูคลังฝากขาย (${consignments.length})</span>
               </button>
             </div>
           </div>
@@ -1092,7 +1168,7 @@
                    class="w-full h-full object-cover transition-all ${isSold ? 'grayscale contrast-125 opacity-75' : ''}">
               
               <!-- Bank & Category Badges (Clean Pastel) -->
-              <div class="absolute top-2.5 left-2.5 flex items-center gap-1 z-10">
+              <div class="absolute top-2.5 left-2.5 flex items-center gap-1.5 z-10">
                 ${bankBadge}
                 <span class="bg-white/95 backdrop-blur-xs text-gray-700 border border-gray-200/80 text-[10px] font-medium px-2 py-0.5 rounded-full shadow-2xs">
                   ${p.category || 'อสังหาฯ'}
@@ -1101,30 +1177,37 @@
 
               <!-- Bundle Select Button (Gold 10% for selected) -->
               ${(currentMode !== 'client' && currentMode !== 'trainee') ? `
-                <button onclick="toggleBundleItem('${p.id}')" class="absolute top-2.5 left-40 z-10 text-[9px] font-medium px-2 py-0.5 rounded-full shadow-2xs flex items-center gap-1 transition-all ${isSelected ? 'bg-siwasup-gold text-gray-950 ring-2 ring-white scale-105 font-bold' : 'bg-white/95 hover:bg-white text-gray-700 border border-gray-200/80 backdrop-blur-xs'}">
-                  <span>${isSelected ? '✓ ในมัดรวม' : '+ มัดรวม'}</span>
+                <button onclick="toggleBundleItem('${p.id}')" class="absolute top-2.5 left-36 z-10 text-[9px] font-medium px-2 py-0.5 rounded-full shadow-2xs flex items-center gap-1 transition-all ${isSelected ? 'bg-siwasup-gold text-gray-950 ring-2 ring-white scale-105 font-bold' : 'bg-white/95 hover:bg-white text-gray-700 border border-gray-200/80 backdrop-blur-xs'}">
+                  <span class="icon-circle w-3.5 h-3.5"><i data-lucide="${isSelected ? 'check' : 'plus'}" class="w-2.5 h-2.5 stroke-[2]"></i></span>
+                  <span>${isSelected ? 'ในมัดรวม' : 'มัดรวม'}</span>
                 </button>
               ` : ''}
 
-              <!-- Status Badge (Pastel Aesthetic) -->
+              <!-- Status Badge (Pastel Aesthetic with Clean Icon) -->
               ${isSold ? `
                 <div class="absolute top-2.5 right-2.5 bg-rose-50/95 backdrop-blur-xs text-rose-700 border border-rose-200 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-2xs flex items-center gap-1">
-                  <span>🔴</span> SOLD OUT
+                  <span class="icon-circle w-3.5 h-3.5 bg-rose-600/80"><i data-lucide="x" class="w-2.5 h-2.5 stroke-[2]"></i></span>
+                  <span>SOLD OUT</span>
                 </div>
               ` : isBooked ? `
                 <div class="absolute top-2.5 right-2.5 bg-amber-50/95 backdrop-blur-xs text-amber-800 border border-amber-200 text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-2xs badge-fomo flex items-center gap-1">
-                  <span>🟠</span> ติดจอง
+                  <span class="icon-circle w-3.5 h-3.5 bg-amber-600/80"><i data-lucide="lock" class="w-2.5 h-2.5 stroke-[2]"></i></span>
+                  <span>ติดจอง</span>
                 </div>
               ` : `
                 <div class="absolute top-2.5 right-2.5 bg-emerald-50/95 backdrop-blur-xs text-emerald-700 border border-emerald-200 text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-2xs flex items-center gap-1">
-                  <span>🟢</span> พร้อมขาย
+                  <span class="icon-circle w-3.5 h-3.5 bg-emerald-600/80"><i data-lucide="check" class="w-2.5 h-2.5 stroke-[2]"></i></span>
+                  <span>พร้อมขาย</span>
                 </div>
               `}
 
               <!-- Agent Commission Badge Bar (White 60% Glassmorphism + Satin Gold 10% Accent) -->
               ${(currentMode === 'free_agent' || currentMode === 'employee') ? `
                 <div class="absolute bottom-2 left-2 right-2 bg-white/95 backdrop-blur-xs text-gray-800 border border-amber-200/90 border-l-3 border-l-siwasup-gold font-medium px-2.5 py-1 rounded-lg text-xs shadow-xs flex items-center justify-between">
-                  <span>💰 ${comLabel}: <strong class="text-[#990000] font-bold">${comAmount || 'ตามผลงาน'}</strong></span>
+                  <span class="flex items-center gap-1.5">
+                    <span class="icon-circle w-4 h-4"><i data-lucide="coins" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                    <span>${comLabel}: <strong class="text-[#990000] font-bold">${comAmount || 'ตามผลงาน'}</strong></span>
+                  </span>
                   <span class="text-[9px] bg-amber-50 text-amber-800 border border-amber-200/80 px-1.5 py-0.5 rounded-full font-medium">รับเต็ม</span>
                 </div>
               ` : ''}
@@ -1132,7 +1215,10 @@
               <!-- Trainee Locked Badge Bar -->
               ${currentMode === 'trainee' ? `
                 <div class="absolute bottom-2 left-2 right-2 bg-white/95 backdrop-blur-xs text-gray-700 border border-gray-200/90 border-l-3 border-l-siwasup-gold font-medium px-2.5 py-1 rounded-lg text-[11px] shadow-xs flex items-center justify-between">
-                  <span>🔒 ค่าคอมมิชชั่น: ซ่อนอยู่ (Trainee)</span>
+                  <span class="flex items-center gap-1.5">
+                    <span class="icon-circle w-4 h-4"><i data-lucide="lock" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                    <span>ค่าคอมมิชชั่น: ซ่อนอยู่ (Trainee)</span>
+                  </span>
                   <span class="text-[9px] bg-amber-50 text-amber-800 border border-amber-200 px-1.5 py-0.5 rounded-full font-medium">ส่งครบ 3 หลัง</span>
                 </div>
               ` : ''}
@@ -1140,8 +1226,14 @@
               <!-- Owner Management Bar -->
               ${currentMode === 'owner' ? `
                 <div class="absolute bottom-2 left-2 right-2 bg-white/95 backdrop-blur-xs text-gray-800 text-[10px] px-2.5 py-1 rounded-lg shadow-xs flex items-center justify-between border border-gray-200/90">
-                  <span>💰 คอมเอเจนต์: <strong class="text-[#990000] font-bold">${comAmount || '3-5%'}</strong></span>
-                  <span class="text-gray-500 font-medium">👁️ วิว 34 ครั้ง</span>
+                  <span class="flex items-center gap-1.5">
+                    <span class="icon-circle w-4 h-4"><i data-lucide="coins" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                    <span>คอมเอเจนต์: <strong class="text-[#990000] font-bold">${comAmount || '3-5%'}</strong></span>
+                  </span>
+                  <span class="text-gray-500 font-medium flex items-center gap-1">
+                    <span class="icon-circle w-4 h-4"><i data-lucide="eye" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                    <span>วิว 34 ครั้ง</span>
+                  </span>
                 </div>
               ` : ''}
             </div>
@@ -1154,10 +1246,11 @@
               <!-- 7-Day Social Proof Banner for SOLD properties (Pastel Rose) -->
               ${isSold ? `
                 <div class="bg-rose-50/70 border border-rose-200/70 rounded-xl p-2 flex items-center justify-between text-xs">
-                  <span class="font-bold text-rose-800 flex items-center gap-1">
-                    <span>🔥</span> ${p.sold_time || 'ปิดการขายแล้วใน 48 ชม.'}
+                  <span class="font-bold text-rose-800 flex items-center gap-1.5">
+                    <span class="icon-circle w-4 h-4 bg-rose-600/80"><i data-lucide="flame" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                    <span>${p.sold_time || 'ปิดการขายแล้วใน 48 ชม.'}</span>
                   </span>
-                  <span class="text-[10px] text-rose-600">โอนกรรมสิทธิ์แล้ว (Social Proof)</span>
+                  <span class="text-[10px] text-rose-600 font-medium">โอนกรรมสิทธิ์แล้ว (Social Proof)</span>
                 </div>
               ` : ''}
 
@@ -1167,7 +1260,8 @@
                   <span class="text-base font-extrabold text-[#990000]">${p.price || 'ติดต่อสอบถาม'}</span>
                   ${currentMode === 'owner' ? `
                     <button onclick="openEditPriceModal('${p.id}')" class="text-[11px] bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 font-bold px-2 py-0.5 rounded-lg shadow-2xs flex items-center gap-1 active:scale-95 transition-all" title="คลิกเพื่อแก้ราคา">
-                      <span>✏️</span> แก้ราคา
+                      <span class="icon-circle w-3.5 h-3.5"><i data-lucide="edit-3" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                      <span>แก้ราคา</span>
                     </button>
                   ` : ''}
                 </div>
@@ -1176,90 +1270,110 @@
               <!-- ACTION BUTTONS ACCORDING TO ROLES -->
               <div class="pt-2">
                 ${currentMode === 'owner' ? `
-                  <!-- 👑 OWNER CONTROLS (BUA & GOOL) -->
+                  <!-- OWNER CONTROLS (BUA & GOOL) -->
                   <div class="bg-[#fafbfc] p-2.5 rounded-xl border border-gray-100 space-y-2">
-                    <div class="text-[11px] font-bold text-gray-800 flex justify-between">
-                      <span>🎛️ ปรับสถานะ & ราคา (1-Click):</span>
+                    <div class="text-[11px] font-bold text-gray-800 flex justify-between items-center">
+                      <span class="flex items-center gap-1">
+                        <span class="icon-circle w-4 h-4"><i data-lucide="sliders" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                        <span>ปรับสถานะ & ราคา (1-Click):</span>
+                      </span>
                       <span class="text-gray-400 font-normal">บัว/เจี๊ยบ กดได้เลย</span>
                     </div>
                     <div class="grid grid-cols-3 gap-1">
-                      <button onclick="updateStatus('${p.id}', 'available')" class="py-1 px-1 rounded-lg text-[10px] font-bold ${!isBooked && !isSold ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs' : 'bg-white text-gray-600 border border-gray-200'}">
-                        🟢 พร้อมขาย
+                      <button onclick="updateStatus('${p.id}', 'available')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${!isBooked && !isSold ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs' : 'bg-white text-gray-600 border border-gray-200'}">
+                        <span class="icon-circle w-3.5 h-3.5 bg-emerald-600/80"><i data-lucide="check" class="w-2.5 h-2.5 stroke-[2]"></i></span>
+                        <span>พร้อมขาย</span>
                       </button>
-                      <button onclick="updateStatus('${p.id}', 'booked')" class="py-1 px-1 rounded-lg text-[10px] font-bold ${isBooked ? 'bg-amber-50 text-amber-800 border border-amber-300 shadow-2xs' : 'bg-white text-gray-600 border border-gray-200'}">
-                        🟠 ติดจอง
+                      <button onclick="updateStatus('${p.id}', 'booked')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${isBooked ? 'bg-amber-50 text-amber-800 border border-amber-300 shadow-2xs' : 'bg-white text-gray-600 border border-gray-200'}">
+                        <span class="icon-circle w-3.5 h-3.5 bg-amber-600/80"><i data-lucide="lock" class="w-2.5 h-2.5 stroke-[2]"></i></span>
+                        <span>ติดจอง</span>
                       </button>
-                      <button onclick="updateStatus('${p.id}', 'sold')" class="py-1 px-1 rounded-lg text-[10px] font-bold ${isSold ? 'bg-rose-50 text-rose-800 border border-rose-300 shadow-2xs' : 'bg-white text-gray-600 border border-gray-200'}">
-                        🔴 ขายแล้ว
+                      <button onclick="updateStatus('${p.id}', 'sold')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${isSold ? 'bg-rose-50 text-rose-800 border border-rose-300 shadow-2xs' : 'bg-white text-gray-600 border border-gray-200'}">
+                        <span class="icon-circle w-3.5 h-3.5 bg-rose-600/80"><i data-lucide="x" class="w-2.5 h-2.5 stroke-[2]"></i></span>
+                        <span>ขายแล้ว</span>
                       </button>
                     </div>
                     <div class="grid grid-cols-2 gap-1.5 pt-1">
-                      <button onclick="openEditPriceModal('${p.id}')" class="bg-[#990000] hover:bg-red-800 text-white text-[11px] font-bold py-1.5 px-2 rounded-lg shadow-xs flex items-center justify-center gap-1 active:scale-95 transition-all">
-                        <span>✏️</span> แก้ไขราคาขาย
+                      <button onclick="openEditPriceModal('${p.id}')" class="bg-[#990000] hover:bg-red-800 text-white text-[11px] font-bold py-1.5 px-2 rounded-lg shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+                        <span class="icon-circle w-4 h-4"><i data-lucide="edit-3" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                        <span>แก้ไขราคาขาย</span>
                       </button>
-                      <button onclick="openOfferModal('${p.id}', '${p.title}', '${p.price}')" class="bg-white hover:bg-gray-50 text-gray-700 text-[10px] font-medium py-1.5 px-2 rounded-lg border border-gray-200 text-center">
-                        🤝 ต่อรองธนาคาร
+                      <button onclick="openOfferModal('${p.id}', '${p.title}', '${p.price}')" class="bg-white hover:bg-gray-50 text-gray-700 text-[10px] font-medium py-1.5 px-2 rounded-lg border border-gray-200 flex items-center justify-center gap-1.5">
+                        <span class="icon-circle w-4 h-4"><i data-lucide="handshake" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                        <span>ต่อรองธนาคาร</span>
                       </button>
                     </div>
                     <div class="flex gap-1.5 pt-0.5">
-                      <a href="${p.url || '#'}" target="_blank" class="flex-1 bg-white hover:bg-gray-50 text-gray-600 text-[10px] font-medium py-1 px-2 rounded-lg border border-gray-200 text-center">
-                        📂 ดูรูปเดิมในเว็บ
+                      <a href="${p.url || '#'}" target="_blank" class="flex-1 bg-white hover:bg-gray-50 text-gray-600 text-[10px] font-medium py-1 px-2 rounded-lg border border-gray-200 flex items-center justify-center gap-1">
+                        <span class="icon-circle w-3.5 h-3.5"><i data-lucide="external-link" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                        <span>ดูรูปในเว็บ</span>
                       </a>
-                      <button onclick="showToast('เชื่อมต่อ Google Drive คลังรูปของบัว')" class="flex-1 bg-white hover:bg-gray-50 text-gray-600 text-[10px] font-medium py-1 px-2 rounded-lg border border-gray-200 text-center">
-                        📁 โฟลเดอร์ Drive
+                      <button onclick="showToast('เชื่อมต่อ Google Drive คลังรูปของบัว')" class="flex-1 bg-white hover:bg-gray-50 text-gray-600 text-[10px] font-medium py-1 px-2 rounded-lg border border-gray-200 flex items-center justify-center gap-1">
+                        <span class="icon-circle w-3.5 h-3.5"><i data-lucide="folder" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                        <span>โฟลเดอร์ Drive</span>
                       </button>
                     </div>
                   </div>
                 ` : (currentMode === 'free_agent' || currentMode === 'employee') ? `
-                  <!-- 👔 ACTIVE AGENT ACTIONS (FREE / EMPLOYEE) -->
+                  <!-- ACTIVE AGENT ACTIONS (FREE / EMPLOYEE) -->
                   <div class="space-y-1.5">
                     <div class="grid grid-cols-2 gap-1.5">
-                      <button onclick="openSmartShare('${p.id}', '${p.title}')" class="bg-[#990000] hover:bg-red-800 text-white text-[11px] font-bold py-2 px-2 rounded-lg flex items-center justify-center gap-1 shadow-xs active:scale-95 transition-all">
-                        <span>🚀</span> แชร์ลิงก์ล็อกสิทธิ์
+                      <button onclick="openSmartShare('${p.id}', '${p.title}')" class="bg-[#990000] hover:bg-red-800 text-white text-[11px] font-bold py-2 px-2 rounded-lg flex items-center justify-center gap-1.5 shadow-xs active:scale-95 transition-all">
+                        <span class="icon-circle w-4 h-4"><i data-lucide="share-2" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                        <span>แชร์ล็อกสิทธิ์</span>
                       </button>
-                      <button onclick="openOfferModal('${p.id}', '${p.title}', '${p.price}')" class="bg-white hover:bg-gray-50 text-gray-800 text-[11px] font-semibold py-2 px-2 rounded-lg border border-gray-200 shadow-2xs flex items-center justify-center gap-1 text-center">
-                        <span>🤝</span> ต่อรองราคา NPA
+                      <button onclick="openOfferModal('${p.id}', '${p.title}', '${p.price}')" class="bg-white hover:bg-gray-50 text-gray-800 text-[11px] font-semibold py-2 px-2 rounded-lg border border-gray-200 shadow-2xs flex items-center justify-center gap-1.5 text-center">
+                        <span class="icon-circle w-4 h-4"><i data-lucide="handshake" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                        <span>ต่อรองราคา NPA</span>
                       </button>
                     </div>
                     ${!isBooked && !isSold ? `
-                      <button onclick="openBookingModal('${p.id}', '${p.title}', '${p.price}')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 rounded-lg flex items-center justify-center gap-1 shadow-xs active:scale-95 transition-all">
-                        <span>📝</span> แจ้งวางเงินจอง (ส่งสลิปให้เจี๊ยบ/บัว)
+                      <button onclick="openBookingModal('${p.id}', '${p.title}', '${p.price}')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 rounded-lg flex items-center justify-center gap-1.5 shadow-xs active:scale-95 transition-all">
+                        <span class="icon-circle w-4 h-4"><i data-lucide="file-check" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                        <span>แจ้งวางเงินจอง (สลิปเจี๊ยบ/บัว)</span>
                       </button>
                     ` : `
-                      <button class="w-full bg-gray-50 text-gray-400 text-xs font-medium py-2 rounded-lg cursor-not-allowed border border-gray-100">
-                        🔒 ${isSold ? 'ขายแล้ว (SOLD OUT)' : 'ติดจองแล้ว'}
+                      <button class="w-full bg-gray-50 text-gray-400 text-xs font-medium py-2 rounded-lg cursor-not-allowed border border-gray-100 flex items-center justify-center gap-1.5">
+                        <span class="icon-circle w-4 h-4"><i data-lucide="lock" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                        <span>${isSold ? 'ขายแล้ว (SOLD OUT)' : 'ติดจองแล้ว'}</span>
                       </button>
                     `}
                   </div>
                 ` : currentMode === 'trainee' ? `
-                  <!-- 🎓 TRAINEE ACTIONS (LOCKED UNTIL 3 LISTINGS) -->
+                  <!-- TRAINEE ACTIONS (LOCKED UNTIL 3 LISTINGS) -->
                   <div class="bg-[#fafbfc] border border-gray-100 rounded-xl p-2.5 space-y-2 text-center">
-                    <div class="text-[11px] text-gray-800 font-semibold flex items-center justify-center gap-1">
-                      <span>🔒</span> ฟังก์ชันแชร์ล็อกอยู่ (Trainee Onboarding)
+                    <div class="text-[11px] text-gray-800 font-semibold flex items-center justify-center gap-1.5">
+                      <span class="icon-circle w-4 h-4"><i data-lucide="lock" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                      <span>ฟังก์ชันแชร์ล็อกอยู่ (Trainee Onboarding)</span>
                     </div>
                     <p class="text-[10px] text-gray-500">ส่งทรัพย์เข้าพอร์ตให้บริษัทอีก 2 หลัง เพื่อปลดล็อกลิงก์แชร์และรับค่าคอม 3-5%</p>
-                    <button onclick="openConsignModal(true)" class="w-full bg-[#990000] hover:bg-red-800 text-white text-xs font-bold py-2 rounded-lg shadow-xs flex items-center justify-center gap-1">
-                      <span>➕</span> ส่งทรัพย์ฝากขายหลังที่ 2/3 ทันที
+                    <button onclick="openConsignModal(true)" class="w-full bg-[#990000] hover:bg-red-800 text-white text-xs font-bold py-2 rounded-lg shadow-xs flex items-center justify-center gap-1.5">
+                      <span class="icon-circle w-4 h-4"><i data-lucide="plus" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                      <span>ส่งทรัพย์ฝากขายหลังที่ 2/3 ทันที</span>
                     </button>
                   </div>
                 ` : `
-                  <!-- 👤 CLIENT ACTIONS (WHITE-LABEL / NO COMPANY NUMBER) -->
+                  <!-- CLIENT ACTIONS (WHITE-LABEL / NO COMPANY NUMBER) -->
                   <div class="bg-[#fafbfc] border border-gray-100 rounded-xl p-2.5 space-y-1.5 text-center">
                     <p class="text-[11px] text-gray-600 font-medium">สนใจทรัพย์นี้ หรือต้องการต่อรองราคา / ยื่นกู้</p>
                     <div class="grid grid-cols-2 gap-1.5 pt-0.5">
-                      <button onclick="contactViaLine('${p.id}', '${p.title}')" class="bg-[#06C755] hover:bg-[#05b34c] text-white text-[11px] font-bold py-2.5 px-1 rounded-lg shadow-xs flex items-center justify-center gap-1 text-center active:scale-95 transition-all">
-                        <span>📱</span> ทัก LINE นัดชม
+                      <button onclick="contactViaLine('${p.id}', '${p.title}')" class="bg-[#06C755] hover:bg-[#05b34c] text-white text-[11px] font-bold py-2.5 px-1 rounded-lg shadow-xs flex items-center justify-center gap-1.5 text-center active:scale-95 transition-all">
+                        <span class="icon-circle w-4 h-4"><i data-lucide="message-circle" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                        <span>ทัก LINE นัดชม</span>
                       </button>
-                      <button onclick="openCallModal('${p.id}', '${p.title}')" class="bg-siwasup-gold hover:opacity-95 text-gray-950 text-[11px] font-bold py-2.5 px-1 rounded-lg shadow-xs flex items-center justify-center gap-1 text-center active:scale-95 transition-all">
-                        <span>📞</span> โทรรับสิทธิ์พิเศษ
+                      <button onclick="openCallModal('${p.id}', '${p.title}')" class="bg-siwasup-gold hover:opacity-95 text-gray-950 text-[11px] font-bold py-2.5 px-1 rounded-lg shadow-xs flex items-center justify-center gap-1.5 text-center active:scale-95 transition-all">
+                        <span class="icon-circle w-4 h-4"><i data-lucide="phone" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                        <span>โทรรับสิทธิ์พิเศษ</span>
                       </button>
                     </div>
                     <div class="grid grid-cols-2 gap-1.5">
-                      <button onclick="openOfferModal('${p.id}', '${p.title}', '${p.price}')" class="bg-white hover:bg-gray-50 text-gray-700 text-[10px] font-semibold py-1.5 rounded-lg border border-gray-200 shadow-2xs">
-                        🤝 ยื่นต่อรองราคา
+                      <button onclick="openOfferModal('${p.id}', '${p.title}', '${p.price}')" class="bg-white hover:bg-gray-50 text-gray-700 text-[10px] font-semibold py-1.5 rounded-lg border border-gray-200 shadow-2xs flex items-center justify-center gap-1.5">
+                        <span class="icon-circle w-3.5 h-3.5"><i data-lucide="handshake" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                        <span>ยื่นต่อรองราคา</span>
                       </button>
-                      <button onclick="openInquiryModal('${p.id}', '${p.title}', '${p.price}')" class="bg-white hover:bg-gray-50 text-gray-700 text-[10px] font-semibold py-1.5 rounded-lg border border-gray-200 shadow-2xs">
-                        📅 นัดหมายชมห้อง
+                      <button onclick="openInquiryModal('${p.id}', '${p.title}', '${p.price}')" class="bg-white hover:bg-gray-50 text-gray-700 text-[10px] font-semibold py-1.5 rounded-lg border border-gray-200 shadow-2xs flex items-center justify-center gap-1.5">
+                        <span class="icon-circle w-3.5 h-3.5"><i data-lucide="calendar" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                        <span>นัดหมายชมห้อง</span>
                       </button>
                     </div>
                   </div>
@@ -1271,6 +1385,8 @@
           </div>
         `;
       }).join('');
+
+      if (window.lucide) { lucide.createIcons(); }
     }
     // --- NEW PHASE 1 FUNCTIONS: CONSIGNMENT, MGM, OFFER, AND OWNER LEADS ---
     let pendingOfferProp = null;
@@ -1285,13 +1401,14 @@
       const title = document.getElementById('consign-modal-title');
       const sub = document.getElementById('consign-modal-sub');
       if (isTrainee) {
-        title.innerHTML = "🎓 ส่งทรัพย์เข้าพอร์ต (ภารกิจปลดล็อก Trainee 2/3)";
+        title.innerHTML = `<span class="icon-circle w-5 h-5"><i data-lucide="graduation-cap" class="w-3 h-3 stroke-[1.5]"></i></span><span>ส่งทรัพย์เข้าพอร์ต (ภารกิจปลดล็อก Trainee 2/3)</span>`;
         sub.innerHTML = "ส่งทรัพย์บ้าน/คอนโด/ที่ดิน เข้าสู่ระบบเพื่อให้แอดมินบัวตรวจสอบและอนุมัติ";
       } else {
-        title.innerHTML = "🏡 ฝากขายบ้าน/คอนโด/ที่ดิน กับศิวาทรัพย์";
+        title.innerHTML = `<span class="icon-circle w-5 h-5"><i data-lucide="building" class="w-3 h-3 stroke-[1.5]"></i></span><span>ฝากขายบ้าน/คอนโด/ที่ดิน กับศิวาทรัพย์</span>`;
         sub.innerHTML = "ฟรี! ไม่มีค่าแรกเข้า • เข้าถึงเครือข่ายเอเจนต์ทั่วประเทศ";
       }
       document.getElementById('consign-modal').classList.remove('hidden');
+      if (window.lucide) { lucide.createIcons(); }
     }
 
     function closeConsignModal() {
@@ -1372,10 +1489,14 @@
     function openOfferModal(id, title, price) {
       pendingOfferProp = { id, title, price };
       document.getElementById('offer-prop-info').innerHTML = `
-        <div class="font-bold text-blue-950">🏠 ${title}</div>
+        <div class="font-bold text-blue-950 flex items-center gap-1.5">
+          <span class="icon-circle w-4 h-4"><i data-lucide="home" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+          <span>${title}</span>
+        </div>
         <div class="text-[10px] text-blue-700">ราคาตั้งขาย: <span class="font-bold text-red-600">${price}</span> (รหัส: ${id})</div>
       `;
       document.getElementById('offer-modal').classList.remove('hidden');
+      if (window.lucide) { lucide.createIcons(); }
     }
 
     function closeOfferModal() {
@@ -1392,7 +1513,7 @@
       closeOfferModal();
 
       document.getElementById('admin-toast-body').innerHTML = `
-        🤝 <strong>มีข้อเสนอต่อรองราคาธนาคารเข้ามา!</strong><br>
+        <strong>มีข้อเสนอต่อรองราคาธนาคารเข้ามา!</strong><br>
         • ทรัพย์: ${pendingOfferProp ? pendingOfferProp.title : '-'}<br>
         • ราคาที่เสนอ: <strong class="text-amber-400 font-bold">${parseInt(offerPrice).toLocaleString()} บาท</strong><br>
         • ผู้เสนอซื้อ: คุณ${name} (${phone})<br>
@@ -1400,6 +1521,7 @@
         <span class="text-emerald-400 font-bold">📲 ส่งต่อให้บัวเจรจาเจ้าหน้าที่ธนาคารทันที</span>
       `;
       document.getElementById('admin-toast').classList.remove('hidden');
+      if (window.lucide) { lucide.createIcons(); }
       showToast("✅ ส่งข้อเสนอต่อรองเรียบร้อย! บัวจะประสานงานธนาคารและติดต่อกลับครับ");
     }
 
@@ -1418,19 +1540,25 @@
               </div>
               <span class="text-[10px] text-gray-400">${c.created_at}</span>
             </div>
-            <div class="text-[11px] text-gray-800 font-semibold">
-              💰 ราคาเสนอขาย: ${c.price} บาท | พื้นที่: ${c.size}
+            <div class="text-[11px] text-gray-800 font-semibold flex items-center gap-1.5">
+              <span class="icon-circle w-4 h-4"><i data-lucide="coins" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+              <span>ราคาเสนอขาย: ${c.price} บาท | พื้นที่: ${c.size}</span>
             </div>
             <div class="text-[11px] text-gray-600 flex items-center justify-between pt-1 border-t border-gray-200">
-              <span>👤 ${c.owner_name} (<a href="tel:${c.phone}" class="text-[#990000] font-bold underline">${c.phone}</a>)</span>
-              <button onclick="convertLeadToAgent('${c.id}')" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold text-[10px] px-2.5 py-1 rounded shadow-xs">
-                🤝 ชวนเป็น Free Agent
+              <span class="flex items-center gap-1.5">
+                <span class="icon-circle w-3.5 h-3.5"><i data-lucide="user" class="w-2 h-2 stroke-[1.5]"></i></span>
+                <span>${c.owner_name} (<a href="tel:${c.phone}" class="text-[#990000] font-bold underline">${c.phone}</a>)</span>
+              </span>
+              <button onclick="convertLeadToAgent('${c.id}')" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold text-[10px] px-2.5 py-1 rounded shadow-xs flex items-center gap-1">
+                <span class="icon-circle w-3.5 h-3.5"><i data-lucide="user-plus" class="w-2 h-2 stroke-[1.5]"></i></span>
+                <span>ชวนเป็น Free Agent</span>
               </button>
             </div>
           </div>
         `).join('');
       }
       document.getElementById('owner-leads-modal').classList.remove('hidden');
+      if (window.lucide) { lucide.createIcons(); }
     }
 
     function closeOwnerLeadsModal() {
@@ -1465,15 +1593,20 @@
       pendingEditPriceProp = prop;
       const currentNum = parsePriceNumber(prop.price);
       document.getElementById('edit-price-prop-info').innerHTML = `
-        <div class="font-bold text-gray-900">🏠 ${prop.title}</div>
+        <div class="font-bold text-gray-900 flex items-center gap-1.5">
+          <span class="icon-circle w-4 h-4"><i data-lucide="home" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+          <span>${prop.title}</span>
+        </div>
         <div class="text-[11px] text-gray-600">ราคาปัจจุบัน: <strong class="text-[#990000] font-extrabold text-sm">${prop.price}</strong> (รหัส: ${prop.id})</div>
         <div class="mt-1.5 p-2 bg-amber-50 border border-amber-300 rounded-lg text-[10px] text-amber-950 leading-snug">
-          ⚠️ <strong>จิตวิทยาการขาย:</strong> หากมีลูกค้ากำลังนัดชมหรือคุยอยู่ การลดราคาอาจทำให้ลูกค้าชะงัก (คิดว่าบ้านมีตำหนิหรือรอให้ลดอีก) และเอเจนต์จะเสียหน้า ควรปรับลดเฉพาะกรณี <strong>"ทรัพย์นิ่งเกิน 14 วัน"</strong> หรือธนาคารมีรอบลดราคาเท่านั้น!
+          <span class="icon-circle w-3.5 h-3.5 inline-flex mr-1 align-middle"><i data-lucide="alert-circle" class="w-2 h-2 stroke-[1.5]"></i></span>
+          <strong>จิตวิทยาการขาย:</strong> หากมีลูกค้ากำลังนัดชมหรือคุยอยู่ การลดราคาอาจทำให้ลูกค้าชะงัก (คิดว่าบ้านมีตำหนิหรือรอให้ลดอีก) และเอเจนต์จะเสียหน้า ควรปรับลดเฉพาะกรณี <strong>"ทรัพย์นิ่งเกิน 14 วัน"</strong> หรือธนาคารมีรอบลดราคาเท่านั้น!
         </div>
       `;
       document.getElementById('new-price-input').value = currentNum > 0 ? currentNum : '';
       document.getElementById('mark-hot-deal').checked = false;
       document.getElementById('edit-price-modal').classList.remove('hidden');
+      if (window.lucide) { lucide.createIcons(); }
     }
 
     function closeEditPriceModal() {
@@ -1517,12 +1650,16 @@
       const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'AG-บัวรา';
       document.getElementById('agent-ref-input').value = savedRef;
       document.getElementById('share-prop-info').innerHTML = `
-        <div class="font-bold text-gray-900">🏠 ${title}</div>
+        <div class="font-bold text-gray-900 flex items-center gap-1.5">
+          <span class="icon-circle w-4 h-4"><i data-lucide="home" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+          <span>${title}</span>
+        </div>
         <div class="text-[10px] text-gray-600">รหัสทรัพย์: <span class="font-mono text-amber-800 font-bold">${id}</span></div>
       `;
       document.getElementById('qr-container').classList.add('hidden');
       document.getElementById('qr-toggle-text').textContent = "เปิดดู QR";
       document.getElementById('share-modal').classList.remove('hidden');
+      if (window.lucide) { lucide.createIcons(); }
       updateShareUrls();
     }
 
@@ -1608,10 +1745,14 @@
     function openInquiryModal(id, title, price) {
       pendingInquiryProp = { id, title, price };
       document.getElementById('inquiry-prop-info').innerHTML = `
-        <strong>${title}</strong><br>
-        <span class="text-red-600 font-bold">${price}</span>
+        <div class="font-bold text-gray-800 flex items-center gap-1.5">
+          <span class="icon-circle w-4 h-4"><i data-lucide="home" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+          <span>${title}</span>
+        </div>
+        <div class="text-red-600 font-bold">${price}</div>
       `;
       document.getElementById('inquiry-modal').classList.remove('hidden');
+      if (window.lucide) { lucide.createIcons(); }
     }
 
     function closeInquiryModal() {
@@ -1630,13 +1771,14 @@
 
       // Show Admin notification toast (Simulate Bua seeing in LINE)
       document.getElementById('admin-toast-body').innerHTML = `
-        📅 <strong>ลูกค้านัดดูห้องใหม่!</strong><br>
+        <strong>ลูกค้านัดดูห้องใหม่!</strong><br>
         • ทรัพย์: ${pendingInquiryProp ? pendingInquiryProp.title : '-'}<br>
         • ลูกค้า: คุณ${name} (${phone})<br>
         • วันที่สะดวก: ${date || 'เร็วที่สุด'}<br>
         • <span class="text-amber-300 font-bold">เอเจนต์ผู้แนะนำ: ${ref} (จาก ${src})</span>
       `;
       document.getElementById('admin-toast').classList.remove('hidden');
+      if (window.lucide) { lucide.createIcons(); }
       showToast(`✅ ส่งข้อมูลนัดหมายเรียบร้อย เจ้าหน้าที่จะติดต่อกลับที่เบอร์ ${phone} ครับ`);
     }
 
@@ -1644,10 +1786,14 @@
     function openBookingModal(id, title, price) {
       pendingBookingId = id;
       document.getElementById('booking-property-info').innerHTML = `
-        <div class="font-bold text-gray-800">${title}</div>
+        <div class="font-bold text-gray-800 flex items-center gap-1.5">
+          <span class="icon-circle w-4 h-4"><i data-lucide="home" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+          <span>${title}</span>
+        </div>
         <div class="text-red-600 font-semibold">${price}</div>
       `;
       document.getElementById('booking-modal').classList.remove('hidden');
+      if (window.lucide) { lucide.createIcons(); }
     }
 
     function closeBookingModal() {
@@ -1701,6 +1847,7 @@
       renderBundleSelectedList();
       updateBundlePreview();
       document.getElementById('bundle-modal').classList.remove('hidden');
+      if (window.lucide) { lucide.createIcons(); }
     }
 
     function closeBundleModal() {
@@ -1847,6 +1994,10 @@
     // Auto-run
     checkUrlParameters();
     loadProperties();
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) { lucide.createIcons(); }
+    });
+    if (window.lucide) { lucide.createIcons(); }
   </script>
 </body>
 </html>
