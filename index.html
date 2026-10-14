@@ -10,69 +10,76 @@
     body { font-family: 'Kanit', 'Tahoma', sans-serif; -webkit-tap-highlight-color: transparent; }
     .badge-fomo { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .75; } }
+
+    /* 🏛️ Authentic Siwasup Satin Architectural Gold (Sampled from Office 3D Sign) */
+    .bg-siwasup-gold { background: linear-gradient(135deg, #D4BA7A 0%, #C2A460 50%, #967C3E 100%); }
+    .bg-siwasup-gold-light { background: linear-gradient(135deg, #E2CE99 0%, #D4BA7A 100%); }
+    .text-siwasup-gold { color: #C2A460; }
+    .text-siwasup-gold-light { color: #D4BA7A; }
+    .border-siwasup-gold { border-color: #C2A460; }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen text-gray-800 pb-20">
+<body class="bg-[#f4f5f7] min-h-screen text-gray-800 pb-20">
 
   <!-- Mobile Container (Max 480px like LINE in-app browser) -->
-  <div class="max-w-md mx-auto bg-white min-h-screen shadow-lg relative flex flex-col">
+  <div class="max-w-md mx-auto bg-white min-h-screen shadow-xl relative flex flex-col border-x border-gray-200/80">
     
-    <!-- Top Header & View Toggle -->
-    <header class="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
-      <div class="bg-gradient-to-r from-red-600 to-red-800 text-white px-3 py-2 flex items-center justify-between">
+    <!-- Top Header & View Toggle (Red 15% - Primary Brand Identity) -->
+    <header class="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-xs">
+      <div class="bg-gradient-to-r from-[#800000] via-[#990000] to-[#730000] text-white px-3.5 py-2.5 flex items-center justify-between shadow-xs">
         <div class="flex items-center space-x-2">
-          <div class="w-7 h-7 bg-white rounded-full flex items-center justify-center text-red-600 font-bold text-xs shadow">S</div>
+          <div class="w-7 h-7 bg-white rounded-full flex items-center justify-center text-[#990000] font-black text-xs shadow-xs">S</div>
           <div>
-            <h1 class="text-xs sm:text-sm font-semibold leading-tight flex items-center gap-1">
+            <h1 class="text-xs sm:text-sm font-semibold leading-tight flex items-center gap-1.5">
               ศิวาทรัพย์ แอสเซท
-              <span class="text-[9px] bg-red-950/60 text-amber-300 px-1.5 py-0.2 rounded font-normal border border-red-400/40">NPA & Agent OS</span>
+              <span class="text-[9px] bg-black/35 text-siwasup-gold-light px-1.5 py-0.2 rounded font-normal border border-[#C2A460]/40">NPA & Agent OS</span>
             </h1>
             <p class="text-[9px] sm:text-[10px] text-red-100">ระบบบริหารคลังทรัพย์ธนาคาร & ตัวแทนขาย</p>
           </div>
         </div>
         <div class="flex items-center gap-1.5">
-          <!-- Public Consignment Button (Lead Magnet) -->
-          <button onclick="openConsignModal()" class="bg-amber-400 hover:bg-amber-300 text-gray-950 font-bold text-[10px] px-2.5 py-1 rounded-full shadow flex items-center gap-1 transition-transform active:scale-95">
+          <!-- Public Consignment Button (Authentic Satin Architectural Gold) -->
+          <button onclick="openConsignModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold text-[10px] px-2.5 py-1 rounded-full shadow-xs flex items-center gap-1 transition-transform active:scale-95">
             <span>🏷️</span> ฝากขายฟรี
           </button>
-          <span class="text-[10px] bg-red-900 bg-opacity-60 px-2 py-0.5 rounded-full border border-red-400">LIFF</span>
+          <span class="text-[10px] bg-black/25 px-2 py-0.5 rounded-full border border-white/20 text-gray-200">LIFF</span>
         </div>
       </div>
 
-      <!-- Mode Switcher (The 5-Way Architecture for Phase 1) -->
-      <div class="bg-amber-50 p-2 border-b border-amber-200">
+      <!-- Mode Switcher (Grey 30% - Architectural Structure) -->
+      <div class="bg-gray-100 p-2 border-b border-gray-200">
         <div class="flex items-center justify-between text-xs mb-1.5">
-          <span class="font-medium text-amber-900 flex items-center gap-1">
-            <span id="mode-icon">👑</span> โหมด: <strong id="mode-text" class="text-purple-700 underline font-bold">เจ้าของ/แอดมิน (บัว & กูล)</strong>
+          <span class="font-medium text-gray-700 flex items-center gap-1">
+            <span id="mode-icon">👑</span> โหมด: <strong id="mode-text" class="text-[#990000] underline font-bold">เจ้าของ/แอดมิน (บัว & กูล)</strong>
           </span>
           <span class="text-[10px] text-gray-500 font-normal">สลับมุมมองสิทธิ์ผู้ใช้</span>
         </div>
-        <div class="grid grid-cols-5 gap-1 bg-amber-200/70 p-1 rounded-lg text-[10px]">
-          <button id="btn-owner-mode" onclick="setMode('owner')" class="py-1 font-bold rounded-md transition-all bg-purple-700 text-white shadow text-center">
+        <div class="grid grid-cols-5 gap-1 bg-gray-200/70 p-1 rounded-lg text-[10px]">
+          <button id="btn-owner-mode" onclick="setMode('owner')" class="py-1 font-bold rounded-md transition-all bg-gray-900 text-white shadow-xs text-center">
             👑 เจ้าของ
           </button>
-          <button id="btn-freeagent-mode" onclick="setMode('free_agent')" class="py-1 font-medium rounded-md transition-all text-gray-700 hover:text-gray-900 text-center">
+          <button id="btn-freeagent-mode" onclick="setMode('free_agent')" class="py-1 font-medium rounded-md transition-all text-gray-700 hover:text-gray-900 bg-white/70 border border-gray-200/50 text-center">
             👔 Free (3-5%)
           </button>
-          <button id="btn-employee-mode" onclick="setMode('employee')" class="py-1 font-medium rounded-md transition-all text-gray-700 hover:text-gray-900 text-center">
+          <button id="btn-employee-mode" onclick="setMode('employee')" class="py-1 font-medium rounded-md transition-all text-gray-700 hover:text-gray-900 bg-white/70 border border-gray-200/50 text-center">
             💼 พนักงาน (1%)
           </button>
-          <button id="btn-trainee-mode" onclick="setMode('trainee')" class="py-1 font-medium rounded-md transition-all text-gray-700 hover:text-gray-900 text-center">
+          <button id="btn-trainee-mode" onclick="setMode('trainee')" class="py-1 font-medium rounded-md transition-all text-gray-700 hover:text-gray-900 bg-white/70 border border-gray-200/50 text-center">
             🎓 ฝึกหัด (0/3)
           </button>
-          <button id="btn-client-mode" onclick="setMode('client')" class="py-1 font-medium rounded-md transition-all text-gray-700 hover:text-gray-900 text-center">
+          <button id="btn-client-mode" onclick="setMode('client')" class="py-1 font-medium rounded-md transition-all text-gray-700 hover:text-gray-900 bg-white/70 border border-gray-200/50 text-center">
             👤 ลูกค้า
           </button>
         </div>
       </div>
 
-      <!-- ⚡ Quick Filter Bar (ทำเล, งบ, ประเภท, ธนาคาร NPA) -->
-      <div class="p-2.5 bg-gray-50 border-b border-gray-200 space-y-2 text-xs">
+      <!-- ⚡ Quick Filter Bar (Grey 30% background + White 45% inputs) -->
+      <div class="p-2.5 bg-gray-50/90 border-b border-gray-200 space-y-2 text-xs">
         <!-- Search Keyword -->
         <div class="relative">
           <input type="text" id="search-input" oninput="applyAllFilters()" 
                  placeholder="🔍 ค้นหา: ทำเล, โครงการ, รหัส NPA, #ผ่อนล้านละ3พัน..." 
-                 class="w-full bg-white border border-gray-300 rounded-lg pl-8 pr-3 py-1.5 text-xs outline-none focus:ring-2 focus:ring-amber-500 shadow-2xs">
+                 class="w-full bg-white border border-gray-300 rounded-lg pl-8 pr-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700 shadow-2xs">
           <span class="absolute left-2.5 top-2 text-gray-400 text-xs">🔍</span>
           <button id="btn-clear-search" onclick="clearFilters()" class="hidden absolute right-2.5 top-1.5 text-gray-400 hover:text-gray-600 text-xs font-bold">&times;</button>
         </div>
@@ -80,7 +87,7 @@
         <!-- 4 Quick Dropdowns including Bank NPA Source -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[11px]">
           <!-- 🏦 สถาบัน/ธนาคาร NPA -->
-          <select id="filter-bank" onchange="applyAllFilters()" class="bg-white border border-gray-300 rounded-lg p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-amber-500">
+          <select id="filter-bank" onchange="applyAllFilters()" class="bg-white border border-gray-300 rounded-lg p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700">
             <option value="all">🏦 ทุกสถาบัน/ธนาคาร</option>
             <option value="Siwasup">⭐ ศิวาทรัพย์ (รีโนเวท)</option>
             <option value="SAM">🔵 SAM (บสส.)</option>
@@ -92,7 +99,7 @@
           </select>
 
           <!-- 📍 ทำเล -->
-          <select id="filter-location" onchange="applyAllFilters()" class="bg-white border border-gray-300 rounded-lg p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-amber-500">
+          <select id="filter-location" onchange="applyAllFilters()" class="bg-white border border-gray-300 rounded-lg p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700">
             <option value="all">📍 ทุกทำเล</option>
             <option value="บางใหญ่">บางใหญ่/นนทบุรี</option>
             <option value="ลำลูกกา">ลำลูกกา/ปทุมธานี</option>
@@ -104,7 +111,7 @@
           </select>
 
           <!-- 💰 งบประมาณ -->
-          <select id="filter-budget" onchange="applyAllFilters()" class="bg-white border border-gray-300 rounded-lg p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-amber-500">
+          <select id="filter-budget" onchange="applyAllFilters()" class="bg-white border border-gray-300 rounded-lg p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700">
             <option value="all">💰 ทุกช่วงราคา</option>
             <option value="under2m">ต่ำกว่า 2 ล้าน</option>
             <option value="2to3.5m">2 - 3.5 ล้าน</option>
@@ -113,7 +120,7 @@
           </select>
 
           <!-- 🏠 ประเภท -->
-          <select id="filter-category" onchange="applyAllFilters()" class="bg-white border border-gray-300 rounded-lg p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-amber-500">
+          <select id="filter-category" onchange="applyAllFilters()" class="bg-white border border-gray-300 rounded-lg p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700">
             <option value="all">🏠 ทุกประเภท</option>
             <option value="ทาวน์โฮม">ทาวน์โฮม</option>
             <option value="คอนโด">คอนโด</option>
@@ -125,75 +132,75 @@
       </div>
     </header>
 
-    <!-- VIP Micro-Catalog Banner (เมื่อลูกค้าเปิดดูมัดรวมเฉพาะบุคคล) -->
-    <div id="vip-bundle-banner" class="hidden mx-3 mt-3 bg-gradient-to-r from-amber-600 via-amber-700 to-yellow-600 text-white p-3.5 rounded-xl shadow-md text-xs space-y-1">
+    <!-- VIP Micro-Catalog Banner (เมื่อลูกค้าเปิดดูมัดรวมเฉพาะบุคคล - Charcoal + Satin Gold 5%) -->
+    <div id="vip-bundle-banner" class="hidden mx-3 mt-3 bg-gray-900 text-white p-3.5 rounded-xl shadow-xs text-xs space-y-1 border-l-4 border-[#C2A460]">
       <div class="flex items-center justify-between font-bold">
         <span class="flex items-center gap-1.5 text-sm">👑 <span id="vip-client-title">รายการทรัพย์คัดสรรเฉพาะสำหรับคุณ</span></span>
-        <span class="text-[10px] bg-black bg-opacity-25 px-2 py-0.5 rounded-full border border-amber-300">VIP Curated</span>
+        <span class="text-[10px] bg-black/50 text-siwasup-gold-light px-2 py-0.5 rounded-full border border-[#C2A460]/40">VIP Curated</span>
       </div>
-      <p class="text-[11px] text-amber-100 leading-snug">
+      <p class="text-[11px] text-gray-300 leading-snug">
         ศิวาทรัพย์ แอสเซท คัดเลือกบ้านรีโนเวทคุณภาพตรงตามความต้องการของคุณมาให้ชมโดยเฉพาะ สามารถนัดชมห้องจริงได้ทันทีค่ะ
       </p>
-      <div class="pt-1 flex items-center justify-between text-[10px] text-amber-200">
+      <div class="pt-1 flex items-center justify-between text-[10px] text-siwasup-gold-light">
         <span id="vip-agent-info">ดูแลโดย: ศิวาทรัพย์ แอสเซท</span>
         <a href="index.html" class="underline text-white font-semibold">ดูทรัพย์ทั้งหมดในระบบ &rarr;</a>
       </div>
     </div>
 
-    <!-- 🎓 Trainee Agent Onboarding Challenge Banner -->
-    <div id="trainee-challenge-banner" class="hidden mx-3 mt-3 bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white p-3.5 rounded-xl shadow-md text-xs space-y-2 border border-blue-500/50">
+    <!-- 🎓 Trainee Agent Onboarding Challenge Banner (Charcoal + Satin Gold 5% Progress) -->
+    <div id="trainee-challenge-banner" class="hidden mx-3 mt-3 bg-gray-900 text-white p-3.5 rounded-xl shadow-xs text-xs space-y-2 border-l-4 border-[#C2A460]">
       <div class="flex items-center justify-between font-bold">
-        <span class="flex items-center gap-1.5 text-sm text-amber-300">
+        <span class="flex items-center gap-1.5 text-sm text-siwasup-gold-light">
           <span>🎓</span> ภารกิจปลดล็อกสู่ Free Agent
         </span>
-        <span class="text-[10px] bg-blue-800 px-2 py-0.5 rounded-full border border-blue-400">Onboarding Challenge</span>
+        <span class="text-[10px] bg-gray-800 px-2 py-0.5 rounded-full border border-gray-700 text-gray-300">Onboarding Challenge</span>
       </div>
-      <p class="text-[11px] text-blue-100 leading-snug">
-        คุณอยู่ในสถานะ <strong class="text-amber-300">"เด็กฝึกหัด (Trainee)"</strong> ต้องส่งทรัพย์เข้าพอร์ตให้บริษัทตรวจสอบอย่างน้อย <strong>3 หลัง</strong> จึงจะปลดล็อกระบบแชร์และรับคอมมิชชั่น 3-5%
+      <p class="text-[11px] text-gray-300 leading-snug">
+        คุณอยู่ในสถานะ <strong class="text-siwasup-gold-light">"เด็กฝึกหัด (Trainee)"</strong> ต้องส่งทรัพย์เข้าพอร์ตให้บริษัทตรวจสอบอย่างน้อย <strong>3 หลัง</strong> จึงจะปลดล็อกระบบแชร์และรับคอมมิชชั่น 3-5%
       </p>
       
-      <!-- Progress Bar -->
+      <!-- Progress Bar (Satin Gold Accent) -->
       <div class="space-y-1">
-        <div class="flex justify-between text-[10px] text-blue-200 font-medium">
+        <div class="flex justify-between text-[10px] text-gray-400 font-medium">
           <span>ความคืบหน้าการส่งทรัพย์</span>
-          <span class="font-bold text-amber-300">1 / 3 หลัง (33%)</span>
+          <span class="font-bold text-siwasup-gold-light">1 / 3 หลัง (33%)</span>
         </div>
-        <div class="w-full bg-blue-950 rounded-full h-2.5 p-0.5 border border-blue-700">
-          <div class="bg-gradient-to-r from-amber-400 to-yellow-300 h-1.5 rounded-full" style="width: 33%"></div>
+        <div class="w-full bg-gray-800 rounded-full h-2 p-0.5 border border-gray-700">
+          <div class="bg-gradient-to-r from-[#C2A460] to-[#D4BA7A] h-1 rounded-full" style="width: 33%"></div>
         </div>
       </div>
 
       <div class="pt-1 flex items-center justify-between text-[11px]">
-        <span class="text-blue-300 text-[10px]">ส่งอีก 2 หลังเพื่อปลดล็อกลิงก์แชร์</span>
-        <button onclick="openConsignModal(true)" class="bg-amber-400 hover:bg-amber-300 text-gray-950 font-bold px-3 py-1 rounded-lg text-xs shadow flex items-center gap-1">
+        <span class="text-gray-400 text-[10px]">ส่งอีก 2 หลังเพื่อปลดล็อกลิงก์แชร์</span>
+        <button onclick="openConsignModal(true)" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold px-3 py-1 rounded-lg text-xs shadow-xs flex items-center gap-1">
           <span>➕</span> ส่งทรัพย์เพิ่ม
         </button>
       </div>
     </div>
 
-    <!-- 🤝 Agent MGM Banner (ชวนเพื่อนรับโบนัส 0.5%) -->
-    <div id="agent-mgm-banner" class="hidden mx-3 mt-3 bg-gradient-to-r from-emerald-800 via-teal-800 to-emerald-900 text-white p-3 rounded-xl shadow-sm text-xs flex items-center justify-between border border-emerald-500/40">
+    <!-- 🤝 Agent MGM Banner (White 45% + Grey 30% border + Satin Gold 5% CTA) -->
+    <div id="agent-mgm-banner" class="hidden mx-3 mt-3 bg-white text-gray-900 p-3 rounded-xl shadow-xs text-xs flex items-center justify-between border border-gray-200">
       <div>
-        <div class="font-bold text-amber-300 flex items-center gap-1 text-xs">
+        <div class="font-bold text-gray-900 flex items-center gap-1 text-xs">
           <span>🤝</span> ชวนเพื่อนมาเป็น Agent (MGM)
         </div>
-        <div class="text-[10px] text-emerald-100">รับแต้มสะสม + ค่าบริหารทีม 0.5% ทุกดีลที่เพื่อนปิดได้</div>
+        <div class="text-[10px] text-gray-500">รับแต้มสะสม + ค่าบริหารทีม 0.5% ทุกดีลที่เพื่อนปิดได้</div>
       </div>
-      <button onclick="openMgmModal()" class="bg-amber-400 hover:bg-amber-300 text-gray-950 font-bold px-2.5 py-1.5 rounded-lg text-[11px] shadow whitespace-nowrap active:scale-95 transition-transform">
+      <button onclick="openMgmModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold px-2.5 py-1.5 rounded-lg text-[11px] shadow-xs whitespace-nowrap active:scale-95 transition-transform">
         รับลิงก์ชวนเพื่อน ✨
       </button>
     </div>
 
-    <!-- 📥 Owner Leads Alert Bar -->
-    <div id="owner-leads-bar" class="hidden mx-3 mt-3 bg-purple-950 text-white p-2.5 rounded-xl border border-purple-600 shadow flex items-center justify-between text-xs">
+    <!-- 📥 Owner Leads Alert Bar (Dark Charcoal + Red 15% Accent) -->
+    <div id="owner-leads-bar" class="hidden mx-3 mt-3 bg-gray-900 text-white p-2.5 rounded-xl border border-gray-800 shadow-xs flex items-center justify-between text-xs border-l-4 border-[#990000]">
       <div class="flex items-center gap-2">
         <span class="text-base">📬</span>
         <div>
-          <span class="font-bold text-purple-200">มีทรัพย์ฝากขายใหม่ (<span id="consign-count-badge">1</span> รายการ)</span>
-          <div class="text-[10px] text-purple-300">กดเพื่อโทรหาเจ้าของบ้านชวนเป็น Free Agent</div>
+          <span class="font-bold text-gray-100">มีทรัพย์ฝากขายใหม่ (<span id="consign-count-badge">1</span> รายการ)</span>
+          <div class="text-[10px] text-gray-400">กดเพื่อโทรหาเจ้าของบ้านชวนเป็น Free Agent</div>
         </div>
       </div>
-      <button onclick="openOwnerLeadsModal()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-2.5 py-1 rounded-lg text-[10px]">
+      <button onclick="openOwnerLeadsModal()" class="bg-[#990000] hover:bg-red-800 text-white font-bold px-2.5 py-1 rounded-lg text-[10px] shadow-xs">
         ดูรายการ
       </button>
     </div>
@@ -232,7 +239,7 @@
             <input type="file" accept="image/*" class="w-full border rounded-lg p-2 bg-gray-50">
             <p class="text-[10px] text-gray-400 mt-0.5">ยอดมัดจำขั้นต่ำ 10,000 บาท</p>
           </div>
-          <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-sm shadow">
+          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-lg text-sm shadow-xs">
             ยืนยันส่งข้อมูลให้แอดมิน (เจี๊ยบ/บัว) ตรวจสอบ
           </button>
         </form>
@@ -309,15 +316,15 @@
           </div>
 
           <!-- Channel 4: General Web / Forum -->
-          <div class="flex items-center justify-between p-2 rounded-lg border border-purple-200 bg-purple-50/60">
+          <div class="flex items-center justify-between p-2 rounded-lg border border-gray-200 bg-gray-50/70">
             <div class="flex items-center gap-2">
-              <span class="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-xs">🌐</span>
+              <span class="w-6 h-6 rounded-full bg-gray-800 text-white flex items-center justify-center font-bold text-xs">🌐</span>
               <div>
-                <div class="font-bold text-purple-950 text-xs">เว็บบอร์ด / LivingInsider / DDprop</div>
-                <div class="text-[10px] text-purple-700">ลิงก์กลางสำหรับโพสต์ลงเว็บไซต์</div>
+                <div class="font-bold text-gray-900 text-xs">เว็บบอร์ด / LivingInsider / DDprop</div>
+                <div class="text-[10px] text-gray-500">ลิงก์กลางสำหรับโพสต์ลงเว็บไซต์</div>
               </div>
             </div>
-            <button onclick="copyChannelLink('web')" class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs">
+            <button onclick="copyChannelLink('web')" class="bg-gray-800 hover:bg-gray-900 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs">
               คัดลอกลิงก์
             </button>
           </div>
@@ -350,17 +357,17 @@
         </div>
         <h3 class="font-bold text-base text-gray-900">รับสิทธิพิเศษสำหรับคุณ!</h3>
         <p class="text-xs text-gray-600">
-          แจ้งรหัสอ้างอิงนี้กับเจ้าหน้าที่ฝ่ายขาย เพื่อรับ <strong class="text-red-600">สิทธิ์ฟรีค่าโอนกรรมสิทธิ์ / ส่วนลดพิเศษ</strong>
+          แจ้งรหัสอ้างอิงนี้กับเจ้าหน้าที่ฝ่ายขาย เพื่อรับ <strong class="text-[#990000]">สิทธิ์ฟรีค่าโอนกรรมสิทธิ์ / ส่วนลดพิเศษ</strong>
         </p>
         <div class="bg-amber-50 border-2 border-dashed border-amber-300 rounded-xl p-2.5 text-center">
           <span class="text-[11px] text-amber-800">รหัสส่วนลดของคุณ:</span>
           <div id="call-discount-code" class="text-xl font-extrabold text-amber-900 tracking-wider">SS-09</div>
         </div>
         <div class="pt-2 flex gap-2">
-          <a id="btn-actual-call" href="tel:0944629796" onclick="logCallLead()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs shadow text-center">
+          <a id="btn-actual-call" href="tel:0944629796" onclick="logCallLead()" class="flex-1 bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold py-2.5 rounded-xl text-xs shadow-xs text-center">
             📞 โทรติดต่อเจ้าหน้าที่ทันที
           </a>
-          <button onclick="closeCallModal()" class="px-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl text-xs">
+          <button onclick="closeCallModal()" class="px-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl text-xs border border-gray-200">
             ปิด
           </button>
         </div>
@@ -380,17 +387,17 @@
         <form onsubmit="handleInquirySubmit(event)" class="space-y-2.5 text-xs">
           <div>
             <label class="block font-medium mb-1">ชื่อของคุณ <span class="text-red-500">*</span></label>
-            <input type="text" id="inquiry-name" required placeholder="เช่น คุณวิชัย" class="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-emerald-500">
+            <input type="text" id="inquiry-name" required placeholder="เช่น คุณวิชัย" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
           </div>
           <div>
             <label class="block font-medium mb-1">เบอร์โทรศัพท์ติดต่อสะดวก <span class="text-red-500">*</span></label>
-            <input type="tel" id="inquiry-phone" required placeholder="08x-xxx-xxxx" class="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-emerald-500">
+            <input type="tel" id="inquiry-phone" required placeholder="08x-xxx-xxxx" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
           </div>
           <div>
             <label class="block font-medium mb-1">วันที่สะดวกเข้าชม (โดยประมาณ)</label>
-            <input type="text" id="inquiry-date" placeholder="เช่น เสาร์นี้ ช่วงบ่าย" class="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-emerald-500">
+            <input type="text" id="inquiry-date" placeholder="เช่น เสาร์นี้ ช่วงบ่าย" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
           </div>
-          <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow text-xs mt-2">
+          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2">
             ยืนยันส่งข้อมูลนัดหมาย
           </button>
         </form>
@@ -398,17 +405,17 @@
     </div>
 
     <!-- Admin Notification Toast (Simulate 1-Click Approval) -->
-    <div id="admin-toast" class="hidden fixed top-4 inset-x-4 max-w-sm mx-auto z-50 bg-gray-900 text-white p-3 rounded-xl shadow-2xl border border-gray-700 text-xs space-y-2">
-      <div class="flex items-center justify-between font-bold text-emerald-400">
+    <div id="admin-toast" class="hidden fixed top-4 inset-x-4 max-w-sm mx-auto z-50 bg-gray-900 text-white p-3 rounded-xl shadow-2xl border border-gray-700 text-xs space-y-2 border-l-4 border-amber-400">
+      <div class="flex items-center justify-between font-bold text-amber-300">
         <span>🔔 แจ้งเตือนแอดมิน (เจี๊ยบ/บัว)</span>
         <span class="text-[10px] text-gray-400">เมื่อสักครู่</span>
       </div>
       <p id="admin-toast-body" class="text-gray-200 text-[11px]"></p>
       <div class="flex gap-2 pt-1">
-        <button onclick="adminApproveBooking()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 rounded text-center">
+        <button onclick="adminApproveBooking()" class="flex-1 bg-[#D4AF37] hover:bg-[#c49f2b] text-gray-950 font-bold py-1.5 rounded text-center shadow-xs">
           ✅ กดอนุมัติการจอง (1-Click)
         </button>
-        <button onclick="document.getElementById('admin-toast').classList.add('hidden')" class="px-3 bg-gray-700 text-gray-300 rounded">
+        <button onclick="document.getElementById('admin-toast').classList.add('hidden')" class="px-3 bg-gray-800 text-gray-300 rounded border border-gray-700">
           ปิด
         </button>
       </div>
@@ -436,7 +443,7 @@
         <form onsubmit="handleConsignSubmit(event)" class="space-y-2.5 text-xs">
           <div>
             <label class="block font-medium mb-1">ประเภททรัพย์ <span class="text-red-500">*</span></label>
-            <select id="consign-type" required class="w-full border rounded-lg p-2 bg-gray-50 outline-none focus:ring-2 focus:ring-amber-500">
+            <select id="consign-type" required class="w-full border rounded-lg p-2 bg-gray-50 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
               <option value="ทาวน์โฮม">ทาวน์โฮม / ทาวน์เฮ้าส์</option>
               <option value="บ้านเดี่ยว">บ้านเดี่ยว / บ้านแฝด</option>
               <option value="คอนโด">คอนโดมิเนียม</option>
@@ -447,28 +454,28 @@
 
           <div>
             <label class="block font-medium mb-1">ชื่อโครงการ / ทำเล / ซอย / ถนน <span class="text-red-500">*</span></label>
-            <input type="text" id="consign-title" required placeholder="เช่น ม.พฤกษา 12 คลองสาม ปทุมธานี" class="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-amber-500">
+            <input type="text" id="consign-title" required placeholder="เช่น ม.พฤกษา 12 คลองสาม ปทุมธานี" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
           </div>
 
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block font-medium mb-1">ราคาที่ต้องการขาย (บาท) <span class="text-red-500">*</span></label>
-              <input type="number" id="consign-price" required placeholder="เช่น 2500000" class="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-amber-500">
+              <input type="number" id="consign-price" required placeholder="เช่น 2500000" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
             </div>
             <div>
               <label class="block font-medium mb-1">ขนาดพื้นที่ (ตร.ว. / ตร.ม.)</label>
-              <input type="text" id="consign-size" placeholder="เช่น 24 ตร.ว." class="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-amber-500">
+              <input type="text" id="consign-size" placeholder="เช่น 24 ตร.ว." class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
             </div>
           </div>
 
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block font-medium mb-1">ชื่อเจ้าของทรัพย์ / ผู้ส่ง <span class="text-red-500">*</span></label>
-              <input type="text" id="consign-name" required placeholder="เช่น คุณสมบัติ" class="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-amber-500">
+              <input type="text" id="consign-name" required placeholder="เช่น คุณสมบัติ" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
             </div>
             <div>
               <label class="block font-medium mb-1">เบอร์โทรศัพท์ <span class="text-red-500">*</span></label>
-              <input type="tel" id="consign-phone" required placeholder="08x-xxx-xxxx" class="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-amber-500">
+              <input type="tel" id="consign-phone" required placeholder="08x-xxx-xxxx" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
             </div>
           </div>
 
@@ -478,7 +485,7 @@
             <p class="text-[10px] text-gray-400 mt-0.5">แนบรูปช่วยให้ประเมินราคาและปล่อยขายได้ไวยิ่งขึ้น</p>
           </div>
 
-          <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-gray-950 font-extrabold py-2.5 rounded-xl shadow text-xs mt-2">
+          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2">
             🚀 ยืนยันส่งข้อมูลฝากขาย (ฟรี)
           </button>
         </form>
@@ -495,13 +502,13 @@
           <button onclick="closeMgmModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
         </div>
 
-        <div class="bg-emerald-50 border border-emerald-200 p-2.5 rounded-xl text-xs space-y-1 text-emerald-950">
-          <div class="font-bold flex items-center gap-1 text-emerald-800">
+        <div class="bg-gray-50 border border-gray-200 p-2.5 rounded-xl text-xs space-y-1 text-gray-800 border-l-4 border-[#D4AF37]">
+          <div class="font-bold flex items-center gap-1 text-gray-900">
             <span>💰</span> สิทธิประโยชน์ผู้ชวน:
           </div>
-          <p class="text-[11px] leading-relaxed">
-            1. รับ <strong class="text-emerald-700">100 แต้มสะสม</strong> เมื่อเพื่อนส่งทรัพย์ครบ 3 หลัง<br>
-            2. รับ <strong class="text-emerald-700">ค่าบริหารทีม 0.5% (Overriding)</strong> จากยอดขายทุกดีลที่เพื่อนปิดได้ตลอดชีพ!
+          <p class="text-[11px] leading-relaxed text-gray-600">
+            1. รับ <strong class="text-[#990000]">100 แต้มสะสม</strong> เมื่อเพื่อนส่งทรัพย์ครบ 3 หลัง<br>
+            2. รับ <strong class="text-[#990000]">ค่าบริหารทีม 0.5% (Overriding)</strong> จากยอดขายทุกดีลที่เพื่อนปิดได้ตลอดชีพ!
           </p>
         </div>
 
@@ -510,7 +517,7 @@
           <div class="flex gap-1.5">
             <input type="text" id="mgm-link-input" readonly value="https://thenassty-cpu.github.io/siwasup-cobroker-os/?join_ref=AG-บัวรา" 
                    class="flex-1 bg-gray-100 border rounded-lg px-2.5 py-1.5 text-[11px] font-mono text-gray-700 outline-none">
-            <button onclick="copyMgmLink()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-lg text-xs whitespace-nowrap">
+            <button onclick="copyMgmLink()" class="bg-[#990000] hover:bg-red-800 text-white font-bold px-3 py-1.5 rounded-lg text-xs whitespace-nowrap shadow-xs">
               คัดลอก
             </button>
           </div>
@@ -565,7 +572,7 @@
     <div id="owner-leads-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
       <div class="bg-white w-full max-w-md rounded-2xl p-5 space-y-3.5 max-h-[88vh] overflow-y-auto shadow-2xl">
         <div class="flex justify-between items-center border-b pb-2">
-          <h3 class="font-bold text-sm text-purple-950 flex items-center gap-1.5">
+          <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
             <span>📬</span> รายการทรัพย์ฝากขายใหม่ (Lead Magnet)
           </h3>
           <button onclick="closeOwnerLeadsModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
@@ -581,19 +588,19 @@
     <div id="edit-price-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
       <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-3.5 shadow-2xl">
         <div class="flex justify-between items-center border-b pb-2">
-          <h3 class="font-bold text-sm text-purple-950 flex items-center gap-1.5">
+          <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
             <span>✏️</span> แก้ไขราคาขาย (แอดมิน บัว & กูล)
           </h3>
           <button onclick="closeEditPriceModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
         </div>
 
-        <div id="edit-price-prop-info" class="bg-purple-50 border border-purple-200 p-2.5 rounded-xl text-xs space-y-0.5"></div>
+        <div id="edit-price-prop-info" class="bg-gray-50 border border-gray-200 p-2.5 rounded-xl text-xs space-y-0.5"></div>
 
         <form onsubmit="handleEditPriceSubmit(event)" class="space-y-3 text-xs">
           <div>
             <label class="block font-medium mb-1 text-gray-700">ราคาขายใหม่ (บาท) <span class="text-red-500">*</span></label>
             <input type="number" id="new-price-input" required placeholder="เช่น 3390000" 
-                   class="w-full border-2 border-purple-400 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-purple-600 font-extrabold text-base text-purple-900 bg-white">
+                   class="w-full border-2 border-gray-300 rounded-lg p-2.5 outline-none focus:border-[#990000] focus:ring-1 focus:ring-[#990000] font-extrabold text-base text-gray-900 bg-white">
             <p class="text-[10px] text-gray-400 mt-1">ระบบจะคำนวณยอดเงินค่าคอมมิชชั่นของเอเจนต์ใหม่ให้อัตโนมัติ</p>
           </div>
 
@@ -604,17 +611,17 @@
             </label>
           </div>
 
-          <button type="submit" class="w-full bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white font-bold py-2.5 rounded-xl shadow text-xs">
+          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-xl shadow-xs text-xs">
             💾 บันทึกราคาใหม่ทันที
           </button>
         </form>
       </div>
     </div>
 
-    <!-- 📦 Instant Bundle Floating Action Bar (แสดงเมื่อติ๊กเลือกบ้าน 1 หลังขึ้นไป) -->
-    <div id="bundle-bar" class="hidden fixed bottom-0 inset-x-0 max-w-md mx-auto bg-gradient-to-r from-gray-950 via-gray-900 to-black text-white p-3 z-40 shadow-2xl flex items-center justify-between border-t-2 border-amber-500">
+    <!-- 📦 Instant Bundle Floating Action Bar (แสดงเมื่อติ๊กเลือกบ้าน 1 หลังขึ้นไป - Charcoal + Satin Gold 5%) -->
+    <div id="bundle-bar" class="hidden fixed bottom-0 inset-x-0 max-w-md mx-auto bg-gray-900 text-white p-3 z-40 shadow-2xl flex items-center justify-between border-t-2 border-[#C2A460]">
       <div>
-        <div class="font-extrabold text-xs text-amber-400 flex items-center gap-1.5">
+        <div class="font-extrabold text-xs text-siwasup-gold-light flex items-center gap-1.5">
           <span>📦</span> มัดรวมส่งลูกค้า (<span id="bundle-count">0</span> หลัง)
         </div>
         <div class="text-[10px] text-gray-300">สร้างหน้าเว็บ VIP + แคปชั่นส่งในไลน์</div>
@@ -623,7 +630,7 @@
         <button onclick="clearBundleSelection()" class="text-[11px] text-gray-400 hover:text-white px-2 py-1">
           ล้าง
         </button>
-        <button onclick="openBundleModal()" class="bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-gray-950 font-extrabold py-1.5 px-3 rounded-lg text-xs shadow-md">
+        <button onclick="openBundleModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-extrabold py-1.5 px-3 rounded-lg text-xs shadow-xs">
           ส่งลูกค้าทันที ✨
         </button>
       </div>
@@ -645,7 +652,7 @@
           </label>
           <input type="text" id="bundle-client-name" value="คุณวิชัย" oninput="updateBundlePreview()"
                  placeholder="เช่น คุณวิชัย, คุณสมชาย" 
-                 class="w-full border rounded-lg p-2 text-xs font-semibold focus:ring-2 focus:ring-amber-500 outline-none bg-gray-50">
+                 class="w-full border rounded-lg p-2 text-xs font-semibold focus:ring-1 focus:ring-red-700 focus:border-red-700 outline-none bg-gray-50">
         </div>
 
         <!-- Selected Properties List Preview -->
@@ -660,16 +667,16 @@
         <div class="space-y-1.5">
           <div class="text-xs font-bold text-gray-800 flex justify-between items-center">
             <span>💬 ข้อความแคปชั่นพร้อมส่งใน LINE:</span>
-            <span class="text-[10px] text-emerald-600 font-normal">จัดหน้าสวยงามพร้อมลิงก์</span>
+            <span class="text-[10px] text-gray-500 font-normal">จัดหน้าสวยงามพร้อมลิงก์</span>
           </div>
           <div class="bg-gray-100 border border-gray-300 rounded-lg p-2.5 text-[11px] text-gray-700 whitespace-pre-wrap font-sans leading-relaxed select-all" id="bundle-text-preview"></div>
         </div>
 
         <div class="grid grid-cols-2 gap-2 pt-1">
-          <button onclick="copyBundleMessage()" class="bg-gray-900 hover:bg-black text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow flex items-center justify-center gap-1">
+          <button onclick="copyBundleMessage()" class="bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1">
             <span>📋</span> คัดลอกข้อความ
           </button>
-          <button onclick="sendBundleToLine()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow flex items-center justify-center gap-1">
+          <button onclick="sendBundleToLine()" class="bg-[#06C755] hover:bg-[#05b34c] text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1">
             <span>📲</span> ส่งเข้าแอป LINE
           </button>
         </div>
@@ -804,7 +811,7 @@
       const mgmBanner = document.getElementById('agent-mgm-banner');
       const ownerLeadsBar = document.getElementById('owner-leads-bar');
 
-      const defaultBtnClass = "py-1 font-medium rounded-md transition-all text-gray-700 hover:text-gray-900 text-center text-[10px]";
+      const defaultBtnClass = "py-1 font-medium rounded-md transition-all text-gray-700 hover:text-gray-900 bg-white/70 border border-gray-200/50 text-center text-[10px]";
       btnOwner.className = defaultBtnClass;
       btnFreeAgent.className = defaultBtnClass;
       btnEmployee.className = defaultBtnClass;
@@ -816,33 +823,33 @@
       ownerLeadsBar.classList.add('hidden');
 
       if (mode === 'owner') {
-        btnOwner.className = "py-1 font-bold rounded-md transition-all bg-purple-700 text-white shadow text-center text-[10px]";
+        btnOwner.className = "py-1 font-bold rounded-md transition-all bg-gray-900 text-white shadow-xs text-center text-[10px]";
         modeText.textContent = "เจ้าของ/แอดมิน (บัว & กูล)";
-        modeText.className = "text-purple-700 underline font-bold";
+        modeText.className = "text-[#990000] underline font-bold";
         modeIcon.textContent = "👑";
         if (consignments.length > 0) ownerLeadsBar.classList.remove('hidden');
       } else if (mode === 'free_agent') {
-        btnFreeAgent.className = "py-1 font-bold rounded-md transition-all bg-amber-500 text-gray-950 shadow text-center text-[10px]";
+        btnFreeAgent.className = "py-1 font-bold rounded-md transition-all bg-[#990000] text-white shadow-xs text-center text-[10px]";
         modeText.textContent = "Free Agent (คอม 3-5% อิสระ)";
-        modeText.className = "text-amber-800 underline font-bold";
+        modeText.className = "text-[#990000] underline font-bold";
         modeIcon.textContent = "👔";
         mgmBanner.classList.remove('hidden');
       } else if (mode === 'employee') {
-        btnEmployee.className = "py-1 font-bold rounded-md transition-all bg-blue-600 text-white shadow text-center text-[10px]";
+        btnEmployee.className = "py-1 font-bold rounded-md transition-all bg-gray-800 text-white shadow-xs text-center text-[10px]";
         modeText.textContent = "พนักงานประจำ (คอม 1% มีเงินเดือน)";
-        modeText.className = "text-blue-800 underline font-bold";
+        modeText.className = "text-gray-800 underline font-bold";
         modeIcon.textContent = "💼";
         mgmBanner.classList.remove('hidden');
       } else if (mode === 'trainee') {
-        btnTrainee.className = "py-1 font-bold rounded-md transition-all bg-indigo-700 text-white shadow text-center text-[10px]";
+        btnTrainee.className = "py-1 font-bold rounded-md transition-all bg-gray-900 text-amber-300 border border-amber-400/40 shadow-xs text-center text-[10px]";
         modeText.textContent = "เด็กฝึกหัด (ส่งทรัพย์ 1/3 หลัง)";
-        modeText.className = "text-indigo-800 underline font-bold";
+        modeText.className = "text-amber-800 underline font-bold";
         modeIcon.textContent = "🎓";
         traineeBanner.classList.remove('hidden');
       } else {
-        btnClient.className = "py-1 font-bold rounded-md transition-all bg-emerald-600 text-white shadow text-center text-[10px]";
+        btnClient.className = "py-1 font-bold rounded-md transition-all bg-[#990000] text-white shadow-xs text-center text-[10px]";
         modeText.textContent = "ลูกค้า (White-Label ไม่เห็นค่าคอม)";
-        modeText.className = "text-emerald-700 underline font-bold";
+        modeText.className = "text-[#990000] underline font-bold";
         modeIcon.textContent = "👤";
       }
 
@@ -1009,34 +1016,34 @@
       let ownerHeaderHtml = '';
       if (currentMode === 'owner') {
         ownerHeaderHtml = `
-          <div class="bg-gradient-to-r from-purple-900 to-indigo-900 text-white p-3 rounded-xl shadow-md space-y-2 mb-3">
+          <div class="bg-gray-900 text-white p-3 rounded-xl shadow-xs space-y-2 mb-3 border border-gray-800 border-l-4 border-[#990000]">
             <div class="flex justify-between items-center">
-              <span class="font-bold text-xs flex items-center gap-1.5 text-purple-200">
+              <span class="font-bold text-xs flex items-center gap-1.5 text-gray-200">
                 👑 แผงควบคุมเจ้าของ (บัว & กูล)
               </span>
-              <span class="text-[10px] bg-purple-800 px-2 py-0.5 rounded-full border border-purple-500">Real-time DB</span>
+              <span class="text-[10px] bg-gray-800 text-gray-300 px-2 py-0.5 rounded-full border border-gray-700">Real-time DB</span>
             </div>
             <div class="grid grid-cols-4 gap-1.5 text-center text-[10px]">
-              <div class="bg-black bg-opacity-30 p-1.5 rounded">
-                <div class="text-gray-300">ทั้งหมด</div>
-                <div class="font-extrabold text-sm">${totalCount}</div>
+              <div class="bg-gray-800/90 p-1.5 rounded">
+                <div class="text-gray-400">ทั้งหมด</div>
+                <div class="font-extrabold text-sm text-white">${totalCount}</div>
               </div>
-              <div class="bg-emerald-950 bg-opacity-60 p-1.5 rounded border border-emerald-700">
-                <div class="text-emerald-300">พร้อมขาย</div>
+              <div class="bg-gray-800/90 p-1.5 rounded border border-gray-700">
+                <div class="text-emerald-400">พร้อมขาย</div>
                 <div class="font-extrabold text-sm text-emerald-400">${availCount}</div>
               </div>
-              <div class="bg-amber-950 bg-opacity-60 p-1.5 rounded border border-amber-700">
+              <div class="bg-gray-800/90 p-1.5 rounded border border-gray-700">
                 <div class="text-amber-300">ติดจอง</div>
-                <div class="font-extrabold text-sm text-amber-400">${bookedCount}</div>
+                <div class="font-extrabold text-sm text-amber-300">${bookedCount}</div>
               </div>
-              <div class="bg-red-950 bg-opacity-60 p-1.5 rounded border border-red-700">
-                <div class="text-red-300">ขายแล้ว (7วัน)</div>
+              <div class="bg-gray-800/90 p-1.5 rounded border border-gray-700">
+                <div class="text-red-400">ขายแล้ว (7วัน)</div>
                 <div class="font-extrabold text-sm text-red-400">${soldCount}</div>
               </div>
             </div>
-            <div class="flex items-center justify-between text-[10px] text-purple-200 pt-1">
+            <div class="flex items-center justify-between text-[10px] text-gray-300 pt-1">
               <span>💡 สลับสถานะทรัพย์ได้ทันที</span>
-              <button onclick="openOwnerLeadsModal()" class="text-amber-300 font-bold underline flex items-center gap-1">
+              <button onclick="openOwnerLeadsModal()" class="text-siwasup-gold-light font-bold underline flex items-center gap-1">
                 📬 ดูคลังฝากขาย (${consignments.length})
               </button>
             </div>
@@ -1070,7 +1077,7 @@
         }
 
         return `
-          <div class="bg-white rounded-xl overflow-hidden border ${isSelected ? 'border-amber-400 ring-2 ring-amber-400' : 'border-gray-200'} shadow-sm transition-all hover:shadow-md relative">
+          <div class="bg-white rounded-xl overflow-hidden border ${isSelected ? 'border-[#C2A460] ring-2 ring-[#C2A460]' : 'border-gray-200'} shadow-xs hover:shadow-md transition-all relative">
             
             <!-- Image & Badges -->
             <div class="relative h-48 bg-gray-200 overflow-hidden">
@@ -1080,59 +1087,59 @@
               <!-- Bank & Category Badges -->
               <div class="absolute top-2.5 left-2.5 flex items-center gap-1 z-10">
                 ${bankBadge}
-                <span class="bg-black/70 text-white text-[9px] font-medium px-1.5 py-0.5 rounded">
+                <span class="bg-gray-900/80 text-white text-[9px] font-medium px-2 py-0.5 rounded">
                   ${p.category || 'อสังหาฯ'}
                 </span>
               </div>
 
-              <!-- Bundle Select Button (for Agent & Owner) -->
+              <!-- Bundle Select Button (for Agent & Owner - Satin Gold) -->
               ${(currentMode !== 'client' && currentMode !== 'trainee') ? `
-                <button onclick="toggleBundleItem('${p.id}')" class="absolute top-2.5 left-36 z-10 text-[9px] font-bold px-2 py-0.5 rounded shadow flex items-center gap-1 transition-all ${isSelected ? 'bg-amber-400 text-gray-950 ring-2 ring-white scale-105' : 'bg-white/90 hover:bg-white text-gray-800'}">
+                <button onclick="toggleBundleItem('${p.id}')" class="absolute top-2.5 left-36 z-10 text-[9px] font-bold px-2 py-0.5 rounded shadow flex items-center gap-1 transition-all ${isSelected ? 'bg-siwasup-gold text-gray-950 ring-2 ring-white scale-105' : 'bg-white/95 hover:bg-white text-gray-800'}">
                   <span>${isSelected ? '✓ ในมัดรวม' : '+ มัดรวม'}</span>
                 </button>
               ` : ''}
 
-              <!-- Status Badge (7-Day Social Proof for SOLD) -->
+              <!-- Status Badge (7-Day Social Proof for SOLD - Red 15%) -->
               ${isSold ? `
-                <div class="absolute top-2.5 right-2.5 bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded shadow flex items-center gap-1">
+                <div class="absolute top-2.5 right-2.5 bg-[#990000] text-white text-[10px] font-extrabold px-2 py-0.5 rounded shadow flex items-center gap-1">
                   <span>🔴</span> SOLD OUT (ขายแล้ว)
                 </div>
               ` : isBooked ? `
-                <div class="absolute top-2.5 right-2.5 bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow badge-fomo">
+                <div class="absolute top-2.5 right-2.5 bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow badge-fomo">
                   🟠 ติดจองแล้ว
                 </div>
               ` : `
-                <div class="absolute top-2.5 right-2.5 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow">
+                <div class="absolute top-2.5 right-2.5 bg-gray-900/80 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded shadow border border-gray-700">
                   🟢 พร้อมขาย
                 </div>
               `}
 
-              <!-- Agent Commission Badge Bar -->
+              <!-- Agent Commission Badge Bar (Charcoal + Authentic Satin Gold 5% Accent) -->
               ${(currentMode === 'free_agent' || currentMode === 'employee') ? `
-                <div class="absolute bottom-2 left-2 right-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-gray-950 font-bold px-2.5 py-1 rounded text-xs shadow flex items-center justify-between">
-                  <span>💰 ${comLabel}: <strong class="text-black">${comAmount || 'ตามผลงาน'}</strong></span>
-                  <span class="text-[9px] bg-black bg-opacity-15 px-1.5 py-0.5 rounded font-normal">รับเต็ม</span>
+                <div class="absolute bottom-2 left-2 right-2 bg-gray-900/95 text-white border-l-2 border-[#C2A460] font-semibold px-2.5 py-1 rounded text-xs shadow-xs flex items-center justify-between">
+                  <span>💰 ${comLabel}: <strong class="text-siwasup-gold-light font-bold">${comAmount || 'ตามผลงาน'}</strong></span>
+                  <span class="text-[9px] bg-white/10 px-1.5 py-0.5 rounded font-normal text-gray-300">รับเต็ม</span>
                 </div>
               ` : ''}
 
               <!-- Trainee Locked Badge Bar -->
               ${currentMode === 'trainee' ? `
-                <div class="absolute bottom-2 left-2 right-2 bg-indigo-950/90 text-indigo-200 font-semibold px-2.5 py-1 rounded text-[11px] shadow flex items-center justify-between">
+                <div class="absolute bottom-2 left-2 right-2 bg-gray-900/95 text-gray-300 border-l-2 border-[#C2A460]/60 font-medium px-2.5 py-1 rounded text-[11px] shadow-xs flex items-center justify-between">
                   <span>🔒 ค่าคอมมิชชั่น: ซ่อนอยู่ (Trainee)</span>
-                  <span class="text-[9px] bg-amber-400 text-gray-950 px-1.5 py-0.5 rounded font-bold">ส่งครบ 3 หลังเพื่อปลด</span>
+                  <span class="text-[9px] bg-siwasup-gold text-gray-950 px-1.5 py-0.5 rounded font-bold">ส่งครบ 3 หลังเพื่อปลด</span>
                 </div>
               ` : ''}
 
               <!-- Owner Management Bar -->
               ${currentMode === 'owner' ? `
-                <div class="absolute bottom-2 left-2 right-2 bg-purple-950 bg-opacity-90 text-purple-200 text-[10px] px-2.5 py-1 rounded shadow flex items-center justify-between">
-                  <span>💰 คอมเอเจนต์: <strong class="text-amber-400 font-bold">${comAmount || '3-5%'}</strong></span>
-                  <span>👁️ วิว 34 ครั้ง</span>
+                <div class="absolute bottom-2 left-2 right-2 bg-gray-900/95 text-gray-200 text-[10px] px-2.5 py-1 rounded shadow flex items-center justify-between border-t border-gray-800">
+                  <span>💰 คอมเอเจนต์: <strong class="text-siwasup-gold-light font-bold">${comAmount || '3-5%'}</strong></span>
+                  <span class="text-gray-400">👁️ วิว 34 ครั้ง</span>
                 </div>
               ` : ''}
             </div>
 
-            <!-- Content -->
+            <!-- Content (White 45% surface + Grey 30% text) -->
             <div class="p-3.5 space-y-2">
               <h3 class="font-bold text-sm text-gray-900 leading-snug line-clamp-2">${p.title}</h3>
               <p class="text-xs text-gray-500 line-clamp-2">${p.description || 'สเปกห้องและทำเลทอง สนใจนัดชมล่วงหน้าได้เลย'}</p>
@@ -1140,19 +1147,19 @@
               <!-- 7-Day Social Proof Banner for SOLD properties -->
               ${isSold ? `
                 <div class="bg-red-50 border border-red-200 rounded-lg p-2 flex items-center justify-between text-xs">
-                  <span class="font-bold text-red-700 flex items-center gap-1">
+                  <span class="font-bold text-[#990000] flex items-center gap-1">
                     <span>🔥</span> ${p.sold_time || 'ปิดการขายแล้วใน 48 ชม.'}
                   </span>
-                  <span class="text-[10px] text-red-500">โอนกรรมสิทธิ์แล้ว (Social Proof)</span>
+                  <span class="text-[10px] text-red-600">โอนกรรมสิทธิ์แล้ว (Social Proof)</span>
                 </div>
               ` : ''}
 
               <div class="flex items-baseline justify-between pt-1 border-t border-gray-100">
                 <span class="text-[11px] text-gray-500">ราคาขายพิเศษ</span>
                 <div class="flex items-center gap-2">
-                  <span class="text-base font-extrabold text-red-600">${p.price || 'ติดต่อสอบถาม'}</span>
+                  <span class="text-base font-extrabold text-[#990000]">${p.price || 'ติดต่อสอบถาม'}</span>
                   ${currentMode === 'owner' ? `
-                    <button onclick="openEditPriceModal('${p.id}')" class="text-[11px] bg-purple-700 hover:bg-purple-800 text-white font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center gap-1 active:scale-95 transition-all" title="คลิกเพื่อแก้ราคา">
+                    <button onclick="openEditPriceModal('${p.id}')" class="text-[11px] bg-gray-900 hover:bg-black text-white font-bold px-2 py-0.5 rounded-md shadow-xs flex items-center gap-1 active:scale-95 transition-all" title="คลิกเพื่อแก้ราคา">
                       <span>✏️</span> แก้ราคา
                     </button>
                   ` : ''}
@@ -1163,24 +1170,24 @@
               <div class="pt-2">
                 ${currentMode === 'owner' ? `
                   <!-- 👑 OWNER CONTROLS (BUA & GOOL) -->
-                  <div class="bg-purple-50 p-2.5 rounded-lg border border-purple-200 space-y-2">
-                    <div class="text-[11px] font-bold text-purple-900 flex justify-between">
+                  <div class="bg-gray-50 p-2.5 rounded-lg border border-gray-200 space-y-2">
+                    <div class="text-[11px] font-bold text-gray-800 flex justify-between">
                       <span>🎛️ ปรับสถานะ & ราคา (1-Click):</span>
-                      <span class="text-purple-600 font-normal">บัว/เจี๊ยบ กดได้เลย</span>
+                      <span class="text-gray-500 font-normal">บัว/เจี๊ยบ กดได้เลย</span>
                     </div>
                     <div class="grid grid-cols-3 gap-1">
-                      <button onclick="updateStatus('${p.id}', 'available')" class="py-1 px-1 rounded text-[10px] font-bold ${!isBooked && !isSold ? 'bg-emerald-600 text-white shadow' : 'bg-white text-gray-700 border border-gray-300'}">
+                      <button onclick="updateStatus('${p.id}', 'available')" class="py-1 px-1 rounded text-[10px] font-bold ${!isBooked && !isSold ? 'bg-gray-900 text-white shadow-xs' : 'bg-white text-gray-700 border border-gray-300'}">
                         🟢 พร้อมขาย
                       </button>
-                      <button onclick="updateStatus('${p.id}', 'booked')" class="py-1 px-1 rounded text-[10px] font-bold ${isBooked ? 'bg-amber-500 text-white shadow' : 'bg-white text-gray-700 border border-gray-300'}">
+                      <button onclick="updateStatus('${p.id}', 'booked')" class="py-1 px-1 rounded text-[10px] font-bold ${isBooked ? 'bg-amber-600 text-white shadow-xs' : 'bg-white text-gray-700 border border-gray-300'}">
                         🟠 ติดจอง
                       </button>
-                      <button onclick="updateStatus('${p.id}', 'sold')" class="py-1 px-1 rounded text-[10px] font-bold ${isSold ? 'bg-red-600 text-white shadow' : 'bg-white text-gray-700 border border-gray-300'}">
+                      <button onclick="updateStatus('${p.id}', 'sold')" class="py-1 px-1 rounded text-[10px] font-bold ${isSold ? 'bg-[#990000] text-white shadow-xs' : 'bg-white text-gray-700 border border-gray-300'}">
                         🔴 ขายแล้ว
                       </button>
                     </div>
                     <div class="grid grid-cols-2 gap-1.5 pt-1">
-                      <button onclick="openEditPriceModal('${p.id}')" class="bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white text-[11px] font-bold py-1.5 px-2 rounded-lg shadow flex items-center justify-center gap-1 active:scale-95 transition-all">
+                      <button onclick="openEditPriceModal('${p.id}')" class="bg-[#990000] hover:bg-red-800 text-white text-[11px] font-bold py-1.5 px-2 rounded-lg shadow-xs flex items-center justify-center gap-1 active:scale-95 transition-all">
                         <span>✏️</span> แก้ไขราคาขาย
                       </button>
                       <button onclick="openOfferModal('${p.id}', '${p.title}', '${p.price}')" class="bg-white hover:bg-gray-100 text-gray-800 text-[10px] font-medium py-1.5 px-2 rounded border border-gray-300 text-center">
@@ -1200,51 +1207,51 @@
                   <!-- 👔 ACTIVE AGENT ACTIONS (FREE / EMPLOYEE) -->
                   <div class="space-y-1.5">
                     <div class="grid grid-cols-2 gap-1.5">
-                      <button onclick="openSmartShare('${p.id}', '${p.title}')" class="bg-gradient-to-r from-gray-900 to-black hover:from-black hover:to-gray-900 text-white text-[11px] font-bold py-2 px-2 rounded-lg flex items-center justify-center gap-1 shadow-sm">
+                      <button onclick="openSmartShare('${p.id}', '${p.title}')" class="bg-[#990000] hover:bg-red-800 text-white text-[11px] font-bold py-2 px-2 rounded-lg flex items-center justify-center gap-1 shadow-xs">
                         <span>🚀</span> แชร์ลิงก์ล็อกสิทธิ์ (?ref)
                       </button>
-                      <button onclick="openOfferModal('${p.id}', '${p.title}', '${p.price}')" class="bg-blue-50 hover:bg-blue-100 text-blue-900 text-[11px] font-bold py-2 px-2 rounded-lg border border-blue-300 flex items-center justify-center gap-1 text-center">
+                      <button onclick="openOfferModal('${p.id}', '${p.title}', '${p.price}')" class="bg-white hover:bg-gray-50 text-gray-800 text-[11px] font-semibold py-2 px-2 rounded-lg border border-gray-300 flex items-center justify-center gap-1 text-center">
                         <span>🤝</span> ต่อรองราคา NPA
                       </button>
                     </div>
                     ${!isBooked && !isSold ? `
-                      <button onclick="openBookingModal('${p.id}', '${p.title}', '${p.price}')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 rounded-lg flex items-center justify-center gap-1 shadow">
+                      <button onclick="openBookingModal('${p.id}', '${p.title}', '${p.price}')" class="w-full bg-gray-900 hover:bg-black text-white text-xs font-bold py-2 rounded-lg flex items-center justify-center gap-1 shadow-xs">
                         <span>📝</span> แจ้งวางเงินจอง (ส่งสลิปให้เจี๊ยบ/บัว)
                       </button>
                     ` : `
-                      <button class="w-full bg-gray-200 text-gray-500 text-xs font-medium py-2 rounded-lg cursor-not-allowed">
+                      <button class="w-full bg-gray-100 text-gray-400 text-xs font-medium py-2 rounded-lg cursor-not-allowed border border-gray-200">
                         🔒 ${isSold ? 'ขายแล้ว (SOLD OUT)' : 'ติดจองแล้ว'}
                       </button>
                     `}
                   </div>
                 ` : currentMode === 'trainee' ? `
                   <!-- 🎓 TRAINEE ACTIONS (LOCKED UNTIL 3 LISTINGS) -->
-                  <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-2.5 space-y-2 text-center">
-                    <div class="text-[11px] text-indigo-900 font-semibold flex items-center justify-center gap-1">
+                  <div class="bg-gray-50 border border-gray-200 rounded-lg p-2.5 space-y-2 text-center">
+                    <div class="text-[11px] text-gray-800 font-semibold flex items-center justify-center gap-1">
                       <span>🔒</span> ฟังก์ชันแชร์ล็อกอยู่ (Trainee Onboarding)
                     </div>
-                    <p class="text-[10px] text-indigo-700">ส่งทรัพย์เข้าพอร์ตให้บริษัทอีก 2 หลัง เพื่อปลดล็อกลิงก์แชร์และรับค่าคอม 3-5%</p>
-                    <button onclick="openConsignModal(true)" class="w-full bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-bold py-2 rounded-lg shadow flex items-center justify-center gap-1">
+                    <p class="text-[10px] text-gray-500">ส่งทรัพย์เข้าพอร์ตให้บริษัทอีก 2 หลัง เพื่อปลดล็อกลิงก์แชร์และรับค่าคอม 3-5%</p>
+                    <button onclick="openConsignModal(true)" class="w-full bg-[#990000] hover:bg-red-800 text-white text-xs font-bold py-2 rounded-lg shadow-xs flex items-center justify-center gap-1">
                       <span>➕</span> ส่งทรัพย์ฝากขายหลังที่ 2/3 ทันที
                     </button>
                   </div>
                 ` : `
-                  <!-- 👤 CLIENT ACTIONS (WHITE-LABEL / NO COMPANY NUMBER) -->
-                  <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-2.5 space-y-1.5 text-center">
-                    <p class="text-[11px] text-emerald-900 font-semibold">สนใจทรัพย์นี้ หรือต้องการต่อรองราคา / ยื่นกู้</p>
+                  <!-- 👤 CLIENT ACTIONS (WHITE-LABEL / NO COMPANY NUMBER - Red 15% + Gold 5%) -->
+                  <div class="bg-gray-50 border border-gray-200 rounded-lg p-2.5 space-y-1.5 text-center">
+                    <p class="text-[11px] text-gray-700 font-semibold">สนใจทรัพย์นี้ หรือต้องการต่อรองราคา / ยื่นกู้</p>
                     <div class="grid grid-cols-2 gap-1.5 pt-0.5">
-                      <button onclick="contactViaLine('${p.id}', '${p.title}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold py-2 px-1 rounded-lg shadow-xs flex items-center justify-center gap-1 text-center">
+                      <button onclick="contactViaLine('${p.id}', '${p.title}')" class="bg-[#990000] hover:bg-red-800 text-white text-[11px] font-bold py-2.5 px-1 rounded-lg shadow-xs flex items-center justify-center gap-1 text-center">
                         <span>📱</span> ทัก LINE นัดชม
                       </button>
-                      <button onclick="openCallModal('${p.id}', '${p.title}')" class="bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold py-2 px-1 rounded-lg shadow-xs flex items-center justify-center gap-1 text-center">
+                      <button onclick="openCallModal('${p.id}', '${p.title}')" class="bg-siwasup-gold hover:opacity-95 text-gray-950 text-[11px] font-bold py-2.5 px-1 rounded-lg shadow-xs flex items-center justify-center gap-1 text-center">
                         <span>📞</span> โทรรับสิทธิ์พิเศษ
                       </button>
                     </div>
                     <div class="grid grid-cols-2 gap-1.5">
-                      <button onclick="openOfferModal('${p.id}', '${p.title}', '${p.price}')" class="bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold py-1.5 rounded shadow-2xs">
+                      <button onclick="openOfferModal('${p.id}', '${p.title}', '${p.price}')" class="bg-white hover:bg-gray-100 text-gray-700 text-[10px] font-semibold py-1.5 rounded border border-gray-300 shadow-2xs">
                         🤝 ยื่นต่อรองราคา
                       </button>
-                      <button onclick="openInquiryModal('${p.id}', '${p.title}', '${p.price}')" class="bg-white hover:bg-emerald-100 text-emerald-800 text-[10px] font-semibold py-1.5 rounded border border-emerald-300 shadow-2xs">
+                      <button onclick="openInquiryModal('${p.id}', '${p.title}', '${p.price}')" class="bg-white hover:bg-gray-100 text-gray-700 text-[10px] font-semibold py-1.5 rounded border border-gray-300 shadow-2xs">
                         📅 นัดหมายชมห้อง
                       </button>
                     </div>
@@ -1396,20 +1403,20 @@
         container.innerHTML = `<div class="text-center py-6 text-gray-400">ยังไม่มีทรัพย์ฝากขายใหม่</div>`;
       } else {
         container.innerHTML = consignments.map(c => `
-          <div class="p-3 bg-purple-50 rounded-xl border border-purple-200 space-y-1.5 relative">
+          <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5 relative">
             <div class="flex justify-between items-start">
               <div>
-                <span class="bg-purple-700 text-white text-[9px] font-bold px-1.5 py-0.2 rounded">${c.type}</span>
+                <span class="bg-gray-900 text-white text-[9px] font-bold px-1.5 py-0.2 rounded">${c.type}</span>
                 <span class="font-bold text-gray-900 text-xs ml-1">${c.title}</span>
               </div>
               <span class="text-[10px] text-gray-400">${c.created_at}</span>
             </div>
-            <div class="text-[11px] text-purple-900 font-semibold">
+            <div class="text-[11px] text-gray-800 font-semibold">
               💰 ราคาเสนอขาย: ${c.price} บาท | พื้นที่: ${c.size}
             </div>
-            <div class="text-[11px] text-gray-600 flex items-center justify-between pt-1 border-t border-purple-100">
-              <span>👤 ${c.owner_name} (<a href="tel:${c.phone}" class="text-purple-700 font-bold underline">${c.phone}</a>)</span>
-              <button onclick="convertLeadToAgent('${c.id}')" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-[10px] px-2.5 py-1 rounded shadow">
+            <div class="text-[11px] text-gray-600 flex items-center justify-between pt-1 border-t border-gray-200">
+              <span>👤 ${c.owner_name} (<a href="tel:${c.phone}" class="text-[#990000] font-bold underline">${c.phone}</a>)</span>
+              <button onclick="convertLeadToAgent('${c.id}')" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold text-[10px] px-2.5 py-1 rounded shadow-xs">
                 🤝 ชวนเป็น Free Agent
               </button>
             </div>
@@ -1451,8 +1458,8 @@
       pendingEditPriceProp = prop;
       const currentNum = parsePriceNumber(prop.price);
       document.getElementById('edit-price-prop-info').innerHTML = `
-        <div class="font-bold text-purple-950">🏠 ${prop.title}</div>
-        <div class="text-[11px] text-purple-800">ราคาปัจจุบัน: <strong class="text-red-600 font-extrabold text-sm">${prop.price}</strong> (รหัส: ${prop.id})</div>
+        <div class="font-bold text-gray-900">🏠 ${prop.title}</div>
+        <div class="text-[11px] text-gray-600">ราคาปัจจุบัน: <strong class="text-[#990000] font-extrabold text-sm">${prop.price}</strong> (รหัส: ${prop.id})</div>
         <div class="mt-1.5 p-2 bg-amber-50 border border-amber-300 rounded-lg text-[10px] text-amber-950 leading-snug">
           ⚠️ <strong>จิตวิทยาการขาย:</strong> หากมีลูกค้ากำลังนัดชมหรือคุยอยู่ การลดราคาอาจทำให้ลูกค้าชะงัก (คิดว่าบ้านมีตำหนิหรือรอให้ลดอีก) และเอเจนต์จะเสียหน้า ควรปรับลดเฉพาะกรณี <strong>"ทรัพย์นิ่งเกิน 14 วัน"</strong> หรือธนาคารมีรอบลดราคาเท่านั้น!
         </div>
