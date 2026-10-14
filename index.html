@@ -1431,15 +1431,27 @@
       }
     }
 
-    // 5. Owner Edit Price Functions (สำหรับแอดมิน บัว & กูล)
+    // 5. Owner Edit Price Functions (พร้อมระบบ Smart Guardrails ป้องกันการเปลี่ยนราคาผิดจังหวะ)
     let pendingEditPriceProp = null;
 
     function openEditPriceModal(id, title, price) {
+      const prop = allProperties.find(p => p.id === id);
+      
+      // กฎเหล็กที่ 1: ห้ามแก้ราคาเมื่อติดจองหรือขายแล้วเด็ดขาด
+      if (prop && (prop.status === 'booked' || prop.status === 'sold')) {
+        const stText = prop.status === 'booked' ? 'ติดจองแล้ว' : 'ขายแล้ว (SOLD OUT)';
+        showToast(`❌ ไม่อนุญาตให้แก้ราคา: ทรัพย์นี้อยู่ในสถานะ [${stText}] มีสัญญาแล้ว ห้ามแก้ราคาเด็ดขาด!`);
+        return;
+      }
+
       pendingEditPriceProp = { id, title, price };
       const currentNum = parsePriceNumber(price);
       document.getElementById('edit-price-prop-info').innerHTML = `
         <div class="font-bold text-purple-950">🏠 ${title}</div>
         <div class="text-[11px] text-purple-800">ราคาปัจจุบัน: <strong class="text-red-600">${price}</strong> (รหัส: ${id})</div>
+        <div class="mt-1.5 p-2 bg-amber-50 border border-amber-300 rounded-lg text-[10px] text-amber-950 leading-snug">
+          ⚠️ <strong>จิตวิทยาการขาย:</strong> หากมีลูกค้ากำลังนัดชมหรือคุยอยู่ การลดราคาอาจทำให้ลูกค้าชะงัก (คิดว่าบ้านมีตำหนิหรือรอให้ลดอีก) และเอเจนต์จะเสียหน้า ควรปรับลดเฉพาะกรณี <strong>"ทรัพย์นิ่งเกิน 14 วัน"</strong> หรือธนาคารมีรอบลดราคาเท่านั้น!
+        </div>
       `;
       document.getElementById('new-price-input').value = currentNum > 0 ? currentNum : '';
       document.getElementById('mark-hot-deal').checked = false;
@@ -1458,13 +1470,22 @@
       if (pendingEditPriceProp && newPriceVal > 0) {
         const prop = allProperties.find(p => p.id === pendingEditPriceProp.id);
         if (prop) {
+          const oldPrice = prop.price;
+          // บันทึกประวัติราคา (Price History)
+          if (!prop.price_history) prop.price_history = [];
+          prop.price_history.push({
+            old_price: oldPrice,
+            new_price: `${newPriceVal.toLocaleString()} บาท`,
+            changed_at: new Date().toLocaleDateString('th-TH')
+          });
+
           prop.price = `${newPriceVal.toLocaleString()} บาท`;
           if (isHotDeal) {
             prop.title = `🔥 [ลดด่วน] ${prop.title.replace(/^🔥\s*\[ลดด่วน\]\s*/, '')}`;
           }
           renderProperties();
           closeEditPriceModal();
-          showToast(`👑 บัว/เจี๊ยบ ปรับราคาเป็น [${prop.price}] เรียบร้อย! ค่าคอมมิชชั่นคำนวณใหม่ทันที`);
+          showToast(`👑 บัว/เจี๊ยบ ปรับราคาเป็น [${prop.price}] เรียบร้อย! ระบบคำนวณคอม 5% ใหม่ทันที`);
         }
       }
     }
