@@ -83,13 +83,23 @@
       }
     }
 
-    /* Hide scrollbars completely while keeping scrollability */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
+    /* Hide scrollbars completely across Chrome, Edge, Safari, Firefox while keeping smooth scrollability */
+    .no-scrollbar::-webkit-scrollbar,
+    .modal-card::-webkit-scrollbar,
+    .modal-card-sm::-webkit-scrollbar,
+    #share-modal .modal-card::-webkit-scrollbar,
+    #share-modal-card::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
     }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+    .no-scrollbar,
+    .modal-card,
+    .modal-card-sm,
+    #share-modal .modal-card,
+    #share-modal-card {
+      -ms-overflow-style: none !important;
+      scrollbar-width: none !important;
     }
 
     @keyframes fadeIn {
@@ -376,9 +386,9 @@
 
   </div>
 
-  <script src="modals.js"></script>
-  <script src="vinyl_generator.js"></script>
-  <script src="siwasup_all_properties.js"></script>
+  <script src="modals.js?v=20261015-1350"></script>
+  <script src="vinyl_generator.js?v=20261015-1350"></script>
+  <script src="siwasup_all_properties.js?v=20261015-1350"></script>
   <script>
     let currentMode = 'free_agent';
     let currentCategory = 'all';
@@ -1437,8 +1447,7 @@
       const shareModalCard = document.getElementById('share-modal-card');
       const toggleText = document.getElementById('qr-toggle-text');
       if (desktopPanel) {
-        desktopPanel.classList.add('hidden');
-        desktopPanel.classList.remove('flex');
+        desktopPanel.style.display = 'none';
       }
       if (shareModalCard) {
         shareModalCard.classList.remove('md:max-w-2xl');
@@ -1504,25 +1513,25 @@
 
     function toggleQrView() {
       const isDesktop = window.innerWidth >= 768;
+      const desktopPanel = document.getElementById('desktop-qr-panel');
+      const shareModalCard = document.getElementById('share-modal-card');
+      const toggleText = document.getElementById('qr-toggle-text');
       
-      if (isDesktop) {
-        const desktopPanel = document.getElementById('desktop-qr-panel');
-        const shareModalCard = document.getElementById('share-modal-card');
-        const toggleText = document.getElementById('qr-toggle-text');
+      // If desktop/tablet and desktop panel exists in DOM
+      if (isDesktop && desktopPanel) {
+        const isHidden = desktopPanel.style.display === 'none' || getComputedStyle(desktopPanel).display === 'none';
         
-        if (desktopPanel && desktopPanel.classList.contains('hidden')) {
+        if (isHidden) {
           updateShareUrls();
-          desktopPanel.classList.remove('hidden');
-          desktopPanel.classList.add('flex');
+          desktopPanel.style.display = 'flex';
           if (shareModalCard) {
             shareModalCard.classList.remove('md:max-w-md');
             shareModalCard.classList.add('md:max-w-2xl');
           }
           if (toggleText) toggleText.textContent = "ซ่อน QR";
           if (window.lucide) { lucide.createIcons(); }
-        } else if (desktopPanel) {
-          desktopPanel.classList.add('hidden');
-          desktopPanel.classList.remove('flex');
+        } else {
+          desktopPanel.style.display = 'none';
           if (shareModalCard) {
             shareModalCard.classList.remove('md:max-w-2xl');
             shareModalCard.classList.add('md:max-w-md');
@@ -1530,6 +1539,7 @@
           if (toggleText) toggleText.textContent = "เปิดดู QR";
         }
       } else {
+        // Fallback for mobile or if desktop panel not available:
         openMobileQrModal();
       }
     }

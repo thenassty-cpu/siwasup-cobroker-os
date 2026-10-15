@@ -152,7 +152,7 @@
           </div>
 
           <!-- Right Column: Desktop/Tablet Side QR Panel -->
-          <div id="desktop-qr-panel" class="hidden md:flex w-52 flex-col items-center justify-between p-3 bg-gradient-to-b from-amber-50/70 to-slate-50 border border-amber-200/80 rounded-xl text-center self-stretch animate-fadeIn">
+          <div id="desktop-qr-panel" style="display: none;" class="w-56 flex-col items-center justify-between p-3 bg-gradient-to-b from-amber-50/70 to-slate-50 border border-amber-200/80 rounded-xl text-center self-stretch animate-fadeIn">
             <div class="w-full">
               <div class="text-[11px] font-bold text-gray-800 mb-1.5 flex items-center justify-center gap-1">
                 <i data-lucide="qr-code" class="w-3 h-3 text-amber-600"></i>
