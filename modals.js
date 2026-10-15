@@ -843,7 +843,7 @@
 
     <!-- 🏆 Agent Directory & Leaderboard Modal (125 Agents: S02-S126) -->
     <div id="agent-leaderboard-modal" class="hidden modal-backdrop !items-center !p-3">
-      <div class="modal-card max-w-xl space-y-3.5 max-h-[92vh] overflow-y-auto no-scrollbar !p-4">
+      <div class="modal-card max-w-xl space-y-3.5 max-h-[92vh] overflow-y-auto custom-scrollbar !p-4">
         <!-- Header -->
         <div class="flex justify-between items-center pb-2 border-b border-gray-100">
           <div class="flex items-center gap-2">
@@ -964,7 +964,7 @@
         </div>
 
         <!-- Leaderboard Table List -->
-        <div id="leaderboard-list" class="space-y-1.5 max-h-72 overflow-y-auto no-scrollbar pr-0.5">
+        <div id="leaderboard-list" class="space-y-1.5 max-h-[52vh] sm:max-h-[58vh] overflow-y-auto custom-scrollbar pr-2">
           <!-- Injected via JS -->
         </div>
       </div>

@@ -112,6 +112,30 @@
       scrollbar-width: none !important;
     }
 
+    /* Modern, Sleek Custom Scrollbar for lists & scrollable panels */
+    .custom-scrollbar::-webkit-scrollbar {
+      display: block !important;
+      width: 6px !important;
+      height: 6px !important;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9 !important;
+      border-radius: 9999px !important;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1 !important;
+      border-radius: 9999px !important;
+      border: 1px solid #f1f5f9 !important;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8 !important;
+    }
+    .custom-scrollbar {
+      -ms-overflow-style: auto !important;
+      scrollbar-width: thin !important;
+      scrollbar-color: #cbd5e1 #f1f5f9 !important;
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: scale(0.97); }
       to { opacity: 1; transform: scale(1); }
