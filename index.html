@@ -6,6 +6,9 @@
   <title>Siwasup Co-Broker Demo - ศิวาทรัพย์ แอสเซท</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- PDF & QR Libraries for Vinyl Sign Generator -->
+  <script src="https://unpkg.com/pdf-lib@1.17.9/dist/pdf-lib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Tahoma&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Kanit', 'Tahoma', sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -29,6 +32,63 @@
       color: #ffffff;
       flex-shrink: 0;
       backdrop-filter: blur(2px);
+    }
+
+    /* 🪟 Global Glassmorphism & Capsule Utilities */
+    .capsule-glass-20 {
+      background-color: rgba(255, 255, 255, 0.20);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.40);
+      border-radius: 9999px;
+    }
+
+    /* 📦 Modal System Utilities */
+    .modal-backdrop:not(.hidden) {
+      display: flex;
+    }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background-color: rgba(0, 0, 0, 0.60);
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0;
+    }
+    @media (min-width: 640px) {
+      .modal-backdrop {
+        align-items: center;
+        padding: 1rem;
+      }
+    }
+
+    .modal-card {
+      background-color: #ffffff;
+      width: 100%;
+      max-width: 28rem;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      padding: 1.25rem;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    @media (min-width: 640px) {
+      .modal-card {
+        border-radius: 1rem;
+      }
+    }
+
+    .modal-card-sm {
+      background-color: #ffffff;
+      width: 100%;
+      max-width: 24rem;
+      border-radius: 1rem;
+      padding: 1.25rem;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     }
   </style>
 </head>
@@ -241,524 +301,13 @@
       <div class="text-center py-10 text-gray-400">กำลังโหลดคลังทรัพย์ศิวาทรัพย์...</div>
     </main>
 
-    <!-- Booking Modal -->
-    <div id="booking-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div class="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-4 max-h-[90vh] overflow-y-auto">
-        <div class="flex justify-between items-center border-b pb-2">
-          <h3 class="font-bold text-base text-gray-800 flex items-center gap-1.5">
-            <span class="icon-circle w-5 h-5"><i data-lucide="file-text" class="w-3 h-3 stroke-[1.5]"></i></span>
-            <span>แจ้งหลักฐานการจอง (วางมัดจำ)</span>
-          </h3>
-          <button onclick="closeBookingModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
-        </div>
-        <div id="booking-property-info" class="bg-gray-50 p-2.5 rounded-lg text-xs space-y-1"></div>
-        <form onsubmit="handleBookingSubmit(event)" class="space-y-3 text-xs">
-          <div>
-            <label class="block font-medium mb-1">ชื่อเอเจนต์ผู้พาจอง <span class="text-red-500">*</span></label>
-            <input type="text" required placeholder="เช่น คุณกานต์ หรือ บัวไหล" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 outline-none">
-          </div>
-          <div>
-            <label class="block font-medium mb-1">เบอร์โทรเอเจนต์ <span class="text-red-500">*</span></label>
-            <input type="tel" required placeholder="08x-xxx-xxxx" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 outline-none">
-          </div>
-          <div>
-            <label class="block font-medium mb-1">ชื่อลูกค้าผู้จอง <span class="text-red-500">*</span></label>
-            <input type="text" required placeholder="เช่น คุณสมชาย (นัดทำสัญญา 15 ต.ค.)" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-red-500 outline-none">
-          </div>
-          <div>
-            <label class="block font-medium mb-1">แนบสลิปเงินมัดจำ (เข้าบัญชีเจี๊ยบ) <span class="text-red-500">*</span></label>
-            <input type="file" accept="image/*" class="w-full border rounded-lg p-2 bg-gray-50">
-            <p class="text-[10px] text-gray-400 mt-0.5">ยอดมัดจำขั้นต่ำ 10,000 บาท</p>
-          </div>
-          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-lg text-sm shadow-xs flex items-center justify-center gap-1.5">
-            <span class="icon-circle w-4 h-4"><i data-lucide="check" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>ยืนยันส่งข้อมูลให้แอดมิน (เจี๊ยบ/บัว) ตรวจสอบ</span>
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Smart Share Center Modal (Omni-Channel Share) -->
-    <div id="share-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div class="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-4 max-h-[90vh] overflow-y-auto">
-        <div class="flex justify-between items-center border-b pb-2">
-          <h3 class="font-bold text-base text-gray-800 flex items-center gap-1.5">
-            <span class="icon-circle w-5 h-5"><i data-lucide="share-2" class="w-3 h-3 stroke-[1.5]"></i></span>
-            <span>Smart Share Center (เลือกช่องทางโปรโมท)</span>
-          </h3>
-          <button onclick="closeShareModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
-        </div>
-        
-        <div id="share-prop-info" class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-xs space-y-0.5"></div>
-
-        <div>
-          <label class="block font-medium text-xs mb-1 text-gray-700 flex items-center gap-1.5">
-            <span class="icon-circle w-4 h-4"><i data-lucide="user" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>รหัส / ชื่อเอเจนต์ของคุณ (สำหรับล็อกค่าคอม 5%):</span>
-          </label>
-          <input type="text" id="agent-ref-input" value="AG-บัวรา" oninput="updateShareUrls()" 
-                 class="w-full border rounded-lg p-2 text-xs font-semibold focus:ring-2 focus:ring-amber-500 outline-none bg-gray-50">
-          <p class="text-[10px] text-gray-400 mt-0.5">ระบบจะฝังรหัสนี้ไว้ในลิงก์และจำไว้ในเครื่องลูกค้า 60 วัน</p>
-        </div>
-
-        <div class="space-y-2 text-xs pt-1">
-          <div class="font-bold text-gray-800 flex justify-between items-center">
-            <span class="flex items-center gap-1.5">
-              <span class="icon-circle w-4 h-4"><i data-lucide="link" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-              <span>กดคัดลอกลิงก์เฉพาะช่องทาง:</span>
-            </span>
-            <span class="text-[10px] text-emerald-600 font-normal">ระบบดักจับและล็อกสิทธิ์ให้ 100%</span>
-          </div>
-
-          <!-- Channel 1: Facebook -->
-          <div class="flex items-center justify-between p-2 rounded-lg border border-blue-200 bg-blue-50/60">
-            <div class="flex items-center gap-2">
-              <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs">f</span>
-              <div>
-                <div class="font-bold text-blue-950 text-xs">Facebook (Marketplace / กลุ่ม)</div>
-                <div class="text-[10px] text-blue-700">ดักจับ Lead จากโพสต์ & แคปชั่น FB</div>
-              </div>
-            </div>
-            <button onclick="copyChannelLink('facebook')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs">
-              คัดลอกลิงก์
-            </button>
-          </div>
-
-          <!-- Channel 2: TikTok / Reels -->
-          <div class="flex items-center justify-between p-2 rounded-lg border border-gray-300 bg-gray-50">
-            <div class="flex items-center gap-2">
-              <span class="w-6 h-6 rounded-full bg-gray-900 text-white flex items-center justify-center font-bold text-xs">♪</span>
-              <div>
-                <div class="font-bold text-gray-950 text-xs">TikTok / Reels / Shorts</div>
-                <div class="text-[10px] text-gray-600">สำหรับแปะ Bio หรือใต้คอมเมนต์คลิป</div>
-              </div>
-            </div>
-            <button onclick="copyChannelLink('tiktok')" class="bg-gray-900 hover:bg-black text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs">
-              คัดลอกลิงก์
-            </button>
-          </div>
-
-          <!-- Channel 3: LINE -->
-          <div class="flex items-center justify-between p-2 rounded-lg border border-emerald-200 bg-emerald-50/60">
-            <div class="flex items-center gap-2">
-              <span class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs">L</span>
-              <div>
-                <div class="font-bold text-emerald-950 text-xs">LINE (แชตส่วนตัว / กลุ่ม)</div>
-                <div class="text-[10px] text-emerald-700">ส่งต่อให้คนรู้จัก หรือกลุ่มนักลงทุน</div>
-              </div>
-            </div>
-            <button onclick="copyChannelLink('line')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs">
-              คัดลอกลิงก์
-            </button>
-          </div>
-
-          <!-- Channel 4: General Web / Forum -->
-          <div class="flex items-center justify-between p-2 rounded-lg border border-gray-200 bg-gray-50/70">
-            <div class="flex items-center gap-2">
-              <span class="icon-circle w-6 h-6 bg-gray-800 text-white"><i data-lucide="globe" class="w-3.5 h-3.5 stroke-[1.5]"></i></span>
-              <div>
-                <div class="font-bold text-gray-900 text-xs">เว็บบอร์ด / LivingInsider / DDprop</div>
-                <div class="text-[10px] text-gray-500">ลิงก์กลางสำหรับโพสต์ลงเว็บไซต์</div>
-              </div>
-            </div>
-            <button onclick="copyChannelLink('web')" class="bg-gray-800 hover:bg-gray-900 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs">
-              คัดลอกลิงก์
-            </button>
-          </div>
-
-          <!-- Channel 5: QR Code Generator -->
-          <div class="border border-gray-200 rounded-lg p-2.5 bg-gray-50 space-y-2 text-center">
-            <div class="flex justify-between items-center text-left">
-              <div>
-                <div class="font-bold text-gray-900 text-xs flex items-center gap-1.5">
-                  <span class="icon-circle w-4 h-4"><i data-lucide="qr-code" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-                  <span>QR Code สำหรับป้ายหน้าบ้าน / ใบปลิว</span>
-                </div>
-                <div class="text-[10px] text-gray-500">ใครสแกนป้าย จะตกเป็นลูกค้าของคุณทันที</div>
-              </div>
-              <button onclick="toggleQrView()" class="text-xs text-amber-700 font-bold underline">
-                <span id="qr-toggle-text">เปิดดู QR</span>
-              </button>
-            </div>
-            <div id="qr-container" class="hidden pt-2 flex flex-col items-center">
-              <img id="qr-image" src="" alt="QR Code" class="w-36 h-36 border p-1 bg-white rounded-lg shadow-sm">
-              <p class="text-[10px] text-gray-500 mt-1">คลิกขวาหรือกดค้างเพื่อบันทึกรูป QR Code</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Client Call Discount Modal (Click to Call) -->
-    <div id="call-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
-      <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-3 text-center shadow-xl">
-        <div class="icon-circle w-12 h-12 bg-amber-900/60 text-[#D4AF37] mx-auto">
-          <i data-lucide="gift" class="w-6 h-6 stroke-[1.5]"></i>
-        </div>
-        <h3 class="font-bold text-base text-gray-900">รับสิทธิพิเศษสำหรับคุณ!</h3>
-        <p class="text-xs text-gray-600">
-          แจ้งรหัสอ้างอิงนี้กับเจ้าหน้าที่ฝ่ายขาย เพื่อรับ <strong class="text-[#990000]">สิทธิ์ฟรีค่าโอนกรรมสิทธิ์ / ส่วนลดพิเศษ</strong>
-        </p>
-        <div class="bg-amber-50 border-2 border-dashed border-amber-300 rounded-xl p-2.5 text-center">
-          <span class="text-[11px] text-amber-800">รหัสส่วนลดของคุณ:</span>
-          <div id="call-discount-code" class="text-xl font-extrabold text-amber-900 tracking-wider">SS-09</div>
-        </div>
-        <div class="pt-2 flex gap-2">
-          <a id="btn-actual-call" href="tel:0944629796" onclick="logCallLead()" class="flex-1 bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold py-2.5 rounded-xl text-xs shadow-xs text-center flex items-center justify-center gap-1.5">
-            <span class="icon-circle w-4 h-4"><i data-lucide="phone" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>โทรติดต่อเจ้าหน้าที่ทันที</span>
-          </a>
-          <button onclick="closeCallModal()" class="px-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl text-xs border border-gray-200">
-            ปิด
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Client Inquiry Modal (Appointment / Callback) -->
-    <div id="inquiry-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
-      <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-3 shadow-xl">
-        <div class="flex justify-between items-center border-b pb-2">
-          <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
-            <span class="icon-circle w-5 h-5"><i data-lucide="calendar" class="w-3 h-3 stroke-[1.5]"></i></span>
-            <span>ขอนัดหมายเข้าชมห้องจริง / ปรึกษาสินเชื่อ</span>
-          </h3>
-          <button onclick="closeInquiryModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
-        </div>
-        <div id="inquiry-prop-info" class="bg-gray-50 p-2 rounded-lg text-xs font-medium text-gray-700"></div>
-        <form onsubmit="handleInquirySubmit(event)" class="space-y-2.5 text-xs">
-          <div>
-            <label class="block font-medium mb-1">ชื่อของคุณ <span class="text-red-500">*</span></label>
-            <input type="text" id="inquiry-name" required placeholder="เช่น คุณวิชัย" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
-          </div>
-          <div>
-            <label class="block font-medium mb-1">เบอร์โทรศัพท์ติดต่อสะดวก <span class="text-red-500">*</span></label>
-            <input type="tel" id="inquiry-phone" required placeholder="08x-xxx-xxxx" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
-          </div>
-          <div>
-            <label class="block font-medium mb-1">วันที่สะดวกเข้าชม (โดยประมาณ)</label>
-            <input type="text" id="inquiry-date" placeholder="เช่น เสาร์นี้ ช่วงบ่าย" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
-          </div>
-          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2 flex items-center justify-center gap-1.5">
-            <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>ยืนยันส่งข้อมูลนัดหมาย</span>
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Admin Notification Toast (Simulate 1-Click Approval) -->
-    <div id="admin-toast" class="hidden fixed top-4 inset-x-4 max-w-sm mx-auto z-50 bg-gray-900 text-white p-3 rounded-xl shadow-2xl border border-gray-700 text-xs space-y-2 border-l-4 border-amber-400">
-      <div class="flex items-center justify-between font-bold text-amber-300">
-        <span class="flex items-center gap-1.5">
-          <span class="icon-circle w-4 h-4"><i data-lucide="bell" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-          <span>แจ้งเตือนแอดมิน (เจี๊ยบ/บัว)</span>
-        </span>
-        <span class="text-[10px] text-gray-400">เมื่อสักครู่</span>
-      </div>
-      <p id="admin-toast-body" class="text-gray-200 text-[11px]"></p>
-      <div class="flex gap-2 pt-1">
-        <button onclick="adminApproveBooking()" class="flex-1 bg-[#D4AF37] hover:bg-[#c49f2b] text-gray-950 font-bold py-1.5 rounded text-center shadow-xs flex items-center justify-center gap-1.5">
-          <span class="icon-circle w-4 h-4"><i data-lucide="check" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-          <span>กดอนุมัติการจอง (1-Click)</span>
-        </button>
-        <button onclick="document.getElementById('admin-toast').classList.add('hidden')" class="px-3 bg-gray-800 text-gray-300 rounded border border-gray-700">
-          ปิด
-        </button>
-      </div>
-    </div>
-
-    <!-- 🏷️ Public Consignment / Trainee Challenge Modal (ฝากขายทรัพย์ฟรี) -->
-    <div id="consign-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div class="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-3.5 max-h-[92vh] overflow-y-auto">
-        <div class="flex justify-between items-center border-b pb-2">
-          <div>
-            <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5" id="consign-modal-title">
-              <span class="icon-circle w-5 h-5"><i data-lucide="building" class="w-3 h-3 stroke-[1.5]"></i></span>
-              <span>ฝากขายบ้าน/คอนโด/ที่ดิน กับศิวาทรัพย์</span>
-            </h3>
-            <p class="text-[10px] text-emerald-600 font-semibold" id="consign-modal-sub">
-              ฟรี! ไม่มีค่าแรกเข้า • เข้าถึงเครือข่ายเอเจนต์ทั่วประเทศ
-            </p>
-          </div>
-          <button onclick="closeConsignModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
-        </div>
-
-        <div class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-[11px] text-amber-900 leading-snug">
-          <span class="icon-circle w-3.5 h-3.5 inline-flex mr-1 align-middle"><i data-lucide="sparkles" class="w-2 h-2 stroke-[1.5]"></i></span>
-          <strong>สิทธิประโยชน์พิเศษ:</strong> หลังลงทะเบียน เจ้าหน้าที่จะติดต่อประเมินราคา และท่านสามารถเลือกรับสิทธิ์เป็น <strong>Free Agent</strong> เพื่อรับค่าคอมมิชชั่นของตัวเองเต็มๆ ได้ทันที!
-        </div>
-
-        <form onsubmit="handleConsignSubmit(event)" class="space-y-2.5 text-xs">
-          <div>
-            <label class="block font-medium mb-1">ประเภททรัพย์ <span class="text-red-500">*</span></label>
-            <select id="consign-type" required class="w-full border rounded-lg p-2 bg-gray-50 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
-              <option value="ทาวน์โฮม">ทาวน์โฮม / ทาวน์เฮ้าส์</option>
-              <option value="บ้านเดี่ยว">บ้านเดี่ยว / บ้านแฝด</option>
-              <option value="คอนโด">คอนโดมิเนียม</option>
-              <option value="ที่ดิน">ที่ดินเปล่า</option>
-              <option value="อาคารพาณิชย์">อาคารพาณิชย์ / ตึกแถว</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block font-medium mb-1">ชื่อโครงการ / ทำเล / ซอย / ถนน <span class="text-red-500">*</span></label>
-            <input type="text" id="consign-title" required placeholder="เช่น ม.พฤกษา 12 คลองสาม ปทุมธานี" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
-          </div>
-
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block font-medium mb-1">ราคาที่ต้องการขาย (บาท) <span class="text-red-500">*</span></label>
-              <input type="number" id="consign-price" required placeholder="เช่น 2500000" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
-            </div>
-            <div>
-              <label class="block font-medium mb-1">ขนาดพื้นที่ (ตร.ว. / ตร.ม.)</label>
-              <input type="text" id="consign-size" placeholder="เช่น 24 ตร.ว." class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block font-medium mb-1">ชื่อเจ้าของทรัพย์ / ผู้ส่ง <span class="text-red-500">*</span></label>
-              <input type="text" id="consign-name" required placeholder="เช่น คุณสมบัติ" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
-            </div>
-            <div>
-              <label class="block font-medium mb-1">เบอร์โทรศัพท์ <span class="text-red-500">*</span></label>
-              <input type="tel" id="consign-phone" required placeholder="08x-xxx-xxxx" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
-            </div>
-          </div>
-
-          <div>
-            <label class="block font-medium mb-1">แนบรูปถ่ายทรัพย์ / โฉนด (ถ้ามี)</label>
-            <input type="file" accept="image/*" class="w-full border rounded-lg p-1.5 bg-gray-50 text-[11px]">
-            <p class="text-[10px] text-gray-400 mt-0.5">แนบรูปช่วยให้ประเมินราคาและปล่อยขายได้ไวยิ่งขึ้น</p>
-          </div>
-
-          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2 flex items-center justify-center gap-1.5">
-            <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>ยืนยันส่งข้อมูลฝากขาย (ฟรี)</span>
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <!-- 🤝 Member Get Member (MGM) Referral Modal -->
-    <div id="mgm-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
-      <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-3.5 shadow-2xl">
-        <div class="flex justify-between items-center border-b pb-2">
-          <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
-            <span class="icon-circle w-5 h-5"><i data-lucide="users" class="w-3 h-3 stroke-[1.5]"></i></span>
-            <span>ชวนเพื่อนมาเป็น Agent (MGM)</span>
-          </h3>
-          <button onclick="closeMgmModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
-        </div>
-
-        <div class="bg-gray-50 border border-gray-200 p-2.5 rounded-xl text-xs space-y-1 text-gray-800 border-l-4 border-[#D4AF37]">
-          <div class="font-bold flex items-center gap-1.5 text-gray-900">
-            <span class="icon-circle w-4 h-4"><i data-lucide="coins" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>สิทธิประโยชน์ผู้ชวน:</span>
-          </div>
-          <p class="text-[11px] leading-relaxed text-gray-600">
-            1. รับ <strong class="text-[#990000]">100 แต้มสะสม</strong> เมื่อเพื่อนส่งทรัพย์ครบ 3 หลัง<br>
-            2. รับ <strong class="text-[#990000]">ค่าบริหารทีม 0.5% (Overriding)</strong> จากยอดขายทุกดีลที่เพื่อนปิดได้ตลอดชีพ!
-          </p>
-        </div>
-
-        <div class="space-y-1 text-xs">
-          <label class="block font-medium text-gray-700">ลิงก์ชวนเพื่อนของคุณ (ฝังรหัสตัวแทน):</label>
-          <div class="flex gap-1.5">
-            <input type="text" id="mgm-link-input" readonly value="https://thenassty-cpu.github.io/siwasup-cobroker-os/?join_ref=AG-บัวรา" 
-                   class="flex-1 bg-gray-100 border rounded-lg px-2.5 py-1.5 text-[11px] font-mono text-gray-700 outline-none">
-            <button onclick="copyMgmLink()" class="bg-[#990000] hover:bg-red-800 text-white font-bold px-3 py-1.5 rounded-lg text-xs whitespace-nowrap shadow-xs flex items-center gap-1">
-              <span class="icon-circle w-3.5 h-3.5"><i data-lucide="copy" class="w-2 h-2 stroke-[1.5]"></i></span>
-              <span>คัดลอก</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- MGM QR Code -->
-        <div class="text-center p-2 bg-gray-50 rounded-xl border border-gray-200 space-y-1">
-          <div class="text-[10px] text-gray-500 font-medium">ให้เพื่อนสแกน QR สมัครทันที</div>
-          <img id="mgm-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https://thenassty-cpu.github.io/siwasup-cobroker-os/?join_ref=AG-%E0%B8%9A%E0%B8%B1%E0%B8%A7%E0%B8%A3%E0%B8%B2" 
-               alt="MGM QR" class="w-32 h-32 mx-auto border p-1 bg-white rounded-lg shadow-xs">
-        </div>
-      </div>
-    </div>
-
-    <!-- 💬 Submit Offer / Negotiate Bank NPA Modal -->
-    <div id="offer-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
-      <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-3 shadow-2xl">
-        <div class="flex justify-between items-center border-b pb-2">
-          <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
-            <span class="icon-circle w-5 h-5"><i data-lucide="handshake" class="w-3 h-3 stroke-[1.5]"></i></span>
-            <span>ยื่นข้อเสนอซื้อ / ต่อรองราคาธนาคาร</span>
-          </h3>
-          <button onclick="closeOfferModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
-        </div>
-
-        <div id="offer-prop-info" class="bg-blue-50 border border-blue-200 p-2.5 rounded-xl text-xs space-y-0.5"></div>
-
-        <form onsubmit="handleOfferSubmit(event)" class="space-y-2.5 text-xs">
-          <div>
-            <label class="block font-medium mb-1">ราคาที่ต้องการยื่นต่อรอง (บาท) <span class="text-red-500">*</span></label>
-            <input type="number" id="offer-price" required placeholder="เช่น 2,200,000" class="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-blue-500 font-bold text-blue-900">
-          </div>
-          <div>
-            <label class="block font-medium mb-1">ชื่อลูกค้าผู้เสนอซื้อ <span class="text-red-500">*</span></label>
-            <input type="text" id="offer-name" required placeholder="เช่น คุณวิเชียร" class="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-blue-500">
-          </div>
-          <div>
-            <label class="block font-medium mb-1">เบอร์โทรศัพท์ติดต่อ <span class="text-red-500">*</span></label>
-            <input type="tel" id="offer-phone" required placeholder="08x-xxx-xxxx" class="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-blue-500">
-          </div>
-          <div>
-            <label class="block font-medium mb-1">เงื่อนไขเพิ่มเติม (เช่น กู้ธนาคาร 100%, ซื้อสด)</label>
-            <input type="text" id="offer-terms" placeholder="เช่น พร้อมทำสัญญาใน 7 วัน" class="w-full border rounded-lg p-2 outline-none focus:ring-2 focus:ring-blue-500">
-          </div>
-          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl shadow text-xs mt-2 flex items-center justify-center gap-1.5">
-            <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>ส่งเรื่องให้แอดมิน (บัว) ดำเนินการต่อรองธนาคาร</span>
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <!-- 📥 Owner Leads Management Modal (สำหรับแอดมินบัว/เจี๊ยบ) -->
-    <div id="owner-leads-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
-      <div class="bg-white w-full max-w-md rounded-2xl p-5 space-y-3.5 max-h-[88vh] overflow-y-auto shadow-2xl">
-        <div class="flex justify-between items-center border-b pb-2">
-          <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
-            <span class="icon-circle w-5 h-5"><i data-lucide="inbox" class="w-3 h-3 stroke-[1.5]"></i></span>
-            <span>รายการทรัพย์ฝากขายใหม่ (Lead Magnet)</span>
-          </h3>
-          <button onclick="closeOwnerLeadsModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
-        </div>
-
-        <div id="owner-leads-container" class="space-y-2 text-xs">
-          <!-- Dynamically populated -->
-        </div>
-      </div>
-    </div>
-
-    <!-- 💰 Edit Price Modal (สำหรับเจ้าของ/แอดมิน บัว & กูล) -->
-    <div id="edit-price-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center p-4">
-      <div class="bg-white w-full max-w-sm rounded-2xl p-5 space-y-3.5 shadow-2xl">
-        <div class="flex justify-between items-center border-b pb-2">
-          <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
-            <span class="icon-circle w-5 h-5"><i data-lucide="edit-3" class="w-3 h-3 stroke-[1.5]"></i></span>
-            <span>แก้ไขราคาขาย (แอดมิน บัว & กูล)</span>
-          </h3>
-          <button onclick="closeEditPriceModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
-        </div>
-
-        <div id="edit-price-prop-info" class="bg-gray-50 border border-gray-200 p-2.5 rounded-xl text-xs space-y-0.5"></div>
-
-        <form onsubmit="handleEditPriceSubmit(event)" class="space-y-3 text-xs">
-          <div>
-            <label class="block font-medium mb-1 text-gray-700">ราคาขายใหม่ (บาท) <span class="text-red-500">*</span></label>
-            <input type="number" id="new-price-input" required placeholder="เช่น 3390000" 
-                   class="w-full border-2 border-gray-300 rounded-lg p-2.5 outline-none focus:border-[#990000] focus:ring-1 focus:ring-[#990000] font-extrabold text-base text-gray-900 bg-white">
-            <p class="text-[10px] text-gray-400 mt-1">ระบบจะคำนวณยอดเงินค่าคอมมิชชั่นของเอเจนต์ใหม่ให้อัตโนมัติ</p>
-          </div>
-
-          <div class="flex items-center gap-2 p-2 bg-amber-50 rounded-lg border border-amber-200">
-            <input type="checkbox" id="mark-hot-deal" class="rounded text-amber-600 focus:ring-amber-500">
-            <label for="mark-hot-deal" class="text-[11px] font-bold text-amber-900 cursor-pointer flex items-center gap-1.5">
-              <span class="icon-circle w-3.5 h-3.5"><i data-lucide="flame" class="w-2 h-2 stroke-[1.5]"></i></span>
-              <span>แปะป้าย "ลดราคาพิเศษ (Hot Deal)"</span>
-            </label>
-          </div>
-
-          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-xl shadow-xs text-xs flex items-center justify-center gap-1.5">
-            <span class="icon-circle w-4 h-4"><i data-lucide="save" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>บันทึกราคาใหม่ทันที</span>
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Instant Bundle Floating Action Bar (White 60% Glassmorphism + Satin Gold 10%) -->
-    <div id="bundle-bar" class="hidden fixed bottom-0 inset-x-0 max-w-md mx-auto bg-white/95 backdrop-blur-md text-gray-900 p-3 z-40 shadow-xl flex items-center justify-between border-t-2 border-[#C2A460] border-x border-b border-gray-200 rounded-t-xl">
-      <div>
-        <div class="font-extrabold text-xs text-gray-900 flex items-center gap-1.5">
-          <span class="icon-circle w-5 h-5"><i data-lucide="package" class="w-3 h-3 stroke-[1.5]"></i></span>
-          <span>มัดรวมส่งลูกค้า (<span id="bundle-count" class="text-[#990000]">0</span> หลัง)</span>
-        </div>
-        <div class="text-[10px] text-gray-500">สร้างหน้าเว็บ VIP + แคปชั่นส่งในไลน์</div>
-      </div>
-      <div class="flex items-center gap-1.5">
-        <button onclick="clearBundleSelection()" class="text-[11px] text-gray-400 hover:text-gray-700 px-2 py-1">
-          ล้าง
-        </button>
-        <button onclick="openBundleModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold py-1.5 px-3 rounded-lg text-xs shadow-xs flex items-center gap-1.5">
-          <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-          <span>ส่งลูกค้าทันที</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- 📦 Instant Bundle Modal (มัดรวมส่งลูกค้า) -->
-    <div id="bundle-modal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-60 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div class="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-5 space-y-4 max-h-[90vh] overflow-y-auto">
-        <div class="flex justify-between items-center border-b pb-2">
-          <h3 class="font-bold text-base text-gray-800 flex items-center gap-1.5">
-            <span class="icon-circle w-5 h-5"><i data-lucide="package" class="w-3 h-3 stroke-[1.5]"></i></span>
-            <span>มัดรวมส่งลูกค้า (VIP Micro-Catalog)</span>
-          </h3>
-          <button onclick="closeBundleModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
-        </div>
-
-        <div>
-          <label class="block font-medium text-xs mb-1 text-gray-700 flex items-center gap-1.5">
-            <span class="icon-circle w-4 h-4"><i data-lucide="user" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>ชื่อลูกค้าผู้รับ (ใส่เพื่อเพิ่มความประทับใจ VIP):</span>
-          </label>
-          <input type="text" id="bundle-client-name" value="คุณวิชัย" oninput="updateBundlePreview()"
-                 placeholder="เช่น คุณวิชัย, คุณสมชาย" 
-                 class="w-full border rounded-lg p-2 text-xs font-semibold focus:ring-1 focus:ring-red-700 focus:border-red-700 outline-none bg-gray-50">
-        </div>
-
-        <!-- Selected Properties List Preview -->
-        <div class="space-y-1.5">
-          <div class="text-xs font-bold text-gray-800 flex items-center gap-1.5">
-            <span class="icon-circle w-4 h-4"><i data-lucide="home" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>รายการทรัพย์ที่คัดสรร (<span id="bundle-modal-count">0</span> หลัง):</span>
-          </div>
-          <div id="bundle-selected-list" class="max-h-40 overflow-y-auto space-y-1.5 pr-1"></div>
-        </div>
-
-        <!-- Generated Text Preview for LINE -->
-        <div class="space-y-1.5">
-          <div class="text-xs font-bold text-gray-800 flex justify-between items-center">
-            <span class="flex items-center gap-1.5">
-              <span class="icon-circle w-4 h-4"><i data-lucide="message-square" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-              <span>ข้อความแคปชั่นพร้อมส่งใน LINE:</span>
-            </span>
-            <span class="text-[10px] text-gray-500 font-normal">จัดหน้าสวยงามพร้อมลิงก์</span>
-          </div>
-          <div class="bg-gray-100 border border-gray-300 rounded-lg p-2.5 text-[11px] text-gray-700 whitespace-pre-wrap font-sans leading-relaxed select-all" id="bundle-text-preview"></div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2 pt-1">
-          <button onclick="copyBundleMessage()" class="bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5">
-            <span class="icon-circle w-4 h-4"><i data-lucide="copy" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>คัดลอกข้อความ</span>
-          </button>
-          <button onclick="sendBundleToLine()" class="bg-[#06C755] hover:bg-[#05b34c] text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5">
-            <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>ส่งเข้าแอป LINE</span>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Copy Share Toast -->
-    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-4 py-2 rounded-full shadow-lg opacity-0 transition-opacity pointer-events-none z-50">
-      ก๊อปปี้เรียบร้อย!
-    </div>
+    <!-- 🧩 Modular Components Root (Modals, Overlays & Toasts loaded from modals.js) -->
+    <div id="modals-root"></div>
 
   </div>
 
+  <script src="modals.js"></script>
+  <script src="vinyl_generator.js"></script>
   <script src="siwasup_all_properties.js"></script>
   <script>
     let currentMode = 'free_agent';
@@ -1201,10 +750,9 @@
                 </div>
               `}
 
-              <!-- Agent Commission Badge Bar (White 60% Glassmorphism + Satin Gold 10% Accent) -->
               <!-- Agent Commission Badge Bar (Capsule White 20% Transparent + Frosted Glass) -->
               ${(currentMode === 'free_agent' || currentMode === 'employee') ? `
-                <div class="absolute bottom-2 left-2 right-2 bg-white/20 backdrop-blur-md text-gray-900 border border-white/40 font-medium px-3 py-1.5 rounded-full text-xs shadow-xs flex items-center justify-between">
+                <div class="absolute bottom-2 left-2 right-2 capsule-glass-20 text-gray-900 font-medium px-3 py-1.5 text-xs shadow-xs flex items-center justify-between">
                   <span class="flex items-center gap-2">
                     <span class="icon-circle w-5 h-5"><i data-lucide="coins" class="w-3 h-3 stroke-[1.5]"></i></span>
                     <span>${comLabel}: <strong class="text-[#990000] font-bold">${comAmount || 'ตามผลงาน'}</strong></span>
@@ -1215,7 +763,7 @@
 
               <!-- Trainee Locked Badge Bar (Capsule White 20% Transparent) -->
               ${currentMode === 'trainee' ? `
-                <div class="absolute bottom-2 left-2 right-2 bg-white/20 backdrop-blur-md text-gray-900 border border-white/40 font-medium px-3 py-1.5 rounded-full text-[11px] shadow-xs flex items-center justify-between">
+                <div class="absolute bottom-2 left-2 right-2 capsule-glass-20 text-gray-900 font-medium px-3 py-1.5 text-[11px] shadow-xs flex items-center justify-between">
                   <span class="flex items-center gap-2">
                     <span class="icon-circle w-5 h-5"><i data-lucide="lock" class="w-3 h-3 stroke-[1.5]"></i></span>
                     <span>ค่าคอมมิชชั่น: ซ่อนอยู่ (Trainee)</span>
@@ -1226,7 +774,7 @@
 
               <!-- Owner Management Bar (Capsule White 20% Transparent) -->
               ${currentMode === 'owner' ? `
-                <div class="absolute bottom-2 left-2 right-2 bg-white/20 backdrop-blur-md text-gray-900 border border-white/40 text-[11px] px-3 py-1.5 rounded-full shadow-xs flex items-center justify-between">
+                <div class="absolute bottom-2 left-2 right-2 capsule-glass-20 text-gray-900 text-[11px] px-3 py-1.5 shadow-xs flex items-center justify-between">
                   <span class="flex items-center gap-2">
                     <span class="icon-circle w-5 h-5"><i data-lucide="coins" class="w-3 h-3 stroke-[1.5]"></i></span>
                     <span>คอมเอเจนต์: <strong class="text-[#990000] font-bold">${comAmount || '3-5%'}</strong></span>
@@ -1314,6 +862,10 @@
                         <span>โฟลเดอร์ Drive</span>
                       </button>
                     </div>
+                    <button onclick="openVinylModal('${p.id}')" class="w-full bg-amber-50 hover:bg-amber-100 text-[#8C6D23] text-[11px] font-bold py-1.5 px-2 rounded-lg border border-amber-300/80 shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+                      <span class="icon-circle w-4 h-4 bg-amber-600/80"><i data-lucide="printer" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                      <span>พิมพ์ป้ายไวนิลหน้าบ้าน (Auto PDF)</span>
+                    </button>
                   </div>
                 ` : (currentMode === 'free_agent' || currentMode === 'employee') ? `
                   <!-- ACTIVE AGENT ACTIONS (FREE / EMPLOYEE) -->
@@ -1328,6 +880,10 @@
                         <span>ต่อรองราคา NPA</span>
                       </button>
                     </div>
+                    <button onclick="openVinylModal('${p.id}')" class="w-full bg-amber-50 hover:bg-amber-100 text-[#8C6D23] text-[11px] font-bold py-1.5 px-2 rounded-lg border border-amber-300/80 shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+                      <span class="icon-circle w-4 h-4 bg-amber-600/80"><i data-lucide="printer" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                      <span>พิมพ์ป้ายไวนิลหน้าบ้าน (Auto PDF)</span>
+                    </button>
                     ${!isBooked && !isSold ? `
                       <button onclick="openBookingModal('${p.id}', '${p.title}', '${p.price}')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 rounded-lg flex items-center justify-center gap-1.5 shadow-xs active:scale-95 transition-all">
                         <span class="icon-circle w-4 h-4"><i data-lucide="file-check" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>

@@ -41,10 +41,10 @@
 - [ ] **Gamification Engine:** คำนวณแต้มสะสมจาก Lead และการส่งทรัพย์ขึ้น Leaderboard อัตโนมัติ
 
 ### 🖨️ Phase 3: Scale & Production Tools
-- [ ] **Auto PDF Vinyl Sign Generator:** เจนไฟล์ PDF พิมพ์ป้ายไวนิลหน้าบ้านขนาดจริงพร้อม Dynamic QR Code ด้วย `pdf-lib`
+- [x] **Auto PDF Vinyl Sign Generator:** สร้างไฟล์ PDF พิมพ์ป้ายไวนิลหน้าบ้านขนาดจริง (1:1 สเกลเป๊ะ 120x80 ซม., 150x80 ซม., 60x90 ซม.) พร้อม Dynamic QR Code ล็อกสิทธิ์ตัวแทน และดาวน์โหลดรูป HD ได้ในคลิกเดียวด้วย `pdf-lib` + `qrcode`
 - [ ] **GPS & OCR Proof of Work:** ระบบถ่ายรูปตรวจเช็กพิกัด GPS ติดป้ายหน้าบ้านจริง
 
-### 🧩 Architectural Optimization & Token Economy
-- [ ] **Modal Component Extraction:** แยก Template ของ Modals ทั้ง 6 ตัวออกจาก `index.html` เป็นไฟล์ HTML Components หรือ JS Modules ย่อย เพื่อให้โค้ดหลักเบาลง
-- [ ] **Global CSS Style Presets:** กำหนด Class Utility กลาง เช่น `.capsule-glass-20` (`rounded-full bg-white/20 backdrop-blur-md border border-white/40`) เพื่อให้การปรับจูนสไตล์ในอนาคตแก้ที่จุดเดียวแล้วมีผลทั่วทั้งระบบ ช่วยประหยัด Token สูงสุด
+### 🧩 Architectural Optimization & Token Economy (100% Completed)
+- [x] **Modal Component Extraction:** สกัด Template ของ Modals ทั้งหมด 10 ตัวออกจาก `index.html` ไปไว้ใน `modals.js` ช่วยลดโค้ดใน `index.html` ลงกว่า 530 บรรทัด (จาก 2,062 เหลือ 1,532 บรรทัด) ประหยัด Token สูงสุด
+- [x] **Global CSS Style Presets:** กำหนด Class Utility กลาง `.capsule-glass-20` (`rounded-full bg-white/20 backdrop-blur-md border border-white/40`) และชุด Modal `.modal-backdrop`, `.modal-card`, `.modal-card-sm` ทำให้การปรับจูนสไตล์แก้เพียง 1 จุดแล้วมีผลทั่วทั้งระบบทันที
 
