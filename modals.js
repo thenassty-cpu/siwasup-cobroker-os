@@ -56,25 +56,30 @@
           <button onclick="closeShareModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold leading-none p-1">&times;</button>
         </div>
         
-        <div id="share-prop-info" class="bg-amber-50/80 border border-amber-200/80 p-2 rounded-lg text-xs mb-2.5"></div>
-
-        <div class="mb-2.5">
-          <div class="flex justify-between items-center mb-1">
-            <label class="font-medium text-[11px] text-gray-700 flex items-center gap-1.5">
-              <span class="icon-circle w-3.5 h-3.5 bg-slate-100"><i data-lucide="user" class="w-2 h-2 stroke-[1.5]"></i></span>
-              <span>รหัสเอเจนต์ของคุณ (ล็อกสิทธิ์ 5%):</span>
-            </label>
-            <span class="text-[9px] text-emerald-600 font-medium">จำค่าอัตโนมัติ 60 วัน</span>
-          </div>
-          <input type="text" id="agent-ref-input" value="AG-บัวรา" oninput="updateShareUrls()" 
-                 class="w-full border rounded-lg py-1.5 px-2.5 text-xs font-semibold focus:ring-2 focus:ring-amber-500 outline-none bg-gray-50">
-        </div>
-
         <!-- Adaptive Layout: Side-by-Side on Desktop/Tablet if QR open -->
-        <div class="flex flex-col md:flex-row gap-3 items-stretch">
-          <!-- Left Column: Channel Links -->
-          <div class="flex-1 space-y-2 text-xs min-w-0">
-            <div class="font-bold text-gray-700 text-[11px] flex justify-between items-center px-0.5">
+        <div class="flex flex-col md:flex-row items-stretch">
+          
+          <!-- Left Column: Channel Links & Controls (LOCKED FIXED WIDTH: 380px) -->
+          <div class="w-full md:w-[380px] md:shrink-0 space-y-2 text-xs">
+            
+            <!-- Property Info Badge -->
+            <div id="share-prop-info" class="bg-amber-50/80 border border-amber-200/80 p-2 rounded-lg text-xs"></div>
+
+            <!-- Agent Ref Input -->
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <label class="font-medium text-[11px] text-gray-700 flex items-center gap-1.5">
+                  <span class="icon-circle w-3.5 h-3.5 bg-slate-100"><i data-lucide="user" class="w-2 h-2 stroke-[1.5]"></i></span>
+                  <span>รหัสเอเจนต์ของคุณ (ล็อกสิทธิ์ 5%):</span>
+                </label>
+                <span class="text-[9px] text-emerald-600 font-medium">จำค่าอัตโนมัติ 60 วัน</span>
+              </div>
+              <input type="text" id="agent-ref-input" value="AG-บัวรา" oninput="updateShareUrls()" 
+                     class="w-full border rounded-lg py-1.5 px-2.5 text-xs font-semibold focus:ring-2 focus:ring-amber-500 outline-none bg-gray-50">
+            </div>
+
+            <!-- Channel Links Header -->
+            <div class="font-bold text-gray-700 text-[11px] flex justify-between items-center px-0.5 pt-0.5">
               <span>กดคัดลอกลิงก์เฉพาะช่องทาง:</span>
               <span class="text-[9px] text-gray-400">เลือกลิงก์ที่ต้องการ</span>
             </div>
