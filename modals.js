@@ -45,112 +45,178 @@
     </div>
 
     <!-- Smart Share Center Modal (Omni-Channel Share) -->
-    <div id="share-modal" class="hidden modal-backdrop">
-      <div class="modal-card space-y-4">
-        <div class="flex justify-between items-center border-b pb-2">
-          <h3 class="font-bold text-base text-gray-800 flex items-center gap-1.5">
-            <span class="icon-circle w-5 h-5"><i data-lucide="share-2" class="w-3 h-3 stroke-[1.5]"></i></span>
-            <span>Smart Share Center (เลือกช่องทางโปรโมท)</span>
+    <div id="share-modal" class="hidden modal-backdrop !items-center !p-3 sm:!p-4 z-50" onclick="if(event.target === this) closeShareModal()">
+      <div id="share-modal-card" class="modal-card no-scrollbar w-full max-w-md transition-all duration-300 p-4 sm:p-5 my-auto overflow-hidden">
+        <div class="flex justify-between items-center border-b pb-2 mb-2.5">
+          <h3 class="font-bold text-sm sm:text-base text-gray-800 flex items-center gap-1.5">
+            <span class="icon-circle w-5 h-5 bg-amber-50 text-amber-700 border border-amber-200"><i data-lucide="share-2" class="w-3 h-3 stroke-[1.5]"></i></span>
+            <span>Smart Share Center</span>
+            <span class="text-[10px] text-amber-800 font-normal hidden sm:inline">(เลือกลิงก์โปรโมท)</span>
           </h3>
-          <button onclick="closeShareModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+          <button onclick="closeShareModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold leading-none p-1">&times;</button>
         </div>
         
-        <div id="share-prop-info" class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-xs space-y-0.5"></div>
+        <div id="share-prop-info" class="bg-amber-50/80 border border-amber-200/80 p-2 rounded-lg text-xs mb-2.5"></div>
 
-        <div>
-          <label class="block font-medium text-xs mb-1 text-gray-700 flex items-center gap-1.5">
-            <span class="icon-circle w-4 h-4"><i data-lucide="user" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>รหัส / ชื่อเอเจนต์ของคุณ (สำหรับล็อกค่าคอม 5%):</span>
-          </label>
+        <div class="mb-2.5">
+          <div class="flex justify-between items-center mb-1">
+            <label class="font-medium text-[11px] text-gray-700 flex items-center gap-1.5">
+              <span class="icon-circle w-3.5 h-3.5 bg-slate-100"><i data-lucide="user" class="w-2 h-2 stroke-[1.5]"></i></span>
+              <span>รหัสเอเจนต์ของคุณ (ล็อกสิทธิ์ 5%):</span>
+            </label>
+            <span class="text-[9px] text-emerald-600 font-medium">จำค่าอัตโนมัติ 60 วัน</span>
+          </div>
           <input type="text" id="agent-ref-input" value="AG-บัวรา" oninput="updateShareUrls()" 
-                 class="w-full border rounded-lg p-2 text-xs font-semibold focus:ring-2 focus:ring-amber-500 outline-none bg-gray-50">
-          <p class="text-[10px] text-gray-400 mt-0.5">ระบบจะฝังรหัสนี้ไว้ในลิงก์และจำไว้ในเครื่องลูกค้า 60 วัน</p>
+                 class="w-full border rounded-lg py-1.5 px-2.5 text-xs font-semibold focus:ring-2 focus:ring-amber-500 outline-none bg-gray-50">
         </div>
 
-        <div class="space-y-2 text-xs pt-1">
-          <div class="font-bold text-gray-800 flex justify-between items-center">
-            <span class="flex items-center gap-1.5">
-              <span class="icon-circle w-4 h-4"><i data-lucide="link" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+        <!-- Adaptive Layout: Side-by-Side on Desktop/Tablet if QR open -->
+        <div class="flex flex-col md:flex-row gap-3 items-stretch">
+          <!-- Left Column: Channel Links -->
+          <div class="flex-1 space-y-2 text-xs min-w-0">
+            <div class="font-bold text-gray-700 text-[11px] flex justify-between items-center px-0.5">
               <span>กดคัดลอกลิงก์เฉพาะช่องทาง:</span>
-            </span>
-            <span class="text-[10px] text-emerald-600 font-normal">ระบบดักจับและล็อกสิทธิ์ให้ 100%</span>
-          </div>
-
-          <!-- Channel 1: Facebook -->
-          <div class="flex items-center justify-between p-2 rounded-lg border border-blue-200 bg-blue-50/60">
-            <div class="flex items-center gap-2">
-              <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs">f</span>
-              <div>
-                <div class="font-bold text-blue-950 text-xs">Facebook (Marketplace / กลุ่ม)</div>
-                <div class="text-[10px] text-blue-700">ดักจับ Lead จากโพสต์ & แคปชั่น FB</div>
-              </div>
+              <span class="text-[9px] text-gray-400">เลือกลิงก์ที่ต้องการ</span>
             </div>
-            <button onclick="copyChannelLink('facebook')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs">
-              คัดลอกลิงก์
-            </button>
-          </div>
 
-          <!-- Channel 2: TikTok / Reels -->
-          <div class="flex items-center justify-between p-2 rounded-lg border border-gray-300 bg-gray-50">
-            <div class="flex items-center gap-2">
-              <span class="w-6 h-6 rounded-full bg-gray-900 text-white flex items-center justify-center font-bold text-xs">♪</span>
-              <div>
-                <div class="font-bold text-gray-950 text-xs">TikTok / Reels / Shorts</div>
-                <div class="text-[10px] text-gray-600">สำหรับแปะ Bio หรือใต้คอมเมนต์คลิป</div>
-              </div>
-            </div>
-            <button onclick="copyChannelLink('tiktok')" class="bg-gray-900 hover:bg-black text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs">
-              คัดลอกลิงก์
-            </button>
-          </div>
-
-          <!-- Channel 3: LINE -->
-          <div class="flex items-center justify-between p-2 rounded-lg border border-emerald-200 bg-emerald-50/60">
-            <div class="flex items-center gap-2">
-              <span class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs">L</span>
-              <div>
-                <div class="font-bold text-emerald-950 text-xs">LINE (แชตส่วนตัว / กลุ่ม)</div>
-                <div class="text-[10px] text-emerald-700">ส่งต่อให้คนรู้จัก หรือกลุ่มนักลงทุน</div>
-              </div>
-            </div>
-            <button onclick="copyChannelLink('line')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs">
-              คัดลอกลิงก์
-            </button>
-          </div>
-
-          <!-- Channel 4: General Web / Forum -->
-          <div class="flex items-center justify-between p-2 rounded-lg border border-gray-200 bg-gray-50/70">
-            <div class="flex items-center gap-2">
-              <span class="icon-circle w-6 h-6 bg-gray-800 text-white"><i data-lucide="globe" class="w-3.5 h-3.5 stroke-[1.5]"></i></span>
-              <div>
-                <div class="font-bold text-gray-900 text-xs">เว็บบอร์ด / LivingInsider / DDprop</div>
-                <div class="text-[10px] text-gray-500">ลิงก์กลางสำหรับโพสต์ลงเว็บไซต์</div>
-              </div>
-            </div>
-            <button onclick="copyChannelLink('web')" class="bg-gray-800 hover:bg-gray-900 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs">
-              คัดลอกลิงก์
-            </button>
-          </div>
-
-          <!-- Channel 5: QR Code Generator -->
-          <div class="border border-gray-200 rounded-lg p-2.5 bg-gray-50 space-y-2 text-center">
-            <div class="flex justify-between items-center text-left">
-              <div>
-                <div class="font-bold text-gray-900 text-xs flex items-center gap-1.5">
-                  <span class="icon-circle w-4 h-4"><i data-lucide="qr-code" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-                  <span>QR Code สำหรับป้ายหน้าบ้าน / ใบปลิว</span>
+            <!-- Channel 1: Facebook -->
+            <div class="flex items-center justify-between p-2 rounded-lg border border-blue-200 bg-blue-50/60 hover:bg-blue-50 transition-all">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-6 h-6 shrink-0 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-2xs">f</span>
+                <div class="truncate">
+                  <div class="font-bold text-blue-950 text-xs">Facebook (Marketplace / โพสต์)</div>
+                  <div class="text-[10px] text-blue-700 truncate">ดักจับ Lead จากโพสต์ & แคปชั่น FB</div>
                 </div>
-                <div class="text-[10px] text-gray-500">ใครสแกนป้าย จะตกเป็นลูกค้าของคุณทันที</div>
               </div>
-              <button onclick="toggleQrView()" class="text-xs text-amber-700 font-bold underline">
+              <button onclick="copyChannelLink('facebook')" class="shrink-0 ml-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs active:scale-95 transition-all">
+                คัดลอกลิงก์
+              </button>
+            </div>
+
+            <!-- Channel 2: TikTok / Reels -->
+            <div class="flex items-center justify-between p-2 rounded-lg border border-gray-300 bg-gray-50 hover:bg-gray-100/70 transition-all">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-6 h-6 shrink-0 rounded-full bg-gray-900 text-white flex items-center justify-center font-bold text-xs shadow-2xs">♪</span>
+                <div class="truncate">
+                  <div class="font-bold text-gray-950 text-xs">TikTok / Reels / Shorts</div>
+                  <div class="text-[10px] text-gray-600 truncate">สำหรับแปะ Bio หรือใต้คอมเมนต์คลิป</div>
+                </div>
+              </div>
+              <button onclick="copyChannelLink('tiktok')" class="shrink-0 ml-2 bg-gray-900 hover:bg-black text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs active:scale-95 transition-all">
+                คัดลอกลิงก์
+              </button>
+            </div>
+
+            <!-- Channel 3: LINE -->
+            <div class="flex items-center justify-between p-2 rounded-lg border border-emerald-200 bg-emerald-50/60 hover:bg-emerald-50 transition-all">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-6 h-6 shrink-0 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs shadow-2xs">L</span>
+                <div class="truncate">
+                  <div class="font-bold text-emerald-950 text-xs">LINE (แชตส่วนตัว / ส่งกลุ่ม)</div>
+                  <div class="text-[10px] text-emerald-700 truncate">ส่งต่อให้คนรู้จัก หรือกลุ่มนักลงทุน</div>
+                </div>
+              </div>
+              <button onclick="copyChannelLink('line')" class="shrink-0 ml-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs active:scale-95 transition-all">
+                คัดลอกลิงก์
+              </button>
+            </div>
+
+            <!-- Channel 4: General Web / Forum -->
+            <div class="flex items-center justify-between p-2 rounded-lg border border-gray-200 bg-gray-50/70 hover:bg-gray-100/70 transition-all">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="icon-circle w-6 h-6 shrink-0 bg-gray-800 text-white"><i data-lucide="globe" class="w-3.5 h-3.5 stroke-[1.5]"></i></span>
+                <div class="truncate">
+                  <div class="font-bold text-gray-900 text-xs">เว็บบอร์ด / LivingInsider / เว็บไซต์</div>
+                  <div class="text-[10px] text-gray-500 truncate">ลิงก์กลางสำหรับโพสต์ลงเว็บไซต์ทั่วไป</div>
+                </div>
+              </div>
+              <button onclick="copyChannelLink('web')" class="shrink-0 ml-2 bg-gray-800 hover:bg-gray-900 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs active:scale-95 transition-all">
+                คัดลอกลิงก์
+              </button>
+            </div>
+
+            <!-- Channel 5: QR Code Generator Action Row -->
+            <div class="flex items-center justify-between p-2 rounded-lg border border-amber-200/90 bg-amber-50/50 hover:bg-amber-50 transition-all">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="icon-circle w-6 h-6 shrink-0 bg-amber-700 text-white"><i data-lucide="qr-code" class="w-3.5 h-3.5 stroke-[1.5]"></i></span>
+                <div class="truncate">
+                  <div class="font-bold text-amber-950 text-xs">QR Code ป้ายหน้าบ้าน / นามบัตร</div>
+                  <div class="text-[10px] text-amber-700 truncate">สแกนป้ายแล้วล็อกค่าคอม 60 วัน</div>
+                </div>
+              </div>
+              <button onclick="toggleQrView()" class="shrink-0 ml-2 bg-[#990000] hover:bg-red-800 text-white font-medium py-1 px-3 rounded text-[11px] shadow-xs flex items-center gap-1 active:scale-95 transition-all">
+                <i data-lucide="scan-line" class="w-3 h-3"></i>
                 <span id="qr-toggle-text">เปิดดู QR</span>
               </button>
             </div>
-            <div id="qr-container" class="hidden pt-2 flex flex-col items-center">
-              <img id="qr-image" src="" alt="QR Code" class="w-36 h-36 border p-1 bg-white rounded-lg shadow-sm">
-              <p class="text-[10px] text-gray-500 mt-1">คลิกขวาหรือกดค้างเพื่อบันทึกรูป QR Code</p>
+          </div>
+
+          <!-- Right Column: Desktop/Tablet Side QR Panel -->
+          <div id="desktop-qr-panel" class="hidden md:flex w-52 flex-col items-center justify-between p-3 bg-gradient-to-b from-amber-50/70 to-slate-50 border border-amber-200/80 rounded-xl text-center self-stretch animate-fadeIn">
+            <div class="w-full">
+              <div class="text-[11px] font-bold text-gray-800 mb-1.5 flex items-center justify-center gap-1">
+                <i data-lucide="qr-code" class="w-3 h-3 text-amber-600"></i>
+                <span>QR ป้ายหน้าบ้าน</span>
+              </div>
+              <div class="bg-white p-2 rounded-lg border border-gray-200 shadow-xs mb-1.5 inline-block">
+                <img id="qr-image-desktop" src="" alt="QR Code" class="w-32 h-32 object-contain">
+              </div>
+              <div>
+                <span class="inline-block text-[9px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-medium border border-emerald-200">
+                  ✓ ล็อกสิทธิ์ 60 วัน
+                </span>
+              </div>
+            </div>
+            <div class="w-full space-y-1.5 mt-2">
+              <button onclick="downloadQrImage()" class="w-full bg-[#1E749C] hover:bg-[#185e7f] text-white font-medium py-1.5 px-2 rounded text-[10px] shadow-2xs flex items-center justify-center gap-1 transition-all active:scale-95">
+                <i data-lucide="download" class="w-2.5 h-2.5"></i>
+                <span>บันทึกรูป QR</span>
+              </button>
+              <button onclick="copyChannelLink('qr_sign')" class="w-full bg-white hover:bg-slate-100 text-gray-700 border border-gray-300 font-medium py-1.5 px-2 rounded text-[10px] shadow-2xs flex items-center justify-center gap-1 transition-all active:scale-95">
+                <i data-lucide="copy" class="w-2.5 h-2.5"></i>
+                <span>คัดลอกลิงก์ QR</span>
+              </button>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Dedicated QR Code Sub-Modal (Popup ซ้อนขึ้นมาแบบคลีน ไม่มี Scrollbar) -->
+    <div id="mobile-qr-modal" class="hidden modal-backdrop !items-center !p-4 z-[60]" onclick="if(event.target === this) closeMobileQrModal()">
+      <div class="modal-card-sm no-scrollbar space-y-3 text-center bg-white border border-amber-200 shadow-2xl p-4 rounded-2xl max-w-[320px] mx-auto animate-fadeIn">
+        <div class="flex justify-between items-center border-b pb-2">
+          <div class="font-bold text-xs text-gray-800 flex items-center gap-1.5 text-left">
+            <span class="icon-circle w-5 h-5 bg-amber-50 text-amber-700 border border-amber-200">
+              <i data-lucide="qr-code" class="w-3 h-3 stroke-[1.5]"></i>
+            </span>
+            <span>QR Code สำหรับสแกน</span>
+          </div>
+          <button onclick="closeMobileQrModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold leading-none p-1">&times;</button>
+        </div>
+
+        <div id="mobile-qr-prop-info" class="text-left bg-slate-50 border border-slate-200 p-2 rounded-lg text-[11px] space-y-0.5"></div>
+
+        <div class="bg-amber-50/60 p-3 rounded-xl border border-amber-200/70 inline-block shadow-inner my-1">
+          <img id="qr-image-mobile" src="" alt="QR Code" class="w-44 h-44 object-contain bg-white p-2 rounded-lg border border-gray-200 shadow-sm mx-auto">
+        </div>
+
+        <div>
+          <span class="inline-block text-[10px] bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-medium border border-emerald-200">
+            ✓ สแกนแล้วระบบล็อกสิทธิ์เอเจนต์ 60 วัน
+          </span>
+          <p class="text-[10px] text-gray-400 mt-1">แตะค้างที่รูปเพื่อบันทึก หรือกดปุ่มด้านล่าง</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <button onclick="downloadQrImage()" class="bg-[#1E749C] hover:bg-[#185e7f] text-white font-medium py-2 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1 active:scale-95 transition-all">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>บันทึกรูป QR</span>
+          </button>
+          <button onclick="copyChannelLink('qr_sign')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2 px-2 rounded-xl text-xs border border-slate-200 shadow-xs flex items-center justify-center gap-1 active:scale-95 transition-all">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span>คัดลอกลิงก์</span>
+          </button>
         </div>
       </div>
     </div>

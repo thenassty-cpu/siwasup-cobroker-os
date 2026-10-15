@@ -83,6 +83,23 @@
       }
     }
 
+    /* Hide scrollbars completely while keeping scrollability */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
     .modal-card {
       background-color: #ffffff;
       width: 100%;
@@ -1399,23 +1416,44 @@
     function openSmartShare(id, title) {
       currentShareProp = { id, title };
       const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'AG-บัวรา';
-      document.getElementById('agent-ref-input').value = savedRef;
-      document.getElementById('share-prop-info').innerHTML = `
-        <div class="font-bold text-gray-900 flex items-center gap-1.5">
-          <span class="icon-circle w-4 h-4"><i data-lucide="home" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-          <span>${title}</span>
-        </div>
-        <div class="text-[10px] text-gray-600">รหัสทรัพย์: <span class="font-mono text-amber-800 font-bold">${id}</span></div>
-      `;
-      document.getElementById('qr-container').classList.add('hidden');
-      document.getElementById('qr-toggle-text').textContent = "เปิดดู QR";
+      const refInput = document.getElementById('agent-ref-input');
+      if (refInput) refInput.value = savedRef;
+
+      const propInfo = document.getElementById('share-prop-info');
+      if (propInfo) {
+        propInfo.innerHTML = `
+          <div class="font-bold text-gray-900 flex items-center gap-1.5 truncate">
+            <span class="icon-circle w-4 h-4 shrink-0"><i data-lucide="home" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span class="truncate">${title}</span>
+          </div>
+          <div class="text-[10px] text-gray-600">รหัสทรัพย์: <span class="font-mono text-amber-800 font-bold">${id}</span></div>
+        `;
+      }
+
+      // Reset desktop QR panel state on fresh open
+      const desktopPanel = document.getElementById('desktop-qr-panel');
+      const shareModalCard = document.getElementById('share-modal-card');
+      const toggleText = document.getElementById('qr-toggle-text');
+      if (desktopPanel) {
+        desktopPanel.classList.add('hidden');
+        desktopPanel.classList.remove('flex');
+      }
+      if (shareModalCard) {
+        shareModalCard.classList.remove('md:max-w-2xl');
+        shareModalCard.classList.add('md:max-w-md');
+      }
+      if (toggleText) toggleText.textContent = "เปิดดู QR";
+
+      closeMobileQrModal();
       document.getElementById('share-modal').classList.remove('hidden');
       if (window.lucide) { lucide.createIcons(); }
       updateShareUrls();
     }
 
     function closeShareModal() {
-      document.getElementById('share-modal').classList.add('hidden');
+      const shareModal = document.getElementById('share-modal');
+      if (shareModal) shareModal.classList.add('hidden');
+      closeMobileQrModal();
     }
 
     function getBaseUrl() {
@@ -1424,21 +1462,38 @@
 
     function updateShareUrls() {
       if (!currentShareProp) return;
-      const ref = encodeURIComponent(document.getElementById('agent-ref-input').value.trim() || 'AG-บัวรา');
-      localStorage.setItem('siwasup_my_agent_ref', document.getElementById('agent-ref-input').value.trim() || 'AG-บัวรา');
+      const refInput = document.getElementById('agent-ref-input');
+      const rawRef = refInput ? refInput.value.trim() : 'AG-บัวรา';
+      const ref = encodeURIComponent(rawRef || 'AG-บัวรา');
+      localStorage.setItem('siwasup_my_agent_ref', rawRef || 'AG-บัวรา');
       
       const qrUrl = `${getBaseUrl()}?view=client&prop=${currentShareProp.id}&ref=${ref}&src=qr_sign`;
-      document.getElementById('qr-image').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrUrl)}`;
+      const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrUrl)}`;
+
+      const desktopImg = document.getElementById('qr-image-desktop');
+      if (desktopImg) desktopImg.src = qrSrc;
+
+      const mobileImg = document.getElementById('qr-image-mobile');
+      if (mobileImg) mobileImg.src = qrSrc;
+
+      const fallbackImg = document.getElementById('qr-image');
+      if (fallbackImg) fallbackImg.src = qrSrc;
     }
 
     function copyChannelLink(channel) {
       if (!currentShareProp) return;
-      const ref = encodeURIComponent(document.getElementById('agent-ref-input').value.trim() || 'AG-บัวรา');
+      const refInput = document.getElementById('agent-ref-input');
+      const rawRef = refInput ? refInput.value.trim() : 'AG-บัวรา';
+      const ref = encodeURIComponent(rawRef || 'AG-บัวรา');
       const targetUrl = `${getBaseUrl()}?view=client&prop=${currentShareProp.id}&ref=${ref}&src=${channel}`;
       
       navigator.clipboard.writeText(targetUrl).then(() => {
-        const channelThai = channel === 'facebook' ? 'Facebook' : (channel === 'tiktok' ? 'TikTok' : (channel === 'line' ? 'LINE' : 'ทั่วไป'));
-        showToast(`✅ คัดลอกลิงก์สำหรับ ${channelThai} แล้ว (ล็อกสิทธิ์ ${ref})`);
+        const channelThai = channel === 'facebook' ? 'Facebook' 
+                          : channel === 'tiktok' ? 'TikTok' 
+                          : channel === 'line' ? 'LINE' 
+                          : channel === 'qr_sign' ? 'QR Code' 
+                          : 'ทั่วไป';
+        showToast(`✅ คัดลอกลิงก์สำหรับ ${channelThai} แล้ว (ล็อกสิทธิ์ ${rawRef || 'AG-บัวรา'})`);
         closeShareModal();
       }).catch(() => {
         showToast(`ลิงก์พร้อมใช้: ${targetUrl}`);
@@ -1446,16 +1501,92 @@
     }
 
     function toggleQrView() {
-      const container = document.getElementById('qr-container');
-      const toggleText = document.getElementById('qr-toggle-text');
-      if (container.classList.contains('hidden')) {
-        updateShareUrls();
-        container.classList.remove('hidden');
-        toggleText.textContent = "ซ่อน QR";
+      const isDesktop = window.innerWidth >= 768;
+      
+      if (isDesktop) {
+        const desktopPanel = document.getElementById('desktop-qr-panel');
+        const shareModalCard = document.getElementById('share-modal-card');
+        const toggleText = document.getElementById('qr-toggle-text');
+        
+        if (desktopPanel && desktopPanel.classList.contains('hidden')) {
+          updateShareUrls();
+          desktopPanel.classList.remove('hidden');
+          desktopPanel.classList.add('flex');
+          if (shareModalCard) {
+            shareModalCard.classList.remove('md:max-w-md');
+            shareModalCard.classList.add('md:max-w-2xl');
+          }
+          if (toggleText) toggleText.textContent = "ซ่อน QR";
+          if (window.lucide) { lucide.createIcons(); }
+        } else if (desktopPanel) {
+          desktopPanel.classList.add('hidden');
+          desktopPanel.classList.remove('flex');
+          if (shareModalCard) {
+            shareModalCard.classList.remove('md:max-w-2xl');
+            shareModalCard.classList.add('md:max-w-md');
+          }
+          if (toggleText) toggleText.textContent = "เปิดดู QR";
+        }
       } else {
-        container.classList.add('hidden');
-        toggleText.textContent = "เปิดดู QR";
+        openMobileQrModal();
       }
+    }
+
+    function openMobileQrModal() {
+      if (!currentShareProp) return;
+      updateShareUrls();
+      const infoEl = document.getElementById('mobile-qr-prop-info');
+      if (infoEl) {
+        const refInput = document.getElementById('agent-ref-input');
+        const ref = refInput ? refInput.value.trim() : 'AG-บัวรา';
+        infoEl.innerHTML = `
+          <div class="font-bold text-gray-900 truncate">${currentShareProp.title}</div>
+          <div class="flex items-center justify-between text-[10px] text-gray-500 pt-0.5">
+            <span>รหัสทรัพย์: <strong class="text-amber-800">${currentShareProp.id}</strong></span>
+            <span>เอเจนต์: <strong class="text-emerald-700">${ref}</strong></span>
+          </div>
+        `;
+      }
+      const modal = document.getElementById('mobile-qr-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        if (window.lucide) { lucide.createIcons(); }
+      }
+    }
+
+    function closeMobileQrModal() {
+      const modal = document.getElementById('mobile-qr-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function downloadQrImage() {
+      if (!currentShareProp) return;
+      const refInput = document.getElementById('agent-ref-input');
+      const rawRef = refInput ? refInput.value.trim() : 'AG-บัวรา';
+      const ref = encodeURIComponent(rawRef || 'AG-บัวรา');
+      const qrUrl = `${getBaseUrl()}?view=client&prop=${currentShareProp.id}&ref=${ref}&src=qr_sign`;
+      const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(qrUrl)}`;
+      
+      showToast('⏳ กำลังเตรียมไฟล์รูป QR Code...');
+      fetch(qrSrc)
+        .then(res => res.blob())
+        .then(blob => {
+          const blobUrl = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = blobUrl;
+          a.download = `QR_${currentShareProp.id}_${rawRef}.png`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(blobUrl);
+          showToast('📥 ดาวน์โหลดภาพ QR Code เรียบร้อยแล้ว');
+        })
+        .catch(() => {
+          window.open(qrSrc, '_blank');
+          showToast('เปิดรูป QR ในแท็บใหม่แล้ว สามารถกดบันทึกรูปได้เลย');
+        });
     }
 
     // --- CLIENT VIEW INTERACTION FUNCTIONS ---
