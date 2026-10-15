@@ -2173,14 +2173,31 @@
     }
 
     // 4. Meeting Check-in Modal
-    function openMeetingCheckinModal() {
+    function openMeetingCheckinModal(dateParam = null) {
       const modal = document.getElementById('modal-meeting-checkin');
       const select = document.getElementById('meeting-agent-select');
+      const qrImg = document.getElementById('meeting-qr-img');
+      const dateLabel = document.getElementById('meeting-date-label');
+
+      const today = dateParam || new Date().toISOString().split('T')[0];
+      if (dateLabel) {
+        dateLabel.textContent = `รอบวันที่ ${today}`;
+      }
+
+      if (qrImg) {
+        const checkinUrl = `https://thenassty-cpu.github.io/siwasup-cobroker-os/?action=checkin&date=${today}`;
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(checkinUrl)}`;
+      }
+
       if (select && window.SiwasupAgents) {
         const agents = window.SiwasupAgents.getActive();
         select.innerHTML = agents.map(a => `
           <option value="${a.code}">${a.code} - ${a.nickname || a.name} (${a.name})</option>
         `).join('');
+        const savedRef = localStorage.getItem('siwasup_my_agent_ref');
+        if (savedRef && select.querySelector(`option[value="${savedRef}"]`)) {
+          select.value = savedRef;
+        }
       }
       if (modal) {
         modal.classList.remove('hidden');
@@ -2198,7 +2215,18 @@
       const agentCode = select ? select.value : null;
       if (!agentCode || !window.SiwasupAgents) return;
 
-      const res = window.SiwasupAgents.award(agentCode, 'meeting_checkin');
+      const today = new Date().toISOString().split('T')[0];
+      const checkinKey = `siwasup_checked_in_${agentCode}_${today}`;
+      if (localStorage.getItem(checkinKey)) {
+        if (typeof showToast === 'function') {
+          showToast(`⚠️ ตัวแทน [${agentCode}] ได้เช็คชื่อรอบวันที่ ${today} ไปเรียบร้อยแล้วครับ!`);
+        }
+        closeMeetingCheckinModal();
+        return;
+      }
+
+      const res = window.SiwasupAgents.award(agentCode, 'meeting_checkin', { date: today });
+      localStorage.setItem(checkinKey, 'true');
       closeMeetingCheckinModal();
       renderLeaderboard(activeLeaderboardTrack);
       if (typeof showToast === 'function') {
@@ -2598,6 +2626,15 @@
           openPropertyDetailModal(propId);
           showToast(`📍 กำลังเปิดข้อมูลทรัพย์ #${propId} จากการสแกนป้าย`);
         }, 300);
+      }
+
+      // Check auto check-in from Meeting QR (?action=checkin&date=YYYY-MM-DD)
+      if (params.get('action') === 'checkin') {
+        const checkinDate = params.get('date');
+        setTimeout(() => {
+          openMeetingCheckinModal(checkinDate);
+          showToast(`🎟️ สแกน QR เข้าประชุมเรียบร้อย กรุณายืนยันรหัสตัวแทนเพื่อรับ +10 แต้มกิจกรรม`);
+        }, 500);
       }
     }
 

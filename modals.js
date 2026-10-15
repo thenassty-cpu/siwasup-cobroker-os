@@ -983,7 +983,7 @@
 
         <!-- QR Display for Zoom / Big Screen -->
         <div class="bg-gray-50 p-3 rounded-2xl border border-gray-200 space-y-2">
-          <p class="text-[11px] text-gray-600 font-medium">ฉาย QR บนจอเพื่อให้ตัวแทนสแกนเช็คชื่ออัตโนมัติ:</p>
+          <p class="text-[11px] text-gray-600 font-medium">ฉาย QR บนจอเพื่อให้ตัวแทนสแกนเช็คชื่ออัตโนมัติ (<span id="meeting-date-label" class="font-bold text-amber-900">รอบวันนี้</span>):</p>
           <div class="bg-white p-2 rounded-xl inline-block border border-gray-200 shadow-2xs">
             <img id="meeting-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://thenassty-cpu.github.io/siwasup-cobroker-os/?action=checkin" alt="Meeting QR" class="w-40 h-40 object-contain mx-auto">
           </div>
