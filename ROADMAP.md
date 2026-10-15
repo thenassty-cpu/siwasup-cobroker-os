@@ -10,6 +10,14 @@
 ## ✅ 1. สถานะงานที่ทำสำเร็จแล้ว (Completed Milestones)
 
 ### 🎨 Design System & Visual Architecture (100%)
+- [x] **Homerun Platform Clean Aesthetic (2026 Modern Real Estate Standard):**
+  - **4:3 Aspect Ratio Cards:** รูปทรัพย์สัดส่วน 4:3 คมชัด พร้อมเอฟเฟกต์ซูมละมุนเมื่อ Hover
+  - **Translucent Floating Badges:** ป้ายหมวดหมู่แคปซูลกระจกดำโปร่งแสง (`bg-black/60 backdrop-blur-md`) มุมซ้ายบน พร้อมปุ่มวงกลมแก้วแชร์ & บันทึกหัวใจมุมขวาบน
+  - **Vibrant Status Pills:** ป้าย `New` สีส้มอมแดงสดใส (`#FF3838`) วางเคียงข้างป้ายธนาคาร NPA แบบพาสเทลคลีนตา
+  - **2-Tier Financial Pricing Layout:** แสดงราคาก่อนต่อรอง (สีฟ้า Ocean `#1E749C`) คู่กับหลักประกันต่อรองราคา (เช่น ฿50,000) สไตล์ Homerun เป๊ะ
+  - **Signature Caramel Pill CTA:** ปุ่ม `ดูรายละเอียด` ทรงแคปซูลมนสีทองทรายซาติน (`#BCA371`) เต็มความกว้าง
+  - **Sub-Header Quick Bar:** แถบหัวข้อย่อยสไตล์ Homerun พร้อมป้าย "รอบล่าสุด", ตัวสลับโหมด "ตาราง | แผนที่" และตัวนับจำนวนทรัพย์เรียลไทม์
+  - **Property Detail Modal:** ป๊อปอัปดูรายละเอียดครบวงจร คำนวณยอดผ่อนรายเดือน (ล้านละ 3,500 บ.) และเชื่อมต่อไปยังป้ายไวนิล/แชร์สิทธิ์
 - [x] **60-30-10 Brand Identity:** คุมสัดส่วน White 60% (Clean Canvas) - Red 30% (Brand/CTA) - Satin Gold 10% (Luxury Hooks จากป้ายโลโก้ 3D จริง)
 - [x] **Pastel NPA Bank Badges:** แปลงป้ายธนาคาร (SCB, KBank, TTB, SAM, KTB, GSB, GHB, BBL, Siwasup) เป็น Soft Pastel ไม่แย่งซีนแบรนด์หลัก
 - [x] **Lucide Icon System:** กำจัด Emoji หลากสีออกทั้งหมด ใช้ไอคอนเส้นขาวมาตรฐาน (`stroke-[1.5]`) ในคอนเทนเนอร์วงกลมเทาโปร่งแสง 50% (`.icon-circle`)
@@ -47,4 +55,3 @@
 ### 🧩 Architectural Optimization & Token Economy (100% Completed)
 - [x] **Modal Component Extraction:** สกัด Template ของ Modals ทั้งหมด 10 ตัวออกจาก `index.html` ไปไว้ใน `modals.js` ช่วยลดโค้ดใน `index.html` ลงกว่า 530 บรรทัด (จาก 2,062 เหลือ 1,532 บรรทัด) ประหยัด Token สูงสุด
 - [x] **Global CSS Style Presets:** กำหนด Class Utility กลาง `.capsule-glass-20` (`rounded-full bg-white/20 backdrop-blur-md border border-white/40`) และชุด Modal `.modal-backdrop`, `.modal-card`, `.modal-card-sm` ทำให้การปรับจูนสไตล์แก้เพียง 1 จุดแล้วมีผลทั่วทั้งระบบทันที
-
