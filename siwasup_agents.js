@@ -2247,19 +2247,38 @@
     }
   };
 
+  // Vector SVG Silhouettes from Ton's Illustrator Design (Animal Matrix Bar.ai)
+  const ANIMAL_SVGS = {
+    lion: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 145.6 145.67" fill="currentColor" class="{CLASS}"><path d="M131.33,84.31c-4.67,5.55-11.12,9.6-18.19,11.33,1.5-3.07,2.08-6.92,1.45-10.4-5.29-4.64-14.44-.38-14.19,6.76-.27,7.51,9.71,11.61,14.8,6.2-1.13,4.52-3.15,8.68-5.85,12.3t0,.01c-1.92,1.44-9.29,5.25-11.12,5.79-.37-8.27-7.98-13.1-8.16-21.43-5.17,13.1,12.21,26.55.27,40.58-.84-7.03-4.98-13.12-11.04-16.51,6.26,6.91,7.41,17.99,2.67,26.09C39.67,150.83-.38,116.69,0,72.8,1.53,35.54,15.87,19.43,53.74,21.27c-5.47-1.42-11.18-2.22-17.07-2.32,19.7-5.94,43.28-2.12,59.73,9.21-.01,0-.01,0-.01,0,8.89,5.52,16.1,13.52,17.85,24.26l8.18,7.89v6.89c-.52-.32,5.05,6.96,5.46,10.96,1.67,1.54,2.88,4.26,3.45,6.14Z"/></svg>',
+    eagle: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 145.85 145.6" fill="currentColor" class="{CLASS}"><path d="M103.22,44.23c-1.35-.41-2.75-.71-4.2-.86-1.23-7.39-6.81-12.48-12.86-16.27-19.64-13.39-48.2-12.7-67.18,1.89,3.6-1.11,7.28-1.86,11.1-2.26-44.29,12.36-34.49,79.29-3.97,101.26.04.19.08.37.13.56,19.8,17.17,50.17,21.89,74.26,11.69,5.05-8.7,6.84-20.31,4.48-30.42,3.11,5.72,4.88,11.92,5.2,18.51,3.08-13.75-1.14-28.73-10.91-38.81.01.01.02.01.03,0-4.28-5.21-7.27-11.32-8.72-17.98,9.04-5.56,21.61,2.13,20.76,12.7,14.02-10.78,8.93-35.59-8.12-40.01Z"/></svg>',
+    wolf: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 145.6 145.78" fill="currentColor" class="{CLASS}"><path d="M36.3,54.94h-.21c.06.01.11.03.16.04.01-.01.03-.02.05-.04Z"/><path d="M114.97,74.44c-3.44-6.85-8.32-12.85-14.24-17.63-1.49-9.94,1.64-20.42,8.24-27.85-9.51,3.29-18.08,8.57-25.23,15.35-1.23-8.95,1.39-18.4,6.58-25.23-22.77,4.75-40.16,24.94-48.17,26.18-7.49.8-14.55,4.15-19.85,9.13,4.58-.8,9.54-.44,14,.55-.02.02-.04.03-.05.04-11.85-.14-22.58,5.9-28.99,15.45,2.8-.84,5.77-1.36,8.72-1.48-6.05,2.19-11.41,6.07-15.39,11.1,3.26,37.97,37.94,68.01,76.2,65.59-4.94-25.2,22.03-47.75,45.98-38.38,8.7-4.15,15.39-11.82,18.26-21.16,0,0-26.03-11.61-26.06-11.66Z"/></svg>',
+    bear: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 145.67 145.6" fill="currentColor" class="{CLASS}"><path d="M129.45,81.84c-4.43-4.02-9.69-9.52-12.02-15.32,3.5-9.63-8.38-25.93-19.2-30.63.19.02.37.05.55.08-.56-4.31-1.9-8.38-3.89-12.05-.46-.07-.92-.12-1.39-.17-3.11,2.4-6.65,4.27-10.47,5.5-8.66-6.48-19.82-9.51-30.83-8.14-7.21-3.55-15.62-3.6-22.86-7.03C-7.23,38.41-10.23,99.18,23.81,127.02c5.22.56,10.76.33,15.86-.62,3.17-7.76,2.95-16.7,8.29-23.4,7.82,1.28,13.98-3.11,21.05-5.37,13.05-3.84,28.22-.74,38.59,7.77,3.77-1.77,7.25-4.08,10.32-6.84,5.19-.93,10.06-2.79,14.42-5.41.86-2.35,1.5-4.78,1.95-7.25-1.33-1.04-3.02-2.42-4.84-4.06Z"/></svg>'
+  };
+
+  function getAnimalSvg(id, className = 'w-4 h-4 inline-block') {
+    const tpl = ANIMAL_SVGS[id];
+    if (!tpl) return '';
+    return tpl.replace('{CLASS}', className);
+  }
+
   function getAgentArchetype(agent) {
     if (!agent) return ANIMAL_ARCHETYPES.bear;
     const act = agent.activityPoints || 0;
     const perf = agent.performancePoints || 0;
+    let arch;
     if (act >= 100 && perf >= 300) {
-      return ANIMAL_ARCHETYPES.eagle;
+      arch = ANIMAL_ARCHETYPES.eagle;
     } else if (act < 100 && perf >= 300) {
-      return ANIMAL_ARCHETYPES.lion;
+      arch = ANIMAL_ARCHETYPES.lion;
     } else if (act >= 100 && perf < 300) {
-      return ANIMAL_ARCHETYPES.wolf;
+      arch = ANIMAL_ARCHETYPES.wolf;
     } else {
-      return ANIMAL_ARCHETYPES.bear;
+      arch = ANIMAL_ARCHETYPES.bear;
     }
+    return {
+      ...arch,
+      svg: getAnimalSvg(arch.id)
+    };
   }
 
   // Live Sync from Google Sheets CSV (Auto-Refresh if online)
@@ -2295,7 +2314,8 @@
     RULES: SCORING_RULES,
     getTransactions: getTransactions,
     ARCHETYPES: ANIMAL_ARCHETYPES,
-    getArchetype: getAgentArchetype
+    getArchetype: getAgentArchetype,
+    getAnimalSvg: getAnimalSvg
   };
 
 })(window);

@@ -884,16 +884,25 @@
               <div>ทั้งหมด</div>
               <div class="text-[9px] font-normal">125 ท่าน</div>
             </button>
-            <button type="button" id="animal-btn-eagle" onclick="filterByAnimal('eagle')" class="p-1.5 rounded-xl border border-amber-200 bg-white text-amber-900 shadow-2xs text-center transition-all hover:bg-amber-100/60 active:scale-95">
-              <div>🦅 Eagle</div>
+            <button type="button" id="animal-btn-eagle" onclick="filterByAnimal('eagle')" class="p-1.5 rounded-xl border border-amber-200 bg-white text-amber-900 shadow-2xs text-center transition-all hover:bg-amber-100/60 active:scale-95 flex flex-col items-center justify-center">
+              <div class="flex items-center justify-center gap-1">
+                <span class="w-3.5 h-3.5 inline-flex items-center justify-center text-amber-600">${window.SiwasupAgents ? window.SiwasupAgents.getAnimalSvg('eagle', 'w-full h-full') : '🦅'}</span>
+                <span>Eagle</span>
+              </div>
               <div class="text-[9px] text-amber-700 font-normal"><span id="animal-count-eagle">0</span> ท่าน</div>
             </button>
-            <button type="button" id="animal-btn-lion" onclick="filterByAnimal('lion')" class="p-1.5 rounded-xl border border-purple-200 bg-white text-purple-900 shadow-2xs text-center transition-all hover:bg-purple-100/60 active:scale-95">
-              <div>🦁 Lion</div>
+            <button type="button" id="animal-btn-lion" onclick="filterByAnimal('lion')" class="p-1.5 rounded-xl border border-purple-200 bg-white text-purple-900 shadow-2xs text-center transition-all hover:bg-purple-100/60 active:scale-95 flex flex-col items-center justify-center">
+              <div class="flex items-center justify-center gap-1">
+                <span class="w-3.5 h-3.5 inline-flex items-center justify-center text-purple-600">${window.SiwasupAgents ? window.SiwasupAgents.getAnimalSvg('lion', 'w-full h-full') : '🦁'}</span>
+                <span>Lion</span>
+              </div>
               <div class="text-[9px] text-purple-700 font-normal"><span id="animal-count-lion">0</span> ท่าน</div>
             </button>
-            <button type="button" id="animal-btn-wolf" onclick="filterByAnimal('wolf')" class="p-1.5 rounded-xl border border-blue-200 bg-white text-blue-900 shadow-2xs text-center transition-all hover:bg-blue-100/60 active:scale-95">
-              <div>🐺 Wolf</div>
+            <button type="button" id="animal-btn-wolf" onclick="filterByAnimal('wolf')" class="p-1.5 rounded-xl border border-blue-200 bg-white text-blue-900 shadow-2xs text-center transition-all hover:bg-blue-100/60 active:scale-95 flex flex-col items-center justify-center">
+              <div class="flex items-center justify-center gap-1">
+                <span class="w-3.5 h-3.5 inline-flex items-center justify-center text-blue-600">${window.SiwasupAgents ? window.SiwasupAgents.getAnimalSvg('wolf', 'w-full h-full') : '🐺'}</span>
+                <span>Wolf</span>
+              </div>
               <div class="text-[9px] text-blue-700 font-normal"><span id="animal-count-wolf">0</span> ท่าน</div>
             </button>
           </div>
@@ -902,7 +911,8 @@
           <div class="text-[10px] font-bold bg-white/90 p-1.5 rounded-xl border border-slate-200">
             <button type="button" id="animal-btn-bear" onclick="filterByAnimal('bear')" class="w-full text-slate-700 flex items-center justify-between px-1 hover:text-slate-900 transition-colors">
               <span class="flex items-center gap-1.5">
-                <span>🐻 <strong>Hibernating Bear (หมีจำศีล)</strong></span>
+                <span class="w-4 h-4 inline-flex items-center justify-center text-slate-600">${window.SiwasupAgents ? window.SiwasupAgents.getAnimalSvg('bear', 'w-full h-full') : '🐻'}</span>
+                <span><strong>Hibernating Bear (หมีจำศีล)</strong></span>
                 <span class="text-[9px] text-gray-400 font-normal hidden sm:inline">- สมาชิกพักรบ รอจังหวะปลุกพลัง</span>
               </span>
               <span class="bg-slate-100 px-2 py-0.5 rounded-full border border-slate-300 text-slate-800 font-mono"><span id="animal-count-bear">0</span> ท่าน</span>
