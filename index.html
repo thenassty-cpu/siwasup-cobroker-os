@@ -194,6 +194,10 @@
               <strong id="mode-text" class="text-[#990000] font-bold">เจ้าของ/แอดมิน (บัว & กูล)</strong>
             </span>
             <div class="flex items-center gap-1">
+              <button id="btn-owner-archetype-shortcut" type="button" onclick="openAgentLeaderboardModal('animal_matrix')" class="hidden items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200 shadow-2xs transition-all active:scale-95" title="วิเคราะห์ศักยภาพตัวแทน 4 กลุ่มสัตว์ (เฉพาะแอดมิน บัว & กูล)">
+                <span class="text-xs">🐾</span>
+                <span>จัดกลุ่ม (Admin)</span>
+              </button>
               <button type="button" onclick="openMyProfileModal()" class="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 shadow-2xs transition-all active:scale-95" title="กระเป๋าคะแนน & โปรไฟล์">
                 <i data-lucide="user" class="w-3 h-3 text-amber-600"></i>
                 <span id="bar-profile-btn-text">โปรไฟล์ (S22)</span>
@@ -573,6 +577,17 @@
         modeText.textContent = "ลูกค้า (White-Label ไม่เห็นค่าคอม)";
         modeText.className = "text-[#990000] font-bold";
         modeIcon.innerHTML = `<i data-lucide="users" class="w-2.5 h-2.5 stroke-[1.5]"></i>`;
+      }
+
+      const adminShortcutBtn = document.getElementById('btn-owner-archetype-shortcut');
+      if (adminShortcutBtn) {
+        if (mode === 'owner') {
+          adminShortcutBtn.classList.remove('hidden');
+          adminShortcutBtn.classList.add('flex');
+        } else {
+          adminShortcutBtn.classList.add('hidden');
+          adminShortcutBtn.classList.remove('flex');
+        }
       }
 
       renderProperties();
@@ -1763,6 +1778,26 @@
       if (perfEl) perfEl.textContent = agent.performancePoints || 0;
       if (totalEl) totalEl.textContent = agent.totalPoints || 0;
 
+      // 👑 Owner-Only Intelligence Analysis Card (Visible only when currentMode === 'owner')
+      const ownerBox = document.getElementById('profile-owner-intelligence-box');
+      if (ownerBox) {
+        if (currentMode === 'owner' && window.SiwasupAgents && typeof window.SiwasupAgents.getArchetype === 'function') {
+          const arch = window.SiwasupAgents.getArchetype(agent);
+          const badgeEl = document.getElementById('profile-animal-badge');
+          const descEl = document.getElementById('profile-animal-desc');
+          const actionEl = document.getElementById('profile-animal-action');
+          if (badgeEl) {
+            badgeEl.textContent = `${arch.icon} ${arch.name}`;
+            badgeEl.className = `px-2 py-0.5 rounded-full font-bold text-[10px] border ${arch.badgeClass}`;
+          }
+          if (descEl) descEl.textContent = arch.description;
+          if (actionEl) actionEl.textContent = arch.action;
+          ownerBox.classList.remove('hidden');
+        } else {
+          ownerBox.classList.add('hidden');
+        }
+      }
+
       updateProfileButtons(agent.code);
     }
 
@@ -1893,17 +1928,70 @@
     }
 
     // 3. Leaderboard Modal & Filtering
-    function openAgentLeaderboardModal() {
+    let activeAnimalFilter = 'all';
+
+    function openAgentLeaderboardModal(tab = null) {
       const modal = document.getElementById('agent-leaderboard-modal');
       if (!modal) return;
+      if (tab === 'animal_matrix') {
+        activeAnimalFilter = 'all';
+      }
       modal.classList.remove('hidden');
       if (window.lucide) { lucide.createIcons(); }
       renderLeaderboard(activeLeaderboardTrack);
+      if (tab === 'animal_matrix') {
+        const bar = document.getElementById('owner-animal-intelligence-bar');
+        if (bar) bar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
 
     function closeAgentLeaderboardModal() {
       const modal = document.getElementById('agent-leaderboard-modal');
       if (modal) modal.classList.add('hidden');
+    }
+
+    function filterByAnimal(animalId) {
+      activeAnimalFilter = animalId;
+      const allBtn = document.getElementById('animal-btn-all');
+      const eagleBtn = document.getElementById('animal-btn-eagle');
+      const lionBtn = document.getElementById('animal-btn-lion');
+      const wolfBtn = document.getElementById('animal-btn-wolf');
+      const bearBtn = document.getElementById('animal-btn-bear');
+
+      const defaultBtn = "p-1.5 rounded-xl border border-gray-200 bg-white shadow-2xs text-center transition-all hover:bg-gray-50 active:scale-95";
+      if (allBtn) allBtn.className = defaultBtn + " text-gray-800";
+      if (eagleBtn) eagleBtn.className = defaultBtn + " text-amber-900 border-amber-200";
+      if (lionBtn) lionBtn.className = defaultBtn + " text-purple-900 border-purple-200";
+      if (wolfBtn) wolfBtn.className = defaultBtn + " text-blue-900 border-blue-200";
+      if (bearBtn) bearBtn.className = "w-full text-slate-700 flex items-center justify-between px-1 hover:text-slate-900 transition-colors";
+
+      const activeBadge = "p-1.5 rounded-xl font-bold shadow-2xs text-center transition-all scale-[1.02] ";
+      if (animalId === 'all' && allBtn) {
+        allBtn.className = activeBadge + "bg-amber-400 text-amber-950 border border-amber-500";
+      } else if (animalId === 'eagle' && eagleBtn) {
+        eagleBtn.className = activeBadge + "bg-amber-100 text-amber-950 border-2 border-amber-400";
+      } else if (animalId === 'lion' && lionBtn) {
+        lionBtn.className = activeBadge + "bg-purple-100 text-purple-950 border-2 border-purple-400";
+      } else if (animalId === 'wolf' && wolfBtn) {
+        wolfBtn.className = activeBadge + "bg-blue-100 text-blue-950 border-2 border-blue-400";
+      } else if (animalId === 'bear' && bearBtn) {
+        bearBtn.className = "w-full text-slate-900 font-bold flex items-center justify-between px-1 bg-slate-200 rounded-lg p-1";
+      }
+
+      const titleEl = document.getElementById('animal-strategy-title');
+      const descEl = document.getElementById('animal-strategy-desc');
+      if (window.SiwasupAgents && window.SiwasupAgents.ARCHETYPES) {
+        const arch = window.SiwasupAgents.ARCHETYPES[animalId];
+        if (arch && titleEl && descEl) {
+          titleEl.textContent = `${arch.icon} ${arch.name}`;
+          descEl.innerHTML = `<strong>🎯 กลยุทธ์สำหรับบัว:</strong> ${arch.action}<br><span class="text-gray-500 text-[9.5px]">${arch.description}</span>`;
+        } else if (titleEl && descEl) {
+          titleEl.textContent = "ตัวแทนทั้งหมด 125 ท่าน";
+          descEl.textContent = "เลือกฟิลเตอร์สัตว์เพื่อเจาะลึกพฤติกรรมและแผนการส่งงานที่ตรงจุด";
+        }
+      }
+
+      renderLeaderboard(activeLeaderboardTrack);
     }
 
     function filterLeaderboard(track) {
@@ -1928,7 +2016,40 @@
 
     function renderLeaderboard(track = 'total') {
       if (!window.SiwasupAgents) return;
+      const isOwner = (currentMode === 'owner');
       let list = window.SiwasupAgents.getLeaderboard(track, 125);
+
+      // 👑 Owner-Only Animal Matrix Bar handling
+      const animalBar = document.getElementById('owner-animal-intelligence-bar');
+      if (animalBar) {
+        if (isOwner && window.SiwasupAgents && typeof window.SiwasupAgents.getArchetype === 'function') {
+          animalBar.classList.remove('hidden');
+          const allAgents = window.SiwasupAgents.getActive();
+          let cEagle = 0, cLion = 0, cWolf = 0, cBear = 0;
+          allAgents.forEach(a => {
+            const arch = window.SiwasupAgents.getArchetype(a);
+            if (arch.id === 'eagle') cEagle++;
+            else if (arch.id === 'lion') cLion++;
+            else if (arch.id === 'wolf') cWolf++;
+            else if (arch.id === 'bear') cBear++;
+          });
+          const elE = document.getElementById('animal-count-eagle');
+          const elL = document.getElementById('animal-count-lion');
+          const elW = document.getElementById('animal-count-wolf');
+          const elB = document.getElementById('animal-count-bear');
+          if (elE) elE.textContent = cEagle;
+          if (elL) elL.textContent = cLion;
+          if (elW) elW.textContent = cWolf;
+          if (elB) elB.textContent = cBear;
+
+          // Apply animal filter if chosen
+          if (activeAnimalFilter && activeAnimalFilter !== 'all') {
+            list = list.filter(a => window.SiwasupAgents.getArchetype(a).id === activeAnimalFilter);
+          }
+        } else {
+          animalBar.classList.add('hidden');
+        }
+      }
 
       if (currentLeaderboardQuery) {
         list = list.filter(a => 
@@ -1942,10 +2063,10 @@
       const countLabel = document.getElementById('lb-count-label');
       if (countLabel) countLabel.textContent = `${list.length} ตัวแทน`;
 
-      // Render Top 3 Podium Cards (only if no search active)
+      // Render Top 3 Podium Cards (only if no search active and not filtered to single animal with <3)
       const podiumEl = document.getElementById('leaderboard-podium');
       if (podiumEl) {
-        if (!currentLeaderboardQuery && list.length >= 3) {
+        if (!currentLeaderboardQuery && list.length >= 3 && activeAnimalFilter === 'all') {
           const top1 = list[0];
           const top2 = list[1];
           const top3 = list[2];
@@ -1987,31 +2108,45 @@
         listEl.innerHTML = list.map((a, idx) => {
           const rank = idx + 1;
           const rankBadge = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+          const arch = (isOwner && window.SiwasupAgents && typeof window.SiwasupAgents.getArchetype === 'function') 
+            ? window.SiwasupAgents.getArchetype(a) 
+            : null;
+
           return `
-            <div onclick="closeAgentLeaderboardModal(); openMyProfileModal('${a.code}');" class="flex items-center justify-between p-2 rounded-xl bg-gray-50/80 hover:bg-amber-100/60 border border-gray-100 transition-colors cursor-pointer active:scale-[0.99]" title="คลิกเพื่อดูกระเป๋าคะแนนของ ${a.code}">
-              <div class="flex items-center gap-2.5 min-w-0">
-                <span class="w-6 text-center font-black text-xs ${rank <= 3 ? 'text-amber-700 text-sm' : 'text-gray-400 font-mono'} shrink-0">${rankBadge}</span>
-                <span class="w-7 h-7 rounded-full bg-white border border-gray-200 text-gray-800 font-black text-[10px] flex items-center justify-center shrink-0 shadow-2xs">${a.code}</span>
-                <div class="truncate">
-                  <div class="font-bold text-xs text-gray-900 flex items-center gap-1.5">
-                    <span>${a.nickname || a.name}</span>
-                    <span class="text-[9px] font-medium text-gray-400 font-normal">(${a.code})</span>
+            <div onclick="closeAgentLeaderboardModal(); openMyProfileModal('${a.code}');" class="p-2.5 rounded-xl bg-gray-50/80 hover:bg-amber-100/60 border border-gray-100 transition-colors cursor-pointer active:scale-[0.99]" title="คลิกเพื่อดูกระเป๋าคะแนนของ ${a.code}">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <span class="w-6 text-center font-black text-xs ${rank <= 3 ? 'text-amber-700 text-sm' : 'text-gray-400 font-mono'} shrink-0">${rankBadge}</span>
+                  <span class="w-7 h-7 rounded-full bg-white border border-gray-200 text-gray-800 font-black text-[10px] flex items-center justify-center shrink-0 shadow-2xs">${a.code}</span>
+                  <div class="truncate">
+                    <div class="font-bold text-xs text-gray-900 flex items-center gap-1.5 flex-wrap">
+                      <span>${a.nickname || a.name}</span>
+                      <span class="text-[9px] font-medium text-gray-400 font-normal">(${a.code})</span>
+                      ${arch ? `<span class="text-[9px] font-bold px-1.5 py-0.2 rounded-full border ${arch.badgeClass}">${arch.icon} ${arch.name.split(' ')[0]}</span>` : ''}
+                    </div>
+                    <div class="text-[10px] text-gray-500 truncate flex items-center gap-2">
+                      <span>${a.name}</span>
+                      <span class="text-gray-300">•</span>
+                      <span class="text-amber-700 font-medium">${a.tierIcon} ${a.tierName}</span>
+                    </div>
                   </div>
-                  <div class="text-[10px] text-gray-500 truncate flex items-center gap-2">
-                    <span>${a.name}</span>
-                    <span class="text-gray-300">•</span>
-                    <span class="text-amber-700 font-medium">${a.tierIcon} ${a.tierName}</span>
+                </div>
+                <div class="text-right shrink-0 ml-2">
+                  <div class="font-black text-xs text-gray-900 font-mono">${a.totalPoints} <span class="text-[9px] font-normal text-gray-400">แต้ม</span></div>
+                  <div class="text-[9px] text-gray-500 flex items-center justify-end gap-1 font-mono">
+                    <span class="text-emerald-700">🎪 ${a.activityPoints}</span>
+                    <span class="text-gray-300">|</span>
+                    <span class="text-blue-700">💰 ${a.performancePoints}</span>
                   </div>
                 </div>
               </div>
-              <div class="text-right shrink-0 ml-2">
-                <div class="font-black text-xs text-gray-900 font-mono">${a.totalPoints} <span class="text-[9px] font-normal text-gray-400">แต้ม</span></div>
-                <div class="text-[9px] text-gray-500 flex items-center justify-end gap-1 font-mono">
-                  <span class="text-emerald-700">🎪 ${a.activityPoints}</span>
-                  <span class="text-gray-300">|</span>
-                  <span class="text-blue-700">💰 ${a.performancePoints}</span>
+
+              ${arch ? `
+                <div class="mt-1.5 pt-1.5 border-t border-amber-200/50 flex items-center justify-between text-[9.5px] text-amber-950 bg-amber-50/70 p-1 rounded-md">
+                  <span class="truncate">💡 <strong>แนะนำสำหรับบัว:</strong> ${arch.action}</span>
+                  <span class="text-[9px] font-bold text-amber-800 shrink-0 ml-1">ดูโปรไฟล์ →</span>
                 </div>
-              </div>
+              ` : ''}
             </div>
           `;
         }).join('');

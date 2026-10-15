@@ -868,6 +868,59 @@
           </button>
         </div>
 
+        <!-- 👑 Owner-Only Animal Intelligence Matrix Bar (Visible ONLY when currentMode === 'owner') -->
+        <div id="owner-animal-intelligence-bar" class="hidden bg-gradient-to-r from-amber-50 via-yellow-50 to-orange-50 p-3 rounded-2xl border-2 border-amber-300 space-y-2 shadow-xs">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-amber-950 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-amber-400 text-amber-950 font-black flex items-center justify-center text-[11px] shadow-2xs">🐾</span>
+              <span>วิเคราะห์ศักยภาพตัวแทน 4 กลุ่ม (เฉพาะแอดมิน/บัว & กูล)</span>
+            </span>
+            <span class="text-[9.5px] bg-amber-200 text-amber-900 font-bold px-2 py-0.5 rounded-full border border-amber-300">Admin Only</span>
+          </div>
+
+          <!-- 4 Animal Filter Tabs -->
+          <div class="grid grid-cols-4 gap-1 text-[10px] font-bold">
+            <button type="button" id="animal-btn-all" onclick="filterByAnimal('all')" class="p-1.5 rounded-xl border border-amber-400 bg-amber-400 text-amber-950 shadow-2xs text-center transition-all">
+              <div>ทั้งหมด</div>
+              <div class="text-[9px] font-normal">125 ท่าน</div>
+            </button>
+            <button type="button" id="animal-btn-eagle" onclick="filterByAnimal('eagle')" class="p-1.5 rounded-xl border border-amber-200 bg-white text-amber-900 shadow-2xs text-center transition-all hover:bg-amber-100/60 active:scale-95">
+              <div>🦅 Eagle</div>
+              <div class="text-[9px] text-amber-700 font-normal"><span id="animal-count-eagle">0</span> ท่าน</div>
+            </button>
+            <button type="button" id="animal-btn-lion" onclick="filterByAnimal('lion')" class="p-1.5 rounded-xl border border-purple-200 bg-white text-purple-900 shadow-2xs text-center transition-all hover:bg-purple-100/60 active:scale-95">
+              <div>🦁 Lion</div>
+              <div class="text-[9px] text-purple-700 font-normal"><span id="animal-count-lion">0</span> ท่าน</div>
+            </button>
+            <button type="button" id="animal-btn-wolf" onclick="filterByAnimal('wolf')" class="p-1.5 rounded-xl border border-blue-200 bg-white text-blue-900 shadow-2xs text-center transition-all hover:bg-blue-100/60 active:scale-95">
+              <div>🐺 Wolf</div>
+              <div class="text-[9px] text-blue-700 font-normal"><span id="animal-count-wolf">0</span> ท่าน</div>
+            </button>
+          </div>
+
+          <!-- Bear full width row -->
+          <div class="text-[10px] font-bold bg-white/90 p-1.5 rounded-xl border border-slate-200">
+            <button type="button" id="animal-btn-bear" onclick="filterByAnimal('bear')" class="w-full text-slate-700 flex items-center justify-between px-1 hover:text-slate-900 transition-colors">
+              <span class="flex items-center gap-1.5">
+                <span>🐻 <strong>Hibernating Bear (หมีจำศีล)</strong></span>
+                <span class="text-[9px] text-gray-400 font-normal hidden sm:inline">- สมาชิกพักรบ รอจังหวะปลุกพลัง</span>
+              </span>
+              <span class="bg-slate-100 px-2 py-0.5 rounded-full border border-slate-300 text-slate-800 font-mono"><span id="animal-count-bear">0</span> ท่าน</span>
+            </button>
+          </div>
+
+          <!-- Strategy Banner -->
+          <div id="animal-strategy-box" class="bg-white p-2 rounded-xl border border-amber-200 text-[10.5px] text-gray-700 leading-snug space-y-0.5">
+            <div class="font-bold text-amber-900 flex items-center gap-1">
+              <span>💡 คำแนะนำเชิงบริหารสำหรับบัว:</span>
+              <span id="animal-strategy-title" class="font-normal text-gray-600">กดเลือกกลุ่มสัตว์ด้านบนเพื่อดูคำแนะนำ</span>
+            </div>
+            <div id="animal-strategy-desc" class="text-gray-600 text-[10px]">
+              คัดกรองตัวแทนเพื่อส่งต่อทรัพย์ให้ตรงมือ หรือส่งโค้ชไปประกบปิดการขาย
+            </div>
+          </div>
+        </div>
+
         <!-- Top 3 Podium Cards -->
         <div id="leaderboard-podium" class="grid grid-cols-3 gap-1.5 sm:gap-2 text-center pt-1">
           <!-- Injected via JS -->
@@ -1069,6 +1122,21 @@
               <div id="profile-tier-progress-bar" class="bg-gradient-to-r from-amber-500 to-purple-600 h-2 rounded-full transition-all duration-500" style="width: 76.5%;"></div>
             </div>
             <p id="profile-tier-perk" class="text-[9.5px] text-gray-500 italic">สิทธิพิเศษ: สิทธิ์จองทรัพย์ Hot Deals ล่วงหน้า 24 ชม.</p>
+          </div>
+        </div>
+
+        <!-- 👑 Owner-Only Intelligence Analysis Card (Visible only when currentMode === 'owner') -->
+        <div id="profile-owner-intelligence-box" class="hidden p-3 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300 space-y-1.5 text-xs shadow-2xs">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-950 flex items-center gap-1.5">
+              <span class="w-4 h-4 rounded-full bg-amber-400 text-amber-950 font-black flex items-center justify-center text-[10px]">🐾</span>
+              <span>วิเคราะห์สไตล์ตัวแทน (เฉพาะเจ้าของ / แอดมิน)</span>
+            </span>
+            <span id="profile-animal-badge" class="px-2 py-0.5 rounded-full font-bold text-[10px] bg-blue-100 text-blue-900 border border-blue-300">🐺 Wolf</span>
+          </div>
+          <div id="profile-animal-desc" class="text-[11px] text-gray-700 font-medium"></div>
+          <div class="p-2 rounded-xl bg-white border border-amber-200 text-[10.5px] text-amber-950">
+            <strong>🎯 แนะนำสำหรับบัว:</strong> <span id="profile-animal-action"></span>
           </div>
         </div>
 

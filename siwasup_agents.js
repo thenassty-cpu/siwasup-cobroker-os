@@ -2207,6 +2207,61 @@
     return list.slice(0, limit);
   }
 
+  // 4. OWNER-ONLY ANIMAL ARCHETYPES MATRIX
+  const ANIMAL_ARCHETYPES = {
+    eagle: {
+      id: 'eagle',
+      name: 'Eagle (พญาอินทรี)',
+      icon: '🦅',
+      title: 'สายตาเฉียบคม บินสูง มองกว้าง',
+      badgeClass: 'bg-amber-100 text-amber-900 border-amber-300',
+      description: 'ขยันลงพื้นที่ เข้าประชุมสม่ำเสมอ และปิดการขายได้อย่างแม่นยำ (Super Star)',
+      action: 'ยกย่องเป็น Role Model / ให้สิทธิ์เลือกลีดพิเศษ / เชิญเป็นโค้ชประจำทีม'
+    },
+    lion: {
+      id: 'lion',
+      name: 'Lion (สิงห์สุขุม)',
+      icon: '🦁',
+      title: 'จ้าวป่าประหยัดพลังงาน นิ่งเล็งเป้าใหญ่',
+      badgeClass: 'bg-purple-100 text-purple-900 border-purple-300',
+      description: 'ไม่เน้นกิจกรรมย่อย แต่คอนเนกชันกว้าง ปิดยอดขายดีลใหญ่ได้คมกริบ (Strategic Closer)',
+      action: 'ป้อนเฉพาะทรัพย์พรีเมียม / สเปกลูกค้ากระเป๋าหนัก ไม่ต้องรบกวนด้วยประชุมย่อย'
+    },
+    wolf: {
+      id: 'wolf',
+      name: 'Wolf (หมาป่าพิทักษ์)',
+      icon: '🐺',
+      title: 'หัวใจนักสู้ ไม่ยอมแพ้ อึดทน ลุยพื้นที่',
+      badgeClass: 'bg-blue-100 text-blue-900 border-blue-300',
+      description: 'ขยันปักป้าย เข้าประชุมสม่ำเสมอ พาลูกค้าชมบ้านบ่อย แต่ยังขาดทักษะปิดดีล (Active Grinder)',
+      action: 'ต้องการคนช่วยปิด! ส่งทีมงานหรือพี่เลี้ยงช่วยประกบ (Co-Closing) จะเกิดยอดเงินทันที'
+    },
+    bear: {
+      id: 'bear',
+      name: 'Hibernating Bear (หมีจำศีล)',
+      icon: '🐻',
+      title: 'ผู้สะสมพลัง รอจังหวะเวลาที่เหมาะสม',
+      badgeClass: 'bg-slate-100 text-slate-800 border-slate-300',
+      description: 'สมาชิกที่กำลังพักรบหรือสังเกตการณ์ ยังไม่มีกิจกรรมในรอบเดือน (Waiting for Momentum)',
+      action: 'ส่ง LINE ทักทายด้วยทรัพย์ปล่อยง่าย หรือเคสตัวอย่างที่ปิดได้จริงเพื่อปลุกพลัง'
+    }
+  };
+
+  function getAgentArchetype(agent) {
+    if (!agent) return ANIMAL_ARCHETYPES.bear;
+    const act = agent.activityPoints || 0;
+    const perf = agent.performancePoints || 0;
+    if (act >= 100 && perf >= 300) {
+      return ANIMAL_ARCHETYPES.eagle;
+    } else if (act < 100 && perf >= 300) {
+      return ANIMAL_ARCHETYPES.lion;
+    } else if (act >= 100 && perf < 300) {
+      return ANIMAL_ARCHETYPES.wolf;
+    } else {
+      return ANIMAL_ARCHETYPES.bear;
+    }
+  }
+
   // Live Sync from Google Sheets CSV (Auto-Refresh if online)
   async function syncAgentsFromGoogleSheet() {
     const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/10lAjzMdAeF9X-1E1xBFQa1YKX74SvHcd/export?format=csv&gid=1642138823';
@@ -2216,8 +2271,6 @@
       const csvText = await resp.text();
       if (!csvText || !csvText.includes('รหัส พนง.')) throw new Error('Invalid CSV payload');
       console.log('✅ [Siwasup Agent Engine] Synced fresh roster from Google Sheets!');
-      // Parse & merge new agents seamlessly
-      // (Implementation ensures any new rows like S127 are automatically appended)
       return { success: true, count: currentAgents.length };
     } catch (err) {
       console.log('ℹ️ [Siwasup Agent Engine] Using offline cached agent database (Offline-first active).');
@@ -2240,7 +2293,9 @@
     calculateTier: calculateTier,
     TIERS: TIER_LEVELS,
     RULES: SCORING_RULES,
-    getTransactions: getTransactions
+    getTransactions: getTransactions,
+    ARCHETYPES: ANIMAL_ARCHETYPES,
+    getArchetype: getAgentArchetype
   };
 
 })(window);
