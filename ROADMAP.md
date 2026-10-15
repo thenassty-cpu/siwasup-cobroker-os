@@ -26,7 +26,9 @@
 ### ⚙️ Core OS Functional Modules (Front-End Prototype 100%)
 - [x] **Frictionless White-label Catalog:** ลูกค้าเข้าชมได้ทันทีไม่ต้องล็อกอิน ซ่อนค่าคอมมิชชั่น จำรหัสตัวแทน 60 วัน
 - [x] **Multi-Role Switcher:** สลับโหมด Owner / Free Agent / Employee / Trainee / Client
-- [x] **Smart Share Center:** สร้างลิงก์ดักจับสิทธิ์เจาะจง 5 ช่องทาง (FB, TikTok, LINE, Web, QR Code)
+- [x] **Smart Share Center (Responsive & Scrollbar-Free):** สร้างลิงก์ดักจับสิทธิ์เจาะจง 5 ช่องทาง (FB, TikTok, LINE, Web, QR Code) ดีไซน์ไร้แถบ Scrollbar กวนสายตา พร้อมการแสดงผล QR แบบปรับเปลี่ยนตามหน้าจออัตโนมัติ:
+  - **Desktop / Tablet:** ขยายออกด้านข้างแบบ Side-by-Side Panel สวยงาม ไม่เพิ่มความสูงในแนวตั้ง
+  - **Mobile:** เด้ง Sub-Modal ป๊อปอัปซ้อนขึ้นมาแบบคลีนตา 100% พร้อมปุ่มดาวน์โหลดรูป QR ชัดระดับ HD ใน 1 คลิก
 - [x] **Lead Magnet & Trainee Mission:** หน้าต่างฝากขายทรัพย์ฟรี พร้อมภารกิจส่งทรัพย์ 3 หลังเพื่อปลดล็อก Free Agent
 - [x] **MGM Referral:** ระบบชวนเพื่อนเป็นตัวแทนพร้อม QR Code และโครงสร้าง Overriding Commission 0.5%
 - [x] **Submit Offer / Bank NPA:** ฟังก์ชันยื่นข้อเสนอต่อรองราคาธนาคารผ่านแอดมินบัว
