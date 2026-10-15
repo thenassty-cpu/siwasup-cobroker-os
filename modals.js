@@ -909,14 +909,19 @@
             </button>
           </div>
 
-          <!-- Strategy Banner -->
-          <div id="animal-strategy-box" class="bg-white p-2 rounded-xl border border-amber-200 text-[10.5px] text-gray-700 leading-snug space-y-0.5">
-            <div class="font-bold text-amber-900 flex items-center gap-1">
-              <span>💡 คำแนะนำเชิงบริหารสำหรับบัว:</span>
-              <span id="animal-strategy-title" class="font-normal text-gray-600">กดเลือกกลุ่มสัตว์ด้านบนเพื่อดูคำแนะนำ</span>
-            </div>
-            <div id="animal-strategy-desc" class="text-gray-600 text-[10px]">
-              คัดกรองตัวแทนเพื่อส่งต่อทรัพย์ให้ตรงมือ หรือส่งโค้ชไปประกบปิดการขาย
+          <!-- Strategy & Archetype Visual Banner -->
+          <div id="animal-strategy-box" class="bg-white p-2.5 rounded-xl border border-amber-200 text-[10.5px] text-gray-700 leading-snug space-y-1.5">
+            <div class="flex items-start gap-2.5">
+              <img src="assets/animal_archetypes_terracotta.jpg" alt="Animal Archetypes" class="w-14 h-14 rounded-lg object-cover border border-amber-200 shadow-2xs shrink-0 cursor-pointer hover:scale-105 transition-transform" onclick="window.open('assets/animal_archetypes_terracotta.jpg', '_blank')" title="คลิกดูภาพขยายสัญลักษณ์ 4 สัตว์">
+              <div class="min-w-0 flex-1">
+                <div class="font-bold text-amber-900 flex items-center gap-1">
+                  <span>💡 คำแนะนำเชิงบริหารสำหรับบัว:</span>
+                </div>
+                <div id="animal-strategy-title" class="font-bold text-xs text-amber-950 mt-0.5">ตัวแทนทั้งหมด 125 ท่าน</div>
+                <div id="animal-strategy-desc" class="text-gray-600 text-[10px] mt-0.5">
+                  คัดกรองตัวแทนเพื่อส่งต่อทรัพย์ให้ตรงมือ หรือส่งโค้ชไปประกบปิดการขาย (คลิกเลือกปุ่มสัตว์ด้านบน)
+                </div>
+              </div>
             </div>
           </div>
         </div>
