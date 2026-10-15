@@ -623,7 +623,7 @@
       <div class="modal-card max-w-lg space-y-4 max-h-[92vh] overflow-y-auto">
         <div class="flex justify-between items-center pb-2 border-b border-slate-100">
           <div class="flex items-center gap-2">
-            <span id="detail-category-badge" class="bg-black/80 text-white text-[11px] font-medium px-2.5 py-0.5 rounded-full">ทาวน์โฮม</span>
+            <span id="detail-category-badge" class="capsule-bokeh text-[11px] font-medium px-3 py-0.5">ทาวน์โฮม</span>
             <span id="detail-bank-badge"></span>
             <span id="detail-code" class="text-xs text-slate-400 font-mono">รหัส: -</span>
           </div>
@@ -636,7 +636,7 @@
           <div class="absolute bottom-2.5 left-2.5">
             <span id="detail-status-pill" class="bg-[#FF3838] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">New</span>
           </div>
-          <a id="detail-external-link" href="#" target="_blank" class="absolute bottom-2.5 right-2.5 bg-black/60 hover:bg-black/80 backdrop-blur-md text-white text-[11px] font-medium px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+          <a id="detail-external-link" href="#" target="_blank" class="absolute bottom-2.5 right-2.5 capsule-bokeh hover:bg-slate-900/70 text-white text-[11px] font-medium px-3 py-1 flex items-center gap-1 shadow-sm">
             <i data-lucide="external-link" class="w-3 h-3"></i>
             <span>ดูหน้าเว็บเดิม</span>
           </a>

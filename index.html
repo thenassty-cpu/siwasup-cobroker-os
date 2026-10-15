@@ -43,6 +43,26 @@
       border-radius: 9999px;
     }
 
+    .capsule-bokeh {
+      background: rgba(15, 23, 42, 0.38);
+      backdrop-filter: blur(12px) saturate(160%);
+      -webkit-backdrop-filter: blur(12px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.30);
+      box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.15), inset 0 1px 1px 0 rgba(255, 255, 255, 0.25);
+      border-radius: 9999px;
+      color: #ffffff;
+    }
+
+    .capsule-bokeh-light {
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(12px) saturate(160%);
+      -webkit-backdrop-filter: blur(12px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 0.40);
+      border-radius: 9999px;
+      color: #1e293b;
+    }
+
     /* 📦 Modal System Utilities */
     .modal-backdrop:not(.hidden) {
       display: flex;
@@ -836,18 +856,18 @@
               <img src="${img}" alt="${p.title}" 
                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${isSold ? 'grayscale contrast-125 opacity-75' : ''}">
               
-              <!-- Top-Left: Category Badge (Homerun Dark Glass Capsule) -->
-              <div class="absolute top-3 left-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-medium px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+              <!-- Top-Left: Category Badge (Frosted Bokeh Glass Capsule) -->
+              <div class="absolute top-3 left-3 capsule-bokeh text-[11px] font-medium px-3 py-1 flex items-center gap-1.5 shadow-sm">
                 <i data-lucide="${getCategoryIcon(p.category)}" class="w-3.5 h-3.5 stroke-[1.5]"></i>
                 <span>${p.category || 'ทาวน์โฮม'}</span>
               </div>
 
               <!-- Top-Right: Glass Action Buttons (Share & Heart) -->
               <div class="absolute top-3 right-3 flex items-center gap-1.5 z-10" onclick="event.stopPropagation()">
-                <button onclick="openSmartShare('${p.id}', '${p.title}')" class="w-8 h-8 rounded-full bg-black/45 hover:bg-black/70 backdrop-blur-md text-white flex items-center justify-center transition-all shadow-sm active:scale-90" title="แชร์">
+                <button onclick="openSmartShare('${p.id}', '${p.title}')" class="w-8 h-8 rounded-full capsule-bokeh hover:bg-slate-900/60 flex items-center justify-center transition-all shadow-sm active:scale-90" title="แชร์">
                   <i data-lucide="share-2" class="w-3.5 h-3.5 stroke-[1.5]"></i>
                 </button>
-                <button onclick="toggleFavorite('${p.id}')" class="w-8 h-8 rounded-full ${isFav ? 'bg-rose-600 text-white' : 'bg-black/45 hover:bg-black/70 text-white'} backdrop-blur-md flex items-center justify-center transition-all shadow-sm active:scale-90" title="บันทึกที่ชอบ">
+                <button onclick="toggleFavorite('${p.id}')" class="w-8 h-8 rounded-full ${isFav ? 'bg-rose-600 text-white border border-rose-400' : 'capsule-bokeh hover:bg-slate-900/60'} flex items-center justify-center transition-all shadow-sm active:scale-90" title="บันทึกที่ชอบ">
                   <i data-lucide="heart" class="w-3.5 h-3.5 ${isFav ? 'fill-white stroke-none' : 'stroke-[1.5]'}"></i>
                 </button>
               </div>
@@ -860,7 +880,7 @@
 
               <!-- Bundle Select Button (for agents) -->
               ${(currentMode !== 'client' && currentMode !== 'trainee') ? `
-                <button onclick="event.stopPropagation(); toggleBundleItem('${p.id}')" class="absolute bottom-3 right-3 z-10 text-[10px] font-medium px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1 transition-all ${isSelected ? 'bg-siwasup-gold text-gray-950 ring-2 ring-white scale-105 font-bold' : 'bg-white/95 hover:bg-white text-gray-700 border border-gray-200/80 backdrop-blur-xs'}">
+                <button onclick="event.stopPropagation(); toggleBundleItem('${p.id}')" class="absolute bottom-3 right-3 z-10 text-[10px] font-medium px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1 transition-all ${isSelected ? 'bg-siwasup-gold text-gray-950 ring-2 ring-white scale-105 font-bold' : 'capsule-bokeh hover:bg-slate-900/60'}">
                   <i data-lucide="${isSelected ? 'check' : 'plus'}" class="w-3 h-3 stroke-[2]"></i>
                   <span>${isSelected ? 'ในมัดรวม' : 'มัดรวม'}</span>
                 </button>
@@ -879,9 +899,9 @@
 
               <!-- Commission Badge Bar (for Co-Broker agents) -->
               ${(currentMode === 'free_agent' || currentMode === 'employee') ? `
-                <div class="absolute top-12 left-3 capsule-glass-20 text-gray-900 font-medium px-2 py-0.5 text-[10px] shadow-xs flex items-center gap-1.5 rounded-full">
+                <div class="absolute top-12 left-3 capsule-bokeh text-white font-medium px-2.5 py-0.5 text-[10px] shadow-sm flex items-center gap-1.5">
                   <span class="w-4 h-4 rounded-full bg-[#990000] text-white font-black text-[10px] inline-flex items-center justify-center shadow-xs leading-none">฿</span>
-                  <span>${comLabel}: <strong class="text-[#990000] font-bold">${comAmount || 'ตามผลงาน'}</strong></span>
+                  <span>${comLabel}: <strong class="text-amber-300 font-bold">${comAmount || 'ตามผลงาน'}</strong></span>
                 </div>
               ` : ''}
             </div>
