@@ -1001,6 +1001,130 @@
       </div>
     </div>
 
+    <!-- 👤 My Profile & Scorecard Modal -->
+    <div id="modal-my-profile" class="hidden modal-backdrop !items-center !p-3">
+      <div class="modal-card max-w-md space-y-3.5 max-h-[92vh] overflow-y-auto no-scrollbar !p-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+          <div class="flex items-center gap-2">
+            <span class="icon-circle w-7 h-7 bg-amber-500 text-white"><i data-lucide="user-check" class="w-4 h-4 stroke-[1.5]"></i></span>
+            <div>
+              <h3 class="font-bold text-sm sm:text-base text-gray-900 leading-tight">โปรไฟล์ตัวแทน & กระเป๋าคะแนน</h3>
+              <p class="text-[10px] text-gray-500">Siwasup Co-Broker Agent Scorecard</p>
+            </div>
+          </div>
+          <button onclick="closeMyProfileModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-lg font-bold">&times;</button>
+        </div>
+
+        <!-- Identity Switcher Dropdown (Select Any Agent) -->
+        <div class="bg-gray-50 p-2 rounded-xl border border-gray-200 flex items-center justify-between text-xs">
+          <label class="text-[11px] font-medium text-gray-600 flex items-center gap-1 shrink-0">
+            <i data-lucide="users" class="w-3.5 h-3.5 text-gray-500"></i>
+            <span>สลับตัวแทน:</span>
+          </label>
+          <select id="profile-agent-switcher" onchange="switchMyAgentProfile(this.value)" class="border border-gray-200 rounded-lg p-1 text-xs bg-white font-bold text-gray-800 outline-none focus:ring-1 focus:ring-amber-500 ml-2 flex-1">
+            <!-- Injected via JS -->
+          </select>
+        </div>
+
+        <!-- Profile Hero Card -->
+        <div class="bg-gradient-to-br from-amber-50/80 via-white to-red-50/40 p-3.5 rounded-2xl border border-amber-200/80 relative shadow-2xs space-y-3">
+          <div class="flex items-center gap-3">
+            <div id="profile-avatar-circle" class="w-14 h-14 rounded-2xl bg-siwasup-gold text-gray-950 font-black text-lg flex items-center justify-center shadow-xs border-2 border-white shrink-0">
+              S22
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span id="profile-nickname" class="font-black text-base text-gray-900">เจ็ม</span>
+                <span id="profile-code-pill" class="text-[10px] font-mono font-bold bg-gray-900 text-white px-2 py-0.5 rounded-full">S22</span>
+                <span id="profile-tier-badge" class="text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 rounded-full">🥇 Gold Agent</span>
+              </div>
+              <div id="profile-fullname" class="text-xs text-gray-600 truncate mt-0.5">นางสาวกันยาวีร์ กำธรศิริวัฒน์</div>
+              <div id="profile-start-date" class="text-[10px] text-gray-400 mt-0.5">เริ่มงาน: 8 มีนาคม 2566</div>
+            </div>
+          </div>
+
+          <!-- Contact Details Grid -->
+          <div class="grid grid-cols-2 gap-1.5 text-[11px] pt-1 border-t border-amber-100/80">
+            <div class="flex items-center gap-1.5 text-gray-700 bg-white/70 p-1.5 rounded-lg border border-amber-100/60 truncate">
+              <i data-lucide="phone" class="w-3 h-3 text-emerald-600 shrink-0"></i>
+              <span id="profile-phone" class="font-mono font-bold truncate">06-2396-5161</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-gray-700 bg-white/70 p-1.5 rounded-lg border border-amber-100/60 truncate">
+              <i data-lucide="message-circle" class="w-3 h-3 text-emerald-600 shrink-0"></i>
+              <span id="profile-line" class="truncate font-medium">@siwasup</span>
+            </div>
+          </div>
+
+          <!-- Tier Progress Bar -->
+          <div class="space-y-1 pt-1 border-t border-amber-100/80">
+            <div class="flex justify-between items-center text-[10.5px]">
+              <span class="font-bold text-gray-700 flex items-center gap-1">
+                <span>เลื่อนสู่</span>
+                <span id="profile-next-tier-name" class="text-purple-700 font-bold">💎 Diamond Master</span>
+              </span>
+              <span id="profile-tier-progress-text" class="font-mono text-gray-500 font-bold">765 / 1,000 แต้ม</span>
+            </div>
+            <div class="w-full bg-gray-200/80 rounded-full h-2 overflow-hidden shadow-inner">
+              <div id="profile-tier-progress-bar" class="bg-gradient-to-r from-amber-500 to-purple-600 h-2 rounded-full transition-all duration-500" style="width: 76.5%;"></div>
+            </div>
+            <p id="profile-tier-perk" class="text-[9.5px] text-gray-500 italic">สิทธิพิเศษ: สิทธิ์จองทรัพย์ Hot Deals ล่วงหน้า 24 ชม.</p>
+          </div>
+        </div>
+
+        <!-- 2-Track Points Scorecard Grid -->
+        <div class="grid grid-cols-2 gap-2 text-center text-xs">
+          <!-- Activity Track -->
+          <div class="bg-emerald-50/70 p-2.5 rounded-xl border border-emerald-200/80 space-y-0.5">
+            <div class="text-[10px] text-emerald-700 font-bold flex items-center justify-center gap-1">
+              <span>🎪 คะแนนกิจกรรม</span>
+            </div>
+            <div id="profile-activity-pts" class="text-xl font-black text-emerald-800 font-mono">145</div>
+            <div class="text-[9px] text-emerald-600">ประชุม / ไวนิล / แชร์</div>
+          </div>
+
+          <!-- Performance Track -->
+          <div class="bg-blue-50/70 p-2.5 rounded-xl border border-blue-200/80 space-y-0.5">
+            <div class="text-[10px] text-blue-700 font-bold flex items-center justify-center gap-1">
+              <span>💰 คะแนนผลงาน</span>
+            </div>
+            <div id="profile-perf-pts" class="text-xl font-black text-blue-800 font-mono">620</div>
+            <div class="text-[9px] text-blue-600">ฝากทรัพย์ / จอง / ปิดโอน</div>
+          </div>
+        </div>
+
+        <!-- Total Points Big Pill -->
+        <div class="bg-gradient-to-r from-[#800000] via-[#990000] to-[#730000] text-white p-2.5 rounded-xl shadow-xs flex items-center justify-between px-3">
+          <div class="flex items-center gap-2">
+            <i data-lucide="award" class="w-5 h-5 text-amber-300"></i>
+            <div>
+              <div class="text-[10px] text-red-200">คะแนนสะสมรวมทั้งหมด</div>
+              <div class="font-bold text-xs">จัดอันดับใน Leaderboard</div>
+            </div>
+          </div>
+          <div id="profile-total-pts" class="text-2xl font-black font-mono text-amber-300">765</div>
+        </div>
+
+        <!-- Quick Action Buttons -->
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <button type="button" onclick="closeMyProfileModal(); openMeetingCheckinModal();" class="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-bold py-2 px-2 rounded-xl text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+            <i data-lucide="qr-code" class="w-3.5 h-3.5 text-amber-600"></i>
+            <span>เช็คชื่อเข้าประชุม (+10)</span>
+          </button>
+          <button type="button" onclick="closeMyProfileModal(); openVinylProofModal();" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold py-2 px-2 rounded-xl text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+            <i data-lucide="camera" class="w-3.5 h-3.5 text-emerald-600"></i>
+            <span>ส่งภาพติดป้าย GPS (+15)</span>
+          </button>
+        </div>
+
+        <!-- View Full Leaderboard Link -->
+        <button type="button" onclick="closeMyProfileModal(); openAgentLeaderboardModal();" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95">
+          <i data-lucide="trophy" class="w-3.5 h-3.5 text-amber-600"></i>
+          <span>ดูอันดับในทำเนียบตัวแทน (Leaderboard 125)</span>
+        </button>
+      </div>
+    </div>
+
     <!-- Copy Share Toast -->
     <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-4 py-2 rounded-full shadow-lg opacity-0 transition-opacity pointer-events-none z-50">
       ก๊อปปี้เรียบร้อย!
