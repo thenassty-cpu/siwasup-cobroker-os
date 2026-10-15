@@ -386,9 +386,9 @@
 
   </div>
 
-  <script src="modals.js?v=20261015-1350"></script>
-  <script src="vinyl_generator.js?v=20261015-1350"></script>
-  <script src="siwasup_all_properties.js?v=20261015-1350"></script>
+  <script src="modals.js?v=20261015-1358"></script>
+  <script src="vinyl_generator.js?v=20261015-1358"></script>
+  <script src="siwasup_all_properties.js?v=20261015-1358"></script>
   <script>
     let currentMode = 'free_agent';
     let currentCategory = 'all';
@@ -1447,7 +1447,8 @@
       const shareModalCard = document.getElementById('share-modal-card');
       const toggleText = document.getElementById('qr-toggle-text');
       if (desktopPanel) {
-        desktopPanel.style.display = 'none';
+        desktopPanel.classList.remove('max-w-[260px]', 'opacity-100', 'pointer-events-auto');
+        desktopPanel.classList.add('max-w-0', 'opacity-0', 'pointer-events-none');
       }
       if (shareModalCard) {
         shareModalCard.classList.remove('md:max-w-2xl');
@@ -1519,11 +1520,13 @@
       
       // If desktop/tablet and desktop panel exists in DOM
       if (isDesktop && desktopPanel) {
-        const isHidden = desktopPanel.style.display === 'none' || getComputedStyle(desktopPanel).display === 'none';
+        const isCollapsed = desktopPanel.classList.contains('max-w-0');
         
-        if (isHidden) {
+        if (isCollapsed) {
           updateShareUrls();
-          desktopPanel.style.display = 'flex';
+          // Expand card and slide drawer simultaneously with matching transitions
+          desktopPanel.classList.remove('max-w-0', 'opacity-0', 'pointer-events-none');
+          desktopPanel.classList.add('max-w-[260px]', 'opacity-100', 'pointer-events-auto');
           if (shareModalCard) {
             shareModalCard.classList.remove('md:max-w-md');
             shareModalCard.classList.add('md:max-w-2xl');
@@ -1531,7 +1534,9 @@
           if (toggleText) toggleText.textContent = "ซ่อน QR";
           if (window.lucide) { lucide.createIcons(); }
         } else {
-          desktopPanel.style.display = 'none';
+          // Collapse card and slide drawer back smoothly
+          desktopPanel.classList.remove('max-w-[260px]', 'opacity-100', 'pointer-events-auto');
+          desktopPanel.classList.add('max-w-0', 'opacity-0', 'pointer-events-none');
           if (shareModalCard) {
             shareModalCard.classList.remove('md:max-w-2xl');
             shareModalCard.classList.add('md:max-w-md');

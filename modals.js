@@ -151,31 +151,33 @@
             </div>
           </div>
 
-          <!-- Right Column: Desktop/Tablet Side QR Panel -->
-          <div id="desktop-qr-panel" style="display: none;" class="w-56 flex-col items-center justify-between p-3 bg-gradient-to-b from-amber-50/70 to-slate-50 border border-amber-200/80 rounded-xl text-center self-stretch animate-fadeIn">
-            <div class="w-full">
-              <div class="text-[11px] font-bold text-gray-800 mb-1.5 flex items-center justify-center gap-1">
-                <i data-lucide="qr-code" class="w-3 h-3 text-amber-600"></i>
-                <span>QR ป้ายหน้าบ้าน</span>
+          <!-- Right Column: Desktop/Tablet Side QR Panel (Smooth Sliding Drawer) -->
+          <div id="desktop-qr-panel" class="hidden md:flex flex-col transition-all duration-300 ease-out overflow-hidden max-w-0 opacity-0 pointer-events-none self-stretch">
+            <div class="w-56 shrink-0 h-full flex flex-col items-center justify-between p-3 bg-gradient-to-b from-amber-50/70 to-slate-50 border border-amber-200/80 rounded-xl text-center ml-3">
+              <div class="w-full">
+                <div class="text-[11px] font-bold text-gray-800 mb-1.5 flex items-center justify-center gap-1">
+                  <i data-lucide="qr-code" class="w-3 h-3 text-amber-600"></i>
+                  <span>QR ป้ายหน้าบ้าน</span>
+                </div>
+                <div class="bg-white p-2 rounded-lg border border-gray-200 shadow-xs mb-1.5 inline-block">
+                  <img id="qr-image-desktop" src="" alt="QR Code" class="w-32 h-32 object-contain">
+                </div>
+                <div>
+                  <span class="inline-block text-[9px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-medium border border-emerald-200">
+                    ✓ ล็อกสิทธิ์ 60 วัน
+                  </span>
+                </div>
               </div>
-              <div class="bg-white p-2 rounded-lg border border-gray-200 shadow-xs mb-1.5 inline-block">
-                <img id="qr-image-desktop" src="" alt="QR Code" class="w-32 h-32 object-contain">
+              <div class="w-full space-y-1.5 mt-2">
+                <button onclick="downloadQrImage()" class="w-full bg-[#1E749C] hover:bg-[#185e7f] text-white font-medium py-1.5 px-2 rounded text-[10px] shadow-2xs flex items-center justify-center gap-1 transition-all active:scale-95">
+                  <i data-lucide="download" class="w-2.5 h-2.5"></i>
+                  <span>บันทึกรูป QR</span>
+                </button>
+                <button onclick="copyChannelLink('qr_sign')" class="w-full bg-white hover:bg-slate-100 text-gray-700 border border-gray-300 font-medium py-1.5 px-2 rounded text-[10px] shadow-2xs flex items-center justify-center gap-1 transition-all active:scale-95">
+                  <i data-lucide="copy" class="w-2.5 h-2.5"></i>
+                  <span>คัดลอกลิงก์ QR</span>
+                </button>
               </div>
-              <div>
-                <span class="inline-block text-[9px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-medium border border-emerald-200">
-                  ✓ ล็อกสิทธิ์ 60 วัน
-                </span>
-              </div>
-            </div>
-            <div class="w-full space-y-1.5 mt-2">
-              <button onclick="downloadQrImage()" class="w-full bg-[#1E749C] hover:bg-[#185e7f] text-white font-medium py-1.5 px-2 rounded text-[10px] shadow-2xs flex items-center justify-center gap-1 transition-all active:scale-95">
-                <i data-lucide="download" class="w-2.5 h-2.5"></i>
-                <span>บันทึกรูป QR</span>
-              </button>
-              <button onclick="copyChannelLink('qr_sign')" class="w-full bg-white hover:bg-slate-100 text-gray-700 border border-gray-300 font-medium py-1.5 px-2 rounded text-[10px] shadow-2xs flex items-center justify-center gap-1 transition-all active:scale-95">
-                <i data-lucide="copy" class="w-2.5 h-2.5"></i>
-                <span>คัดลอกลิงก์ QR</span>
-              </button>
             </div>
           </div>
         </div>
