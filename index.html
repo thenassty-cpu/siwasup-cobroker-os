@@ -879,8 +879,8 @@
 
               <!-- Commission Badge Bar (for Co-Broker agents) -->
               ${(currentMode === 'free_agent' || currentMode === 'employee') ? `
-                <div class="absolute top-12 left-3 capsule-glass-20 text-gray-900 font-medium px-2.5 py-0.5 text-[10px] shadow-xs flex items-center gap-1 rounded-full">
-                  <i data-lucide="coins" class="w-3 h-3 text-[#990000]"></i>
+                <div class="absolute top-12 left-3 capsule-glass-20 text-gray-900 font-medium px-2 py-0.5 text-[10px] shadow-xs flex items-center gap-1.5 rounded-full">
+                  <span class="w-4 h-4 rounded-full bg-[#990000] text-white font-black text-[10px] inline-flex items-center justify-center shadow-xs leading-none">฿</span>
                   <span>${comLabel}: <strong class="text-[#990000] font-bold">${comAmount || 'ตามผลงาน'}</strong></span>
                 </div>
               ` : ''}
@@ -910,18 +910,18 @@
                 </div>
               </div>
 
-              <!-- Homerun 2-Row Financial Info -->
+              <!-- Homerun 2-Row Financial Info with Bold Thai Baht (฿) Circles -->
               <div class="pt-2.5 border-t border-slate-100 space-y-1 mt-2">
                 <div class="flex items-center justify-between text-xs">
-                  <span class="text-slate-500 flex items-center gap-1">
-                    <i data-lucide="circle-dollar-sign" class="w-3.5 h-3.5 text-slate-400"></i>
+                  <span class="text-slate-500 flex items-center gap-1.5">
+                    <span class="w-4 h-4 rounded-full border border-slate-400 text-slate-600 font-bold text-[11px] inline-flex items-center justify-center leading-none select-none">฿</span>
                     <span>${currentMode === 'owner' ? 'ราคาตั้งขาย' : 'ราคาก่อนต่อรอง'}</span>
                   </span>
                   <span class="text-base font-bold text-[#1E749C] tracking-tight">฿${formatPriceClean(p.price)}</span>
                 </div>
                 <div class="flex items-center justify-between text-xs">
-                  <span class="text-slate-500 flex items-center gap-1">
-                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-slate-400"></i>
+                  <span class="text-slate-500 flex items-center gap-1.5">
+                    <span class="w-4 h-4 rounded-full border border-slate-400 text-slate-600 font-bold text-[11px] inline-flex items-center justify-center leading-none select-none">฿</span>
                     <span>หลักประกันเพื่อต่อรองราคา</span>
                   </span>
                   <span class="text-base font-bold text-[#1E749C] tracking-tight">฿${calcDeposit(p.price)}</span>

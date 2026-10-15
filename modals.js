@@ -680,14 +680,14 @@
         <div class="bg-gradient-to-br from-slate-50 to-blue-50/30 p-3.5 rounded-2xl border border-blue-100/60 space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs text-slate-600 flex items-center gap-1.5">
-              <i data-lucide="circle-dollar-sign" class="w-4 h-4 text-blue-600"></i>
+              <span class="w-4 h-4 rounded-full border border-blue-400 text-blue-600 font-bold text-[11px] inline-flex items-center justify-center leading-none select-none">฿</span>
               <span>ราคาก่อนต่อรอง</span>
             </span>
             <span id="detail-price" class="text-lg font-black text-[#1E749C] tracking-tight">฿3,410,000</span>
           </div>
           <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/60">
             <span class="text-slate-500 flex items-center gap-1.5">
-              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-slate-400"></i>
+              <span class="w-4 h-4 rounded-full border border-slate-400 text-slate-600 font-bold text-[11px] inline-flex items-center justify-center leading-none select-none">฿</span>
               <span>หลักประกันเพื่อต่อรองราคา</span>
             </span>
             <span id="detail-deposit" class="font-bold text-slate-800">฿50,000</span>
