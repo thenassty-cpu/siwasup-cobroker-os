@@ -131,6 +131,12 @@
           </div>
         </div>
         <div class="flex items-center gap-1.5">
+          <!-- Toggle Filter Button on Header -->
+          <button onclick="toggleSearchDrawer()" id="btn-toggle-search" class="bg-black/25 hover:bg-black/45 text-white font-medium text-[10px] px-2.5 py-1 rounded-full border border-white/20 flex items-center gap-1 transition-all active:scale-95 shadow-2xs" title="เปิด/ปิดแผงค้นหา">
+            <i id="drawer-toggle-icon" data-lucide="sliders-horizontal" class="w-3 h-3"></i>
+            <span id="drawer-toggle-text">ตัวกรอง</span>
+          </button>
+
           <!-- Public Consignment Button (Gold 10% - Satin Architectural Gold Lead Magnet) -->
           <button onclick="openConsignModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold text-[10px] px-2.5 py-1 rounded-full shadow-xs flex items-center gap-1.5 transition-transform active:scale-95">
             <span class="icon-circle w-4 h-4"><i data-lucide="tag" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
@@ -140,97 +146,122 @@
         </div>
       </div>
 
-      <!-- Mode Switcher (Clean White 60% + Red 30% Active Selection) -->
-      <div class="bg-white px-3 py-2 border-b border-gray-100">
-        <div class="flex items-center justify-between text-xs mb-1.5">
-          <span class="font-medium text-gray-600 flex items-center gap-1.5 text-[11px]">
-            <span id="mode-icon" class="icon-circle w-4 h-4"><i data-lucide="crown" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>โหมด:</span>
-            <strong id="mode-text" class="text-[#990000] font-bold">เจ้าของ/แอดมิน (บัว & กูล)</strong>
-          </span>
-          <span class="text-[10px] text-gray-400 font-normal">สลับมุมมองสิทธิ์</span>
+      <!-- 🎛️ Collapsible Search & Mode Drawer (Can slide up/down on scroll or tap) -->
+      <div id="search-filter-drawer" class="transition-all duration-300 ease-in-out overflow-hidden max-h-[800px] opacity-100">
+        <!-- Mode Switcher (Clean White 60% + Red 30% Active Selection) -->
+        <div class="bg-white px-3 py-2 border-b border-gray-100">
+          <div class="flex items-center justify-between text-xs mb-1.5">
+            <span class="font-medium text-gray-600 flex items-center gap-1.5 text-[11px]">
+              <span id="mode-icon" class="icon-circle w-4 h-4"><i data-lucide="crown" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+              <span>โหมด:</span>
+              <strong id="mode-text" class="text-[#990000] font-bold">เจ้าของ/แอดมิน (บัว & กูล)</strong>
+            </span>
+            <span class="text-[10px] text-gray-400 font-normal">สลับมุมมองสิทธิ์</span>
+          </div>
+          <div class="grid grid-cols-5 gap-1 bg-gray-50 p-1 rounded-xl border border-gray-100 text-[10px]">
+            <button id="btn-owner-mode" onclick="setMode('owner')" class="py-1 font-bold rounded-lg transition-all bg-[#990000] text-white shadow-xs flex items-center justify-center gap-1">
+              <span class="icon-circle w-3.5 h-3.5"><i data-lucide="crown" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+              <span>เจ้าของ</span>
+            </button>
+            <button id="btn-freeagent-mode" onclick="setMode('free_agent')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1">
+              <span class="icon-circle w-3.5 h-3.5"><i data-lucide="briefcase" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+              <span>Free</span>
+            </button>
+            <button id="btn-employee-mode" onclick="setMode('employee')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1">
+              <span class="icon-circle w-3.5 h-3.5"><i data-lucide="building" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+              <span>พนักงาน</span>
+            </button>
+            <button id="btn-trainee-mode" onclick="setMode('trainee')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1">
+              <span class="icon-circle w-3.5 h-3.5"><i data-lucide="graduation-cap" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+              <span>ฝึกหัด</span>
+            </button>
+            <button id="btn-client-mode" onclick="setMode('client')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1">
+              <span class="icon-circle w-3.5 h-3.5"><i data-lucide="users" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+              <span>ลูกค้า</span>
+            </button>
+          </div>
         </div>
-        <div class="grid grid-cols-5 gap-1 bg-gray-50 p-1 rounded-xl border border-gray-100 text-[10px]">
-          <button id="btn-owner-mode" onclick="setMode('owner')" class="py-1 font-bold rounded-lg transition-all bg-[#990000] text-white shadow-xs flex items-center justify-center gap-1">
-            <span class="icon-circle w-3.5 h-3.5"><i data-lucide="crown" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>เจ้าของ</span>
-          </button>
-          <button id="btn-freeagent-mode" onclick="setMode('free_agent')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1">
-            <span class="icon-circle w-3.5 h-3.5"><i data-lucide="briefcase" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>Free</span>
-          </button>
-          <button id="btn-employee-mode" onclick="setMode('employee')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1">
-            <span class="icon-circle w-3.5 h-3.5"><i data-lucide="building" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>พนักงาน</span>
-          </button>
-          <button id="btn-trainee-mode" onclick="setMode('trainee')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1">
-            <span class="icon-circle w-3.5 h-3.5"><i data-lucide="graduation-cap" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>ฝึกหัด</span>
-          </button>
-          <button id="btn-client-mode" onclick="setMode('client')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1">
-            <span class="icon-circle w-3.5 h-3.5"><i data-lucide="users" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>ลูกค้า</span>
-          </button>
+
+        <!-- ⚡ Quick Filter Bar (White 60% Minimalist) -->
+        <div class="p-2.5 bg-white border-b border-gray-100 space-y-2 text-xs">
+          <!-- Search Keyword -->
+          <div class="relative">
+            <input type="text" id="search-input" oninput="applyAllFilters()" 
+                   placeholder="ค้นหา: ทำเล, โครงการ, รหัส NPA, #ผ่อนล้านละ3พัน..." 
+                   class="w-full bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl pl-8 pr-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700 transition-all">
+            <span class="absolute left-2.5 top-2 icon-circle w-4 h-4">
+              <i data-lucide="search" class="w-2.5 h-2.5 stroke-[1.5]"></i>
+            </span>
+            <button id="btn-clear-search" onclick="clearFilters()" class="hidden absolute right-2.5 top-1.5 text-gray-400 hover:text-gray-600 text-xs font-bold">&times;</button>
+          </div>
+
+          <!-- 4 Quick Dropdowns including Bank NPA Source -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[11px]">
+            <!-- สถาบัน/ธนาคาร NPA -->
+            <select id="filter-bank" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
+              <option value="all">ทุกสถาบัน/ธนาคาร</option>
+              <option value="Siwasup">ศิวาทรัพย์ (รีโนเวท)</option>
+              <option value="SAM">SAM (บสส.)</option>
+              <option value="SCB">SCB (ไทยพาณิชย์)</option>
+              <option value="KBANK">KBank (กสิกรไทย)</option>
+              <option value="TTB">TTB (ทีเอ็มบีธนชาต)</option>
+              <option value="KTB">KTB (กรุงไทย)</option>
+              <option value="GSB">GSB (ออมสิน)</option>
+            </select>
+
+            <!-- ทำเล -->
+            <select id="filter-location" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
+              <option value="all">ทุกทำเล</option>
+              <option value="บางใหญ่">บางใหญ่/นนทบุรี</option>
+              <option value="ลำลูกกา">ลำลูกกา/ปทุมธานี</option>
+              <option value="พระราม 9">รัชดา/พระราม 9</option>
+              <option value="บางนา">บางนา/สมุทรปราการ</option>
+              <option value="วิภาวดี">วิภาวดี/รัชโยธิน</option>
+              <option value="ลาดกระบัง">ลาดกระบัง/สุวินทวงศ์</option>
+              <option value="บางขุนเทียน">พระราม 2/บางขุนเทียน</option>
+            </select>
+
+            <!-- งบประมาณ -->
+            <select id="filter-budget" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
+              <option value="all">ทุกช่วงราคา</option>
+              <option value="under2m">ต่ำกว่า 2 ล้าน</option>
+              <option value="2to3.5m">2 - 3.5 ล้าน</option>
+              <option value="3.5to5m">3.5 - 5 ล้าน</option>
+              <option value="above5m">มากกว่า 5 ล้าน</option>
+            </select>
+
+            <!-- ประเภท -->
+            <select id="filter-category" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
+              <option value="all">ทุกประเภท</option>
+              <option value="ทาวน์โฮม">ทาวน์โฮม</option>
+              <option value="คอนโด">คอนโด</option>
+              <option value="บ้านเดี่ยว">บ้านเดี่ยว</option>
+              <option value="ที่ดิน">ที่ดิน</option>
+              <option value="อาคารพาณิชย์">อาคารพาณิชย์</option>
+            </select>
+          </div>
+
+          <!-- Subtle Collapse Handle Button -->
+          <div class="flex justify-center pt-1">
+            <button type="button" onclick="toggleSearchDrawer(false)" class="text-[10px] text-gray-500 hover:text-gray-800 flex items-center gap-1 bg-gray-100 hover:bg-gray-200 px-3 py-0.5 rounded-full transition-colors active:scale-95 shadow-2xs">
+              <i data-lucide="chevron-up" class="w-3 h-3"></i>
+              <span>ย่อแผงค้นหาเพื่อดูทรัพย์</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- ⚡ Quick Filter Bar (White 60% Minimalist) -->
-      <div class="p-2.5 bg-white border-b border-gray-100 space-y-2 text-xs">
-        <!-- Search Keyword -->
-        <div class="relative">
-          <input type="text" id="search-input" oninput="applyAllFilters()" 
-                 placeholder="ค้นหา: ทำเล, โครงการ, รหัส NPA, #ผ่อนล้านละ3พัน..." 
-                 class="w-full bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl pl-8 pr-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700 transition-all">
-          <span class="absolute left-2.5 top-2 icon-circle w-4 h-4">
-            <i data-lucide="search" class="w-2.5 h-2.5 stroke-[1.5]"></i>
+      <!-- 🔍 Slim Sticky Mini-Bar when collapsed (Tuck-in strip) -->
+      <div id="search-mini-bar" class="hidden px-3 py-1.5 bg-white/95 backdrop-blur-md border-b border-gray-100 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors shadow-2xs" onclick="toggleSearchDrawer(true)">
+        <div class="flex items-center gap-2 text-xs text-gray-600 truncate flex-1">
+          <span class="w-5 h-5 rounded-full bg-red-50 text-[#990000] flex items-center justify-center shrink-0 border border-red-100">
+            <i data-lucide="search" class="w-3 h-3"></i>
           </span>
-          <button id="btn-clear-search" onclick="clearFilters()" class="hidden absolute right-2.5 top-1.5 text-gray-400 hover:text-gray-600 text-xs font-bold">&times;</button>
+          <span id="search-mini-summary" class="truncate text-[11px] font-medium text-gray-700">ค้นหา: ทำเล, ธนาคาร, งบประมาณ...</span>
         </div>
-
-        <!-- 4 Quick Dropdowns including Bank NPA Source -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[11px]">
-          <!-- สถาบัน/ธนาคาร NPA -->
-          <select id="filter-bank" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
-            <option value="all">ทุกสถาบัน/ธนาคาร</option>
-            <option value="Siwasup">ศิวาทรัพย์ (รีโนเวท)</option>
-            <option value="SAM">SAM (บสส.)</option>
-            <option value="SCB">SCB (ไทยพาณิชย์)</option>
-            <option value="KBANK">KBank (กสิกรไทย)</option>
-            <option value="TTB">TTB (ทีเอ็มบีธนชาต)</option>
-            <option value="KTB">KTB (กรุงไทย)</option>
-            <option value="GSB">GSB (ออมสิน)</option>
-          </select>
-
-          <!-- ทำเล -->
-          <select id="filter-location" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
-            <option value="all">ทุกทำเล</option>
-            <option value="บางใหญ่">บางใหญ่/นนทบุรี</option>
-            <option value="ลำลูกกา">ลำลูกกา/ปทุมธานี</option>
-            <option value="พระราม 9">รัชดา/พระราม 9</option>
-            <option value="บางนา">บางนา/สมุทรปราการ</option>
-            <option value="วิภาวดี">วิภาวดี/รัชโยธิน</option>
-            <option value="ลาดกระบัง">ลาดกระบัง/สุวินทวงศ์</option>
-            <option value="บางขุนเทียน">พระราม 2/บางขุนเทียน</option>
-          </select>
-
-          <!-- งบประมาณ -->
-          <select id="filter-budget" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
-            <option value="all">ทุกช่วงราคา</option>
-            <option value="under2m">ต่ำกว่า 2 ล้าน</option>
-            <option value="2to3.5m">2 - 3.5 ล้าน</option>
-            <option value="3.5to5m">3.5 - 5 ล้าน</option>
-            <option value="above5m">มากกว่า 5 ล้าน</option>
-          </select>
-
-          <!-- ประเภท -->
-          <select id="filter-category" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
-            <option value="all">ทุกประเภท</option>
-            <option value="ทาวน์โฮม">ทาวน์โฮม</option>
-            <option value="คอนโด">คอนโด</option>
-            <option value="บ้านเดี่ยว">บ้านเดี่ยว</option>
-            <option value="ที่ดิน">ที่ดิน</option>
-            <option value="อาคารพาณิชย์">อาคารพาณิชย์</option>
-          </select>
+        <div class="flex items-center gap-1 text-[11px] text-[#990000] font-bold shrink-0 pl-2">
+          <span>แตะเพื่อค้นหา</span>
+          <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
         </div>
       </div>
     </header>
@@ -614,7 +645,84 @@
       if (modal) modal.classList.add('hidden');
     }
 
+    // 🎛️ Collapsible Search Drawer & Smart Mobile Scroll Logic
+    let isSearchDrawerOpen = true;
+
+    function toggleSearchDrawer(forceOpen = null) {
+      const drawer = document.getElementById('search-filter-drawer');
+      const miniBar = document.getElementById('search-mini-bar');
+      const toggleIcon = document.getElementById('drawer-toggle-icon');
+      const toggleText = document.getElementById('drawer-toggle-text');
+
+      if (forceOpen !== null) {
+        isSearchDrawerOpen = forceOpen;
+      } else {
+        isSearchDrawerOpen = !isSearchDrawerOpen;
+      }
+
+      if (isSearchDrawerOpen) {
+        if (drawer) {
+          drawer.classList.remove('hidden');
+          setTimeout(() => {
+            drawer.style.maxHeight = '800px';
+            drawer.style.opacity = '1';
+          }, 10);
+        }
+        if (miniBar) miniBar.classList.add('hidden');
+        if (toggleIcon) toggleIcon.setAttribute('data-lucide', 'chevron-up');
+        if (toggleText) toggleText.textContent = 'ซ่อนตัวกรอง';
+      } else {
+        if (drawer) {
+          drawer.style.maxHeight = '0px';
+          drawer.style.opacity = '0';
+          setTimeout(() => {
+            if (!isSearchDrawerOpen) drawer.classList.add('hidden');
+          }, 300);
+        }
+        if (miniBar) miniBar.classList.remove('hidden');
+        if (toggleIcon) toggleIcon.setAttribute('data-lucide', 'sliders-horizontal');
+        if (toggleText) toggleText.textContent = 'ตัวกรอง';
+      }
+      updateMiniBarSummary();
+      if (window.lucide) { lucide.createIcons(); }
+    }
+
+    function updateMiniBarSummary() {
+      const summaryEl = document.getElementById('search-mini-summary');
+      if (!summaryEl) return;
+      const q = document.getElementById('search-input')?.value.trim();
+      const bank = document.getElementById('filter-bank')?.value;
+      const cat = document.getElementById('filter-category')?.value;
+      const budget = document.getElementById('filter-budget')?.value;
+      
+      let parts = [];
+      if (q) parts.push(`"${q}"`);
+      if (bank && bank !== 'all') parts.push(bank);
+      if (cat && cat !== 'all') parts.push(cat);
+      if (budget && budget !== 'all') {
+        const bMap = { 'under2m': '< 2ลบ.', '2to3.5m': '2-3.5ลบ.', '3.5to5m': '3.5-5ลบ.', 'above5m': '> 5ลบ.' };
+        parts.push(bMap[budget] || budget);
+      }
+
+      if (parts.length > 0) {
+        summaryEl.innerHTML = `<span class="text-[#990000] font-bold">ตัวกรอง: ${parts.join(' • ')}</span>`;
+      } else {
+        summaryEl.textContent = 'ค้นหา: ทำเล, ธนาคาร, งบประมาณ, ประเภท...';
+      }
+    }
+
+    // Auto-collapse when scrolling down on mobile (threshold 100px)
+    let lastScrollY = window.scrollY;
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > 100 && currentScrollY > lastScrollY + 15 && isSearchDrawerOpen) {
+        toggleSearchDrawer(false);
+      }
+      lastScrollY = currentScrollY;
+    }, { passive: true });
+
     function applyAllFilters() {
+      updateMiniBarSummary();
       renderProperties();
     }
 
@@ -624,6 +732,7 @@
       document.getElementById('filter-location').value = 'all';
       document.getElementById('filter-budget').value = 'all';
       document.getElementById('filter-category').value = 'all';
+      updateMiniBarSummary();
       applyAllFilters();
     }
 
