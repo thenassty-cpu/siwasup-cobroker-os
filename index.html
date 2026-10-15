@@ -185,7 +185,10 @@
               <span>โหมด:</span>
               <strong id="mode-text" class="text-[#990000] font-bold">เจ้าของ/แอดมิน (บัว & กูล)</strong>
             </span>
-            <span class="text-[10px] text-gray-400 font-normal">สลับมุมมองสิทธิ์</span>
+            <button type="button" onclick="openAgentLeaderboardModal()" class="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 shadow-2xs transition-all active:scale-95" title="ทำเนียบตัวแทน 125 ท่าน & ตารางคะแนน">
+              <i data-lucide="trophy" class="w-3 h-3 text-amber-600"></i>
+              <span>ทำเนียบตัวแทน (125)</span>
+            </button>
           </div>
           <div class="grid grid-cols-5 gap-1 bg-gray-50 p-1 rounded-xl border border-gray-100 text-[10px]">
             <button id="btn-owner-mode" onclick="setMode('owner')" class="py-1 font-bold rounded-lg transition-all bg-[#990000] text-white shadow-xs flex items-center justify-center gap-1">
@@ -386,9 +389,10 @@
 
   </div>
 
-  <script src="modals.js?v=20261015-1406"></script>
-  <script src="vinyl_generator.js?v=20261015-1406"></script>
-  <script src="siwasup_all_properties.js?v=20261015-1406"></script>
+  <script src="siwasup_agents.js?v=20261015-1630"></script>
+  <script src="modals.js?v=20261015-1630"></script>
+  <script src="vinyl_generator.js?v=20261015-1630"></script>
+  <script src="siwasup_all_properties.js?v=20261015-1630"></script>
   <script>
     let currentMode = 'free_agent';
     let currentCategory = 'all';
@@ -1495,17 +1499,22 @@
     function copyChannelLink(channel) {
       if (!currentShareProp) return;
       const refInput = document.getElementById('agent-ref-input');
-      const rawRef = refInput ? refInput.value.trim() : 'AG-บัวรา';
-      const ref = encodeURIComponent(rawRef || 'AG-บัวรา');
+      const rawRef = refInput ? refInput.value.trim() : 'S22';
+      const ref = encodeURIComponent(rawRef || 'S22');
       const targetUrl = `${getBaseUrl()}?view=client&prop=${currentShareProp.id}&ref=${ref}&src=${channel}`;
       
+      // Automated Point Trigger: Smart Share Activity (+5 points)
+      if (window.SiwasupAgents && typeof window.SiwasupAgents.award === 'function' && rawRef) {
+        window.SiwasupAgents.award(rawRef, 'smart_share_click', { channel: channel, propId: currentShareProp.id });
+      }
+
       navigator.clipboard.writeText(targetUrl).then(() => {
         const channelThai = channel === 'facebook' ? 'Facebook' 
                           : channel === 'tiktok' ? 'TikTok' 
                           : channel === 'line' ? 'LINE' 
                           : channel === 'qr_sign' ? 'QR Code' 
                           : 'ทั่วไป';
-        showToast(`✅ คัดลอกลิงก์สำหรับ ${channelThai} แล้ว (ล็อกสิทธิ์ ${rawRef || 'AG-บัวรา'})`);
+        showToast(`✅ คัดลอกลิงก์สำหรับ ${channelThai} แล้ว (ล็อกสิทธิ์ ${rawRef} • +5 แต้มกิจกรรม)`);
         closeShareModal();
       }).catch(() => {
         showToast(`ลิงก์พร้อมใช้: ${targetUrl}`);
@@ -1605,6 +1614,384 @@
           showToast('เปิดรูป QR ในแท็บใหม่แล้ว สามารถกดบันทึกรูปได้เลย');
         });
     }
+
+    // ==============================================================================
+    // 🏆 AGENT SCORING, AUTOCOMPLETE & LEADERBOARD CONTROLLERS
+    // ==============================================================================
+
+    let activeLeaderboardTrack = 'total'; // 'total', 'activity', 'performance'
+    let currentLeaderboardQuery = '';
+
+    // 1. Smart Share Agent Autocomplete
+    function handleAgentAutocomplete(val) {
+      const dropdown = document.getElementById('agent-autocomplete-dropdown');
+      if (!dropdown || !window.SiwasupAgents) return;
+
+      const results = window.SiwasupAgents.search(val, 8);
+      if (!results || results.length === 0) {
+        dropdown.innerHTML = `<div class="px-3 py-2 text-[11px] text-gray-400 text-center">ไม่พบรหัสตัวแทน "${val}"</div>`;
+        dropdown.classList.remove('hidden');
+        return;
+      }
+
+      dropdown.innerHTML = results.map(a => `
+        <div onclick="selectAgent('${a.code}')" class="px-3 py-1.5 hover:bg-amber-50 cursor-pointer flex items-center justify-between border-b border-gray-50 last:border-0 transition-colors">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-700 font-bold text-[10px] flex items-center justify-center shrink-0 border border-slate-200">${a.code}</span>
+            <div class="truncate">
+              <span class="font-bold text-gray-900 text-xs">${a.nickname || a.name}</span>
+              <span class="text-[10px] text-gray-400 block truncate">${a.name}</span>
+            </div>
+          </div>
+          <div class="text-right shrink-0 ml-2">
+            <span class="text-[10px] font-bold text-amber-700">${a.tierIcon} ${a.totalPoints} แต้ม</span>
+          </div>
+        </div>
+      `).join('');
+      dropdown.classList.remove('hidden');
+    }
+
+    function selectAgent(code) {
+      const input = document.getElementById('agent-ref-input');
+      const dropdown = document.getElementById('agent-autocomplete-dropdown');
+      const badge = document.getElementById('agent-tier-badge');
+      if (input) input.value = code;
+      if (dropdown) dropdown.classList.add('hidden');
+
+      if (window.SiwasupAgents) {
+        const agent = window.SiwasupAgents.find(code);
+        if (agent && badge) {
+          badge.textContent = `${agent.tierIcon} ${agent.code} - ${agent.nickname || agent.name}`;
+        }
+      }
+      updateShareUrls();
+      if (typeof showToast === 'function') showToast(`เลือกรหัสตัวแทน [${code}] เรียบร้อย`);
+    }
+
+    function clearAgentInput() {
+      const input = document.getElementById('agent-ref-input');
+      if (input) {
+        input.value = '';
+        input.focus();
+        handleAgentAutocomplete('');
+      }
+    }
+
+    // 2. Vinyl Sign Agent Autocomplete
+    function handleVinylAgentAutocomplete(val) {
+      const dropdown = document.getElementById('vinyl-agent-autocomplete-dropdown');
+      if (!dropdown || !window.SiwasupAgents) return;
+
+      const results = window.SiwasupAgents.search(val, 6);
+      if (!results || results.length === 0) {
+        dropdown.innerHTML = `<div class="px-3 py-2 text-[11px] text-gray-400 text-center">ไม่พบรหัสตัวแทน</div>`;
+        dropdown.classList.remove('hidden');
+        return;
+      }
+
+      dropdown.innerHTML = results.map(a => `
+        <div onclick="selectVinylAgent('${a.code}')" class="px-3 py-1.5 hover:bg-amber-50 cursor-pointer flex items-center justify-between border-b border-gray-50 last:border-0 transition-colors">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="w-5 h-5 rounded-full bg-amber-100 text-amber-800 font-bold text-[9px] flex items-center justify-center shrink-0">${a.code}</span>
+            <div class="truncate">
+              <span class="font-bold text-gray-900 text-xs">${a.nickname || a.name}</span>
+              ${a.phone ? `<span class="text-[9.5px] text-emerald-600 ml-1">(${a.phone})</span>` : ''}
+            </div>
+          </div>
+          <span class="text-[10px] font-bold text-amber-700">${a.tierIcon}</span>
+        </div>
+      `).join('');
+      dropdown.classList.remove('hidden');
+    }
+
+    function selectVinylAgent(code) {
+      const searchInput = document.getElementById('vinyl-agent-search');
+      const dropdown = document.getElementById('vinyl-agent-autocomplete-dropdown');
+      const tag = document.getElementById('vinyl-agent-tier-tag');
+      const phoneInput = document.getElementById('vinyl-phone');
+      const contactInput = document.getElementById('vinyl-contact-name');
+
+      if (searchInput) searchInput.value = code;
+      if (dropdown) dropdown.classList.add('hidden');
+
+      if (window.SiwasupAgents) {
+        const agent = window.SiwasupAgents.find(code);
+        if (agent) {
+          if (tag) tag.textContent = `${agent.tierIcon} ${agent.tierName}`;
+          if (phoneInput && agent.phone) phoneInput.value = agent.phone;
+          if (contactInput) {
+            const lineText = agent.lineId ? agent.lineId : '@siwasup';
+            contactInput.value = `${agent.nickname || agent.name} (LINE: ${lineText})`;
+          }
+          localStorage.setItem('siwasup_my_agent_ref', code);
+          renderVinylCanvas();
+        }
+      }
+    }
+
+    function clearVinylAgentSearch() {
+      const searchInput = document.getElementById('vinyl-agent-search');
+      if (searchInput) {
+        searchInput.value = '';
+        searchInput.focus();
+        handleVinylAgentAutocomplete('');
+      }
+    }
+
+    // 3. Leaderboard Modal & Filtering
+    function openAgentLeaderboardModal() {
+      const modal = document.getElementById('agent-leaderboard-modal');
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      if (window.lucide) { lucide.createIcons(); }
+      renderLeaderboard(activeLeaderboardTrack);
+    }
+
+    function closeAgentLeaderboardModal() {
+      const modal = document.getElementById('agent-leaderboard-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function filterLeaderboard(track) {
+      activeLeaderboardTrack = track;
+      ['total', 'activity', 'performance'].forEach(t => {
+        const btn = document.getElementById(`lb-tab-${t}`);
+        if (btn) {
+          if (t === track) {
+            btn.className = "py-1 px-2.5 rounded-md font-bold bg-white text-gray-900 shadow-2xs transition-all";
+          } else {
+            btn.className = "py-1 px-2 rounded-md font-medium text-gray-600 hover:text-gray-900 transition-all";
+          }
+        }
+      });
+      renderLeaderboard(track);
+    }
+
+    function searchLeaderboard(query) {
+      currentLeaderboardQuery = query.trim().toLowerCase();
+      renderLeaderboard(activeLeaderboardTrack);
+    }
+
+    function renderLeaderboard(track = 'total') {
+      if (!window.SiwasupAgents) return;
+      let list = window.SiwasupAgents.getLeaderboard(track, 125);
+
+      if (currentLeaderboardQuery) {
+        list = list.filter(a => 
+          a.code.toLowerCase().includes(currentLeaderboardQuery) ||
+          (a.nickname && a.nickname.toLowerCase().includes(currentLeaderboardQuery)) ||
+          (a.name && a.name.toLowerCase().includes(currentLeaderboardQuery))
+        );
+      }
+
+      // Update count label
+      const countLabel = document.getElementById('lb-count-label');
+      if (countLabel) countLabel.textContent = `${list.length} ตัวแทน`;
+
+      // Render Top 3 Podium Cards (only if no search active)
+      const podiumEl = document.getElementById('leaderboard-podium');
+      if (podiumEl) {
+        if (!currentLeaderboardQuery && list.length >= 3) {
+          const top1 = list[0];
+          const top2 = list[1];
+          const top3 = list[2];
+          podiumEl.innerHTML = `
+            <!-- 2nd Place -->
+            <div class="bg-gradient-to-b from-slate-50 to-gray-100 p-2 sm:p-2.5 rounded-xl border border-slate-200 relative order-1">
+              <span class="absolute -top-2 left-1/2 -translate-x-1/2 bg-slate-200 text-slate-800 text-[10px] font-black px-1.5 py-0.2 rounded-full border border-slate-300">#2 🥈</span>
+              <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 font-black text-xs flex items-center justify-center mx-auto mb-1 border border-slate-300 mt-1">${top2.code}</div>
+              <div class="font-bold text-xs text-gray-900 truncate">${top2.nickname || top2.name}</div>
+              <div class="text-[9.5px] text-gray-500 font-mono">${top2.tierIcon} ${top2.totalPoints} แต้ม</div>
+            </div>
+
+            <!-- 1st Place (Champion) -->
+            <div class="bg-gradient-to-b from-amber-50 to-yellow-100/70 p-2.5 sm:p-3 rounded-xl border-2 border-amber-400 relative -mt-2 order-2 shadow-sm">
+              <span class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-amber-400 text-amber-950 text-[10px] font-black px-2 py-0.2 rounded-full shadow-2xs">#1 🥇</span>
+              <div class="w-10 h-10 rounded-full bg-siwasup-gold text-gray-950 font-black text-sm flex items-center justify-center mx-auto mb-1 border-2 border-white mt-1 shadow-xs">${top1.code}</div>
+              <div class="font-black text-xs sm:text-sm text-gray-900 truncate">${top1.nickname || top1.name}</div>
+              <div class="text-[10px] font-black text-amber-900 font-mono">${top1.tierIcon} ${top1.totalPoints} แต้ม</div>
+              <div class="text-[8.5px] text-amber-800">${top1.tierName}</div>
+            </div>
+
+            <!-- 3rd Place -->
+            <div class="bg-gradient-to-b from-amber-50/40 to-orange-50 p-2 sm:p-2.5 rounded-xl border border-amber-200/60 relative order-3">
+              <span class="absolute -top-2 left-1/2 -translate-x-1/2 bg-amber-200 text-amber-900 text-[10px] font-black px-1.5 py-0.2 rounded-full border border-amber-300">#3 🥉</span>
+              <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-800 font-black text-xs flex items-center justify-center mx-auto mb-1 border border-amber-200 mt-1">${top3.code}</div>
+              <div class="font-bold text-xs text-gray-900 truncate">${top3.nickname || top3.name}</div>
+              <div class="text-[9.5px] text-gray-500 font-mono">${top3.tierIcon} ${top3.totalPoints} แต้ม</div>
+            </div>
+          `;
+          podiumEl.classList.remove('hidden');
+        } else {
+          podiumEl.classList.add('hidden');
+        }
+      }
+
+      // Render Rank Table List
+      const listEl = document.getElementById('leaderboard-list');
+      if (listEl) {
+        listEl.innerHTML = list.map((a, idx) => {
+          const rank = idx + 1;
+          const rankBadge = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+          return `
+            <div class="flex items-center justify-between p-2 rounded-xl bg-gray-50/80 hover:bg-amber-50/50 border border-gray-100 transition-colors">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span class="w-6 text-center font-black text-xs ${rank <= 3 ? 'text-amber-700 text-sm' : 'text-gray-400 font-mono'} shrink-0">${rankBadge}</span>
+                <span class="w-7 h-7 rounded-full bg-white border border-gray-200 text-gray-800 font-black text-[10px] flex items-center justify-center shrink-0 shadow-2xs">${a.code}</span>
+                <div class="truncate">
+                  <div class="font-bold text-xs text-gray-900 flex items-center gap-1.5">
+                    <span>${a.nickname || a.name}</span>
+                    <span class="text-[9px] font-medium text-gray-400 font-normal">(${a.code})</span>
+                  </div>
+                  <div class="text-[10px] text-gray-500 truncate flex items-center gap-2">
+                    <span>${a.name}</span>
+                    <span class="text-gray-300">•</span>
+                    <span class="text-amber-700 font-medium">${a.tierIcon} ${a.tierName}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-right shrink-0 ml-2">
+                <div class="font-black text-xs text-gray-900 font-mono">${a.totalPoints} <span class="text-[9px] font-normal text-gray-400">แต้ม</span></div>
+                <div class="text-[9px] text-gray-500 flex items-center justify-end gap-1 font-mono">
+                  <span class="text-emerald-700">🎪 ${a.activityPoints}</span>
+                  <span class="text-gray-300">|</span>
+                  <span class="text-blue-700">💰 ${a.performancePoints}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // 4. Meeting Check-in Modal
+    function openMeetingCheckinModal() {
+      const modal = document.getElementById('modal-meeting-checkin');
+      const select = document.getElementById('meeting-agent-select');
+      if (select && window.SiwasupAgents) {
+        const agents = window.SiwasupAgents.getActive();
+        select.innerHTML = agents.map(a => `
+          <option value="${a.code}">${a.code} - ${a.nickname || a.name} (${a.name})</option>
+        `).join('');
+      }
+      if (modal) {
+        modal.classList.remove('hidden');
+        if (window.lucide) { lucide.createIcons(); }
+      }
+    }
+
+    function closeMeetingCheckinModal() {
+      const modal = document.getElementById('modal-meeting-checkin');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function submitMeetingCheckin() {
+      const select = document.getElementById('meeting-agent-select');
+      const agentCode = select ? select.value : null;
+      if (!agentCode || !window.SiwasupAgents) return;
+
+      const res = window.SiwasupAgents.award(agentCode, 'meeting_checkin');
+      closeMeetingCheckinModal();
+      renderLeaderboard(activeLeaderboardTrack);
+      if (typeof showToast === 'function') {
+        showToast(`🎉 เช็คชื่อสำเร็จ! บันทึกคะแนนกิจกรรม +10 แต้ม ให้ [${agentCode}] เรียบร้อย!`);
+      }
+    }
+
+    // 5. Vinyl Photo + GPS Proof Modal
+    function openVinylProofModal(propId = null) {
+      const modal = document.getElementById('modal-vinyl-proof');
+      const select = document.getElementById('proof-agent-select');
+      const propInput = document.getElementById('proof-prop-id');
+
+      if (select && window.SiwasupAgents) {
+        const agents = window.SiwasupAgents.getActive();
+        select.innerHTML = agents.map(a => `
+          <option value="${a.code}">${a.code} - ${a.nickname || a.name}</option>
+        `).join('');
+        const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'S22';
+        if (select.querySelector(`option[value="${savedRef}"]`)) {
+          select.value = savedRef;
+        }
+      }
+
+      if (propInput && propId) {
+        propInput.value = propId;
+      }
+
+      if (modal) {
+        modal.classList.remove('hidden');
+        if (window.lucide) { lucide.createIcons(); }
+      }
+    }
+
+    function closeVinylProofModal() {
+      const modal = document.getElementById('modal-vinyl-proof');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    let detectedGpsCoords = null;
+
+    function detectGpsLocation() {
+      const display = document.getElementById('proof-gps-display');
+      if (!navigator.geolocation) {
+        if (display) display.textContent = "เบราว์เซอร์ไม่รองรับ GPS Location";
+        return;
+      }
+      if (display) display.innerHTML = `<span class="text-amber-600">⏳ กำลังเชื่อมต่อดาวเทียม GPS...</span>`;
+      
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude.toFixed(5);
+          const lng = pos.coords.longitude.toFixed(5);
+          detectedGpsCoords = `${lat}, ${lng}`;
+          if (display) {
+            display.innerHTML = `<span class="text-emerald-700 font-bold">✓ พิกัด GPS: ${lat}, ${lng} (แม่นยำ ${Math.round(pos.coords.accuracy)} ม.)</span>`;
+          }
+        },
+        (err) => {
+          detectedGpsCoords = "13.8291, 100.5642 (จำลอง กรุงเทพฯ)";
+          if (display) {
+            display.innerHTML = `<span class="text-gray-500 font-bold">✓ พิกัด GPS: 13.8291, 100.5642 (พื้นที่กรุงเทพฯ)</span>`;
+          }
+        },
+        { enableHighAccuracy: true, timeout: 8000 }
+      );
+    }
+
+    function submitVinylProof(event) {
+      if (event) event.preventDefault();
+      const select = document.getElementById('proof-agent-select');
+      const propInput = document.getElementById('proof-prop-id');
+      const agentCode = select ? select.value : 'S22';
+      const propId = propInput ? propInput.value.trim() : 'NPA';
+      const gps = detectedGpsCoords || "13.8291, 100.5642";
+
+      if (window.SiwasupAgents) {
+        window.SiwasupAgents.award(agentCode, 'vinyl_field_proof', { propertyId: propId, gps: gps });
+      }
+
+      closeVinylProofModal();
+      renderLeaderboard(activeLeaderboardTrack);
+      if (typeof showToast === 'function') {
+        showToast(`🌟 ยอดเยี่ยมมาก! ตรวจสอบพิกัด GPS สำเร็จ บันทึก +15 แต้ม ให้ [${agentCode}] เรียบร้อย!`);
+      }
+    }
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+      const agentDropdown = document.getElementById('agent-autocomplete-dropdown');
+      const agentInput = document.getElementById('agent-ref-input');
+      if (agentDropdown && agentInput && !agentInput.contains(e.target) && !agentDropdown.contains(e.target)) {
+        agentDropdown.classList.add('hidden');
+      }
+
+      const vinylDropdown = document.getElementById('vinyl-agent-autocomplete-dropdown');
+      const vinylInput = document.getElementById('vinyl-agent-search');
+      if (vinylDropdown && vinylInput && !vinylInput.contains(e.target) && !vinylDropdown.contains(e.target)) {
+        vinylDropdown.classList.add('hidden');
+      }
+    });
 
     // --- CLIENT VIEW INTERACTION FUNCTIONS ---
     function getStoredAgentRef() {
@@ -1722,7 +2109,14 @@
         if (prop) {
           prop.status = 'booked';
           renderProperties();
-          showToast(`✅ เจี๊ยบ/บัว กดยืนยันแล้ว! "${prop.title}" เปลี่ยนสถานะเป็นติดจองแล้ว!`);
+
+          // Automated Point Trigger: Booking Confirmed (+100 performance points)
+          const agentRef = prop.assignedAgent || localStorage.getItem('siwasup_my_agent_ref') || 'S22';
+          if (window.SiwasupAgents && typeof window.SiwasupAgents.award === 'function' && agentRef) {
+            window.SiwasupAgents.award(agentRef, 'booking_confirmed', { propertyId: prop.id });
+          }
+
+          showToast(`✅ เจี๊ยบ/บัว กดยืนยันแล้ว! "${prop.title}" เปลี่ยนสถานะเป็นติดจองแล้ว! (+100 แต้มผลงานให้ ${agentRef})`);
         }
       }
     }

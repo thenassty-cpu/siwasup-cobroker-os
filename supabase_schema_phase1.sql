@@ -23,18 +23,35 @@ CREATE TABLE IF NOT EXISTS public.assets (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 2. ตารางโปรไฟล์ผู้ใช้งานและตัวแทน (Profiles & Agents)
+-- 2. ตารางโปรไฟล์ผู้ใช้งานและตัวแทน (Profiles & Agents 125 ท่าน)
 CREATE TABLE IF NOT EXISTS public.profiles (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
     name TEXT NOT NULL,
+    nickname TEXT,
     phone TEXT,
     role TEXT DEFAULT 'trainee',                  -- admin, employee, free_agent, trainee
+    tier TEXT DEFAULT 'trainee',                  -- trainee, active, silver, gold, diamond
     commission_rate NUMERIC DEFAULT 0.03,         -- พนักงาน: 0.01, Free Agent: 0.03 - 0.05
-    agent_code TEXT UNIQUE NOT NULL,              -- เช่น AG-001 หรือ AG-บัวรา
+    agent_code TEXT UNIQUE NOT NULL,              -- เช่น S02 ถึง S126
     referred_by TEXT,                             -- รหัสผู้ชวนมาสมัคร (MGM Referral)
-    points INTEGER DEFAULT 0,                     -- แต้มสะสม Gamification
+    activity_points INTEGER DEFAULT 0,            -- คะแนนกิจกรรม (วัดความขยัน)
+    performance_points INTEGER DEFAULT 0,         -- คะแนนผลงาน (วัดยอดขาย)
+    total_points INTEGER DEFAULT 0,               -- คะแนนรวม
     trainee_listings_count INTEGER DEFAULT 0,     -- ส่งทรัพย์เข้าพอร์ต (ต้องครบ 3 เพื่อปลดล็อก)
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 2.1 ตารางบันทึกประวัติการแจกแต้มตัวแทนอัตโนมัติ (Event-Driven Point Transactions Log)
+CREATE TABLE IF NOT EXISTS public.agent_point_transactions (
+    id TEXT PRIMARY KEY,
+    agent_code TEXT NOT NULL,
+    track TEXT NOT NULL,                          -- activity, performance
+    rule_key TEXT NOT NULL,                       -- meeting_checkin, vinyl_download, vinyl_field_proof, smart_share_click, mgm_referral, etc.
+    points INTEGER NOT NULL,
+    property_id TEXT,
+    gps_coordinates TEXT,
+    meta JSONB,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

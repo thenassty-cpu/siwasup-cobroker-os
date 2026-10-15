@@ -23,18 +23,29 @@ function openVinylModal(propertyId) {
   activeVinylProperty = p;
 
   // Set default values from current agent or property
-  const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'AG-บัวรา';
+  const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'S22';
+  const vinylSearchEl = document.getElementById('vinyl-agent-search');
+  if (vinylSearchEl) vinylSearchEl.value = savedRef;
+
   const headlineEl = document.getElementById('vinyl-headline');
   const phoneEl = document.getElementById('vinyl-phone');
   const contactNameEl = document.getElementById('vinyl-contact-name');
   const hookEl = document.getElementById('vinyl-hook');
 
-  const mode = (typeof currentMode !== 'undefined') ? currentMode : (window.currentMode || 'owner');
+  const agent = (window.SiwasupAgents && typeof window.SiwasupAgents.find === 'function')
+    ? window.SiwasupAgents.find(savedRef)
+    : null;
+
   if (phoneEl) {
-    phoneEl.value = (savedRef.includes('บัว') || mode === 'owner') ? '06-2396-5161' : '089-178-xxxx';
+    phoneEl.value = (agent && agent.phone) ? agent.phone : '06-2396-5161';
   }
   if (contactNameEl) {
-    contactNameEl.value = savedRef.replace('AG-', '') + ' (LINE: @siwasup)';
+    if (agent) {
+      const lineText = agent.lineId ? agent.lineId : '@siwasup';
+      contactNameEl.value = `${agent.nickname || agent.name} (LINE: ${lineText})`;
+    } else {
+      contactNameEl.value = savedRef.replace('AG-', '') + ' (LINE: @siwasup)';
+    }
   }
   if (hookEl) {
     hookEl.value = 'กู้ได้เต็ม 100% • ฟรีดาวน์ • ยื่นกู้ฟรี';
@@ -394,8 +405,15 @@ async function downloadVinylPDF() {
     link.click();
     document.body.removeChild(link);
 
+    // Automated Point Trigger: Intent to Work (+5 points)
+    const agentSearchEl = document.getElementById('vinyl-agent-search');
+    const agentCode = (agentSearchEl ? agentSearchEl.value.trim() : '') || localStorage.getItem('siwasup_my_agent_ref') || 'S22';
+    if (window.SiwasupAgents && typeof window.SiwasupAgents.award === 'function' && agentCode) {
+      window.SiwasupAgents.award(agentCode, 'vinyl_download', { propertyId: activeVinylProperty.id });
+    }
+
     if (typeof showToast === 'function') {
-      showToast(`✅ ดาวน์โหลด PDF ป้ายไวนิลขนาดจริง (${widthCm}x${heightCm} ซม.) สำเร็จ!`);
+      showToast(`✅ ดาวน์โหลด PDF สำเร็จ! บันทึกแต้มกิจกรรม +5 แต้ม ให้ [${agentCode}] อัตโนมัติ!`);
     }
   } catch (err) {
     console.error("PDF generation error:", err);
@@ -420,8 +438,15 @@ function downloadVinylJPG() {
   link.click();
   document.body.removeChild(link);
 
+  // Automated Point Trigger: Intent to Work (+5 points)
+  const agentSearchEl = document.getElementById('vinyl-agent-search');
+  const agentCode = (agentSearchEl ? agentSearchEl.value.trim() : '') || localStorage.getItem('siwasup_my_agent_ref') || 'S22';
+  if (window.SiwasupAgents && typeof window.SiwasupAgents.award === 'function' && agentCode) {
+    window.SiwasupAgents.award(agentCode, 'vinyl_download', { propertyId: activeVinylProperty.id });
+  }
+
   if (typeof showToast === 'function') {
-    showToast(`✅ บันทึกรูปภาพ HD ป้ายไวนิล (${widthCm}x${heightCm} ซม.) เรียบร้อย!`);
+    showToast(`✅ บันทึกรูปภาพ HD สำเร็จ! บันทึกแต้มกิจกรรม +5 แต้ม ให้ [${agentCode}] อัตโนมัติ!`);
   }
 }
 

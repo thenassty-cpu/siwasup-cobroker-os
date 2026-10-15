@@ -65,17 +65,35 @@
             <!-- Property Info Badge -->
             <div id="share-prop-info" class="bg-amber-50/80 border border-amber-200/80 p-2 rounded-lg text-xs"></div>
 
-            <!-- Agent Ref Input -->
-            <div>
+            <!-- Agent Ref Input with Autocomplete (125 Agents: S02-S126) -->
+            <div class="relative">
               <div class="flex justify-between items-center mb-1">
                 <label class="font-medium text-[11px] text-gray-700 flex items-center gap-1.5">
                   <span class="icon-circle w-3.5 h-3.5 bg-slate-100"><i data-lucide="user" class="w-2 h-2 stroke-[1.5]"></i></span>
                   <span>รหัสเอเจนต์ของคุณ (ล็อกสิทธิ์ 5%):</span>
                 </label>
-                <span class="text-[9px] text-emerald-600 font-medium">จำค่าอัตโนมัติ 60 วัน</span>
+                <div class="flex items-center gap-1">
+                  <span id="agent-tier-badge" class="text-[9.5px] text-amber-800 font-bold bg-amber-50 px-1.5 py-0.2 rounded border border-amber-200">
+                    🥇 S22 - เจ็ม
+                  </span>
+                  <span class="text-[9px] text-emerald-600 font-medium">จำค่า 60 วัน</span>
+                </div>
               </div>
-              <input type="text" id="agent-ref-input" value="AG-บัวรา" oninput="updateShareUrls()" 
-                     class="w-full border rounded-lg py-1.5 px-2.5 text-xs font-semibold focus:ring-2 focus:ring-amber-500 outline-none bg-gray-50">
+              <div class="relative">
+                <input type="text" id="agent-ref-input" value="S22" 
+                       placeholder="พิมพ์รหัส S02-S126 หรือชื่อเล่น..."
+                       oninput="handleAgentAutocomplete(this.value)"
+                       onfocus="handleAgentAutocomplete(this.value)"
+                       autocomplete="off"
+                       class="w-full border rounded-lg py-1.5 pl-8 pr-7 text-xs font-semibold focus:ring-2 focus:ring-amber-500 outline-none bg-gray-50">
+                <span class="absolute left-2.5 top-2 text-gray-400">
+                  <i data-lucide="search" class="w-3.5 h-3.5"></i>
+                </span>
+                <button type="button" onclick="clearAgentInput()" class="absolute right-2 top-1.5 text-gray-400 hover:text-gray-600 text-xs font-bold">&times;</button>
+              </div>
+
+              <!-- Autocomplete Dropdown List -->
+              <div id="agent-autocomplete-dropdown" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50 max-h-48 overflow-y-auto no-scrollbar py-1"></div>
             </div>
 
             <!-- Channel Links Header -->
@@ -649,6 +667,30 @@
             </div>
           </div>
 
+          <!-- Agent Selection Autocomplete (125 Agents: S02-S126) -->
+          <div class="relative">
+            <div class="flex justify-between items-center mb-1">
+              <label class="block font-medium text-gray-700">รหัสตัวแทนผู้ดูแลป้าย (ดึงเบอร์ & LINE อัตโนมัติ):</label>
+              <span id="vinyl-agent-tier-tag" class="text-[9.5px] text-amber-800 font-bold bg-amber-50 px-1.5 py-0.2 rounded border border-amber-200">
+                +5 แต้มเมื่อโหลด
+              </span>
+            </div>
+            <div class="relative">
+              <input type="text" id="vinyl-agent-search" value="S22" 
+                     placeholder="พิมพ์รหัส S02-S126 หรือชื่อเล่น..."
+                     oninput="handleVinylAgentAutocomplete(this.value)"
+                     onfocus="handleVinylAgentAutocomplete(this.value)"
+                     autocomplete="off"
+                     class="w-full border rounded-lg p-1.5 pl-7 pr-6 text-xs bg-amber-50/40 font-bold text-gray-900 outline-none focus:ring-1 focus:ring-amber-500 border-amber-200">
+              <span class="absolute left-2 top-2 text-gray-400">
+                <i data-lucide="user-check" class="w-3.5 h-3.5 text-amber-600"></i>
+              </span>
+              <button type="button" onclick="clearVinylAgentSearch()" class="absolute right-2 top-1.5 text-gray-400 hover:text-gray-600 text-xs font-bold">&times;</button>
+            </div>
+            <!-- Autocomplete Dropdown List -->
+            <div id="vinyl-agent-autocomplete-dropdown" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50 max-h-40 overflow-y-auto no-scrollbar py-1"></div>
+          </div>
+
           <!-- Contact Info -->
           <div class="grid grid-cols-2 gap-2">
             <div>
@@ -686,6 +728,11 @@
               <span>โหลดรูป HD ส่ง LINE</span>
             </button>
           </div>
+          <!-- Field Proof GPS Submission Link Button -->
+          <button type="button" onclick="openVinylProofModal(activeVinylProperty ? activeVinylProperty.id : null)" class="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold py-2 px-3 rounded-xl text-xs shadow-2xs flex items-center justify-center gap-1.5 transition-all active:scale-95">
+            <span class="icon-circle w-4 h-4 bg-emerald-600 text-white"><i data-lucide="camera" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+            <span>ผูกป้ายเสร็จแล้ว? ถ่ายรูปเช็คอิน GPS รับ +15 แต้ม</span>
+          </button>
           <p class="text-[10px] text-center text-gray-400">PDF ถูกตั้งค่าขนาดและสเกลจริง (1:1) สำหรับเครื่องพิมพ์อิงค์เจ็ทไวนิล</p>
         </div>
       </div>
@@ -791,6 +838,166 @@
             <span>ยื่นข้อเสนอต่อรองราคา NPA</span>
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- 🏆 Agent Directory & Leaderboard Modal (125 Agents: S02-S126) -->
+    <div id="agent-leaderboard-modal" class="hidden modal-backdrop !items-center !p-3">
+      <div class="modal-card max-w-xl space-y-3.5 max-h-[92vh] overflow-y-auto no-scrollbar !p-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+          <div class="flex items-center gap-2">
+            <span class="icon-circle w-7 h-7 bg-amber-500 text-white"><i data-lucide="trophy" class="w-4 h-4 stroke-[1.5]"></i></span>
+            <div>
+              <h3 class="font-bold text-sm sm:text-base text-gray-900 leading-tight">ทำเนียบตัวแทน & Leaderboard</h3>
+              <p class="text-[10px] text-gray-500">ระบบวัดผลอัตโนมัติ 2 แทร็ก (กิจกรรม & ผลงาน) • 125 ท่าน</p>
+            </div>
+          </div>
+          <button onclick="closeAgentLeaderboardModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-lg font-bold">&times;</button>
+        </div>
+
+        <!-- Quick Action Bar for Admins & Agents -->
+        <div class="grid grid-cols-2 gap-2 bg-gradient-to-r from-amber-50/60 to-red-50/60 p-2.5 rounded-xl border border-amber-200/60">
+          <button type="button" onclick="openMeetingCheckinModal()" class="bg-white hover:bg-amber-50 text-amber-900 border border-amber-300 font-bold py-1.5 px-2 rounded-lg text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+            <i data-lucide="qr-code" class="w-3.5 h-3.5 text-amber-600"></i>
+            <span>🎟️ QR เช็คชื่อเข้าประชุม (+10)</span>
+          </button>
+          <button type="button" onclick="openVinylProofModal()" class="bg-[#990000] hover:bg-red-800 text-white font-bold py-1.5 px-2 rounded-lg text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+            <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+            <span>📸 ส่งภาพติดป้าย GPS (+15)</span>
+          </button>
+        </div>
+
+        <!-- Top 3 Podium Cards -->
+        <div id="leaderboard-podium" class="grid grid-cols-3 gap-1.5 sm:gap-2 text-center pt-1">
+          <!-- Injected via JS -->
+        </div>
+
+        <!-- Filter Tracks & Search -->
+        <div class="space-y-2 pt-1 border-t border-gray-100">
+          <div class="flex items-center justify-between gap-1 text-[11px]">
+            <div class="flex items-center gap-1 bg-gray-100 p-0.5 rounded-lg border border-gray-200">
+              <button id="lb-tab-total" onclick="filterLeaderboard('total')" class="py-1 px-2.5 rounded-md font-bold bg-white text-gray-900 shadow-2xs transition-all">รวมทุกแต้ม</button>
+              <button id="lb-tab-activity" onclick="filterLeaderboard('activity')" class="py-1 px-2 rounded-md font-medium text-gray-600 hover:text-gray-900 transition-all">🎪 กิจกรรม</button>
+              <button id="lb-tab-performance" onclick="filterLeaderboard('performance')" class="py-1 px-2 rounded-md font-medium text-gray-600 hover:text-gray-900 transition-all">💰 ผลงาน</button>
+            </div>
+            <span id="lb-count-label" class="text-[10px] text-gray-400 font-mono">125 ตัวแทน</span>
+          </div>
+
+          <!-- Search Input -->
+          <div class="relative">
+            <input type="text" id="lb-search-input" oninput="searchLeaderboard(this.value)" 
+                   placeholder="ค้นหา: รหัส S02-S126, ชื่อเล่น, หรือชื่อจริง..." 
+                   class="w-full bg-gray-50 border border-gray-200 rounded-lg pl-8 pr-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-red-700">
+            <span class="absolute left-2.5 top-2 text-gray-400">
+              <i data-lucide="search" class="w-3.5 h-3.5"></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- Leaderboard Table List -->
+        <div id="leaderboard-list" class="space-y-1.5 max-h-72 overflow-y-auto no-scrollbar pr-0.5">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 🎟️ Meeting QR Check-in Modal -->
+    <div id="modal-meeting-checkin" class="hidden modal-backdrop !items-center !p-3">
+      <div class="modal-card max-w-sm space-y-3.5 !p-4 text-center">
+        <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+          <div class="flex items-center gap-1.5">
+            <span class="icon-circle w-6 h-6 bg-amber-600 text-white"><i data-lucide="calendar-check" class="w-3.5 h-3.5"></i></span>
+            <h3 class="font-bold text-sm text-gray-900">เช็คชื่อเข้าอบรม / ประชุมทีม</h3>
+          </div>
+          <button onclick="closeMeetingCheckinModal()" class="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold">&times;</button>
+        </div>
+
+        <!-- QR Display for Zoom / Big Screen -->
+        <div class="bg-gray-50 p-3 rounded-2xl border border-gray-200 space-y-2">
+          <p class="text-[11px] text-gray-600 font-medium">ฉาย QR บนจอเพื่อให้ตัวแทนสแกนเช็คชื่ออัตโนมัติ:</p>
+          <div class="bg-white p-2 rounded-xl inline-block border border-gray-200 shadow-2xs">
+            <img id="meeting-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://thenassty-cpu.github.io/siwasup-cobroker-os/?action=checkin" alt="Meeting QR" class="w-40 h-40 object-contain mx-auto">
+          </div>
+          <div class="text-[10px] text-emerald-700 font-bold bg-emerald-50 py-0.5 px-2 rounded-full border border-emerald-200 inline-block">
+            ✓ สแกนรับ +10 แต้มกิจกรรมทันที
+          </div>
+        </div>
+
+        <!-- Self Check-in Option (for agents checking in right now) -->
+        <div class="space-y-2 text-left pt-1 border-t border-gray-100">
+          <label class="block font-medium text-xs text-gray-700">หรือเลือกรหัสตัวแทนของคุณเพื่อเช็คชื่อ:</label>
+          <div class="relative">
+            <select id="meeting-agent-select" class="w-full border rounded-lg p-2 text-xs bg-white font-bold text-gray-800 outline-none focus:ring-1 focus:ring-amber-500">
+              <!-- Injected via JS -->
+            </select>
+          </div>
+          <button type="button" onclick="submitMeetingCheckin()" class="w-full bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold py-2 px-3 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+            <span>ยืนยันเช็คชื่อรับ +10 แต้ม</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 📸 Vinyl Photo + GPS Proof Modal -->
+    <div id="modal-vinyl-proof" class="hidden modal-backdrop !items-center !p-3">
+      <div class="modal-card max-w-sm space-y-3.5 !p-4">
+        <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+          <div class="flex items-center gap-1.5">
+            <span class="icon-circle w-6 h-6 bg-emerald-600 text-white"><i data-lucide="camera" class="w-3.5 h-3.5"></i></span>
+            <div>
+              <h3 class="font-bold text-sm text-gray-900 leading-tight">ส่งภาพติดป้ายหน้างานจริง</h3>
+              <p class="text-[9.5px] text-gray-500">Proof of Installation • รับทันที +15 แต้ม</p>
+            </div>
+          </div>
+          <button onclick="closeVinylProofModal()" class="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold">&times;</button>
+        </div>
+
+        <form onsubmit="submitVinylProof(event)" class="space-y-2.5 text-xs">
+          <!-- Agent Selection -->
+          <div>
+            <label class="block font-medium mb-1 text-gray-700">รหัสตัวแทนผู้ติดป้าย:</label>
+            <select id="proof-agent-select" class="w-full border rounded-lg p-1.5 text-xs bg-gray-50 font-bold text-gray-800 outline-none focus:ring-1 focus:ring-emerald-500">
+              <!-- Injected via JS -->
+            </select>
+          </div>
+
+          <!-- Property ID -->
+          <div>
+            <label class="block font-medium mb-1 text-gray-700">รหัสทรัพย์ที่ติดป้าย:</label>
+            <input type="text" id="proof-prop-id" placeholder="เช่น 1069562 หรือชื่อโครงการ" required 
+                   class="w-full border rounded-lg p-1.5 text-xs outline-none focus:ring-1 focus:ring-emerald-500">
+          </div>
+
+          <!-- GPS Location Auto-Detection -->
+          <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-200 space-y-1.5">
+            <div class="flex justify-between items-center">
+              <span class="font-medium text-gray-700 flex items-center gap-1">
+                <i data-lucide="map-pin" class="w-3 h-3 text-red-600"></i>
+                <span>พิกัด GPS หน้างานจริง:</span>
+              </span>
+              <button type="button" onclick="detectGpsLocation()" class="bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-300 px-2 py-0.5 rounded text-[10px] font-bold shadow-2xs active:scale-95 transition-all">
+                ดึงพิกัดสด
+              </button>
+            </div>
+            <div id="proof-gps-display" class="font-mono text-[10.5px] text-gray-600 bg-white p-1.5 rounded border border-gray-200">
+              กดปุ่ม "ดึงพิกัดสด" เพื่อดึงตำแหน่ง GPS
+            </div>
+          </div>
+
+          <!-- Photo Upload Input -->
+          <div>
+            <label class="block font-medium mb-1 text-gray-700">ภาพถ่ายป้ายที่ผูกหน้าบ้าน:</label>
+            <input type="file" id="proof-photo-file" accept="image/*" capture="environment" required 
+                   class="w-full text-[11px] text-gray-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[11px] file:font-semibold file:bg-emerald-100 file:text-emerald-800 hover:file:bg-emerald-200">
+          </div>
+
+          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 px-3 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+            <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i>
+            <span>ยืนยันส่งผลงานรับ +15 แต้ม</span>
+          </button>
+        </form>
       </div>
     </div>
 

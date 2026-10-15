@@ -52,7 +52,17 @@
 
 ### 🖨️ Phase 3: Scale & Production Tools
 - [x] **Auto PDF Vinyl Sign Generator:** สร้างไฟล์ PDF พิมพ์ป้ายไวนิลหน้าบ้านขนาดจริง (1:1 สเกลเป๊ะ 120x80 ซม., 150x80 ซม., 60x90 ซม.) พร้อม Dynamic QR Code ล็อกสิทธิ์ตัวแทน และดาวน์โหลดรูป HD ได้ในคลิกเดียวด้วย `pdf-lib` + `qrcode`
-- [ ] **GPS & OCR Proof of Work:** ระบบถ่ายรูปตรวจเช็กพิกัด GPS ติดป้ายหน้าบ้านจริง
+- [x] **Siwasup Agent Roster & 2-Track Automated Scoring Engine (`siwasup_agents.js`):**
+  - ฐานข้อมูลตัวแทนจริง 125 ท่าน (`S02` ถึง `S126`) คลีนข้อมูลจาก Google Sheets พร้อมคำนวณ 5 ระดับเกียรติยศ (Trainee ➔ Active ➔ Silver ➔ Gold ➔ Diamond Master)
+  - ระบบ Autocomplete ค้นหารหัสตัวแทนและชื่อเล่นแบบเรียลไทม์ ในหน้าต่าง Smart Share และ Auto PDF Vinyl Sign
+  - หน้าต่าง **ทำเนียบตัวแทน & Live Leaderboard Modal** แสดงโพเดียม Top 3 (🥇, 🥈, 🥉), กรองแทร็กคะแนน (รวม, กิจกรรม, ผลงาน) และช่องค้นหาฉับไว
+  - กลไกแจกแต้มอัตโนมัติ Zero-Admin Overhead:
+    - ดาวน์โหลดแบบป้ายไวนิล: ได้ **+5 แต้ม** อัตโนมัติ
+    - สแกน QR เช็คชื่อเข้าประชุมทีม/อบรม: ได้ **+10 แต้ม** อัตโนมัติ (พร้อมระบบฉาย QR จอใหญ่)
+    - ส่งภาพติดป้ายหน้างานจริงพร้อมดึงพิกัด GPS (`navigator.geolocation`): ได้ **+15 แต้ม** อัตโนมัติ
+    - แชร์ทรัพย์ผ่าน Smart Share Center: ได้ **+5 แต้ม** อัตโนมัติ
+    - แอดมินกดยืนยันการจองบ้าน: ยิง **+100 แต้มผลงาน** เข้าตัวแทนผู้ดูแลเคสอัตโนมัติทันที
+- [x] **Database Schema Update:** อัปเดต `supabase_schema_phase1.sql` เพิ่มตาราง `agent_point_transactions` และฟิลด์คะแนน/ระดับในตาราง `profiles`
 
 ### 🧩 Architectural Optimization & Token Economy (100% Completed)
 - [x] **Modal Component Extraction:** สกัด Template ของ Modals ทั้งหมด 10 ตัวออกจาก `index.html` ไปไว้ใน `modals.js` ช่วยลดโค้ดใน `index.html` ลงกว่า 530 บรรทัด (จาก 2,062 เหลือ 1,532 บรรทัด) ประหยัด Token สูงสุด
