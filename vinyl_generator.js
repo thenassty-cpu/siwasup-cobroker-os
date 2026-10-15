@@ -10,9 +10,14 @@ let activeVinylPreset = '120x80'; // '120x80', '150x80', '60x90'
 
 // Open Vinyl Generator Modal
 function openVinylModal(propertyId) {
-  const p = (window.allProperties || []).find(item => item.id === propertyId);
+  const list = (window.allProperties && window.allProperties.length > 0)
+    ? window.allProperties
+    : ((typeof allProperties !== 'undefined' && allProperties.length > 0)
+      ? allProperties
+      : (window.SIWASUP_PROPERTIES || []));
+  const p = list.find(item => String(item.id) === String(propertyId));
   if (!p) {
-    if (typeof showToast === 'function') showToast("ไม่พบข้อมูลทรัพย์");
+    if (typeof showToast === 'function') showToast("ไม่พบข้อมูลทรัพย์ #" + propertyId);
     return;
   }
   activeVinylProperty = p;
@@ -24,8 +29,9 @@ function openVinylModal(propertyId) {
   const contactNameEl = document.getElementById('vinyl-contact-name');
   const hookEl = document.getElementById('vinyl-hook');
 
+  const mode = (typeof currentMode !== 'undefined') ? currentMode : (window.currentMode || 'owner');
   if (phoneEl) {
-    phoneEl.value = (savedRef.includes('บัว') || currentMode === 'owner') ? '06-2396-5161' : '089-178-xxxx';
+    phoneEl.value = (savedRef.includes('บัว') || mode === 'owner') ? '06-2396-5161' : '089-178-xxxx';
   }
   if (contactNameEl) {
     contactNameEl.value = savedRef.replace('AG-', '') + ' (LINE: @siwasup)';
@@ -418,3 +424,12 @@ function downloadVinylJPG() {
     showToast(`✅ บันทึกรูปภาพ HD ป้ายไวนิล (${widthCm}x${heightCm} ซม.) เรียบร้อย!`);
   }
 }
+
+// Global window bindings
+window.openVinylModal = openVinylModal;
+window.closeVinylModal = closeVinylModal;
+window.setVinylPreset = setVinylPreset;
+window.renderVinylCanvas = renderVinylCanvas;
+window.downloadVinylPDF = downloadVinylPDF;
+window.downloadVinylJPG = downloadVinylJPG;
+

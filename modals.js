@@ -618,6 +618,109 @@
       </div>
     </div>
 
+    <!-- Homerun-Style Clean Property Detail Modal -->
+    <div id="property-detail-modal" class="hidden modal-backdrop !items-center !p-4">
+      <div class="modal-card max-w-lg space-y-4 max-h-[92vh] overflow-y-auto">
+        <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <span id="detail-category-badge" class="bg-black/80 text-white text-[11px] font-medium px-2.5 py-0.5 rounded-full">ทาวน์โฮม</span>
+            <span id="detail-bank-badge"></span>
+            <span id="detail-code" class="text-xs text-slate-400 font-mono">รหัส: -</span>
+          </div>
+          <button onclick="closePropertyDetailModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-lg font-bold">&times;</button>
+        </div>
+
+        <!-- Detail Image Carousel / Hero -->
+        <div class="relative aspect-[16/10] bg-slate-100 rounded-2xl overflow-hidden shadow-inner">
+          <img id="detail-main-img" src="" alt="" class="w-full h-full object-cover">
+          <div class="absolute bottom-2.5 left-2.5">
+            <span id="detail-status-pill" class="bg-[#FF3838] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">New</span>
+          </div>
+          <a id="detail-external-link" href="#" target="_blank" class="absolute bottom-2.5 right-2.5 bg-black/60 hover:bg-black/80 backdrop-blur-md text-white text-[11px] font-medium px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+            <i data-lucide="external-link" class="w-3 h-3"></i>
+            <span>ดูหน้าเว็บเดิม</span>
+          </a>
+        </div>
+
+        <!-- Title & Location -->
+        <div class="space-y-1">
+          <h2 id="detail-title" class="font-bold text-slate-900 text-base md:text-lg leading-snug"></h2>
+          <div class="flex items-center gap-1.5 text-xs text-slate-500">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-400 shrink-0"></i>
+            <span id="detail-location">กรุงเทพฯ และปริมณฑล</span>
+          </div>
+        </div>
+
+        <!-- Homerun Specs Grid -->
+        <div class="grid grid-cols-2 gap-2 bg-slate-50/80 p-3 rounded-2xl border border-slate-100 text-xs">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-full bg-white shadow-xs flex items-center justify-center text-slate-500">
+              <i data-lucide="grid" class="w-3.5 h-3.5"></i>
+            </div>
+            <div>
+              <div class="text-[10px] text-slate-400">เนื้อที่</div>
+              <div id="detail-size" class="font-bold text-slate-800">43.9 ตร.ว.</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-full bg-white shadow-xs flex items-center justify-center text-slate-500">
+              <i data-lucide="home" class="w-3.5 h-3.5"></i>
+            </div>
+            <div>
+              <div class="text-[10px] text-slate-400">พื้นที่ใช้สอย</div>
+              <div id="detail-usable" class="font-bold text-slate-800">110 ตร.ม.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <p id="detail-desc" class="text-xs text-slate-600 leading-relaxed bg-white border border-slate-100 p-3 rounded-2xl"></p>
+
+        <!-- Financial Breakdown (Homerun Style) -->
+        <div class="bg-gradient-to-br from-slate-50 to-blue-50/30 p-3.5 rounded-2xl border border-blue-100/60 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-slate-600 flex items-center gap-1.5">
+              <i data-lucide="circle-dollar-sign" class="w-4 h-4 text-blue-600"></i>
+              <span>ราคาก่อนต่อรอง</span>
+            </span>
+            <span id="detail-price" class="text-lg font-black text-[#1E749C] tracking-tight">฿3,410,000</span>
+          </div>
+          <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/60">
+            <span class="text-slate-500 flex items-center gap-1.5">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-slate-400"></i>
+              <span>หลักประกันเพื่อต่อรองราคา</span>
+            </span>
+            <span id="detail-deposit" class="font-bold text-slate-800">฿50,000</span>
+          </div>
+          <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/60">
+            <span class="text-slate-500 flex items-center gap-1.5">
+              <i data-lucide="calculator" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <span>ประมาณการผ่อนต่อเดือน</span>
+            </span>
+            <span id="detail-installment" class="font-bold text-emerald-700">~ 12,000 บ./เดือน</span>
+          </div>
+        </div>
+
+        <!-- Primary Homerun-Style Action Bar -->
+        <div class="space-y-2 pt-1">
+          <div class="grid grid-cols-2 gap-2">
+            <button id="detail-btn-vinyl" onclick="" class="w-full bg-amber-50 hover:bg-amber-100 text-[#8C6D23] font-bold py-2.5 rounded-full border border-amber-300 text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+              <i data-lucide="printer" class="w-4 h-4 text-amber-600"></i>
+              <span>พิมพ์ป้ายไวนิล (Auto PDF)</span>
+            </button>
+            <button id="detail-btn-share" onclick="" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-full shadow-xs text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+              <i data-lucide="share-2" class="w-4 h-4"></i>
+              <span>แชร์ล็อกสิทธิ์ (3-5%)</span>
+            </button>
+          </div>
+          <button id="detail-btn-offer" onclick="" class="w-full bg-[#BFA267] hover:bg-[#b09257] text-white font-bold py-3 rounded-full shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all">
+            <i data-lucide="handshake" class="w-4 h-4"></i>
+            <span>ยื่นข้อเสนอต่อรองราคา NPA</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Copy Share Toast -->
     <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-4 py-2 rounded-full shadow-lg opacity-0 transition-opacity pointer-events-none z-50">
       ก๊อปปี้เรียบร้อย!
