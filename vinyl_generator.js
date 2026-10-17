@@ -362,23 +362,30 @@ function renderSiwasupMaster43x49(ctx, canvas, p, headline, phoneA, phoneB, subt
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
 
+  // Helper for auto-shrinking text to fit max width (37 cm = 1110px on this canvas)
+  const maxContentW = Math.round(W * (37 / 43)); // 1110px
+  function fillAutoFitText(text, x, y, initialSize, minSize, fontFace, fillStyle) {
+    let size = initialSize;
+    ctx.fillStyle = fillStyle;
+    ctx.font = `bold ${size}px ${fontFace}`;
+    while (ctx.measureText(text).width > maxContentW && size > minSize) {
+      size -= 2;
+      ctx.font = `bold ${size}px ${fontFace}`;
+    }
+    ctx.fillText(text, x, y);
+  }
+
   // 1. Ticker_Asset (Gold font: บ้านเดี่ยวพร้อมอยู่)
   const assetType = p.category ? `${p.category}พร้อมอยู่` : 'บ้านเดี่ยวพร้อมอยู่';
-  ctx.fillStyle = '#967C3E'; // Satin Dark Gold
-  ctx.font = 'bold 96px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
-  ctx.fillText(assetType, W / 2, midY + 50);
+  fillAutoFitText(assetType, W / 2, midY + 50, 96, 48, '"RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif', '#967C3E');
 
   // 2. Ticker_Detail (Dark font: 2 ห้องนอน 2 ห้องน้ำ ทำเลรามคำแหง)
   let detailText = (p.specs || '2 ห้องนอน 2 ห้องน้ำ') + (p.location ? ` ทำเล${p.location}` : ' ทำเลรามคำแหง');
-  ctx.fillStyle = '#1F2937';
-  ctx.font = 'bold 68px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
-  ctx.fillText(detailText, W / 2, midY + 190);
+  fillAutoFitText(detailText, W / 2, midY + 190, 68, 36, '"RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif', '#1F2937');
 
   // 3. Ticker_Price (Big Red font: ฿ 2,500,000)
   const priceNum = p.price_sell || p.price_negotiate || 2500000;
-  ctx.fillStyle = '#C8102E';
-  ctx.font = 'bold 144px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
-  ctx.fillText(`฿ ${Number(priceNum).toLocaleString()}`, W / 2, midY + 310);
+  fillAutoFitText(`฿ ${Number(priceNum).toLocaleString()}`, W / 2, midY + 310, 144, 72, '"RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif', '#C8102E');
 
   // Bottom Red Ribbon for Phone Numbers
   const ribbonY = 1480;

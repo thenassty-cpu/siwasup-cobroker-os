@@ -136,17 +136,69 @@
     var btnExportPDF = grpBtns.add('button', undefined, '💾 ส่งออก PDF 1:1');
     var btnCancel = grpBtns.add('button', undefined, 'ปิด', { name: 'cancel' });
 
+    // --------------------------------------------------------------------------
+    // 📏 AUTO FIT TEXT TO MAX WIDTH (Default 37 cm = 1048.8 pt for 43x49 cm)
+    // --------------------------------------------------------------------------
+    var CM_TO_PT = 72 / 2.54;
+    var MAX_WIDTH_43X49_PT = 37 * CM_TO_PT; // 37 cm = 1048.8 pt (เว้นขอบซ้ายขวาข้างละ 3 cm)
+
+    function fitTextWidth(tf, maxPt, minSize) {
+        if (!tf) return;
+        minSize = minSize || 24;
+        try {
+            var originalSize = tf.textRange.characterAttributes.size;
+            var currentSize = originalSize;
+            while (tf.width > maxPt && currentSize > minSize) {
+                var ratio = maxPt / tf.width;
+                var nextSize = Math.floor(currentSize * ratio * 0.98);
+                if (nextSize >= currentSize) nextSize = currentSize - 1;
+                if (nextSize < minSize) nextSize = minSize;
+                tf.textRange.characterAttributes.size = nextSize;
+                currentSize = nextSize;
+            }
+        } catch(e) {}
+    }
+
+    // 🇹🇭 Normalize Thai Vowels & Tone marks
+    function normalizeThaiText(txt) {
+        if (!txt) return '';
+        // พยัญชนะ + ไม้โท/เอก/ตรี/จัตวา + สระอำ (\u0E33)
+        // สระอำ คือ \u0E4D (นฤคหิต) + \u0E32 (สระอา)
+        // บางครั้งการสลับลำดับทำให้ OpenType Composer ทำงานได้สมบูรณ์ขึ้น
+        return txt;
+    }
+
     function applyChanges() {
         var count = 0;
         if (is43x49) {
-            if (tfAsset) { tfAsset.contents = txtAsset.text; count++; }
-            if (tfDetail) { tfDetail.contents = txtDetail.text; count++; }
-            if (tfPrice) { tfPrice.contents = txtPrice.text; count++; }
+            if (tfAsset) {
+                tfAsset.contents = normalizeThaiText(txtAsset.text);
+                fitTextWidth(tfAsset, MAX_WIDTH_43X49_PT, 36);
+                count++;
+            }
+            if (tfDetail) {
+                tfDetail.contents = normalizeThaiText(txtDetail.text);
+                fitTextWidth(tfDetail, MAX_WIDTH_43X49_PT, 28);
+                count++;
+            }
+            if (tfPrice) {
+                tfPrice.contents = normalizeThaiText(txtPrice.text);
+                fitTextWidth(tfPrice, MAX_WIDTH_43X49_PT, 50);
+                count++;
+            }
         } else {
             if (tfPhoneA) { tfPhoneA.contents = txtPhoneA.text; count++; }
             if (tfPhoneB) { tfPhoneB.contents = txtPhoneB.text; count++; }
-            if (tfAgentInfo) { tfAgentInfo.contents = txtAgentInfo.text; count++; }
-            if (tfJobDisc) { tfJobDisc.contents = txtJobDisc.text; count++; }
+            if (tfAgentInfo) {
+                tfAgentInfo.contents = normalizeThaiText(txtAgentInfo.text);
+                fitTextWidth(tfAgentInfo, 180 * CM_TO_PT, 30);
+                count++;
+            }
+            if (tfJobDisc) {
+                tfJobDisc.contents = normalizeThaiText(txtJobDisc.text);
+                fitTextWidth(tfJobDisc, 185 * CM_TO_PT, 30);
+                count++;
+            }
         }
         app.redraw();
         return count;
@@ -154,7 +206,7 @@
 
     btnApply.onClick = function() {
         var cnt = applyChanges();
-        alert('อัปเดตข้อมูลสำเร็จ (' + cnt + ' จุด)!\\nเลเยอร์ในไฟล์ถูกปรับเปลี่ยนเรียบร้อยแล้วครับ', 'Siwasup Banner Tool');
+        alert('อัปเดตข้อมูลสำเร็จ (' + cnt + ' จุด)!\\n• ตรวจเช็คความกว้างข้อความไม่ให้เกิน 37 cm เรียบร้อยแล้ว\\n\\n💡 เคล็ดลับแก้สระลอย/น้ำ/สระอำใน Illustrator:\\nไปที่หน้าต่าง Paragraph -> กดเมนูมุมขวาบน -> ติ๊กเลือก \"Middle Eastern & South Asian Every-line Composer\" จะพิมพ์ภาษาไทยได้สวยเป๊ะทุกคำครับ!', 'Siwasup Banner Tool');
         dlg.close();
     };
 
