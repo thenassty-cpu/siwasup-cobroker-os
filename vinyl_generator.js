@@ -414,10 +414,10 @@ function renderSiwasupMaster43x49(ctx, canvas, p, assetText, detailText, priceTe
   ctx.fillStyle = '#C2A460'; // Satin Gold CI
   ctx.fillRect(50, goldBarY, W - 100, goldBarH);
 
-  // Middle Area: Ticker_Asset + Ticker_Detail + Ticker_Price
-  const midY = goldBarY + goldBarH + 60;
+  // Middle Area: Ticker_Asset + Ticker_Detail + Ticker_Price (Intelligent Auto-Fit & Balanced Vertical Distribution)
+  // Available vertical space: from goldBarBottom (554px) to ribbonY (1480px) = 926px total height
   ctx.textAlign = 'center';
-  ctx.textBaseline = 'top';
+  ctx.textBaseline = 'middle';
 
   // Helper for auto-shrinking text to fit max width (37 cm = 1480px on this 1720 canvas)
   const maxContentW = Math.round(W * (37 / 43)); // 1480px
@@ -432,14 +432,14 @@ function renderSiwasupMaster43x49(ctx, canvas, p, assetText, detailText, priceTe
     ctx.fillText(text, x, y);
   }
 
-  // 1. Ticker_Asset (Gold font: บ้านเดี่ยวพร้อมอยู่)
-  fillAutoFitText(assetText, W / 2, midY + 50, 96, 48, '"RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif', '#967C3E');
+  // 1. Ticker_Asset (Gold font: บ้านเดี่ยว ทำเลทอง) - Initial 170px, prominent & luxurious
+  fillAutoFitText(assetText, W / 2, 690, 170, 70, '"RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif', '#967C3E');
 
-  // 2. Ticker_Detail (Dark font: 2 ห้องนอน 2 ห้องน้ำ ทำเลรามคำแหง)
-  fillAutoFitText(detailText, W / 2, midY + 190, 68, 36, '"RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif', '#1F2937');
+  // 2. Ticker_Detail (Dark font: 3 ชั้น 5ห้องนอน พร้อมโอน) - Initial 120px, bold & crisp from 30m
+  fillAutoFitText(detailText, W / 2, 940, 120, 50, '"RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif', '#1F2937');
 
-  // 3. Ticker_Price (Big Red font: ฿ 2,500,000)
-  fillAutoFitText(priceText, W / 2, midY + 310, 144, 72, '"RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif', '#C8102E');
+  // 3. Ticker_Price (Big Red font: ฿ 4,500,000) - Initial 250px, massive hero number
+  fillAutoFitText(priceText, W / 2, 1240, 250, 100, '"RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif', '#C8102E');
 
   // Bottom Red Ribbon for Phone Numbers
   const ribbonY = 1480;
@@ -447,18 +447,19 @@ function renderSiwasupMaster43x49(ctx, canvas, p, assetText, detailText, priceTe
   ctx.fillStyle = '#C8102E';
   ctx.fillRect(50, ribbonY, W - 100, ribbonH);
 
-  // Phone Numbers
+  // Phone Numbers - Enlarge to 64px for maximum legibility
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = 'bold 50px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
+  ctx.font = 'bold 64px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
   ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
-  ctx.fillText(`📞 ${phoneA}   ${phoneB}`, 90, ribbonY + ribbonH / 2);
+  const phoneText = phoneB && phoneB.trim() !== '' ? `📞 ${phoneA}   ${phoneB}` : `📞 ${phoneA}`;
+  ctx.fillText(phoneText, 90, ribbonY + ribbonH / 2);
 
   // Dynamic QR Code on right side of ribbon
   if (qrImg) {
-    const qrSize = 220;
-    const qrX = W - qrSize - 80;
-    const qrY = ribbonY - 15;
+    const qrSize = 240;
+    const qrX = W - qrSize - 75;
+    const qrY = ribbonY - 25;
 
     ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(qrX - 6, qrY - 6, qrSize + 12, qrSize + 12);
@@ -472,8 +473,8 @@ function renderSiwasupMaster43x49(ctx, canvas, p, assetText, detailText, priceTe
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#C8102E';
-  ctx.font = 'bold 78px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
-  ctx.fillText('รับฝากขาย รีโนเวท โฆษณาฟรี!', W / 2, ribbonY + ribbonH + 110);
+  ctx.font = 'bold 84px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
+  ctx.fillText('รับฝากขาย รีโนเวท โฆษณาฟรี!', W / 2, ribbonY + ribbonH + 115);
 
   // 4 Corner Eyelet Markers
   drawEyelets(ctx, W, H, 50, 12);
