@@ -735,16 +735,20 @@
             </div>
           </div>
 
-          <!-- Toggle Price and Installment -->
-          <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-200">
-            <label class="flex items-center gap-1.5 cursor-pointer text-gray-800 font-medium">
-              <input type="checkbox" id="vinyl-show-price" checked onchange="renderVinylCanvas()" class="rounded text-[#990000] focus:ring-red-600">
-              <span>แสดงตัวเลขราคาขายตัวใหญ่</span>
+          <!-- Smart Auto-Fit & Font Weight Controls -->
+          <div class="flex flex-wrap items-center justify-between gap-2 p-2 bg-amber-50/50 rounded-lg border border-amber-200/80">
+            <label class="flex items-center gap-1.5 cursor-pointer text-gray-800 font-bold text-[11px]">
+              <input type="checkbox" id="vinyl-auto-expand" checked onchange="renderVinylCanvas()" class="rounded text-[#990000] focus:ring-red-600">
+              <span>✨ Auto-Fit ขยายเต็มกรอบอัตโนมัติ</span>
             </label>
-            <span class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
-              <i data-lucide="qr-code" class="w-3 h-3 stroke-[1.5]"></i>
-              ฝัง QR ล็อกสิทธิ์อัตโนมัติ
-            </span>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[10px] text-gray-600 font-medium">ความหนา:</span>
+              <select id="vinyl-weight-mode" onchange="renderVinylCanvas()" class="border border-amber-300 rounded-md py-0.5 px-1.5 text-[11px] bg-white font-bold text-gray-800 outline-none focus:ring-1 focus:ring-amber-600">
+                <option value="heavy" selected>หนาคมชัด (แนะนำ)</option>
+                <option value="ultra">หนาพิเศษ (Ultra Bold)</option>
+                <option value="normal">มาตรฐาน (Normal)</option>
+              </select>
+            </div>
           </div>
 
           <!-- Download Action Buttons -->

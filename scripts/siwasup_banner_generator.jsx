@@ -135,6 +135,10 @@
         txtJobDisc.preferredSize.width = 280;
     }
 
+    var grpOpt = pnlInputs.add('group');
+    var chkAutoExpand = grpOpt.add('checkbox', undefined, '✨ Auto-Fit ขยายอักษรให้เต็มกรอบอัตโนมัติ (เมื่อพิมพ์ข้อความสั้น)');
+    chkAutoExpand.value = true;
+
     var grpBtns = dlg.add('group');
     grpBtns.alignment = ['center', 'bottom'];
     grpBtns.spacing = 10;
@@ -143,17 +147,36 @@
     var btnCancel = grpBtns.add('button', undefined, 'ปิด', { name: 'cancel' });
 
     // --------------------------------------------------------------------------
-    // 📏 AUTO FIT TEXT TO MAX WIDTH (Default 37 cm = 1048.8 pt for 43x49 cm)
+    // 📏 2-WAY SMART AUTO FIT TEXT (Scale Up when short + Scale Down when > 37cm)
     // --------------------------------------------------------------------------
     var CM_TO_PT = 72 / 2.54;
-    var MAX_WIDTH_43X49_PT = 37 * CM_TO_PT; // 37 cm = 1048.8 pt (เว้นขอบซ้ายขวาข้างละ 3 cm)
+    var MAX_WIDTH_43X49_PT = 37 * CM_TO_PT;    // 37 cm = 1048.8 pt (Hard limit)
+    var TARGET_WIDTH_43X49_PT = 34 * CM_TO_PT; // 34 cm = 963.7 pt (Target fill width)
 
-    function fitTextWidth(tf, maxPt, minSize) {
+    function fitTextWidth(tf, maxPt, minSize, maxSize, targetPt) {
         if (!tf) return;
         minSize = minSize || 24;
+        maxSize = maxSize || 220;
+        targetPt = targetPt || (maxPt * 0.90);
+        var doExpand = chkAutoExpand.value;
         try {
-            var originalSize = tf.textRange.characterAttributes.size;
-            var currentSize = originalSize;
+            tf.textRange.characterAttributes.horizontalScale = 100;
+            var currentSize = tf.textRange.characterAttributes.size;
+
+            // 1. Scale UP if short and auto-expand is enabled
+            if (doExpand && tf.width < targetPt && currentSize < maxSize) {
+                while (tf.width < targetPt && currentSize < maxSize) {
+                    var ratioUp = targetPt / (tf.width > 1 ? tf.width : 1);
+                    var nextUp = Math.ceil(currentSize * Math.min(ratioUp, 1.25));
+                    if (nextUp <= currentSize) nextUp = currentSize + 2;
+                    if (nextUp > maxSize) nextUp = maxSize;
+                    tf.textRange.characterAttributes.size = nextUp;
+                    currentSize = nextUp;
+                    if (currentSize >= maxSize) break;
+                }
+            }
+
+            // 2. Scale DOWN if exceeds maxPt (37 cm safety zone)
             while (tf.width > maxPt && currentSize > minSize) {
                 var ratio = maxPt / tf.width;
                 var nextSize = Math.floor(currentSize * ratio * 0.98);
@@ -162,15 +185,20 @@
                 tf.textRange.characterAttributes.size = nextSize;
                 currentSize = nextSize;
             }
+
+            // 3. Gentle Horizontal Scale (100% - 115%) if at maxSize and still narrower than targetPt
+            if (doExpand && tf.width > 0 && tf.width < targetPt * 0.92) {
+                var hScale = Math.min(115, Math.round(((targetPt * 0.92) / tf.width) * 100));
+                if (hScale > 100) {
+                    tf.textRange.characterAttributes.horizontalScale = hScale;
+                }
+            }
         } catch(e) {}
     }
 
     // 🇹🇭 Normalize Thai Vowels & Tone marks
     function normalizeThaiText(txt) {
         if (!txt) return '';
-        // พยัญชนะ + ไม้โท/เอก/ตรี/จัตวา + สระอำ (\u0E33)
-        // สระอำ คือ \u0E4D (นฤคหิต) + \u0E32 (สระอา)
-        // บางครั้งการสลับลำดับทำให้ OpenType Composer ทำงานได้สมบูรณ์ขึ้น
         return txt;
     }
 
@@ -179,41 +207,49 @@
         if (is43x49) {
             if (tfAsset) {
                 tfAsset.contents = normalizeThaiText(txtAsset.text);
-                fitTextWidth(tfAsset, MAX_WIDTH_43X49_PT, 36);
+                fitTextWidth(tfAsset, MAX_WIDTH_43X49_PT, 36, 160, TARGET_WIDTH_43X49_PT);
                 count++;
             }
             if (tfDetail) {
                 tfDetail.contents = normalizeThaiText(txtDetail.text);
-                fitTextWidth(tfDetail, MAX_WIDTH_43X49_PT, 28);
+                fitTextWidth(tfDetail, MAX_WIDTH_43X49_PT, 28, 115, TARGET_WIDTH_43X49_PT);
                 count++;
             }
             if (tfPrice) {
                 tfPrice.contents = normalizeThaiText(txtPrice.text);
-                fitTextWidth(tfPrice, MAX_WIDTH_43X49_PT, 50);
+                fitTextWidth(tfPrice, MAX_WIDTH_43X49_PT, 50, 230, TARGET_WIDTH_43X49_PT);
                 count++;
             }
         } else {
             if (tfHorsale) {
                 var rawHead = txtHorsale.text;
-                if (rawHead.indexOf('/') !== -1) {
+                if (rawHead.length > 14 && rawHead.indexOf('/') !== -1) {
                     var pParts = rawHead.split('/');
                     tfHorsale.contents = pParts[0].replace(/\s+$/, '') + '\n' + pParts[1].replace(/^\s+/, '');
                 } else {
                     tfHorsale.contents = rawHead;
                 }
-                fitTextWidth(tfHorsale, 185 * CM_TO_PT, 80);
+                fitTextWidth(tfHorsale, 185 * CM_TO_PT, 80, 420, 170 * CM_TO_PT);
                 count++;
             }
-            if (tfPhoneA) { tfPhoneA.contents = txtPhoneA.text; count++; }
-            if (tfPhoneB) { tfPhoneB.contents = txtPhoneB.text; count++; }
+            if (tfPhoneA) {
+                tfPhoneA.contents = txtPhoneA.text;
+                fitTextWidth(tfPhoneA, 185 * CM_TO_PT, 100, 310, 175 * CM_TO_PT);
+                count++;
+            }
+            if (tfPhoneB) {
+                tfPhoneB.contents = txtPhoneB.text;
+                fitTextWidth(tfPhoneB, 185 * CM_TO_PT, 100, 310, 175 * CM_TO_PT);
+                count++;
+            }
             if (tfAgentInfo) {
                 tfAgentInfo.contents = normalizeThaiText(txtAgentInfo.text);
-                fitTextWidth(tfAgentInfo, 180 * CM_TO_PT, 30);
+                fitTextWidth(tfAgentInfo, 180 * CM_TO_PT, 30, 85, 155 * CM_TO_PT);
                 count++;
             }
             if (tfJobDisc) {
                 tfJobDisc.contents = normalizeThaiText(txtJobDisc.text);
-                fitTextWidth(tfJobDisc, 185 * CM_TO_PT, 30);
+                fitTextWidth(tfJobDisc, 185 * CM_TO_PT, 30, 80, 165 * CM_TO_PT);
                 count++;
             }
         }
