@@ -198,12 +198,25 @@ async function renderVinylCanvas() {
 }
 
 // ==============================================================================
-// 🪄 UNIVERSAL 2-WAY SMART AUTO-FIT & STROKE THICKNESS ENGINE
-// Automatically expands short text to fill target width (up to maxSize & maxStretchX)
-// and shrinks long text to stay within maxW, plus applies Faux-Bold Offset Stroke.
+// 🪄 UNIVERSAL 2-WAY SMART AUTO-FIT, STROKE THICKNESS & THAI TONE CLEARANCE ENGINE
+// Automatically expands short text to fill target width, shrinks long text to stay
+// within maxW, applies Faux-Bold Offset Stroke, and reserves top headroom for Thai
+// upper vowels + tone marks (วรรณยุกต์ซ้อน เช่น บ้านเดี่ยว, ขายด่วน, ที่ดิน, ชั้น).
 // ==============================================================================
+function getThaiHeadroomProfile(str) {
+  const s = String(str || '');
+  // Double top stack: upper vowel (\u0E31, \u0E34-\u0E37, \u0E47, \u0E4D) + tone mark (\u0E48-\u0E4C) e.g. เดี่ยว, ที่, ชั้น, น้ำ
+  const hasDoubleTop = /[\u0E31\u0E34-\u0E37\u0E47\u0E4D][\u0E48-\u0E4C]/.test(s);
+  // Single top vowel or tone mark e.g. บ้าน, ด่วน, ให้
+  const hasSingleTop = /[\u0E31\u0E34-\u0E37\u0E47-\u0E4E]/.test(s);
+  return { hasDoubleTop, hasSingleTop };
+}
+
 function drawSmartText(ctx, text, x, y, opts) {
   if (!text) return 0;
+  const str = String(text).trim();
+  if (!str) return 0;
+
   const {
     targetW = 1400,
     maxW = 1500,
@@ -216,22 +229,34 @@ function drawSmartText(ctx, text, x, y, opts) {
     baseline = 'middle',
     autoExpand = true,
     weightMode = 'heavy', // 'normal', 'heavy', 'ultra'
-    maxStretchX = 1.16    // Gentle horizontal expansion up to 16% when text is very short
+    maxStretchX = 1.12,   // Gentle horizontal expansion cap so letters stay well-proportioned
+    protectThaiMarks = true
   } = opts;
 
   const cssWeight = weightMode === 'ultra' ? '900' : (weightMode === 'heavy' ? '800' : '700');
-  const strokeFactor = weightMode === 'ultra' ? 0.036 : (weightMode === 'heavy' ? 0.018 : 0);
+  const strokeFactor = weightMode === 'ultra' ? 0.034 : (weightMode === 'heavy' ? 0.016 : 0);
 
-  let size = baseSize;
+  // Reserve vertical headroom when text contains tall Thai upper vowels + tone marks (กันวรรณยุกต์เกยกรอบ)
+  const thaiProfile = getThaiHeadroomProfile(str);
+  let effectiveMaxSize = maxSize;
+  if (protectThaiMarks) {
+    if (thaiProfile.hasDoubleTop) {
+      effectiveMaxSize = Math.max(minSize, Math.round(maxSize * 0.86));
+    } else if (thaiProfile.hasSingleTop) {
+      effectiveMaxSize = Math.max(minSize, Math.round(maxSize * 0.93));
+    }
+  }
+
+  let size = Math.min(baseSize, effectiveMaxSize);
   ctx.font = `${cssWeight} ${size}px ${fontFamily}`;
-  let w = ctx.measureText(text).width;
+  let w = ctx.measureText(str).width;
 
   // 1. Scale UP if autoExpand is active and text is narrower than targetW
-  if (autoExpand && w < targetW && size < maxSize) {
-    while (w < targetW && size < maxSize) {
+  if (autoExpand && w < targetW && size < effectiveMaxSize) {
+    while (w < targetW && size < effectiveMaxSize) {
       size += 2;
       ctx.font = `${cssWeight} ${size}px ${fontFamily}`;
-      w = ctx.measureText(text).width;
+      w = ctx.measureText(str).width;
     }
   }
 
@@ -239,13 +264,25 @@ function drawSmartText(ctx, text, x, y, opts) {
   while (w > maxW && size > minSize) {
     size -= 2;
     ctx.font = `${cssWeight} ${size}px ${fontFamily}`;
-    w = ctx.measureText(text).width;
+    w = ctx.measureText(str).width;
   }
 
-  // 3. Apply gentle horizontal stretch if text hit vertical maxSize ceiling but still looks narrow
+  // 3. Apply gentle horizontal stretch (or condense if still wider than maxW at minSize)
   let scaleX = 1.0;
-  if (autoExpand && w > 0 && w < targetW * 0.90 && maxStretchX > 1.0) {
-    scaleX = Math.min(maxStretchX, (targetW * 0.90) / w);
+  if (w > maxW) {
+    scaleX = Math.max(0.72, maxW / w);
+  } else if (autoExpand && w > 0 && w < targetW * 0.92 && maxStretchX > 1.0) {
+    scaleX = Math.min(maxStretchX, (targetW * 0.92) / w);
+  }
+
+  // 4. Downward optical offset when tall Thai tone marks are present so they never clip top borders/bars
+  let yOffset = 0;
+  if (protectThaiMarks && baseline === 'middle') {
+    if (thaiProfile.hasDoubleTop) {
+      yOffset = Math.round(size * 0.08);
+    } else if (thaiProfile.hasSingleTop) {
+      yOffset = Math.round(size * 0.04);
+    }
   }
 
   ctx.save();
@@ -254,29 +291,121 @@ function drawSmartText(ctx, text, x, y, opts) {
   ctx.fillStyle = fillStyle;
   ctx.font = `${cssWeight} ${size}px ${fontFamily}`;
 
-  if (scaleX !== 1.0) {
-    ctx.translate(x, y);
+  ctx.translate(x, y + yOffset);
+  if (Math.abs(scaleX - 1.0) > 0.005) {
     ctx.scale(scaleX, 1);
-    if (strokeFactor > 0) {
-      ctx.strokeStyle = fillStyle;
-      ctx.lineWidth = Math.max(1.5, size * strokeFactor);
-      ctx.lineJoin = 'round';
-      ctx.miterLimit = 2;
-      ctx.strokeText(text, 0, 0);
-    }
-    ctx.fillText(text, 0, 0);
-  } else {
-    if (strokeFactor > 0) {
-      ctx.strokeStyle = fillStyle;
-      ctx.lineWidth = Math.max(1.5, size * strokeFactor);
-      ctx.lineJoin = 'round';
-      ctx.miterLimit = 2;
-      ctx.strokeText(text, x, y);
-    }
-    ctx.fillText(text, x, y);
   }
+  if (strokeFactor > 0) {
+    ctx.strokeStyle = fillStyle;
+    ctx.lineWidth = Math.max(1.5, size * strokeFactor);
+    ctx.lineJoin = 'round';
+    ctx.miterLimit = 2;
+    ctx.strokeText(str, 0, 0);
+  }
+  ctx.fillText(str, 0, 0);
   ctx.restore();
   return size;
+}
+
+// ==============================================================================
+// 📞 PAIRED DUAL PHONE RENDERER (Equal Weight + Dynamic Tracking for Narrow Digits like '1')
+// Ensures both phone lines use the EXACT SAME font size & stroke weight while
+// aligning to the exact same total width via inter-character letter-spacing.
+// ==============================================================================
+function drawPairedPhones(ctx, phoneA, phoneB, centerX, yA, yB, opts = {}) {
+  const {
+    targetW = 1720,
+    maxW = 1820,
+    baseSize = 220,
+    maxSize = 255,
+    minSize = 130,
+    fillStyle = '#1F2937',
+    fontFamily = '"Kanit", "RSU", "Tahoma", sans-serif',
+    autoExpand = true,
+    weightMode = 'heavy'
+  } = opts;
+
+  const cssWeight = weightMode === 'ultra' ? '900' : (weightMode === 'heavy' ? '800' : '700');
+  const strokeFactor = weightMode === 'ultra' ? 0.034 : (weightMode === 'heavy' ? 0.016 : 0);
+
+  const strA = String(phoneA || '').trim();
+  const strB = String(phoneB || '').trim();
+
+  // Measure both phones at the same fontSize so stroke thickness & height are 100% identical
+  let size = baseSize;
+  ctx.font = `${cssWeight} ${size}px ${fontFamily}`;
+  let wA = ctx.measureText(strA).width;
+  let wB = ctx.measureText(strB).width;
+  let maxNaturalW = Math.max(wA, wB);
+
+  // 1. Scale UP shared fontSize based on the wider phone number
+  if (autoExpand && maxNaturalW > 0 && maxNaturalW < targetW && size < maxSize) {
+    while (maxNaturalW < targetW && size < maxSize) {
+      size += 2;
+      ctx.font = `${cssWeight} ${size}px ${fontFamily}`;
+      wA = ctx.measureText(strA).width;
+      wB = ctx.measureText(strB).width;
+      maxNaturalW = Math.max(wA, wB);
+    }
+  }
+
+  // 2. Scale DOWN shared fontSize if the wider phone exceeds maxW
+  while (maxNaturalW > maxW && size > minSize) {
+    size -= 2;
+    ctx.font = `${cssWeight} ${size}px ${fontFamily}`;
+    wA = ctx.measureText(strA).width;
+    wB = ctx.measureText(strB).width;
+    maxNaturalW = Math.max(wA, wB);
+  }
+
+  // 3. Determine unified target span width (so narrow digits like '1' expand via tracking, not distortion)
+  const unifiedSpanW = autoExpand
+    ? Math.min(maxW, Math.max(maxNaturalW, Math.min(targetW, maxNaturalW * 1.10)))
+    : Math.min(maxW, maxNaturalW);
+
+  const renderTrackedPhone = (str, yPos, naturalW) => {
+    if (!str) return;
+    const chars = Array.from(str);
+    const gaps = Math.max(1, chars.length - 1);
+    const extraW = Math.max(0, unifiedSpanW - naturalW);
+    const maxTrackPerGap = size * 0.15; // Cap tracking so digits remain cohesive
+    const tracking = Math.min(maxTrackPerGap, extraW / gaps);
+    const totalLineW = naturalW + tracking * gaps;
+
+    // Gentle shared horizontal scale only if unifiedSpanW still needs a tiny nudge
+    const scaleX = totalLineW > maxW ? (maxW / totalLineW) : 1.0;
+
+    ctx.save();
+    ctx.translate(centerX, yPos);
+    if (Math.abs(scaleX - 1.0) > 0.005) {
+      ctx.scale(scaleX, 1);
+    }
+    ctx.font = `${cssWeight} ${size}px ${fontFamily}`;
+    ctx.fillStyle = fillStyle;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+
+    if (strokeFactor > 0) {
+      ctx.strokeStyle = fillStyle;
+      ctx.lineWidth = Math.max(1.5, size * strokeFactor);
+      ctx.lineJoin = 'round';
+      ctx.miterLimit = 2;
+    }
+
+    let cursorX = -totalLineW / 2;
+    for (let i = 0; i < chars.length; i++) {
+      const ch = chars[i];
+      if (strokeFactor > 0) {
+        ctx.strokeText(ch, cursorX, 0);
+      }
+      ctx.fillText(ch, cursorX, 0);
+      cursorX += ctx.measureText(ch).width + tracking;
+    }
+    ctx.restore();
+  };
+
+  renderTrackedPhone(strA, yA, wA);
+  renderTrackedPhone(strB, yB, wB);
 }
 
 // ------------------------------------------------------------------------------
@@ -297,15 +426,34 @@ function renderSiwasupMaster200x160(ctx, canvas, p, headline, phoneA, phoneB, su
   ctx.strokeStyle = '#F3F4F6';
   ctx.strokeRect(20, 20, W - 40, H - 40);
 
-  // 1. Red Header Block 'Horsale' (Height = 580px)
+  // 1. Red Header Block 'Horsale' (Height = 580px: Y=30..610)
   const headerHeight = 580;
   ctx.fillStyle = '#C8102E';
   ctx.fillRect(30, 30, W - 60, headerHeight);
 
-  // ⭐ Headline Text: Break into 2 lines ONLY when text is long (> 14 chars like 'บ้านหลุดจำนอง / NPA')
-  // Short phrases like 'ขายด่วน', 'ขาย / ให้เช่า', 'ขายบ้านรีโนเวท' stay on 1 huge full-bleed line!
-  const maxHeadW = W - 130;    // 1870px hard limit
-  const targetHeadW = W - 220; // 1780px target fill width
+  // ⭐ 1.1 Job_Discription (www.siwasup.com ซื้อ ขาย บ้าน ที่ดิน ทำการตลาดฟรี @siwasup)
+  // Moved inside the bottom of the Red Header Box in crisp White (#FFFFFF)
+  const hasSubtitle = subtitle && String(subtitle).trim() !== '';
+  if (hasSubtitle) {
+    drawSmartText(ctx, subtitle, W / 2, 30 + headerHeight - 55, {
+      targetW: 1680,
+      maxW: 1820,
+      baseSize: 46,
+      maxSize: 54,
+      minSize: 28,
+      fillStyle: '#FFFFFF',
+      autoExpand,
+      weightMode: weightMode === 'ultra' ? 'heavy' : 'normal',
+      maxStretchX: 1.06
+    });
+  }
+
+  // ⭐ 1.2 Headline Text inside upper portion of Red Header Box (Y=30..500)
+  // Works seamlessly whether the user selects a 1-line or 2-line headline!
+  const maxHeadW = W - 150;    // 1850px hard limit
+  const targetHeadW = W - 240; // 1760px target fill width
+  const headZoneBottom = hasSubtitle ? (30 + headerHeight - 110) : (30 + headerHeight - 20);
+  const headZoneMidY = Math.round((30 + headZoneBottom) / 2);
 
   let headLines = [];
   if (headline.includes('\n')) {
@@ -327,122 +475,96 @@ function renderSiwasupMaster200x160(ctx, canvas, p, headline, phoneA, phoneB, su
   }
 
   if (headLines.length > 1) {
-    // 2-line layout inside 580px red box (Each line up to 250px tall)
-    const midY = 30 + headerHeight / 2;
-    const lineGap = 240;
-    drawSmartText(ctx, headLines[0], W / 2, midY - lineGap / 2 - 5, {
-      targetW: targetHeadW,
+    // 2-line layout (e.g. 'บ้านหลุดจำนอง / NPA') positioned cleanly above the white www.siwasup.com line
+    const lineGap = 195;
+    drawSmartText(ctx, headLines[0], W / 2, headZoneMidY - lineGap / 2, {
+      targetW: targetHeadW * 0.94,
       maxW: maxHeadW,
-      baseSize: 215,
-      maxSize: 255,
+      baseSize: 180,
+      maxSize: 205,
       minSize: 90,
       fillStyle: '#FFFFFF',
       autoExpand,
       weightMode,
-      maxStretchX: 1.20
+      maxStretchX: 1.12
     });
-    drawSmartText(ctx, headLines[1], W / 2, midY + lineGap / 2 + 5, {
-      targetW: targetHeadW * 0.75,
+    drawSmartText(ctx, headLines[1], W / 2, headZoneMidY + lineGap / 2, {
+      targetW: targetHeadW * 0.72,
       maxW: maxHeadW,
-      baseSize: 215,
-      maxSize: 255,
+      baseSize: 175,
+      maxSize: 200,
       minSize: 90,
       fillStyle: '#FFFFFF',
       autoExpand,
       weightMode,
-      maxStretchX: 1.25
+      maxStretchX: 1.14
     });
   } else {
-    // 1-line layout: Expands up to 410px tall to fill the 580px red box like Ads200x160.ait!
-    drawSmartText(ctx, headLines[0], W / 2, 30 + headerHeight / 2 + 8, {
+    // 1-line layout (e.g. 'ขายด่วน', 'ขาย / ให้เช่า', 'ขายบ้านรีโนเวท') with Thai tone-mark headroom protection
+    drawSmartText(ctx, headLines[0], W / 2, headZoneMidY, {
       targetW: targetHeadW,
       maxW: maxHeadW,
-      baseSize: 310,
-      maxSize: 410,
+      baseSize: 280,
+      maxSize: 345,
       minSize: 120,
       fillStyle: '#FFFFFF',
       autoExpand,
       weightMode,
-      maxStretchX: 1.22
+      maxStretchX: 1.14
     });
   }
 
-  // ⭐ 1.1 Signature Satin Gold Accent Bar (แถบสีทองคั่นใต้บล็อกแดงตาม Ads200x160.ait)
+  // ⭐ 1.3 Signature Satin Gold Accent Bar (แถบสีทองคั่นใต้บล็อกแดงตาม Ads200x160.ait)
   const goldBarH = 26;
-  const goldBarY = 30 + headerHeight;
+  const goldBarY = 30 + headerHeight; // 610
   ctx.fillStyle = '#C2A460'; // Satin Gold CI
   ctx.fillRect(30, goldBarY, W - 60, goldBarH);
 
-  // 2. Middle Body: Job_Discription + Huge Phone Numbers + Ticker_AgentInfo
-  const bodyTop = goldBarY + goldBarH;
+  // 2. Middle White Body (Y=636..1265 -> Generous vertical breathing room!)
+  const bodyTop = goldBarY + goldBarH; // 636
 
-  // Job_Discription: Red Web & LINE text (Fills width nicely above phones)
-  drawSmartText(ctx, subtitle, W / 2, bodyTop + 42, {
-    targetW: 1680,
-    maxW: 1840,
-    baseSize: 48,
-    maxSize: 64,
-    minSize: 28,
-    fillStyle: '#C8102E',
-    autoExpand,
-    weightMode: weightMode === 'ultra' ? 'heavy' : 'normal',
-    maxStretchX: 1.08
-  });
-
-  // Phone Numbers - Auto-Fit to span 1760px width across the 2000px banner!
+  // Phone Numbers - Equal font weight & dynamic tracking for narrow '1' digits
   if (phoneB && phoneB.trim() !== '') {
-    drawSmartText(ctx, phoneA, W / 2, bodyTop + 190, {
-      targetW: 1760,
-      maxW: 1850,
-      baseSize: 235,
-      maxSize: 285,
-      minSize: 140,
+    drawPairedPhones(ctx, phoneA, phoneB, W / 2, bodyTop + 145, bodyTop + 370, {
+      targetW: 1740,
+      maxW: 1840,
+      baseSize: 220,
+      maxSize: 255,
+      minSize: 135,
       fillStyle: '#1F2937',
       autoExpand,
-      weightMode,
-      maxStretchX: 1.18
-    });
-    drawSmartText(ctx, phoneB, W / 2, bodyTop + 405, {
-      targetW: 1760,
-      maxW: 1850,
-      baseSize: 235,
-      maxSize: 285,
-      minSize: 140,
-      fillStyle: '#1F2937',
-      autoExpand,
-      weightMode,
-      maxStretchX: 1.18
+      weightMode
     });
   } else {
     // Single phone number: Massive centered hero number
-    drawSmartText(ctx, phoneA, W / 2, bodyTop + 295, {
-      targetW: 1800,
-      maxW: 1860,
-      baseSize: 270,
-      maxSize: 330,
+    drawSmartText(ctx, phoneA, W / 2, bodyTop + 255, {
+      targetW: 1760,
+      maxW: 1850,
+      baseSize: 255,
+      maxSize: 300,
       minSize: 150,
       fillStyle: '#1F2937',
       autoExpand,
       weightMode,
-      maxStretchX: 1.22
+      maxStretchX: 1.14
     });
   }
 
-  // Ticker_AgentInfo: Red text line below phone numbers
-  drawSmartText(ctx, agentInfo, W / 2, bodyTop + 545, {
-    targetW: 1560,
-    maxW: 1840,
-    baseSize: 52,
-    maxSize: 68,
+  // Ticker_AgentInfo: Red text line below phone numbers with airy gap above & below
+  drawSmartText(ctx, agentInfo, W / 2, bodyTop + 535, {
+    targetW: 1540,
+    maxW: 1820,
+    baseSize: 50,
+    maxSize: 62,
     minSize: 28,
     fillStyle: '#C8102E',
     autoExpand,
     weightMode: weightMode === 'ultra' ? 'heavy' : 'normal',
-    maxStretchX: 1.08
+    maxStretchX: 1.06
   });
 
   // 3. Bottom Footer Bar: Siwasup Logo + Services + QR Code (Larger & Perfectly Centered Group)
-  const footerTop = 1255;
+  const footerTop = 1265;
   const logoW = 225;
   const logoH = 180;
   const qrSize = 185;
@@ -469,27 +591,27 @@ function renderSiwasupMaster200x160(ctx, canvas, p, headline, phoneA, phoneB, su
   // Footer Center Text: Services & Catchphrase (Auto-fit to textW = 860px)
   const textCenterX = startX + logoW + gap + textW / 2;
   drawSmartText(ctx, 'รับฝากขายบ้าน-ที่ดิน', textCenterX, footerTop + 48, {
-    targetW: textW * 0.96,
+    targetW: textW * 0.94,
     maxW: textW,
-    baseSize: 78,
-    maxSize: 98,
+    baseSize: 74,
+    maxSize: 90,
     minSize: 48,
     fillStyle: '#C8102E',
     autoExpand,
     weightMode,
-    maxStretchX: 1.15
+    maxStretchX: 1.10
   });
 
   drawSmartText(ctx, 'ให้เราช่วยขาย ง่ายกว่า โฆษณาฟรี มีบริการจัดสินเชื่อ', textCenterX, footerTop + 118, {
-    targetW: textW * 0.96,
+    targetW: textW * 0.95,
     maxW: textW,
-    baseSize: 40,
-    maxSize: 48,
+    baseSize: 38,
+    maxSize: 46,
     minSize: 28,
     fillStyle: '#1F2937',
     autoExpand,
     weightMode: 'normal',
-    maxStretchX: 1.08
+    maxStretchX: 1.06
   });
 
   ctx.fillStyle = '#6B7280';
@@ -543,73 +665,76 @@ function renderSiwasupMaster43x49(ctx, canvas, p, assetText, detailText, priceTe
   ctx.fillStyle = '#C8102E';
   ctx.fillRect(redBoxX, 50, redBoxW, redBoxH);
 
-  // White text 'ขาย' (Fills the red box boldly like Ads43x49.ai!)
-  drawSmartText(ctx, 'ขาย', redBoxX + redBoxW / 2, 50 + redBoxH / 2 - 28, {
-    targetW: redBoxW * 0.84,
-    maxW: redBoxW - 60,
-    baseSize: 310,
-    maxSize: 390,
+  // White text 'ขาย' (Balanced with generous red padding above 'Siwasup Assets')
+  drawSmartText(ctx, 'ขาย', redBoxX + redBoxW / 2, 50 + redBoxH / 2 - 34, {
+    targetW: redBoxW * 0.78,
+    maxW: redBoxW - 90,
+    baseSize: 285,
+    maxSize: 330,
     minSize: 180,
     fillStyle: '#FFFFFF',
     autoExpand: true,
     weightMode,
-    maxStretchX: 1.22
+    maxStretchX: 1.12
   });
 
   // Subtitle 'Siwasup Assets' (Right-aligned under 'ขาย' matching Ads43x49.ai)
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '700 50px "Kanit", "RSU", "Tahoma", sans-serif';
+  ctx.font = '700 46px "Kanit", "RSU", "Tahoma", sans-serif';
   ctx.textAlign = 'right';
   ctx.textBaseline = 'middle';
   ctx.fillText('Siwasup Assets', redBoxX + redBoxW - 65, 50 + redBoxH - 42);
 
   // ⭐ Signature Satin Gold Accent Bar (แถบสีทองคั่นใต้ส่วนหัวตาม Ads43x49.ai)
-  const goldBarY = 50 + redBoxH + 16;
-  const goldBarH = 26;
+  const goldBarY = 50 + redBoxH + 16; // 526
+  const goldBarH = 26;                // Bottom of Gold Bar = 552
   ctx.fillStyle = '#C2A460'; // Satin Gold CI
   ctx.fillRect(50, goldBarY, W - 100, goldBarH);
 
-  // Middle Area: Ticker_Asset + Ticker_Detail + Ticker_Price (2-Way Smart Auto-Fit)
+  // Middle Area: Ticker_Asset + Ticker_Detail + Ticker_Price (2-Way Smart Auto-Fit + Airy Line Spacing)
   // Hard safety limit: 37 cm = 1480px on this 1720px canvas
   const maxContentW = Math.round(W * (37 / 43)); // 1480px
 
-  // 1. Ticker_Asset (Gold font: คอนโด UBIO ริมถนน / บ้านเดี่ยวพร้อมอยู่)
-  drawSmartText(ctx, assetText, W / 2, 695, {
-    targetW: 1380,
+  // 1. Ticker_Asset (Gold font: บ้านเดี่ยว / คอนโด UBIO ริมถนน)
+  // Positioned at Y=735 with Thai tone-mark clearance so ไม้เอก/สระอี never touches the Gold Bar (Y=552)
+  drawSmartText(ctx, assetText, W / 2, 735, {
+    targetW: 1260,
     maxW: maxContentW,
-    baseSize: 165,
-    maxSize: 225,
+    baseSize: 148,
+    maxSize: 180,
     minSize: 65,
     fillStyle: '#967C3E',
     autoExpand,
     weightMode,
-    maxStretchX: 1.18
+    maxStretchX: 1.08
   });
 
-  // 2. Ticker_Detail (Dark font: รีโนเวทหรู พร้อมอยู่ / 3 ห้องนอน ทำเลพุทธมณฑลสาย 2)
-  drawSmartText(ctx, detailText, W / 2, 945, {
-    targetW: 1340,
+  // 2. Ticker_Detail (Dark font: 2ทำเลทอง / 3 ห้องนอน ทำเลพุทธมณฑลสาย 2)
+  // Positioned at Y=975 (240px gap below Asset)
+  drawSmartText(ctx, detailText, W / 2, 975, {
+    targetW: 1200,
     maxW: maxContentW,
-    baseSize: 120,
-    maxSize: 165,
+    baseSize: 108,
+    maxSize: 135,
     minSize: 48,
     fillStyle: '#1F2937',
     autoExpand,
     weightMode,
-    maxStretchX: 1.15
+    maxStretchX: 1.06
   });
 
-  // 3. Ticker_Price (Big Red font: ฿ 1,500,000)
-  drawSmartText(ctx, priceText, W / 2, 1235, {
-    targetW: 1420,
+  // 3. Ticker_Price (Big Red font: ฿ 5,500,000)
+  // Positioned at Y=1245 (270px gap below Detail, 235px gap above Red Ribbon at Y=1480)
+  drawSmartText(ctx, priceText, W / 2, 1245, {
+    targetW: 1340,
     maxW: maxContentW,
-    baseSize: 245,
-    maxSize: 315,
+    baseSize: 215,
+    maxSize: 255,
     minSize: 95,
     fillStyle: '#C8102E',
     autoExpand,
     weightMode,
-    maxStretchX: 1.20
+    maxStretchX: 1.10
   });
 
   // Bottom Red Ribbon for Phone Numbers
@@ -623,19 +748,19 @@ function renderSiwasupMaster43x49(ctx, canvas, p, assetText, detailText, priceTe
   const qrX = W - qrSize - 75; // 1380px
   const qrY = ribbonY - 35;
 
-  // Phone Numbers on left of ribbon - Auto-Fit to fill the ribbon space before QR code!
+  // Phone Numbers on left of ribbon - Balanced padding inside the red ribbon
   const phoneText = phoneB && phoneB.trim() !== '' ? `📞 ${phoneA}   ${phoneB}` : `📞 ${phoneA}`;
-  const availRibbonW = qrX - 110; // ~1270px available width
+  const availRibbonW = qrX - 115; // ~1265px available width
   drawSmartText(ctx, phoneText, 75 + availRibbonW / 2, ribbonY + ribbonH / 2, {
-    targetW: availRibbonW * 0.94,
-    maxW: availRibbonW,
-    baseSize: 68,
-    maxSize: 98,
+    targetW: availRibbonW * 0.90,
+    maxW: availRibbonW - 20,
+    baseSize: 64,
+    maxSize: 80,
     minSize: 42,
     fillStyle: '#FFFFFF',
     autoExpand,
     weightMode,
-    maxStretchX: 1.12
+    maxStretchX: 1.06
   });
 
   if (qrImg) {
@@ -647,17 +772,17 @@ function renderSiwasupMaster43x49(ctx, canvas, p, assetText, detailText, priceTe
     ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
   }
 
-  // Slogan below ribbon - Auto-Fit across the bottom area
-  drawSmartText(ctx, 'รับฝากขาย รีโนเวท โฆษณาฟรี!', (50 + qrX) / 2 + 40, ribbonY + ribbonH + 115, {
-    targetW: 1260,
-    maxW: 1380,
-    baseSize: 88,
-    maxSize: 112,
-    minSize: 56,
+  // Slogan below ribbon - Clean breathing room below ribbon and above bottom border
+  drawSmartText(ctx, 'รับฝากขาย รีโนเวท โฆษณาฟรี!', (50 + qrX) / 2 + 40, ribbonY + ribbonH + 125, {
+    targetW: 1200,
+    maxW: 1340,
+    baseSize: 80,
+    maxSize: 95,
+    minSize: 54,
     fillStyle: '#C8102E',
     autoExpand,
     weightMode,
-    maxStretchX: 1.14
+    maxStretchX: 1.08
   });
 
   // 4 Corner Eyelet Markers
