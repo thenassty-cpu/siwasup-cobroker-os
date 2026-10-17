@@ -636,9 +636,19 @@
           <!-- Preset Size Selection -->
           <div>
             <label class="block font-medium mb-1 text-gray-700">สัดส่วนขนาดป้าย:</label>
+            <!-- Row 1: ป้ายขายด่วน Siwasup Master (สไตล์ไฟล์บัว) -->
+            <div class="grid grid-cols-2 gap-1.5 mb-1.5">
+              <button type="button" onclick="setVinylPreset('200x160')" id="btn-preset-200x160" class="py-1.5 px-2 rounded-lg border font-bold text-[11px] text-center transition-all bg-[#990000] text-white border-[#990000] shadow-xs">
+                🔥 200 x 160 ซม.<br><span class="text-[9px] font-normal opacity-90">ป้ายขายด่วนใหญ่ (5:4 สไตล์บัว)</span>
+              </button>
+              <button type="button" onclick="setVinylPreset('43x49')" id="btn-preset-43x49" class="py-1.5 px-2 rounded-lg border font-medium text-[11px] text-center transition-all bg-white text-gray-700 border-gray-200 hover:bg-gray-50">
+                🏷️ 43 x 49 ซม.<br><span class="text-[9px] font-normal text-gray-400">ป้ายไซส์ S ส่งร้าน (ติดเสา/รั้ว)</span>
+              </button>
+            </div>
+            <!-- Row 2: ป้ายข้อมูลทรัพย์ Homerun Modern -->
             <div class="grid grid-cols-3 gap-1.5">
-              <button type="button" onclick="setVinylPreset('120x80')" id="btn-preset-120x80" class="py-1 px-1.5 rounded-lg border font-bold text-[11px] text-center transition-all bg-[#990000] text-white border-[#990000]">
-                120 x 80 ซม.<br><span class="text-[9px] font-normal opacity-90">มาตรฐาน (3:2)</span>
+              <button type="button" onclick="setVinylPreset('120x80')" id="btn-preset-120x80" class="py-1 px-1.5 rounded-lg border font-medium text-[11px] text-center transition-all bg-white text-gray-700 border-gray-200 hover:bg-gray-50">
+                120 x 80 ซม.<br><span class="text-[9px] font-normal text-gray-400">มาตรฐาน (3:2)</span>
               </button>
               <button type="button" onclick="setVinylPreset('150x80')" id="btn-preset-150x80" class="py-1 px-1.5 rounded-lg border font-medium text-[11px] text-center transition-all bg-white text-gray-700 border-gray-200 hover:bg-gray-50">
                 150 x 80 ซม.<br><span class="text-[9px] font-normal text-gray-400">หน้ากว้าง</span>
@@ -654,15 +664,15 @@
             <div>
               <label class="block font-medium mb-1 text-gray-700">ข้อความพาดหัว:</label>
               <select id="vinyl-headline" onchange="renderVinylCanvas()" class="w-full border rounded-lg p-1.5 text-xs bg-gray-50 font-bold text-[#990000]">
-                <option value="ขายด่วน!">ขายด่วน!</option>
+                <option value="ขายด่วน">ขายด่วน (Siwasup Master)</option>
                 <option value="ขายบ้านรีโนเวท">ขายบ้านรีโนเวท</option>
                 <option value="บ้านหลุดจำนอง / NPA">บ้านหลุดจำนอง / NPA</option>
                 <option value="ขาย / ให้เช่า">ขาย / ให้เช่า</option>
               </select>
             </div>
             <div>
-              <label class="block font-medium mb-1 text-gray-700">ป้ายจุดเด่นการกู้:</label>
-              <input type="text" id="vinyl-hook" value="กู้ได้เต็ม 100% • ฟรีดาวน์" oninput="renderVinylCanvas()" 
+              <label class="block font-medium mb-1 text-gray-700">สโลแกนเพจ (แทน All About Assets):</label>
+              <input type="text" id="vinyl-subtitle" value="เพจ: ซื้อ ขาย บ้าน ที่ดิน ทำการตลาดฟรี by Siwasup Asset" oninput="renderVinylCanvas()" 
                      class="w-full border rounded-lg p-1.5 text-xs outline-none focus:ring-1 focus:ring-red-700">
             </div>
           </div>
@@ -691,17 +701,17 @@
             <div id="vinyl-agent-autocomplete-dropdown" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50 max-h-40 overflow-y-auto no-scrollbar py-1"></div>
           </div>
 
-          <!-- Contact Info -->
+          <!-- Contact Info (Two Phones for GraphicAdsForm parity) -->
           <div class="grid grid-cols-2 gap-2">
             <div>
-              <label class="block font-medium mb-1 text-gray-700">เบอร์โทรติดต่อหน้าป้าย: <span class="text-red-500">*</span></label>
-              <input type="tel" id="vinyl-phone" value="06-2396-5161" oninput="renderVinylCanvas()" 
+              <label class="block font-medium mb-1 text-gray-700">เบอร์โทร 1 (Ticker_NumberA): <span class="text-red-500">*</span></label>
+              <input type="tel" id="vinyl-phone" value="094-462-9796" oninput="renderVinylCanvas()" 
                      class="w-full border rounded-lg p-1.5 text-xs font-bold text-gray-900 outline-none focus:ring-1 focus:ring-red-700">
             </div>
             <div>
-              <label class="block font-medium mb-1 text-gray-700">ชื่อตัวแทน / LINE ID:</label>
-              <input type="text" id="vinyl-contact-name" value="บัวรา (Siwasup)" oninput="renderVinylCanvas()" 
-                     class="w-full border rounded-lg p-1.5 text-xs outline-none focus:ring-1 focus:ring-red-700">
+              <label class="block font-medium mb-1 text-gray-700">เบอร์โทร 2 (Ticker_NumberB):</label>
+              <input type="tel" id="vinyl-phone-b" value="096-129-2459" oninput="renderVinylCanvas()" 
+                     class="w-full border rounded-lg p-1.5 text-xs font-bold text-gray-900 outline-none focus:ring-1 focus:ring-red-700">
             </div>
           </div>
 
