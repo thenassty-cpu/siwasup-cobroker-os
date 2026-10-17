@@ -634,50 +634,70 @@
         <!-- Customization Controls -->
         <div class="space-y-2.5 text-xs">
           <!-- Preset Size Selection -->
+          <!-- Preset Size Selection (Only 2 Official Master Templates) -->
           <div>
             <label class="block font-medium mb-1 text-gray-700">สัดส่วนขนาดป้าย:</label>
-            <!-- Row 1: ป้ายขายด่วน Siwasup Master (สไตล์ไฟล์บัว) -->
-            <div class="grid grid-cols-2 gap-1.5 mb-1.5">
-              <button type="button" onclick="setVinylPreset('200x160')" id="btn-preset-200x160" class="py-1.5 px-2 rounded-lg border font-bold text-[11px] text-center transition-all bg-[#990000] text-white border-[#990000] shadow-xs">
-                🔥 200 x 160 ซม.<br><span class="text-[9px] font-normal opacity-90">ป้ายขายด่วนใหญ่ (5:4 สไตล์บัว)</span>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" onclick="setVinylPreset('200x160')" id="btn-preset-200x160" class="py-2 px-2.5 rounded-xl border font-bold text-xs text-center transition-all bg-[#990000] text-white border-[#990000] shadow-xs active:scale-95">
+                🔥 200 x 160 ซม.<br><span class="text-[10px] font-normal opacity-90">ป้ายขายด่วนใหญ่ (5:4 สไตล์บัว)</span>
               </button>
-              <button type="button" onclick="setVinylPreset('43x49')" id="btn-preset-43x49" class="py-1.5 px-2 rounded-lg border font-medium text-[11px] text-center transition-all bg-white text-gray-700 border-gray-200 hover:bg-gray-50">
-                🏷️ 43 x 49 ซม.<br><span class="text-[9px] font-normal text-gray-400">ป้ายไซส์ S ส่งร้าน (ติดเสา/รั้ว)</span>
-              </button>
-            </div>
-            <!-- Row 2: ป้ายข้อมูลทรัพย์ Homerun Modern -->
-            <div class="grid grid-cols-3 gap-1.5">
-              <button type="button" onclick="setVinylPreset('120x80')" id="btn-preset-120x80" class="py-1 px-1.5 rounded-lg border font-medium text-[11px] text-center transition-all bg-white text-gray-700 border-gray-200 hover:bg-gray-50">
-                120 x 80 ซม.<br><span class="text-[9px] font-normal text-gray-400">มาตรฐาน (3:2)</span>
-              </button>
-              <button type="button" onclick="setVinylPreset('150x80')" id="btn-preset-150x80" class="py-1 px-1.5 rounded-lg border font-medium text-[11px] text-center transition-all bg-white text-gray-700 border-gray-200 hover:bg-gray-50">
-                150 x 80 ซม.<br><span class="text-[9px] font-normal text-gray-400">หน้ากว้าง</span>
-              </button>
-              <button type="button" onclick="setVinylPreset('60x90')" id="btn-preset-60x90" class="py-1 px-1.5 rounded-lg border font-medium text-[11px] text-center transition-all bg-white text-gray-700 border-gray-200 hover:bg-gray-50">
-                60 x 90 ซม.<br><span class="text-[9px] font-normal text-gray-400">แนวตั้ง (2:3)</span>
+              <button type="button" onclick="setVinylPreset('43x49')" id="btn-preset-43x49" class="py-2 px-2.5 rounded-xl border font-medium text-xs text-center transition-all bg-white text-gray-700 border-gray-200 hover:bg-gray-50 active:scale-95">
+                🏷️ 43 x 49 ซม.<br><span class="text-[10px] font-normal text-gray-400">ป้ายไซส์ S ส่งร้าน (ติดเสา/รั้ว)</span>
               </button>
             </div>
           </div>
 
-          <!-- Headline Banner & Job_Discription -->
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block font-medium mb-1 text-gray-700">ข้อความพาดหัว (Horsale):</label>
-              <select id="vinyl-headline" onchange="renderVinylCanvas()" class="w-full border rounded-lg p-1.5 text-xs bg-gray-50 font-bold text-[#990000]">
-                <option value="ขายด่วน">ขายด่วน (Siwasup Master)</option>
-                <option value="ขายบ้านรีโนเวท">ขายบ้านรีโนเวท</option>
-                <option value="บ้านหลุดจำนอง / NPA">บ้านหลุดจำนอง / NPA</option>
-                <option value="ขาย / ให้เช่า">ขาย / ให้เช่า</option>
-              </select>
+          <!-- Section 1: Inputs for 200x160 cm (ป้ายขายด่วนใหญ่) -->
+          <div id="vinyl-section-200x160" class="space-y-2">
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block font-medium mb-1 text-gray-700">ข้อความพาดหัว (Horsale):</label>
+                <select id="vinyl-headline" onchange="renderVinylCanvas()" class="w-full border rounded-lg p-1.5 text-xs bg-gray-50 font-bold text-[#990000]">
+                  <option value="ขายด่วน">ขายด่วน (Siwasup Master)</option>
+                  <option value="ขายบ้านรีโนเวท">ขายบ้านรีโนเวท</option>
+                  <option value="บ้านหลุดจำนอง / NPA">บ้านหลุดจำนอง / NPA</option>
+                  <option value="ขาย / ให้เช่า">ขาย / ให้เช่า</option>
+                </select>
+              </div>
+              <div>
+                <label class="block font-medium mb-1 text-gray-700">แถบเว็บ/ไลน์ (Job_Discription):</label>
+                <input type="text" id="vinyl-subtitle" value="www.siwasup.com ซื้อ ขาย บ้าน ที่ดิน ทำการตลาดฟรี  @siwasup" oninput="renderVinylCanvas()" 
+                       class="w-full border rounded-lg p-1.5 text-xs outline-none focus:ring-1 focus:ring-red-700">
+              </div>
             </div>
+            <!-- Ticker_AgentInfo -->
             <div>
-              <label class="block font-medium mb-1 text-gray-700">แถบเว็บ/ไลน์ (Job_Discription):</label>
-              <input type="text" id="vinyl-subtitle" value="www.siwasup.com ซื้อ ขาย บ้าน ที่ดิน ทำการตลาดฟรี  @siwasup" oninput="renderVinylCanvas()" 
-                     class="w-full border rounded-lg p-1.5 text-xs outline-none focus:ring-1 focus:ring-red-700">
+              <label class="block font-medium mb-1 text-gray-700">ข้อมูลตัวแทนประจำป้าย (Ticker_AgentInfo):</label>
+              <input type="text" id="vinyl-agent-info" value="ติดต่อ: คุณเอ (ตัวแทนพื้นที่โซนบางนา) LINE ID: ของตัวแทน" oninput="renderVinylCanvas()" 
+                     class="w-full border rounded-lg p-1.5 text-xs font-medium text-red-700 outline-none focus:ring-1 focus:ring-red-700 bg-red-50/30 border-red-200">
             </div>
           </div>
 
-          <!-- Agent Selection Autocomplete (125 Agents: S02-S126) -->
+          <!-- Section 2: Inputs for 43x49 cm (ป้ายไซส์ S ส่งร้าน/ติดเสา) -->
+          <div id="vinyl-section-43x49" class="hidden space-y-2">
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block font-medium mb-1 text-gray-700">ประเภททรัพย์ (Ticker_Asset):</label>
+                <input type="text" id="vinyl-asset" value="บ้านเดี่ยวพร้อมอยู่" oninput="renderVinylCanvas()" 
+                       placeholder="เช่น บ้านเดี่ยวพร้อมอยู่, ทาวน์โฮม 2 ชั้น"
+                       class="w-full border rounded-lg p-1.5 text-xs font-bold text-[#967C3E] outline-none focus:ring-1 focus:ring-amber-600 bg-amber-50/20">
+              </div>
+              <div>
+                <label class="block font-medium mb-1 text-gray-700">ราคาขาย (Ticker_Price):</label>
+                <input type="text" id="vinyl-price" value="฿ 2,500,000" oninput="renderVinylCanvas()" 
+                       placeholder="เช่น ฿ 2,500,000"
+                       class="w-full border rounded-lg p-1.5 text-xs font-bold text-red-700 outline-none focus:ring-1 focus:ring-red-700 bg-red-50/20">
+              </div>
+            </div>
+            <div>
+              <label class="block font-medium mb-1 text-gray-700">รายละเอียดจุดเด่น (Ticker_Detail):</label>
+              <input type="text" id="vinyl-detail" value="2 ห้องนอน 2 ห้องน้ำ ทำเลรามคำแหง" oninput="renderVinylCanvas()" 
+                     placeholder="เช่น 3 ห้องนอน ทำเลพุทธมณฑลสาย 2"
+                     class="w-full border rounded-lg p-1.5 text-xs font-medium text-gray-900 outline-none focus:ring-1 focus:ring-gray-700">
+            </div>
+          </div>
+
+          <!-- Common Section: Agent Selection Autocomplete (125 Agents: S02-S126) -->
           <div class="relative">
             <div class="flex justify-between items-center mb-1">
               <label class="block font-medium text-gray-700">รหัสตัวแทนผู้ดูแลป้าย (ดึงเบอร์ & LINE อัตโนมัติ):</label>
@@ -713,13 +733,6 @@
               <input type="tel" id="vinyl-phone-b" value="096-129-2459" oninput="renderVinylCanvas()" 
                      class="w-full border rounded-lg p-1.5 text-xs font-bold text-gray-900 outline-none focus:ring-1 focus:ring-red-700">
             </div>
-          </div>
-
-          <!-- Ticker_AgentInfo: Agent details below phone numbers -->
-          <div>
-            <label class="block font-medium mb-1 text-gray-700">ข้อมูลตัวแทนประจำป้าย (Ticker_AgentInfo):</label>
-            <input type="text" id="vinyl-agent-info" value="ติดต่อ: คุณเอ (ตัวแทนพื้นที่โซนบางนา) LINE ID: ของตัวแทน" oninput="renderVinylCanvas()" 
-                   class="w-full border rounded-lg p-1.5 text-xs font-medium text-red-700 outline-none focus:ring-1 focus:ring-red-700 bg-red-50/30 border-red-200">
           </div>
 
           <!-- Toggle Price and Installment -->

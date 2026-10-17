@@ -79,8 +79,8 @@
     pnlInputs.alignChildren = ['fill', 'top'];
     pnlInputs.spacing = 8;
 
-    var tfAsset, tfDetail, tfPrice, tfPhoneA, tfPhoneB, tfAgentInfo, tfJobDisc;
-    var txtAsset, txtDetail, txtPrice, txtPhoneA, txtPhoneB, txtAgentInfo, txtJobDisc;
+    var tfAsset, tfDetail, tfPrice, tfPhoneA, tfPhoneB, tfAgentInfo, tfJobDisc, tfHorsale;
+    var txtAsset, txtDetail, txtPrice, txtPhoneA, txtPhoneB, txtAgentInfo, txtJobDisc, txtHorsale;
 
     if (is43x49) {
         tfAsset = findTargetTextFrame(doc, 'Ticker_Asset');
@@ -103,10 +103,16 @@
         txtPrice = grpPrice.add('edittext', undefined, tfPrice ? tfPrice.contents : '฿ 2,500,000');
         txtPrice.preferredSize.width = 280;
     } else {
+        tfHorsale = findTargetTextFrame(doc, 'Horsale');
         tfPhoneA = findTargetTextFrame(doc, 'Ticker_NumberA');
         tfPhoneB = findTargetTextFrame(doc, 'Ticker_NumberB');
         tfAgentInfo = findTargetTextFrame(doc, 'Ticker_AgentInfo');
         tfJobDisc = findTargetTextFrame(doc, 'Job_Discription');
+
+        var grpHorsale = pnlInputs.add('group');
+        grpHorsale.add('statictext', undefined, 'ข้อความพาดหัว (Horsale):').preferredSize.width = 180;
+        txtHorsale = grpHorsale.add('edittext', undefined, tfHorsale ? tfHorsale.contents : 'ขายด่วน');
+        txtHorsale.preferredSize.width = 280;
 
         var grpA = pnlInputs.add('group');
         grpA.add('statictext', undefined, 'เบอร์โทร 1 (Ticker_NumberA):').preferredSize.width = 180;
@@ -187,6 +193,17 @@
                 count++;
             }
         } else {
+            if (tfHorsale) {
+                var rawHead = txtHorsale.text;
+                if (rawHead.indexOf('/') !== -1) {
+                    var pParts = rawHead.split('/');
+                    tfHorsale.contents = pParts[0].replace(/\s+$/, '') + '\n' + pParts[1].replace(/^\s+/, '');
+                } else {
+                    tfHorsale.contents = rawHead;
+                }
+                fitTextWidth(tfHorsale, 185 * CM_TO_PT, 80);
+                count++;
+            }
             if (tfPhoneA) { tfPhoneA.contents = txtPhoneA.text; count++; }
             if (tfPhoneB) { tfPhoneB.contents = txtPhoneB.text; count++; }
             if (tfAgentInfo) {
