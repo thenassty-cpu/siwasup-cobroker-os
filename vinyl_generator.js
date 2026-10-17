@@ -311,7 +311,7 @@ function renderSiwasupMaster200x160(ctx, canvas, p, headline, phoneA, phoneB, su
 }
 
 // ------------------------------------------------------------------------------
-// STYLE 2: SIWASUP MASTER 43x49 CM (ป้ายไซส์ S ส่งร้าน/ติดเสาไฟฟ้า)
+// STYLE 2: SIWASUP MASTER 43x49 CM (ป้ายไซส์ S ส่งร้าน/ติดเสาไฟฟ้า ตาม Ads43x49.ai)
 // ------------------------------------------------------------------------------
 function renderSiwasupMaster43x49(ctx, canvas, p, headline, phoneA, phoneB, subtitle, savedRef, qrImg, logoImg) {
   const W = 1720;
@@ -323,71 +323,81 @@ function renderSiwasupMaster43x49(ctx, canvas, p, headline, phoneA, phoneB, subt
   ctx.fillStyle = '#FFFFFF';
   ctx.fillRect(0, 0, W, H);
 
+  // Outer safety guide
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = '#E5E7EB';
+  ctx.strokeRect(30, 30, W - 60, H - 60);
+
   // Top-Left: Siwasup Logo
   if (logoImg) {
-    ctx.drawImage(logoImg, 70, 70, 380, 305);
+    ctx.drawImage(logoImg, 100, 80, 380, 305);
   }
 
   // Top-Right: Solid Red Header Block 'ขาย'
-  const redBoxX = 540;
-  const redBoxW = W - redBoxX;
+  const redBoxX = 600;
+  const redBoxW = W - redBoxX - 50;
   const redBoxH = 460;
   ctx.fillStyle = '#C8102E';
-  ctx.fillRect(redBoxX, 0, redBoxW, redBoxH);
+  ctx.fillRect(redBoxX, 50, redBoxW, redBoxH);
 
   // White text 'ขาย'
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = 'bold 310px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
+  ctx.font = 'bold 260px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('ขาย', redBoxX + redBoxW / 2, redBoxH / 2 - 25);
+  ctx.fillText('ขาย', redBoxX + redBoxW / 2, 50 + redBoxH / 2 - 30);
 
-  // Subtitle 'Siwasup Asset' (Replaces All About Assets)
-  ctx.font = 'bold 50px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
-  ctx.fillText('Siwasup Asset', redBoxX + redBoxW / 2, redBoxH - 55);
+  // Subtitle 'Siwasup Assets' (ตรงตามไฟล์ Ads43x49.ai)
+  ctx.font = 'bold 48px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
+  ctx.fillText('Siwasup Assets', redBoxX + redBoxW / 2, 50 + redBoxH - 50);
 
-  // Middle Area: Property Note / Space
-  const midY = 560;
+  // ⭐ Signature Satin Gold Accent Bar (แถบสีทองคั่นใต้ส่วนหัวตาม Ads43x49.ai)
+  const goldBarY = 50 + redBoxH + 20;
+  const goldBarH = 24;
+  ctx.fillStyle = '#C2A460'; // Satin Gold CI
+  ctx.fillRect(50, goldBarY, W - 100, goldBarH);
+
+  // Middle Area: Ticker_Asset + Ticker_Detail + Ticker_Price
+  const midY = goldBarY + goldBarH + 60;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
 
-  if (p && p.title) {
-    ctx.fillStyle = '#8C6D23';
-    ctx.font = 'bold 44px "Kanit", "Tahoma", sans-serif';
-    ctx.fillText((p.category || 'บ้านพร้อมอยู่') + ' • ' + (p.bank_source ? `ทรัพย์ ${p.bank_source}` : 'ศิวาทรัพย์'), W / 2, midY + 40);
+  // 1. Ticker_Asset (Gold font: บ้านเดี่ยวพร้อมอยู่)
+  const assetType = p.category ? `${p.category}พร้อมอยู่` : 'บ้านเดี่ยวพร้อมอยู่';
+  ctx.fillStyle = '#967C3E'; // Satin Dark Gold
+  ctx.font = 'bold 96px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
+  ctx.fillText(assetType, W / 2, midY + 50);
 
-    ctx.fillStyle = '#111827';
-    ctx.font = 'bold 64px "Kanit", "Tahoma", sans-serif';
-    let shortTitle = p.title;
-    if (shortTitle.length > 28) shortTitle = shortTitle.substring(0, 26) + '...';
-    ctx.fillText(shortTitle, W / 2, midY + 115);
+  // 2. Ticker_Detail (Dark font: 2 ห้องนอน 2 ห้องน้ำ ทำเลรามคำแหง)
+  let detailText = (p.specs || '2 ห้องนอน 2 ห้องน้ำ') + (p.location ? ` ทำเล${p.location}` : ' ทำเลรามคำแหง');
+  ctx.fillStyle = '#1F2937';
+  ctx.font = 'bold 68px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
+  ctx.fillText(detailText, W / 2, midY + 190);
 
-    if (p.price_negotiate || p.price_sell) {
-      ctx.fillStyle = '#C8102E';
-      ctx.font = '900 84px "Kanit", "Tahoma", sans-serif';
-      const pr = p.price_negotiate || p.price_sell;
-      ctx.fillText(`฿${Number(pr).toLocaleString()}`, W / 2, midY + 205);
-    }
-  }
+  // 3. Ticker_Price (Big Red font: ฿ 2,500,000)
+  const priceNum = p.price_sell || p.price_negotiate || 2500000;
+  ctx.fillStyle = '#C8102E';
+  ctx.font = 'bold 144px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
+  ctx.fillText(`฿ ${Number(priceNum).toLocaleString()}`, W / 2, midY + 310);
 
   // Bottom Red Ribbon for Phone Numbers
-  const ribbonY = 1380;
-  const ribbonH = 220;
+  const ribbonY = 1480;
+  const ribbonH = 190;
   ctx.fillStyle = '#C8102E';
-  ctx.fillRect(0, ribbonY, W, ribbonH);
+  ctx.fillRect(50, ribbonY, W - 100, ribbonH);
 
   // Phone Numbers
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = 'bold 74px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
+  ctx.font = 'bold 50px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
   ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
-  ctx.fillText(`📞 ${phoneA}   ${phoneB}`, 70, ribbonY + ribbonH / 2);
+  ctx.fillText(`📞 ${phoneA}   ${phoneB}`, 90, ribbonY + ribbonH / 2);
 
-  // Dynamic QR Code inside ribbon
+  // Dynamic QR Code on right side of ribbon
   if (qrImg) {
-    const qrSize = 250;
-    const qrX = W - qrSize - 40;
-    const qrY = ribbonY - 20;
+    const qrSize = 220;
+    const qrX = W - qrSize - 80;
+    const qrY = ribbonY - 15;
 
     ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(qrX - 6, qrY - 6, qrSize + 12, qrSize + 12);
@@ -401,8 +411,8 @@ function renderSiwasupMaster43x49(ctx, canvas, p, headline, phoneA, phoneB, subt
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#C8102E';
-  ctx.font = 'bold 84px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
-  ctx.fillText('รับฝากขาย รีโนเวท โฆษณาฟรี!', W / 2, 1750);
+  ctx.font = 'bold 78px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
+  ctx.fillText('รับฝากขาย รีโนเวท โฆษณาฟรี!', W / 2, ribbonY + ribbonH + 110);
 
   // 4 Corner Eyelet Markers
   drawEyelets(ctx, W, H, 50, 12);
