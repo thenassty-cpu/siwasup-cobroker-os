@@ -168,6 +168,19 @@ async function renderVinylCanvas() {
 
   const savedRef = (document.getElementById('vinyl-agent-search')?.value || 'S22').trim();
   const targetUrl = `https://thenassty-cpu.github.io/siwasup-cobroker-os/?ref=${encodeURIComponent(savedRef)}&id=${encodeURIComponent(p.id)}&ch=vinyl`;
+  
+  // 🔤 Guarantee RSU Web Font is loaded in browser before Canvas drawing
+  if (document.fonts && typeof document.fonts.load === 'function') {
+    try {
+      await Promise.all([
+        document.fonts.load('bold 100px RSU'),
+        document.fonts.load('normal 40px RSU')
+      ]);
+    } catch (e) {
+      console.warn('RSU font preloading:', e);
+    }
+  }
+
   const qrDataUrl = await generateQrDataUrl(targetUrl);
   const qrImg = await loadImage(qrDataUrl);
   const logoImg = await loadImage('assets/siwasup_logo.png');
@@ -658,8 +671,8 @@ async function downloadVinylPDF() {
   }
 }
 
-// Download High-Resolution JPG (Direct LINE sharing to print shops)
-function downloadVinylJPG() {
+// Download High-Resolution JPG (Direct LINE sharing to print shops or Save to Camera Roll)
+async function downloadVinylJPG() {
   const canvas = document.getElementById('vinyl-canvas');
   if (!canvas || !activeVinylProperty) return;
 
@@ -671,16 +684,47 @@ function downloadVinylJPG() {
   else if (activeVinylPreset === '150x80') { widthCm = 150; heightCm = 80; }
   else if (activeVinylPreset === '60x90') { widthCm = 60; heightCm = 90; }
 
+  const fileName = `Vinyl_Sign_${activeVinylProperty.id || 'Siwasup'}_${widthCm}x${heightCm}cm.jpg`;
+  const agentSearchEl = document.getElementById('vinyl-agent-search');
+  const agentCode = (agentSearchEl ? agentSearchEl.value.trim() : '') || localStorage.getItem('siwasup_my_agent_ref') || 'S22';
+
+  // Check if Mobile Web Share API with File support is available (LINE, iOS Photos, Android)
+  if (navigator.share && navigator.canShare && canvas.toBlob) {
+    try {
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.95));
+      const file = new File([blob], fileName, { type: 'image/jpeg' });
+      if (navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: `ป้ายขายด่วน ${widthCm}x${heightCm} ซม.`,
+          text: `ป้ายไวนิลศิวาทรัพย์ รหัสทรัพย์ #${activeVinylProperty.id} (ตัวแทน: ${agentCode})`
+        });
+        if (window.SiwasupAgents && typeof window.SiwasupAgents.award === 'function' && agentCode) {
+          window.SiwasupAgents.award(agentCode, 'vinyl_download', { propertyId: activeVinylProperty.id });
+        }
+        if (typeof showToast === 'function') {
+          showToast(`✅ แชร์รูปภาพสำเร็จ! บันทึกแต้มกิจกรรม +5 แต้ม ให้ [${agentCode}] อัตโนมัติ!`);
+        }
+        return;
+      }
+    } catch (shareErr) {
+      if (shareErr.name !== 'AbortError') {
+        console.warn('Web Share failed, fallback to download:', shareErr);
+      } else {
+        return; // User canceled share
+      }
+    }
+  }
+
+  // Standard File Download fallback (PC / Mac)
   const link = document.createElement('a');
   link.href = canvas.toDataURL('image/jpeg', 0.95);
-  link.download = `Vinyl_Sign_${activeVinylProperty.id || 'Siwasup'}_${widthCm}x${heightCm}cm.jpg`;
+  link.download = fileName;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 
   // Automated Point Trigger: Intent to Work (+5 points)
-  const agentSearchEl = document.getElementById('vinyl-agent-search');
-  const agentCode = (agentSearchEl ? agentSearchEl.value.trim() : '') || localStorage.getItem('siwasup_my_agent_ref') || 'S22';
   if (window.SiwasupAgents && typeof window.SiwasupAgents.award === 'function' && agentCode) {
     window.SiwasupAgents.award(agentCode, 'vinyl_download', { propertyId: activeVinylProperty.id });
   }
