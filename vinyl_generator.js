@@ -161,7 +161,8 @@ async function renderVinylCanvas() {
   const hook = (document.getElementById('vinyl-hook')?.value || 'กู้ได้เต็ม 100% • ฟรีดาวน์').trim();
   const phoneA = (document.getElementById('vinyl-phone')?.value || '094-462-9796').trim();
   const phoneB = (document.getElementById('vinyl-phone-b')?.value || '096-129-2459').trim();
-  const subtitle = (document.getElementById('vinyl-subtitle')?.value || 'เพจ: ซื้อ ขาย บ้าน ที่ดิน ทำการตลาดฟรี by Siwasup Asset').trim();
+  const subtitle = (document.getElementById('vinyl-subtitle')?.value || 'www.siwasup.com ซื้อ ขาย บ้าน ที่ดิน ทำการตลาดฟรี  @siwasup').trim();
+  const agentInfo = (document.getElementById('vinyl-agent-info')?.value || 'ติดต่อ: คุณเอ (ตัวแทนพื้นที่โซนบางนา) LINE ID: ของตัวแทน').trim();
   const contactName = (document.getElementById('vinyl-contact-name')?.value || 'บัวรา (Siwasup)').trim();
   const showPrice = document.getElementById('vinyl-show-price')?.checked ?? true;
 
@@ -173,7 +174,7 @@ async function renderVinylCanvas() {
 
   // Branch by Preset Style
   if (activeVinylPreset === '200x160') {
-    renderSiwasupMaster200x160(ctx, canvas, p, headline, phoneA, phoneB, subtitle, savedRef, qrImg, logoImg);
+    renderSiwasupMaster200x160(ctx, canvas, p, headline, phoneA, phoneB, subtitle, agentInfo, savedRef, qrImg, logoImg);
   } else if (activeVinylPreset === '43x49') {
     renderSiwasupMaster43x49(ctx, canvas, p, headline, phoneA, phoneB, subtitle, savedRef, qrImg, logoImg);
   } else {
@@ -182,9 +183,9 @@ async function renderVinylCanvas() {
 }
 
 // ------------------------------------------------------------------------------
-// STYLE 1: SIWASUP MASTER 200x160 CM (ขายด่วน สไตล์บัว & FBT GraphicAdsForm)
+// STYLE 1: SIWASUP MASTER 200x160 CM (ขายด่วน สไตล์ Ads200x160.ait พร้อม Bar สีทอง)
 // ------------------------------------------------------------------------------
-function renderSiwasupMaster200x160(ctx, canvas, p, headline, phoneA, phoneB, subtitle, savedRef, qrImg, logoImg) {
+function renderSiwasupMaster200x160(ctx, canvas, p, headline, phoneA, phoneB, subtitle, agentInfo, savedRef, qrImg, logoImg) {
   const W = 2000;
   const H = 1600;
   canvas.width = W;
@@ -199,8 +200,8 @@ function renderSiwasupMaster200x160(ctx, canvas, p, headline, phoneA, phoneB, su
   ctx.strokeStyle = '#F3F4F6';
   ctx.strokeRect(20, 20, W - 40, H - 40);
 
-  // 1. Red Header (38% height = ~600px)
-  const headerHeight = 600;
+  // 1. Red Header Block 'Horsale' (Height = 580px)
+  const headerHeight = 580;
   ctx.fillStyle = '#C8102E';
   ctx.fillRect(30, 30, W - 60, headerHeight);
 
@@ -211,33 +212,38 @@ function renderSiwasupMaster200x160(ctx, canvas, p, headline, phoneA, phoneB, su
   ctx.textBaseline = 'middle';
   ctx.fillText(headline, W / 2, 30 + headerHeight / 2);
 
-  // 2. Middle Body: Subtitle line + Huge Phone Numbers
-  const bodyTop = 30 + headerHeight;
+  // ⭐ 1.1 Signature Satin Gold Accent Bar (แถบสีทองคั่นใต้บล็อกแดงตาม Ads200x160.ait)
+  const goldBarH = 26;
+  const goldBarY = 30 + headerHeight;
+  ctx.fillStyle = '#C2A460'; // Satin Gold CI
+  ctx.fillRect(30, goldBarY, W - 60, goldBarH);
 
-  // Subtitle (Replaces All About Assets)
-  ctx.fillStyle = '#374151';
-  ctx.font = 'bold 36px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
+  // 2. Middle Body: Job_Discription + Huge Phone Numbers + Ticker_AgentInfo
+  const bodyTop = goldBarY + goldBarH;
+
+  // Job_Discription: Red Web & LINE text
+  ctx.fillStyle = '#C8102E';
+  ctx.font = 'bold 40px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
   ctx.fillText(subtitle, W / 2, bodyTop + 24);
 
-  // Subtle divider line
-  ctx.lineWidth = 2.5;
-  ctx.strokeStyle = '#E5E7EB';
-  ctx.beginPath();
-  ctx.moveTo(100, bodyTop + 75);
-  ctx.lineTo(W - 100, bodyTop + 75);
-  ctx.stroke();
-
   // Phone Number A (Ticker_NumberA)
   ctx.fillStyle = '#111827';
-  ctx.font = 'bold 185px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
+  ctx.font = 'bold 190px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText(phoneA, W / 2, bodyTop + 210);
+  ctx.fillText(phoneA, W / 2, bodyTop + 185);
 
   // Phone Number B (Ticker_NumberB)
-  ctx.fillText(phoneB, W / 2, bodyTop + 400);
+  ctx.fillText(phoneB, W / 2, bodyTop + 365);
+
+  // Ticker_AgentInfo: Red text line below phone numbers
+  ctx.fillStyle = '#C8102E';
+  ctx.font = 'bold 44px "RSU", "RSU Bold", "Kanit", "Tahoma", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(agentInfo, W / 2, bodyTop + 490);
 
   // 3. Bottom Footer Bar: Siwasup Logo + Services + QR Code
   const footerTop = 1270;

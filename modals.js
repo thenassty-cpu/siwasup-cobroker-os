@@ -659,10 +659,10 @@
             </div>
           </div>
 
-          <!-- Headline Banner & Selling Hook -->
+          <!-- Headline Banner & Job_Discription -->
           <div class="grid grid-cols-2 gap-2">
             <div>
-              <label class="block font-medium mb-1 text-gray-700">ข้อความพาดหัว:</label>
+              <label class="block font-medium mb-1 text-gray-700">ข้อความพาดหัว (Horsale):</label>
               <select id="vinyl-headline" onchange="renderVinylCanvas()" class="w-full border rounded-lg p-1.5 text-xs bg-gray-50 font-bold text-[#990000]">
                 <option value="ขายด่วน">ขายด่วน (Siwasup Master)</option>
                 <option value="ขายบ้านรีโนเวท">ขายบ้านรีโนเวท</option>
@@ -671,8 +671,8 @@
               </select>
             </div>
             <div>
-              <label class="block font-medium mb-1 text-gray-700">สโลแกนเพจ (แทน All About Assets):</label>
-              <input type="text" id="vinyl-subtitle" value="เพจ: ซื้อ ขาย บ้าน ที่ดิน ทำการตลาดฟรี by Siwasup Asset" oninput="renderVinylCanvas()" 
+              <label class="block font-medium mb-1 text-gray-700">แถบเว็บ/ไลน์ (Job_Discription):</label>
+              <input type="text" id="vinyl-subtitle" value="www.siwasup.com ซื้อ ขาย บ้าน ที่ดิน ทำการตลาดฟรี  @siwasup" oninput="renderVinylCanvas()" 
                      class="w-full border rounded-lg p-1.5 text-xs outline-none focus:ring-1 focus:ring-red-700">
             </div>
           </div>
@@ -713,6 +713,13 @@
               <input type="tel" id="vinyl-phone-b" value="096-129-2459" oninput="renderVinylCanvas()" 
                      class="w-full border rounded-lg p-1.5 text-xs font-bold text-gray-900 outline-none focus:ring-1 focus:ring-red-700">
             </div>
+          </div>
+
+          <!-- Ticker_AgentInfo: Agent details below phone numbers -->
+          <div>
+            <label class="block font-medium mb-1 text-gray-700">ข้อมูลตัวแทนประจำป้าย (Ticker_AgentInfo):</label>
+            <input type="text" id="vinyl-agent-info" value="ติดต่อ: คุณเอ (ตัวแทนพื้นที่โซนบางนา) LINE ID: ของตัวแทน" oninput="renderVinylCanvas()" 
+                   class="w-full border rounded-lg p-1.5 text-xs font-medium text-red-700 outline-none focus:ring-1 focus:ring-red-700 bg-red-50/30 border-red-200">
           </div>
 
           <!-- Toggle Price and Installment -->
