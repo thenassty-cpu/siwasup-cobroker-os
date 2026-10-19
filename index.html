@@ -472,10 +472,10 @@
 
   </div>
 
-  <script src="siwasup_agents.js?v=20261019-2200"></script>
-  <script src="modals.js?v=20261019-2200"></script>
-  <script src="vinyl_generator.js?v=20261019-2200"></script>
-  <script src="siwasup_all_properties.js?v=20261019-2200"></script>
+  <script src="siwasup_agents.js?v=20261019-2350"></script>
+  <script src="modals.js?v=20261019-2350"></script>
+  <script src="vinyl_generator.js?v=20261019-2350"></script>
+  <script src="siwasup_all_properties.js?v=20261019-2350"></script>
   <script>
     let currentMode = 'free_agent';
     let currentCategory = 'all';
@@ -731,7 +731,7 @@
         return;
       }
 
-      // โหมด Admin / Agent: ดาวน์โหลดได้ครบทั้งหมด (ใบเสนอซื้อแยกตามธนาคาร + คำขอผู้แนะนำ + สัญญาจะซื้อจะขายลูกค้า)
+      // โหมด Admin / Agent / Employee: แสดงเอกสารตรงตามธนาคารเจ้าของทรัพย์
       const pBank = (p.bank_source || '').toUpperCase();
       const matchedDoc = BANK_OFFER_DOCUMENTS.find(d => d.bankKey === pBank);
 
@@ -755,16 +755,9 @@
         `;
       }).join('');
 
-      container.innerHTML = `
-        <div class="flex items-center justify-between">
-          <span class="font-bold text-slate-900 flex items-center gap-1.5">
-            <i data-lucide="folder-down" class="w-4 h-4 text-[#990000]"></i>
-            <span>คลังเอกสารใบเสนอซื้อธนาคาร & สัญญา (สิทธิ์ Admin/Agent)</span>
-          </span>
-          <span class="text-[10px] bg-red-50 text-[#990000] border border-red-200 font-bold px-2 py-0.5 rounded-full">โหลดได้ครบทุกแบงก์</span>
-        </div>
-
-        ${matchedDoc ? `
+      let bankNoticeHtml = '';
+      if (matchedDoc) {
+        bankNoticeHtml = `
           <div class="bg-amber-50/90 border border-amber-300 rounded-xl p-2.5 flex items-center justify-between gap-2">
             <div class="min-w-0">
               <div class="text-[10px] font-extrabold text-amber-900">📌 แบบฟอร์มตรงกับเจ้าของทรัพย์นี้ (${matchedDoc.bankLabel}):</div>
@@ -776,30 +769,75 @@
               <span>โหลดฟอร์ม ${matchedDoc.bankKey}</span>
             </a>
           </div>
-        ` : ''}
+        `;
+      } else if (pBank.includes('KBANK') || pBank.includes('กสิกร')) {
+        bankNoticeHtml = `
+          <div class="bg-emerald-50/90 border border-emerald-300 rounded-xl p-2.5 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-extrabold text-emerald-900 flex items-center gap-1.5">
+                <span class="px-1.5 py-0.2 rounded bg-emerald-700 text-white text-[9.5px] font-bold">KBANK</span>
+                <span>ธนาคารกสิกรไทย (KBank NPA)</span>
+              </span>
+              <span class="text-[10px] text-emerald-800 bg-emerald-100 font-bold px-2 py-0.5 rounded-full">NPA Online</span>
+            </div>
+            <div class="text-[11px] text-emerald-800 leading-relaxed">
+              KBank เปิดรับคำเสนอซื้อผ่านระบบ <strong>KBank NPA Online</strong> หรือใช้แบบฟอร์มสัญญาจะซื้อจะขายมาตรฐานของศิวาทรัพย์ด้านล่างนี้ประกอบการยื่น
+            </div>
+          </div>
+        `;
+      } else if (pBank.includes('SAM')) {
+        bankNoticeHtml = `
+          <div class="bg-teal-50/90 border border-teal-300 rounded-xl p-2.5 space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-extrabold text-teal-900 flex items-center gap-1.5">
+                <span class="px-1.5 py-0.2 rounded bg-teal-700 text-white text-[9.5px] font-bold">SAM</span>
+                <span>บสส. สุขุมวิท แอสเซท แมเนจเม้นท์</span>
+              </span>
+              <span class="text-[10px] text-teal-800 bg-teal-100 font-bold px-2 py-0.5 rounded-full">SAM e-Auction</span>
+            </div>
+            <div class="text-[11px] text-teal-800 leading-relaxed">
+              ยื่นเสนอซื้อผ่านระบบ SAM e-Auction หรือใช้สัญญาจะซื้อจะขายมาตรฐานของศิวาทรัพย์
+            </div>
+          </div>
+        `;
+      }
+
+      container.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-slate-900 flex items-center gap-1.5 text-xs">
+            <i data-lucide="folder-down" class="w-4 h-4 text-[#990000]"></i>
+            <span>เอกสารประกอบการเสนอซื้อ (${p.bank_source || 'ทั่วไป'})</span>
+          </span>
+          <span class="text-[10px] bg-slate-100 text-slate-700 font-semibold px-2 py-0.5 rounded-full border border-slate-200">สิทธิ์ Admin/Agent</span>
+        </div>
+
+        ${bankNoticeHtml}
 
         <!-- สัญญาจะซื้อจะขายสำหรับส่งให้ลูกค้า -->
-        <a href="${contractUrl}" target="_blank" class="bg-white hover:bg-sky-50/60 border border-sky-200 rounded-xl p-2 flex items-center justify-between transition-all group">
+        <a href="${contractUrl}" target="_blank" class="bg-white hover:bg-sky-50/60 border border-sky-200 rounded-xl p-2.5 flex items-center justify-between transition-all group">
           <div class="flex items-center gap-2 min-w-0">
             <span class="px-1.5 py-0.5 rounded text-[9.5px] font-extrabold bg-sky-100 text-[#1E749C] shrink-0">สำหรับลูกค้า</span>
             <div class="min-w-0">
-              <div class="font-bold text-slate-800 text-[11px] group-hover:text-[#1E749C] truncate">สัญญาจะซื้อจะขายอสังหาริมทรัพย์ (ดึงข้อมูลทรัพย์ #${p.id} อัตโนมัติ)</div>
-              <div class="text-[9.5px] text-slate-400 truncate">ไฟล์สัญญามาตรฐานที่อนุญาตให้ลูกค้าดาวน์โหลดได้</div>
+              <div class="font-bold text-slate-800 text-[11px] group-hover:text-[#1E749C] truncate">สัญญาจะซื้อจะขายอสังหาริมทรัพย์ (รหัสทรัพย์ #${p.id})</div>
+              <div class="text-[9.5px] text-slate-400 truncate">ดึงราคาและข้อมูลอัตโนมัติ สั่งพิมพ์หรือบันทึกเป็น PDF ได้ทันที</div>
             </div>
           </div>
-          <span class="shrink-0 text-[10px] font-bold text-[#1E749C] bg-sky-50 group-hover:bg-[#1E749C] group-hover:text-white px-2 py-1 rounded-lg flex items-center gap-1 ml-2 transition-colors">
+          <span class="shrink-0 text-[10px] font-bold text-[#1E749C] bg-sky-50 group-hover:bg-[#1E749C] group-hover:text-white px-2.5 py-1 rounded-lg flex items-center gap-1 ml-2 transition-colors">
             <i data-lucide="printer" class="w-3 h-3"></i>
             <span>เปิดสัญญา</span>
           </span>
         </a>
 
-        <!-- รายการแบบฟอร์มเสนอซื้อแยกตามธนาคารทั้งหมด -->
-        <details class="group pt-0.5" ${matchedDoc ? '' : 'open'}>
-          <summary class="cursor-pointer text-[11px] font-bold text-slate-700 hover:text-[#990000] flex items-center justify-between py-1 select-none">
-            <span>📂 ดูและดาวน์โหลดใบเสนอซื้อทุกธนาคาร (SCB, ออมสิน GSB, TTB, PAMCO)</span>
+        <!-- รายการแบบฟอร์มเสนอซื้อแยกตามธนาคารอื่นๆ (พับเก็บเป็นค่าเริ่มต้น ไม่รกสายตา) -->
+        <details class="group pt-0.5">
+          <summary class="cursor-pointer text-[10.5px] font-bold text-slate-600 hover:text-[#990000] flex items-center justify-between py-1.5 px-2 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200/80 transition-colors select-none">
+            <span class="flex items-center gap-1.5">
+              <i data-lucide="archive" class="w-3.5 h-3.5 text-slate-400"></i>
+              <span>ดูคลังแบบฟอร์มเสนอซื้อธนาคารอื่นๆ ทั้งหมด (${BANK_OFFER_DOCUMENTS.length} ฟอร์ม)</span>
+            </span>
             <span class="text-[10px] text-slate-400 group-open:rotate-180 transition-transform">▼</span>
           </summary>
-          <div class="space-y-1.5 pt-1.5">
+          <div class="space-y-1.5 pt-2">
             ${allDocsHtml}
           </div>
         </details>
@@ -1049,6 +1087,23 @@
           agentActionsRow.classList.add('hidden');
         } else {
           agentActionsRow.classList.remove('hidden');
+        }
+      }
+
+      // แสดง/ซ่อน แถบเบิกกุญแจ NPA ด้านบน (แสดงเฉพาะโหมดพนักงาน, เอเจนต์, เจ้าของ)
+      const npaKeyBanner = document.getElementById('detail-npa-key-banner');
+      const btnBannerNpaKey = document.getElementById('detail-btn-banner-npa-key');
+      if (npaKeyBanner) {
+        if (currentMode === 'client') {
+          npaKeyBanner.classList.add('hidden');
+        } else {
+          npaKeyBanner.classList.remove('hidden');
+          if (btnBannerNpaKey) {
+            btnBannerNpaKey.onclick = () => {
+              closePropertyDetailModal();
+              openNpaKeyModal(p.id);
+            };
+          }
         }
       }
 
@@ -1608,16 +1663,20 @@
                     </button>
                   </div>
                 ` : (currentMode === 'free_agent' || currentMode === 'employee') ? `
-                  <!-- Free Agent Quick Operations -->
+                  <!-- Free Agent / Employee Quick Operations -->
                   <div class="space-y-1.5 pt-0.5">
-                    <div class="grid grid-cols-2 gap-1.5">
-                      <button onclick="openSmartShare('${p.id}', '${safeTitleAttr}')" class="bg-[#990000] hover:bg-red-800 text-white text-[11px] font-bold py-1.5 px-2 rounded-xl flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 transition-all">
-                        <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
-                        <span>แชร์ล็อกสิทธิ์</span>
+                    <div class="grid grid-cols-3 gap-1">
+                      <button onclick="openSmartShare('${p.id}', '${safeTitleAttr}')" class="bg-[#990000] hover:bg-red-800 text-white text-[10px] font-bold py-1.5 px-1 rounded-xl flex items-center justify-center gap-1 shadow-2xs active:scale-95 transition-all truncate" title="แชร์พร้อมล็อกสิทธิ์คอมมิชชั่น 60 วัน">
+                        <i data-lucide="share-2" class="w-3 h-3 shrink-0"></i>
+                        <span class="truncate">แชร์ล็อกสิทธิ์</span>
                       </button>
-                      <button onclick="openPropertyDetailModal('${p.id}')" class="bg-white hover:bg-slate-50 text-slate-800 text-[11px] font-semibold py-1.5 px-2 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-center gap-1.5">
-                        <i data-lucide="folder-down" class="w-3.5 h-3.5 text-[#990000]"></i>
-                        <span>เอกสารแบงก์</span>
+                      <button onclick="openNpaKeyModal('${p.id}')" class="bg-[#1E749C] hover:bg-[#165a7a] text-white text-[10px] font-bold py-1.5 px-1 rounded-xl flex items-center justify-center gap-1 shadow-2xs active:scale-95 transition-all truncate" title="เบิกกุญแจ NPA ประสานงานพี่ลิลลี่ & Messenger">
+                        <i data-lucide="key" class="w-3 h-3 shrink-0"></i>
+                        <span class="truncate">เบิกกุญแจ</span>
+                      </button>
+                      <button onclick="openPropertyDetailModal('${p.id}')" class="bg-white hover:bg-slate-50 text-slate-800 text-[10px] font-semibold py-1.5 px-1 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-center gap-1 truncate" title="ดูรายละเอียดและเอกสารยื่นแบงก์">
+                        <i data-lucide="folder-down" class="w-3 h-3 shrink-0 text-[#990000]"></i>
+                        <span class="truncate">เอกสารแบงก์</span>
                       </button>
                     </div>
                     <button onclick="openVinylModal('${p.id}')" class="w-full bg-amber-50 hover:bg-amber-100 text-[#8C6D23] text-[11px] font-bold py-1.5 px-2 rounded-xl border border-amber-300/80 shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">

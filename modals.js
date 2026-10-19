@@ -987,6 +987,26 @@
         <!-- Description -->
         <p id="detail-desc" class="text-xs text-slate-600 leading-relaxed bg-white border border-slate-100 p-3 rounded-2xl"></p>
 
+        <!-- 🔑 NPA Key & Messenger Banner (Employee, Agent & Owner) -->
+        <div id="detail-npa-key-banner" class="bg-gradient-to-r from-sky-50 via-blue-50/70 to-indigo-50/50 border border-sky-200 rounded-2xl p-3 flex items-center justify-between gap-2 shadow-2xs">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-9 h-9 rounded-xl bg-[#1E749C] text-white flex items-center justify-center shrink-0 shadow-xs">
+              <i data-lucide="key" class="w-4 h-4"></i>
+            </div>
+            <div class="min-w-0">
+              <div class="font-bold text-xs text-sky-950 flex items-center gap-1.5">
+                <span>บริการเบิกกุญแจ NPA & Messenger</span>
+                <span class="text-[9px] bg-sky-200/80 text-sky-900 px-1.5 py-0.2 rounded font-bold">พี่ลิลลี่</span>
+              </div>
+              <div class="text-[10.5px] text-sky-700 truncate">มี Messenger วิ่งรับกุญแจจากแบงก์ส่งมอบหน้างาน</div>
+            </div>
+          </div>
+          <button type="button" id="detail-btn-banner-npa-key" onclick="" class="shrink-0 bg-[#1E749C] hover:bg-[#165a7a] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-2xs flex items-center gap-1 transition-all active:scale-95">
+            <span>ขอนัดชม</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
         <!-- Financial Breakdown (Homerun Style) -->
         <div class="bg-gradient-to-br from-slate-50 to-blue-50/30 p-3.5 rounded-2xl border border-blue-100/60 space-y-2">
           <div class="flex items-center justify-between">
