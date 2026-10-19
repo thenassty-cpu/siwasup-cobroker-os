@@ -1019,20 +1019,27 @@
 
         <!-- Primary Homerun-Style Action Bar -->
         <div class="space-y-2 pt-1">
-          <div id="detail-agent-actions-row" class="grid grid-cols-2 gap-2">
-            <button id="detail-btn-vinyl" onclick="" class="w-full bg-amber-50 hover:bg-amber-100 text-[#8C6D23] font-bold py-2.5 rounded-full border border-amber-300 text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-              <i data-lucide="printer" class="w-4 h-4 text-amber-600"></i>
-              <span>พิมพ์ป้ายไวนิล (Auto PDF)</span>
-            </button>
-            <button id="detail-btn-share" onclick="" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-full shadow-xs text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-              <i data-lucide="share-2" class="w-4 h-4"></i>
-              <span>แชร์ล็อกสิทธิ์ (3-5%)</span>
+          <div id="detail-agent-actions-row" class="space-y-1.5">
+            <div class="grid grid-cols-2 gap-2">
+              <button id="detail-btn-vinyl" onclick="" class="w-full bg-amber-50 hover:bg-amber-100 text-[#8C6D23] font-bold py-2.5 rounded-full border border-amber-300 text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+                <i data-lucide="printer" class="w-4 h-4 text-amber-600"></i>
+                <span>พิมพ์ป้ายไวนิล (Auto PDF)</span>
+              </button>
+              <button id="detail-btn-share" onclick="" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-full shadow-xs text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+                <i data-lucide="share-2" class="w-4 h-4"></i>
+                <span>แชร์ล็อกสิทธิ์ (3-5%)</span>
+              </button>
+            </div>
+            <button id="detail-btn-npa-key" onclick="" class="w-full bg-sky-50 hover:bg-sky-100 text-[#1E749C] font-bold py-2 rounded-full border border-sky-300 text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+              <i data-lucide="key" class="w-3.5 h-3.5 text-[#1E749C]"></i>
+              <span>เบิกกุญแจ NPA & ติดตาม Messenger (Demo พี่ลิลลี่)</span>
             </button>
           </div>
           <button id="detail-btn-offer" onclick="" class="w-full bg-[#BFA267] hover:bg-[#b09257] text-white font-bold py-3 rounded-full shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all">
             <i data-lucide="badge-dollar-sign" class="w-4 h-4"></i>
             <span id="detail-btn-offer-label">เสนอราคา</span>
           </button>
+          <div id="detail-waitlist-row" class="hidden"></div>
         </div>
       </div>
     </div>
@@ -1401,6 +1408,196 @@
           <i data-lucide="trophy" class="w-3.5 h-3.5 text-amber-600"></i>
           <span>ดูอันดับในทำเนียบตัวแทน (Leaderboard 125)</span>
         </button>
+      </div>
+    </div>
+
+    <!-- 🔑 NPA Key Dispatch & Messenger Tracking Modal (Demo Prototype) -->
+    <div id="npa-key-dispatch-modal" class="hidden modal-backdrop !items-center !p-3">
+      <div class="modal-card max-w-xl space-y-3.5 max-h-[92vh] overflow-y-auto custom-scrollbar !p-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-full bg-sky-50 text-[#1E749C] flex items-center justify-center font-bold">
+              <i data-lucide="key" class="w-4 h-4"></i>
+            </span>
+            <div>
+              <div class="font-bold text-gray-900 text-sm flex items-center gap-1.5">
+                <span>ระบบเบิกกุญแจ NPA & ติดตาม Messenger</span>
+                <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-200">Demo Prototype</span>
+              </div>
+              <div class="text-[11px] text-gray-500">ผู้รับผิดชอบงานเบิก-คืนกุญแจ NPA: <strong class="text-gray-700">พี่ลิลลี่ (Admin ศิวาทรัพย์)</strong></div>
+            </div>
+          </div>
+          <button type="button" onclick="closeNpaKeyModal()" class="w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center font-bold text-sm transition-colors">&times;</button>
+        </div>
+
+        <!-- Development Status Notice -->
+        <div class="bg-amber-50/80 border border-amber-200/90 rounded-xl p-2.5 text-xs text-amber-900 flex items-start gap-2">
+          <i data-lucide="info" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
+          <div class="leading-relaxed">
+            <strong>สถานะระบบ:</strong> ระบบเบิกกุญแจและประเมินคะแนนตัวแทนนี้เป็นแบบจำลอง (Demo) รอการประชุมสรุปข้อกำหนดร่วมกับ <strong>กูล, บัว และพี่ลิลลี่</strong> เพิ่มเติม (รอ <em>Argon</em> กลับมาพัฒนาต่อ)
+          </div>
+        </div>
+
+        <!-- Tab Switcher -->
+        <div class="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl text-xs font-semibold">
+          <button type="button" id="tab-npa-btn-req" onclick="switchNpaKeyTab('req')" class="py-1.5 px-1 rounded-lg bg-white text-slate-800 shadow-2xs text-center transition-all">1. ยื่นขอเบิก (Agent)</button>
+          <button type="button" id="tab-npa-btn-track" onclick="switchNpaKeyTab('track')" class="py-1.5 px-1 rounded-lg text-slate-500 hover:text-slate-800 text-center transition-all">2. ติดตาม Messenger</button>
+          <button type="button" id="tab-npa-btn-audit" onclick="switchNpaKeyTab('audit')" class="py-1.5 px-1 rounded-lg text-slate-500 hover:text-slate-800 text-center transition-all">3. ตรวจสอบ (พี่ลิลลี่)</button>
+        </div>
+
+        <!-- TAB 1: Agent Key Request Form -->
+        <div id="npa-tab-req" class="space-y-3">
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3 space-y-2 text-xs">
+            <div class="font-bold text-slate-800 flex items-center justify-between">
+              <span>ข้อมูลทรัพย์ NPA ที่ต้องการเบิกกุญแจ</span>
+              <span id="npa-req-bank" class="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 text-sky-800">SCB</span>
+            </div>
+            <div id="npa-req-prop-title" class="font-semibold text-slate-700 text-xs truncate">ทาวน์โฮม 3 ชั้น รีโนเวทพร้อมอยู่</div>
+            <div class="text-[11px] text-slate-500">รหัสทรัพย์: <span id="npa-req-prop-id" class="font-mono font-bold text-slate-700">#1069562</span></div>
+          </div>
+
+          <div class="space-y-2.5 text-xs">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">เวลานัดหมายพาลูกค้าเข้าชมหน้างาน</label>
+              <div class="grid grid-cols-2 gap-2">
+                <input type="date" id="npa-date" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#1E749C]">
+                <input type="time" id="npa-time" value="14:00" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#1E749C]">
+              </div>
+              <div class="mt-1 text-[11px] text-emerald-700 flex items-center gap-1 font-medium">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
+                <span>แจ้งล่วงหน้า 24 ชม. (ผ่านเกณฑ์ Fast-Track เบิกกุญแจทันที)</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">ชื่อผู้จะซื้อ (ลูกค้า)</label>
+                <input type="text" id="npa-client-name" placeholder="คุณสมชาย ใจดี" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#1E749C]">
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">เบอร์โทรลูกค้า</label>
+                <input type="tel" id="npa-client-phone" placeholder="08x-xxx-xxxx" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#1E749C]">
+              </div>
+            </div>
+
+            <div class="bg-sky-50/70 border border-sky-100 rounded-xl p-2.5 text-[11px] text-sky-900 space-y-1">
+              <div class="font-bold flex items-center gap-1 text-[#1E749C]">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                <span>ข้อตกลงและนโยบายการเบิกกุญแจธนาคาร</span>
+              </div>
+              <ul class="list-disc list-inside space-y-0.5 text-slate-600 pl-1">
+                <li>Messenger จะนำกุญแจไปส่งมอบให้ Agent ณ จุดนัดพบหน้าทรัพย์</li>
+                <li>Agent ต้องตรวจนับดอกกุญแจและเซ็นรับมอบต่อหน้า Messenger</li>
+                <li>เมื่อชมเสร็จ ต้องล็อกบ้านเรียบร้อยและส่งมอบกุญแจคืนทันที (ไม่เกิน 24 ชม.)</li>
+              </ul>
+            </div>
+          </div>
+
+          <button type="button" onclick="submitNpaKeyRequestDemo()" class="w-full bg-[#1E749C] hover:bg-[#165a7a] text-white font-bold py-2.5 rounded-full text-xs shadow-xs flex items-center justify-center gap-1.5 transition-all active:scale-95">
+            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            <span>ยื่นคำขอเบิกกุญแจถึงพี่ลิลลี่ (Admin)</span>
+          </button>
+        </div>
+
+        <!-- TAB 2: Messenger & Bank Live Tracker -->
+        <div id="npa-tab-track" class="hidden space-y-3">
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-slate-800">สถานะคำขอเบิกกุญแจ #KEY-2026-089</span>
+              <span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full text-[10px]">กำลังวิ่งส่ง</span>
+            </div>
+            
+            <!-- Stepper -->
+            <div class="space-y-2 pt-1 text-xs">
+              <div class="flex items-center gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold">✓</span>
+                <span class="text-slate-700">10:00 น. - Agent ยื่นคำขอเบิกกุญแจเข้าระบบ</span>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold">✓</span>
+                <span class="text-slate-700">10:30 น. - <strong>พี่ลิลลี่</strong> ตรวจสอบเอกสาร & อนุมัติใบส่งตัวธนาคาร</span>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px] font-bold animate-pulse">🛵</span>
+                <span class="font-bold text-sky-800">13:15 น. - Messenger (พี่สมชาย) รับกุญแจจาก สนง.ใหญ่ กำลังวิ่งไปหน้างาน</span>
+              </div>
+              <div class="flex items-center gap-2.5 text-slate-400">
+                <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-[10px] font-bold">4</span>
+                <span>รอส่งมอบกุญแจให้ Agent ณ หน้าบ้าน (นัด 14:00 น.)</span>
+              </div>
+              <div class="flex items-center gap-2.5 text-slate-400">
+                <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-[10px] font-bold">5</span>
+                <span>รอรับกุญแจคืน & ถ่ายรูปยืนยันปิดล็อกบ้าน</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Messenger Contact Card -->
+          <div class="bg-white border border-slate-200 rounded-xl p-3 flex items-center justify-between text-xs shadow-2xs">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold">🛵</div>
+              <div>
+                <div class="font-bold text-slate-800">คุณสมชาย (Messenger ศิวาทรัพย์)</div>
+                <div class="text-[11px] text-slate-500">โทร 089-224-xxxx • Honda Wave ดำ-แดง</div>
+              </div>
+            </div>
+            <a href="tel:089224xxxx" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1">
+              <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+              <span>โทร</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- TAB 3: Admin Lily Audit & Agent Trust Score -->
+        <div id="npa-tab-audit" class="hidden space-y-3">
+          <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-3.5 rounded-2xl space-y-2">
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-slate-300">ตัวแทนที่เบิกกุญแจ</span>
+              <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 text-[10px] font-bold px-2.5 py-0.5 rounded-full">Fast-Track Trusted</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="font-bold text-base">ภมรมาศ (Agent S02 / บัว)</div>
+                <div class="text-xs text-slate-300">ประวัติเบิกกุญแจ: 18 ครั้ง | กุญแจหาย: 0 ครั้ง</div>
+              </div>
+              <div class="text-right">
+                <div class="text-2xl font-black text-[#C2A460]">96 <span class="text-xs font-normal text-slate-400">/ 100</span></div>
+                <div class="text-[10px] text-slate-300">Trust Score</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Scoring by Lily -->
+          <div class="space-y-1.5 text-xs">
+            <div class="font-bold text-slate-800 flex items-center gap-1">
+              <i data-lucide="award" class="w-3.5 h-3.5 text-amber-600"></i>
+              <span>แผงตัดเกรด & บันทึกคะแนนโดยพี่ลิลลี่ (1-Click Audit):</span>
+            </div>
+            <div class="grid grid-cols-2 gap-1.5">
+              <button type="button" onclick="rateAgentDemo('punctual')" class="bg-white hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 p-2 rounded-xl text-left transition-all">
+                <div class="font-bold text-emerald-700 text-xs">+5 ⭐ ตรงเวลาดีเยี่ยม</div>
+                <div class="text-[10px] text-slate-400">มารอ Messenger ตามนัด</div>
+              </button>
+              <button type="button" onclick="rateAgentDemo('keysafe')" class="bg-white hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 p-2 rounded-xl text-left transition-all">
+                <div class="font-bold text-emerald-700 text-xs">+5 🔑 กุญแจครบ 100%</div>
+                <div class="text-[10px] text-slate-400">ล็อกบ้าน ปิดน้ำไฟเรียบร้อย</div>
+              </button>
+              <button type="button" onclick="rateAgentDemo('report')" class="bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-300 p-2 rounded-xl text-left transition-all">
+                <div class="font-bold text-sky-700 text-xs">+3 📝 รีพอร์ตผลไว</div>
+                <div class="text-[10px] text-slate-400">ส่ง Feedback ลูกค้าใน 24 ชม.</div>
+              </button>
+              <button type="button" onclick="rateAgentDemo('late')" class="bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-300 p-2 rounded-xl text-left transition-all">
+                <div class="font-bold text-rose-700 text-xs">-5 ⚠️ มาสาย > 20 นาที</div>
+                <div class="text-[10px] text-slate-400">Messenger ต้องยืนรอ</div>
+              </button>
+            </div>
+          </div>
+
+          <div class="text-[11px] text-slate-500 bg-slate-50 border border-slate-200 rounded-xl p-2.5">
+            <strong>เกณฑ์ระบบ:</strong> Agent ที่มีคะแนนเกิน 85 แต้มจะได้รับสิทธิ์ <em>Fast-Track</em> เบิกกุญแจฟรีโดยไม่ต้องวางเงินประกัน 1,000 บาท หากคะแนนต่ำกว่า 70 แต้ม ระบบจะระงับการเบิกอัตโนมัติ
+          </div>
+        </div>
       </div>
     </div>
 

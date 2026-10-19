@@ -258,6 +258,10 @@
                 <span class="text-xs">🐾</span>
                 <span>จัดกลุ่ม (Admin)</span>
               </button>
+              <button type="button" onclick="openNpaKeyModal()" class="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-50 text-sky-900 border border-sky-300 hover:bg-sky-100 shadow-2xs transition-all active:scale-95" title="ระบบเบิกกุญแจ NPA & ติดตาม Messenger (Demo พี่ลิลลี่)">
+                <i data-lucide="key" class="w-3 h-3 text-[#1E749C]"></i>
+                <span>เบิกกุญแจ (Demo)</span>
+              </button>
               <button type="button" onclick="openMyProfileModal()" class="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 shadow-2xs transition-all active:scale-95" title="กระเป๋าคะแนน & โปรไฟล์">
                 <i data-lucide="user" class="w-3 h-3 text-amber-600"></i>
                 <span id="bar-profile-btn-text">โปรไฟล์ (S22)</span>
@@ -674,7 +678,29 @@
       const contractUrl = getCustomerContractUrl(p);
       const isAdminOrAgent = (currentMode === 'owner' || currentMode === 'free_agent' || currentMode === 'employee');
 
+      const isBooked = (p.status === 'booked' || p.status === 'sold');
       if (!isAdminOrAgent) {
+        if (isBooked) {
+          // ทรัพย์ติดจองในโหมดลูกค้า: ปิดดาวน์โหลดสัญญา
+          container.innerHTML = `
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-amber-800 flex items-center gap-1.5">
+                <i data-lucide="lock" class="w-4 h-4 text-amber-600"></i>
+                <span>เอกสารสัญญาจะซื้อจะขาย</span>
+              </span>
+              <span class="text-[10px] bg-amber-100 text-amber-800 border border-amber-200 font-semibold px-2 py-0.5 rounded-full">ติดจองแล้ว</span>
+            </div>
+            <div class="bg-amber-50/70 border border-amber-200/80 rounded-xl p-3 text-xs text-amber-900 flex items-start gap-2.5">
+              <i data-lucide="alert-circle" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
+              <div>
+                <div class="font-bold text-xs">ทรัพย์นี้อยู่ระหว่างติดจอง ปิดดาวน์โหลดสัญญาชั่วคราว</div>
+                <div class="text-[11px] text-amber-800/80 mt-0.5">ระบบปิดการเปิดดูสัญญาสำหรับรายการนี้ชั่วคราว หากสนใจเป็นคิวสำรอง สามารถสอบถามทีมงานศิวาทรัพย์ได้ค่ะ</div>
+              </div>
+            </div>
+          `;
+          return;
+        }
+
         // โหมดลูกค้า (Client): ดาวน์โหลดได้เฉพาะเอกสารฝั่งลูกค้า เช่น สัญญาจะซื้อจะขาย (ไม่เห็นใบคำเสนอซื้อของธนาคาร)
         container.innerHTML = `
           <div class="flex items-center justify-between">
@@ -980,16 +1006,20 @@
       document.getElementById('detail-usable').textContent = p.usable_area || '110 ตร.ม.';
       document.getElementById('detail-desc').textContent = displayDesc;
 
-      // Status pill on detail modal image ('ติดจอง' vs 'New')
+      // Status pill on detail modal image ('ติดจอง' vs 'New' - only show if booked or truly new)
       const statusPill = document.getElementById('detail-status-pill');
       const isBooked = (p.status === 'booked' || p.status === 'sold');
       if (statusPill) {
         if (isBooked) {
           statusPill.textContent = 'ติดจอง';
           statusPill.className = 'bg-amber-500 text-white text-xs font-black px-3 py-1 rounded-full shadow-md border border-white/40';
-        } else {
+          statusPill.classList.remove('hidden');
+        } else if (p.is_new) {
           statusPill.textContent = 'New';
           statusPill.className = 'bg-[#FF3838] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm';
+          statusPill.classList.remove('hidden');
+        } else {
+          statusPill.classList.add('hidden');
         }
       }
       
@@ -1012,7 +1042,7 @@
         }
       }
 
-      // ซ่อนปุ่มสำหรับเอเจนต์ (พิมพ์ป้ายไวนิล / แชร์ล็อกสิทธิ์ 3-5%) เมื่ออยู่ในโหมดลูกค้า
+      // ซ่อนปุ่มสำหรับเอเจนต์ (พิมพ์ป้ายไวนิล / แชร์ล็อกสิทธิ์ 3-5% / เบิกกุญแจ) เมื่ออยู่ในโหมดลูกค้า
       const agentActionsRow = document.getElementById('detail-agent-actions-row');
       if (agentActionsRow) {
         if (currentMode === 'client') {
@@ -1031,8 +1061,35 @@
       const btnShare = document.getElementById('detail-btn-share');
       if (btnShare) btnShare.onclick = () => { openSmartShare(p.id, displayTitle); };
 
+      const btnNpaKey = document.getElementById('detail-btn-npa-key');
+      if (btnNpaKey) btnNpaKey.onclick = () => { closePropertyDetailModal(); openNpaKeyModal(p.id); };
+
       const btnOffer = document.getElementById('detail-btn-offer');
-      if (btnOffer) btnOffer.onclick = () => { closePropertyDetailModal(); openOfferModal(p.id, displayTitle, p.price); };
+      const btnOfferLabel = document.getElementById('detail-btn-offer-label');
+      const waitlistRow = document.getElementById('detail-waitlist-row');
+      if (btnOffer) {
+        if (currentMode === 'client' && isBooked) {
+          btnOffer.disabled = true;
+          btnOffer.className = "w-full bg-slate-200 text-slate-500 font-bold py-3 rounded-full flex items-center justify-center gap-2 text-xs sm:text-sm cursor-not-allowed select-none border border-slate-300";
+          if (btnOfferLabel) btnOfferLabel.textContent = "ทรัพย์นี้อยู่ระหว่างติดจอง (ปิดรับข้อเสนอชั่วคราว)";
+          btnOffer.onclick = null;
+          if (waitlistRow) {
+            waitlistRow.classList.remove('hidden');
+            waitlistRow.innerHTML = `
+              <button onclick="closePropertyDetailModal(); contactViaLine('${p.id}', '${safeTitleAttr}', true)" class="w-full bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-bold py-2.5 rounded-full flex items-center justify-center gap-2 text-xs active:scale-95 transition-all shadow-xs">
+                <i data-lucide="message-circle" class="w-4 h-4 text-amber-600"></i>
+                <span>สอบถามคิวสำรองผ่าน LINE Official (@siwasup)</span>
+              </button>
+            `;
+          }
+        } else {
+          btnOffer.disabled = false;
+          btnOffer.className = "w-full bg-[#BFA267] hover:bg-[#b09257] text-white font-bold py-3 rounded-full shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
+          if (btnOfferLabel) btnOfferLabel.textContent = "เสนอราคา";
+          btnOffer.onclick = () => { closePropertyDetailModal(); openOfferModal(p.id, displayTitle, p.price); };
+          if (waitlistRow) waitlistRow.classList.add('hidden');
+        }
+      }
 
       modal.classList.remove('hidden');
       if (window.lucide) lucide.createIcons();
@@ -1369,7 +1426,7 @@
         </div>
       `;
 
-      const cardsHtml = filtered.map(p => {
+      const cardsHtml = filtered.map((p, idx) => {
         // ข้อ 2: เปลี่ยนจาก Sold Out เป็นคำว่า "ติดจอง" ทั้งหมด ส่วนโอนแล้วจะถูกคัดออกจากหน้าเว็บ
         const isBooked = (p.status === 'booked' || p.status === 'sold');
         const isTransferred = (p.status === 'transferred');
@@ -1425,10 +1482,13 @@
               <!-- Bottom-Left: New Pill Badge & Bank NPA Badge (Bank Badge hidden in Client mode) -->
               <div class="absolute bottom-3 left-3 flex items-center gap-1.5 z-10">
                 ${isBooked ? `
-                  <span class="bg-amber-500 text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-sm">ติดจอง</span>
-                ` : `
+                  <span class="bg-amber-500 text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1">
+                    <i data-lucide="clock" class="w-3 h-3"></i>
+                    <span>ติดจอง</span>
+                  </span>
+                ` : (p.is_new || idx < 6) ? `
                   <span class="bg-[#FF3838] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">New</span>
-                `}
+                ` : ''}
                 ${bankBadge}
               </div>
 
@@ -1569,6 +1629,18 @@
                   <!-- Trainee locked -->
                   <div class="bg-slate-50 border border-slate-100 rounded-xl p-2 text-center text-[10px] text-slate-500">
                     ส่งทรัพย์เข้าพอร์ตอีก 2 หลังเพื่อปลดล็อกฟังก์ชันเอเจนต์
+                  </div>
+                ` : isBooked ? `
+                  <!-- Client Quick Actions: Booked property -->
+                  <div class="grid grid-cols-2 gap-1.5 pt-0.5">
+                    <button onclick="contactViaLine('${p.id}', '${safeTitleAttr}', true)" class="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-[11px] font-bold py-2 px-1 rounded-xl shadow-2xs flex items-center justify-center gap-1 active:scale-95 transition-all" title="ลงชื่อคิวสำรองกรณีหลุดจอง">
+                      <i data-lucide="message-circle" class="w-3.5 h-3.5 text-amber-600"></i>
+                      <span>คิวสำรอง</span>
+                    </button>
+                    <div class="bg-slate-100 text-slate-400 text-[10.5px] font-medium py-2 px-1 rounded-xl border border-slate-200 flex items-center justify-center gap-1 cursor-not-allowed select-none truncate" title="ทรัพย์นี้อยู่ระหว่างติดจอง ปิดรับข้อเสนอและทำสัญญาชั่วคราว">
+                      <i data-lucide="lock" class="w-3.5 h-3.5 shrink-0 text-slate-400"></i>
+                      <span class="truncate">ปิดรับข้อเสนอ</span>
+                    </div>
                   </div>
                 ` : `
                   <!-- Client Quick Contact & Contract Download -->
@@ -2089,6 +2161,94 @@
       if (lead) {
         closeOwnerLeadsModal();
         showToast(`🎉 อัปเกรด "${lead.owner_name}" เป็น Free Agent ในระบบเรียบร้อย! พร้อมส่งลิงก์รหัสตัวแทนให้ทาง LINE`);
+      }
+    }
+
+    // 🔑 NPA Key Dispatch & Messenger Demo (พี่ลิลลี่ Admin)
+    let currentNpaKeyProp = null;
+
+    function openNpaKeyModal(propId = null) {
+      const list = (window.allProperties && window.allProperties.length > 0)
+        ? window.allProperties
+        : (window.SIWASUP_PROPERTIES || allProperties || []);
+      
+      let p = null;
+      if (propId) {
+        p = list.find(x => String(x.id) === String(propId));
+      }
+      if (!p && list.length > 0) {
+        p = list.find(x => x.bank_source && x.bank_source !== 'Siwasup') || list[0];
+      }
+
+      currentNpaKeyProp = p;
+
+      if (p) {
+        const titleEl = document.getElementById('npa-req-prop-title');
+        const idEl = document.getElementById('npa-req-prop-id');
+        const bankEl = document.getElementById('npa-req-bank');
+        if (titleEl) titleEl.textContent = getDisplayTitle(p);
+        if (idEl) idEl.textContent = `#${p.id}`;
+        if (bankEl) bankEl.textContent = (p.bank_source || 'NPA ธนาคาร').toUpperCase();
+      }
+
+      // Set tomorrow's date by default
+      const dateEl = document.getElementById('npa-date');
+      if (dateEl && !dateEl.value) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        dateEl.value = tomorrow.toISOString().split('T')[0];
+      }
+
+      switchNpaKeyTab('req');
+      const modal = document.getElementById('npa-key-dispatch-modal');
+      if (modal) modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeNpaKeyModal() {
+      const modal = document.getElementById('npa-key-dispatch-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function switchNpaKeyTab(tab) {
+      const tabReq = document.getElementById('npa-tab-req');
+      const tabTrack = document.getElementById('npa-tab-track');
+      const tabAudit = document.getElementById('npa-tab-audit');
+      const btnReq = document.getElementById('tab-npa-btn-req');
+      const btnTrack = document.getElementById('tab-npa-btn-track');
+      const btnAudit = document.getElementById('tab-npa-btn-audit');
+
+      const activeClass = "py-1.5 px-1 rounded-lg bg-white text-slate-800 shadow-2xs text-center transition-all font-bold";
+      const inactiveClass = "py-1.5 px-1 rounded-lg text-slate-500 hover:text-slate-800 text-center transition-all";
+
+      if (tabReq) tabReq.classList.toggle('hidden', tab !== 'req');
+      if (tabTrack) tabTrack.classList.toggle('hidden', tab !== 'track');
+      if (tabAudit) tabAudit.classList.toggle('hidden', tab !== 'audit');
+
+      if (btnReq) btnReq.className = tab === 'req' ? activeClass : inactiveClass;
+      if (btnTrack) btnTrack.className = tab === 'track' ? activeClass : inactiveClass;
+      if (btnAudit) btnAudit.className = tab === 'audit' ? activeClass : inactiveClass;
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function submitNpaKeyRequestDemo() {
+      const name = (document.getElementById('npa-client-name')?.value || '').trim() || 'คุณสมชาย ใจดี';
+      const propTitle = currentNpaKeyProp ? getDisplayTitle(currentNpaKeyProp) : 'ทรัพย์ NPA';
+      
+      showToast(`🔑 ยื่นขอเบิกกุญแจถึงพี่ลิลลี่ (Admin) สำเร็จ! Messenger กำลังเตรียมรอบรับจากธนาคาร`);
+      switchNpaKeyTab('track');
+    }
+
+    function rateAgentDemo(type) {
+      if (type === 'punctual') {
+        showToast("⭐ พี่ลิลลี่บันทึก: +5 แต้ม (Agent ตรงเวลาดีเยี่ยม)");
+      } else if (type === 'keysafe') {
+        showToast("🔑 พี่ลิลลี่บันทึก: +5 แต้ม (ตรวจนับกุญแจครบ 100% ล็อกบ้านเรียบร้อย)");
+      } else if (type === 'report') {
+        showToast("📝 พี่ลิลลี่บันทึก: +3 แต้ม (Agent ส่งรายงานผลลูกค้าใน 24 ชม.)");
+      } else if (type === 'late') {
+        showToast("⚠️ พี่ลิลลี่บันทึก: -5 แต้ม (Agent มาสายเกินกำหนด)");
       }
     }
 
@@ -3039,10 +3199,11 @@
       showToast(`📞 กำลังโทรออก... แจ้งรหัส SS-${ref} กับเจ้าหน้าที่เพื่อรับสิทธิพิเศษ`);
     }
 
-    function contactViaLine(id, title) {
+    function contactViaLine(id, title, isWaitlist = false) {
       const ref = getStoredAgentRef();
       const src = getStoredSource();
-      const msg = `สวัสดีครับ สนใจทรัพย์: ${title} (รหัส ${id}) [ผู้แนะนำ: ${ref} | ช่องทาง: ${src}]`;
+      const prefix = isWaitlist ? "สวัสดีครับ สนใจสอบถามสถานะคิวสำรอง (กรณีหลุดจอง) ทรัพย์: " : "สวัสดีครับ สนใจทรัพย์: ";
+      const msg = `${prefix}${title} (รหัส ${id}) [ผู้แนะนำ: ${ref} | ช่องทาง: ${src}]`;
       const lineUrl = `https://line.me/R/oaMessage/@siwasup/?${encodeURIComponent(msg)}`;
       window.open(lineUrl, '_blank');
     }
