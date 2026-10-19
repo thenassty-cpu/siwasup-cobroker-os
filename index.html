@@ -9,6 +9,7 @@
   <!-- PDF & QR Libraries for Vinyl Sign Generator -->
   <script src="https://unpkg.com/pdf-lib@1.17.9/dist/pdf-lib.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script src="siwasup_all_properties.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&family=Tahoma&display=swap" rel="stylesheet">
   <style>
     @font-face {
@@ -495,7 +496,9 @@
 
     // Load data from JS bundle or fetch or fallback
     async function loadProperties() {
-      if (window.SIWASUP_PROPERTIES && window.SIWASUP_PROPERTIES.length > 0) {
+      if (typeof ALL_PROPERTIES_DATA !== 'undefined' && ALL_PROPERTIES_DATA.length > 0) {
+        allProperties = ALL_PROPERTIES_DATA;
+      } else if (window.SIWASUP_PROPERTIES && window.SIWASUP_PROPERTIES.length > 0) {
         allProperties = window.SIWASUP_PROPERTIES;
       } else {
         try {
@@ -565,7 +568,7 @@
           p.bank_source = banks[idx % banks.length];
         }
         // Normalize any legacy 'sold' status to 'booked' (ติดจอง) per Bua's brief
-        if (p.status === 'sold' || idx === 3 || idx === 11) {
+        if (p.status === 'sold') {
           p.status = 'booked';
           p.sold_time = 'เมื่อ 2 วันที่ผ่านมา';
         }
@@ -874,8 +877,15 @@
     }
 
     let showTransferredInOwnerMode = false;
+    let showSoldArchiveInOwnerMode = false;
+
     function toggleShowTransferred() {
       showTransferredInOwnerMode = !showTransferredInOwnerMode;
+      renderProperties();
+    }
+
+    function toggleShowSoldArchive() {
+      showSoldArchiveInOwnerMode = !showSoldArchiveInOwnerMode;
       renderProperties();
     }
 
@@ -1206,6 +1216,13 @@
       }
 
       const filtered = allProperties.filter(p => {
+        // คัดกรองทรัพย์ที่มีภาพปั๊ม 'Sold Out' จากระบบเก่าออกอัตโนมัติ (ยกเว้นแอดมินกดเปิดดูแฟ้มประวัติ Sold Out เก่า)
+        if (p.is_image_soldout || p.status === 'sold_archive') {
+          if (!(currentMode === 'owner' && showSoldArchiveInOwnerMode)) {
+            return false;
+          }
+        }
+
         // ข้อ 2: พอโอนปุ๊บ (status === 'transferred') เอาทรัพย์ออกจากหน้าเว็บทันที (ยกเว้นแอดมินกดดูรายการโอนแล้วชั่วคราว)
         if (p.status === 'transferred') {
           if (!(currentMode === 'owner' && showTransferredInOwnerMode)) {
@@ -1271,9 +1288,11 @@
       }
 
       // Stats for Owner
+      const soldArchiveCount = allProperties.filter(x => x.is_image_soldout || x.status === 'sold_archive').length;
       const transferredCount = allProperties.filter(x => x.status === 'transferred').length;
-      const activeTotalCount = allProperties.length - transferredCount;
-      const bookedCount = allProperties.filter(x => x.status === 'booked' || x.status === 'sold').length;
+      const activeCleanList = allProperties.filter(x => !x.is_image_soldout && x.status !== 'sold_archive' && x.status !== 'transferred');
+      const activeTotalCount = activeCleanList.length;
+      const bookedCount = activeCleanList.filter(x => x.status === 'booked' || x.status === 'sold').length;
       const availCount = Math.max(0, activeTotalCount - bookedCount);
 
       let ownerHeaderHtml = '';
@@ -1287,7 +1306,7 @@
               </span>
               <span class="text-[10px] bg-gray-50 text-gray-600 px-2 py-0.5 rounded-full border border-gray-200 font-medium">Real-time DB</span>
             </div>
-            <div class="grid grid-cols-4 gap-1.5 text-center text-[10px]">
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 text-center text-[10px]">
               <div class="bg-gray-50 p-1.5 rounded-lg border border-gray-100">
                 <div class="text-gray-500">แสดงบนเว็บ</div>
                 <div class="font-extrabold text-sm text-gray-800">${activeTotalCount}</div>
@@ -1300,13 +1319,17 @@
                 <div class="text-amber-800">ติดจอง</div>
                 <div class="font-extrabold text-sm text-amber-800">${bookedCount}</div>
               </div>
-              <div onclick="toggleShowTransferred()" class="cursor-pointer ${showTransferredInOwnerMode ? 'bg-rose-600 text-white' : 'bg-rose-50/70 text-rose-700'} p-1.5 rounded-lg border border-rose-200 transition-colors" title="คลิกเพื่อดู/ซ่อนทรัพย์ที่โอนแล้ว">
+              <div onclick="toggleShowSoldArchive()" class="cursor-pointer ${showSoldArchiveInOwnerMode ? 'bg-slate-700 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'} p-1.5 rounded-lg border border-slate-300 transition-colors" title="คลิกเพื่อดู/ซ่อนทรัพย์ที่ภาพมีตรา Sold Out จากระบบเก่า">
+                <div>Sold Out เดิม</div>
+                <div class="font-extrabold text-sm">${soldArchiveCount}</div>
+              </div>
+              <div onclick="toggleShowTransferred()" class="cursor-pointer ${showTransferredInOwnerMode ? 'bg-rose-600 text-white' : 'bg-rose-50/70 text-rose-700 hover:bg-rose-100'} p-1.5 rounded-lg border border-rose-200 transition-colors" title="คลิกเพื่อดู/ซ่อนทรัพย์ที่โอนแล้ว">
                 <div>โอนแล้ว (นำออก)</div>
                 <div class="font-extrabold text-sm">${transferredCount}</div>
               </div>
             </div>
             <div class="flex items-center justify-between text-[10px] text-gray-500 pt-1 border-t border-gray-100">
-              <span>${showTransferredInOwnerMode ? '👁️ กำลังแสดงรวมทรัพย์ที่โอนแล้ว (คลิกช่องโอนแล้วเพื่อซ่อน)' : 'เมื่อกด [โอนแล้ว] ระบบจะนำทรัพย์ออกจากหน้าเว็บทันที'}</span>
+              <span>${showSoldArchiveInOwnerMode ? '👁️ กำลังแสดงทรัพย์ Sold Out จากภาพระบบเก่า' : showTransferredInOwnerMode ? '👁️ กำลังแสดงรวมทรัพย์ที่โอนแล้ว' : 'ทรัพย์ที่มีภาพ Sold Out และโอนแล้ว ถูกคัดออกจากหน้าบ้านอัตโนมัติ'}</span>
               <button onclick="openOwnerLeadsModal()" class="text-[#990000] font-bold hover:underline flex items-center gap-1.5">
                 <span class="icon-circle w-4 h-4"><i data-lucide="inbox" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
                 <span>ดูคลังฝากขาย (${consignments.length})</span>
