@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สัญญาจะซื้อจะขายอสังหาริมทรัพย์ - บริษัท ศิวาทรัพย์ จำกัด</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: #f1f5f9;
+      color: #1e293b;
+      margin: 0;
+      padding: 24px 12px;
+      line-height: 1.75;
+      font-size: 15px;
+    }
+    .toolbar {
+      max-width: 210mm;
+      margin: 0 auto 16px auto;
+      background: #0f172a;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+    .toolbar button {
+      background: #C2A460;
+      color: #0f172a;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .toolbar button:hover { opacity: 0.92; }
+    .page {
+      max-width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      background: #fff;
+      padding: 22mm 20mm;
+      box-shadow: 0 6px 24px rgba(15, 23, 42, 0.08);
+      border-radius: 4px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+      color: #0f172a;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 18px;
+      border-bottom: 2px solid #C2A460;
+      padding-bottom: 10px;
+    }
+    .meta-right {
+      text-align: right;
+      margin-bottom: 16px;
+    }
+    .clause {
+      margin-bottom: 14px;
+      text-align: justify;
+    }
+    .clause-title {
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .fill-blank {
+      display: inline-block;
+      border-bottom: 1px dotted #475569;
+      min-width: 150px;
+      padding: 0 6px;
+      font-weight: 600;
+      color: #990000;
+    }
+    .sign-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-top: 42px;
+      text-align: center;
+    }
+    .sign-box {
+      padding-top: 12px;
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .toolbar { display: none !important; }
+      .page { box-shadow: none; padding: 15mm 18mm; max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <div>
+      <strong>📄 สัญญาจะซื้อจะขายอสังหาริมทรัพย์ (สำหรับลูกค้า)</strong>
+      <div style="font-size:12px; color:#cbd5e1;">บริษัท ศิวาทรัพย์ จำกัด (SIWASUP CO., LTD.)</div>
+    </div>
+    <button onclick="window.print()">🖨️ พิมพ์เอกสาร / บันทึกเป็น PDF</button>
+  </div>
+
+  <div class="page">
+    <h1>สัญญาจะซื้อจะขายอสังหาริมทรัพย์</h1>
+    <div class="subtitle">บริษัท ศิวาทรัพย์ จำกัด • ศูนย์รวมอสังหาริมทรัพย์และบ้านรีโนเวทคัดพิเศษ</div>
+
+    <div class="meta-right">
+      <div>ทำที่: <strong>สำนักงาน บริษัท ศิวาทรัพย์ จำกัด</strong></div>
+      <div>วันที่: <span id="doc-date" class="fill-blank">................................................</span></div>
+    </div>
+
+    <div class="clause">
+      สัญญาฉบับนี้ทำขึ้นระหว่าง <span class="fill-blank" style="min-width:220px;">บริษัท ศิวาทรัพย์ จำกัด / ผู้ถือกรรมสิทธิ์</span>
+      ซึ่งต่อไปในสัญญานี้เรียกว่า <strong>“ผู้จะขาย”</strong> ฝ่ายหนึ่ง กับ
+      <span id="buyer-name" class="fill-blank" style="min-width:220px;">........................................................................</span>
+      ถือบัตรประจำตัวประชาชนเลขที่ <span class="fill-blank">................................................</span>
+      โทรศัพท์ <span id="buyer-phone" class="fill-blank">........................................</span>
+      ซึ่งต่อไปในสัญญานี้เรียกว่า <strong>“ผู้จะซื้อ”</strong> อีกฝ่ายหนึ่ง
+    </div>
+
+    <div class="clause">
+      คู่สัญญาทั้งสองฝ่ายตกลงทำสัญญาจะซื้อจะขายอสังหาริมทรัพย์กัน โดยมีข้อความดังต่อไปนี้:
+    </div>
+
+    <div class="clause">
+      <span class="clause-title">ข้อ 1. ทรัพย์สินที่จะซื้อจะขาย</span><br>
+      ผู้จะขายตกลงจะขาย และผู้จะซื้อตกลงจะซื้ออสังหาริมทรัพย์ รหัสทรัพย์ <span id="prop-code" class="fill-blank">........................</span>
+      รายการ: <span id="prop-title" class="fill-blank" style="min-width:300px;">........................................................................................</span>
+      เนื้อที่ประมาณ <span id="prop-size" class="fill-blank" style="min-width:80px;">................</span>
+      ตั้งอยู่ที่ <span id="prop-loc" class="fill-blank" style="min-width:200px;">................................................................</span>
+    </div>
+
+    <div class="clause">
+      <span class="clause-title">ข้อ 2. ราคาซื้อขายและการชำระเงิน</span><br>
+      คู่สัญญาตกลงราคาซื้อขายอสังหาริมทรัพย์ตามข้อ 1 เป็นจำนวนเงินทั้งสิ้น
+      <span id="prop-price" class="fill-blank">........................................</span> บาท
+      โดยมีรายละเอียดการวางเงินมัดจำ/หลักประกันการซื้อขาย ดังนี้:<br>
+      2.1 ในวันทำสัญญานี้ ผู้จะซื้อได้วางเงินมัดจำ/หลักประกันจำนวน <span id="prop-deposit" class="fill-blank">................................</span> บาท<br>
+      2.2 ส่วนที่เหลือจำนวน <span id="prop-balance" class="fill-blank">........................................</span> บาท ผู้จะซื้อตกลงชำระให้ครบถ้วนในวันจดทะเบียนโอนกรรมสิทธิ์ ณ สำนักงานที่ดิน
+    </div>
+
+    <div class="clause">
+      <span class="clause-title">ข้อ 3. กำหนดการโอนกรรมสิทธิ์</span><br>
+      คู่สัญญาทั้งสองฝ่ายตกลงไปดำเนินการจดทะเบียนโอนกรรมสิทธิ์อสังหาริมทรัพย์ตามสัญญานี้ ณ สำนักงานที่ดินที่ทรัพย์ตั้งอยู่ ภายในกำหนด
+      <span class="fill-blank" style="min-width:60px;">30 - 45</span> วัน นับถัดจากวันที่ได้รับอนุมัติราคา/ทำสัญญาฉบับนี้
+    </div>
+
+    <div class="clause">
+      <span class="clause-title">ข้อ 4. ค่าธรรมเนียมและภาษีอากร</span><br>
+      ค่าธรรมเนียมการโอน ภาษีเงินได้หัก ณ ที่จ่าย ภาษีธุรกิจเฉพาะ และอากรแสตมป์ ให้เป็นไปตามเงื่อนไขมาตรฐานที่ตกลงร่วมกันระหว่างผู้จะซื้อและผู้จะขาย
+    </div>
+
+    <div class="clause">
+      สัญญานี้ทำขึ้นเป็นสองฉบับ มีข้อความถูกต้องตรงกัน คู่สัญญาได้อ่านและเข้าใจข้อความโดยตลอดแล้ว จึงลงลายมือชื่อไว้เป็นสำคัญ
+    </div>
+
+    <div class="sign-grid">
+      <div class="sign-box">
+        <div>ลงชื่อ ....................................................... ผู้จะซื้อ</div>
+        <div style="margin-top:6px;">( <span id="buyer-sign-name">.......................................................</span> )</div>
+      </div>
+      <div class="sign-box">
+        <div>ลงชื่อ ....................................................... ผู้จะขาย/ผู้รับมอบอำนาจ</div>
+        <div style="margin-top:6px;">( บริษัท ศิวาทรัพย์ จำกัด )</div>
+      </div>
+      <div class="sign-box">
+        <div>ลงชื่อ ....................................................... พยาน</div>
+        <div style="margin-top:6px;">( ....................................................... )</div>
+      </div>
+      <div class="sign-box">
+        <div>ลงชื่อ ....................................................... พยาน/ผู้ประสานงาน</div>
+        <div style="margin-top:6px;">( ....................................................... )</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const today = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+      document.getElementById('doc-date').textContent = today;
+      if (params.get('code')) document.getElementById('prop-code').textContent = params.get('code');
+      if (params.get('title')) document.getElementById('prop-title').textContent = params.get('title');
+      if (params.get('size')) document.getElementById('prop-size').textContent = params.get('size');
+      if (params.get('loc')) document.getElementById('prop-loc').textContent = params.get('loc');
+      if (params.get('price')) {
+        const p = Number(params.get('price'));
+        const d = Number(params.get('deposit')) || Math.max(20000, Math.round((p * 0.05) / 10000) * 10000);
+        document.getElementById('prop-price').textContent = p.toLocaleString('th-TH');
+        document.getElementById('prop-deposit').textContent = d.toLocaleString('th-TH');
+        document.getElementById('prop-balance').textContent = Math.max(0, p - d).toLocaleString('th-TH');
+      }
+      if (params.get('buyer')) {
+        document.getElementById('buyer-name').textContent = params.get('buyer');
+        document.getElementById('buyer-sign-name').textContent = params.get('buyer');
+      }
+      if (params.get('phone')) {
+        document.getElementById('buyer-phone').textContent = params.get('phone');
+      }
+    })();
+  </script>
+</body>
+</html>

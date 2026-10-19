@@ -75,6 +75,15 @@
       color: #1e293b;
     }
 
+    /* Modern Form Validation Feedback (:user-invalid / :user-valid) */
+    #homerun-offer-form input:user-invalid {
+      border-color: #ef4444 !important;
+      background-color: #fef2f2 !important;
+    }
+    #homerun-offer-form input:user-valid {
+      border-color: #10b981 !important;
+    }
+
     /* 📦 Modal System Utilities & Body Scroll Lock */
     body.modal-open {
       overflow: hidden !important;
@@ -295,9 +304,9 @@
             <button id="btn-clear-search" onclick="clearFilters()" class="hidden absolute right-2.5 top-1.5 text-gray-400 hover:text-gray-600 text-xs font-bold">&times;</button>
           </div>
 
-          <!-- 4 Quick Dropdowns including Bank NPA Source -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[11px]">
-            <!-- สถาบัน/ธนาคาร NPA -->
+          <!-- 4 Quick Dropdowns including Bank NPA Source (Hidden in Client Mode) -->
+          <div id="filter-dropdowns-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[11px]">
+            <!-- สถาบัน/ธนาคาร NPA (แสดงเฉพาะโหมด Admin / Agent) -->
             <select id="filter-bank" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
               <option value="all">ทุกสถาบัน/ธนาคาร</option>
               <option value="Siwasup">ศิวาทรัพย์ (รีโนเวท)</option>
@@ -307,6 +316,7 @@
               <option value="TTB">TTB (ทีเอ็มบีธนชาต)</option>
               <option value="KTB">KTB (กรุงไทย)</option>
               <option value="GSB">GSB (ออมสิน)</option>
+              <option value="PAMCO">PAMCO (บสส. พหลโยธิน)</option>
             </select>
 
             <!-- ทำเล -->
@@ -457,10 +467,10 @@
 
   </div>
 
-  <script src="siwasup_agents.js?v=20261015-1630"></script>
-  <script src="modals.js?v=20261015-1630"></script>
-  <script src="vinyl_generator.js?v=20261015-1630"></script>
-  <script src="siwasup_all_properties.js?v=20261015-1630"></script>
+  <script src="siwasup_agents.js?v=20261019-2200"></script>
+  <script src="modals.js?v=20261019-2200"></script>
+  <script src="vinyl_generator.js?v=20261019-2200"></script>
+  <script src="siwasup_all_properties.js?v=20261019-2200"></script>
   <script>
     let currentMode = 'free_agent';
     let currentCategory = 'all';
@@ -541,7 +551,7 @@
             price: "1,980,000 บาท",
             main_image: "https://www.allabout-assets.com/images/banner/crop-1753242466429.png",
             description: "ทรัพย์ SCB สภาพดี โครงสร้างแกร่ง กู้ผ่านง่าย มีส่วนลดค่าธรรมเนียมโอน",
-            status: "sold",
+            status: "booked",
             sold_time: "เมื่อ 2 วันที่ผ่านมา",
             commission: "4% (79,200 บาท)"
           }
@@ -549,14 +559,14 @@
       }
 
       // Distribute realistic bank sources across mock properties if missing
-      const banks = ['SAM', 'SCB', 'KBANK', 'TTB', 'Siwasup', 'KTB', 'GSB'];
+      const banks = ['SAM', 'SCB', 'KBANK', 'TTB', 'Siwasup', 'KTB', 'GSB', 'PAMCO'];
       allProperties.forEach((p, idx) => {
         if (!p.bank_source) {
           p.bank_source = banks[idx % banks.length];
         }
-        // Mock a couple of sold properties to demonstrate 7-day Social Proof
-        if (idx === 3 || idx === 11) {
-          p.status = 'sold';
+        // Normalize any legacy 'sold' status to 'booked' (ติดจอง) per Bua's brief
+        if (p.status === 'sold' || idx === 3 || idx === 11) {
+          p.status = 'booked';
           p.sold_time = 'เมื่อ 2 วันที่ผ่านมา';
         }
       });
@@ -566,6 +576,205 @@
 
       updateConsignBadge();
       renderProperties();
+    }
+
+    // 🛡️ White-Label Sanitizer for Client Mode (ซ่อนชื่อธนาคาร/NPA ในโหมดลูกค้า 100%)
+    function sanitizeForClientMode(text) {
+      if (!text) return '';
+      if (currentMode !== 'client') return text;
+      return String(text)
+        .replace(/ทรัพย์\s*NPA\s*(ธนาคาร|กสิกรไทย|กสิกร|ไทยพาณิชย์|กรุงไทย|ออมสิน|ทีเอ็มบีธนชาต|ทหารไทยธนชาต|บสส\.?|SAM|SCB|KBank|KBANK|KTB|TTB|GSB|GHB|BBL|PAMCO)?\s*:\s*/gi, '')
+        .replace(/ทรัพย์หลุดจำนอง\s*(บสส\.?\s*\(?SAM\)?|ธนาคาร|SCB|KBank|KBANK|KTB|TTB|GSB|PAMCO)?/gi, 'ทรัพย์คัดพิเศษ')
+        .replace(/\bNPA\s*(KBank|KBANK|SCB|SAM|KTB|TTB|GSB|GHB|BBL|PAMCO)?\b/gi, 'ทรัพย์คัดพิเศษ')
+        .replace(/ทรัพย์\s*(SCB|KBank|KBANK|SAM|KTB|TTB|GSB|GHB|BBL|PAMCO)\b/gi, 'ทรัพย์สภาพดี')
+        .replace(/\(\s*(SAM|SCB|KBank|KBANK|KTB|TTB|GSB|GHB|BBL|PAMCO)\s*\)/gi, '')
+        .trim();
+    }
+
+    function getDisplayTitle(p) {
+      if (!p) return '';
+      return sanitizeForClientMode(p.title || '');
+    }
+
+    function getDisplayDesc(p) {
+      if (!p) return '';
+      const raw = p.description || 'ทรัพย์คัดสรรพิเศษ สภาพดี ทำเลศักยภาพ เหมาะทั้งอยู่อาศัยและลงทุนปล่อยเช่า พร้อมประสานงานกู้สินเชื่อ 100%';
+      return sanitizeForClientMode(raw);
+    }
+
+    // 📄 Bank-Specific Offer Documents Registry (จากโฟลเดอร์ E:\TON\#Siwasub\document\)
+    const BANK_OFFER_DOCUMENTS = [
+      {
+        id: 'scb_offer',
+        bankKey: 'SCB',
+        bankLabel: 'SCB (ไทยพาณิชย์)',
+        title: 'ใบคำเสนอซื้อทรัพย์สินธนาคาร SCB (แบบฟอร์มปี 2026)',
+        subtitle: 'คำเสนอซื้อทรัพย์สิน NPA + หลักเกณฑ์และเงื่อนไข 5 หน้า',
+        fileUrl: 'assets/documents/scb_offer_form_2026.pdf',
+        fileName: 'ใบคำเสนอซื้อทรัพย์_SCB_2026.pdf',
+        role: 'agent_admin'
+      },
+      {
+        id: 'gsb_offer',
+        bankKey: 'GSB',
+        bankLabel: 'GSB (ธนาคารออมสิน)',
+        title: 'ฟอร์มคำเสนอซื้อทรัพย์สินของธนาคารออมสิน',
+        subtitle: 'เอกสารแนบ 3 แบบฟอร์มยื่นเสนอซื้อและวางเงินมัดจำ',
+        fileUrl: 'assets/documents/gsb_offer_form.pdf',
+        fileName: 'ฟอร์มคำเสนอซื้อทรัพย์สิน_ออมสิน_GSB.pdf',
+        role: 'agent_admin'
+      },
+      {
+        id: 'ttb_offer',
+        bankKey: 'TTB',
+        bankLabel: 'TTB (ทหารไทยธนชาต)',
+        title: 'แบบฟอร์มเสนอซื้อทรัพย์สิน TTB + ใบชำระเงินประกัน',
+        subtitle: 'ใบเสนอซื้อทรัพย์สิน + ใบแจ้งชำระเงิน (Com Code: 150)',
+        fileUrl: 'assets/documents/ttb_offer_form.pdf',
+        fileName: 'แบบฟอร์มเสนอซื้อทรัพย์สิน_TTB.pdf',
+        role: 'agent_admin'
+      },
+      {
+        id: 'pamco_offer',
+        bankKey: 'PAMCO',
+        bankLabel: 'PAMCO (บสส. พหลโยธิน)',
+        title: 'แบบฟอร์มเสนอซื้อทรัพย์สิน PAMCO + ใบชำระเงินประกัน',
+        subtitle: 'ใบเสนอซื้อทรัพย์สิน + ใบแจ้งชำระเงิน (Com Code: 0299)',
+        fileUrl: 'assets/documents/pamco_offer_form.pdf',
+        fileName: 'แบบฟอร์มเสนอซื้อทรัพย์สิน_PAMCO.pdf',
+        role: 'agent_admin'
+      },
+      {
+        id: 'ttb_agent_reg',
+        bankKey: 'TTB_AGENT',
+        bankLabel: 'สำหรับตัวแทน/นายหน้า',
+        title: 'แบบฟอร์ม 1 คำขอเข้าร่วมโครงการผู้แนะนำฯ (TTB & PAMCO)',
+        subtitle: 'เอกสารขึ้นทะเบียนผู้แนะนำทรัพย์สินรอการขาย (NPA) 6 หน้า',
+        fileUrl: 'assets/documents/ttb_agent_register_form.pdf',
+        fileName: 'แบบฟอร์ม_1_คำขอเข้าร่วมโครงการผู้แนะนำ_TTB_PAMCO.pdf',
+        role: 'agent_admin'
+      }
+    ];
+
+    function getCustomerContractUrl(p) {
+      if (!p) return 'assets/documents/siwasup_sales_contract.html';
+      const cleanTitle = getDisplayTitle(p);
+      const priceNum = parsePriceNumber(p.price);
+      const depositNum = parsePriceNumber(calcDeposit(p.price));
+      return `assets/documents/siwasup_sales_contract.html?code=${encodeURIComponent(p.id)}&title=${encodeURIComponent(cleanTitle)}&price=${priceNum}&deposit=${depositNum}&size=${encodeURIComponent(p.size || '43.9 ตร.ว.')}&loc=${encodeURIComponent(p.location || 'กรุงเทพฯ และปริมณฑล')}`;
+    }
+
+    function renderPropertyDocumentDownloads(p) {
+      const container = document.getElementById('detail-documents-section');
+      if (!container || !p) return;
+
+      const contractUrl = getCustomerContractUrl(p);
+      const isAdminOrAgent = (currentMode === 'owner' || currentMode === 'free_agent' || currentMode === 'employee');
+
+      if (!isAdminOrAgent) {
+        // โหมดลูกค้า (Client): ดาวน์โหลดได้เฉพาะเอกสารฝั่งลูกค้า เช่น สัญญาจะซื้อจะขาย (ไม่เห็นใบคำเสนอซื้อของธนาคาร)
+        container.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-800 flex items-center gap-1.5">
+              <i data-lucide="file-check-2" class="w-4 h-4 text-[#1E749C]"></i>
+              <span>เอกสารประกอบการซื้อขาย (สำหรับลูกค้า)</span>
+            </span>
+            <span class="text-[10px] bg-sky-50 text-[#1E749C] border border-sky-200 font-semibold px-2 py-0.5 rounded-full">ดาวน์โหลดได้</span>
+          </div>
+          <div class="pt-1">
+            <a href="${contractUrl}" target="_blank" class="w-full bg-white hover:bg-sky-50/60 border border-slate-200 hover:border-[#1E749C] rounded-xl p-2.5 flex items-center justify-between transition-all group">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-8 h-8 rounded-lg bg-sky-50 text-[#1E749C] flex items-center justify-center shrink-0 font-bold">
+                  <i data-lucide="file-text" class="w-4 h-4"></i>
+                </div>
+                <div class="min-w-0">
+                  <div class="font-bold text-slate-800 text-xs group-hover:text-[#1E749C] truncate">สัญญาจะซื้อจะขายอสังหาริมทรัพย์ (ฉบับมาตรฐาน)</div>
+                  <div class="text-[10px] text-slate-500 truncate">ระบุรหัสทรัพย์ #${p.id} และราคาเบื้องต้น พร้อมสั่งพิมพ์/บันทึก PDF</div>
+                </div>
+              </div>
+              <span class="shrink-0 bg-[#1E749C] text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 ml-2">
+                <i data-lucide="download" class="w-3 h-3"></i>
+                <span>เปิด/ดาวน์โหลด</span>
+              </span>
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      // โหมด Admin / Agent: ดาวน์โหลดได้ครบทั้งหมด (ใบเสนอซื้อแยกตามธนาคาร + คำขอผู้แนะนำ + สัญญาจะซื้อจะขายลูกค้า)
+      const pBank = (p.bank_source || '').toUpperCase();
+      const matchedDoc = BANK_OFFER_DOCUMENTS.find(d => d.bankKey === pBank);
+
+      const allDocsHtml = BANK_OFFER_DOCUMENTS.map(doc => {
+        const isMatch = doc.bankKey === pBank;
+        return `
+          <a href="${doc.fileUrl}" download="${doc.fileName}" target="_blank"
+             class="bg-white hover:bg-amber-50/50 border ${isMatch ? 'border-[#990000] ring-1 ring-[#990000]/20 bg-red-50/20' : 'border-slate-200'} rounded-xl p-2 flex items-center justify-between transition-all group">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="px-1.5 py-0.5 rounded text-[9.5px] font-extrabold shrink-0 ${isMatch ? 'bg-[#990000] text-white' : 'bg-slate-100 text-slate-700'}">${doc.bankLabel}</span>
+              <div class="min-w-0">
+                <div class="font-bold text-slate-800 text-[11px] group-hover:text-[#990000] truncate">${doc.title}</div>
+                <div class="text-[9.5px] text-slate-400 truncate">${doc.subtitle}</div>
+              </div>
+            </div>
+            <span class="shrink-0 text-[10px] font-bold text-[#990000] bg-red-50 group-hover:bg-[#990000] group-hover:text-white px-2 py-1 rounded-lg flex items-center gap-1 ml-2 transition-colors">
+              <i data-lucide="download" class="w-3 h-3"></i>
+              <span>PDF</span>
+            </span>
+          </a>
+        `;
+      }).join('');
+
+      container.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-slate-900 flex items-center gap-1.5">
+            <i data-lucide="folder-down" class="w-4 h-4 text-[#990000]"></i>
+            <span>คลังเอกสารใบเสนอซื้อธนาคาร & สัญญา (สิทธิ์ Admin/Agent)</span>
+          </span>
+          <span class="text-[10px] bg-red-50 text-[#990000] border border-red-200 font-bold px-2 py-0.5 rounded-full">โหลดได้ครบทุกแบงก์</span>
+        </div>
+
+        ${matchedDoc ? `
+          <div class="bg-amber-50/90 border border-amber-300 rounded-xl p-2.5 flex items-center justify-between gap-2">
+            <div class="min-w-0">
+              <div class="text-[10px] font-extrabold text-amber-900">📌 แบบฟอร์มตรงกับเจ้าของทรัพย์นี้ (${matchedDoc.bankLabel}):</div>
+              <div class="text-xs font-bold text-slate-900 truncate">${matchedDoc.title}</div>
+            </div>
+            <a href="${matchedDoc.fileUrl}" download="${matchedDoc.fileName}" target="_blank"
+               class="shrink-0 bg-[#990000] hover:bg-red-800 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg shadow-2xs flex items-center gap-1">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+              <span>โหลดฟอร์ม ${matchedDoc.bankKey}</span>
+            </a>
+          </div>
+        ` : ''}
+
+        <!-- สัญญาจะซื้อจะขายสำหรับส่งให้ลูกค้า -->
+        <a href="${contractUrl}" target="_blank" class="bg-white hover:bg-sky-50/60 border border-sky-200 rounded-xl p-2 flex items-center justify-between transition-all group">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="px-1.5 py-0.5 rounded text-[9.5px] font-extrabold bg-sky-100 text-[#1E749C] shrink-0">สำหรับลูกค้า</span>
+            <div class="min-w-0">
+              <div class="font-bold text-slate-800 text-[11px] group-hover:text-[#1E749C] truncate">สัญญาจะซื้อจะขายอสังหาริมทรัพย์ (ดึงข้อมูลทรัพย์ #${p.id} อัตโนมัติ)</div>
+              <div class="text-[9.5px] text-slate-400 truncate">ไฟล์สัญญามาตรฐานที่อนุญาตให้ลูกค้าดาวน์โหลดได้</div>
+            </div>
+          </div>
+          <span class="shrink-0 text-[10px] font-bold text-[#1E749C] bg-sky-50 group-hover:bg-[#1E749C] group-hover:text-white px-2 py-1 rounded-lg flex items-center gap-1 ml-2 transition-colors">
+            <i data-lucide="printer" class="w-3 h-3"></i>
+            <span>เปิดสัญญา</span>
+          </span>
+        </a>
+
+        <!-- รายการแบบฟอร์มเสนอซื้อแยกตามธนาคารทั้งหมด -->
+        <details class="group pt-0.5" ${matchedDoc ? '' : 'open'}>
+          <summary class="cursor-pointer text-[11px] font-bold text-slate-700 hover:text-[#990000] flex items-center justify-between py-1 select-none">
+            <span>📂 ดูและดาวน์โหลดใบเสนอซื้อทุกธนาคาร (SCB, ออมสิน GSB, TTB, PAMCO)</span>
+            <span class="text-[10px] text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <div class="space-y-1.5 pt-1.5">
+            ${allDocsHtml}
+          </div>
+        </details>
+      `;
     }
 
     function setMode(mode) {
@@ -624,9 +833,28 @@
         traineeBanner.classList.remove('hidden');
       } else {
         btnClient.className = activeBtnClass;
-        modeText.textContent = "ลูกค้า (White-Label ไม่เห็นค่าคอม)";
+        modeText.textContent = "ลูกค้า (White-Label ไม่เห็นเจ้าของทรัพย์ NPA/ค่าคอม)";
         modeText.className = "text-[#990000] font-bold";
         modeIcon.innerHTML = `<i data-lucide="users" class="w-2.5 h-2.5 stroke-[1.5]"></i>`;
+      }
+
+      // ข้อ 1: ในโหมดลูกค้า ซ่อนตัวกรองสถาบัน/ธนาคาร NPA ไม่ให้ลูกค้าเห็นเจ้าของทรัพย์ (KTB, SCB, KBANK ฯลฯ)
+      const filterBankEl = document.getElementById('filter-bank');
+      const filterGridEl = document.getElementById('filter-dropdowns-grid');
+      const searchInputEl = document.getElementById('search-input');
+      if (filterBankEl && filterGridEl) {
+        if (mode === 'client') {
+          filterBankEl.value = 'all';
+          filterBankEl.classList.add('hidden');
+          filterGridEl.classList.remove('sm:grid-cols-4');
+          filterGridEl.classList.add('sm:grid-cols-3');
+          if (searchInputEl) searchInputEl.placeholder = "ค้นหา: ทำเล, โครงการ, รหัสทรัพย์, #ผ่อนล้านละ3พัน...";
+        } else {
+          filterBankEl.classList.remove('hidden');
+          filterGridEl.classList.remove('sm:grid-cols-3');
+          filterGridEl.classList.add('sm:grid-cols-4');
+          if (searchInputEl) searchInputEl.placeholder = "ค้นหา: ทำเล, โครงการ, รหัส NPA, #ผ่อนล้านละ3พัน...";
+        }
       }
 
       const adminShortcutBtn = document.getElementById('btn-owner-archetype-shortcut');
@@ -640,20 +868,31 @@
         }
       }
 
+      updateMiniBarSummary();
       renderProperties();
       if (window.lucide) { lucide.createIcons(); }
     }
 
+    let showTransferredInOwnerMode = false;
+    function toggleShowTransferred() {
+      showTransferredInOwnerMode = !showTransferredInOwnerMode;
+      renderProperties();
+    }
+
     function updateStatus(id, newStatus) {
-      const p = allProperties.find(x => x.id === id);
+      const p = allProperties.find(x => String(x.id) === String(id));
       if (p) {
         p.status = newStatus;
-        if (newStatus === 'sold') {
+        if (newStatus === 'booked') {
           p.sold_time = 'เมื่อสักครู่';
         }
         renderProperties();
-        const statusThai = newStatus === 'available' ? 'พร้อมขาย' : (newStatus === 'booked' ? 'ติดจอง' : 'ขายแล้ว (SOLD OUT)');
-        showToast(`บัว/เจี๊ยบ อัปเดต "${p.title}" เป็น [${statusThai}] เรียบร้อย!`);
+        if (newStatus === 'transferred') {
+          showToast(`✅ โอนกรรมสิทธิ์แล้ว! นำ "${p.title}" ออกจากหน้าเว็บเรียบร้อย`);
+        } else {
+          const statusThai = newStatus === 'available' ? 'พร้อมขาย' : 'ติดจอง';
+          showToast(`บัว/เจี๊ยบ อัปเดต "${p.title}" เป็น [${statusThai}] เรียบร้อย!`);
+        }
       }
     }
 
@@ -718,15 +957,31 @@
       const modal = document.getElementById('property-detail-modal');
       if (!modal) return;
 
+      const displayTitle = getDisplayTitle(p);
+      const displayDesc = getDisplayDesc(p);
+
       document.getElementById('detail-code').textContent = `รหัส: ${p.id}`;
       document.getElementById('detail-category-badge').textContent = p.category || 'อสังหาฯ';
       document.getElementById('detail-bank-badge').innerHTML = getBankBadge(p.bank_source);
       document.getElementById('detail-main-img').src = p.main_image || "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600";
-      document.getElementById('detail-title').textContent = p.title;
+      document.getElementById('detail-title').textContent = displayTitle;
       document.getElementById('detail-location').textContent = p.location || 'กรุงเทพฯ และปริมณฑล';
       document.getElementById('detail-size').textContent = p.size || '43.9 ตร.ว.';
       document.getElementById('detail-usable').textContent = p.usable_area || '110 ตร.ม.';
-      document.getElementById('detail-desc').textContent = p.description || 'ทรัพย์คัดสรรพิเศษ สภาพดี ทำเลศักยภาพ เหมาะทั้งอยู่อาศัยและลงทุนปล่อยเช่า พร้อมประสานงานกู้สินเชื่อ 100%';
+      document.getElementById('detail-desc').textContent = displayDesc;
+
+      // Status pill on detail modal image ('ติดจอง' vs 'New')
+      const statusPill = document.getElementById('detail-status-pill');
+      const isBooked = (p.status === 'booked' || p.status === 'sold');
+      if (statusPill) {
+        if (isBooked) {
+          statusPill.textContent = 'ติดจอง';
+          statusPill.className = 'bg-amber-500 text-white text-xs font-black px-3 py-1 rounded-full shadow-md border border-white/40';
+        } else {
+          statusPill.textContent = 'New';
+          statusPill.className = 'bg-[#FF3838] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm';
+        }
+      }
       
       const formattedPrice = formatPriceClean(p.price);
       document.getElementById('detail-price').textContent = `฿${formattedPrice}`;
@@ -736,17 +991,38 @@
       const monthly = priceNum > 0 ? Math.round((priceNum / 1000000) * 3500) : 10500;
       document.getElementById('detail-installment').textContent = `~ ${monthly.toLocaleString()} บ./เดือน (คำนวณล้านละ 3,500)`;
 
+      // ซ่อนลิงก์หน้าเว็บเดิมของธนาคารในโหมดลูกค้า เพื่อไม่ให้ลูกค้าเห็นเจ้าของทรัพย์ NPA
       const extLink = document.getElementById('detail-external-link');
-      if (extLink) extLink.href = p.url || '#';
+      if (extLink) {
+        extLink.href = p.url || '#';
+        if (currentMode === 'client') {
+          extLink.classList.add('hidden');
+        } else {
+          extLink.classList.remove('hidden');
+        }
+      }
+
+      // ซ่อนปุ่มสำหรับเอเจนต์ (พิมพ์ป้ายไวนิล / แชร์ล็อกสิทธิ์ 3-5%) เมื่ออยู่ในโหมดลูกค้า
+      const agentActionsRow = document.getElementById('detail-agent-actions-row');
+      if (agentActionsRow) {
+        if (currentMode === 'client') {
+          agentActionsRow.classList.add('hidden');
+        } else {
+          agentActionsRow.classList.remove('hidden');
+        }
+      }
+
+      // Render Role-Based Document Downloads inside Detail Modal
+      renderPropertyDocumentDownloads(p);
 
       const btnVinyl = document.getElementById('detail-btn-vinyl');
       if (btnVinyl) btnVinyl.onclick = () => { closePropertyDetailModal(); openVinylModal(p.id); };
 
       const btnShare = document.getElementById('detail-btn-share');
-      if (btnShare) btnShare.onclick = () => { openSmartShare(p.id, p.title); };
+      if (btnShare) btnShare.onclick = () => { openSmartShare(p.id, displayTitle); };
 
       const btnOffer = document.getElementById('detail-btn-offer');
-      if (btnOffer) btnOffer.onclick = () => { closePropertyDetailModal(); openOfferModal(p.id, p.title, p.price); };
+      if (btnOffer) btnOffer.onclick = () => { closePropertyDetailModal(); openOfferModal(p.id, displayTitle, p.price); };
 
       modal.classList.remove('hidden');
       if (window.lucide) lucide.createIcons();
@@ -816,7 +1092,7 @@
       
       let parts = [];
       if (q) parts.push(`"${q}"`);
-      if (bank && bank !== 'all') parts.push(bank);
+      if (currentMode !== 'client' && bank && bank !== 'all') parts.push(bank);
       if (cat && cat !== 'all') parts.push(cat);
       if (budget && budget !== 'all') {
         const bMap = { 'under2m': '< 2ลบ.', '2to3.5m': '2-3.5ลบ.', '3.5to5m': '3.5-5ลบ.', 'above5m': '> 5ลบ.' };
@@ -826,7 +1102,9 @@
       if (parts.length > 0) {
         summaryEl.innerHTML = `<span class="text-[#990000] font-bold">ตัวกรอง: ${parts.join(' • ')}</span>`;
       } else {
-        summaryEl.textContent = 'ค้นหา: ทำเล, ธนาคาร, งบประมาณ, ประเภท...';
+        summaryEl.textContent = currentMode === 'client'
+          ? 'ค้นหา: ทำเล, งบประมาณ, ประเภทบ้าน...'
+          : 'ค้นหา: ทำเล, ธนาคาร, งบประมาณ, ประเภท...';
       }
     }
 
@@ -884,8 +1162,11 @@
       renderProperties();
     }
 
-    // 🏦 NPA Bank Badges (Clean Pastel Aesthetic without Emojis)
+    // 🏦 NPA Bank Badges (ซ่อนชื่อธนาคารทั้งหมดในโหมดลูกค้าตามบรีฟของบัว ข้อ 1)
     function getBankBadge(bankSource) {
+      if (currentMode === 'client') {
+        return '';
+      }
       const b = (bankSource || 'Siwasup').toUpperCase();
       if (b === 'SAM') {
         return `<span class="bg-indigo-50/95 text-indigo-700 border border-indigo-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">SAM</span>`;
@@ -903,6 +1184,8 @@
         return `<span class="bg-orange-50/95 text-orange-700 border border-orange-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">ธอส.</span>`;
       } else if (b === 'BBL') {
         return `<span class="bg-slate-100/95 text-slate-700 border border-slate-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">กรุงเทพ</span>`;
+      } else if (b === 'PAMCO') {
+        return `<span class="bg-teal-50/95 text-teal-700 border border-teal-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">PAMCO</span>`;
       } else {
         return `<span class="bg-amber-50/95 text-[#8C6D23] border border-amber-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">ศิวาทรัพย์</span>`;
       }
@@ -923,13 +1206,20 @@
       }
 
       const filtered = allProperties.filter(p => {
+        // ข้อ 2: พอโอนปุ๊บ (status === 'transferred') เอาทรัพย์ออกจากหน้าเว็บทันที (ยกเว้นแอดมินกดดูรายการโอนแล้วชั่วคราว)
+        if (p.status === 'transferred') {
+          if (!(currentMode === 'owner' && showTransferredInOwnerMode)) {
+            return false;
+          }
+        }
+
         // VIP Bundle Filter if active
         if (activeBundleFilter && activeBundleFilter.length > 0) {
           if (!activeBundleFilter.includes(p.id)) return false;
         }
 
-        // Bank NPA Filter
-        if (bank !== 'all') {
+        // Bank NPA Filter (เฉพาะโหมดที่ไม่ใช่ลูกค้า)
+        if (currentMode !== 'client' && bank !== 'all') {
           const pBank = (p.bank_source || '').toLowerCase();
           const targetBank = bank.toLowerCase();
           if (!pBank.includes(targetBank)) return false;
@@ -955,9 +1245,10 @@
           if (budget === 'above5m' && priceNum < 5000000) return false;
         }
 
-        // Search Query
+        // Search Query (ใช้ชื่อที่ซ่อนแบงก์แล้วในโหมดลูกค้า)
         if (query) {
-          const text = ((p.title || '') + ' ' + (p.description || '') + ' ' + (p.price || '') + ' ' + (p.category || '') + ' ' + (p.bank_source || '')).toLowerCase();
+          const searchableBank = currentMode === 'client' ? '' : (p.bank_source || '');
+          const text = (getDisplayTitle(p) + ' ' + getDisplayDesc(p) + ' ' + (p.price || '') + ' ' + (p.category || '') + ' ' + searchableBank + ' ' + (p.id || '')).toLowerCase();
           if (!text.includes(query)) return false;
         }
 
@@ -971,7 +1262,7 @@
               <i data-lucide="search" class="w-5 h-5 stroke-[1.5]"></i>
             </div>
             <div class="font-bold text-gray-600">ไม่พบทรัพย์ที่ตรงกับเงื่อนไข</div>
-            <p class="text-xs text-gray-400">ลองล้างตัวกรอง หรือค้นหาธนาคารอื่นดูนะคะ</p>
+            <p class="text-xs text-gray-400">ลองล้างตัวกรอง หรือเปลี่ยนคำค้นหาดูนะคะ</p>
             <button onclick="clearFilters()" class="text-xs bg-amber-100 text-amber-800 font-bold px-3 py-1.5 rounded-lg shadow-xs">ล้างตัวกรองทั้งหมด</button>
           </div>
         `;
@@ -980,10 +1271,10 @@
       }
 
       // Stats for Owner
-      const totalCount = allProperties.length;
-      const bookedCount = allProperties.filter(x => x.status === 'booked').length;
-      const soldCount = allProperties.filter(x => x.status === 'sold').length;
-      const availCount = totalCount - bookedCount - soldCount;
+      const transferredCount = allProperties.filter(x => x.status === 'transferred').length;
+      const activeTotalCount = allProperties.length - transferredCount;
+      const bookedCount = allProperties.filter(x => x.status === 'booked' || x.status === 'sold').length;
+      const availCount = Math.max(0, activeTotalCount - bookedCount);
 
       let ownerHeaderHtml = '';
       if (currentMode === 'owner') {
@@ -998,8 +1289,8 @@
             </div>
             <div class="grid grid-cols-4 gap-1.5 text-center text-[10px]">
               <div class="bg-gray-50 p-1.5 rounded-lg border border-gray-100">
-                <div class="text-gray-500">ทั้งหมด</div>
-                <div class="font-extrabold text-sm text-gray-800">${totalCount}</div>
+                <div class="text-gray-500">แสดงบนเว็บ</div>
+                <div class="font-extrabold text-sm text-gray-800">${activeTotalCount}</div>
               </div>
               <div class="bg-emerald-50/70 p-1.5 rounded-lg border border-emerald-100">
                 <div class="text-emerald-700">พร้อมขาย</div>
@@ -1009,13 +1300,13 @@
                 <div class="text-amber-800">ติดจอง</div>
                 <div class="font-extrabold text-sm text-amber-800">${bookedCount}</div>
               </div>
-              <div class="bg-rose-50/70 p-1.5 rounded-lg border border-rose-100">
-                <div class="text-rose-700">ขายแล้ว (7วัน)</div>
-                <div class="font-extrabold text-sm text-rose-700">${soldCount}</div>
+              <div onclick="toggleShowTransferred()" class="cursor-pointer ${showTransferredInOwnerMode ? 'bg-rose-600 text-white' : 'bg-rose-50/70 text-rose-700'} p-1.5 rounded-lg border border-rose-200 transition-colors" title="คลิกเพื่อดู/ซ่อนทรัพย์ที่โอนแล้ว">
+                <div>โอนแล้ว (นำออก)</div>
+                <div class="font-extrabold text-sm">${transferredCount}</div>
               </div>
             </div>
             <div class="flex items-center justify-between text-[10px] text-gray-500 pt-1 border-t border-gray-100">
-              <span>สลับสถานะทรัพย์ได้ทันที</span>
+              <span>${showTransferredInOwnerMode ? '👁️ กำลังแสดงรวมทรัพย์ที่โอนแล้ว (คลิกช่องโอนแล้วเพื่อซ่อน)' : 'เมื่อกด [โอนแล้ว] ระบบจะนำทรัพย์ออกจากหน้าเว็บทันที'}</span>
               <button onclick="openOwnerLeadsModal()" class="text-[#990000] font-bold hover:underline flex items-center gap-1.5">
                 <span class="icon-circle w-4 h-4"><i data-lucide="inbox" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
                 <span>ดูคลังฝากขาย (${consignments.length})</span>
@@ -1025,13 +1316,17 @@
         `;
       }
 
-      // Homerun Clean Sub-Header Controls
+      // Homerun Clean Sub-Header Controls (ซ่อนคำว่า NPA ในโหมดลูกค้า)
+      const subHeaderLabel = currentMode === 'client'
+        ? 'บ้านและอสังหาริมทรัพย์คัดพิเศษ พร้อมยื่นเสนอราคา'
+        : 'ทรัพย์ NPA คัดพิเศษ & รีโนเวทพร้อมอยู่';
+
       const subHeaderHtml = `
         <div class="flex items-center justify-between py-2 border-b border-slate-100 text-xs mb-3 px-1">
           <div class="flex items-center gap-2">
             <span class="bg-[#BCA371] text-white px-3 py-1 rounded-full text-xs font-semibold shadow-2xs">รอบล่าสุด</span>
             <span class="text-slate-400 hidden sm:inline">•</span>
-            <span class="text-slate-500 font-medium hidden sm:inline">ทรัพย์ NPA คัดพิเศษ & รีโนเวทพร้อมอยู่</span>
+            <span class="text-slate-500 font-medium hidden sm:inline">${subHeaderLabel}</span>
           </div>
           <div class="flex items-center gap-2.5">
             <!-- View Switcher (Table / Map) -->
@@ -1052,12 +1347,15 @@
       `;
 
       const cardsHtml = filtered.map(p => {
-        const isBooked = p.status === 'booked';
-        const isSold = p.status === 'sold';
+        // ข้อ 2: เปลี่ยนจาก Sold Out เป็นคำว่า "ติดจอง" ทั้งหมด ส่วนโอนแล้วจะถูกคัดออกจากหน้าเว็บ
+        const isBooked = (p.status === 'booked' || p.status === 'sold');
+        const isTransferred = (p.status === 'transferred');
         const isSelected = selectedBundleIds.has(p.id);
         const isFav = savedFavorites.has(p.id);
         const img = p.main_image || "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600";
         const bankBadge = getBankBadge(p.bank_source);
+        const displayTitle = getDisplayTitle(p);
+        const safeTitleAttr = displayTitle.replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
         const num = parsePriceNumber(p.price);
         
@@ -1082,8 +1380,8 @@
             
             <!-- Image Area (Homerun 4:3 Ratio) -->
             <div class="relative aspect-[4/3] bg-slate-100 overflow-hidden cursor-pointer" onclick="openPropertyDetailModal('${p.id}')">
-              <img src="${img}" alt="${p.title}" 
-                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${isSold ? 'grayscale contrast-125 opacity-75' : ''}">
+              <img src="${img}" alt="${safeTitleAttr}" 
+                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${isBooked || isTransferred ? 'contrast-105 opacity-85' : ''}">
               
               <!-- Top-Left: Category Badge (Frosted Bokeh Glass Capsule) -->
               <div class="absolute top-3 left-3 capsule-bokeh text-[11px] font-medium px-3 py-1 flex items-center gap-1.5 shadow-sm">
@@ -1093,7 +1391,7 @@
 
               <!-- Top-Right: Glass Action Buttons (Share & Heart) -->
               <div class="absolute top-3 right-3 flex items-center gap-1.5 z-10" onclick="event.stopPropagation()">
-                <button onclick="openSmartShare('${p.id}', '${p.title}')" class="w-8 h-8 rounded-full capsule-bokeh hover:bg-slate-900/60 flex items-center justify-center transition-all shadow-sm active:scale-90" title="แชร์">
+                <button onclick="openSmartShare('${p.id}', '${safeTitleAttr}')" class="w-8 h-8 rounded-full capsule-bokeh hover:bg-slate-900/60 flex items-center justify-center transition-all shadow-sm active:scale-90" title="แชร์">
                   <i data-lucide="share-2" class="w-3.5 h-3.5 stroke-[1.5]"></i>
                 </button>
                 <button onclick="toggleFavorite('${p.id}')" class="w-8 h-8 rounded-full ${isFav ? 'bg-rose-600 text-white border border-rose-400' : 'capsule-bokeh hover:bg-slate-900/60'} flex items-center justify-center transition-all shadow-sm active:scale-90" title="บันทึกที่ชอบ">
@@ -1101,9 +1399,13 @@
                 </button>
               </div>
 
-              <!-- Bottom-Left: New Pill Badge & Bank NPA Badge -->
+              <!-- Bottom-Left: New Pill Badge & Bank NPA Badge (Bank Badge hidden in Client mode) -->
               <div class="absolute bottom-3 left-3 flex items-center gap-1.5 z-10">
-                <span class="bg-[#FF3838] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">New</span>
+                ${isBooked ? `
+                  <span class="bg-amber-500 text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-sm">ติดจอง</span>
+                ` : `
+                  <span class="bg-[#FF3838] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">New</span>
+                `}
                 ${bankBadge}
               </div>
 
@@ -1115,14 +1417,17 @@
                 </button>
               ` : ''}
 
-              <!-- Status Overlay if Sold or Booked -->
-              ${isSold ? `
-                <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
-                  <span class="bg-rose-600 text-white text-xs font-black tracking-wider px-3 py-1 rounded-full shadow-lg border border-white/30">SOLD OUT ปิดการขาย</span>
+              <!-- Status Overlay: เปลี่ยนจาก SOLD OUT เป็น "ติดจอง" ตามบรีฟข้อ 2 -->
+              ${isTransferred ? `
+                <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-[2px] flex items-center justify-center">
+                  <span class="bg-slate-800 text-white text-xs font-black tracking-wider px-3.5 py-1.5 rounded-full shadow-lg border border-white/30">โอนแล้ว (นำออกจากหน้าเว็บแล้ว)</span>
                 </div>
               ` : isBooked ? `
-                <div class="absolute top-12 right-3 bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
-                  ติดจองแล้ว
+                <div class="absolute inset-0 bg-black/35 backdrop-blur-[1.5px] flex items-center justify-center">
+                  <span class="bg-amber-500 text-white text-xs sm:text-sm font-black tracking-wide px-4 py-1.5 rounded-full shadow-lg border-2 border-white/80 flex items-center gap-1.5">
+                    <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                    <span>ติดจอง</span>
+                  </span>
                 </div>
               ` : ''}
 
@@ -1141,9 +1446,9 @@
                 <!-- Property Code -->
                 <div class="text-[11px] text-slate-400 font-mono text-right">รหัสทรัพย์: ${p.id}</div>
                 
-                <!-- Title -->
+                <!-- Title (White-labeled in Client Mode) -->
                 <h3 class="font-bold text-slate-900 text-sm md:text-base leading-snug line-clamp-2 hover:text-[#990000] transition-colors cursor-pointer" onclick="openPropertyDetailModal('${p.id}')">
-                  ${p.title}
+                  ${displayTitle}
                 </h3>
 
                 <!-- Location with Pin -->
@@ -1177,25 +1482,31 @@
                 </div>
               </div>
 
-              <!-- Primary Homerun Caramel Pill Button -->
+              <!-- Primary Homerun Caramel Pill Button & Quick Offer CTA -->
               <div class="pt-2 space-y-1.5">
-                <button onclick="openPropertyDetailModal('${p.id}')" class="w-full bg-[#BCA371] hover:bg-[#b09763] text-white font-semibold py-2.5 rounded-full shadow-xs flex items-center justify-center gap-1.5 text-xs sm:text-sm transition-all active:scale-[0.98]">
-                  <span>ดูรายละเอียด</span>
-                </button>
+                <div class="grid grid-cols-2 gap-1.5">
+                  <button onclick="openPropertyDetailModal('${p.id}')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 rounded-full text-xs transition-all active:scale-[0.98]">
+                    <span>ดูรายละเอียด</span>
+                  </button>
+                  <button onclick="openOfferModal('${p.id}', '${safeTitleAttr}', '${p.price}')" class="w-full bg-[#BCA371] hover:bg-[#b09763] text-white font-bold py-2.5 rounded-full shadow-xs flex items-center justify-center gap-1 text-xs transition-all active:scale-[0.98]">
+                    <i data-lucide="badge-dollar-sign" class="w-3.5 h-3.5"></i>
+                    <span>เสนอราคา</span>
+                  </button>
+                </div>
 
                 <!-- Mode-Specific Quick Actions -->
                 ${currentMode === 'owner' ? `
                   <!-- Owner 1-Click Status & Price Controls -->
                   <div class="bg-slate-50/80 p-2 rounded-xl border border-slate-200/70 space-y-1.5 text-xs">
                     <div class="grid grid-cols-3 gap-1">
-                      <button onclick="updateStatus('${p.id}', 'available')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${!isBooked && !isSold ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs' : 'bg-white text-gray-600 border border-gray-200'}">
+                      <button onclick="updateStatus('${p.id}', 'available')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${!isBooked && !isTransferred ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs' : 'bg-white text-gray-600 border border-gray-200'}">
                         <span>พร้อมขาย</span>
                       </button>
                       <button onclick="updateStatus('${p.id}', 'booked')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${isBooked ? 'bg-amber-50 text-amber-800 border border-amber-300 shadow-2xs' : 'bg-white text-gray-600 border border-gray-200'}">
                         <span>ติดจอง</span>
                       </button>
-                      <button onclick="updateStatus('${p.id}', 'sold')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${isSold ? 'bg-rose-50 text-rose-800 border border-rose-300 shadow-2xs' : 'bg-white text-gray-600 border border-gray-200'}">
-                        <span>ขายแล้ว</span>
+                      <button onclick="updateStatus('${p.id}', 'transferred')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${isTransferred ? 'bg-rose-600 text-white border border-rose-700 shadow-2xs' : 'bg-white text-rose-700 hover:bg-rose-50 border border-rose-200'}" title="เมื่อโอนแล้ว ระบบจะนำทรัพย์ออกจากหน้าเว็บทันที">
+                        <span>โอนแล้ว (นำออก)</span>
                       </button>
                     </div>
                     <div class="grid grid-cols-2 gap-1">
@@ -1203,9 +1514,9 @@
                         <i data-lucide="edit-3" class="w-3 h-3 text-[#990000]"></i>
                         <span>แก้ราคา</span>
                       </button>
-                      <button onclick="openOfferModal('${p.id}', '${p.title}', '${p.price}')" class="bg-white hover:bg-slate-100 text-slate-700 text-[10px] font-medium py-1 px-2 rounded-lg border border-slate-200 flex items-center justify-center gap-1">
-                        <i data-lucide="handshake" class="w-3 h-3 text-blue-600"></i>
-                        <span>ต่อรองแบงก์</span>
+                      <button onclick="openPropertyDetailModal('${p.id}')" class="bg-white hover:bg-slate-100 text-slate-700 text-[10px] font-bold py-1 px-2 rounded-lg border border-slate-200 flex items-center justify-center gap-1">
+                        <i data-lucide="folder-down" class="w-3 h-3 text-blue-600"></i>
+                        <span>โหลดฟอร์มแบงก์</span>
                       </button>
                     </div>
                     <button onclick="openVinylModal('${p.id}')" class="w-full bg-amber-50 hover:bg-amber-100 text-[#8C6D23] text-[11px] font-bold py-1.5 px-2 rounded-lg border border-amber-300/80 shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
@@ -1217,13 +1528,13 @@
                   <!-- Free Agent Quick Operations -->
                   <div class="space-y-1.5 pt-0.5">
                     <div class="grid grid-cols-2 gap-1.5">
-                      <button onclick="openSmartShare('${p.id}', '${p.title}')" class="bg-[#990000] hover:bg-red-800 text-white text-[11px] font-bold py-1.5 px-2 rounded-xl flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 transition-all">
+                      <button onclick="openSmartShare('${p.id}', '${safeTitleAttr}')" class="bg-[#990000] hover:bg-red-800 text-white text-[11px] font-bold py-1.5 px-2 rounded-xl flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 transition-all">
                         <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
                         <span>แชร์ล็อกสิทธิ์</span>
                       </button>
-                      <button onclick="openOfferModal('${p.id}', '${p.title}', '${p.price}')" class="bg-white hover:bg-slate-50 text-slate-800 text-[11px] font-semibold py-1.5 px-2 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-center gap-1.5">
-                        <i data-lucide="handshake" class="w-3.5 h-3.5 text-blue-600"></i>
-                        <span>ต่อรอง NPA</span>
+                      <button onclick="openPropertyDetailModal('${p.id}')" class="bg-white hover:bg-slate-50 text-slate-800 text-[11px] font-semibold py-1.5 px-2 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-center gap-1.5">
+                        <i data-lucide="folder-down" class="w-3.5 h-3.5 text-[#990000]"></i>
+                        <span>เอกสารแบงก์</span>
                       </button>
                     </div>
                     <button onclick="openVinylModal('${p.id}')" class="w-full bg-amber-50 hover:bg-amber-100 text-[#8C6D23] text-[11px] font-bold py-1.5 px-2 rounded-xl border border-amber-300/80 shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
@@ -1237,16 +1548,16 @@
                     ส่งทรัพย์เข้าพอร์ตอีก 2 หลังเพื่อปลดล็อกฟังก์ชันเอเจนต์
                   </div>
                 ` : `
-                  <!-- Client Quick Contact -->
+                  <!-- Client Quick Contact & Contract Download -->
                   <div class="grid grid-cols-2 gap-1.5 pt-0.5">
-                    <button onclick="contactViaLine('${p.id}', '${p.title}')" class="bg-[#06C755] hover:bg-[#05b34c] text-white text-[11px] font-bold py-2 px-1 rounded-xl shadow-2xs flex items-center justify-center gap-1 active:scale-95 transition-all">
+                    <button onclick="contactViaLine('${p.id}', '${safeTitleAttr}')" class="bg-[#06C755] hover:bg-[#05b34c] text-white text-[11px] font-bold py-2 px-1 rounded-xl shadow-2xs flex items-center justify-center gap-1 active:scale-95 transition-all">
                       <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
                       <span>LINE นัดชม</span>
                     </button>
-                    <button onclick="openCallModal('${p.id}', '${p.title}')" class="bg-siwasup-gold hover:opacity-95 text-gray-950 text-[11px] font-bold py-2 px-1 rounded-xl shadow-2xs flex items-center justify-center gap-1 active:scale-95 transition-all">
-                      <i data-lucide="phone" class="w-3.5 h-3.5"></i>
-                      <span>โทรสอบถาม</span>
-                    </button>
+                    <a href="${getCustomerContractUrl(p)}" target="_blank" class="bg-sky-50 hover:bg-sky-100 text-[#1E749C] border border-sky-200 text-[11px] font-bold py-2 px-1 rounded-xl shadow-2xs flex items-center justify-center gap-1 active:scale-95 transition-all">
+                      <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                      <span>สัญญาซื้อขาย</span>
+                    </a>
                   </div>
                 `}
               </div>
@@ -1356,16 +1667,219 @@
       });
     }
 
-    // 3. Submit Offer / Negotiate Bank NPA
+    // 3. Homerun-Style "เสนอราคา" (Submit Offer) Flow & LINE Official CTA
+    const OFFER_LINE_WORDING_PRESETS = {
+      option1: {
+        header: 'ช่องทางยืนยันและวางหลักประกัน',
+        cardTitle: 'ยืนยันใบเสนอราคา & วางหลักประกันผ่าน LINE',
+        cardDesc: 'ส่งรายละเอียดราคาที่เสนอเข้า LINE ศิวาทรัพย์ (@siwasup) เพื่อรับเอกสารใบเสนอซื้อและเลขบัญชีวางหลักประกันโดยตรง',
+        btnText: 'ส่งใบเสนอราคาผ่าน LINE ศิวาทรัพย์'
+      },
+      option2: {
+        header: 'ขั้นตอนการวางหลักประกันเสนอซื้อ',
+        cardTitle: 'ติดต่อเจ้าหน้าที่เพื่อรับใบวางหลักประกันทาง LINE',
+        cardDesc: 'คลิกเพื่อส่งราคาที่เสนอให้เจ้าหน้าที่ศิวาทรัพย์ตรวจสอบ และรับใบแจ้งชำระเงินหลักประกันผ่าน LINE Official',
+        btnText: 'ติดต่อเจ้าหน้าที่ทาง LINE เพื่อวางหลักประกัน'
+      },
+      option3: {
+        header: 'ช่องทางการชำระเงินหลักประกัน',
+        cardTitle: 'ส่งข้อเสนอซื้อและชำระเงินมัดจำผ่าน LINE ศิวาทรัพย์',
+        cardDesc: 'แทนการสแกน QR หน้าเว็บ เพื่อความปลอดภัยสูงสุด เจ้าหน้าที่จะส่งเลขบัญชีบริษัท/ธนาคารให้ท่านในแชท LINE ทันที',
+        btnText: 'ส่งข้อเสนอซื้อ & รับช่องทางชำระเงินทาง LINE'
+      },
+      option4: {
+        header: 'ประสานงานยื่นข้อเสนอราคา',
+        cardTitle: 'ประสานงานยื่นข้อเสนอราคาผ่าน LINE Official',
+        cardDesc: 'พูดคุยเงื่อนไขการซื้อ (เงินสด/สินเชื่อ) และนัดหมายทำสัญญาจะซื้อจะขายกับทีมงานศิวาทรัพย์โดยตรง',
+        btnText: 'ยืนยันเสนอราคาผ่าน LINE Official (@siwasup)'
+      }
+    };
+
+    function applyOfferLineWordingPreset(presetKey) {
+      const preset = OFFER_LINE_WORDING_PRESETS[presetKey] || OFFER_LINE_WORDING_PRESETS.option1;
+      const headerEl = document.getElementById('offer-line-box-header');
+      const titleEl = document.getElementById('offer-line-card-title');
+      const descEl = document.getElementById('offer-line-card-desc');
+      const btnTextEl = document.getElementById('offer-submit-btn-text');
+
+      if (headerEl) headerEl.textContent = preset.header;
+      if (titleEl) titleEl.textContent = preset.cardTitle;
+      if (descEl) descEl.textContent = preset.cardDesc;
+      if (btnTextEl) btnTextEl.textContent = preset.btnText;
+    }
+
+    const MIN_OFFER_RATIO = 0.70; // ล็อกเพดานเสนอราคาขั้นต่ำที่ 70% ของราคาก่อนต่อรอง (ป้องกันคนปั่นราคาหลอก)
+    const OFFER_COOLDOWN_MS = 60 * 1000; // จำกัดความถี่การกดส่ง 1 ครั้ง ต่อ 60 วินาที
+
+    function getMinAllowedOfferPrice(askNum) {
+      if (!askNum || askNum <= 0) return 50000;
+      return Math.max(50000, Math.round((askNum * MIN_OFFER_RATIO) / 10000) * 10000);
+    }
+
+    function setQuickOfferRatio(ratio) {
+      if (!pendingOfferProp) return;
+      const askNum = parsePriceNumber(pendingOfferProp.price);
+      if (!askNum || askNum <= 0) return;
+      const targetPrice = Math.round((askNum * ratio) / 10000) * 10000;
+      const priceInput = document.getElementById('offer-price');
+      if (priceInput) {
+        priceInput.value = targetPrice;
+        priceInput.setAttribute('aria-invalid', 'false');
+        updateOfferSummaryBox();
+      }
+    }
+
+    function isValidThaiMobile(phone) {
+      const clean = String(phone || '').replace(/[^0-9]/g, '');
+      if (!/^0[689][0-9]{8}$/.test(clean)) return false;
+      // ป้องกันเบอร์มั่วเลขซ้ำ 7 ตัวขึ้นไป เช่น 0800000000, 0811111111 หรือเลขเรียง 0812345678
+      if (/(\d)\1{6,}/.test(clean)) return false;
+      if (clean === '0812345678' || clean === '0912345678' || clean === '0612345678') return false;
+      return true;
+    }
+
+    function updateOfferSummaryBox() {
+      if (!pendingOfferProp) return;
+      const askNum = parsePriceNumber(pendingOfferProp.price);
+      const minAllowed = getMinAllowedOfferPrice(askNum);
+      const depositStr = calcDeposit(pendingOfferProp.price);
+      const priceInput = document.getElementById('offer-price');
+      const proposedVal = priceInput ? parseInt(priceInput.value, 10) : 0;
+
+      const origEl = document.getElementById('offer-summary-original');
+      const propEl = document.getElementById('offer-summary-proposed');
+      const depEl = document.getElementById('offer-summary-deposit');
+      const badgeEl = document.getElementById('offer-discount-badge');
+      const hintEl = document.getElementById('offer-price-hint');
+
+      if (origEl) origEl.textContent = `฿${askNum > 0 ? askNum.toLocaleString() : pendingOfferProp.price}`;
+      if (depEl) depEl.textContent = `฿${depositStr}`;
+
+      if (proposedVal && proposedVal > 0) {
+        if (propEl) propEl.textContent = `฿${proposedVal.toLocaleString()}`;
+        if (badgeEl && askNum > 0) {
+          const diff = askNum - proposedVal;
+          const pct = ((diff / askNum) * 100).toFixed(1);
+          if (proposedVal < minAllowed) {
+            badgeEl.textContent = `⚠️ ต่ำกว่าเกณฑ์ขั้นต่ำ (ขั้นต่ำ ฿${minAllowed.toLocaleString()})`;
+            badgeEl.className = 'text-[10px] font-bold text-red-700 bg-red-50 border border-red-300 px-2 py-0.5 rounded-full';
+            if (hintEl) {
+              hintEl.textContent = `ระบบกำหนดราคาเสนอซื้อขั้นต่ำที่ 70% (฿${minAllowed.toLocaleString()} บาท) เพื่อป้องกันการปั่นราคา`;
+              hintEl.className = 'text-[10px] text-red-600 font-semibold mt-1';
+            }
+          } else if (diff > 0) {
+            badgeEl.textContent = `ต่ำกว่าราคาตั้ง ${pct}% (-฿${diff.toLocaleString()})`;
+            badgeEl.className = 'text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full';
+            if (hintEl) {
+              hintEl.textContent = `อยู่ในเกณฑ์ยื่นพิจารณาได้ (ขั้นต่ำที่ระบบรับพิจารณา ฿${minAllowed.toLocaleString()} บาท)`;
+              hintEl.className = 'text-[10px] text-slate-400 mt-1';
+            }
+          } else if (diff === 0) {
+            badgeEl.textContent = `เท่าราคาตั้งขาย (โอกาสอนุมัติไว)`;
+            badgeEl.className = 'text-[10px] font-bold text-sky-700 bg-sky-50 border border-sky-200 px-2 py-0.5 rounded-full';
+          } else {
+            badgeEl.textContent = `สูงกว่าราคาตั้ง +฿${Math.abs(diff).toLocaleString()}`;
+            badgeEl.className = 'text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full';
+          }
+        }
+      } else {
+        if (propEl) propEl.textContent = 'รอระบุราคา';
+        if (badgeEl) {
+          badgeEl.textContent = 'ระบุราคาที่ต้องการ';
+          badgeEl.className = 'text-[10px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full';
+        }
+      }
+    }
+
     function openOfferModal(id, title, price) {
-      pendingOfferProp = { id, title, price };
+      const list = (window.allProperties && window.allProperties.length > 0)
+        ? window.allProperties
+        : (window.SIWASUP_PROPERTIES || allProperties || []);
+      const found = list.find(item => String(item.id) === String(id));
+      const cleanTitle = found ? getDisplayTitle(found) : sanitizeForClientMode(title);
+      const bankSource = found ? found.bank_source : 'Siwasup';
+      const img = (found && found.main_image) ? found.main_image : "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600";
+
+      pendingOfferProp = {
+        id,
+        title: cleanTitle,
+        rawTitle: found ? found.title : title,
+        price,
+        bank_source: bankSource,
+        propObj: found
+      };
+
+      const askNum = parsePriceNumber(price);
+      const minAllowed = getMinAllowedOfferPrice(askNum);
+      const suggestedOffer = askNum > 0 ? Math.round((askNum * 0.95) / 10000) * 10000 : '';
+
       document.getElementById('offer-prop-info').innerHTML = `
-        <div class="font-bold text-blue-950 flex items-center gap-1.5">
-          <span class="icon-circle w-4 h-4"><i data-lucide="home" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-          <span>${title}</span>
+        <div class="flex items-center gap-3">
+          <img src="${img}" alt="${cleanTitle}" class="w-14 h-14 rounded-xl object-cover shrink-0 border border-slate-200">
+          <div class="min-w-0 flex-1 space-y-0.5">
+            <div class="flex items-center gap-1.5">
+              <span class="text-[10px] font-mono bg-slate-200/80 text-slate-700 px-2 py-0.5 rounded font-bold">รหัส: ${id}</span>
+              ${getBankBadge(bankSource)}
+            </div>
+            <div class="font-bold text-slate-900 text-xs sm:text-sm truncate">${cleanTitle}</div>
+            <div class="text-[11px] text-slate-600 flex flex-wrap items-center gap-x-3 gap-y-0.5">
+              <span>ราคาก่อนต่อรอง: <strong class="text-[#1E749C] font-extrabold">฿${formatPriceClean(price)}</strong></span>
+              <span>หลักประกัน: <strong class="text-slate-800">฿${calcDeposit(price)}</strong></span>
+            </div>
+          </div>
         </div>
-        <div class="text-[10px] text-blue-700">ราคาตั้งขาย: <span class="font-bold text-red-600">${price}</span> (รหัส: ${id})</div>
       `;
+
+      const priceInput = document.getElementById('offer-price');
+      if (priceInput) {
+        priceInput.min = String(minAllowed);
+        priceInput.value = suggestedOffer;
+      }
+
+      const honeypotEl = document.getElementById('offer-company-website');
+      if (honeypotEl) honeypotEl.value = '';
+
+      // Render Role-Based Document Download box inside Offer Modal
+      const docsBox = document.getElementById('offer-modal-docs-box');
+      if (docsBox) {
+        const contractUrl = getCustomerContractUrl(found || { id, title: cleanTitle, price });
+        const isAdminOrAgent = (currentMode === 'owner' || currentMode === 'free_agent' || currentMode === 'employee');
+        const pBank = (bankSource || '').toUpperCase();
+        const matchedBankDoc = BANK_OFFER_DOCUMENTS.find(d => d.bankKey === pBank) || BANK_OFFER_DOCUMENTS[0];
+
+        if (!isAdminOrAgent) {
+          docsBox.innerHTML = `
+            <div class="text-[10.5px] font-bold text-slate-700 flex items-center gap-1">
+              <i data-lucide="file-text" class="w-3.5 h-3.5 text-[#1E749C]"></i>
+              <span>เอกสารสำหรับลูกค้า:</span>
+            </div>
+            <a href="${contractUrl}" target="_blank" class="w-full bg-sky-50/70 hover:bg-sky-100/80 border border-sky-200 text-[#1E749C] rounded-lg p-1.5 text-[10.5px] font-bold flex items-center justify-between transition-colors">
+              <span>📄 เปิดดู / ดาวน์โหลดสัญญาจะซื้อจะขาย</span>
+              <i data-lucide="external-link" class="w-3 h-3"></i>
+            </a>
+          `;
+        } else {
+          docsBox.innerHTML = `
+            <div class="text-[10.5px] font-bold text-slate-800 flex items-center justify-between">
+              <span class="flex items-center gap-1"><i data-lucide="folder-down" class="w-3.5 h-3.5 text-[#990000]"></i> เอกสารใบเสนอซื้อ (สิทธิ์ Admin/Agent):</span>
+            </div>
+            <div class="grid grid-cols-1 gap-1">
+              <a href="${matchedBankDoc.fileUrl}" download="${matchedBankDoc.fileName}" target="_blank" class="bg-red-50/80 hover:bg-red-100 border border-red-200 text-[#990000] rounded-lg p-1.5 text-[10px] font-bold flex items-center justify-between">
+                <span class="truncate">📥 โหลด${matchedBankDoc.title}</span>
+                <span class="shrink-0 underline ml-1">PDF</span>
+              </a>
+              <a href="${contractUrl}" target="_blank" class="bg-sky-50/70 hover:bg-sky-100 border border-sky-200 text-[#1E749C] rounded-lg p-1.5 text-[10px] font-bold flex items-center justify-between">
+                <span class="truncate">📄 สัญญาจะซื้อจะขาย (สำหรับส่งลูกค้า)</span>
+                <span class="shrink-0 underline ml-1">เปิดดู</span>
+              </a>
+            </div>
+          `;
+        }
+      }
+
+      updateOfferSummaryBox();
+      initOfferFormValidationSync();
+
       document.getElementById('offer-modal').classList.remove('hidden');
       if (window.lucide) { lucide.createIcons(); }
     }
@@ -1374,26 +1888,137 @@
       document.getElementById('offer-modal').classList.add('hidden');
     }
 
+    function initOfferFormValidationSync() {
+      const form = document.getElementById('homerun-offer-form');
+      if (!form || form.dataset.validationBound === 'true') return;
+      form.dataset.validationBound = 'true';
+
+      const inputs = form.querySelectorAll('input[required]');
+      inputs.forEach(input => {
+        input.addEventListener('blur', () => {
+          input.setAttribute('aria-invalid', String(!input.checkValidity()));
+        });
+        input.addEventListener('input', () => {
+          if (input.getAttribute('aria-invalid') === 'true' && input.checkValidity()) {
+            input.setAttribute('aria-invalid', 'false');
+          }
+        });
+      });
+    }
+
     function handleOfferSubmit(e) {
       e.preventDefault();
-      const offerPrice = document.getElementById('offer-price').value;
-      const name = document.getElementById('offer-name').value;
-      const phone = document.getElementById('offer-phone').value;
-      const terms = document.getElementById('offer-terms').value;
+
+      // เกราะชั้นที่ 1: ตรวจจับบอทด้วย Honeypot Field
+      const honeypotVal = (document.getElementById('offer-company-website')?.value || '').trim();
+      if (honeypotVal !== '') {
+        closeOfferModal();
+        return; // บล็อกบอทเงียบๆ
+      }
+
+      // เกราะชั้นที่ 2: จำกัดความถี่การกดส่ง (Rate Limit Cooldown 60 วินาที)
+      const lastSubmitTs = parseInt(localStorage.getItem('siwasup_last_offer_ts') || '0', 10);
+      const nowTs = Date.now();
+      if (nowTs - lastSubmitTs < OFFER_COOLDOWN_MS) {
+        const waitSec = Math.ceil((OFFER_COOLDOWN_MS - (nowTs - lastSubmitTs)) / 1000);
+        showToast(`⏳ ระบบป้องกันการยิงซ้ำ: กรุณารออีก ${waitSec} วินาทีก่อนส่งข้อเสนอใหม่ค่ะ`);
+        return;
+      }
+
+      // เกราะชั้นที่ 3: ตรวจสอบเพดานราคาขั้นต่ำ (70% Price Floor)
+      const offerPriceRaw = document.getElementById('offer-price').value;
+      const offerNum = parseInt(offerPriceRaw, 10) || 0;
+      const askNum = pendingOfferProp ? parsePriceNumber(pendingOfferProp.price) : 0;
+      const minAllowed = getMinAllowedOfferPrice(askNum);
+      if (offerNum < minAllowed) {
+        const priceEl = document.getElementById('offer-price');
+        if (priceEl) {
+          priceEl.setAttribute('aria-invalid', 'true');
+          priceEl.focus();
+        }
+        showToast(`❌ ราคาที่เสนอต่ำเกินเกณฑ์: กรุณาเสนอราคาไม่ต่ำกว่า ฿${minAllowed.toLocaleString()} บาท (70% ของราคาตั้ง)`);
+        return;
+      }
+
+      // เกราะชั้นที่ 4: ตรวจสอบเบอร์โทรศัพท์มือถือไทยแท้ 10 หลัก (กันเบอร์มั่ว/เลขตอง)
+      const phone = (document.getElementById('offer-phone')?.value || '').trim();
+      if (!isValidThaiMobile(phone)) {
+        const phoneEl = document.getElementById('offer-phone');
+        if (phoneEl) {
+          phoneEl.setAttribute('aria-invalid', 'true');
+          phoneEl.focus();
+        }
+        showToast("⚠️ กรุณากรอกเบอร์มือถือไทย 10 หลักที่ถูกต้อง (ขึ้นต้น 06, 08, 09)");
+        return;
+      }
+
+      const form = document.getElementById('homerun-offer-form');
+      if (form && !form.checkValidity()) {
+        const firstInvalid = form.querySelector(':invalid');
+        if (firstInvalid) {
+          firstInvalid.setAttribute('aria-invalid', 'true');
+          firstInvalid.focus();
+        }
+        showToast("⚠️ กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบถ้วนค่ะ");
+        return;
+      }
+
+      localStorage.setItem('siwasup_last_offer_ts', String(nowTs));
+
+      const firstName = (document.getElementById('offer-firstname')?.value || '').trim();
+      const lastName = (document.getElementById('offer-lastname')?.value || '').trim();
+      const email = (document.getElementById('offer-email')?.value || '').trim();
+      const terms = (document.getElementById('offer-terms')?.value || '').trim();
+      const purchaseTypeEl = document.querySelector('input[name="offer_PurchaseType"]:checked');
+      const purchaseType = purchaseTypeEl ? purchaseTypeEl.value : 'เงินสด';
+
+      const fullName = `${firstName} ${lastName}`.trim();
+      const formattedOfferPrice = offerNum.toLocaleString();
+      const propId = pendingOfferProp ? pendingOfferProp.id : '-';
+      const propTitle = pendingOfferProp ? pendingOfferProp.title : '-';
+      const askPrice = pendingOfferProp ? formatPriceClean(pendingOfferProp.price) : '-';
+      const depositAmt = pendingOfferProp ? calcDeposit(pendingOfferProp.price) : '50,000';
 
       closeOfferModal();
 
+      // Build LINE Official message for @siwasup
+      const lineMessage = [
+        `📋 ใบเสนอราคาซื้อทรัพย์ (ศิวาทรัพย์)`,
+        `━━━━━━━━━━━━━━`,
+        `🏠 รหัสทรัพย์: ${propId}`,
+        `📌 รายการ: ${propTitle}`,
+        `💰 ราคาก่อนต่อรอง: ฿${askPrice}`,
+        `✨ ราคาที่เสนอซื้อ: ฿${formattedOfferPrice} บาท`,
+        `💳 รูปแบบการซื้อ: ${purchaseType}`,
+        `🔐 หลักประกันการเสนอราคา: ฿${depositAmt} บาท`,
+        `━━━━━━━━━━━━━━`,
+        `👤 ผู้เสนอราคา: คุณ${fullName}`,
+        `📞 เบอร์โทร: ${phone}`,
+        `✉️ อีเมล: ${email}`,
+        terms ? `📝 เงื่อนไขเพิ่มเติม: ${terms}` : null,
+        `━━━━━━━━━━━━━━`,
+        `รบกวนเจ้าหน้าที่ศิวาทรัพย์ตรวจสอบข้อเสนอและส่งรายละเอียดการวางหลักประกันให้ด้วยค่ะ/ครับ`
+      ].filter(Boolean).join('\n');
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(lineMessage).catch(() => {});
+      }
+
       document.getElementById('admin-toast-body').innerHTML = `
-        <strong>มีข้อเสนอต่อรองราคาธนาคารเข้ามา!</strong><br>
-        • ทรัพย์: ${pendingOfferProp ? pendingOfferProp.title : '-'}<br>
-        • ราคาที่เสนอ: <strong class="text-amber-400 font-bold">${parseInt(offerPrice).toLocaleString()} บาท</strong><br>
-        • ผู้เสนอซื้อ: คุณ${name} (${phone})<br>
-        • เงื่อนไข: ${terms || 'ไม่ระบุ'}<br>
-        <span class="text-emerald-400 font-bold">📲 ส่งต่อให้บัวเจรจาเจ้าหน้าที่ธนาคารทันที</span>
+        <strong>💬 มีรายการ "เสนอราคา" ใหม่เข้ามา!</strong><br>
+        • ทรัพย์: ${propTitle} (#${propId})<br>
+        • ราคาที่เสนอ: <strong class="text-amber-400 font-bold">฿${formattedOfferPrice} บาท (${purchaseType})</strong><br>
+        • ผู้เสนอซื้อ: คุณ${fullName}<br>
+        • โทร: ${phone} | อีเมล: ${email}<br>
+        • เงื่อนไข: ${terms || 'ตามมาตรฐานบริษัท'}<br>
+        <span class="text-emerald-400 font-bold">📲 ระบบกำลังพาลูกค้าเข้า LINE ศิวาทรัพย์ พร้อมข้อความสรุปใบเสนอราคา</span>
       `;
       document.getElementById('admin-toast').classList.remove('hidden');
       if (window.lucide) { lucide.createIcons(); }
-      showToast("✅ ส่งข้อเสนอต่อรองเรียบร้อย! บัวจะประสานงานธนาคารและติดต่อกลับครับ");
+
+      const lineUrl = `https://line.me/R/oaMessage/%40siwasup/?${encodeURIComponent(lineMessage)}`;
+      window.open(lineUrl, '_blank');
+      showToast("✅ บันทึกใบเสนอราคาและเปิดแชท LINE ศิวาทรัพย์ (@siwasup) เรียบร้อยแล้ว!");
     }
 
     // 4. Owner Leads Management
@@ -1448,15 +2073,15 @@
     let pendingEditPriceProp = null;
 
     function openEditPriceModal(id) {
-      const prop = allProperties.find(p => p.id === id);
+      const prop = allProperties.find(p => String(p.id) === String(id));
       if (!prop) {
         showToast("ไม่พบข้อมูลทรัพย์");
         return;
       }
       
-      // กฎเหล็กที่ 1: ห้ามแก้ราคาเมื่อติดจองหรือขายแล้วเด็ดขาด
-      if (prop.status === 'booked' || prop.status === 'sold') {
-        const stText = prop.status === 'booked' ? 'ติดจองแล้ว' : 'ขายแล้ว (SOLD OUT)';
+      // กฎเหล็กที่ 1: ห้ามแก้ราคาเมื่อติดจองหรือโอนแล้วเด็ดขาด
+      if (prop.status === 'booked' || prop.status === 'sold' || prop.status === 'transferred') {
+        const stText = prop.status === 'transferred' ? 'โอนแล้ว' : 'ติดจอง';
         showToast(`❌ ไม่อนุญาตให้แก้ราคา: ทรัพย์นี้อยู่ในสถานะ [${stText}] มีสัญญาแล้ว ห้ามแก้ราคาเด็ดขาด!`);
         return;
       }
