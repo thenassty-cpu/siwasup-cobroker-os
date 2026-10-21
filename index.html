@@ -295,9 +295,9 @@
             </div>
           </div>
 
-          <!-- Unified Minimal Search Pill (รวม Search + 4 Filters ในแคปซูลเดียว) -->
+          <!-- Unified Minimal Search Pill (รวม Search + ทุกตัวกรองในแคปซูลเดียว) -->
           <div class="flex-1 max-w-4xl bg-neutral-50/90 hover:bg-white rounded-2xl lg:rounded-full border border-neutral-200/90 p-1.5 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.04)] transition-all">
-            <div class="grid grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr_auto] items-center gap-1 lg:gap-0">
+            <div class="grid grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr_1fr_auto] items-center gap-1 lg:gap-0" id="search-pill-grid">
               
               <!-- ช่องที่ 1: ค้นหาคำสำคัญ -->
               <div class="col-span-2 lg:col-span-1 px-3 py-1 relative">
@@ -310,7 +310,20 @@
                 </div>
               </div>
 
-              <!-- ช่องที่ 2: สถาบัน/ธนาคาร (ซ่อนอัตโนมัติในโหมดลูกค้า) -->
+              <!-- ช่องที่ 2: ประเภทอสังหาฯ (แสดงสำหรับทุกคน!) -->
+              <div id="filter-category-wrapper" class="px-3 py-1 lg:border-l border-neutral-200/70">
+                <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">ประเภทอสังหาฯ</label>
+                <select id="filter-category" onchange="syncCategoryToChips(this.value); applyAllFilters()" class="w-full bg-transparent text-xs font-medium text-neutral-800 focus:outline-none cursor-pointer truncate">
+                  <option value="all">ทุกประเภท</option>
+                  <option value="ทาวน์โฮม">ทาวน์โฮม</option>
+                  <option value="คอนโด">คอนโด</option>
+                  <option value="บ้านเดี่ยว">บ้านเดี่ยว</option>
+                  <option value="ที่ดิน">ที่ดิน</option>
+                  <option value="อาคารพาณิชย์">อาคารพาณิชย์</option>
+                </select>
+              </div>
+
+              <!-- ช่องที่ 3: สถาบัน/ธนาคาร (ซ่อนอัตโนมัติในโหมดลูกค้า) -->
               <div id="filter-bank-wrapper" class="px-3 py-1 lg:border-l border-neutral-200/70">
                 <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">สถาบัน/เจ้าของ</label>
                 <select id="filter-bank" onchange="applyAllFilters()" class="w-full bg-transparent text-xs font-medium text-neutral-800 focus:outline-none cursor-pointer truncate">
@@ -326,7 +339,7 @@
                 </select>
               </div>
 
-              <!-- ช่องที่ 3: โซนทำเล -->
+              <!-- ช่องที่ 4: โซนทำเล -->
               <div class="px-3 py-1 lg:border-l border-neutral-200/70">
                 <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">โซนทำเล</label>
                 <select id="filter-location" onchange="applyAllFilters()" class="w-full bg-transparent text-xs font-medium text-neutral-800 focus:outline-none cursor-pointer truncate">
@@ -341,7 +354,7 @@
                 </select>
               </div>
 
-              <!-- ช่องที่ 4: งบประมาณ -->
+              <!-- ช่องที่ 5: งบประมาณ -->
               <div class="col-span-2 lg:col-span-1 px-3 py-1 lg:border-l border-neutral-200/70">
                 <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">งบประมาณ</label>
                 <select id="filter-budget" onchange="applyAllFilters()" class="w-full bg-transparent text-xs font-medium text-neutral-800 focus:outline-none cursor-pointer truncate">
@@ -352,16 +365,6 @@
                   <option value="above5m">5 ล้านขึ้นไป</option>
                 </select>
               </div>
-
-              <!-- ช่องที่ 5 (ซ่อนประเภทไว้สำหรับ sync กับ chips หรือ filter) -->
-              <select id="filter-category" onchange="applyAllFilters()" class="hidden">
-                <option value="all">ทุกประเภท</option>
-                <option value="ทาวน์โฮม">ทาวน์โฮม</option>
-                <option value="คอนโด">คอนโด</option>
-                <option value="บ้านเดี่ยว">บ้านเดี่ยว</option>
-                <option value="ที่ดิน">ที่ดิน</option>
-                <option value="อาคารพาณิชย์">อาคารพาณิชย์</option>
-              </select>
 
               <!-- ปุ่มค้นหา -->
               <div class="col-span-2 lg:col-span-1 flex justify-end p-0.5">
@@ -389,9 +392,74 @@
         <div class="max-w-7xl mx-auto pt-2.5 pb-0.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           <span class="text-[10px] font-semibold text-neutral-400 shrink-0 uppercase tracking-wider mr-1 hidden sm:inline">กรองด่วน:</span>
           
+          <!-- Category Chips (แสดงสำหรับทุกคน! พร้อมไอคอนคมชัดมาตรฐาน) -->
+          <div id="category-quick-chips" class="flex items-center gap-1.5 shrink-0">
+            <button type="button" data-cat="all" onclick="selectCategoryChip('all', this)" class="cat-chip active h-8 px-3.5 rounded-full text-xs font-semibold bg-neutral-900 text-white shadow-xs transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+              </svg>
+              <span>ทุกประเภท</span>
+            </button>
+            <button type="button" data-cat="ทาวน์โฮม" onclick="selectCategoryChip('ทาวน์โฮม', this)" class="cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
+              <!-- ทาวน์โฮมแฝด 2 หลังพร้อมประตูชัดเจน (ไม่หลอกตาเป็นสมุด) -->
+              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 11l5-4 5 4v9H2v-9z"></path>
+                <path d="M12 11l5-4 5 4v9h-10"></path>
+                <path d="M6 20v-4h2v4"></path>
+                <path d="M16 20v-4h2v4"></path>
+              </svg>
+              <span>ทาวน์โฮม</span>
+            </button>
+            <button type="button" data-cat="คอนโด" onclick="selectCategoryChip('คอนโด', this)" class="cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
+              <!-- คอนโดมิเนียมอาคารสูงระเบียงกว้าง -->
+              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="5" y="2" width="14" height="20" rx="1.5"></rect>
+                <path d="M9 6h6"></path>
+                <path d="M9 10h6"></path>
+                <path d="M9 14h6"></path>
+                <path d="M11 22v-4h2v4"></path>
+              </svg>
+              <span>คอนโด</span>
+            </button>
+            <button type="button" data-cat="บ้านเดี่ยว" onclick="selectCategoryChip('บ้านเดี่ยว', this)" class="cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              <span>บ้านเดี่ยว</span>
+            </button>
+            <button type="button" data-cat="ที่ดิน" onclick="selectCategoryChip('ที่ดิน', this)" class="cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
+              <!-- หมุดระวางที่ดิน / โฉนดแปลงที่ดินสากล -->
+              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 21s-6-5.33-6-10a6 6 0 0 1 12 0c0 4.67-6 10-6 10z"></path>
+                <circle cx="12" cy="11" r="2.5"></circle>
+              </svg>
+              <span>ที่ดิน</span>
+            </button>
+            <button type="button" data-cat="อาคารพาณิชย์" onclick="selectCategoryChip('อาคารพาณิชย์', this)" class="cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
+              <!-- อาคารพาณิชย์/ตึกแถวค้าขาย: หน้าต่างสำนักงานชั้น 2-3 + กันสาด & ประตูการค้ากว้าง -->
+              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 22V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v17"></path>
+                <path d="M8 8h2"></path>
+                <path d="M14 8h2"></path>
+                <path d="M8 12h2"></path>
+                <path d="M14 12h2"></path>
+                <path d="M3 16h18"></path>
+                <path d="M9 22v-6h6v6"></path>
+              </svg>
+              <span>อาคารพาณิชย์</span>
+            </button>
+          </div>
+
+          <!-- Divider คั่นกลางระหว่าง Category กับ Bank (แสดงเฉพาะโหมดที่มี Bank) -->
+          <div id="quick-chips-divider" class="h-4 w-[1px] bg-neutral-200 shrink-0 mx-1"></div>
+
           <!-- Bank Chips (แสดงในโหมด Agent/Admin) -->
           <div id="bank-quick-chips" class="flex items-center gap-1.5 shrink-0">
-            <button type="button" onclick="selectBankChip('all', this)" class="bank-chip active h-8 px-3.5 rounded-full text-xs font-semibold bg-neutral-900 text-white shadow-xs transition whitespace-nowrap shrink-0 inline-flex items-center">ทั้งหมด</button>
+            <button type="button" onclick="selectBankChip('all', this)" class="bank-chip active h-8 px-3.5 rounded-full text-xs font-semibold bg-neutral-900 text-white shadow-xs transition whitespace-nowrap shrink-0 inline-flex items-center">ทุกแบงก์</button>
             <button type="button" onclick="selectBankChip('Siwasup', this)" class="bank-chip h-8 px-3.5 rounded-full text-xs font-semibold bg-[#FAF7F2] border border-[#DFD3C3] text-[#8C734B] hover:bg-[#F3EDE2] transition inline-flex items-center gap-1.5 whitespace-nowrap shrink-0">
               <span class="text-[#C2A460]">✦</span>
               <span>ศิวาทรัพย์ รีโนเวท</span>
@@ -403,62 +471,6 @@
             <button type="button" onclick="selectBankChip('KTB', this)" class="bank-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center">KTB</button>
             <button type="button" onclick="selectBankChip('GSB', this)" class="bank-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center">GSB</button>
             <button type="button" onclick="selectBankChip('PAMCO', this)" class="bank-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center">PAMCO</button>
-          </div>
-
-          <!-- Category Chips (สลับมาแสดงในโหมดลูกค้า Client Mode แทนที่ชื่อธนาคาร พร้อม Minimalist Vector Icons) -->
-          <div id="category-quick-chips" class="hidden flex items-center gap-1.5 shrink-0">
-            <button type="button" onclick="selectCategoryChip('all', this)" class="cat-chip active h-8 px-3.5 rounded-full text-xs font-semibold bg-neutral-900 text-white shadow-xs transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
-                <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
-                <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
-                <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
-              </svg>
-              <span>ทุกประเภท</span>
-            </button>
-            <button type="button" onclick="selectCategoryChip('ทาวน์โฮม', this)" class="cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 10.5L7.5 6l5.5 4.5V20H2V10.5z"></path>
-                <path d="M13 10.5l5.5-4.5 3.5 3V20h-9"></path>
-              </svg>
-              <span>ทาวน์โฮม</span>
-            </button>
-            <button type="button" onclick="selectCategoryChip('คอนโด', this)" class="cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path>
-                <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path>
-                <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path>
-                <path d="M10 6h4"></path>
-                <path d="M10 10h4"></path>
-                <path d="M10 14h4"></path>
-                <path d="M10 18h4"></path>
-              </svg>
-              <span>คอนโด</span>
-            </button>
-            <button type="button" onclick="selectCategoryChip('บ้านเดี่ยว', this)" class="cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-              </svg>
-              <span>บ้านเดี่ยว</span>
-            </button>
-            <button type="button" onclick="selectCategoryChip('ที่ดิน', this)" class="cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M8 19a4 4 0 0 1-2.24-7.32A5 5 0 0 1 12 4a5 5 0 0 1 6.24 7.68A4 4 0 0 1 16 19Z"></path>
-                <path d="M12 19v3"></path>
-              </svg>
-              <span>ที่ดิน</span>
-            </button>
-            <button type="button" onclick="selectCategoryChip('อาคารพาณิชย์', this)" class="cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"></path>
-                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-                <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"></path>
-                <path d="M2 7h20"></path>
-                <path d="M4 12h16"></path>
-              </svg>
-              <span>อาคารพาณิชย์</span>
-            </button>
           </div>
         </div>
 
@@ -1074,21 +1086,28 @@
       // สลับการแสดงผลของ Bank Quick Chips vs Category Quick Chips & Dropdowns
       const bankChips = document.getElementById('bank-quick-chips');
       const catChips = document.getElementById('category-quick-chips');
+      const chipsDivider = document.getElementById('quick-chips-divider');
       const filterBankWrapper = document.getElementById('filter-bank-wrapper');
       const filterBankEl = document.getElementById('filter-bank');
       const searchInputEl = document.getElementById('search-input');
+      const searchPillGrid = document.getElementById('search-pill-grid');
+
+      // Category Chips แสดงสำหรับทุกคนเสมอ!
+      if (catChips) catChips.classList.remove('hidden');
 
       if (mode === 'client') {
         if (bankChips) bankChips.classList.add('hidden');
-        if (catChips) catChips.classList.remove('hidden');
+        if (chipsDivider) chipsDivider.classList.add('hidden');
         if (filterBankWrapper) filterBankWrapper.classList.add('hidden');
         if (filterBankEl) filterBankEl.value = 'all';
         if (searchInputEl) searchInputEl.placeholder = "ชื่อโครงการ, รหัสทรัพย์...";
+        if (searchPillGrid) searchPillGrid.className = "grid grid-cols-2 lg:grid-cols-[1.3fr_1.1fr_1fr_1fr_auto] items-center gap-1 lg:gap-0";
       } else {
         if (bankChips) bankChips.classList.remove('hidden');
-        if (catChips) catChips.classList.add('hidden');
+        if (chipsDivider) chipsDivider.classList.remove('hidden');
         if (filterBankWrapper) filterBankWrapper.classList.remove('hidden');
         if (searchInputEl) searchInputEl.placeholder = "ชื่อโครงการ, รหัส NPA...";
+        if (searchPillGrid) searchPillGrid.className = "grid grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr_1fr_auto] items-center gap-1 lg:gap-0";
       }
 
       const adminShortcutBtn = document.getElementById('btn-owner-archetype-shortcut');
@@ -1127,17 +1146,21 @@
       applyAllFilters();
     }
 
-    // 1-Click Category Quick Chip Selector (Client Mode)
+    // Sync Category Dropdown with Quick Chips
+    function syncCategoryToChips(catVal) {
+      document.querySelectorAll('.cat-chip').forEach(b => {
+        const isMatch = b.getAttribute('data-cat') === catVal || (catVal === 'all' && b.getAttribute('data-cat') === 'all');
+        b.className = isMatch
+          ? "cat-chip active h-8 px-4 rounded-full text-xs font-semibold bg-neutral-900 text-white shadow-xs transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5"
+          : "cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5";
+      });
+    }
+
+    // 1-Click Category Quick Chip Selector (สำหรับทุกคน)
     function selectCategoryChip(catVal, btnEl) {
       const selectEl = document.getElementById('filter-category');
       if (selectEl) selectEl.value = catVal;
-      
-      document.querySelectorAll('.cat-chip').forEach(b => {
-        b.className = "cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5";
-      });
-      if (btnEl) {
-        btnEl.className = "cat-chip active h-8 px-4 rounded-full text-xs font-semibold bg-neutral-900 text-white shadow-xs transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5";
-      }
+      syncCategoryToChips(catVal);
       applyAllFilters();
     }
 
