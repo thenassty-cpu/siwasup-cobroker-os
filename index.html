@@ -202,269 +202,386 @@
 <body class="bg-[#fafbfc] min-h-screen text-gray-800 pb-20">
 
   <!-- Responsive App Container (Mobile LINE view to Desktop Homerun Grid) -->
-  <div class="max-w-md sm:max-w-2xl md:max-w-4xl lg:max-w-6xl mx-auto bg-white min-h-screen shadow-xl relative flex flex-col border-x border-gray-200/70">
+  <div class="w-full max-w-7xl mx-auto bg-white min-h-screen shadow-xl relative flex flex-col border-x border-neutral-200/70">
     
-    <!-- Top Header & View Toggle (Red 30% - Primary Brand Identity Gradient) -->
-    <header class="sticky top-0 z-30 bg-white border-b border-gray-100 shadow-2xs">
-      <div class="bg-gradient-to-r from-[#800000] via-[#990000] to-[#730000] text-white px-3 py-2 sm:px-4 sm:py-2.5 flex items-center justify-between shadow-xs">
-        <!-- Brand Info (Preserved single-line, no broken words) -->
-        <div class="flex items-center space-x-2 min-w-0 pr-2">
-          <div class="w-7 h-7 sm:w-8 sm:h-8 bg-white rounded-full flex items-center justify-center text-[#990000] font-black text-xs shadow-xs shrink-0">S</div>
-          <div class="min-w-0">
-            <h1 class="text-xs sm:text-sm font-bold leading-tight flex items-center gap-1.5 whitespace-nowrap">
-              <span>ศิวาทรัพย์ แอสเซท</span>
-              <span class="text-[9px] bg-black/35 text-siwasup-gold-light px-1.5 py-0.2 rounded font-normal border border-[#C2A460]/40 shrink-0">NPA OS</span>
-            </h1>
-            <p class="text-[9px] sm:text-[10px] text-red-100 whitespace-nowrap truncate">ระบบบริหารคลังทรัพย์ธนาคาร & ตัวแทนขาย</p>
-          </div>
-        </div>
+    <!-- 🏛️ Top Header (Sticky, Backdrop-blur) -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80 shadow-xs">
+      
+      <!-- 1. Top Role Utility Bar (แยกส่วนแอดมิน/โหมดออกจาก UI หลัก สูง ~32px) -->
+      <div class="bg-neutral-900 text-neutral-300 text-xs py-1.5 px-3 sm:px-6 border-b border-neutral-800">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+          
+          <!-- ด้านซ้าย: สถานะโหมด + แถบสลับโหมด 5 บทบาท -->
+          <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+            <div class="flex items-center gap-1.5 shrink-0">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span class="text-[11px] text-neutral-400 hidden sm:inline">โหมด:</span>
+              <strong id="mode-text" class="text-white font-semibold text-[11px]">Free Agent (คอม 3-5% อิสระ)</strong>
+            </div>
 
-        <!-- Quick Actions: Clean Stacked Capsules on Mobile, Side-by-Side on Desktop/Tablet -->
-        <div class="flex flex-col sm:flex-row items-end sm:items-center gap-1 sm:gap-1.5 shrink-0">
-          <div class="flex items-center gap-1">
-            <!-- Agent Profile Button (Instant Access) -->
-            <button onclick="openMyProfileModal()" id="btn-header-profile" class="bg-black/30 hover:bg-black/50 text-white font-bold text-[9.5px] sm:text-[10px] px-2 py-0.5 sm:py-1 rounded-full border border-white/25 flex items-center gap-1 transition-all active:scale-95 shadow-2xs whitespace-nowrap" title="ดูโปรไฟล์และกระเป๋าคะแนนของฉัน">
-              <span class="w-3.5 h-3.5 rounded-full bg-amber-400 text-gray-950 font-black text-[7.5px] flex items-center justify-center shrink-0" id="header-profile-avatar">S22</span>
-              <span id="header-profile-name">โปรไฟล์</span>
+            <!-- Role Switcher Pills -->
+            <div class="flex items-center bg-neutral-800/80 p-0.5 rounded-lg border border-neutral-700/60 text-[10px]">
+              <button id="btn-owner-mode" onclick="setMode('owner')" class="px-2 py-0.5 rounded font-medium transition-all text-neutral-400 hover:text-white" title="โหมดเจ้าของ/แอดมิน">เจ้าของ</button>
+              <button id="btn-freeagent-mode" onclick="setMode('free_agent')" class="px-2.5 py-0.5 rounded-md font-bold transition-all bg-[#990000] text-white shadow-2xs" title="โหมด Free Agent">Free</button>
+              <button id="btn-employee-mode" onclick="setMode('employee')" class="px-2 py-0.5 rounded font-medium transition-all text-neutral-400 hover:text-white" title="โหมดพนักงานประจำ">พนักงาน</button>
+              <button id="btn-trainee-mode" onclick="setMode('trainee')" class="px-2 py-0.5 rounded font-medium transition-all text-neutral-400 hover:text-white" title="โหมดฝึกหัด">ฝึกหัด</button>
+              <button id="btn-client-mode" onclick="setMode('client')" class="px-2 py-0.5 rounded font-medium transition-all text-neutral-400 hover:text-white" title="โหมดลูกค้า White-label">ลูกค้า</button>
+            </div>
+          </div>
+
+          <!-- ด้านขวา: ทางลัดแอดมิน & การแจ้งเตือนกระดิ่ง -->
+          <div class="flex items-center gap-1.5 shrink-0">
+            <!-- กระดิ่งแจ้งเตือนทรัพย์ฝากขายใหม่ (ย้ายขึ้นมาบนนี้แทน Banner ใหญ่) -->
+            <button id="btn-owner-leads-notify" onclick="openOwnerLeadsModal()" class="hidden items-center gap-1.5 bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-0.5 rounded-full hover:bg-amber-500/30 transition text-[10.5px] active:scale-95" title="ดูรายการทรัพย์ฝากขายใหม่">
+              <span>🔔 ทรัพย์ฝากขายใหม่ (<span id="consign-count-badge">1</span>)</span>
             </button>
 
-            <!-- Public Consignment Button (Gold 10% - Satin Architectural Gold Lead Magnet) -->
-            <button onclick="openConsignModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold text-[10px] px-2.5 py-0.5 sm:py-1 rounded-full shadow-xs flex items-center gap-1 transition-transform active:scale-95 whitespace-nowrap">
-              <span class="icon-circle w-3.5 h-3.5"><i data-lucide="tag" class="w-2 h-2 stroke-[1.5]"></i></span>
+            <!-- แอดมินจัดกลุ่มสัตว์ 4 กลุ่ม -->
+            <button id="btn-owner-archetype-shortcut" type="button" onclick="openAgentLeaderboardModal('animal_matrix')" class="hidden items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30 hover:bg-amber-400/30 transition active:scale-95" title="วิเคราะห์ศักยภาพตัวแทน 4 กลุ่มสัตว์">
+              <span>🐾 จัดกลุ่ม</span>
+            </button>
+
+            <!-- เบิกกุญแจ NPA (Demo) -->
+            <button type="button" onclick="openNpaKeyModal()" class="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-sky-500/20 text-sky-300 border border-sky-500/30 hover:bg-sky-500/30 transition active:scale-95" title="ระบบเบิกกุญแจ NPA & Messenger">
+              <i data-lucide="key" class="w-3 h-3 text-sky-400"></i>
+              <span class="hidden sm:inline">เบิกกุญแจ (Demo)</span>
+              <span class="sm:hidden">กุญแจ</span>
+            </button>
+
+            <!-- ทำเนียบตัวแทน 125 -->
+            <button type="button" onclick="openAgentLeaderboardModal()" class="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-neutral-800 text-neutral-300 border border-neutral-700 hover:text-white transition active:scale-95" title="ทำเนียบตัวแทน 125 ท่าน & ตารางคะแนน">
+              <i data-lucide="trophy" class="w-3 h-3 text-amber-400"></i>
+              <span class="hidden sm:inline">ทำเนียบ (125)</span>
+              <span class="sm:hidden">125</span>
+            </button>
+
+            <!-- โปรไฟล์ตัวแทน -->
+            <button type="button" onclick="openMyProfileModal()" id="btn-header-profile" class="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-neutral-800 text-neutral-300 border border-neutral-700 hover:text-white transition active:scale-95" title="กระเป๋าคะแนน & โปรไฟล์">
+              <span class="w-3.5 h-3.5 rounded-full bg-amber-400 text-gray-950 font-black text-[7.5px] flex items-center justify-center shrink-0" id="header-profile-avatar">S22</span>
+              <span id="bar-profile-btn-text" class="hidden sm:inline">โปรไฟล์</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 2. Main Clean Header & Unified Floating Pill Filter -->
+      <div class="px-3 sm:px-6 py-2.5 sm:py-3 border-b border-neutral-100">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+          
+          <!-- Brand Identity -->
+          <div class="flex items-center justify-between lg:justify-start gap-3 shrink-0">
+            <div class="flex items-center gap-2.5 cursor-pointer" onclick="location.reload()">
+              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#800000] via-[#990000] to-[#660000] text-white flex items-center justify-center font-black text-lg shadow-sm shrink-0 border border-[#b33939]/30">
+                S
+              </div>
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <h1 class="font-bold text-neutral-900 text-sm sm:text-base tracking-tight whitespace-nowrap">ศิวาทรัพย์ แอสเซท</h1>
+                  <span class="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-neutral-100 text-neutral-700 border border-neutral-300">NPA OS</span>
+                </div>
+                <p class="text-[10px] sm:text-xs text-neutral-400 whitespace-nowrap">คลังทรัพย์ธนาคาร & ระบบตัวแทนขาย</p>
+              </div>
+            </div>
+
+            <!-- Mobile Public Consignment Action -->
+            <div class="lg:hidden flex items-center gap-1.5">
+              <button onclick="openConsignModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold text-[11px] px-3 py-1.5 rounded-full shadow-xs flex items-center gap-1 transition-transform active:scale-95">
+                <i data-lucide="tag" class="w-3 h-3 stroke-[2]"></i>
+                <span>ฝากขายฟรี</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Unified Minimal Search Pill (รวม Search + 4 Filters ในแคปซูลเดียว) -->
+          <div class="flex-1 max-w-4xl bg-neutral-50/90 hover:bg-white rounded-2xl lg:rounded-full border border-neutral-200/90 p-1.5 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.04)] transition-all">
+            <div class="grid grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr_auto] items-center gap-1 lg:gap-0">
+              
+              <!-- ช่องที่ 1: ค้นหาคำสำคัญ -->
+              <div class="col-span-2 lg:col-span-1 px-3 py-1 relative">
+                <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">ค้นหาทรัพย์</label>
+                <div class="flex items-center">
+                  <input type="text" id="search-input" oninput="applyAllFilters()" 
+                         placeholder="ชื่อโครงการ, รหัสทรัพย์..." 
+                         class="w-full bg-transparent text-xs font-medium text-neutral-800 placeholder-neutral-400 focus:outline-none truncate pr-5" />
+                  <button id="btn-clear-search" onclick="clearFilters()" class="hidden text-neutral-400 hover:text-neutral-600 text-sm font-bold leading-none pr-1">&times;</button>
+                </div>
+              </div>
+
+              <!-- ช่องที่ 2: สถาบัน/ธนาคาร (ซ่อนอัตโนมัติในโหมดลูกค้า) -->
+              <div id="filter-bank-wrapper" class="px-3 py-1 lg:border-l border-neutral-200/70">
+                <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">สถาบัน/เจ้าของ</label>
+                <select id="filter-bank" onchange="applyAllFilters()" class="w-full bg-transparent text-xs font-medium text-neutral-800 focus:outline-none cursor-pointer truncate">
+                  <option value="all">ทุกธนาคาร</option>
+                  <option value="Siwasup">ศิวาทรัพย์ (รีโนเวท)</option>
+                  <option value="SAM">SAM (บสส.)</option>
+                  <option value="SCB">SCB (ไทยพาณิชย์)</option>
+                  <option value="KBANK">KBank (กสิกรไทย)</option>
+                  <option value="TTB">TTB (ทีเอ็มบีธนชาต)</option>
+                  <option value="KTB">KTB (กรุงไทย)</option>
+                  <option value="GSB">GSB (ออมสิน)</option>
+                  <option value="PAMCO">PAMCO (บสส. พหลโยธิน)</option>
+                </select>
+              </div>
+
+              <!-- ช่องที่ 3: โซนทำเล -->
+              <div class="px-3 py-1 lg:border-l border-neutral-200/70">
+                <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">โซนทำเล</label>
+                <select id="filter-location" onchange="applyAllFilters()" class="w-full bg-transparent text-xs font-medium text-neutral-800 focus:outline-none cursor-pointer truncate">
+                  <option value="all">ทุกทำเล</option>
+                  <option value="บางใหญ่">บางใหญ่/นนทบุรี</option>
+                  <option value="ลำลูกกา">ลำลูกกา/ปทุมธานี</option>
+                  <option value="พระราม 9">รัชดา/พระราม 9</option>
+                  <option value="บางนา">บางนา/สมุทรปราการ</option>
+                  <option value="วิภาวดี">วิภาวดี/รัชโยธิน</option>
+                  <option value="ลาดกระบัง">ลาดกระบัง/สุวินทวงศ์</option>
+                  <option value="บางขุนเทียน">พระราม 2/บางขุนเทียน</option>
+                </select>
+              </div>
+
+              <!-- ช่องที่ 4: งบประมาณ -->
+              <div class="col-span-2 lg:col-span-1 px-3 py-1 lg:border-l border-neutral-200/70">
+                <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">งบประมาณ</label>
+                <select id="filter-budget" onchange="applyAllFilters()" class="w-full bg-transparent text-xs font-medium text-neutral-800 focus:outline-none cursor-pointer truncate">
+                  <option value="all">ทุกช่วงราคา</option>
+                  <option value="under2m">ต่ำกว่า 2 ล้าน</option>
+                  <option value="2to3.5m">2 - 3.5 ล้าน</option>
+                  <option value="3.5to5m">3.5 - 5 ล้าน</option>
+                  <option value="above5m">5 ล้านขึ้นไป</option>
+                </select>
+              </div>
+
+              <!-- ช่องที่ 5 (ซ่อนประเภทไว้สำหรับ sync กับ chips หรือ filter) -->
+              <select id="filter-category" onchange="applyAllFilters()" class="hidden">
+                <option value="all">ทุกประเภท</option>
+                <option value="ทาวน์โฮม">ทาวน์โฮม</option>
+                <option value="คอนโด">คอนโด</option>
+                <option value="บ้านเดี่ยว">บ้านเดี่ยว</option>
+                <option value="ที่ดิน">ที่ดิน</option>
+                <option value="อาคารพาณิชย์">อาคารพาณิชย์</option>
+              </select>
+
+              <!-- ปุ่มค้นหา -->
+              <div class="col-span-2 lg:col-span-1 flex justify-end p-0.5">
+                <button onclick="applyAllFilters()" class="w-full lg:w-9 h-9 rounded-xl lg:rounded-full bg-neutral-900 hover:bg-neutral-800 text-white flex items-center justify-center transition active:scale-95 shadow-xs" title="ค้นหา">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Desktop Right Action: ฝากขายฟรี -->
+          <div class="hidden lg:flex items-center gap-2 shrink-0">
+            <button onclick="openConsignModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold text-xs px-4 py-2 rounded-full shadow-xs flex items-center gap-1.5 transition-transform active:scale-95 whitespace-nowrap">
+              <i data-lucide="tag" class="w-3.5 h-3.5 stroke-[2]"></i>
               <span>ฝากขายฟรี</span>
             </button>
           </div>
 
-          <!-- Toggle Filter Button on Header -->
-          <button onclick="toggleSearchDrawer()" id="btn-toggle-search" class="bg-black/25 hover:bg-black/45 text-white font-medium text-[9.5px] sm:text-[10px] px-2.5 py-0.5 sm:py-1 rounded-full border border-white/20 flex items-center gap-1 transition-all active:scale-95 shadow-2xs whitespace-nowrap" title="เปิด/ปิดแผงค้นหา">
-            <i id="drawer-toggle-icon" data-lucide="sliders-horizontal" class="w-2.5 h-2.5"></i>
-            <span id="drawer-toggle-text">ตัวกรอง</span>
-          </button>
         </div>
-      </div>
 
-      <!-- 🎛️ Collapsible Search & Mode Drawer (Can slide up/down on scroll or tap) -->
-      <div id="search-filter-drawer" class="transition-all duration-300 ease-in-out overflow-hidden max-h-[800px] opacity-100">
-        <!-- Mode Switcher (Clean White 60% + Red 30% Active Selection) -->
-        <div class="bg-white px-3 py-2 border-b border-gray-100">
-          <div class="flex items-center justify-between text-xs mb-1.5">
-            <span class="font-medium text-gray-600 flex items-center gap-1.5 text-[11px]">
-              <span id="mode-icon" class="icon-circle w-4 h-4"><i data-lucide="crown" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-              <span>โหมด:</span>
-              <strong id="mode-text" class="text-[#990000] font-bold">เจ้าของ/แอดมิน (บัว & กูล)</strong>
-            </span>
-            <div class="flex items-center gap-1">
-              <button id="btn-owner-archetype-shortcut" type="button" onclick="openAgentLeaderboardModal('animal_matrix')" class="hidden items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200 shadow-2xs transition-all active:scale-95" title="วิเคราะห์ศักยภาพตัวแทน 4 กลุ่มสัตว์ (เฉพาะแอดมิน บัว & กูล)">
-                <span class="text-xs">🐾</span>
-                <span>จัดกลุ่ม (Admin)</span>
-              </button>
-              <button type="button" onclick="openNpaKeyModal()" class="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-50 text-sky-900 border border-sky-300 hover:bg-sky-100 shadow-2xs transition-all active:scale-95" title="ระบบเบิกกุญแจ NPA & ติดตาม Messenger (Demo พี่ลิลลี่)">
-                <i data-lucide="key" class="w-3 h-3 text-[#1E749C]"></i>
-                <span>เบิกกุญแจ (Demo)</span>
-              </button>
-              <button type="button" onclick="openMyProfileModal()" class="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 shadow-2xs transition-all active:scale-95" title="กระเป๋าคะแนน & โปรไฟล์">
-                <i data-lucide="user" class="w-3 h-3 text-amber-600"></i>
-                <span id="bar-profile-btn-text">โปรไฟล์ (S22)</span>
-              </button>
-              <button type="button" onclick="openAgentLeaderboardModal()" class="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 shadow-2xs transition-all active:scale-95" title="ทำเนียบตัวแทน 125 ท่าน & ตารางคะแนน">
-                <i data-lucide="trophy" class="w-3 h-3 text-amber-600"></i>
-                <span>ทำเนียบ (125)</span>
-              </button>
-            </div>
+        <!-- 3. Bank / Category Quick Chips (1-Click Filters แนวนอน) -->
+        <div class="max-w-7xl mx-auto pt-2.5 pb-0.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+          <span class="text-[10px] font-semibold text-neutral-400 shrink-0 uppercase tracking-wider mr-1 hidden sm:inline">กรองด่วน:</span>
+          
+          <!-- Bank Chips (แสดงในโหมด Agent/Admin) -->
+          <div id="bank-quick-chips" class="flex items-center gap-1.5 shrink-0">
+            <button type="button" onclick="selectBankChip('all', this)" class="bank-chip active text-[11px] font-semibold px-3 py-1 rounded-full border transition-all bg-neutral-900 text-white border-neutral-900 shadow-2xs">ทั้งหมด</button>
+            <button type="button" onclick="selectBankChip('Siwasup', this)" class="bank-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs flex items-center gap-1">✨ ศิวาทรัพย์ รีโนเวท</button>
+            <button type="button" onclick="selectBankChip('SAM', this)" class="bank-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs">SAM</button>
+            <button type="button" onclick="selectBankChip('SCB', this)" class="bank-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs">SCB</button>
+            <button type="button" onclick="selectBankChip('KBANK', this)" class="bank-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs">KBank</button>
+            <button type="button" onclick="selectBankChip('TTB', this)" class="bank-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs">TTB</button>
+            <button type="button" onclick="selectBankChip('KTB', this)" class="bank-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs">KTB</button>
+            <button type="button" onclick="selectBankChip('GSB', this)" class="bank-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs">GSB</button>
+            <button type="button" onclick="selectBankChip('PAMCO', this)" class="bank-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs">PAMCO</button>
           </div>
-          <div class="grid grid-cols-5 gap-1 bg-gray-50 p-1 rounded-xl border border-gray-100 text-[10px]">
-            <button id="btn-owner-mode" onclick="setMode('owner')" class="py-1 font-bold rounded-lg transition-all bg-[#990000] text-white shadow-xs flex items-center justify-center gap-1">
-              <span class="icon-circle w-3.5 h-3.5"><i data-lucide="crown" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-              <span>เจ้าของ</span>
-            </button>
-            <button id="btn-freeagent-mode" onclick="setMode('free_agent')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1">
-              <span class="icon-circle w-3.5 h-3.5"><i data-lucide="briefcase" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-              <span>Free</span>
-            </button>
-            <button id="btn-employee-mode" onclick="setMode('employee')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1">
-              <span class="icon-circle w-3.5 h-3.5"><i data-lucide="building" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-              <span>พนักงาน</span>
-            </button>
-            <button id="btn-trainee-mode" onclick="setMode('trainee')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1">
-              <span class="icon-circle w-3.5 h-3.5"><i data-lucide="graduation-cap" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-              <span>ฝึกหัด</span>
-            </button>
-            <button id="btn-client-mode" onclick="setMode('client')" class="py-1 font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center justify-center gap-1">
-              <span class="icon-circle w-3.5 h-3.5"><i data-lucide="users" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-              <span>ลูกค้า</span>
-            </button>
+
+          <!-- Category Chips (สลับมาแสดงในโหมดลูกค้า Client Mode แทนที่ชื่อธนาคาร) -->
+          <div id="category-quick-chips" class="hidden flex items-center gap-1.5 shrink-0">
+            <button type="button" onclick="selectCategoryChip('all', this)" class="cat-chip active text-[11px] font-semibold px-3 py-1 rounded-full border transition-all bg-neutral-900 text-white border-neutral-900 shadow-2xs">ทุกประเภท</button>
+            <button type="button" onclick="selectCategoryChip('ทาวน์โฮม', this)" class="cat-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs">🏡 ทาวน์โฮม</button>
+            <button type="button" onclick="selectCategoryChip('คอนโด', this)" class="cat-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs">🏢 คอนโด</button>
+            <button type="button" onclick="selectCategoryChip('บ้านเดี่ยว', this)" class="cat-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs">🏠 บ้านเดี่ยว</button>
+            <button type="button" onclick="selectCategoryChip('ที่ดิน', this)" class="cat-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs">🌳 ที่ดิน</button>
+            <button type="button" onclick="selectCategoryChip('อาคารพาณิชย์', this)" class="cat-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs">🏬 อาคารพาณิชย์</button>
           </div>
         </div>
 
-        <!-- ⚡ Quick Filter Bar (White 60% Minimalist) -->
-        <div class="p-2.5 bg-white border-b border-gray-100 space-y-2 text-xs">
-          <!-- Search Keyword -->
-          <div class="relative">
-            <input type="text" id="search-input" oninput="applyAllFilters()" 
-                   placeholder="ค้นหา: ทำเล, โครงการ, รหัส NPA, #ผ่อนล้านละ3พัน..." 
-                   class="w-full bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl pl-8 pr-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700 transition-all">
-            <span class="absolute left-2.5 top-2 icon-circle w-4 h-4">
-              <i data-lucide="search" class="w-2.5 h-2.5 stroke-[1.5]"></i>
-            </span>
-            <button id="btn-clear-search" onclick="clearFilters()" class="hidden absolute right-2.5 top-1.5 text-gray-400 hover:text-gray-600 text-xs font-bold">&times;</button>
-          </div>
-
-          <!-- 4 Quick Dropdowns including Bank NPA Source (Hidden in Client Mode) -->
-          <div id="filter-dropdowns-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[11px]">
-            <!-- สถาบัน/ธนาคาร NPA (แสดงเฉพาะโหมด Admin / Agent) -->
-            <select id="filter-bank" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
-              <option value="all">ทุกสถาบัน/ธนาคาร</option>
-              <option value="Siwasup">ศิวาทรัพย์ (รีโนเวท)</option>
-              <option value="SAM">SAM (บสส.)</option>
-              <option value="SCB">SCB (ไทยพาณิชย์)</option>
-              <option value="KBANK">KBank (กสิกรไทย)</option>
-              <option value="TTB">TTB (ทีเอ็มบีธนชาต)</option>
-              <option value="KTB">KTB (กรุงไทย)</option>
-              <option value="GSB">GSB (ออมสิน)</option>
-              <option value="PAMCO">PAMCO (บสส. พหลโยธิน)</option>
-            </select>
-
-            <!-- ทำเล -->
-            <select id="filter-location" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
-              <option value="all">ทุกทำเล</option>
-              <option value="บางใหญ่">บางใหญ่/นนทบุรี</option>
-              <option value="ลำลูกกา">ลำลูกกา/ปทุมธานี</option>
-              <option value="พระราม 9">รัชดา/พระราม 9</option>
-              <option value="บางนา">บางนา/สมุทรปราการ</option>
-              <option value="วิภาวดี">วิภาวดี/รัชโยธิน</option>
-              <option value="ลาดกระบัง">ลาดกระบัง/สุวินทวงศ์</option>
-              <option value="บางขุนเทียน">พระราม 2/บางขุนเทียน</option>
-            </select>
-
-            <!-- งบประมาณ -->
-            <select id="filter-budget" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
-              <option value="all">ทุกช่วงราคา</option>
-              <option value="under2m">ต่ำกว่า 2 ล้าน</option>
-              <option value="2to3.5m">2 - 3.5 ล้าน</option>
-              <option value="3.5to5m">3.5 - 5 ล้าน</option>
-              <option value="above5m">มากกว่า 5 ล้าน</option>
-            </select>
-
-            <!-- ประเภท -->
-            <select id="filter-category" onchange="applyAllFilters()" class="bg-gray-50/80 hover:bg-white focus:bg-white border border-gray-200 rounded-xl p-1.5 font-medium text-gray-700 outline-none focus:ring-1 focus:ring-red-700 transition-all">
-              <option value="all">ทุกประเภท</option>
-              <option value="ทาวน์โฮม">ทาวน์โฮม</option>
-              <option value="คอนโด">คอนโด</option>
-              <option value="บ้านเดี่ยว">บ้านเดี่ยว</option>
-              <option value="ที่ดิน">ที่ดิน</option>
-              <option value="อาคารพาณิชย์">อาคารพาณิชย์</option>
-            </select>
-          </div>
-
-          <!-- Subtle Collapse Handle Button -->
-          <div class="flex justify-center pt-1">
-            <button type="button" onclick="toggleSearchDrawer(false)" class="text-[10px] text-gray-500 hover:text-gray-800 flex items-center gap-1 bg-gray-100 hover:bg-gray-200 px-3 py-0.5 rounded-full transition-colors active:scale-95 shadow-2xs">
-              <i data-lucide="chevron-up" class="w-3 h-3"></i>
-              <span>ย่อแผงค้นหาเพื่อดูทรัพย์</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 🔍 Slim Sticky Mini-Bar when collapsed (Tuck-in strip) -->
-      <div id="search-mini-bar" class="hidden px-3 py-1.5 bg-white/95 backdrop-blur-md border-b border-gray-100 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors shadow-2xs" onclick="toggleSearchDrawer(true)">
-        <div class="flex items-center gap-2 text-xs text-gray-600 truncate flex-1">
-          <span class="w-5 h-5 rounded-full bg-red-50 text-[#990000] flex items-center justify-center shrink-0 border border-red-100">
-            <i data-lucide="search" class="w-3 h-3"></i>
-          </span>
-          <span id="search-mini-summary" class="truncate text-[11px] font-medium text-gray-700">ค้นหา: ทำเล, ธนาคาร, งบประมาณ...</span>
-        </div>
-        <div class="flex items-center gap-1 text-[11px] text-[#990000] font-bold shrink-0 pl-2">
-          <span>แตะเพื่อค้นหา</span>
-          <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
-        </div>
       </div>
     </header>
 
-    <!-- VIP Micro-Catalog Banner (Clean White 60% + Satin Gold 10% Accent) -->
-    <div id="vip-bundle-banner" class="hidden mx-3 mt-3 bg-white text-gray-800 p-3.5 rounded-xl shadow-xs text-xs space-y-1.5 border border-gray-200 border-l-4 border-siwasup-gold">
-      <div class="flex items-center justify-between font-bold">
-        <span class="flex items-center gap-1.5 text-sm text-gray-900">
-          <span class="icon-circle w-5 h-5"><i data-lucide="crown" class="w-3 h-3 stroke-[1.5]"></i></span>
-          <span id="vip-client-title">รายการทรัพย์คัดสรรเฉพาะสำหรับคุณ</span>
-        </span>
-        <span class="text-[10px] bg-amber-50 text-amber-800 px-2 py-0.5 rounded-full border border-amber-200/80 font-medium">VIP Curated</span>
-      </div>
-      <p class="text-[11px] text-gray-500 leading-snug">
-        ศิวาทรัพย์ แอสเซท คัดเลือกบ้านรีโนเวทคุณภาพตรงตามความต้องการของคุณมาให้ชมโดยเฉพาะ สามารถนัดชมห้องจริงได้ทันทีค่ะ
-      </p>
-      <div class="pt-1 flex items-center justify-between text-[10px]">
-        <span id="vip-agent-info" class="text-amber-800 font-medium">ดูแลโดย: ศิวาทรัพย์ แอสเซท</span>
-        <a href="index.html" class="underline text-gray-600 hover:text-gray-900 font-semibold">ดูทรัพย์ทั้งหมดในระบบ &rarr;</a>
+    <!-- 💎 3. Contextual Banners (Compact & Clean) -->
+
+    <!-- VIP Micro-Catalog Banner (Luxury Off-White & Satin Gold) -->
+    <div id="vip-bundle-banner" class="hidden mx-3 sm:mx-6 mt-3 bg-[#faf8f5] text-neutral-800 p-4 rounded-2xl shadow-xs text-xs border border-amber-200/80 border-l-4 border-siwasup-gold">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <div class="flex items-center gap-2 font-bold text-sm text-neutral-900">
+            <span class="text-amber-600">👑</span>
+            <span id="vip-client-title">รายการทรัพย์คัดสรรเฉพาะสำหรับคุณ (VIP Curated)</span>
+          </div>
+          <p class="text-xs text-neutral-500 mt-0.5">
+            ศิวาทรัพย์ แอสเซท คัดเลือกบ้านรีโนเวทคุณภาพตรงตามความต้องการของคุณมาให้ชมโดยเฉพาะ สามารถนัดชมห้องจริงได้ทันทีค่ะ
+          </p>
+        </div>
+        <div class="flex items-center gap-3 shrink-0 self-end sm:self-auto text-[11px]">
+          <span id="vip-agent-info" class="text-amber-800 font-semibold">ดูแลโดย: ศิวาทรัพย์ แอสเซท</span>
+          <a href="index.html" class="underline text-neutral-600 hover:text-neutral-900 font-semibold">ดูทรัพย์ทั้งหมด &rarr;</a>
+        </div>
       </div>
     </div>
 
-    <!-- Trainee Agent Onboarding Challenge Banner (Clean White 60% + Satin Gold 10% Progress) -->
-    <div id="trainee-challenge-banner" class="hidden mx-3 mt-3 bg-white text-gray-800 p-3.5 rounded-xl shadow-xs text-xs space-y-2 border border-gray-200 border-l-4 border-siwasup-gold">
-      <div class="flex items-center justify-between font-bold">
-        <span class="flex items-center gap-1.5 text-sm text-gray-900">
-          <span class="icon-circle w-5 h-5"><i data-lucide="graduation-cap" class="w-3 h-3 stroke-[1.5]"></i></span>
-          <span>ภารกิจปลดล็อกสู่ Free Agent</span>
-        </span>
-        <span class="text-[10px] bg-amber-50 text-amber-800 px-2 py-0.5 rounded-full border border-amber-200 font-medium">Onboarding Challenge</span>
-      </div>
-      <p class="text-[11px] text-gray-500 leading-snug">
-        คุณอยู่ในสถานะ <strong class="text-amber-800">"เด็กฝึกหัด (Trainee)"</strong> ต้องส่งทรัพย์เข้าพอร์ตให้บริษัทตรวจสอบอย่างน้อย <strong>3 หลัง</strong> จึงจะปลดล็อกระบบแชร์และรับคอมมิชชั่น 3-5%
-      </p>
-      
-      <!-- Progress Bar (Pastel track + Satin Gold Gradient) -->
-      <div class="space-y-1">
-        <div class="flex justify-between text-[10px] text-gray-500 font-medium">
-          <span>ความคืบหน้าการส่งทรัพย์</span>
-          <span class="font-bold text-amber-800">1 / 3 หลัง (33%)</span>
+    <!-- Trainee Agent Onboarding Challenge Banner (Compact Single Bar <= 50px) -->
+    <div id="trainee-challenge-banner" class="hidden mx-3 sm:mx-6 mt-3 bg-white text-gray-800 px-4 py-2.5 rounded-xl shadow-xs text-xs border border-gray-200 border-l-4 border-siwasup-gold">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-1.5 font-bold text-gray-900">
+            <i data-lucide="graduation-cap" class="w-4 h-4 text-amber-600"></i>
+            <span>ภารกิจปลดล็อก Trainee:</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-24 sm:w-36 bg-gray-100 rounded-full h-2 p-0.5 border border-gray-200">
+              <div class="bg-gradient-to-r from-[#C2A460] to-[#D4BA7A] h-1 rounded-full" style="width: 33%"></div>
+            </div>
+            <span class="font-bold text-amber-800 text-[11px]">1 / 3 หลัง (33%)</span>
+          </div>
         </div>
-        <div class="w-full bg-gray-100 rounded-full h-2 p-0.5 border border-gray-200">
-          <div class="bg-gradient-to-r from-[#C2A460] to-[#D4BA7A] h-1 rounded-full" style="width: 33%"></div>
+        <div class="flex items-center gap-2 justify-between sm:justify-end">
+          <span class="text-gray-400 text-[10px]">ส่งอีก 2 หลังเพื่อปลดล็อกคอม 3-5%</span>
+          <button onclick="openConsignModal(true)" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold px-3 py-1 rounded-lg text-xs shadow-xs flex items-center gap-1 active:scale-95">
+            <i data-lucide="plus" class="w-3 h-3 stroke-[2]"></i>
+            <span>ส่งทรัพย์เพิ่ม</span>
+          </button>
         </div>
       </div>
+    </div>
 
-      <div class="pt-1 flex items-center justify-between text-[11px]">
-        <span class="text-gray-400 text-[10px]">ส่งอีก 2 หลังเพื่อปลดล็อกลิงก์แชร์</span>
-        <button onclick="openConsignModal(true)" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold px-3 py-1 rounded-lg text-xs shadow-xs flex items-center gap-1.5">
-          <span class="icon-circle w-4 h-4"><i data-lucide="plus" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-          <span>ส่งทรัพย์เพิ่ม</span>
+    <!-- Agent MGM Banner (Compact Single Bar) -->
+    <div id="agent-mgm-banner" class="hidden mx-3 sm:mx-6 mt-3 bg-white text-gray-900 px-4 py-2.5 rounded-xl shadow-xs text-xs border border-gray-200 border-l-4 border-[#C2A460]">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <i data-lucide="sparkles" class="w-4 h-4 text-[#C2A460] shrink-0"></i>
+          <span class="font-bold text-gray-900">ชวนเพื่อนมาเป็น Agent (MGM):</span>
+          <span class="text-[11px] text-gray-500 hidden sm:inline">รับแต้มสะสม + ค่าบริหารทีม 0.5% ทุกดีลที่เพื่อนปิดได้</span>
+        </div>
+        <button onclick="openMgmModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold px-3 py-1 rounded-lg text-[11px] shadow-xs active:scale-95 transition-transform flex items-center justify-center gap-1.5 self-end sm:self-auto">
+          <i data-lucide="link-2" class="w-3 h-3 stroke-[2]"></i>
+          <span>รับลิงก์ชวนเพื่อน MGM</span>
         </button>
       </div>
     </div>
 
-    <!-- Agent MGM Banner (Clean White 60% + Satin Gold 10% CTA) -->
-    <div id="agent-mgm-banner" class="hidden mx-3 mt-3 bg-white text-gray-900 p-3 rounded-xl shadow-xs text-xs flex items-center justify-between border border-gray-200">
-      <div>
-        <div class="font-bold text-gray-900 flex items-center gap-1.5 text-xs">
-          <span class="icon-circle w-5 h-5"><i data-lucide="users" class="w-3 h-3 stroke-[1.5]"></i></span>
-          <span>ชวนเพื่อนมาเป็น Agent (MGM)</span>
-        </div>
-        <div class="text-[10px] text-gray-500">รับแต้มสะสม + ค่าบริหารทีม 0.5% ทุกดีลที่เพื่อนปิดได้</div>
-      </div>
-      <button onclick="openMgmModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold px-2.5 py-1.5 rounded-lg text-[11px] shadow-xs whitespace-nowrap active:scale-95 transition-transform flex items-center gap-1.5">
-        <span class="icon-circle w-4 h-4"><i data-lucide="sparkles" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-        <span>รับลิงก์ชวนเพื่อน</span>
-      </button>
-    </div>
+    <!-- Hidden compatibility container for owner-leads-bar -->
+    <div id="owner-leads-bar" class="hidden"></div>
 
-    <!-- Owner Leads Alert Bar (Clean White 60% + Red 30% Accent) -->
-    <div id="owner-leads-bar" class="hidden mx-3 mt-3 bg-white text-gray-800 p-2.5 rounded-xl border border-gray-200 shadow-xs flex items-center justify-between text-xs border-l-4 border-[#990000]">
-      <div class="flex items-center gap-2">
-        <span class="icon-circle w-6 h-6"><i data-lucide="inbox" class="w-3.5 h-3.5 stroke-[1.5]"></i></span>
-        <div>
-          <span class="font-bold text-gray-900">มีทรัพย์ฝากขายใหม่ (<span id="consign-count-badge" class="text-[#990000]">1</span> รายการ)</span>
-          <div class="text-[10px] text-gray-500">โทรหาเจ้าของบ้านชวนเป็น Free Agent</div>
+    <!-- 4. Property Cards Stream with Skeleton Loading State -->
+    <main class="p-3 sm:p-6 space-y-4 flex-1" id="property-list">
+      
+      <!-- 💀 Skeleton Loading Cards (Tailwind animate-pulse) -->
+      <div class="space-y-4 animate-pulse" id="skeleton-loading-state">
+        <div class="flex items-center justify-between py-2 border-b border-slate-100 mb-3 px-1">
+          <div class="flex items-center gap-2">
+            <div class="h-6 w-20 bg-slate-200 rounded-full"></div>
+            <div class="h-4 w-48 bg-slate-100 rounded-full hidden sm:block"></div>
+          </div>
+          <div class="h-6 w-28 bg-slate-100 rounded-full"></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- 6 Skeleton Cards -->
+          <div class="bg-white rounded-[22px] border border-slate-200/80 shadow-xs overflow-hidden flex flex-col justify-between">
+            <div class="relative aspect-[4/3] bg-slate-200">
+              <div class="absolute top-3 left-3 h-6 w-20 bg-slate-300 rounded-full"></div>
+              <div class="absolute top-3 right-3 flex gap-1.5">
+                <div class="w-8 h-8 rounded-full bg-slate-300"></div>
+                <div class="w-8 h-8 rounded-full bg-slate-300"></div>
+              </div>
+              <div class="absolute bottom-3 left-3 h-5 w-16 bg-slate-300 rounded-full"></div>
+            </div>
+            <div class="p-4 space-y-3">
+              <div class="h-3 w-16 bg-slate-200 rounded ml-auto"></div>
+              <div class="h-4 w-5/6 bg-slate-200 rounded"></div>
+              <div class="h-4 w-3/5 bg-slate-200 rounded"></div>
+              <div class="h-3 w-1/2 bg-slate-100 rounded"></div>
+              <div class="flex gap-4 pt-1">
+                <div class="h-3 w-16 bg-slate-100 rounded"></div>
+                <div class="h-3 w-16 bg-slate-100 rounded"></div>
+              </div>
+              <div class="pt-3 border-t border-slate-100 space-y-2">
+                <div class="flex justify-between"><div class="h-4 w-24 bg-slate-200 rounded"></div><div class="h-5 w-24 bg-slate-200 rounded"></div></div>
+                <div class="flex justify-between"><div class="h-4 w-32 bg-slate-100 rounded"></div><div class="h-5 w-20 bg-slate-100 rounded"></div></div>
+              </div>
+              <div class="grid grid-cols-2 gap-2 pt-2">
+                <div class="h-9 bg-slate-200 rounded-full"></div>
+                <div class="h-9 bg-slate-200 rounded-full"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-[22px] border border-slate-200/80 shadow-xs overflow-hidden flex flex-col justify-between">
+            <div class="relative aspect-[4/3] bg-slate-200">
+              <div class="absolute top-3 left-3 h-6 w-20 bg-slate-300 rounded-full"></div>
+              <div class="absolute top-3 right-3 flex gap-1.5">
+                <div class="w-8 h-8 rounded-full bg-slate-300"></div>
+                <div class="w-8 h-8 rounded-full bg-slate-300"></div>
+              </div>
+              <div class="absolute bottom-3 left-3 h-5 w-16 bg-slate-300 rounded-full"></div>
+            </div>
+            <div class="p-4 space-y-3">
+              <div class="h-3 w-16 bg-slate-200 rounded ml-auto"></div>
+              <div class="h-4 w-5/6 bg-slate-200 rounded"></div>
+              <div class="h-4 w-3/5 bg-slate-200 rounded"></div>
+              <div class="h-3 w-1/2 bg-slate-100 rounded"></div>
+              <div class="flex gap-4 pt-1">
+                <div class="h-3 w-16 bg-slate-100 rounded"></div>
+                <div class="h-3 w-16 bg-slate-100 rounded"></div>
+              </div>
+              <div class="pt-3 border-t border-slate-100 space-y-2">
+                <div class="flex justify-between"><div class="h-4 w-24 bg-slate-200 rounded"></div><div class="h-5 w-24 bg-slate-200 rounded"></div></div>
+                <div class="flex justify-between"><div class="h-4 w-32 bg-slate-100 rounded"></div><div class="h-5 w-20 bg-slate-100 rounded"></div></div>
+              </div>
+              <div class="grid grid-cols-2 gap-2 pt-2">
+                <div class="h-9 bg-slate-200 rounded-full"></div>
+                <div class="h-9 bg-slate-200 rounded-full"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-[22px] border border-slate-200/80 shadow-xs overflow-hidden flex flex-col justify-between">
+            <div class="relative aspect-[4/3] bg-slate-200">
+              <div class="absolute top-3 left-3 h-6 w-20 bg-slate-300 rounded-full"></div>
+              <div class="absolute top-3 right-3 flex gap-1.5">
+                <div class="w-8 h-8 rounded-full bg-slate-300"></div>
+                <div class="w-8 h-8 rounded-full bg-slate-300"></div>
+              </div>
+              <div class="absolute bottom-3 left-3 h-5 w-16 bg-slate-300 rounded-full"></div>
+            </div>
+            <div class="p-4 space-y-3">
+              <div class="h-3 w-16 bg-slate-200 rounded ml-auto"></div>
+              <div class="h-4 w-5/6 bg-slate-200 rounded"></div>
+              <div class="h-4 w-3/5 bg-slate-200 rounded"></div>
+              <div class="h-3 w-1/2 bg-slate-100 rounded"></div>
+              <div class="flex gap-4 pt-1">
+                <div class="h-3 w-16 bg-slate-100 rounded"></div>
+                <div class="h-3 w-16 bg-slate-100 rounded"></div>
+              </div>
+              <div class="pt-3 border-t border-slate-100 space-y-2">
+                <div class="flex justify-between"><div class="h-4 w-24 bg-slate-200 rounded"></div><div class="h-5 w-24 bg-slate-200 rounded"></div></div>
+                <div class="flex justify-between"><div class="h-4 w-32 bg-slate-100 rounded"></div><div class="h-5 w-20 bg-slate-100 rounded"></div></div>
+              </div>
+              <div class="grid grid-cols-2 gap-2 pt-2">
+                <div class="h-9 bg-slate-200 rounded-full"></div>
+                <div class="h-9 bg-slate-200 rounded-full"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <button onclick="openOwnerLeadsModal()" class="bg-[#990000] hover:bg-red-800 text-white font-bold px-2.5 py-1 rounded-lg text-[10px] shadow-xs">
-        ดูรายการ
-      </button>
-    </div>
 
-    <!-- Property Cards Stream -->
-    <main class="p-3 space-y-4 flex-1" id="property-list">
-      <!-- Loading state or injected by JS -->
-      <div class="text-center py-10 text-gray-400">กำลังโหลดคลังทรัพย์ศิวาทรัพย์...</div>
     </main>
 
     <!-- 🧩 Modular Components Root (Modals, Overlays & Toasts loaded from modals.js) -->
@@ -855,73 +972,70 @@
       const btnClient = document.getElementById('btn-client-mode');
       
       const modeText = document.getElementById('mode-text');
-      const modeIcon = document.getElementById('mode-icon');
-
       const traineeBanner = document.getElementById('trainee-challenge-banner');
       const mgmBanner = document.getElementById('agent-mgm-banner');
       const ownerLeadsBar = document.getElementById('owner-leads-bar');
+      const ownerNotifyBtn = document.getElementById('btn-owner-leads-notify');
 
-      const defaultBtnClass = "py-1 font-medium rounded-lg transition-all text-gray-500 hover:text-gray-800 flex items-center justify-center gap-1 text-[10px]";
-      btnOwner.className = defaultBtnClass;
-      btnFreeAgent.className = defaultBtnClass;
-      btnEmployee.className = defaultBtnClass;
-      btnTrainee.className = defaultBtnClass;
-      btnClient.className = defaultBtnClass;
+      const defaultBtnClass = "px-2 py-0.5 rounded font-medium transition-all text-neutral-400 hover:text-white text-[10px]";
+      const activeBtnClass = "px-2.5 py-0.5 rounded-md font-bold transition-all bg-[#990000] text-white shadow-2xs text-[10px]";
 
-      traineeBanner.classList.add('hidden');
-      mgmBanner.classList.add('hidden');
-      ownerLeadsBar.classList.add('hidden');
+      if (btnOwner) btnOwner.className = defaultBtnClass;
+      if (btnFreeAgent) btnFreeAgent.className = defaultBtnClass;
+      if (btnEmployee) btnEmployee.className = defaultBtnClass;
+      if (btnTrainee) btnTrainee.className = defaultBtnClass;
+      if (btnClient) btnClient.className = defaultBtnClass;
 
-      const activeBtnClass = "py-1 font-bold rounded-lg transition-all bg-[#990000] text-white shadow-xs flex items-center justify-center gap-1 text-[10px]";
-
-      if (mode === 'owner') {
-        btnOwner.className = activeBtnClass;
-        modeText.textContent = "เจ้าของ/แอดมิน (บัว & กูล)";
-        modeText.className = "text-[#990000] font-bold";
-        modeIcon.innerHTML = `<i data-lucide="crown" class="w-2.5 h-2.5 stroke-[1.5]"></i>`;
-        if (consignments.length > 0) ownerLeadsBar.classList.remove('hidden');
-      } else if (mode === 'free_agent') {
-        btnFreeAgent.className = activeBtnClass;
-        modeText.textContent = "Free Agent (คอม 3-5% อิสระ)";
-        modeText.className = "text-[#990000] font-bold";
-        modeIcon.innerHTML = `<i data-lucide="briefcase" class="w-2.5 h-2.5 stroke-[1.5]"></i>`;
-        mgmBanner.classList.remove('hidden');
-      } else if (mode === 'employee') {
-        btnEmployee.className = activeBtnClass;
-        modeText.textContent = "พนักงานประจำ (คอม 1% มีเงินเดือน)";
-        modeText.className = "text-gray-800 font-bold";
-        modeIcon.innerHTML = `<i data-lucide="building" class="w-2.5 h-2.5 stroke-[1.5]"></i>`;
-        mgmBanner.classList.remove('hidden');
-      } else if (mode === 'trainee') {
-        btnTrainee.className = activeBtnClass;
-        modeText.textContent = "เด็กฝึกหัด (ส่งทรัพย์ 1/3 หลัง)";
-        modeText.className = "text-amber-800 font-bold";
-        modeIcon.innerHTML = `<i data-lucide="graduation-cap" class="w-2.5 h-2.5 stroke-[1.5]"></i>`;
-        traineeBanner.classList.remove('hidden');
-      } else {
-        btnClient.className = activeBtnClass;
-        modeText.textContent = "ลูกค้า (White-Label ไม่เห็นเจ้าของทรัพย์ NPA/ค่าคอม)";
-        modeText.className = "text-[#990000] font-bold";
-        modeIcon.innerHTML = `<i data-lucide="users" class="w-2.5 h-2.5 stroke-[1.5]"></i>`;
+      if (traineeBanner) traineeBanner.classList.add('hidden');
+      if (mgmBanner) mgmBanner.classList.add('hidden');
+      if (ownerLeadsBar) ownerLeadsBar.classList.add('hidden');
+      if (ownerNotifyBtn) {
+        ownerNotifyBtn.classList.add('hidden');
+        ownerNotifyBtn.classList.remove('flex');
       }
 
-      // ข้อ 1: ในโหมดลูกค้า ซ่อนตัวกรองสถาบัน/ธนาคาร NPA ไม่ให้ลูกค้าเห็นเจ้าของทรัพย์ (KTB, SCB, KBANK ฯลฯ)
-      const filterBankEl = document.getElementById('filter-bank');
-      const filterGridEl = document.getElementById('filter-dropdowns-grid');
-      const searchInputEl = document.getElementById('search-input');
-      if (filterBankEl && filterGridEl) {
-        if (mode === 'client') {
-          filterBankEl.value = 'all';
-          filterBankEl.classList.add('hidden');
-          filterGridEl.classList.remove('sm:grid-cols-4');
-          filterGridEl.classList.add('sm:grid-cols-3');
-          if (searchInputEl) searchInputEl.placeholder = "ค้นหา: ทำเล, โครงการ, รหัสทรัพย์, #ผ่อนล้านละ3พัน...";
-        } else {
-          filterBankEl.classList.remove('hidden');
-          filterGridEl.classList.remove('sm:grid-cols-3');
-          filterGridEl.classList.add('sm:grid-cols-4');
-          if (searchInputEl) searchInputEl.placeholder = "ค้นหา: ทำเล, โครงการ, รหัส NPA, #ผ่อนล้านละ3พัน...";
+      if (mode === 'owner') {
+        if (btnOwner) btnOwner.className = activeBtnClass;
+        if (modeText) modeText.textContent = "เจ้าของ/แอดมิน (บัว & กูล)";
+        if (consignments.length > 0 && ownerNotifyBtn) {
+          ownerNotifyBtn.classList.remove('hidden');
+          ownerNotifyBtn.classList.add('flex');
         }
+      } else if (mode === 'free_agent') {
+        if (btnFreeAgent) btnFreeAgent.className = activeBtnClass;
+        if (modeText) modeText.textContent = "Free Agent (คอม 3-5% อิสระ)";
+        if (mgmBanner) mgmBanner.classList.remove('hidden');
+      } else if (mode === 'employee') {
+        if (btnEmployee) btnEmployee.className = activeBtnClass;
+        if (modeText) modeText.textContent = "พนักงานประจำ (คอม 1% มีเงินเดือน)";
+        if (mgmBanner) mgmBanner.classList.remove('hidden');
+      } else if (mode === 'trainee') {
+        if (btnTrainee) btnTrainee.className = activeBtnClass;
+        if (modeText) modeText.textContent = "เด็กฝึกหัด (ส่งทรัพย์ 1/3 หลัง)";
+        if (traineeBanner) traineeBanner.classList.remove('hidden');
+      } else {
+        if (btnClient) btnClient.className = activeBtnClass;
+        if (modeText) modeText.textContent = "ลูกค้า (White-Label)";
+      }
+
+      // สลับการแสดงผลของ Bank Quick Chips vs Category Quick Chips & Dropdowns
+      const bankChips = document.getElementById('bank-quick-chips');
+      const catChips = document.getElementById('category-quick-chips');
+      const filterBankWrapper = document.getElementById('filter-bank-wrapper');
+      const filterBankEl = document.getElementById('filter-bank');
+      const searchInputEl = document.getElementById('search-input');
+
+      if (mode === 'client') {
+        if (bankChips) bankChips.classList.add('hidden');
+        if (catChips) catChips.classList.remove('hidden');
+        if (filterBankWrapper) filterBankWrapper.classList.add('hidden');
+        if (filterBankEl) filterBankEl.value = 'all';
+        if (searchInputEl) searchInputEl.placeholder = "ชื่อโครงการ, รหัสทรัพย์...";
+      } else {
+        if (bankChips) bankChips.classList.remove('hidden');
+        if (catChips) catChips.classList.add('hidden');
+        if (filterBankWrapper) filterBankWrapper.classList.remove('hidden');
+        if (searchInputEl) searchInputEl.placeholder = "ชื่อโครงการ, รหัส NPA...";
       }
 
       const adminShortcutBtn = document.getElementById('btn-owner-archetype-shortcut');
@@ -938,6 +1052,34 @@
       updateMiniBarSummary();
       renderProperties();
       if (window.lucide) { lucide.createIcons(); }
+    }
+
+    // 1-Click Bank Quick Chip Selector
+    function selectBankChip(bankVal, btnEl) {
+      const selectEl = document.getElementById('filter-bank');
+      if (selectEl) selectEl.value = bankVal;
+      
+      document.querySelectorAll('.bank-chip').forEach(b => {
+        b.className = "bank-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs";
+      });
+      if (btnEl) {
+        btnEl.className = "bank-chip active text-[11px] font-semibold px-3 py-1 rounded-full border transition-all bg-neutral-900 text-white border-neutral-900 shadow-2xs";
+      }
+      applyAllFilters();
+    }
+
+    // 1-Click Category Quick Chip Selector (Client Mode)
+    function selectCategoryChip(catVal, btnEl) {
+      const selectEl = document.getElementById('filter-category');
+      if (selectEl) selectEl.value = catVal;
+      
+      document.querySelectorAll('.cat-chip').forEach(b => {
+        b.className = "cat-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs";
+      });
+      if (btnEl) {
+        btnEl.className = "cat-chip active text-[11px] font-semibold px-3 py-1 rounded-full border transition-all bg-neutral-900 text-white border-neutral-900 shadow-2xs";
+      }
+      applyAllFilters();
     }
 
     let showTransferredInOwnerMode = false;
@@ -1247,11 +1389,24 @@
     }
 
     function clearFilters() {
-      document.getElementById('search-input').value = '';
-      document.getElementById('filter-bank').value = 'all';
-      document.getElementById('filter-location').value = 'all';
-      document.getElementById('filter-budget').value = 'all';
-      document.getElementById('filter-category').value = 'all';
+      if (document.getElementById('search-input')) document.getElementById('search-input').value = '';
+      if (document.getElementById('filter-bank')) document.getElementById('filter-bank').value = 'all';
+      if (document.getElementById('filter-location')) document.getElementById('filter-location').value = 'all';
+      if (document.getElementById('filter-budget')) document.getElementById('filter-budget').value = 'all';
+      if (document.getElementById('filter-category')) document.getElementById('filter-category').value = 'all';
+
+      // Reset Quick Chips UI
+      document.querySelectorAll('.bank-chip').forEach((b, idx) => {
+        b.className = idx === 0 
+          ? "bank-chip active text-[11px] font-semibold px-3 py-1 rounded-full border transition-all bg-neutral-900 text-white border-neutral-900 shadow-2xs"
+          : "bank-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs";
+      });
+      document.querySelectorAll('.cat-chip').forEach((b, idx) => {
+        b.className = idx === 0 
+          ? "cat-chip active text-[11px] font-semibold px-3 py-1 rounded-full border transition-all bg-neutral-900 text-white border-neutral-900 shadow-2xs"
+          : "cat-chip text-[11px] font-semibold px-3 py-1 rounded-full border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 shadow-2xs";
+      });
+
       updateMiniBarSummary();
       applyAllFilters();
     }
@@ -1555,7 +1710,7 @@
                 </button>
               ` : ''}
 
-              <!-- Status Overlay: เปลี่ยนจาก SOLD OUT เป็น "ติดจอง" ตามบรีฟข้อ 2 -->
+              <!-- Status Overlay: ติดจอง / โอนแล้ว -->
               ${isTransferred ? `
                 <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-[2px] flex items-center justify-center">
                   <span class="bg-slate-800 text-white text-xs font-black tracking-wider px-3.5 py-1.5 rounded-full shadow-lg border border-white/30">โอนแล้ว (นำออกจากหน้าเว็บแล้ว)</span>
@@ -1568,19 +1723,11 @@
                   </span>
                 </div>
               ` : ''}
-
-              <!-- Commission Badge Bar (for Co-Broker agents) -->
-              ${(currentMode === 'free_agent' || currentMode === 'employee') ? `
-                <div class="absolute top-12 left-3 capsule-bokeh text-white font-medium px-2.5 py-0.5 text-[10px] shadow-sm flex items-center gap-1.5">
-                  <span class="w-4 h-4 rounded-full bg-[#990000] text-white font-black text-[10px] inline-flex items-center justify-center shadow-xs leading-none">฿</span>
-                  <span>${comLabel}: <strong class="text-amber-300 font-bold">${comAmount || 'ตามผลงาน'}</strong></span>
-                </div>
-              ` : ''}
             </div>
 
-            <!-- Card Body -->
-            <div class="p-3.5 space-y-2 flex-1 flex flex-col justify-between">
-              <div class="space-y-1">
+            <!-- Card Body: General Customer-Safe Info -->
+            <div class="p-4 space-y-2 flex-1 flex flex-col justify-between">
+              <div class="space-y-1.5">
                 <!-- Property Code -->
                 <div class="text-[11px] text-slate-400 font-mono text-right">รหัสทรัพย์: ${p.id}</div>
                 
@@ -1620,102 +1767,115 @@
                 </div>
               </div>
 
-              <!-- Primary Homerun Caramel Pill Button & Quick Offer CTA -->
-              <div class="pt-2 space-y-1.5">
-                <div class="grid grid-cols-2 gap-1.5">
-                  <button onclick="openPropertyDetailModal('${p.id}')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 rounded-full text-xs transition-all active:scale-[0.98]">
-                    <span>ดูรายละเอียด</span>
-                  </button>
-                  <button onclick="openOfferModal('${p.id}', '${safeTitleAttr}', '${p.price}')" class="w-full bg-[#BCA371] hover:bg-[#b09763] text-white font-bold py-2.5 rounded-full shadow-xs flex items-center justify-center gap-1 text-xs transition-all active:scale-[0.98]">
-                    <i data-lucide="badge-dollar-sign" class="w-3.5 h-3.5"></i>
-                    <span>เสนอราคา</span>
-                  </button>
-                </div>
-
-                <!-- Mode-Specific Quick Actions -->
-                ${currentMode === 'owner' ? `
-                  <!-- Owner 1-Click Status & Price Controls -->
-                  <div class="bg-slate-50/80 p-2 rounded-xl border border-slate-200/70 space-y-1.5 text-xs">
-                    <div class="grid grid-cols-3 gap-1">
-                      <button onclick="updateStatus('${p.id}', 'available')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${!isBooked && !isTransferred ? 'bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs' : 'bg-white text-gray-600 border border-gray-200'}">
-                        <span>พร้อมขาย</span>
-                      </button>
-                      <button onclick="updateStatus('${p.id}', 'booked')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${isBooked ? 'bg-amber-50 text-amber-800 border border-amber-300 shadow-2xs' : 'bg-white text-gray-600 border border-gray-200'}">
-                        <span>ติดจอง</span>
-                      </button>
-                      <button onclick="updateStatus('${p.id}', 'transferred')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${isTransferred ? 'bg-rose-600 text-white border border-rose-700 shadow-2xs' : 'bg-white text-rose-700 hover:bg-rose-50 border border-rose-200'}" title="เมื่อโอนแล้ว ระบบจะนำทรัพย์ออกจากหน้าเว็บทันที">
-                        <span>โอนแล้ว (นำออก)</span>
-                      </button>
-                    </div>
-                    <div class="grid grid-cols-2 gap-1">
-                      <button onclick="openEditPriceModal('${p.id}')" class="bg-white hover:bg-slate-100 text-slate-700 text-[10px] font-bold py-1 px-2 rounded-lg border border-slate-200 flex items-center justify-center gap-1">
-                        <i data-lucide="edit-3" class="w-3 h-3 text-[#990000]"></i>
-                        <span>แก้ราคา</span>
-                      </button>
-                      <button onclick="openPropertyDetailModal('${p.id}')" class="bg-white hover:bg-slate-100 text-slate-700 text-[10px] font-bold py-1 px-2 rounded-lg border border-slate-200 flex items-center justify-center gap-1">
-                        <i data-lucide="folder-down" class="w-3 h-3 text-blue-600"></i>
-                        <span>โหลดฟอร์มแบงก์</span>
-                      </button>
-                    </div>
-                    <button onclick="openVinylModal('${p.id}')" class="w-full bg-amber-50 hover:bg-amber-100 text-[#8C6D23] text-[11px] font-bold py-1.5 px-2 rounded-lg border border-amber-300/80 shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-                      <i data-lucide="printer" class="w-3.5 h-3.5 text-amber-600"></i>
-                      <span>พิมพ์ป้ายไวนิลหน้าบ้าน (Auto PDF)</span>
+              <!-- Primary Action Buttons (ดูรายละเอียด & เสนอราคา/LINE) -->
+              <div class="pt-2">
+                ${isBooked ? `
+                  <div class="grid grid-cols-2 gap-1.5">
+                    <button onclick="openPropertyDetailModal('${p.id}')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 rounded-full text-xs transition-all active:scale-[0.98]">
+                      <span>ดูรายละเอียด</span>
                     </button>
-                  </div>
-                ` : (currentMode === 'free_agent' || currentMode === 'employee') ? `
-                  <!-- Free Agent / Employee Quick Operations -->
-                  <div class="space-y-1.5 pt-0.5">
-                    <div class="grid grid-cols-3 gap-1">
-                      <button onclick="openSmartShare('${p.id}', '${safeTitleAttr}')" class="bg-[#990000] hover:bg-red-800 text-white text-[10px] font-bold py-1.5 px-1 rounded-xl flex items-center justify-center gap-1 shadow-2xs active:scale-95 transition-all truncate" title="แชร์พร้อมล็อกสิทธิ์คอมมิชชั่น 60 วัน">
-                        <i data-lucide="share-2" class="w-3 h-3 shrink-0"></i>
-                        <span class="truncate">แชร์ล็อกสิทธิ์</span>
-                      </button>
-                      <button onclick="openNpaKeyModal('${p.id}')" class="bg-[#1E749C] hover:bg-[#165a7a] text-white text-[10px] font-bold py-1.5 px-1 rounded-xl flex items-center justify-center gap-1 shadow-2xs active:scale-95 transition-all truncate" title="เบิกกุญแจ NPA ประสานงานพี่ลิลลี่ & Messenger">
-                        <i data-lucide="key" class="w-3 h-3 shrink-0"></i>
-                        <span class="truncate">เบิกกุญแจ</span>
-                      </button>
-                      <button onclick="openPropertyDetailModal('${p.id}')" class="bg-white hover:bg-slate-50 text-slate-800 text-[10px] font-semibold py-1.5 px-1 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-center gap-1 truncate" title="ดูรายละเอียดและเอกสารยื่นแบงก์">
-                        <i data-lucide="folder-down" class="w-3 h-3 shrink-0 text-[#990000]"></i>
-                        <span class="truncate">เอกสารแบงก์</span>
-                      </button>
-                    </div>
-                    <button onclick="openVinylModal('${p.id}')" class="w-full bg-amber-50 hover:bg-amber-100 text-[#8C6D23] text-[11px] font-bold py-1.5 px-2 rounded-xl border border-amber-300/80 shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-                      <i data-lucide="printer" class="w-3.5 h-3.5 text-amber-600"></i>
-                      <span>พิมพ์ป้ายไวนิลหน้าบ้าน (Auto PDF)</span>
-                    </button>
-                  </div>
-                ` : currentMode === 'trainee' ? `
-                  <!-- Trainee locked -->
-                  <div class="bg-slate-50 border border-slate-100 rounded-xl p-2 text-center text-[10px] text-slate-500">
-                    ส่งทรัพย์เข้าพอร์ตอีก 2 หลังเพื่อปลดล็อกฟังก์ชันเอเจนต์
-                  </div>
-                ` : isBooked ? `
-                  <!-- Client Quick Actions: Booked property -->
-                  <div class="grid grid-cols-2 gap-1.5 pt-0.5">
-                    <button onclick="contactViaLine('${p.id}', '${safeTitleAttr}', true)" class="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-[11px] font-bold py-2 px-1 rounded-xl shadow-2xs flex items-center justify-center gap-1 active:scale-95 transition-all" title="ลงชื่อคิวสำรองกรณีหลุดจอง">
-                      <i data-lucide="message-circle" class="w-3.5 h-3.5 text-amber-600"></i>
+                    <button onclick="contactViaLine('${p.id}', '${safeTitleAttr}', true)" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 rounded-full shadow-xs flex items-center justify-center gap-1 text-xs transition-all active:scale-[0.98]" title="ลงชื่อคิวสำรองกรณีหลุดจอง">
+                      <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
                       <span>คิวสำรอง</span>
                     </button>
-                    <div class="bg-slate-100 text-slate-400 text-[10.5px] font-medium py-2 px-1 rounded-xl border border-slate-200 flex items-center justify-center gap-1 cursor-not-allowed select-none truncate" title="ทรัพย์นี้อยู่ระหว่างติดจอง ปิดรับข้อเสนอและทำสัญญาชั่วคราว">
-                      <i data-lucide="lock" class="w-3.5 h-3.5 shrink-0 text-slate-400"></i>
-                      <span class="truncate">ปิดรับข้อเสนอ</span>
-                    </div>
                   </div>
-                ` : `
-                  <!-- Client Quick Contact & Contract Download -->
-                  <div class="grid grid-cols-2 gap-1.5 pt-0.5">
-                    <button onclick="contactViaLine('${p.id}', '${safeTitleAttr}')" class="bg-[#06C755] hover:bg-[#05b34c] text-white text-[11px] font-bold py-2 px-1 rounded-xl shadow-2xs flex items-center justify-center gap-1 active:scale-95 transition-all">
+                ` : currentMode === 'client' ? `
+                  <div class="grid grid-cols-2 gap-1.5">
+                    <button onclick="openPropertyDetailModal('${p.id}')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 rounded-full text-xs transition-all active:scale-[0.98]">
+                      <span>ดูรายละเอียด</span>
+                    </button>
+                    <button onclick="contactViaLine('${p.id}', '${safeTitleAttr}')" class="w-full bg-[#06C755] hover:bg-[#05b34c] text-white font-bold py-2.5 rounded-full shadow-xs flex items-center justify-center gap-1 text-xs transition-all active:scale-[0.98]">
                       <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
                       <span>LINE นัดชม</span>
                     </button>
-                    <a href="${getCustomerContractUrl(p)}" target="_blank" class="bg-sky-50 hover:bg-sky-100 text-[#1E749C] border border-sky-200 text-[11px] font-bold py-2 px-1 rounded-xl shadow-2xs flex items-center justify-center gap-1 active:scale-95 transition-all">
-                      <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
-                      <span>สัญญาซื้อขาย</span>
-                    </a>
+                  </div>
+                ` : `
+                  <div class="grid grid-cols-2 gap-1.5">
+                    <button onclick="openPropertyDetailModal('${p.id}')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 rounded-full text-xs transition-all active:scale-[0.98]">
+                      <span>ดูรายละเอียด</span>
+                    </button>
+                    <button onclick="openOfferModal('${p.id}', '${safeTitleAttr}', '${p.price}')" class="w-full bg-[#BCA371] hover:bg-[#b09763] text-white font-bold py-2.5 rounded-full shadow-xs flex items-center justify-center gap-1 text-xs transition-all active:scale-[0.98]">
+                      <i data-lucide="badge-dollar-sign" class="w-3.5 h-3.5"></i>
+                      <span>เสนอราคา</span>
+                    </button>
                   </div>
                 `}
               </div>
             </div>
+
+            <!-- 🔒 DEDICATED CO-BROKER / ADMIN BAR (แถบสีพิเศษเฉพาะเอเจนต์/แอดมิน ซ่อนในโหมดลูกค้า 100%) -->
+            ${currentMode === 'owner' ? `
+              <!-- Owner Admin Bar -->
+              <div class="border-t border-neutral-800 bg-neutral-900 text-white p-3 rounded-b-[22px] space-y-2 text-xs">
+                <div class="flex items-center justify-between text-[11px] pb-1 border-b border-neutral-800">
+                  <span class="text-amber-400 font-bold flex items-center gap-1">
+                    <i data-lucide="crown" class="w-3 h-3 text-amber-400"></i>
+                    <span>แอดมิน บัว & กูล</span>
+                  </span>
+                  <span class="text-[10px] text-neutral-400">จัดการสถานะ</span>
+                </div>
+                <div class="grid grid-cols-3 gap-1">
+                  <button onclick="updateStatus('${p.id}', 'available')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${!isBooked && !isTransferred ? 'bg-emerald-500 text-white shadow-2xs' : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'}">
+                    <span>พร้อมขาย</span>
+                  </button>
+                  <button onclick="updateStatus('${p.id}', 'booked')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${isBooked ? 'bg-amber-500 text-white shadow-2xs' : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'}">
+                    <span>ติดจอง</span>
+                  </button>
+                  <button onclick="updateStatus('${p.id}', 'transferred')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${isTransferred ? 'bg-rose-600 text-white shadow-2xs' : 'bg-neutral-800 text-rose-300 hover:bg-neutral-700'}" title="เมื่อโอนแล้ว นำออกจากเว็บทันที">
+                    <span>โอนแล้ว</span>
+                  </button>
+                </div>
+                <div class="grid grid-cols-2 gap-1 pt-0.5">
+                  <button onclick="openEditPriceModal('${p.id}')" class="bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-[10px] font-semibold py-1.5 px-2 rounded-lg border border-neutral-700 flex items-center justify-center gap-1">
+                    <i data-lucide="edit-3" class="w-3 h-3 text-amber-400"></i>
+                    <span>แก้ราคา</span>
+                  </button>
+                  <button onclick="openPropertyDetailModal('${p.id}')" class="bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-[10px] font-semibold py-1.5 px-2 rounded-lg border border-neutral-700 flex items-center justify-center gap-1">
+                    <i data-lucide="folder-down" class="w-3 h-3 text-sky-400"></i>
+                    <span>ฟอร์มแบงก์</span>
+                  </button>
+                </div>
+                <button onclick="openVinylModal('${p.id}')" class="w-full bg-[#C2A460]/20 hover:bg-[#C2A460]/30 text-amber-300 border border-amber-400/40 text-[10.5px] font-bold py-1.5 px-2 rounded-lg shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+                  <i data-lucide="printer" class="w-3.5 h-3.5 text-amber-400"></i>
+                  <span>พิมพ์ป้ายไวนิลหน้าบ้าน (Auto PDF)</span>
+                </button>
+              </div>
+            ` : (currentMode === 'free_agent' || currentMode === 'employee') ? `
+              <!-- Co-Broker Agent Bar -->
+              <div class="border-t border-amber-200/80 bg-gradient-to-b from-amber-50/60 to-amber-50/30 p-3 rounded-b-[22px] space-y-2 text-xs">
+                <div class="flex items-center justify-between text-[11px] pb-1 border-b border-amber-200/60">
+                  <span class="text-amber-900 font-bold flex items-center gap-1">
+                    <span class="w-3.5 h-3.5 rounded-full bg-[#990000] text-white font-black text-[9px] inline-flex items-center justify-center">฿</span>
+                    <span>${comLabel}</span>
+                  </span>
+                  <strong class="text-[#990000] font-extrabold text-xs">${comAmount || 'ตามผลงาน'}</strong>
+                </div>
+                <div class="grid grid-cols-3 gap-1">
+                  <button onclick="openSmartShare('${p.id}', '${safeTitleAttr}')" class="bg-[#990000] hover:bg-red-800 text-white text-[10px] font-bold py-1.5 px-1 rounded-xl flex items-center justify-center gap-1 shadow-2xs active:scale-95 transition-all truncate" title="แชร์พร้อมล็อกสิทธิ์คอมมิชชั่น 60 วัน">
+                    <i data-lucide="share-2" class="w-3 h-3 shrink-0"></i>
+                    <span class="truncate">แชร์ล็อกสิทธิ์</span>
+                  </button>
+                  <button onclick="openNpaKeyModal('${p.id}')" class="bg-[#1E749C] hover:bg-[#165a7a] text-white text-[10px] font-bold py-1.5 px-1 rounded-xl flex items-center justify-center gap-1 shadow-2xs active:scale-95 transition-all truncate" title="เบิกกุญแจ NPA">
+                    <i data-lucide="key" class="w-3 h-3 shrink-0"></i>
+                    <span class="truncate">เบิกกุญแจ</span>
+                  </button>
+                  <button onclick="openPropertyDetailModal('${p.id}')" class="bg-white hover:bg-slate-50 text-slate-800 text-[10px] font-semibold py-1.5 px-1 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-center gap-1 truncate" title="เอกสารแบงก์">
+                    <i data-lucide="folder-down" class="w-3 h-3 shrink-0 text-[#990000]"></i>
+                    <span class="truncate">เอกสารแบงก์</span>
+                  </button>
+                </div>
+                <button onclick="openVinylModal('${p.id}')" class="w-full bg-white hover:bg-amber-100 text-[#8C6D23] text-[10.5px] font-bold py-1.5 px-2 rounded-xl border border-amber-300 shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+                  <i data-lucide="printer" class="w-3.5 h-3.5 text-amber-600"></i>
+                  <span>พิมพ์ป้ายไวนิลหน้าบ้าน (Auto PDF)</span>
+                </button>
+              </div>
+            ` : currentMode === 'trainee' ? `
+              <!-- Trainee Locked Bar -->
+              <div class="border-t border-slate-200 bg-slate-50 p-2.5 rounded-b-[22px] text-center text-[10.5px] text-slate-500">
+                🔒 ส่งทรัพย์เข้าพอร์ตอีก 2 หลังเพื่อปลดล็อกคอม 3-5% และปุ่มแชร์
+              </div>
+            ` : ''}
+
           </div>
         `;
       }).join('');
@@ -1730,6 +1890,17 @@
     function updateConsignBadge() {
       const badge = document.getElementById('consign-count-badge');
       if (badge) badge.textContent = consignments.length;
+
+      const notifyBtn = document.getElementById('btn-owner-leads-notify');
+      if (notifyBtn) {
+        if (currentMode === 'owner' && consignments.length > 0) {
+          notifyBtn.classList.remove('hidden');
+          notifyBtn.classList.add('flex');
+        } else {
+          notifyBtn.classList.add('hidden');
+          notifyBtn.classList.remove('flex');
+        }
+      }
     }
 
     // 1. Public Consignment & Trainee Challenge
