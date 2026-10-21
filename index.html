@@ -1718,11 +1718,17 @@
             <!-- Bottom Footer ของแผงควบคุม -->
             <div class="px-5 py-2.5 bg-neutral-50/70 border-t border-neutral-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
               <span class="text-neutral-400">${showSoldArchiveInOwnerMode ? '👁️ กำลังแสดงทรัพย์ Sold Out จากภาพระบบเก่า' : showTransferredInOwnerMode ? '👁️ กำลังแสดงรวมทรัพย์ที่โอนแล้ว' : 'ทรัพย์ที่มีสถานะ Sold Out และโอนแล้ว จะถูกซ่อนจากหน้าบ้านอัตโนมัติ'}</span>
-              <button onclick="openOwnerLeadsModal()" class="inline-flex items-center gap-1.5 font-semibold text-neutral-800 hover:text-[#9A7D46] transition self-start sm:self-auto cursor-pointer">
-                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-                <span>ดูคลังฝากขายใหม่ (${consignments.length})</span>
-                <span class="text-neutral-400">→</span>
-              </button>
+              <div class="flex items-center gap-3">
+                <a href="Siwasup_Brand_Color_System_Dashboard.html" target="_blank" class="inline-flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 transition font-medium cursor-pointer" title="เปิดดูแดชบอร์ดสรุประบบสี CI และสัดส่วน 75-15-5-5 สำหรับนำเสนอบอร์ดบริหาร">
+                  <i data-lucide="palette" class="w-3.5 h-3.5 text-[#8B0000]"></i>
+                  <span>แดชบอร์ดระบบสี CI</span>
+                </a>
+                <button onclick="openOwnerLeadsModal()" class="inline-flex items-center gap-1.5 font-semibold text-neutral-800 hover:text-[#9A7D46] transition self-start sm:self-auto cursor-pointer">
+                  <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                  <span>ดูคลังฝากขายใหม่ (${consignments.length})</span>
+                  <span class="text-neutral-400">→</span>
+                </button>
+              </div>
             </div>
           </div>
         `;
