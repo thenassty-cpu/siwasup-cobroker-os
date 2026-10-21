@@ -1265,7 +1265,14 @@
       const btnOfferLabel = document.getElementById('detail-btn-offer-label');
       const waitlistRow = document.getElementById('detail-waitlist-row');
       if (btnOffer) {
-        if (currentMode === 'client' && isBooked) {
+        if (currentMode === 'owner') {
+          // โหมดเจ้าของ (บัว & กูล): เจ้าของเป็นคนขาย ไม่ต้องมีปุ่มเสนอราคา เปลี่ยนเป็นปุ่มแก้ราคาขาย
+          btnOffer.disabled = false;
+          btnOffer.className = "w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-3 rounded-full shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
+          if (btnOfferLabel) btnOfferLabel.textContent = "แก้ไขราคาขาย (โหมดเจ้าของ)";
+          btnOffer.onclick = () => { closePropertyDetailModal(); openEditPriceModal(p.id); };
+          if (waitlistRow) waitlistRow.classList.add('hidden');
+        } else if (currentMode === 'client' && isBooked) {
           btnOffer.disabled = true;
           btnOffer.className = "w-full bg-slate-200 text-slate-500 font-bold py-3 rounded-full flex items-center justify-center gap-2 text-xs sm:text-sm cursor-not-allowed select-none border border-slate-300";
           if (btnOfferLabel) btnOfferLabel.textContent = "ทรัพย์นี้อยู่ระหว่างติดจอง (ปิดรับข้อเสนอชั่วคราว)";
@@ -1767,7 +1774,7 @@
                 </div>
               </div>
 
-              <!-- Primary Action Buttons (ดูรายละเอียด & เสนอราคา/LINE) -->
+              <!-- Primary Action Buttons -->
               <div class="pt-2">
                 ${isBooked ? `
                   <div class="grid grid-cols-2 gap-1.5">
@@ -1777,6 +1784,17 @@
                     <button onclick="contactViaLine('${p.id}', '${safeTitleAttr}', true)" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 rounded-full shadow-xs flex items-center justify-center gap-1 text-xs transition-all active:scale-[0.98]" title="ลงชื่อคิวสำรองกรณีหลุดจอง">
                       <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
                       <span>คิวสำรอง</span>
+                    </button>
+                  </div>
+                ` : currentMode === 'owner' ? `
+                  <!-- โหมดเจ้าของ (บัว & กูล): เจ้าของเป็นคนขาย ไม่ต้องมีปุ่มเสนอราคา เปลี่ยนเป็นปุ่มตั้ง/แก้ราคา -->
+                  <div class="grid grid-cols-2 gap-1.5">
+                    <button onclick="openPropertyDetailModal('${p.id}')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 rounded-full text-xs transition-all active:scale-[0.98]">
+                      <span>ดูรายละเอียด</span>
+                    </button>
+                    <button onclick="openEditPriceModal('${p.id}')" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-full shadow-xs flex items-center justify-center gap-1 text-xs transition-all active:scale-[0.98]" title="แก้ไขราคาขาย">
+                      <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                      <span>ตั้ง/แก้ราคา</span>
                     </button>
                   </div>
                 ` : currentMode === 'client' ? `
@@ -1790,6 +1808,7 @@
                     </button>
                   </div>
                 ` : `
+                  <!-- โหมด Agent / Trainee / พนักงาน: เสนอราคาซื้อ -->
                   <div class="grid grid-cols-2 gap-1.5">
                     <button onclick="openPropertyDetailModal('${p.id}')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 rounded-full text-xs transition-all active:scale-[0.98]">
                       <span>ดูรายละเอียด</span>
@@ -1826,9 +1845,9 @@
                   </button>
                 </div>
                 <div class="grid grid-cols-2 gap-1 pt-0.5">
-                  <button onclick="openEditPriceModal('${p.id}')" class="bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-[10px] font-semibold py-1.5 px-2 rounded-lg border border-neutral-700 flex items-center justify-center gap-1">
-                    <i data-lucide="edit-3" class="w-3 h-3 text-amber-400"></i>
-                    <span>แก้ราคา</span>
+                  <button onclick="openNpaKeyModal('${p.id}')" class="bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-[10px] font-semibold py-1.5 px-2 rounded-lg border border-neutral-700 flex items-center justify-center gap-1" title="เบิกกุญแจ NPA & จัดคิว Messenger">
+                    <i data-lucide="key" class="w-3 h-3 text-sky-400"></i>
+                    <span>เบิกกุญแจ</span>
                   </button>
                   <button onclick="openPropertyDetailModal('${p.id}')" class="bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-[10px] font-semibold py-1.5 px-2 rounded-lg border border-neutral-700 flex items-center justify-center gap-1">
                     <i data-lucide="folder-down" class="w-3 h-3 text-sky-400"></i>
