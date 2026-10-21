@@ -1112,6 +1112,24 @@
       }
     }
 
+    // 🛠️ Card Action Popover Menu Controller (Desktop Hover + Mobile/Touch Click)
+    function toggleCardActionMenu(id, e) {
+      if (e) e.stopPropagation();
+      const menu = document.getElementById(`card-menu-${id}`);
+      if (!menu) return;
+      const willOpen = menu.classList.contains('hidden');
+      document.querySelectorAll('.card-action-menu').forEach(m => m.classList.add('hidden'));
+      if (willOpen) {
+        menu.classList.remove('hidden');
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.card-action-menu')) {
+        document.querySelectorAll('.card-action-menu').forEach(m => m.classList.add('hidden'));
+      }
+    });
+
     // Filter states
     let selectedBundleIds = new Set();
     let activeBundleFilter = null;
@@ -1774,126 +1792,132 @@
                 </div>
               </div>
 
-              <!-- Primary Action Buttons -->
-              <div class="pt-2">
+              <!-- แถวที่ 1: Primary Actions (สำหรับทุกคน / ตัวแทน) -->
+              <div class="grid grid-cols-2 gap-2 pt-2">
+                <button onclick="openPropertyDetailModal('${p.id}')" class="py-2.5 px-3 rounded-xl bg-neutral-100 hover:bg-neutral-200/80 text-neutral-800 font-semibold text-xs transition active:scale-[0.98]">
+                  ดูรายละเอียด
+                </button>
                 ${isBooked ? `
-                  <div class="grid grid-cols-2 gap-1.5">
-                    <button onclick="openPropertyDetailModal('${p.id}')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 rounded-full text-xs transition-all active:scale-[0.98]">
-                      <span>ดูรายละเอียด</span>
-                    </button>
-                    <button onclick="contactViaLine('${p.id}', '${safeTitleAttr}', true)" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 rounded-full shadow-xs flex items-center justify-center gap-1 text-xs transition-all active:scale-[0.98]" title="ลงชื่อคิวสำรองกรณีหลุดจอง">
-                      <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-                      <span>คิวสำรอง</span>
-                    </button>
-                  </div>
+                  <button onclick="contactViaLine('${p.id}', '${safeTitleAttr}', true)" class="py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs transition active:scale-[0.98]" title="ลงชื่อคิวสำรองกรณีหลุดจอง">
+                    <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                    <span>คิวสำรอง</span>
+                  </button>
                 ` : currentMode === 'owner' ? `
-                  <!-- โหมดเจ้าของ (บัว & กูล): เจ้าของเป็นคนขาย ไม่ต้องมีปุ่มเสนอราคา เปลี่ยนเป็นปุ่มตั้ง/แก้ราคา -->
-                  <div class="grid grid-cols-2 gap-1.5">
-                    <button onclick="openPropertyDetailModal('${p.id}')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 rounded-full text-xs transition-all active:scale-[0.98]">
-                      <span>ดูรายละเอียด</span>
-                    </button>
-                    <button onclick="openEditPriceModal('${p.id}')" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-full shadow-xs flex items-center justify-center gap-1 text-xs transition-all active:scale-[0.98]" title="แก้ไขราคาขาย">
-                      <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-                      <span>ตั้ง/แก้ราคา</span>
-                    </button>
-                  </div>
+                  <button onclick="openEditPriceModal('${p.id}')" class="py-2.5 px-3 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs transition active:scale-[0.98]" title="แก้ไขราคาขาย">
+                    <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                    <span>ตั้ง/แก้ราคา</span>
+                  </button>
                 ` : currentMode === 'client' ? `
-                  <div class="grid grid-cols-2 gap-1.5">
-                    <button onclick="openPropertyDetailModal('${p.id}')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 rounded-full text-xs transition-all active:scale-[0.98]">
-                      <span>ดูรายละเอียด</span>
-                    </button>
-                    <button onclick="contactViaLine('${p.id}', '${safeTitleAttr}')" class="w-full bg-[#06C755] hover:bg-[#05b34c] text-white font-bold py-2.5 rounded-full shadow-xs flex items-center justify-center gap-1 text-xs transition-all active:scale-[0.98]">
-                      <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-                      <span>LINE นัดชม</span>
-                    </button>
-                  </div>
+                  <button onclick="contactViaLine('${p.id}', '${safeTitleAttr}')" class="py-2.5 px-3 rounded-xl bg-[#06C755] hover:bg-[#05b34c] text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs transition active:scale-[0.98]">
+                    <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                    <span>LINE นัดชม</span>
+                  </button>
                 ` : `
-                  <!-- โหมด Agent / Trainee / พนักงาน: เสนอราคาซื้อ -->
-                  <div class="grid grid-cols-2 gap-1.5">
-                    <button onclick="openPropertyDetailModal('${p.id}')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 rounded-full text-xs transition-all active:scale-[0.98]">
-                      <span>ดูรายละเอียด</span>
-                    </button>
-                    <button onclick="openOfferModal('${p.id}', '${safeTitleAttr}', '${p.price}')" class="w-full bg-[#BCA371] hover:bg-[#b09763] text-white font-bold py-2.5 rounded-full shadow-xs flex items-center justify-center gap-1 text-xs transition-all active:scale-[0.98]">
-                      <i data-lucide="badge-dollar-sign" class="w-3.5 h-3.5"></i>
-                      <span>เสนอราคา</span>
-                    </button>
-                  </div>
+                  <button onclick="openOfferModal('${p.id}', '${safeTitleAttr}', '${p.price}')" class="py-2.5 px-3 rounded-xl bg-[#b89d68] hover:bg-[#a68b56] text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs transition active:scale-[0.98]">
+                    <i data-lucide="badge-dollar-sign" class="w-3.5 h-3.5"></i>
+                    <span>เสนอราคา</span>
+                  </button>
                 `}
               </div>
-            </div>
 
-            <!-- 🔒 DEDICATED CO-BROKER / ADMIN BAR (แถบสีพิเศษเฉพาะเอเจนต์/แอดมิน ซ่อนในโหมดลูกค้า 100%) -->
-            ${currentMode === 'owner' ? `
-              <!-- Owner Admin Bar -->
-              <div class="border-t border-neutral-800 bg-neutral-900 text-white p-3 rounded-b-[22px] space-y-2 text-xs">
-                <div class="flex items-center justify-between text-[11px] pb-1 border-b border-neutral-800">
-                  <span class="text-amber-400 font-bold flex items-center gap-1">
-                    <i data-lucide="crown" class="w-3 h-3 text-amber-400"></i>
-                    <span>แอดมิน บัว & กูล</span>
-                  </span>
-                  <span class="text-[10px] text-neutral-400">จัดการสถานะ</span>
+              <!-- แถวที่ 2: Compact Utility Bar (ยุบรวมทุกอย่างเหลือแถวเดียว Minimal!) -->
+              ${currentMode === 'owner' ? `
+                <div class="mt-2.5 flex items-center justify-between px-3 py-1.5 rounded-xl bg-neutral-50 border border-neutral-200/70">
+                  <!-- ซ้าย: Status Selector (แทน 3 ปุ่มเดิม) -->
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full ${isTransferred ? 'bg-rose-500' : isBooked ? 'bg-amber-500' : 'bg-emerald-500'} shrink-0"></span>
+                    <select onchange="updateStatus('${p.id}', this.value)" class="bg-transparent text-xs font-semibold text-neutral-700 hover:text-neutral-900 focus:outline-none cursor-pointer pr-1">
+                      <option value="available" ${!isBooked && !isTransferred ? 'selected' : ''}>พร้อมขาย</option>
+                      <option value="booked" ${isBooked ? 'selected' : ''}>ติดจอง</option>
+                      <option value="transferred" ${isTransferred ? 'selected' : ''}>โอนแล้ว (นำออก)</option>
+                    </select>
+                  </div>
+
+                  <div class="h-3.5 w-[1px] bg-neutral-200"></div>
+
+                  <!-- ขวา: Quick Edit + Popover Menu -->
+                  <div class="flex items-center gap-1">
+                    <button type="button" onclick="openEditPriceModal('${p.id}')" title="แก้ราคา" class="px-2 py-1 rounded-lg hover:bg-white hover:shadow-xs text-neutral-600 hover:text-neutral-900 text-xs font-medium flex items-center gap-1 transition">
+                      <i data-lucide="edit-3" class="w-3 h-3 text-neutral-400"></i>
+                      <span>แก้ราคา</span>
+                    </button>
+
+                    <div class="relative group">
+                      <button type="button" onclick="toggleCardActionMenu('${p.id}', event)" class="px-2 py-1 rounded-lg hover:bg-white hover:shadow-xs text-neutral-600 hover:text-neutral-900 text-xs font-medium flex items-center gap-1 transition">
+                        <i data-lucide="wrench" class="w-3 h-3 text-neutral-400"></i>
+                        <span>เครื่องมือ</span>
+                        <span class="text-[10px] text-neutral-400">▾</span>
+                      </button>
+
+                      <div id="card-menu-${p.id}" class="card-action-menu hidden group-hover:block absolute right-0 bottom-full mb-1.5 w-52 bg-white rounded-xl shadow-xl border border-neutral-200/90 py-1.5 z-30" onclick="event.stopPropagation()">
+                        <button type="button" onclick="openNpaKeyModal('${p.id}'); toggleCardActionMenu('${p.id}')" class="w-full px-3.5 py-2 text-left text-xs font-medium text-neutral-700 hover:bg-neutral-50 flex items-center gap-2.5 transition">
+                          <i data-lucide="key" class="w-3.5 h-3.5 text-neutral-400"></i>
+                          <span>เบิกกุญแจ NPA & Messenger</span>
+                        </button>
+                        <button type="button" onclick="openPropertyDetailModal('${p.id}'); toggleCardActionMenu('${p.id}')" class="w-full px-3.5 py-2 text-left text-xs font-medium text-neutral-700 hover:bg-neutral-50 flex items-center gap-2.5 transition border-t border-neutral-100">
+                          <i data-lucide="folder-down" class="w-3.5 h-3.5 text-neutral-400"></i>
+                          <span>โหลดฟอร์มแบงก์</span>
+                        </button>
+                        <button type="button" onclick="openVinylModal('${p.id}'); toggleCardActionMenu('${p.id}')" class="w-full px-3.5 py-2 text-left text-xs font-medium text-amber-800 hover:bg-amber-50/60 flex items-center gap-2.5 transition border-t border-neutral-100">
+                          <i data-lucide="printer" class="w-3.5 h-3.5 text-amber-600"></i>
+                          <span>พิมพ์ป้ายไวนิล (Auto PDF)</span>
+                        </button>
+                        <button type="button" onclick="openSmartShare('${p.id}', '${safeTitleAttr}'); toggleCardActionMenu('${p.id}')" class="w-full px-3.5 py-2 text-left text-xs font-medium text-neutral-700 hover:bg-neutral-50 flex items-center gap-2.5 transition border-t border-neutral-100">
+                          <i data-lucide="share-2" class="w-3.5 h-3.5 text-neutral-400"></i>
+                          <span>แชร์ลิงก์ / QR ทรัพย์</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="grid grid-cols-3 gap-1">
-                  <button onclick="updateStatus('${p.id}', 'available')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${!isBooked && !isTransferred ? 'bg-emerald-500 text-white shadow-2xs' : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'}">
-                    <span>พร้อมขาย</span>
-                  </button>
-                  <button onclick="updateStatus('${p.id}', 'booked')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${isBooked ? 'bg-amber-500 text-white shadow-2xs' : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'}">
-                    <span>ติดจอง</span>
-                  </button>
-                  <button onclick="updateStatus('${p.id}', 'transferred')" class="py-1 px-1 rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 ${isTransferred ? 'bg-rose-600 text-white shadow-2xs' : 'bg-neutral-800 text-rose-300 hover:bg-neutral-700'}" title="เมื่อโอนแล้ว นำออกจากเว็บทันที">
-                    <span>โอนแล้ว</span>
-                  </button>
+              ` : (currentMode === 'free_agent' || currentMode === 'employee') ? `
+                <div class="mt-2.5 flex items-center justify-between px-3 py-1.5 rounded-xl bg-neutral-50 border border-neutral-200/70">
+                  <!-- ซ้าย: คอมมิชชั่น (คลีน ขาว/เทา ไม่มีพื้นหลังสีทอง/ส้ม) -->
+                  <div class="flex items-center gap-1.5 min-w-0 pr-1">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+                    <span class="text-[11px] font-semibold text-neutral-600 truncate">${comLabel}:</span>
+                    <strong class="text-xs font-bold text-neutral-900 shrink-0">${comAmount || 'ตามผลงาน'}</strong>
+                  </div>
+
+                  <div class="h-3.5 w-[1px] bg-neutral-200"></div>
+
+                  <!-- ขวา: ปุ่มแชร์ + เมนูเครื่องมือ (โทน Monochrome) -->
+                  <div class="flex items-center gap-1 shrink-0">
+                    <button type="button" onclick="openSmartShare('${p.id}', '${safeTitleAttr}')" class="px-2 py-1 rounded-lg hover:bg-white hover:shadow-xs text-neutral-600 hover:text-neutral-900 text-xs font-medium flex items-center gap-1 transition" title="แชร์พร้อมล็อกสิทธิ์คอมมิชชั่น 60 วัน">
+                      <i data-lucide="share-2" class="w-3 h-3 text-neutral-400"></i>
+                      <span>แชร์</span>
+                    </button>
+
+                    <div class="relative group">
+                      <button type="button" onclick="toggleCardActionMenu('${p.id}', event)" class="px-2 py-1 rounded-lg hover:bg-white hover:shadow-xs text-neutral-600 hover:text-neutral-900 text-xs font-medium flex items-center gap-1 transition">
+                        <i data-lucide="wrench" class="w-3 h-3 text-neutral-400"></i>
+                        <span>เครื่องมือ</span>
+                        <span class="text-[10px] text-neutral-400">▾</span>
+                      </button>
+
+                      <div id="card-menu-${p.id}" class="card-action-menu hidden group-hover:block absolute right-0 bottom-full mb-1.5 w-52 bg-white rounded-xl shadow-xl border border-neutral-200/90 py-1.5 z-30" onclick="event.stopPropagation()">
+                        <button type="button" onclick="openNpaKeyModal('${p.id}'); toggleCardActionMenu('${p.id}')" class="w-full px-3.5 py-2 text-left text-xs font-medium text-neutral-700 hover:bg-neutral-50 flex items-center gap-2.5 transition">
+                          <i data-lucide="key" class="w-3.5 h-3.5 text-neutral-400"></i>
+                          <span>เบิกกุญแจ NPA (Messenger)</span>
+                        </button>
+                        <button type="button" onclick="openPropertyDetailModal('${p.id}'); toggleCardActionMenu('${p.id}')" class="w-full px-3.5 py-2 text-left text-xs font-medium text-neutral-700 hover:bg-neutral-50 flex items-center gap-2.5 transition border-t border-neutral-100">
+                          <i data-lucide="folder-down" class="w-3.5 h-3.5 text-neutral-400"></i>
+                          <span>โหลดฟอร์มแบงก์</span>
+                        </button>
+                        <button type="button" onclick="openVinylModal('${p.id}'); toggleCardActionMenu('${p.id}')" class="w-full px-3.5 py-2 text-left text-xs font-medium text-amber-800 hover:bg-amber-50/60 flex items-center gap-2.5 transition border-t border-neutral-100">
+                          <i data-lucide="printer" class="w-3.5 h-3.5 text-amber-600"></i>
+                          <span>พิมพ์ป้ายไวนิล (Auto PDF)</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="grid grid-cols-2 gap-1 pt-0.5">
-                  <button onclick="openNpaKeyModal('${p.id}')" class="bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-[10px] font-semibold py-1.5 px-2 rounded-lg border border-neutral-700 flex items-center justify-center gap-1" title="เบิกกุญแจ NPA & จัดคิว Messenger">
-                    <i data-lucide="key" class="w-3 h-3 text-sky-400"></i>
-                    <span>เบิกกุญแจ</span>
-                  </button>
-                  <button onclick="openPropertyDetailModal('${p.id}')" class="bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-[10px] font-semibold py-1.5 px-2 rounded-lg border border-neutral-700 flex items-center justify-center gap-1">
-                    <i data-lucide="folder-down" class="w-3 h-3 text-sky-400"></i>
-                    <span>ฟอร์มแบงก์</span>
-                  </button>
+              ` : currentMode === 'trainee' ? `
+                <div class="mt-2.5 px-3 py-1.5 rounded-xl bg-neutral-50 border border-neutral-200/70 text-center text-[10.5px] text-neutral-500">
+                  🔒 ส่งทรัพย์เข้าพอร์ตอีก 2 หลังเพื่อปลดล็อกคอม 3-5% และปุ่มแชร์
                 </div>
-                <button onclick="openVinylModal('${p.id}')" class="w-full bg-[#C2A460]/20 hover:bg-[#C2A460]/30 text-amber-300 border border-amber-400/40 text-[10.5px] font-bold py-1.5 px-2 rounded-lg shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-                  <i data-lucide="printer" class="w-3.5 h-3.5 text-amber-400"></i>
-                  <span>พิมพ์ป้ายไวนิลหน้าบ้าน (Auto PDF)</span>
-                </button>
-              </div>
-            ` : (currentMode === 'free_agent' || currentMode === 'employee') ? `
-              <!-- Co-Broker Agent Bar -->
-              <div class="border-t border-amber-200/80 bg-gradient-to-b from-amber-50/60 to-amber-50/30 p-3 rounded-b-[22px] space-y-2 text-xs">
-                <div class="flex items-center justify-between text-[11px] pb-1 border-b border-amber-200/60">
-                  <span class="text-amber-900 font-bold flex items-center gap-1">
-                    <span class="w-3.5 h-3.5 rounded-full bg-[#990000] text-white font-black text-[9px] inline-flex items-center justify-center">฿</span>
-                    <span>${comLabel}</span>
-                  </span>
-                  <strong class="text-[#990000] font-extrabold text-xs">${comAmount || 'ตามผลงาน'}</strong>
-                </div>
-                <div class="grid grid-cols-3 gap-1">
-                  <button onclick="openSmartShare('${p.id}', '${safeTitleAttr}')" class="bg-[#990000] hover:bg-red-800 text-white text-[10px] font-bold py-1.5 px-1 rounded-xl flex items-center justify-center gap-1 shadow-2xs active:scale-95 transition-all truncate" title="แชร์พร้อมล็อกสิทธิ์คอมมิชชั่น 60 วัน">
-                    <i data-lucide="share-2" class="w-3 h-3 shrink-0"></i>
-                    <span class="truncate">แชร์ล็อกสิทธิ์</span>
-                  </button>
-                  <button onclick="openNpaKeyModal('${p.id}')" class="bg-[#1E749C] hover:bg-[#165a7a] text-white text-[10px] font-bold py-1.5 px-1 rounded-xl flex items-center justify-center gap-1 shadow-2xs active:scale-95 transition-all truncate" title="เบิกกุญแจ NPA">
-                    <i data-lucide="key" class="w-3 h-3 shrink-0"></i>
-                    <span class="truncate">เบิกกุญแจ</span>
-                  </button>
-                  <button onclick="openPropertyDetailModal('${p.id}')" class="bg-white hover:bg-slate-50 text-slate-800 text-[10px] font-semibold py-1.5 px-1 rounded-xl border border-slate-200 shadow-2xs flex items-center justify-center gap-1 truncate" title="เอกสารแบงก์">
-                    <i data-lucide="folder-down" class="w-3 h-3 shrink-0 text-[#990000]"></i>
-                    <span class="truncate">เอกสารแบงก์</span>
-                  </button>
-                </div>
-                <button onclick="openVinylModal('${p.id}')" class="w-full bg-white hover:bg-amber-100 text-[#8C6D23] text-[10.5px] font-bold py-1.5 px-2 rounded-xl border border-amber-300 shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-                  <i data-lucide="printer" class="w-3.5 h-3.5 text-amber-600"></i>
-                  <span>พิมพ์ป้ายไวนิลหน้าบ้าน (Auto PDF)</span>
-                </button>
-              </div>
-            ` : currentMode === 'trainee' ? `
-              <!-- Trainee Locked Bar -->
-              <div class="border-t border-slate-200 bg-slate-50 p-2.5 rounded-b-[22px] text-center text-[10.5px] text-slate-500">
-                🔒 ส่งทรัพย์เข้าพอร์ตอีก 2 หลังเพื่อปลดล็อกคอม 3-5% และปุ่มแชร์
-              </div>
-            ` : ''}
+              ` : ''}
+            </div>
 
           </div>
         `;
