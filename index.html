@@ -388,78 +388,13 @@
 
         </div>
 
-        <!-- 3. Bank / Category Quick Chips (1-Click Filters แนวนอน) -->
-        <div class="max-w-7xl mx-auto pt-2.5 pb-0.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+        <!-- 3. Bank Quick Chips (1-Click Filters แนวนอน - แสดงเฉพาะสถาบัน/เจ้าของ 9 ปุ่ม) -->
+        <div id="quick-chips-bar" class="max-w-7xl mx-auto pt-2.5 pb-0.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           <span class="text-[10px] font-semibold text-neutral-400 shrink-0 uppercase tracking-wider mr-1 hidden sm:inline">กรองด่วน:</span>
           
-          <!-- Category Chips (แสดงสำหรับทุกคน! พร้อมไอคอนคมชัดมาตรฐาน) -->
-          <div id="category-quick-chips" class="flex items-center gap-1.5 shrink-0">
-            <button type="button" data-cat="all" onclick="selectCategoryChip('all', this)" class="cat-chip active h-8 px-3.5 rounded-full text-xs font-semibold bg-neutral-900 text-white shadow-xs transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
-                <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
-                <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
-                <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
-              </svg>
-              <span>ทุกประเภท</span>
-            </button>
-            <button type="button" data-cat="ทาวน์โฮม" onclick="selectCategoryChip('ทาวน์โฮม', this)" class="cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
-              <!-- ทาวน์โฮมแฝด 2 หลังพร้อมประตูชัดเจน (ไม่หลอกตาเป็นสมุด) -->
-              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 11l5-4 5 4v9H2v-9z"></path>
-                <path d="M12 11l5-4 5 4v9h-10"></path>
-                <path d="M6 20v-4h2v4"></path>
-                <path d="M16 20v-4h2v4"></path>
-              </svg>
-              <span>ทาวน์โฮม</span>
-            </button>
-            <button type="button" data-cat="คอนโด" onclick="selectCategoryChip('คอนโด', this)" class="cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
-              <!-- คอนโดมิเนียมอาคารสูงระเบียงกว้าง -->
-              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="5" y="2" width="14" height="20" rx="1.5"></rect>
-                <path d="M9 6h6"></path>
-                <path d="M9 10h6"></path>
-                <path d="M9 14h6"></path>
-                <path d="M11 22v-4h2v4"></path>
-              </svg>
-              <span>คอนโด</span>
-            </button>
-            <button type="button" data-cat="บ้านเดี่ยว" onclick="selectCategoryChip('บ้านเดี่ยว', this)" class="cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-              </svg>
-              <span>บ้านเดี่ยว</span>
-            </button>
-            <button type="button" data-cat="ที่ดิน" onclick="selectCategoryChip('ที่ดิน', this)" class="cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
-              <!-- หมุดระวางที่ดิน / โฉนดแปลงที่ดินสากล -->
-              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 21s-6-5.33-6-10a6 6 0 0 1 12 0c0 4.67-6 10-6 10z"></path>
-                <circle cx="12" cy="11" r="2.5"></circle>
-              </svg>
-              <span>ที่ดิน</span>
-            </button>
-            <button type="button" data-cat="อาคารพาณิชย์" onclick="selectCategoryChip('อาคารพาณิชย์', this)" class="cat-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center gap-1.5">
-              <!-- อาคารพาณิชย์/ตึกแถวค้าขาย: หน้าต่างสำนักงานชั้น 2-3 + กันสาด & ประตูการค้ากว้าง -->
-              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 22V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v17"></path>
-                <path d="M8 8h2"></path>
-                <path d="M14 8h2"></path>
-                <path d="M8 12h2"></path>
-                <path d="M14 12h2"></path>
-                <path d="M3 16h18"></path>
-                <path d="M9 22v-6h6v6"></path>
-              </svg>
-              <span>อาคารพาณิชย์</span>
-            </button>
-          </div>
-
-          <!-- Divider คั่นกลางระหว่าง Category กับ Bank (แสดงเฉพาะโหมดที่มี Bank) -->
-          <div id="quick-chips-divider" class="h-4 w-[1px] bg-neutral-200 shrink-0 mx-1"></div>
-
           <!-- Bank Chips (แสดงในโหมด Agent/Admin) -->
           <div id="bank-quick-chips" class="flex items-center gap-1.5 shrink-0">
-            <button type="button" onclick="selectBankChip('all', this)" class="bank-chip active h-8 px-3.5 rounded-full text-xs font-semibold bg-neutral-900 text-white shadow-xs transition whitespace-nowrap shrink-0 inline-flex items-center">ทุกแบงก์</button>
+            <button type="button" onclick="selectBankChip('all', this)" class="bank-chip active h-8 px-3.5 rounded-full text-xs font-semibold bg-neutral-900 text-white shadow-xs transition whitespace-nowrap shrink-0 inline-flex items-center">ทั้งหมด</button>
             <button type="button" onclick="selectBankChip('Siwasup', this)" class="bank-chip h-8 px-3.5 rounded-full text-xs font-semibold bg-[#FAF7F2] border border-[#DFD3C3] text-[#8C734B] hover:bg-[#F3EDE2] transition inline-flex items-center gap-1.5 whitespace-nowrap shrink-0">
               <span class="text-[#C2A460]">✦</span>
               <span>ศิวาทรัพย์ รีโนเวท</span>
@@ -887,23 +822,23 @@
         container.innerHTML = `
           <div class="flex items-center justify-between">
             <span class="font-bold text-slate-800 flex items-center gap-1.5">
-              <i data-lucide="file-check-2" class="w-4 h-4 text-[#1E749C]"></i>
+              <i data-lucide="file-check-2" class="w-4 h-4 text-[#B89D68]"></i>
               <span>เอกสารประกอบการซื้อขาย (สำหรับลูกค้า)</span>
             </span>
-            <span class="text-[10px] bg-sky-50 text-[#1E749C] border border-sky-200 font-semibold px-2 py-0.5 rounded-full">ดาวน์โหลดได้</span>
+            <span class="text-[10px] bg-neutral-50 text-neutral-600 border border-neutral-200 font-semibold px-2 py-0.5 rounded-full">ดาวน์โหลดได้</span>
           </div>
           <div class="pt-1">
-            <a href="${contractUrl}" target="_blank" class="w-full bg-white hover:bg-sky-50/60 border border-slate-200 hover:border-[#1E749C] rounded-xl p-2.5 flex items-center justify-between transition-all group">
+            <a href="${contractUrl}" target="_blank" class="w-full bg-white hover:bg-sky-50/60 border border-slate-200 hover:border-neutral-900 rounded-xl p-2.5 flex items-center justify-between transition-all group">
               <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-lg bg-sky-50 text-[#1E749C] flex items-center justify-center shrink-0 font-bold">
+                <div class="w-8 h-8 rounded-lg bg-neutral-100 text-neutral-800 flex items-center justify-center shrink-0 font-bold">
                   <i data-lucide="file-text" class="w-4 h-4"></i>
                 </div>
                 <div class="min-w-0">
-                  <div class="font-bold text-slate-800 text-xs group-hover:text-[#1E749C] truncate">สัญญาจะซื้อจะขายอสังหาริมทรัพย์ (ฉบับมาตรฐาน)</div>
+                  <div class="font-bold text-neutral-800 text-xs group-hover:text-neutral-900 truncate">สัญญาจะซื้อจะขายอสังหาริมทรัพย์ (ฉบับมาตรฐาน)</div>
                   <div class="text-[10px] text-slate-500 truncate">ระบุรหัสทรัพย์ #${p.id} และราคาเบื้องต้น พร้อมสั่งพิมพ์/บันทึก PDF</div>
                 </div>
               </div>
-              <span class="shrink-0 bg-[#1E749C] text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 ml-2">
+              <span class="shrink-0 bg-neutral-900 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 ml-2">
                 <i data-lucide="download" class="w-3 h-3"></i>
                 <span>เปิด/ดาวน์โหลด</span>
               </span>
@@ -998,13 +933,13 @@
         <!-- สัญญาจะซื้อจะขายสำหรับส่งให้ลูกค้า -->
         <a href="${contractUrl}" target="_blank" class="bg-white hover:bg-sky-50/60 border border-sky-200 rounded-xl p-2.5 flex items-center justify-between transition-all group">
           <div class="flex items-center gap-2 min-w-0">
-            <span class="px-1.5 py-0.5 rounded text-[9.5px] font-extrabold bg-sky-100 text-[#1E749C] shrink-0">สำหรับลูกค้า</span>
+            <span class="px-1.5 py-0.5 rounded text-[9.5px] font-extrabold bg-neutral-100 text-neutral-700 shrink-0">สำหรับลูกค้า</span>
             <div class="min-w-0">
-              <div class="font-bold text-slate-800 text-[11px] group-hover:text-[#1E749C] truncate">สัญญาจะซื้อจะขายอสังหาริมทรัพย์ (รหัสทรัพย์ #${p.id})</div>
+              <div class="font-bold text-neutral-800 text-[11px] group-hover:text-neutral-900 truncate">สัญญาจะซื้อจะขายอสังหาริมทรัพย์ (รหัสทรัพย์ #${p.id})</div>
               <div class="text-[9.5px] text-slate-400 truncate">ดึงราคาและข้อมูลอัตโนมัติ สั่งพิมพ์หรือบันทึกเป็น PDF ได้ทันที</div>
             </div>
           </div>
-          <span class="shrink-0 text-[10px] font-bold text-[#1E749C] bg-sky-50 group-hover:bg-[#1E749C] group-hover:text-white px-2.5 py-1 rounded-lg flex items-center gap-1 ml-2 transition-colors">
+          <span class="shrink-0 text-[10px] font-bold text-neutral-700 bg-neutral-100 group-hover:bg-neutral-900 group-hover:text-white px-2.5 py-1 rounded-lg flex items-center gap-1 ml-2 transition-colors">
             <i data-lucide="printer" class="w-3 h-3"></i>
             <span>เปิดสัญญา</span>
           </span>
@@ -1083,28 +1018,34 @@
         if (modeText) modeText.textContent = "ลูกค้า (White-Label)";
       }
 
-      // สลับการแสดงผลของ Bank Quick Chips vs Category Quick Chips & Dropdowns
+      // สลับการแสดงผลของ Quick Chips Bar & VIP Banner ตามโหมด
+      const quickChipsBar = document.getElementById('quick-chips-bar');
       const bankChips = document.getElementById('bank-quick-chips');
-      const catChips = document.getElementById('category-quick-chips');
-      const chipsDivider = document.getElementById('quick-chips-divider');
       const filterBankWrapper = document.getElementById('filter-bank-wrapper');
       const filterBankEl = document.getElementById('filter-bank');
       const searchInputEl = document.getElementById('search-input');
       const searchPillGrid = document.getElementById('search-pill-grid');
+      const vipBanner = document.getElementById('vip-bundle-banner');
 
-      // Category Chips แสดงสำหรับทุกคนเสมอ!
-      if (catChips) catChips.classList.remove('hidden');
+      // VIP Banner: ซ่อนเสมอเมื่ออยู่ในโหมด Admin / Agent / Trainee (แสดงเฉพาะโหมดลูกค้าเมื่อมีลิงก์ VIP เท่านั้น)
+      if (vipBanner) {
+        if (mode !== 'client' || !activeBundleFilter || activeBundleFilter.length === 0) {
+          vipBanner.classList.add('hidden');
+        } else {
+          vipBanner.classList.remove('hidden');
+        }
+      }
 
       if (mode === 'client') {
+        if (quickChipsBar) quickChipsBar.classList.add('hidden');
         if (bankChips) bankChips.classList.add('hidden');
-        if (chipsDivider) chipsDivider.classList.add('hidden');
         if (filterBankWrapper) filterBankWrapper.classList.add('hidden');
         if (filterBankEl) filterBankEl.value = 'all';
         if (searchInputEl) searchInputEl.placeholder = "ชื่อโครงการ, รหัสทรัพย์...";
         if (searchPillGrid) searchPillGrid.className = "grid grid-cols-2 lg:grid-cols-[1.3fr_1.1fr_1fr_1fr_auto] items-center gap-1 lg:gap-0";
       } else {
+        if (quickChipsBar) quickChipsBar.classList.remove('hidden');
         if (bankChips) bankChips.classList.remove('hidden');
-        if (chipsDivider) chipsDivider.classList.remove('hidden');
         if (filterBankWrapper) filterBankWrapper.classList.remove('hidden');
         if (searchInputEl) searchInputEl.placeholder = "ชื่อโครงการ, รหัส NPA...";
         if (searchPillGrid) searchPillGrid.className = "grid grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr_1fr_auto] items-center gap-1 lg:gap-0";
@@ -1368,7 +1309,7 @@
         if (currentMode === 'owner') {
           // โหมดเจ้าของ (บัว & กูล): เจ้าของเป็นคนขาย ไม่ต้องมีปุ่มเสนอราคา เปลี่ยนเป็นปุ่มแก้ราคาขาย
           btnOffer.disabled = false;
-          btnOffer.className = "w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-3 rounded-full shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
+          btnOffer.className = "w-full bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-3 rounded-full shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
           if (btnOfferLabel) btnOfferLabel.textContent = "แก้ไขราคาขาย (โหมดเจ้าของ)";
           btnOffer.onclick = () => { closePropertyDetailModal(); openEditPriceModal(p.id); };
           if (waitlistRow) waitlistRow.classList.add('hidden');
@@ -1380,15 +1321,15 @@
           if (waitlistRow) {
             waitlistRow.classList.remove('hidden');
             waitlistRow.innerHTML = `
-              <button onclick="closePropertyDetailModal(); contactViaLine('${p.id}', '${safeTitleAttr}', true)" class="w-full bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-bold py-2.5 rounded-full flex items-center justify-center gap-2 text-xs active:scale-95 transition-all shadow-xs">
-                <i data-lucide="message-circle" class="w-4 h-4 text-amber-600"></i>
+              <button onclick="closePropertyDetailModal(); contactViaLine('${p.id}', '${safeTitleAttr}', true)" class="w-full bg-white border border-neutral-200 hover:border-emerald-500 text-neutral-800 hover:text-emerald-700 font-semibold py-2.5 rounded-full flex items-center justify-center gap-2 text-xs active:scale-95 transition-all shadow-2xs">
+                <span class="w-4 h-4 rounded-full bg-[#06C755] text-white flex items-center justify-center text-[9px] font-black shrink-0">L</span>
                 <span>สอบถามคิวสำรองผ่าน LINE Official (@siwasup)</span>
               </button>
             `;
           }
         } else {
           btnOffer.disabled = false;
-          btnOffer.className = "w-full bg-[#BFA267] hover:bg-[#b09257] text-white font-bold py-3 rounded-full shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
+          btnOffer.className = "w-full bg-[#B89D68] hover:bg-[#A38854] text-white font-bold py-3 rounded-full shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
           if (btnOfferLabel) btnOfferLabel.textContent = "เสนอราคา";
           btnOffer.onclick = () => { closePropertyDetailModal(); openOfferModal(p.id, displayTitle, p.price); };
           if (waitlistRow) waitlistRow.classList.add('hidden');
@@ -1549,13 +1490,38 @@
       renderProperties();
     }
 
-    // 🏦 NPA Bank Badges (ซ่อนชื่อธนาคารทั้งหมดในโหมดลูกค้าตามบรีฟของบัว ข้อ 1)
+    // 🏦 NPA Bank Badges (The Digital Luxury Ratio: Dark Frosted Glass + 6px Accent Dot)
     function getBankBadge(bankSource) {
       if (currentMode === 'client') {
         const b = (bankSource || '').toUpperCase();
         if (b === 'SIWASUP') {
-          return `<span class="bg-gradient-to-r from-[#8B0000] to-[#730000] text-white border border-[#C2A460]/50 text-[10px] font-semibold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs backdrop-blur-xs"><span class="text-[#E5C985]">✦</span><span>รีโนเวทพร้อมอยู่</span></span>`;
+          return `<span class="bg-gradient-to-r from-[#990000] to-[#730000] text-white border border-[#C2A460]/50 text-[10px] font-semibold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs backdrop-blur-xs"><span class="text-[#E5C985]">✦</span><span>รีโนเวทพร้อมอยู่</span></span>`;
         }
+        return '';
+      }
+      const b = (bankSource || 'Siwasup').toUpperCase();
+      if (b === 'SIWASUP') {
+        return `<span class="bg-gradient-to-r from-[#990000] to-[#730000] text-white border border-[#C2A460]/50 text-[10px] font-semibold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs backdrop-blur-xs"><span class="text-[#E5C985]">✦</span><span>ศิวาทรัพย์ รีโนเวท</span></span>`;
+      }
+
+      // Luxury Tone: Dark Frosted Glass with 6px subtle accent dot (no rainbow backgrounds)
+      let dotColor = "bg-neutral-400";
+      let bankLabel = b;
+      if (b === 'SAM') { dotColor = "bg-indigo-400"; bankLabel = "SAM"; }
+      else if (b === 'SCB') { dotColor = "bg-purple-400"; bankLabel = "SCB"; }
+      else if (b === 'KBANK') { dotColor = "bg-emerald-400"; bankLabel = "KBank"; }
+      else if (b === 'TTB') { dotColor = "bg-blue-400"; bankLabel = "TTB"; }
+      else if (b === 'KTB') { dotColor = "bg-cyan-400"; bankLabel = "KTB"; }
+      else if (b === 'GSB') { dotColor = "bg-pink-400"; bankLabel = "GSB"; }
+      else if (b === 'GHB') { dotColor = "bg-amber-400"; bankLabel = "ธอส."; }
+      else if (b === 'BBL') { dotColor = "bg-slate-400"; bankLabel = "กรุงเทพ"; }
+      else if (b === 'PAMCO') { dotColor = "bg-teal-400"; bankLabel = "PAMCO"; }
+
+      return `<span class="bg-neutral-900/80 backdrop-blur-md text-white border border-white/15 text-[10px] font-medium px-2.5 py-0.5 rounded-full inline-flex items-center gap-1.5 shadow-2xs">
+        <span class="w-1.5 h-1.5 rounded-full ${dotColor}"></span>
+        <span>${bankLabel}</span>
+      </span>`;
+    }
         return '';
       }
       const b = (bankSource || 'Siwasup').toUpperCase();
@@ -1903,18 +1869,18 @@
               <!-- Homerun 2-Row Financial Info with Bold Thai Baht (฿) Circles -->
               <div class="pt-2.5 border-t border-slate-100 space-y-1 mt-2">
                 <div class="flex items-center justify-between text-xs">
-                  <span class="text-slate-500 flex items-center gap-1.5">
-                    <span class="w-4 h-4 rounded-full border border-slate-400 text-slate-600 font-bold text-[11px] inline-flex items-center justify-center leading-none select-none">฿</span>
+                  <span class="text-neutral-500 flex items-center gap-1.5 font-medium">
+                    <span class="w-4 h-4 rounded-full border border-neutral-300 text-neutral-600 font-bold text-[10px] inline-flex items-center justify-center leading-none select-none">฿</span>
                     <span>${currentMode === 'owner' ? 'ราคาตั้งขาย' : 'ราคาก่อนต่อรอง'}</span>
                   </span>
-                  <span class="text-base font-bold text-[#1E749C] tracking-tight">฿${formatPriceClean(p.price)}</span>
+                  <span class="text-base font-extrabold text-neutral-900 tracking-tight">฿${formatPriceClean(p.price)}</span>
                 </div>
                 <div class="flex items-center justify-between text-xs">
-                  <span class="text-slate-500 flex items-center gap-1.5">
-                    <span class="w-4 h-4 rounded-full border border-slate-400 text-slate-600 font-bold text-[11px] inline-flex items-center justify-center leading-none select-none">฿</span>
+                  <span class="text-neutral-400 flex items-center gap-1.5">
+                    <span class="w-4 h-4 rounded-full border border-neutral-200 text-neutral-400 font-bold text-[10px] inline-flex items-center justify-center leading-none select-none">฿</span>
                     <span>หลักประกันเพื่อต่อรองราคา</span>
                   </span>
-                  <span class="text-base font-bold text-[#1E749C] tracking-tight">฿${calcDeposit(p.price)}</span>
+                  <span class="text-xs font-semibold text-neutral-600 tracking-tight">฿${calcDeposit(p.price)}</span>
                 </div>
               </div>
 
@@ -1934,8 +1900,8 @@
                     <span>ตั้ง/แก้ราคา</span>
                   </button>
                 ` : currentMode === 'client' ? `
-                  <button onclick="contactViaLine('${p.id}', '${safeTitleAttr}')" class="py-2.5 px-3 rounded-xl bg-[#06C755] hover:bg-[#05b34c] text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs transition active:scale-[0.98]">
-                    <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                  <button onclick="contactViaLine('${p.id}', '${safeTitleAttr}')" class="py-2.5 px-3 rounded-xl bg-white border border-neutral-200 hover:border-emerald-500 text-neutral-800 hover:text-emerald-700 font-semibold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition active:scale-[0.98]">
+                    <span class="w-4 h-4 rounded-full bg-[#06C755] text-white flex items-center justify-center text-[9px] font-black shrink-0">L</span>
                     <span>LINE นัดชม</span>
                   </button>
                 ` : `
@@ -2317,7 +2283,7 @@
             </div>
             <div class="font-bold text-slate-900 text-xs sm:text-sm truncate">${cleanTitle}</div>
             <div class="text-[11px] text-slate-600 flex flex-wrap items-center gap-x-3 gap-y-0.5">
-              <span>ราคาก่อนต่อรอง: <strong class="text-[#1E749C] font-extrabold">฿${formatPriceClean(price)}</strong></span>
+              <span>ราคาก่อนต่อรอง: <strong class="text-neutral-900 font-extrabold">฿${formatPriceClean(price)}</strong></span>
               <span>หลักประกัน: <strong class="text-slate-800">฿${calcDeposit(price)}</strong></span>
             </div>
           </div>
@@ -2344,10 +2310,10 @@
         if (!isAdminOrAgent) {
           docsBox.innerHTML = `
             <div class="text-[10.5px] font-bold text-slate-700 flex items-center gap-1">
-              <i data-lucide="file-text" class="w-3.5 h-3.5 text-[#1E749C]"></i>
+              <i data-lucide="file-text" class="w-3.5 h-3.5 text-[#B89D68]"></i>
               <span>เอกสารสำหรับลูกค้า:</span>
             </div>
-            <a href="${contractUrl}" target="_blank" class="w-full bg-sky-50/70 hover:bg-sky-100/80 border border-sky-200 text-[#1E749C] rounded-lg p-1.5 text-[10.5px] font-bold flex items-center justify-between transition-colors">
+            <a href="${contractUrl}" target="_blank" class="w-full bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 text-neutral-800 rounded-lg p-1.5 text-[10.5px] font-bold flex items-center justify-between transition-colors">
               <span>📄 เปิดดู / ดาวน์โหลดสัญญาจะซื้อจะขาย</span>
               <i data-lucide="external-link" class="w-3 h-3"></i>
             </a>
@@ -2362,7 +2328,7 @@
                 <span class="truncate">📥 โหลด${matchedBankDoc.title}</span>
                 <span class="shrink-0 underline ml-1">PDF</span>
               </a>
-              <a href="${contractUrl}" target="_blank" class="bg-sky-50/70 hover:bg-sky-100 border border-sky-200 text-[#1E749C] rounded-lg p-1.5 text-[10px] font-bold flex items-center justify-between">
+              <a href="${contractUrl}" target="_blank" class="bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 text-neutral-800 rounded-lg p-1.5 text-[10px] font-bold flex items-center justify-between">
                 <span class="truncate">📄 สัญญาจะซื้อจะขาย (สำหรับส่งลูกค้า)</span>
                 <span class="shrink-0 underline ml-1">เปิดดู</span>
               </a>
@@ -3615,7 +3581,7 @@
           <span class="icon-circle w-4 h-4"><i data-lucide="home" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
           <span>${title}</span>
         </div>
-        <div class="text-red-600 font-bold">${price}</div>
+        <div class="text-neutral-900 font-bold">${price}</div>
       `;
       document.getElementById('inquiry-modal').classList.remove('hidden');
       if (window.lucide) { lucide.createIcons(); }
@@ -3656,7 +3622,7 @@
           <span class="icon-circle w-4 h-4"><i data-lucide="home" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
           <span>${title}</span>
         </div>
-        <div class="text-red-600 font-semibold">${price}</div>
+        <div class="text-neutral-900 font-semibold">${price}</div>
       `;
       document.getElementById('booking-modal').classList.remove('hidden');
       if (window.lucide) { lucide.createIcons(); }
@@ -3751,7 +3717,7 @@
               <img src="${img}" class="w-10 h-10 rounded object-cover flex-shrink-0">
               <div class="truncate">
                 <div class="font-bold text-gray-800 truncate">${p.title}</div>
-                <div class="text-[10px] text-red-600 font-bold">${p.price}</div>
+                <div class="text-[10px] text-neutral-900 font-bold">${p.price}</div>
               </div>
             </div>
             <button onclick="removeBundleItemFromModal('${p.id}')" class="text-gray-400 hover:text-red-500 font-bold px-1.5 py-0.5 rounded text-xs">

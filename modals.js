@@ -10,7 +10,7 @@
     <!-- Booking Modal -->
     <div id="booking-modal" class="hidden modal-backdrop">
       <div class="modal-card space-y-4">
-        <div class="flex justify-between items-center border-b pb-2">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <h3 class="font-bold text-base text-gray-800 flex items-center gap-1.5">
             <span class="icon-circle w-5 h-5"><i data-lucide="file-text" class="w-3 h-3 stroke-[1.5]"></i></span>
             <span>แจ้งหลักฐานการจอง (วางมัดจำ)</span>
@@ -47,7 +47,7 @@
     <!-- Smart Share Center Modal (Omni-Channel Share) -->
     <div id="share-modal" class="hidden modal-backdrop !items-center !p-3 sm:!p-4 z-50" onclick="if(event.target === this) closeShareModal()">
       <div id="share-modal-card" class="modal-card no-scrollbar w-full max-w-md transition-all duration-300 p-4 sm:p-5 my-auto overflow-hidden">
-        <div class="flex justify-between items-center border-b pb-2 mb-2.5">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5 mb-2.5">
           <h3 class="font-bold text-sm sm:text-base text-gray-800 flex items-center gap-1.5">
             <span class="icon-circle w-5 h-5 bg-amber-50 text-amber-700 border border-amber-200"><i data-lucide="share-2" class="w-3 h-3 stroke-[1.5]"></i></span>
             <span>Smart Share Center</span>
@@ -167,7 +167,7 @@
                   <div class="text-[10px] text-amber-700 truncate">สแกนป้ายแล้วล็อกค่าคอม 60 วัน</div>
                 </div>
               </div>
-              <button onclick="toggleQrView()" class="shrink-0 ml-2 bg-[#990000] hover:bg-red-800 text-white font-medium py-1 px-3 rounded text-[11px] shadow-xs flex items-center gap-1 active:scale-95 transition-all">
+              <button onclick="toggleQrView()" class="shrink-0 ml-2 bg-neutral-900 hover:bg-neutral-800 text-white font-medium py-1 px-3 rounded text-[11px] shadow-xs flex items-center gap-1 active:scale-95 transition-all">
                 <i data-lucide="scan-line" class="w-3 h-3"></i>
                 <span id="qr-toggle-text">เปิดดู QR</span>
               </button>
@@ -192,7 +192,7 @@
                 </div>
               </div>
               <div class="w-full space-y-1.5 mt-2">
-                <button onclick="downloadQrImage()" class="w-full bg-[#1E749C] hover:bg-[#185e7f] text-white font-medium py-1.5 px-2 rounded text-[10px] shadow-2xs flex items-center justify-center gap-1 transition-all active:scale-95">
+                <button onclick="downloadQrImage()" class="w-full bg-neutral-900 hover:bg-neutral-800 text-white font-medium py-1.5 px-2 rounded text-[10px] shadow-2xs flex items-center justify-center gap-1 transition-all active:scale-95">
                   <i data-lucide="download" class="w-2.5 h-2.5"></i>
                   <span>บันทึกรูป QR</span>
                 </button>
@@ -210,7 +210,7 @@
     <!-- Mobile Dedicated QR Code Sub-Modal (Popup ซ้อนขึ้นมาแบบคลีน ไม่มี Scrollbar) -->
     <div id="mobile-qr-modal" class="hidden modal-backdrop !items-center !p-4 z-[60]" onclick="if(event.target === this) closeMobileQrModal()">
       <div class="modal-card-sm no-scrollbar space-y-3 text-center bg-white border border-amber-200 shadow-2xl p-4 rounded-2xl max-w-[320px] mx-auto animate-fadeIn">
-        <div class="flex justify-between items-center border-b pb-2">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <div class="font-bold text-xs text-gray-800 flex items-center gap-1.5 text-left">
             <span class="icon-circle w-5 h-5 bg-amber-50 text-amber-700 border border-amber-200">
               <i data-lucide="qr-code" class="w-3 h-3 stroke-[1.5]"></i>
@@ -234,7 +234,7 @@
         </div>
 
         <div class="grid grid-cols-2 gap-2 pt-1">
-          <button onclick="downloadQrImage()" class="bg-[#1E749C] hover:bg-[#185e7f] text-white font-medium py-2 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1 active:scale-95 transition-all">
+          <button onclick="downloadQrImage()" class="bg-neutral-900 hover:bg-neutral-800 text-white font-medium py-2 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1 active:scale-95 transition-all">
             <i data-lucide="download" class="w-3.5 h-3.5"></i>
             <span>บันทึกรูป QR</span>
           </button>
@@ -275,7 +275,7 @@
     <!-- Client Inquiry Modal (Appointment / Callback) -->
     <div id="inquiry-modal" class="hidden modal-backdrop !items-center !p-4">
       <div class="modal-card-sm space-y-3">
-        <div class="flex justify-between items-center border-b pb-2">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
             <span class="icon-circle w-5 h-5"><i data-lucide="calendar" class="w-3 h-3 stroke-[1.5]"></i></span>
             <span>ขอนัดหมายเข้าชมห้องจริง / ปรึกษาสินเชื่อ</span>
@@ -286,17 +286,17 @@
         <form onsubmit="handleInquirySubmit(event)" class="space-y-2.5 text-xs">
           <div>
             <label class="block font-medium mb-1">ชื่อของคุณ <span class="text-red-500">*</span></label>
-            <input type="text" id="inquiry-name" required placeholder="เช่น คุณวิชัย" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
+            <input type="text" id="inquiry-name" required placeholder="เช่น คุณวิชัย" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900">
           </div>
           <div>
             <label class="block font-medium mb-1">เบอร์โทรศัพท์ติดต่อสะดวก <span class="text-red-500">*</span></label>
-            <input type="tel" id="inquiry-phone" required placeholder="08x-xxx-xxxx" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
+            <input type="tel" id="inquiry-phone" required placeholder="08x-xxx-xxxx" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900">
           </div>
           <div>
             <label class="block font-medium mb-1">วันที่สะดวกเข้าชม (โดยประมาณ)</label>
-            <input type="text" id="inquiry-date" placeholder="เช่น เสาร์นี้ ช่วงบ่าย" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
+            <input type="text" id="inquiry-date" placeholder="เช่น เสาร์นี้ ช่วงบ่าย" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900">
           </div>
-          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2 flex items-center justify-center gap-1.5">
+          <button type="submit" class="w-full bg-[#B89D68] hover:bg-[#A38854] text-white font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2 flex items-center justify-center gap-1.5 active:scale-95 transition-all">
             <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
             <span>ยืนยันส่งข้อมูลนัดหมาย</span>
           </button>
@@ -328,7 +328,7 @@
     <!-- 🏷️ Public Consignment / Trainee Challenge Modal (ฝากขายทรัพย์ฟรี) -->
     <div id="consign-modal" class="hidden modal-backdrop">
       <div class="modal-card space-y-3.5">
-        <div class="flex justify-between items-center border-b pb-2">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <div>
             <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5" id="consign-modal-title">
               <span class="icon-circle w-5 h-5"><i data-lucide="building" class="w-3 h-3 stroke-[1.5]"></i></span>
@@ -349,7 +349,7 @@
         <form onsubmit="handleConsignSubmit(event)" class="space-y-2.5 text-xs">
           <div>
             <label class="block font-medium mb-1">ประเภททรัพย์ <span class="text-red-500">*</span></label>
-            <select id="consign-type" required class="w-full border rounded-lg p-2 bg-gray-50 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
+            <select id="consign-type" required class="w-full border rounded-lg p-2 bg-gray-50 outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900">
               <option value="ทาวน์โฮม">ทาวน์โฮม / ทาวน์เฮ้าส์</option>
               <option value="บ้านเดี่ยว">บ้านเดี่ยว / บ้านแฝด</option>
               <option value="คอนโด">คอนโดมิเนียม</option>
@@ -360,28 +360,28 @@
 
           <div>
             <label class="block font-medium mb-1">ชื่อโครงการ / ทำเล / ซอย / ถนน <span class="text-red-500">*</span></label>
-            <input type="text" id="consign-title" required placeholder="เช่น ม.พฤกษา 12 คลองสาม ปทุมธานี" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
+            <input type="text" id="consign-title" required placeholder="เช่น ม.พฤกษา 12 คลองสาม ปทุมธานี" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900">
           </div>
 
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block font-medium mb-1">ราคาที่ต้องการขาย (บาท) <span class="text-red-500">*</span></label>
-              <input type="number" id="consign-price" required placeholder="เช่น 2500000" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
+              <input type="number" id="consign-price" required placeholder="เช่น 2500000" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900">
             </div>
             <div>
               <label class="block font-medium mb-1">ขนาดพื้นที่ (ตร.ว. / ตร.ม.)</label>
-              <input type="text" id="consign-size" placeholder="เช่น 24 ตร.ว." class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
+              <input type="text" id="consign-size" placeholder="เช่น 24 ตร.ว." class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900">
             </div>
           </div>
 
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block font-medium mb-1">ชื่อเจ้าของทรัพย์ / ผู้ส่ง <span class="text-red-500">*</span></label>
-              <input type="text" id="consign-name" required placeholder="เช่น คุณสมบัติ" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
+              <input type="text" id="consign-name" required placeholder="เช่น คุณสมบัติ" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900">
             </div>
             <div>
               <label class="block font-medium mb-1">เบอร์โทรศัพท์ <span class="text-red-500">*</span></label>
-              <input type="tel" id="consign-phone" required placeholder="08x-xxx-xxxx" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-red-700 focus:border-red-700">
+              <input type="tel" id="consign-phone" required placeholder="08x-xxx-xxxx" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900">
             </div>
           </div>
 
@@ -391,7 +391,7 @@
             <p class="text-[10px] text-gray-400 mt-0.5">แนบรูปช่วยให้ประเมินราคาและปล่อยขายได้ไวยิ่งขึ้น</p>
           </div>
 
-          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2 flex items-center justify-center gap-1.5">
+          <button type="submit" class="w-full bg-[#B89D68] hover:bg-[#A38854] text-white font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2 flex items-center justify-center gap-1.5 active:scale-95 transition-all">
             <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
             <span>ยืนยันส่งข้อมูลฝากขาย (ฟรี)</span>
           </button>
@@ -402,7 +402,7 @@
     <!-- 🤝 Member Get Member (MGM) Referral Modal -->
     <div id="mgm-modal" class="hidden modal-backdrop !items-center !p-4">
       <div class="modal-card-sm space-y-3.5">
-        <div class="flex justify-between items-center border-b pb-2">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
             <span class="icon-circle w-5 h-5"><i data-lucide="users" class="w-3 h-3 stroke-[1.5]"></i></span>
             <span>ชวนเพื่อนมาเป็น Agent (MGM)</span>
@@ -426,7 +426,7 @@
           <div class="flex gap-1.5">
             <input type="text" id="mgm-link-input" readonly value="https://thenassty-cpu.github.io/siwasup-cobroker-os/?join_ref=AG-บัวรา" 
                    class="flex-1 bg-gray-100 border rounded-lg px-2.5 py-1.5 text-[11px] font-mono text-gray-700 outline-none">
-            <button onclick="copyMgmLink()" class="bg-[#990000] hover:bg-red-800 text-white font-bold px-3 py-1.5 rounded-lg text-xs whitespace-nowrap shadow-xs flex items-center gap-1">
+            <button onclick="copyMgmLink()" class="bg-neutral-900 hover:bg-neutral-800 text-white font-bold px-3 py-1.5 rounded-lg text-xs whitespace-nowrap shadow-xs flex items-center gap-1 active:scale-95 transition-all">
               <span class="icon-circle w-3.5 h-3.5"><i data-lucide="copy" class="w-2 h-2 stroke-[1.5]"></i></span>
               <span>คัดลอก</span>
             </button>
@@ -445,9 +445,9 @@
     <!-- 💬 Homerun-Style "เสนอราคา" (Submit Offer) Modal -->
     <div id="offer-modal" class="hidden modal-backdrop !items-center !p-3 sm:!p-4">
       <div class="modal-card max-w-2xl space-y-3.5 max-h-[94vh] overflow-y-auto custom-scrollbar !p-4 sm:!p-5">
-        <div class="flex justify-between items-center border-b border-slate-200 pb-2.5">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <div class="flex items-center gap-2">
-            <span class="icon-circle w-6 h-6 bg-[#1E749C] text-white"><i data-lucide="badge-dollar-sign" class="w-3.5 h-3.5 stroke-[1.8]"></i></span>
+            <span class="icon-circle w-6 h-6 bg-neutral-900 text-white"><i data-lucide="badge-dollar-sign" class="w-3.5 h-3.5 stroke-[1.8]"></i></span>
             <div>
               <h3 class="font-extrabold text-base text-slate-900 leading-tight">เสนอราคา</h3>
               <p class="text-[11px] text-slate-500">กรอกราคาที่ต้องการเสนอและข้อมูลติดต่อเพื่อดำเนินการยื่นข้อเสนอซื้อ</p>
@@ -468,14 +468,14 @@
               <div class="grid grid-cols-2 gap-2">
                 <label class="cursor-pointer">
                   <input type="radio" name="offer_PurchaseType" value="เงินสด" checked class="peer sr-only" onchange="updateOfferSummaryBox()">
-                  <div class="p-2 rounded-xl border border-slate-200 bg-white peer-checked:border-[#1E749C] peer-checked:bg-sky-50/60 peer-checked:text-[#1E749C] font-bold text-center transition-all flex items-center justify-center gap-1.5">
+                  <div class="p-2 rounded-xl border border-slate-200 bg-white peer-checked:border-neutral-900 peer-checked:bg-neutral-50 peer-checked:text-neutral-900 font-bold text-center transition-all flex items-center justify-center gap-1.5">
                     <i data-lucide="banknote" class="w-3.5 h-3.5"></i>
                     <span>ซื้อเงินสด</span>
                   </div>
                 </label>
                 <label class="cursor-pointer">
                   <input type="radio" name="offer_PurchaseType" value="สินเชื่อธนาคาร" class="peer sr-only" onchange="updateOfferSummaryBox()">
-                  <div class="p-2 rounded-xl border border-slate-200 bg-white peer-checked:border-[#1E749C] peer-checked:bg-sky-50/60 peer-checked:text-[#1E749C] font-bold text-center transition-all flex items-center justify-center gap-1.5">
+                  <div class="p-2 rounded-xl border border-slate-200 bg-white peer-checked:border-neutral-900 peer-checked:bg-neutral-50 peer-checked:text-neutral-900 font-bold text-center transition-all flex items-center justify-center gap-1.5">
                     <i data-lucide="landmark" class="w-3.5 h-3.5"></i>
                     <span>ขอสินเชื่อ</span>
                   </div>
@@ -494,15 +494,15 @@
                 <input type="number" id="offer-price" required min="50000" step="1000"
                        oninput="updateOfferSummaryBox()"
                        placeholder="เช่น 2,850,000"
-                       class="w-full border border-slate-300 rounded-xl py-2 pl-7 pr-3 outline-none focus:ring-2 focus:ring-[#1E749C] focus:border-[#1E749C] font-black text-base text-[#1E749C] bg-white">
+                       class="w-full border border-slate-300 rounded-xl py-2 pl-7 pr-3 outline-none focus:ring-2 focus:ring-neutral-900 focus:border-neutral-900 font-extrabold text-base text-neutral-900 bg-white">
               </div>
               <!-- Quick Offer Chips -->
               <div class="flex flex-wrap items-center gap-1.5 mt-1.5">
                 <span class="text-[10px] text-slate-400">กดเลือกไว:</span>
-                <button type="button" onclick="setQuickOfferRatio(1.0)" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-[#1E749C] border border-slate-200 transition-colors">ราคาตั้ง (โอกาสได้สูงสุด)</button>
-                <button type="button" onclick="setQuickOfferRatio(0.95)" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-50 hover:bg-sky-100 text-[#1E749C] border border-sky-200 transition-colors">-5% (แนะนำ)</button>
-                <button type="button" onclick="setQuickOfferRatio(0.90)" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-[#1E749C] border border-slate-200 transition-colors">-10%</button>
-                <button type="button" onclick="setQuickOfferRatio(0.85)" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-[#1E749C] border border-slate-200 transition-colors">-15%</button>
+                <button type="button" onclick="setQuickOfferRatio(1.0)" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-neutral-900 border border-slate-200 transition-colors">ราคาตั้ง (โอกาสได้สูงสุด)</button>
+                <button type="button" onclick="setQuickOfferRatio(0.95)" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FAF7F2] hover:bg-[#F3EDE2] text-[#8C734B] border border-[#DFD3C3] transition-colors">-5% (แนะนำ)</button>
+                <button type="button" onclick="setQuickOfferRatio(0.90)" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-neutral-900 border border-slate-200 transition-colors">-10%</button>
+                <button type="button" onclick="setQuickOfferRatio(0.85)" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-neutral-900 border border-slate-200 transition-colors">-15%</button>
               </div>
               <p id="offer-price-hint" class="text-[10px] text-slate-400 mt-1">🛡️ ระบบล็อกเกณฑ์เสนอซื้อขั้นต่ำที่ 70% ของราคาตั้งขาย เพื่อป้องกันการปั่นราคา</p>
             </div>
@@ -513,13 +513,13 @@
                 <label for="offer-firstname" class="block font-bold text-slate-700 mb-1">ชื่อ <span class="text-red-500">*</span></label>
                 <input type="text" id="offer-firstname" required placeholder="กรอกชื่อจริง"
                        oninput="updateOfferSummaryBox()"
-                       class="w-full border border-slate-300 rounded-xl p-2 outline-none focus:ring-2 focus:ring-[#1E749C] bg-white">
+                       class="w-full border border-slate-300 rounded-xl p-2 outline-none focus:ring-2 focus:ring-neutral-900 bg-white">
               </div>
               <div>
                 <label for="offer-lastname" class="block font-bold text-slate-700 mb-1">นามสกุล <span class="text-red-500">*</span></label>
                 <input type="text" id="offer-lastname" required placeholder="กรอกนามสกุล"
                        oninput="updateOfferSummaryBox()"
-                       class="w-full border border-slate-300 rounded-xl p-2 outline-none focus:ring-2 focus:ring-[#1E749C] bg-white">
+                       class="w-full border border-slate-300 rounded-xl p-2 outline-none focus:ring-2 focus:ring-neutral-900 bg-white">
               </div>
             </div>
 
@@ -529,14 +529,14 @@
                 <label for="offer-email" class="block font-bold text-slate-700 mb-1">อีเมล <span class="text-red-500">*</span></label>
                 <input type="email" id="offer-email" required placeholder="name@email.com"
                        oninput="updateOfferSummaryBox()"
-                       class="w-full border border-slate-300 rounded-xl p-2 outline-none focus:ring-2 focus:ring-[#1E749C] bg-white">
+                       class="w-full border border-slate-300 rounded-xl p-2 outline-none focus:ring-2 focus:ring-neutral-900 bg-white">
               </div>
               <div>
                 <label for="offer-phone" class="block font-bold text-slate-700 mb-1">เบอร์โทรศัพท์ <span class="text-red-500">*</span></label>
                 <input type="tel" id="offer-phone" required pattern="^0[689][0-9]{8}$" maxlength="10"
                        placeholder="08xxxxxxxx (10 หลัก)"
                        oninput="this.value = this.value.replace(/[^0-9]/g, ''); updateOfferSummaryBox();"
-                       class="w-full border border-slate-300 rounded-xl p-2 outline-none focus:ring-2 focus:ring-[#1E749C] bg-white">
+                       class="w-full border border-slate-300 rounded-xl p-2 outline-none focus:ring-2 focus:ring-neutral-900 bg-white">
               </div>
             </div>
 
@@ -551,12 +551,12 @@
               <label for="offer-terms" class="block font-medium text-slate-600 mb-1">เงื่อนไขเพิ่มเติม (ถ้ามี)</label>
               <input type="text" id="offer-terms" placeholder="เช่น พร้อมวางมัดจำภายใน 3 วัน / ต้องการปรึกษาสินเชื่อ"
                      oninput="updateOfferSummaryBox()"
-                     class="w-full border border-slate-200 rounded-xl p-2 outline-none focus:ring-2 focus:ring-[#1E749C] bg-slate-50/60">
+                     class="w-full border border-slate-200 rounded-xl p-2 outline-none focus:ring-2 focus:ring-neutral-900 bg-slate-50/60">
             </div>
 
             <!-- ข้อกำหนดและเงื่อนไข -->
             <label class="flex items-start gap-2 pt-0.5 cursor-pointer text-[11px] text-slate-600">
-              <input type="checkbox" id="offer-consent" required checked class="mt-0.5 rounded text-[#1E749C] focus:ring-[#1E749C]">
+              <input type="checkbox" id="offer-consent" required checked class="mt-0.5 rounded text-neutral-900 focus:ring-neutral-900">
               <span>ข้าพเจ้ายืนยันความประสงค์ในการเสนอราคาซื้อทรัพย์สินข้างต้น และยินยอมให้เจ้าหน้าที่ศิวาทรัพย์ติดต่อกลับเพื่อดำเนินการด้านเอกสาร</span>
             </label>
           </div>
@@ -573,7 +573,7 @@
                 </div>
                 <div class="flex justify-between items-center text-xs">
                   <span class="text-slate-700 font-bold">ราคาที่ท่านเสนอ</span>
-                  <span id="offer-summary-proposed" class="font-black text-[#1E749C] text-sm">฿0</span>
+                  <span id="offer-summary-proposed" class="font-black text-neutral-900 text-sm">฿0</span>
                 </div>
                 <div class="flex justify-between items-center text-[11px] pt-1 border-t border-dashed border-slate-200">
                   <span class="text-slate-500">หลักประกันการเสนอราคา</span>
@@ -585,7 +585,7 @@
               <div class="space-y-2">
                 <div class="flex items-center justify-between">
                   <span id="offer-line-box-header" class="font-bold text-slate-800 text-xs">ช่องทางยืนยันและวางหลักประกัน</span>
-                  <span class="text-[9.5px] bg-[#06C755]/15 text-[#059440] font-bold px-2 py-0.5 rounded-full">LINE Official</span>
+                  <span class="text-[9.5px] bg-neutral-100 text-neutral-700 font-bold px-2 py-0.5 rounded-full">LINE Official</span>
                 </div>
 
                 <!-- Interactive Wording Selector for Bua & Team to test live -->
@@ -603,10 +603,10 @@
                 </div>
 
                 <!-- Active LINE Channel Card (Replacing Homerun's QR Code Radio Card) -->
-                <div class="p-3 rounded-xl border-2 border-[#06C755] bg-white shadow-2xs space-y-2">
+                <div class="p-3 rounded-xl border border-neutral-200 bg-white shadow-2xs space-y-2 hover:border-emerald-500/60 transition">
                   <div class="flex items-start gap-2.5">
-                    <div class="w-9 h-9 rounded-xl bg-[#06C755] text-white flex items-center justify-center shrink-0 font-black text-xs shadow-xs">
-                      LINE
+                    <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center shrink-0 font-bold text-xs">
+                      L
                     </div>
                     <div class="min-w-0 flex-1">
                       <div id="offer-line-card-title" class="font-extrabold text-slate-900 text-xs leading-snug">
@@ -626,8 +626,8 @@
 
             <!-- Submit & Open LINE Button -->
             <div class="pt-1 space-y-1.5">
-              <button type="submit" id="offer-submit-btn" class="w-full bg-[#06C755] hover:bg-[#05b34c] text-white font-extrabold py-3 px-3 rounded-xl shadow-md text-xs flex items-center justify-center gap-2 active:scale-95 transition-all">
-                <i data-lucide="send" class="w-4 h-4"></i>
+              <button type="submit" id="offer-submit-btn" class="w-full bg-white hover:bg-neutral-50 border border-neutral-200 hover:border-emerald-500 text-neutral-900 font-bold py-3 px-3 rounded-xl shadow-2xs text-xs flex items-center justify-center gap-2 active:scale-95 transition-all">
+                <span class="w-4 h-4 rounded-full bg-[#06C755] text-white flex items-center justify-center text-[9px] font-black shrink-0">L</span>
                 <span id="offer-submit-btn-text">ส่งใบเสนอราคาผ่าน LINE ศิวาทรัพย์</span>
               </button>
               <p class="text-[10px] text-center text-slate-400">ระบบจะสรุปข้อมูลใบเสนอราคาและเปิดแชท LINE @siwasup อัตโนมัติ</p>
@@ -640,7 +640,7 @@
     <!-- 📥 Owner Leads Management Modal (สำหรับแอดมินบัว/เจี๊ยบ) -->
     <div id="owner-leads-modal" class="hidden modal-backdrop !items-center !p-4">
       <div class="modal-card space-y-3.5">
-        <div class="flex justify-between items-center border-b pb-2">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
             <span class="icon-circle w-5 h-5"><i data-lucide="inbox" class="w-3 h-3 stroke-[1.5]"></i></span>
             <span>รายการทรัพย์ฝากขายใหม่ (Lead Magnet)</span>
@@ -657,7 +657,7 @@
     <!-- 💰 Edit Price Modal (สำหรับเจ้าของ/แอดมิน บัว & กูล) -->
     <div id="edit-price-modal" class="hidden modal-backdrop !items-center !p-4">
       <div class="modal-card-sm space-y-3.5">
-        <div class="flex justify-between items-center border-b pb-2">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
             <span class="icon-circle w-5 h-5"><i data-lucide="edit-3" class="w-3 h-3 stroke-[1.5]"></i></span>
             <span>แก้ไขราคาขาย (แอดมิน บัว & กูล)</span>
@@ -683,7 +683,7 @@
             </label>
           </div>
 
-          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-xl shadow-xs text-xs flex items-center justify-center gap-1.5">
+          <button type="submit" class="w-full bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-2.5 rounded-xl shadow-xs text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
             <span class="icon-circle w-4 h-4"><i data-lucide="save" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
             <span>บันทึกราคาใหม่ทันที</span>
           </button>
@@ -714,7 +714,7 @@
     <!-- 📦 Instant Bundle Modal (มัดรวมส่งลูกค้า) -->
     <div id="bundle-modal" class="hidden modal-backdrop">
       <div class="modal-card space-y-4">
-        <div class="flex justify-between items-center border-b pb-2">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <h3 class="font-bold text-base text-gray-800 flex items-center gap-1.5">
             <span class="icon-circle w-5 h-5"><i data-lucide="package" class="w-3 h-3 stroke-[1.5]"></i></span>
             <span>มัดรวมส่งลูกค้า (VIP Micro-Catalog)</span>
@@ -729,7 +729,7 @@
           </label>
           <input type="text" id="bundle-client-name" value="คุณวิชัย" oninput="updateBundlePreview()"
                  placeholder="เช่น คุณวิชัย, คุณสมชาย" 
-                 class="w-full border rounded-lg p-2 text-xs font-semibold focus:ring-1 focus:ring-red-700 focus:border-red-700 outline-none bg-gray-50">
+                 class="w-full border rounded-lg p-2 text-xs font-semibold focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900 outline-none bg-gray-50">
         </div>
 
         <!-- Selected Properties List Preview -->
@@ -754,12 +754,12 @@
         </div>
 
         <div class="grid grid-cols-2 gap-2 pt-1">
-          <button onclick="copyBundleMessage()" class="bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5">
+          <button onclick="copyBundleMessage()" class="bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-2.5 px-3 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
             <span class="icon-circle w-4 h-4"><i data-lucide="copy" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
             <span>คัดลอกข้อความ</span>
           </button>
-          <button onclick="sendBundleToLine()" class="bg-[#06C755] hover:bg-[#05b34c] text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5">
-            <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+          <button onclick="sendBundleToLine()" class="bg-white hover:bg-neutral-50 border border-neutral-200 hover:border-emerald-500 text-neutral-800 hover:text-emerald-700 font-bold py-2.5 px-3 rounded-xl text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+            <span class="w-4 h-4 rounded-full bg-[#06C755] text-white flex items-center justify-center text-[9px] font-black shrink-0">L</span>
             <span>ส่งเข้าแอป LINE</span>
           </button>
         </div>
@@ -769,7 +769,7 @@
     <!-- 🖨️ Auto PDF Vinyl Sign Generator Modal -->
     <div id="vinyl-modal" class="hidden modal-backdrop">
       <div class="modal-card space-y-4 max-w-lg">
-        <div class="flex justify-between items-center border-b pb-2">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <h3 class="font-bold text-sm sm:text-base text-gray-800 flex items-center gap-1.5">
             <span class="icon-circle w-5 h-5 bg-amber-600"><i data-lucide="printer" class="w-3 h-3 stroke-[1.5]"></i></span>
             <span>Auto PDF Vinyl Sign Generator (ป้ายไวนิลหน้าบ้าน)</span>
@@ -932,7 +932,7 @@
     <!-- Homerun-Style Clean Property Detail Modal -->
     <div id="property-detail-modal" class="hidden modal-backdrop !items-center !p-4">
       <div class="modal-card max-w-lg space-y-4 max-h-[92vh] overflow-y-auto">
-        <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <div class="flex items-center gap-2">
             <span id="detail-category-badge" class="capsule-bokeh text-[11px] font-medium px-3 py-0.5">ทาวน์โฮม</span>
             <span id="detail-bank-badge"></span>
@@ -988,9 +988,9 @@
         <p id="detail-desc" class="text-xs text-slate-600 leading-relaxed bg-white border border-slate-100 p-3 rounded-2xl"></p>
 
         <!-- 🔑 NPA Key & Messenger Banner (Employee, Agent & Owner) -->
-        <div id="detail-npa-key-banner" class="bg-gradient-to-r from-sky-50 via-blue-50/70 to-indigo-50/50 border border-sky-200 rounded-2xl p-3 flex items-center justify-between gap-2 shadow-2xs">
+        <div id="detail-npa-key-banner" class="bg-neutral-50 border border-neutral-200/80 rounded-2xl p-3 flex items-center justify-between gap-2 shadow-2xs">
           <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-9 h-9 rounded-xl bg-[#1E749C] text-white flex items-center justify-center shrink-0 shadow-xs">
+            <div class="w-9 h-9 rounded-xl bg-neutral-900 text-white flex items-center justify-center shrink-0 shadow-xs">
               <i data-lucide="key" class="w-4 h-4"></i>
             </div>
             <div class="min-w-0">
@@ -1001,20 +1001,20 @@
               <div class="text-[10.5px] text-sky-700 truncate">มี Messenger วิ่งรับกุญแจจากแบงก์ส่งมอบหน้างาน</div>
             </div>
           </div>
-          <button type="button" id="detail-btn-banner-npa-key" onclick="" class="shrink-0 bg-[#1E749C] hover:bg-[#165a7a] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-2xs flex items-center gap-1 transition-all active:scale-95">
+          <button type="button" id="detail-btn-banner-npa-key" onclick="" class="shrink-0 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-2xs flex items-center gap-1 transition-all active:scale-95">
             <span>ขอนัดชม</span>
             <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
           </button>
         </div>
 
         <!-- Financial Breakdown (Homerun Style) -->
-        <div class="bg-gradient-to-br from-slate-50 to-blue-50/30 p-3.5 rounded-2xl border border-blue-100/60 space-y-2">
+        <div class="bg-neutral-50 p-3.5 rounded-2xl border border-neutral-200/80 space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs text-slate-600 flex items-center gap-1.5">
-              <span class="w-4 h-4 rounded-full border border-blue-400 text-blue-600 font-bold text-[11px] inline-flex items-center justify-center leading-none select-none">฿</span>
+              <span class="w-4 h-4 rounded-full border border-neutral-300 text-neutral-600 font-bold text-[10px] inline-flex items-center justify-center leading-none select-none">฿</span>
               <span>ราคาก่อนต่อรอง</span>
             </span>
-            <span id="detail-price" class="text-lg font-black text-[#1E749C] tracking-tight">฿3,410,000</span>
+            <span id="detail-price" class="text-lg font-black text-neutral-900 tracking-tight">฿3,410,000</span>
           </div>
           <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/60">
             <span class="text-slate-500 flex items-center gap-1.5">
@@ -1045,13 +1045,13 @@
                 <i data-lucide="printer" class="w-4 h-4 text-amber-600"></i>
                 <span>พิมพ์ป้ายไวนิล (Auto PDF)</span>
               </button>
-              <button id="detail-btn-share" onclick="" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-full shadow-xs text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+              <button id="detail-btn-share" onclick="" class="w-full bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-2.5 rounded-full shadow-xs text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
                 <i data-lucide="share-2" class="w-4 h-4"></i>
                 <span>แชร์ล็อกสิทธิ์ (3-5%)</span>
               </button>
             </div>
-            <button id="detail-btn-npa-key" onclick="" class="w-full bg-sky-50 hover:bg-sky-100 text-[#1E749C] font-bold py-2 rounded-full border border-sky-300 text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-              <i data-lucide="key" class="w-3.5 h-3.5 text-[#1E749C]"></i>
+            <button id="detail-btn-npa-key" onclick="" class="w-full bg-sky-50 hover:bg-sky-100 text-neutral-900 font-bold py-2 rounded-full border border-sky-300 text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+              <i data-lucide="key" class="w-3.5 h-3.5 text-neutral-900"></i>
               <span>เบิกกุญแจ NPA & ติดตาม Messenger (Demo พี่ลิลลี่)</span>
             </button>
           </div>
@@ -1068,7 +1068,7 @@
     <div id="agent-leaderboard-modal" class="hidden modal-backdrop !items-center !p-3">
       <div class="modal-card max-w-xl space-y-3.5 max-h-[92vh] overflow-y-auto custom-scrollbar !p-4">
         <!-- Header -->
-        <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <div class="flex items-center gap-2">
             <span class="icon-circle w-7 h-7 bg-amber-500 text-white"><i data-lucide="trophy" class="w-4 h-4 stroke-[1.5]"></i></span>
             <div>
@@ -1196,7 +1196,7 @@
     <!-- 🎟️ Meeting QR Check-in Modal -->
     <div id="modal-meeting-checkin" class="hidden modal-backdrop !items-center !p-3">
       <div class="modal-card max-w-sm space-y-3.5 !p-4 text-center">
-        <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <div class="flex items-center gap-1.5">
             <span class="icon-circle w-6 h-6 bg-amber-600 text-white"><i data-lucide="calendar-check" class="w-3.5 h-3.5"></i></span>
             <h3 class="font-bold text-sm text-gray-900">เช็คชื่อเข้าอบรม / ประชุมทีม</h3>
@@ -1234,7 +1234,7 @@
     <!-- 📸 Vinyl Photo + GPS Proof Modal -->
     <div id="modal-vinyl-proof" class="hidden modal-backdrop !items-center !p-3">
       <div class="modal-card max-w-sm space-y-3.5 !p-4">
-        <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <div class="flex items-center gap-1.5">
             <span class="icon-circle w-6 h-6 bg-emerald-600 text-white"><i data-lucide="camera" class="w-3.5 h-3.5"></i></span>
             <div>
@@ -1296,7 +1296,7 @@
     <div id="modal-my-profile" class="hidden modal-backdrop !items-center !p-3">
       <div class="modal-card max-w-md space-y-3.5 max-h-[92vh] overflow-y-auto no-scrollbar !p-4">
         <!-- Header -->
-        <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <div class="flex items-center gap-2">
             <span class="icon-circle w-7 h-7 bg-amber-500 text-white"><i data-lucide="user-check" class="w-4 h-4 stroke-[1.5]"></i></span>
             <div>
@@ -1435,9 +1435,9 @@
     <div id="npa-key-dispatch-modal" class="hidden modal-backdrop !items-center !p-3">
       <div class="modal-card max-w-xl space-y-3.5 max-h-[92vh] overflow-y-auto custom-scrollbar !p-4">
         <!-- Header -->
-        <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <div class="flex items-center gap-2">
-            <span class="w-8 h-8 rounded-full bg-sky-50 text-[#1E749C] flex items-center justify-center font-bold">
+            <span class="w-8 h-8 rounded-full bg-sky-50 text-neutral-900 flex items-center justify-center font-bold">
               <i data-lucide="key" class="w-4 h-4"></i>
             </span>
             <div>
@@ -1481,8 +1481,8 @@
             <div>
               <label class="block font-semibold text-slate-700 mb-1">เวลานัดหมายพาลูกค้าเข้าชมหน้างาน</label>
               <div class="grid grid-cols-2 gap-2">
-                <input type="date" id="npa-date" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#1E749C]">
-                <input type="time" id="npa-time" value="14:00" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#1E749C]">
+                <input type="date" id="npa-date" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-neutral-900">
+                <input type="time" id="npa-time" value="14:00" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-neutral-900">
               </div>
               <div class="mt-1 text-[11px] text-emerald-700 flex items-center gap-1 font-medium">
                 <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i>
@@ -1493,16 +1493,16 @@
             <div class="grid grid-cols-2 gap-2">
               <div>
                 <label class="block font-semibold text-slate-700 mb-1">ชื่อผู้จะซื้อ (ลูกค้า)</label>
-                <input type="text" id="npa-client-name" placeholder="คุณสมชาย ใจดี" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#1E749C]">
+                <input type="text" id="npa-client-name" placeholder="คุณสมชาย ใจดี" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-neutral-900">
               </div>
               <div>
                 <label class="block font-semibold text-slate-700 mb-1">เบอร์โทรลูกค้า</label>
-                <input type="tel" id="npa-client-phone" placeholder="08x-xxx-xxxx" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#1E749C]">
+                <input type="tel" id="npa-client-phone" placeholder="08x-xxx-xxxx" class="w-full bg-white border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-neutral-900">
               </div>
             </div>
 
             <div class="bg-sky-50/70 border border-sky-100 rounded-xl p-2.5 text-[11px] text-sky-900 space-y-1">
-              <div class="font-bold flex items-center gap-1 text-[#1E749C]">
+              <div class="font-bold flex items-center gap-1 text-neutral-900">
                 <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
                 <span>ข้อตกลงและนโยบายการเบิกกุญแจธนาคาร</span>
               </div>
@@ -1514,7 +1514,7 @@
             </div>
           </div>
 
-          <button type="button" onclick="submitNpaKeyRequestDemo()" class="w-full bg-[#1E749C] hover:bg-[#165a7a] text-white font-bold py-2.5 rounded-full text-xs shadow-xs flex items-center justify-center gap-1.5 transition-all active:scale-95">
+          <button type="button" onclick="submitNpaKeyRequestDemo()" class="w-full bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-2.5 rounded-full text-xs shadow-xs flex items-center justify-center gap-1.5 transition-all active:scale-95">
             <i data-lucide="send" class="w-3.5 h-3.5"></i>
             <span>ยื่นคำขอเบิกกุญแจถึงพี่ลิลลี่ (Admin)</span>
           </button>
