@@ -1134,70 +1134,69 @@
             </button>
           </div>
 
-          <!-- 👑 Owner-Only Animal Intelligence Matrix Bar (Visible ONLY when currentMode === 'owner') -->
-          <div id="owner-animal-intelligence-bar" class="hidden bg-gradient-to-r from-amber-50/70 via-yellow-50/50 to-orange-50/60 p-3 rounded-2xl border border-amber-200/80 space-y-2 shadow-2xs">
+          <!-- 👑 Animal Intelligence Matrix Bar (3D Gold Emblem Edition) -->
+          <div id="owner-animal-intelligence-bar" class="hidden bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/90 p-3.5 rounded-2xl border border-amber-500/40 space-y-2.5 shadow-md text-white">
             <div class="flex items-center justify-between text-xs">
-              <span class="font-bold text-amber-950 flex items-center gap-1.5">
-                <span class="w-5 h-5 rounded-full bg-amber-400 text-amber-950 font-black flex items-center justify-center text-[11px] shadow-2xs">🐾</span>
-                <span>วิเคราะห์ศักยภาพตัวแทน 4 กลุ่ม (Admin Only)</span>
+              <span class="font-bold text-amber-300 flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-full bg-amber-400 text-slate-950 font-black flex items-center justify-center text-[11px] shadow-2xs">👑</span>
+                <span>SIWASUP ANIMAL MATRIX (วิเคราะห์ทีม 4 สาย)</span>
               </span>
-              <span class="text-[9.5px] bg-amber-200/80 text-amber-900 font-bold px-2 py-0.5 rounded-full border border-amber-300">Admin Only</span>
-            </div>
-
-            <!-- 4 Animal Filter Tabs -->
-            <div class="grid grid-cols-4 gap-1 text-[10px] font-bold">
-              <button type="button" id="animal-btn-all" onclick="filterByAnimal('all')" class="p-1.5 rounded-xl border border-amber-400 bg-amber-400 text-amber-950 shadow-2xs text-center transition-all">
-                <div>ทั้งหมด</div>
-                <div class="text-[9px] font-normal">125 ท่าน</div>
-              </button>
-              <button type="button" id="animal-btn-eagle" onclick="filterByAnimal('eagle')" class="p-1.5 rounded-xl border border-amber-200 bg-white text-amber-900 shadow-2xs text-center transition-all hover:bg-amber-100/60 active:scale-95 flex flex-col items-center justify-center">
-                <div class="flex items-center justify-center gap-1">
-                  <span class="w-3.5 h-3.5 inline-flex items-center justify-center text-amber-600">${window.SiwasupAgents ? window.SiwasupAgents.getAnimalSvg('eagle', 'w-full h-full') : '🦅'}</span>
-                  <span>Eagle</span>
-                </div>
-                <div class="text-[9px] text-amber-700 font-normal"><span id="animal-count-eagle">0</span> ท่าน</div>
-              </button>
-              <button type="button" id="animal-btn-lion" onclick="filterByAnimal('lion')" class="p-1.5 rounded-xl border border-purple-200 bg-white text-purple-900 shadow-2xs text-center transition-all hover:bg-purple-100/60 active:scale-95 flex flex-col items-center justify-center">
-                <div class="flex items-center justify-center gap-1">
-                  <span class="w-3.5 h-3.5 inline-flex items-center justify-center text-purple-600">${window.SiwasupAgents ? window.SiwasupAgents.getAnimalSvg('lion', 'w-full h-full') : '🦁'}</span>
-                  <span>Lion</span>
-                </div>
-                <div class="text-[9px] text-purple-700 font-normal"><span id="animal-count-lion">0</span> ท่าน</div>
-              </button>
-              <button type="button" id="animal-btn-wolf" onclick="filterByAnimal('wolf')" class="p-1.5 rounded-xl border border-blue-200 bg-white text-blue-900 shadow-2xs text-center transition-all hover:bg-blue-100/60 active:scale-95 flex flex-col items-center justify-center">
-                <div class="flex items-center justify-center gap-1">
-                  <span class="w-3.5 h-3.5 inline-flex items-center justify-center text-blue-600">${window.SiwasupAgents ? window.SiwasupAgents.getAnimalSvg('wolf', 'w-full h-full') : '🐺'}</span>
-                  <span>Wolf</span>
-                </div>
-                <div class="text-[9px] text-blue-700 font-normal"><span id="animal-count-wolf">0</span> ท่าน</div>
+              <button type="button" onclick="window.open('assets/characters/team_infographic.png', '_blank')" class="text-[10px] bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold px-2.5 py-0.5 rounded-full border border-amber-400/40 transition cursor-pointer flex items-center gap-1">
+                <span>🖼️ ดูอินโฟกราฟิกเต็ม</span>
               </button>
             </div>
 
-            <!-- Bear full width row -->
-            <div class="text-[10px] font-bold bg-white/90 p-1.5 rounded-xl border border-slate-200">
-              <button type="button" id="animal-btn-bear" onclick="filterByAnimal('bear')" class="w-full text-slate-700 flex items-center justify-between px-1 hover:text-slate-900 transition-colors">
-                <span class="flex items-center gap-1.5">
-                  <span class="w-4 h-4 inline-flex items-center justify-center text-slate-600">${window.SiwasupAgents ? window.SiwasupAgents.getAnimalSvg('bear', 'w-full h-full') : '🐻'}</span>
-                  <span><strong>Hibernating Bear (หมีจำศีล)</strong></span>
-                  <span class="text-[9px] text-gray-400 font-normal hidden sm:inline">- สมาชิกพักรบ รอจังหวะปลุกพลัง</span>
-                </span>
-                <span class="bg-slate-100 px-2 py-0.5 rounded-full border border-slate-300 text-slate-800 font-mono"><span id="animal-count-bear">0</span> ท่าน</span>
+            <!-- 4 Animal Filter Tabs with 3D Gold Badges -->
+            <div class="grid grid-cols-5 gap-1.5 text-[10px] font-bold">
+              <button type="button" id="animal-btn-all" onclick="filterByAnimal('all')" class="p-1.5 rounded-xl border border-amber-400 bg-amber-400 text-slate-950 shadow-2xs text-center transition-all flex flex-col items-center justify-center cursor-pointer">
+                <div class="text-[11px] font-black">ทั้งหมด</div>
+                <div class="text-[9px] font-semibold opacity-80">125 ท่าน</div>
+              </button>
+              <button type="button" id="animal-btn-eagle" onclick="filterByAnimal('eagle')" class="p-1.5 rounded-xl border border-slate-700 bg-slate-800/90 text-amber-200 shadow-2xs text-center transition-all hover:border-amber-400 active:scale-95 flex flex-col items-center justify-center gap-0.5 cursor-pointer">
+                <img src="assets/characters/badge_eagle.png" alt="Eagle" class="w-8 h-8 object-contain drop-shadow">
+                <span>Eagle</span>
+                <div class="text-[9px] text-amber-400 font-normal"><span id="animal-count-eagle">0</span> ท่าน</div>
+              </button>
+              <button type="button" id="animal-btn-lion" onclick="filterByAnimal('lion')" class="p-1.5 rounded-xl border border-slate-700 bg-slate-800/90 text-amber-200 shadow-2xs text-center transition-all hover:border-amber-400 active:scale-95 flex flex-col items-center justify-center gap-0.5 cursor-pointer">
+                <img src="assets/characters/badge_lion.png" alt="Lion" class="w-8 h-8 object-contain drop-shadow">
+                <span>Lion</span>
+                <div class="text-[9px] text-amber-400 font-normal"><span id="animal-count-lion">0</span> ท่าน</div>
+              </button>
+              <button type="button" id="animal-btn-wolf" onclick="filterByAnimal('wolf')" class="p-1.5 rounded-xl border border-slate-700 bg-slate-800/90 text-amber-200 shadow-2xs text-center transition-all hover:border-amber-400 active:scale-95 flex flex-col items-center justify-center gap-0.5 cursor-pointer">
+                <img src="assets/characters/badge_wolf.png" alt="Wolf" class="w-8 h-8 object-contain drop-shadow">
+                <span>Wolf</span>
+                <div class="text-[9px] text-amber-400 font-normal"><span id="animal-count-wolf">0</span> ท่าน</div>
+              </button>
+              <button type="button" id="animal-btn-bear" onclick="filterByAnimal('bear')" class="p-1.5 rounded-xl border border-slate-700 bg-slate-800/90 text-amber-200 shadow-2xs text-center transition-all hover:border-amber-400 active:scale-95 flex flex-col items-center justify-center gap-0.5 cursor-pointer">
+                <img src="assets/characters/badge_bear.png" alt="Bear" class="w-8 h-8 object-contain drop-shadow">
+                <span>Bear</span>
+                <div class="text-[9px] text-amber-400 font-normal"><span id="animal-count-bear">0</span> ท่าน</div>
               </button>
             </div>
 
-            <!-- Strategy & Archetype Visual Banner -->
-            <div id="animal-strategy-box" class="bg-white p-2.5 rounded-xl border border-amber-200 text-[10.5px] text-gray-700 leading-snug space-y-1.5">
-              <div class="flex items-start gap-2.5">
-                <img src="assets/animal_archetypes_terracotta.jpg" alt="Animal Archetypes" class="w-14 h-14 rounded-lg object-cover border border-amber-200 shadow-2xs shrink-0 cursor-pointer hover:scale-105 transition-transform" onclick="window.open('assets/animal_archetypes_terracotta.jpg', '_blank')" title="คลิกดูภาพขยายสัญลักษณ์ 4 สัตว์">
+            <!-- Strategy & 3D Archetype Visual Banner -->
+            <div id="animal-strategy-box" class="bg-slate-950/90 p-2.5 rounded-xl border border-amber-500/30 text-[10.5px] text-slate-200 leading-snug space-y-1.5">
+              <div class="flex items-center gap-3">
+                <img id="animal-strategy-img" src="assets/characters/badge_eagle.png" alt="Animal Badge" class="w-14 h-14 object-contain drop-shadow-md shrink-0 cursor-pointer hover:scale-105 transition-transform" onclick="toggleLeaderboardTurnaroundPreview()" title="คลิกเพื่อดูโมเดล 3D 4 มุมรอบตัว">
                 <div class="min-w-0 flex-1">
-                  <div class="font-bold text-amber-900 flex items-center gap-1">
-                    <span>💡 คำแนะนำเชิงบริหารสำหรับบัว:</span>
+                  <div class="flex items-center justify-between gap-1">
+                    <span id="animal-strategy-title" class="font-bold text-xs text-amber-300">ตัวแทนทั้งหมด 125 ท่าน</span>
+                    <button type="button" onclick="toggleLeaderboardTurnaroundPreview()" class="text-[9.5px] px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 font-semibold cursor-pointer shrink-0">
+                      🔄 ดูโมเดล 4 มุม
+                    </button>
                   </div>
-                  <div id="animal-strategy-title" class="font-bold text-xs text-amber-950 mt-0.5">ตัวแทนทั้งหมด 125 ท่าน</div>
-                  <div id="animal-strategy-desc" class="text-gray-600 text-[10px] mt-0.5">
-                    คัดกรองตัวแทนเพื่อส่งต่อทรัพย์ให้ตรงมือ หรือส่งโค้ชไปประกบปิดการขาย (คลิกเลือกปุ่มสัตว์ด้านบน)
+                  <div id="animal-strategy-desc" class="text-slate-300 text-[10px] mt-0.5">
+                    คลิกเลือกเหรียญตราสัตว์ด้านบน เพื่อกรองรายชื่อตัวแทนและดูกลยุทธ์การจับคู่ทีม Co-Broker
                   </div>
                 </div>
+              </div>
+              <!-- Expandable 4-Angle Turnaround Sheet Preview inside Leaderboard -->
+              <div id="leaderboard-turnaround-box" class="hidden pt-2 border-t border-slate-800 space-y-1.5">
+                <div class="flex items-center justify-between text-[10px] text-amber-300 font-semibold px-1">
+                  <span id="leaderboard-turnaround-label">📐 Master 3D Turnaround Sheet (0° / 45° / 90° / 180°)</span>
+                  <button type="button" onclick="toggleLeaderboardTurnaroundPreview()" class="text-slate-400 hover:text-white cursor-pointer">ซ่อน ▲</button>
+                </div>
+                <img id="leaderboard-turnaround-img" src="assets/characters/turnaround_eagle.png" alt="Turnaround 4 Angles" class="w-full h-auto rounded-lg border border-slate-700 shadow-inner">
               </div>
             </div>
           </div>
@@ -1369,8 +1368,11 @@
         <!-- Profile Hero Card -->
         <div class="bg-gradient-to-br from-amber-50/80 via-white to-red-50/40 p-3.5 rounded-2xl border border-amber-200/80 relative shadow-2xs space-y-3">
           <div class="flex items-center gap-3">
-            <div id="profile-avatar-circle" class="w-14 h-14 rounded-2xl bg-siwasup-gold text-gray-950 font-black text-lg flex items-center justify-center shadow-xs border-2 border-white shrink-0">
-              S22
+            <div class="relative shrink-0">
+              <img id="profile-3d-badge-img" src="assets/characters/badge_eagle.png" alt="3D Badge" class="w-16 h-16 object-contain drop-shadow-md">
+              <div id="profile-avatar-circle" class=" -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-slate-900 text-amber-300 font-mono font-black text-[10px] border border-amber-400 shadow-xs">
+                S22
+              </div>
             </div>
             <div class="min-w-0 flex-1">
               <div class="flex items-center gap-1.5 flex-wrap">
@@ -1411,18 +1413,188 @@
           </div>
         </div>
 
-        <!-- 👑 Owner-Only Intelligence Analysis Card (Visible only when currentMode === 'owner') -->
-        <div id="profile-owner-intelligence-box" class="hidden p-3 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300 space-y-1.5 text-xs shadow-2xs">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-amber-950 flex items-center gap-1.5">
-              <span class="w-4 h-4 rounded-full bg-amber-400 text-amber-950 font-black flex items-center justify-center text-[10px]">🐾</span>
-              <span>วิเคราะห์สไตล์ตัวแทน (เฉพาะเจ้าของ / แอดมิน)</span>
+        <!-- 🦁 3D Character Archetype & Turnaround Card (Visible for Agents & Owners) -->
+        <div id="profile-owner-intelligence-box" class="p-3.5 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/90 border border-amber-500/40 space-y-2.5 text-xs shadow-md text-white">
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-bold text-amber-300 flex items-center gap-1.5">
+              <span>✨ เส้นทางวิวัฒนาการตัวละคร (Evolution Path)</span>
             </span>
-            <span id="profile-animal-badge" class="px-2 py-0.5 rounded-full font-bold text-[10px] bg-blue-100 text-blue-900 border border-blue-300">🐺 Wolf</span>
+            <span id="profile-animal-badge" class="px-2.5 py-0.5 rounded-full font-bold text-[10px] bg-amber-400 text-slate-950 border border-amber-300 shadow-2xs">🦅 Eagle</span>
           </div>
-          <div id="profile-animal-desc" class="text-[11px] text-gray-700 font-medium"></div>
-          <div class="p-2 rounded-xl bg-white border border-amber-200 text-[10.5px] text-amber-950">
-            <strong>🎯 แนะนำสำหรับบัว:</strong> <span id="profile-animal-action"></span>
+
+          <!-- 4-Stage Evolution Roadmap Selector -->
+          <div class="grid grid-cols-4 gap-1.5 pt-0.5">
+            <button type="button" onclick="previewProfileArchetypeStage('bear')" id="evo-stage-bear" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
+              <img src="assets/characters/badge_bear.png" alt="Bear" class="w-9 h-9 object-contain drop-shadow" />
+              <span class="text-[9.5px] font-bold text-slate-300 mt-0.5">🐻 หมีจำศีล</span>
+              <span class="text-[8px] text-slate-400">เริ่มต้น</span>
+            </button>
+            <button type="button" onclick="previewProfileArchetypeStage('wolf')" id="evo-stage-wolf" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
+              <img src="assets/characters/badge_wolf.png" alt="Wolf" class="w-9 h-9 object-contain drop-shadow" />
+              <span class="text-[9.5px] font-bold text-emerald-300 mt-0.5">🐺 หมาป่า</span>
+              <span class="text-[8px] text-emerald-400/80">ขยัน ≥100</span>
+            </button>
+            <button type="button" onclick="previewProfileArchetypeStage('lion')" id="evo-stage-lion" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
+              <img src="assets/characters/badge_lion.png" alt="Lion" class="w-9 h-9 object-contain drop-shadow" />
+              <span class="text-[9.5px] font-bold text-amber-300 mt-0.5">🦁 สิงห์สุขุม</span>
+              <span class="text-[8px] text-amber-400/80">ผลงาน ≥300</span>
+            </button>
+            <button type="button" onclick="previewProfileArchetypeStage('eagle')" id="evo-stage-eagle" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
+              <img src="assets/characters/badge_eagle.png" alt="Eagle" class="w-9 h-9 object-contain drop-shadow" />
+              <span class="text-[9.5px] font-bold text-yellow-300 mt-0.5">🦅 พญาอินทรี</span>
+              <span class="text-[8px] text-yellow-400/90">ครบเครื่อง!</span>
+            </button>
+          </div>
+
+          <div id="profile-animal-quote" class="text-[11px] text-amber-200/90 italic font-medium">“มองไกล เห็นโอกาส พาไปได้ไกลกว่า”</div>
+          <div id="profile-animal-desc" class="text-[11px] text-slate-200 font-normal leading-relaxed"></div>
+
+          <!-- Interactive 4-Angle 3D Turnaround Viewer inside Profile -->
+          <div class="bg-slate-950/90 rounded-xl p-2.5 border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span id="profile-turnaround-title" class="text-[10px] font-bold text-amber-400">🔄 โมเดล 3D ประจำสาย (หมุนดู 4 มุม)</span>
+              <div class="flex gap-1">
+                <button type="button" onclick="setProfileTurnaroundAngle(0)" class="prof-angle-btn px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-bold text-[9.5px] cursor-pointer" data-angle="0">0° หน้า</button>
+                <button type="button" onclick="setProfileTurnaroundAngle(1)" class="prof-angle-btn px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white font-semibold text-[9.5px] cursor-pointer" data-angle="1">45° เฉียง</button>
+                <button type="button" onclick="setProfileTurnaroundAngle(2)" class="prof-angle-btn px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white font-semibold text-[9.5px] cursor-pointer" data-angle="2">90° ข้าง</button>
+                <button type="button" onclick="setProfileTurnaroundAngle(3)" class="prof-angle-btn px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white font-semibold text-[9.5px] cursor-pointer" data-angle="3">180° หลัง</button>
+              </div>
+            </div>
+            <div id="profile-turnaround-viewport" class="w-40 h-44 mx-auto rounded-lg bg-slate-900 border border-slate-800 bg-no-repeat transition-all duration-300" style="background-image: url('assets/characters/turnaround_eagle.png'); background-size: 400% 100%; background-position: 0% 0%;"></div>
+          </div>
+
+          <!-- Dual-Track Milestone Checkpoints (Activity 0->50->100 & Performance 0->150->300) -->
+          <div class="bg-slate-950/85 rounded-xl p-2.5 border border-slate-800 space-y-2.5">
+            <div class="text-[10.5px] font-bold text-amber-300 flex items-center justify-between">
+              <span>🎯 หลอดเช็กพอยท์อัปเกรดสายตัวละคร (Dual-Track Evolution)</span>
+              <span class="text-[9px] text-slate-400 font-normal">ขยับทุกครั้งที่ทำภารกิจ</span>
+            </div>
+
+            <!-- Track 1: Activity Evolution Bar (Target 100 pts for Wolf/Eagle) -->
+            <div class="space-y-1">
+              <div class="flex justify-between items-center text-[10px]">
+                <span class="font-bold text-emerald-400 flex items-center gap-1">
+                  <span>🎪 หลอดความขยัน (Activity)</span>
+                </span>
+                <span id="profile-act-checkpoint-label" class="font-mono font-bold text-emerald-300">145 / 100 แต้ม (ปลดล็อก 🐺/🦅)</span>
+              </div>
+              <div class="relative w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
+                <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-400/70 z-10" title="เช็กพอยท์ 50 แต้ม: หมีตื่นตัว"></div>
+                <div id="profile-act-evo-bar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+              </div>
+              <div class="flex justify-between text-[8.5px] text-slate-400 font-medium px-0.5">
+                <span>0 เริ่มต้น</span>
+                <span id="chk-act-50" class="text-emerald-300">📍50 หมีตื่นตัว</span>
+                <span id="chk-act-100" class="text-emerald-300 font-bold">🐺100 หมาป่าพิทักษ์</span>
+              </div>
+              <div id="profile-act-quest-Breakdown" class="text-[9.5px] text-emerald-200/90 bg-emerald-950/50 border border-emerald-800/50 rounded-lg px-2 py-1">
+                ✅ ผ่านเกณฑ์สายขยันแล้ว! รักษาโมเมนตัมรับโบนัสป้ายและประชุมต่อเนื่อง
+              </div>
+            </div>
+
+            <!-- Track 2: Performance Evolution Bar (Target 300 pts for Lion/Eagle) -->
+            <div class="space-y-1 pt-1 border-t border-slate-800/90">
+              <div class="flex justify-between items-center text-[10px]">
+                <span class="font-bold text-amber-400 flex items-center gap-1">
+                  <span>💰 หลอดผลงานปิดดีล (Performance)</span>
+                </span>
+                <span id="profile-perf-checkpoint-label" class="font-mono font-bold text-amber-300">620 / 300 แต้ม (ปลดล็อก 🦁/🦅)</span>
+              </div>
+              <div class="relative w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
+                <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-400/70 z-10" title="เช็กพอยท์ 150 แต้ม: นักเจรจาเปิดดีล"></div>
+                <div id="profile-perf-evo-bar" class="bg-gradient-to-r from-amber-500 via-yellow-400 to-orange-400 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+              </div>
+              <div class="flex justify-between text-[8.5px] text-slate-400 font-medium px-0.5">
+                <span>0 เริ่มต้น</span>
+                <span id="chk-perf-150" class="text-amber-300">📍150 เปิดดีล/กู้ผ่าน</span>
+                <span id="chk-perf-300" class="text-amber-300 font-bold">🦁/🦅300 สิงห์ & อินทรี</span>
+              </div>
+              <div id="profile-perf-quest-Breakdown" class="text-[9.5px] text-amber-200/90 bg-amber-950/50 border border-amber-800/50 rounded-lg px-2 py-1">
+                ✅ ผ่านเกณฑ์นักปิดดีลแล้ว! ลุยปั้นพอร์ตสู่ Diamond Master
+              </div>
+            </div>
+
+            <!-- ⚡ Live Activity & Evolution Simulator (Try adding points & watch evolution!) -->
+            <div class="pt-1.5 border-t border-slate-800 space-y-1.5">
+              <div class="flex items-center justify-between text-[9.5px] text-slate-300">
+                <span class="font-bold text-amber-300">⚡ ทดลองจำลองทำภารกิจ (ดูหลอดขยับ & อัปเลเวลทันที):</span>
+                <button type="button" onclick="resetProfileSimulatorPoints()" class="px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[8.5px] border border-slate-600 cursor-pointer transition">🔄 รีเซ็ตแต้ม</button>
+              </div>
+              <div class="grid grid-cols-4 gap-1">
+                <button type="button" onclick="simulateProfileQuest('smart_share_click')" class="py-1 px-1 rounded-lg bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-600/50 text-emerald-200 font-bold text-[9px] cursor-pointer active:scale-95 transition">
+                  📲 แชร์ทรัพย์<br><span class="text-emerald-400">+5 ขยัน</span>
+                </button>
+                <button type="button" onclick="simulateProfileQuest('vinyl_field_proof')" class="py-1 px-1 rounded-lg bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-600/50 text-emerald-200 font-bold text-[9px] cursor-pointer active:scale-95 transition">
+                  🪧 ติดป้าย GPS<br><span class="text-emerald-400">+15 ขยัน</span>
+                </button>
+                <button type="button" onclick="simulateProfileQuest('customer_viewing')" class="py-1 px-1 rounded-lg bg-amber-950/90 hover:bg-amber-900 border border-amber-600/50 text-amber-200 font-bold text-[9px] cursor-pointer active:scale-95 transition">
+                  🏡 พาชมบ้าน<br><span class="text-amber-400">+50 ผลงาน</span>
+                </button>
+                <button type="button" onclick="simulateProfileQuest('booking_confirmed')" class="py-1 px-1 rounded-lg bg-amber-950/90 hover:bg-amber-900 border border-amber-600/50 text-amber-200 font-bold text-[9px] cursor-pointer active:scale-95 transition">
+                  📝 ปิดใบจอง<br><span class="text-amber-400">+100 ผลงาน</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upgrade Evolution Progress Hint -->
+          <div id="profile-upgrade-hint-box" class="p-2 rounded-xl bg-slate-800/80 border border-slate-700 text-[10.5px] text-amber-200 flex items-start gap-1.5">
+            <span>🚀</span>
+            <span id="profile-upgrade-hint">สะสมแต้มต่อเนื่องเพื่อปลดล็อกสิทธิพิเศษระดับสูงสุด!</span>
+          </div>
+
+          <!-- 🦁/🦅 Voluntary Mentor Opt-In Box (For Eagle & Lion to voluntarily accept Co-Closing pairs) -->
+          <div id="profile-mentor-optin-box" class="p-2.5 rounded-xl bg-amber-950/60 border border-amber-500/40 space-y-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <div class="text-[10.5px] font-bold text-amber-300 flex items-center gap-1.5">
+                <span>👑 สถานะโค้ชพี่เลี้ยง (Co-Close Mentor)</span>
+              </div>
+              <button type="button" id="profile-mentor-toggle-btn" onclick="toggleMentorOptIn()" class="px-2.5 py-0.5 rounded-full text-[9.5px] font-bold bg-emerald-500 text-slate-950 border border-emerald-300 shadow-2xs cursor-pointer transition">
+                🟢 สมัครใจรับเคสประกบคู่
+              </button>
+            </div>
+            <div class="text-[9.5px] text-amber-100/90 leading-relaxed">
+              <strong>🎁 รางวัลโค้ชพี่เลี้ยง (สิงห์/อินทรี) เมื่อช่วยหมาป่าปิดดีลสำเร็จ:</strong>
+              <ul class="list-disc pl-4 mt-0.5 space-y-0.5 text-slate-200">
+                <li><strong>Commission Split:</strong> รับส่วนแบ่งค่าคอมฯ Co-Close ตามสัดส่วนมาตรฐานทีม โดยไม่ต้องลงพื้นที่หาป้ายเอง</li>
+                <li><strong>Mentor Bonus:</strong> รับแต้มผลงานพิเศษ <strong>+150 แต้ม/เคส</strong> ดันขึ้นแท่น Top Podium</li>
+                <li><strong>VIP Lead Token:</strong> ช่วยทีมครบ 2 เคส รับสิทธิ์ <strong>ลัดคิวเลือก Lead ลูกค้า VIP</strong> จากเพจบริษัทก่อนใคร</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 1-Click Co-Closing Request Button (Especially impactful for Wolf / Bear) -->
+          <a id="profile-coclosing-btn" href="https://line.me/R/ti/p/@siwasup" target="_blank" class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-bold text-[11px] flex items-center justify-center gap-1.5 shadow hover:brightness-105 transition">
+            <span>🤝 ขอทีมพี่เลี้ยงสาย Eagle/Lion ช่วยประกบปิดดีล (LINE)</span>
+          </a>
+
+          <!-- 📊 Collapsible Rules & Scarcity Solution (For Team Presentation) -->
+          <div class="pt-1">
+            <button type="button" onclick="document.getElementById('profile-present-rules-panel').classList.toggle('hidden')" class="w-full py-1.5 px-2.5 rounded-xl bg-slate-950/90 hover:bg-slate-900 border border-slate-700 text-amber-300 font-bold text-[10px] flex items-center justify-between cursor-pointer transition">
+              <span>📋 กติการางวัล & ระบบคิวป้องกันรางวัลไม่พอ (สำหรับ Present ทีม)</span>
+              <span>▾</span>
+            </button>
+            <div id="profile-present-rules-panel" class="hidden mt-1.5 p-2.5 rounded-xl bg-slate-950/95 border border-amber-500/30 text-[9.5px] text-slate-200 space-y-2 leading-relaxed">
+              <div>
+                <strong class="text-amber-300">1. แก้ปัญหารางวัล/Lead ไม่พอเมื่อคนเลื่อนชั้นเยอะ (2-Layer Reward System):</strong>
+                <div class="pl-2 mt-0.5 space-y-0.5 text-slate-300">
+                  <div>• <strong>รางวัลที่ได้ 100% ทันที (ไม่จำกัดจำนวน):</strong> ตรา 3D ทองคำบนนามบัตร & ลิงก์แชร์ทรัพย์ (เพิ่มความน่าเชื่อถือลูกค้า) + สิทธิ์เห็นทรัพย์ใหม่ล่วงหน้า (Early Access 12–24 ชม.)</div>
+                  <div>• <strong>รางวัลที่มีโควตาจำกัด (Lead ลูกค้าจากเพจ):</strong> ใช้ระบบ <strong>"ตั๋วเข้าคิวหมุนเวียน (Round-Robin VIP Queue)"</strong> ปลดล็อกสาย = ได้สิทธิ์เข้าแถวรับ Lead ตามลำดับคะแนนความขยันรายสัปดาห์ (แจกตามจำนวน Lead จริง บริษัทไม่ต้องแบกภาระเกินตัว)</div>
+                </div>
+              </div>
+              <div class="border-t border-slate-800 pt-1.5">
+                <strong class="text-emerald-300">2. ระบบประกบคู่ Co-Closing (ต้องกดสมัครใจ Opt-In เท่านั้น):</strong>
+                <div class="pl-2 mt-0.5 space-y-0.5 text-slate-300">
+                  <div>• <strong>🐺 หมาป่า (ขยันแต่ยังปิดดีลไม่คม):</strong> กดปุ่มขอพี่เลี้ยงช่วยเจรจา/ดันสินเชื่อ แทนที่จะปล่อยลูกค้าหลุดมือ (ได้ 0 บาท)</div>
+                  <div>• <strong>🦁 สิงห์ / 🦅 อินทรี:</strong> ต้องกดปุ่ม <strong>"🟢 สมัครใจรับเคส"</strong> ก่อน จึงจะถูกจัดคิวให้ประกบคู่ เมื่อปิดโอนสำเร็จได้ทั้ง <strong>ส่วนแบ่งค่าคอมฯ + แต้ม Mentor Bonus + สิทธิ์ลัดคิว Lead</strong></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Admin-Only Strategy Note for Bua -->
+          <div id="profile-admin-strategy-note" class="hidden p-2 rounded-xl bg-amber-500/15 border border-amber-400/40 text-[10.5px] text-amber-200">
+            <strong>💡 คำแนะนำเชิงบริหารสำหรับบัว (Admin Only):</strong> <span id="profile-animal-action"></span>
           </div>
         </div>
 

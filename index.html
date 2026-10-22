@@ -266,9 +266,9 @@
             </button>
 
             <!-- แอดมินจัดกลุ่มสัตว์ 4 กลุ่ม -->
-            <button id="btn-owner-archetype-shortcut" type="button" onclick="openAgentLeaderboardModal('animal_matrix')" class="hidden h-6 px-2.5 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-300 items-center gap-1 transition cursor-pointer active:scale-95" title="วิเคราะห์ศักยภาพตัวแทน 4 กลุ่มสัตว์">
-              <span class="text-[#D4BC8B]">⊞</span>
-              <span>จัดกลุ่ม</span>
+            <button id="btn-owner-archetype-shortcut" type="button" onclick="openAgentLeaderboardModal('animal_matrix')" class="h-6 px-2.5 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-300 flex items-center gap-1 transition cursor-pointer active:scale-95" title="วิเคราะห์ศักยภาพตัวแทน 4 กลุ่มสัตว์ (Animal Matrix)">
+              <img src="assets/characters/badge_eagle.png" alt="Matrix" class="w-4 h-4 object-contain">
+              <span>4 สาย</span>
             </button>
 
             <!-- ปุ่มกุญแจ -->
@@ -286,7 +286,8 @@
             <div class="h-3.5 w-[1px] bg-neutral-800 mx-0.5 hidden sm:block"></div>
 
             <!-- โปรไฟล์ตัวแทน -->
-            <button type="button" onclick="openMyProfileModal()" id="btn-header-profile" class="h-6 pl-1.5 pr-2.5 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-200 flex items-center gap-1.5 transition cursor-pointer active:scale-95" title="กระเป๋าคะแนน & โปรไฟล์">
+            <button type="button" onclick="openMyProfileModal()" id="btn-header-profile" class="h-6 pl-1 pr-2.5 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-200 flex items-center gap-1.5 transition cursor-pointer active:scale-95" title="กระเป๋าคะแนน & โปรไฟล์ 3D">
+              <img id="header-profile-3d-badge" src="assets/characters/badge_eagle.png" alt="Badge" class="w-4 h-4 object-contain">
               <span class="px-1 py-0.2 rounded bg-[#C2A460]/20 text-[#E5C985] text-[9px] font-bold" id="header-profile-avatar">S22</span>
               <span id="bar-profile-btn-text" class="hidden sm:inline font-medium">เจ็ม</span>
             </button>
@@ -1103,7 +1104,7 @@
 
       const adminShortcutBtn = document.getElementById('btn-owner-archetype-shortcut');
       if (adminShortcutBtn) {
-        if (mode === 'owner') {
+        if (mode !== 'client') {
           adminShortcutBtn.classList.remove('hidden');
           adminShortcutBtn.classList.add('flex');
         } else {
@@ -2939,10 +2940,134 @@
       const headerAvatar = document.getElementById('header-profile-avatar');
       const headerName = document.getElementById('header-profile-name');
       const barText = document.getElementById('bar-profile-btn-text');
+      const headerBadgeImg = document.getElementById('header-profile-3d-badge');
 
       if (headerAvatar) headerAvatar.textContent = agent.code;
       if (headerName) headerName.textContent = agent.nickname || agent.code;
       if (barText) barText.textContent = agent.nickname || agent.name || agent.code;
+      if (headerBadgeImg && typeof window.SiwasupAgents.getArchetype === 'function') {
+        const arch = window.SiwasupAgents.getArchetype(agent);
+        if (arch && arch.badgeImg) headerBadgeImg.src = arch.badgeImg;
+      }
+    }
+
+    function previewProfileArchetypeStage(archKey) {
+      if (!window.SiwasupAgents) return;
+      const archMap = window.SiwasupAgents.ARCHETYPES || window.SiwasupAgents.archetypes;
+      if (!archMap) return;
+      const arch = archMap[archKey];
+      if (!arch) return;
+
+      ['bear', 'wolf', 'lion', 'eagle'].forEach(stageId => {
+        const btn = document.getElementById(`evo-stage-${stageId}`);
+        if (!btn) return;
+        if (stageId === archKey) {
+          btn.className = 'evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-amber-500/25 border-2 border-amber-400 shadow-md scale-[1.03] transition cursor-pointer relative';
+        } else {
+          btn.className = 'evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-950/80 border border-slate-800 opacity-75 hover:opacity-100 hover:border-amber-400/60 transition cursor-pointer relative';
+        }
+      });
+
+      const badge3dImg = document.getElementById('profile-3d-badge-img');
+      const badgeEl = document.getElementById('profile-animal-badge');
+      const quoteEl = document.getElementById('profile-animal-quote');
+      const descEl = document.getElementById('profile-animal-desc');
+      const turnaroundVp = document.getElementById('profile-turnaround-viewport');
+      const turnaroundTitle = document.getElementById('profile-turnaround-title');
+      const upgradeHintEl = document.getElementById('profile-upgrade-hint');
+
+      if (badge3dImg && arch.badgeImg) badge3dImg.src = arch.badgeImg;
+      if (badgeEl) {
+        badgeEl.innerHTML = `<span class="mr-1">${arch.icon}</span><span>ตัวอย่างสาย: ${arch.name} • ${arch.roleTag || ''}</span>`;
+        badgeEl.className = `inline-flex items-center px-2.5 py-0.5 rounded-full font-bold text-[10px] border shadow-2xs ${arch.badgeClass}`;
+      }
+      if (quoteEl) quoteEl.textContent = arch.quote || '';
+      if (descEl) descEl.textContent = arch.agentTip || arch.description;
+      if (turnaroundTitle) turnaroundTitle.textContent = `🔄 โมเดล 3D: ${arch.name} (หมุนดู 4 มุม)`;
+      if (turnaroundVp && arch.turnaroundImg) {
+        turnaroundVp.style.backgroundImage = `url('${arch.turnaroundImg}')`;
+        setProfileTurnaroundAngle(0);
+      }
+      if (upgradeHintEl && arch.upgradeHint) {
+        upgradeHintEl.textContent = arch.upgradeHint;
+      }
+    }
+
+    function simulateProfileQuest(ruleKey) {
+      if (!window.SiwasupAgents) return;
+      const switcher = document.getElementById('profile-agent-switcher');
+      const code = (switcher && switcher.value) ? switcher.value : (localStorage.getItem('siwasup_my_agent_ref') || 'S22');
+      const beforeAgent = window.SiwasupAgents.find(code);
+      const beforeArch = beforeAgent ? window.SiwasupAgents.getArchetype(beforeAgent) : null;
+      const beforeId = beforeArch ? beforeArch.id : null;
+
+      const res = window.SiwasupAgents.award(code, ruleKey);
+      if (!res || !res.success) return;
+
+      const updated = res.agent || window.SiwasupAgents.find(code);
+      const afterArch = window.SiwasupAgents.getArchetype(updated);
+      const rulesMap = window.SiwasupAgents.RULES || window.SiwasupAgents.rules || {};
+      const rule = rulesMap[ruleKey];
+
+      renderMyProfile(code);
+      if (typeof renderLeaderboard === 'function') renderLeaderboard();
+
+      // Visual pulse feedback on the updated checkpoint label
+      const lblId = (rule && rule.track === 'activity') ? 'profile-act-checkpoint-label' : 'profile-perf-checkpoint-label';
+      const lblEl = document.getElementById(lblId);
+      if (lblEl) {
+        lblEl.classList.add('scale-110', 'text-white');
+        setTimeout(() => lblEl.classList.remove('scale-110', 'text-white'), 350);
+      }
+
+      if (beforeId && afterArch && beforeId !== afterArch.id) {
+        if (typeof showToast === 'function') {
+          showToast(`🎉 วิวัฒนาการสำเร็จ! ${updated.nickname || updated.code} อัปเลเวลจาก ${beforeArch.icon} ${beforeArch.name} ➔ ${afterArch.icon} ${afterArch.name}!`);
+        }
+      } else if (rule && typeof showToast === 'function') {
+        showToast(`✨ +${rule.points} แต้ม (${rule.label}) สะสมเข้าหลอดวิวัฒนาการของ ${updated.nickname || updated.code}!`);
+      }
+    }
+
+    function resetProfileSimulatorPoints() {
+      if (!window.SiwasupAgents || typeof window.SiwasupAgents.resetPoints !== 'function') return;
+      const switcher = document.getElementById('profile-agent-switcher');
+      const code = (switcher && switcher.value) ? switcher.value : (localStorage.getItem('siwasup_my_agent_ref') || 'S22');
+      window.SiwasupAgents.resetPoints();
+      renderMyProfile(code);
+      if (typeof renderLeaderboard === 'function') renderLeaderboard();
+      if (typeof showToast === 'function') {
+        showToast('🔄 รีเซ็ตคะแนนกลับสู่ค่าเริ่มต้นสำหรับการสาธิตเรียบร้อยแล้วครับ');
+      }
+    }
+
+    function toggleMentorOptIn() {
+      if (!window.SiwasupAgents) return;
+      const switcher = document.getElementById('profile-agent-switcher');
+      const code = (switcher && switcher.value) ? switcher.value : (localStorage.getItem('siwasup_my_agent_ref') || 'S22');
+      const agent = window.SiwasupAgents.find(code);
+      if (!agent) return;
+      const arch = window.SiwasupAgents.getArchetype(agent);
+      if (!arch || (arch.id !== 'eagle' && arch.id !== 'lion')) {
+        if (typeof showToast === 'function') {
+          showToast('🔒 ต้องอัปเกรดเป็นสาย 🦁 สิงห์สุขุม หรือ 🦅 พญาอินทรี ก่อน จึงจะกดสมัครใจเป็นโค้ชประกบคู่ได้ครับ');
+        }
+        return;
+      }
+
+      const optInMap = JSON.parse(localStorage.getItem('siwasup_mentor_optin_map') || '{}');
+      const current = optInMap[code] !== undefined ? optInMap[code] : true;
+      optInMap[code] = !current;
+      localStorage.setItem('siwasup_mentor_optin_map', JSON.stringify(optInMap));
+
+      renderMyProfile(code);
+      if (typeof showToast === 'function') {
+        if (optInMap[code]) {
+          showToast(`🟢 [${code} ${agent.nickname || ''}] เปิดสถานะ "สมัครใจรับเคสประกบคู่ Co-Close" เรียบร้อย!`);
+        } else {
+          showToast(`⚪ [${code} ${agent.nickname || ''}] ปิดรับเคสประกบคู่ชั่วคราวแล้ว`);
+        }
+      }
     }
 
     function renderMyProfile(code) {
@@ -3022,24 +3147,150 @@
       if (perfEl) perfEl.textContent = agent.performancePoints || 0;
       if (totalEl) totalEl.textContent = agent.totalPoints || 0;
 
-      // 👑 Owner-Only Intelligence Analysis Card (Visible only when currentMode === 'owner')
+      // 🦁 3D Character Archetype & Turnaround Card (Visible for Agents & Owners)
       const ownerBox = document.getElementById('profile-owner-intelligence-box');
-      if (ownerBox) {
-        if (currentMode === 'owner' && window.SiwasupAgents && typeof window.SiwasupAgents.getArchetype === 'function') {
-          const arch = window.SiwasupAgents.getArchetype(agent);
-          const badgeEl = document.getElementById('profile-animal-badge');
-          const descEl = document.getElementById('profile-animal-desc');
-          const actionEl = document.getElementById('profile-animal-action');
-          if (badgeEl) {
-            badgeEl.innerHTML = `<span class="w-3.5 h-3.5 inline-flex items-center justify-center mr-1">${window.SiwasupAgents.getAnimalSvg(arch.id, 'w-full h-full')}</span><span>${arch.name}</span>`;
-            badgeEl.className = `inline-flex items-center px-2 py-0.5 rounded-full font-bold text-[10px] border ${arch.badgeClass}`;
+      if (ownerBox && window.SiwasupAgents && typeof window.SiwasupAgents.getArchetype === 'function') {
+        const arch = window.SiwasupAgents.getArchetype(agent);
+        const badge3dImg = document.getElementById('profile-3d-badge-img');
+        if (badge3dImg && arch.badgeImg) badge3dImg.src = arch.badgeImg;
+
+        const badgeEl = document.getElementById('profile-animal-badge');
+        const quoteEl = document.getElementById('profile-animal-quote');
+        const descEl = document.getElementById('profile-animal-desc');
+        const actionEl = document.getElementById('profile-animal-action');
+        const adminNoteBox = document.getElementById('profile-admin-strategy-note');
+        const turnaroundVp = document.getElementById('profile-turnaround-viewport');
+        const turnaroundTitle = document.getElementById('profile-turnaround-title');
+        const upgradeHintEl = document.getElementById('profile-upgrade-hint');
+        const coClosingBtn = document.getElementById('profile-coclosing-btn');
+
+        // Highlight current stage on the 4-Stage Evolution Roadmap
+        ['bear', 'wolf', 'lion', 'eagle'].forEach(stageId => {
+          const btn = document.getElementById(`evo-stage-${stageId}`);
+          if (!btn) return;
+          if (stageId === arch.id) {
+            btn.className = 'evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-amber-500/20 border-2 border-amber-400 shadow-md scale-[1.03] transition cursor-pointer relative';
+          } else {
+            btn.className = 'evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-950/80 border border-slate-800 opacity-75 hover:opacity-100 hover:border-amber-400/60 transition cursor-pointer relative';
           }
-          if (descEl) descEl.textContent = arch.description;
-          if (actionEl) actionEl.textContent = arch.action;
-          ownerBox.classList.remove('hidden');
-        } else {
-          ownerBox.classList.add('hidden');
+        });
+
+        if (badgeEl) {
+          badgeEl.innerHTML = `<span class="mr-1">${arch.icon}</span><span>${arch.name} • ${arch.roleTag || ''}</span>`;
+          badgeEl.className = `inline-flex items-center px-2.5 py-0.5 rounded-full font-bold text-[10px] border shadow-2xs ${arch.badgeClass}`;
         }
+        if (quoteEl) quoteEl.textContent = arch.quote || '';
+        if (descEl) descEl.textContent = currentMode === 'owner' ? arch.description : (arch.agentTip || arch.description);
+        if (turnaroundTitle) turnaroundTitle.textContent = `🔄 โมเดล 3D: ${arch.name} (หมุนดู 4 มุม)`;
+        if (turnaroundVp && arch.turnaroundImg) {
+          turnaroundVp.style.backgroundImage = `url('${arch.turnaroundImg}')`;
+          setProfileTurnaroundAngle(0);
+        }
+        if (upgradeHintEl && arch.upgradeHint) {
+          upgradeHintEl.textContent = arch.upgradeHint;
+        }
+
+        // Update Dual-Track Milestone Checkpoints (Activity 0->50->100 & Performance 0->150->300)
+        const actPts = agent.activityPoints || 0;
+        const perfPts = agent.performancePoints || 0;
+        const actPct = Math.min(100, Math.round((actPts / 100) * 100));
+        const perfPct = Math.min(100, Math.round((perfPts / 300) * 100));
+
+        const actBar = document.getElementById('profile-act-evo-bar');
+        const perfBar = document.getElementById('profile-perf-evo-bar');
+        const actLbl = document.getElementById('profile-act-checkpoint-label');
+        const perfLbl = document.getElementById('profile-perf-checkpoint-label');
+        const actQuestBox = document.getElementById('profile-act-quest-Breakdown');
+        const perfQuestBox = document.getElementById('profile-perf-quest-Breakdown');
+        const chkAct50 = document.getElementById('chk-act-50');
+        const chkAct100 = document.getElementById('chk-act-100');
+        const chkPerf150 = document.getElementById('chk-perf-150');
+        const chkPerf300 = document.getElementById('chk-perf-300');
+
+        if (actBar) actBar.style.width = `${actPct}%`;
+        if (perfBar) perfBar.style.width = `${perfPct}%`;
+        if (actLbl) actLbl.textContent = `${actPts} / 100 แต้ม ${actPts >= 100 ? '✅ ปลดล็อกสายขยัน!' : ''}`;
+        if (perfLbl) perfLbl.textContent = `${perfPts} / 300 แต้ม ${perfPts >= 300 ? '✅ ปลดล็อกสายปิดดีล!' : ''}`;
+
+        if (chkAct50) chkAct50.className = actPts >= 50 ? 'text-emerald-300 font-bold' : 'text-slate-500';
+        if (chkAct100) chkAct100.className = actPts >= 100 ? 'text-emerald-300 font-bold' : 'text-slate-500';
+        if (chkPerf150) chkPerf150.className = perfPts >= 150 ? 'text-amber-300 font-bold' : 'text-slate-500';
+        if (chkPerf300) chkPerf300.className = perfPts >= 300 ? 'text-amber-300 font-bold' : 'text-slate-500';
+
+        if (actQuestBox) {
+          if (actPts < 50) {
+            const need = 50 - actPts;
+            const signs = Math.ceil(need / 15);
+            const shares = Math.ceil(need / 5);
+            actQuestBox.innerHTML = `🎯 <strong>เช็กพอยท์แรก (50 แต้ม - หมีตื่นตัว):</strong> ขาดอีก <strong>${need} แต้ม</strong> ➔ ส่งภาพติดป้าย <strong>${signs} จุด</strong> (+15) หรือแชร์ทรัพย์ <strong>${shares} ครั้ง</strong> (+5)`;
+          } else if (actPts < 100) {
+            const need = 100 - actPts;
+            const signs = Math.ceil(need / 15);
+            const meets = Math.ceil(need / 10);
+            actQuestBox.innerHTML = `🔥 <strong>ผ่านครึ่งทางแล้ว!</strong> ขาดอีก <strong>${need} แต้ม</strong> เพื่อปลดล็อกร่าง <strong>${perfPts >= 300 ? '🦅 พญาอินทรี' : '🐺 หมาป่าพิทักษ์'}</strong> ➔ ติดป้ายอีก <strong>${signs} จุด</strong> (+15) หรือเข้าประชุม <strong>${meets} ครั้ง</strong> (+10)`;
+          } else {
+            actQuestBox.innerHTML = `✅ <strong>ทะลุ 100 แต้มสายขยันแล้ว!</strong> ทุกการแชร์ (+5) และติดป้าย (+15) จะถูกบวกสะสมดันอันดับ Leaderboard ทันที`;
+          }
+        }
+
+        if (perfQuestBox) {
+          if (perfPts < 150) {
+            const need = 150 - perfPts;
+            const views = Math.ceil(need / 50);
+            const listings = Math.ceil(need / 30);
+            perfQuestBox.innerHTML = `🎯 <strong>เช็กพอยท์แรก (150 แต้ม - เปิดดีล):</strong> ขาดอีก <strong>${need} แต้ม</strong> ➔ พาลูกค้าชมบ้าน <strong>${views} นัด</strong> (+50) หรือฝากทรัพย์เข้าพอร์ต <strong>${listings} หลัง</strong> (+30)`;
+          } else if (perfPts < 300) {
+            const need = 300 - perfPts;
+            const bookings = Math.ceil(need / 100);
+            const views = Math.ceil(need / 50);
+            perfQuestBox.innerHTML = `🔥 <strong>ใกล้ปลดล็อกร่าง ${actPts >= 100 ? '🦅 พญาอินทรี' : '🦁 สิงห์สุขุม'}!</strong> ขาดอีกเพียง <strong>${need} แต้ม</strong> ➔ ปิดใบจอง <strong>${bookings} เคส</strong> (+100) หรือพาชมบ้าน <strong>${views} นัด</strong> (+50)`;
+          } else {
+            perfQuestBox.innerHTML = `👑 <strong>ทะลุ 300 แต้มนักปิดดีลแล้ว!</strong> ทุกเคสโอนกรรมสิทธิ์ (+300) จะพุ่งทะยานแซงขึ้น Top Podium ทันที`;
+          }
+        }
+
+        if (coClosingBtn) {
+          if (arch.id === 'wolf') {
+            coClosingBtn.innerHTML = `<span>🤝 ขอทีมพี่เลี้ยงสาย Eagle/Lion ที่เปิดรับเคสช่วยประกบปิดดีล (LINE)</span>`;
+          } else if (arch.id === 'bear') {
+            coClosingBtn.innerHTML = `<span>🌱 ขอรับลิสต์ทรัพย์ปล่อยง่ายเพื่อปลุกโมเมนตัม (LINE)</span>`;
+          } else {
+            coClosingBtn.innerHTML = `<span>👑 แจ้งความประสงค์รับเคส Co-Close ดีลใหญ่ผ่านแอดมิน (LINE)</span>`;
+          }
+        }
+
+        // Update Voluntary Mentor Opt-In Box (Eagle & Lion can toggle opt-in; Wolf & Bear see info)
+        const mentorBox = document.getElementById('profile-mentor-optin-box');
+        const mentorToggleBtn = document.getElementById('profile-mentor-toggle-btn');
+        if (mentorBox && mentorToggleBtn) {
+          const isMentorEligible = (arch.id === 'eagle' || arch.id === 'lion');
+          if (isMentorEligible) {
+            mentorBox.classList.remove('opacity-60');
+            const optInMap = JSON.parse(localStorage.getItem('siwasup_mentor_optin_map') || '{}');
+            const isOptedIn = optInMap[agent.code] !== undefined ? optInMap[agent.code] : true;
+            if (isOptedIn) {
+              mentorToggleBtn.textContent = '🟢 สมัครใจรับเคสประกบคู่ (เปิดอยู่)';
+              mentorToggleBtn.className = 'px-2.5 py-0.5 rounded-full text-[9.5px] font-bold bg-emerald-500 text-slate-950 border border-emerald-300 shadow-2xs cursor-pointer transition';
+            } else {
+              mentorToggleBtn.textContent = '⚪ ปิดรับเคสชั่วคราว (คลิกเพื่อสมัครใจ)';
+              mentorToggleBtn.className = 'px-2.5 py-0.5 rounded-full text-[9.5px] font-bold bg-slate-800 text-slate-300 border border-slate-600 shadow-2xs cursor-pointer transition';
+            }
+          } else {
+            mentorBox.classList.add('opacity-60');
+            mentorToggleBtn.textContent = '🔒 ปลดล็อกเมื่อเป็น 🦁สิงห์ หรือ 🦅อินทรี';
+            mentorToggleBtn.className = 'px-2.5 py-0.5 rounded-full text-[9.5px] font-bold bg-slate-800 text-slate-400 border border-slate-700 cursor-not-allowed';
+          }
+        }
+
+        if (adminNoteBox) {
+          if (currentMode === 'owner') {
+            if (actionEl) actionEl.textContent = arch.action;
+            adminNoteBox.classList.remove('hidden');
+          } else {
+            adminNoteBox.classList.add('hidden');
+          }
+        }
+        ownerBox.classList.remove('hidden');
       }
 
       updateProfileButtons(agent.code);
@@ -3064,20 +3315,26 @@
         return;
       }
 
-      dropdown.innerHTML = results.map(a => `
+      dropdown.innerHTML = results.map(a => {
+        const arch = window.SiwasupAgents.getArchetype ? window.SiwasupAgents.getArchetype(a) : null;
+        return `
         <div onclick="selectAgent('${a.code}')" class="px-3 py-1.5 hover:bg-amber-50 cursor-pointer flex items-center justify-between border-b border-gray-50 last:border-0 transition-colors">
           <div class="flex items-center gap-2 min-w-0">
-            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-700 font-bold text-[10px] flex items-center justify-center shrink-0 border border-slate-200">${a.code}</span>
+            ${arch && arch.badgeImg
+              ? `<img src="${arch.badgeImg}" alt="${arch.name}" class="w-7 h-7 object-contain shrink-0 drop-shadow-2xs">`
+              : `<span class="w-6 h-6 rounded-full bg-slate-100 text-slate-700 font-bold text-[10px] flex items-center justify-center shrink-0 border border-slate-200">${a.code}</span>`
+            }
             <div class="truncate">
-              <span class="font-bold text-gray-900 text-xs">${a.nickname || a.name}</span>
+              <span class="font-bold text-gray-900 text-xs">${a.nickname || a.name} <span class="text-[10px] font-mono text-gray-500">(${a.code})</span></span>
               <span class="text-[10px] text-gray-400 block truncate">${a.name}</span>
             </div>
           </div>
           <div class="text-right shrink-0 ml-2">
-            <span class="text-[10px] font-bold text-amber-700">${a.tierIcon} ${a.totalPoints} แต้ม</span>
+            <span class="text-[10px] font-bold text-amber-700">${arch ? arch.icon : a.tierIcon} ${a.totalPoints} แต้ม</span>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
       dropdown.classList.remove('hidden');
     }
 
@@ -3195,6 +3452,25 @@
       if (modal) modal.classList.add('hidden');
     }
 
+    function setProfileTurnaroundAngle(angleIdx) {
+      const vp = document.getElementById('profile-turnaround-viewport');
+      const pos = ['0% 0%', '33.333% 0%', '66.666% 0%', '100% 0%'];
+      if (vp) vp.style.backgroundPosition = pos[angleIdx] || '0% 0%';
+      document.querySelectorAll('.prof-angle-btn').forEach(btn => {
+        const idx = Number(btn.getAttribute('data-angle'));
+        if (idx === angleIdx) {
+          btn.className = 'prof-angle-btn px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-bold text-[9.5px] cursor-pointer';
+        } else {
+          btn.className = 'prof-angle-btn px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white font-semibold text-[9.5px] cursor-pointer';
+        }
+      });
+    }
+
+    function toggleLeaderboardTurnaroundPreview() {
+      const box = document.getElementById('leaderboard-turnaround-box');
+      if (box) box.classList.toggle('hidden');
+    }
+
     function filterByAnimal(animalId) {
       activeAnimalFilter = animalId;
       const allBtn = document.getElementById('animal-btn-all');
@@ -3203,36 +3479,48 @@
       const wolfBtn = document.getElementById('animal-btn-wolf');
       const bearBtn = document.getElementById('animal-btn-bear');
 
-      const defaultBtn = "p-1.5 rounded-xl border border-gray-200 bg-white shadow-2xs text-center transition-all hover:bg-gray-50 active:scale-95";
-      if (allBtn) allBtn.className = defaultBtn + " text-gray-800";
-      if (eagleBtn) eagleBtn.className = defaultBtn + " text-amber-900 border-amber-200";
-      if (lionBtn) lionBtn.className = defaultBtn + " text-purple-900 border-purple-200";
-      if (wolfBtn) wolfBtn.className = defaultBtn + " text-blue-900 border-blue-200";
-      if (bearBtn) bearBtn.className = "w-full text-slate-700 flex items-center justify-between px-1 hover:text-slate-900 transition-colors";
+      const defaultBtn = "p-1.5 rounded-xl border border-slate-700 bg-slate-800/90 text-amber-200 shadow-2xs text-center transition-all hover:border-amber-400 active:scale-95 flex flex-col items-center justify-center gap-0.5 cursor-pointer";
+      if (allBtn) allBtn.className = defaultBtn;
+      if (eagleBtn) eagleBtn.className = defaultBtn;
+      if (lionBtn) lionBtn.className = defaultBtn;
+      if (wolfBtn) wolfBtn.className = defaultBtn;
+      if (bearBtn) bearBtn.className = defaultBtn;
 
-      const activeBadge = "p-1.5 rounded-xl font-bold shadow-2xs text-center transition-all scale-[1.02] ";
+      const activeBadge = "p-1.5 rounded-xl border-2 border-amber-400 bg-amber-400/20 text-white font-bold shadow-md text-center transition-all scale-[1.03] flex flex-col items-center justify-center gap-0.5 cursor-pointer";
       if (animalId === 'all' && allBtn) {
-        allBtn.className = activeBadge + "bg-amber-400 text-amber-950 border border-amber-500";
+        allBtn.className = "p-1.5 rounded-xl border border-amber-400 bg-amber-400 text-slate-950 font-black shadow-2xs text-center transition-all flex flex-col items-center justify-center cursor-pointer";
       } else if (animalId === 'eagle' && eagleBtn) {
-        eagleBtn.className = activeBadge + "bg-amber-100 text-amber-950 border-2 border-amber-400";
+        eagleBtn.className = activeBadge;
       } else if (animalId === 'lion' && lionBtn) {
-        lionBtn.className = activeBadge + "bg-purple-100 text-purple-950 border-2 border-purple-400";
+        lionBtn.className = activeBadge;
       } else if (animalId === 'wolf' && wolfBtn) {
-        wolfBtn.className = activeBadge + "bg-blue-100 text-blue-950 border-2 border-blue-400";
+        wolfBtn.className = activeBadge;
       } else if (animalId === 'bear' && bearBtn) {
-        bearBtn.className = "w-full text-slate-900 font-bold flex items-center justify-between px-1 bg-slate-200 rounded-lg p-1";
+        bearBtn.className = activeBadge;
       }
 
       const titleEl = document.getElementById('animal-strategy-title');
       const descEl = document.getElementById('animal-strategy-desc');
+      const imgEl = document.getElementById('animal-strategy-img');
+      const turnImgEl = document.getElementById('leaderboard-turnaround-img');
+      const turnLabelEl = document.getElementById('leaderboard-turnaround-label');
+
       if (window.SiwasupAgents && window.SiwasupAgents.ARCHETYPES) {
         const arch = window.SiwasupAgents.ARCHETYPES[animalId];
         if (arch && titleEl && descEl) {
-          titleEl.textContent = `${arch.icon} ${arch.name}`;
-          descEl.innerHTML = `<strong>🎯 กลยุทธ์สำหรับบัว:</strong> ${arch.action}<br><span class="text-gray-500 text-[9.5px]">${arch.description}</span>`;
+          titleEl.textContent = `${arch.icon} ${arch.name} • ${arch.roleTag || ''}`;
+          const isOwner = (currentMode === 'owner');
+          descEl.innerHTML = isOwner
+            ? `<span class="text-amber-300 italic">${arch.quote || ''}</span><br><strong>🎯 กลยุทธ์สำหรับบัว:</strong> ${arch.action}<br><span class="text-slate-400 text-[9.5px]">${arch.description}</span>`
+            : `<span class="text-amber-300 italic">${arch.quote || ''}</span><br><span>${arch.agentTip || arch.description}</span>`;
+          if (imgEl && arch.badgeImg) imgEl.src = arch.badgeImg;
+          if (turnImgEl && arch.turnaroundImg) turnImgEl.src = arch.turnaroundImg;
+          if (turnLabelEl) turnLabelEl.textContent = `📐 โมเดล 3D รอบตัว: ${arch.name} (0° / 45° / 90° / 180°)`;
         } else if (titleEl && descEl) {
-          titleEl.textContent = "ตัวแทนทั้งหมด 125 ท่าน";
-          descEl.textContent = "เลือกฟิลเตอร์สัตว์เพื่อเจาะลึกพฤติกรรมและแผนการส่งงานที่ตรงจุด";
+          titleEl.textContent = "ตัวแทนทั้งหมด 125 ท่าน (4 สายคาแรคเตอร์)";
+          descEl.textContent = "คลิกเลือกเหรียญตราสัตว์ด้านบน เพื่อกรองรายชื่อตัวแทนและดูกลยุทธ์การจับคู่ทีม Co-Broker";
+          if (imgEl) imgEl.src = 'assets/characters/badge_eagle.png';
+          if (turnImgEl) turnImgEl.src = 'assets/characters/turnaround_eagle.png';
         }
       }
 
@@ -3272,10 +3560,10 @@
       }
       let list = window.SiwasupAgents.getLeaderboard(track, 125);
 
-      // 👑 Owner-Only Animal Matrix Bar handling
+      // 👑 Animal Matrix Bar handling (Visible for Agents & Owners)
       const animalBar = document.getElementById('owner-animal-intelligence-bar');
       if (animalBar) {
-        if (isOwner && window.SiwasupAgents && typeof window.SiwasupAgents.getArchetype === 'function') {
+        if (window.SiwasupAgents && typeof window.SiwasupAgents.getArchetype === 'function') {
           animalBar.classList.remove('hidden');
           const allAgents = window.SiwasupAgents.getActive();
           let cEagle = 0, cLion = 0, cWolf = 0, cBear = 0;
@@ -3316,7 +3604,7 @@
       const countLabel = document.getElementById('lb-count-label');
       if (countLabel) countLabel.textContent = `${list.length} ตัวแทน`;
 
-      // Render Top 3 Podium Cards (only if no search active and not filtered to single animal with <3)
+      // Render Top 3 Podium Cards (with 3D Gold Emblem Badges!)
       const podiumEl = document.getElementById('leaderboard-podium');
       const hasPodium = (!currentLeaderboardQuery && list.length >= 3 && activeAnimalFilter === 'all');
 
@@ -3325,38 +3613,44 @@
           const top1 = list[0];
           const top2 = list[1];
           const top3 = list[2];
+          const arch1 = window.SiwasupAgents.getArchetype(top1);
+          const arch2 = window.SiwasupAgents.getArchetype(top2);
+          const arch3 = window.SiwasupAgents.getArchetype(top3);
           podiumEl.innerHTML = `
             <!-- อันดับ #2 (Silver) -->
             <div onclick="closeAgentLeaderboardModal(); openMyProfileModal('${top2.code}');" class="p-3 sm:p-3.5 rounded-2xl bg-neutral-50 border border-neutral-200/80 text-center space-y-1.5 cursor-pointer hover:scale-[1.02] transition-transform shadow-2xs order-1" title="คลิกดูโปรไฟล์">
               <span class="inline-block px-2 py-0.5 rounded-full bg-neutral-200/80 text-neutral-700 text-[10px] font-bold">#2 Silver</span>
-              <div class="w-10 h-10 sm:w-11 sm:h-11 mx-auto rounded-full bg-white border border-neutral-200 text-neutral-800 font-bold text-xs flex items-center justify-center shadow-2xs mt-1">
-                ${top2.code}
+              <div class="relative w-12 h-12 mx-auto mt-1">
+                <img src="${arch2.badgeImg}" alt="${arch2.name}" class="w-12 h-12 object-contain drop-shadow">
+                <span class=" -bottom-1 -right-1 px-1 py-0.2 rounded-full bg-neutral-800 text-white font-mono font-bold text-[9px] border border-white">${top2.code}</span>
               </div>
-              <div class="font-bold text-neutral-900 text-xs sm:text-sm truncate">${top2.nickname || top2.name}</div>
+              <div class="font-bold text-neutral-900 text-xs sm:text-sm truncate pt-0.5">${top2.nickname || top2.name}</div>
               <div class="text-xs font-bold text-neutral-700 font-mono">${top2.totalPoints} <span class="font-normal text-neutral-400 text-[10px]">แต้ม</span></div>
-              <div class="text-[9px] font-semibold text-neutral-400">${top2.tierName}</div>
+              <div class="text-[9px] font-semibold text-neutral-500">${arch2.icon} ${arch2.shortName || arch2.name.split(' ')[0]}</div>
             </div>
 
             <!-- อันดับ #1 (Top Agent - Warm Champagne Gold Highlight) -->
             <div onclick="closeAgentLeaderboardModal(); openMyProfileModal('${top1.code}');" class="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-b from-[#FAF7F0] to-white border-2 border-[#C2A460] text-center space-y-1.5 shadow-md relative -top-1.5 order-2 cursor-pointer hover:scale-[1.02] transition-transform" title="คลิกดูโปรไฟล์แชมป์">
               <span class="inline-block px-2.5 py-0.5 rounded-full bg-neutral-900 text-[#E5C985] text-[10px] font-bold">♛ #1 Top Agent</span>
-              <div class="w-12 h-12 sm:w-13 sm:h-13 mx-auto rounded-full bg-neutral-900 text-[#E5C985] border-2 border-[#C2A460] font-bold text-sm flex items-center justify-center shadow-xs mt-1">
-                ${top1.code}
+              <div class="relative w-14 h-14 mx-auto mt-1">
+                <img src="${arch1.badgeImg}" alt="${arch1.name}" class="w-14 h-14 object-contain drop-shadow-md">
+                <span class=" -bottom-1 -right-1 px-1.5 py-0.2 rounded-full bg-neutral-900 text-[#E5C985] font-mono font-bold text-[9.5px] border border-[#C2A460]">${top1.code}</span>
               </div>
-              <div class="font-bold text-neutral-900 text-sm sm:text-base truncate">${top1.nickname || top1.name}</div>
+              <div class="font-bold text-neutral-900 text-sm sm:text-base truncate pt-0.5">${top1.nickname || top1.name}</div>
               <div class="text-sm font-bold text-[#8C7038] font-mono">${top1.totalPoints} <span class="font-normal text-neutral-400 text-[11px]">แต้ม</span></div>
-              <div class="text-[10px] font-semibold text-[#9A7D46] uppercase tracking-wider">${top1.tierName}</div>
+              <div class="text-[10px] font-bold text-[#9A7D46]">${arch1.icon} ${arch1.shortName || arch1.name.split(' ')[0]}</div>
             </div>
 
             <!-- อันดับ #3 (Bronze) -->
             <div onclick="closeAgentLeaderboardModal(); openMyProfileModal('${top3.code}');" class="p-3 sm:p-3.5 rounded-2xl bg-neutral-50 border border-neutral-200/80 text-center space-y-1.5 cursor-pointer hover:scale-[1.02] transition-transform shadow-2xs order-3" title="คลิกดูโปรไฟล์">
               <span class="inline-block px-2 py-0.5 rounded-full bg-[#EFECE6] text-[#8C734B] text-[10px] font-bold">#3 Bronze</span>
-              <div class="w-10 h-10 sm:w-11 sm:h-11 mx-auto rounded-full bg-white border border-neutral-200 text-neutral-800 font-bold text-xs flex items-center justify-center shadow-2xs mt-1">
-                ${top3.code}
+              <div class="relative w-12 h-12 mx-auto mt-1">
+                <img src="${arch3.badgeImg}" alt="${arch3.name}" class="w-12 h-12 object-contain drop-shadow">
+                <span class=" -bottom-1 -right-1 px-1 py-0.2 rounded-full bg-neutral-800 text-white font-mono font-bold text-[9px] border border-white">${top3.code}</span>
               </div>
-              <div class="font-bold text-neutral-900 text-xs sm:text-sm truncate">${top3.nickname || top3.name}</div>
+              <div class="font-bold text-neutral-900 text-xs sm:text-sm truncate pt-0.5">${top3.nickname || top3.name}</div>
               <div class="text-xs font-bold text-neutral-700 font-mono">${top3.totalPoints} <span class="font-normal text-neutral-400 text-[10px]">แต้ม</span></div>
-              <div class="text-[9px] font-semibold text-neutral-400">${top3.tierName}</div>
+              <div class="text-[9px] font-semibold text-neutral-500">${arch3.icon} ${arch3.shortName || arch3.name.split(' ')[0]}</div>
             </div>
           `;
           podiumEl.classList.remove('hidden');
@@ -3377,17 +3671,21 @@
           listEl.innerHTML = renderList.map((a, idx) => {
             const rank = startIndex + idx;
             const rankBadge = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
-            const arch = (isOwner && window.SiwasupAgents && typeof window.SiwasupAgents.getArchetype === 'function') 
+            const arch = (window.SiwasupAgents && typeof window.SiwasupAgents.getArchetype === 'function') 
               ? window.SiwasupAgents.getArchetype(a) 
               : null;
 
             return `
-              <div onclick="closeAgentLeaderboardModal(); openMyProfileModal('${a.code}');" class="p-3 sm:p-3.5 flex flex-col gap-1.5 hover:bg-neutral-50/80 transition cursor-pointer active:scale-[0.99]" title="คลิกเพื่อดูกระเป๋าคะแนนของ ${a.code}">
+              <div onclick="closeAgentLeaderboardModal(); openMyProfileModal('${a.code}');" class="p-3 sm:p-3.5 flex flex-col gap-1.5 hover:bg-neutral-50/80 transition cursor-pointer active:scale-[0.99]" title="คลิกเพื่อดูกระเป๋าคะแนนและโมเดล 3D ของ ${a.code}">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-3 min-w-0">
                     <span class="w-6 text-center text-xs font-bold ${rank <= 3 ? 'text-amber-700 text-sm' : 'text-neutral-400 font-mono'} shrink-0">${rankBadge}</span>
-                    <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-neutral-100 border border-neutral-200 text-neutral-800 font-bold text-xs flex items-center justify-center shrink-0 shadow-2xs">
-                      ${a.code}
+                    <div class="relative w-10 h-10 shrink-0">
+                      ${arch && arch.badgeImg
+                        ? `<img src="${arch.badgeImg}" alt="${arch.name}" class="w-10 h-10 object-contain drop-shadow-xs">
+                           <span class=" -bottom-0.5 -right-0.5 px-1 rounded-full bg-neutral-900 text-amber-300 font-mono font-bold text-[8.5px] border border-amber-400">${a.code}</span>`
+                        : `<div class="w-9 h-9 rounded-full bg-neutral-100 border border-neutral-200 text-neutral-800 font-bold text-xs flex items-center justify-center">${a.code}</div>`
+                      }
                     </div>
                     <div class="min-w-0">
                       <div class="flex items-center gap-1.5 flex-wrap">
@@ -3398,8 +3696,8 @@
                         </span>
                         ${arch ? `
                           <span class="inline-flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 rounded-full border ${arch.badgeClass}">
-                            <span class="w-3 h-3 inline-flex items-center justify-center">${window.SiwasupAgents.getAnimalSvg(arch.id, 'w-full h-full')}</span>
-                            <span>${arch.name.split(' ')[0]}</span>
+                            <span>${arch.icon}</span>
+                            <span>${arch.shortName || arch.name.split(' ')[0]}</span>
                           </span>
                         ` : ''}
                       </div>
@@ -3418,10 +3716,10 @@
                   </div>
                 </div>
 
-                ${arch ? `
+                ${(isOwner && arch) ? `
                   <div class="mt-1 pt-1 border-t border-amber-200/40 flex items-center justify-between text-[9.5px] text-amber-950 bg-amber-50/60 p-1.5 rounded-lg">
                     <span class="truncate">💡 <strong>แนะนำสำหรับบัว:</strong> ${arch.action}</span>
-                    <span class="text-[9px] font-bold text-amber-800 shrink-0 ml-1">ดูโปรไฟล์ →</span>
+                    <span class="text-[9px] font-bold text-amber-800 shrink-0 ml-1">ดูโปรไฟล์ 3D →</span>
                   </div>
                 ` : ''}
               </div>

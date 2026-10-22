@@ -2207,43 +2207,67 @@
     return list.slice(0, limit);
   }
 
-  // 4. OWNER-ONLY ANIMAL ARCHETYPES MATRIX
+  // 4. ANIMAL ARCHETYPES MATRIX (3D Gold Badges & Turnaround Assets)
   const ANIMAL_ARCHETYPES = {
     eagle: {
       id: 'eagle',
       name: 'Eagle (พญาอินทรี)',
+      shortName: 'พญาอินทรี',
+      roleTag: '★ Super Star',
+      quote: '“มองไกล เห็นโอกาส พาไปได้ไกลกว่า”',
       icon: '🦅',
+      badgeImg: 'assets/characters/badge_eagle.png',
+      turnaroundImg: 'assets/characters/turnaround_eagle.png',
       title: 'สายตาเฉียบคม บินสูง มองกว้าง',
       badgeClass: 'bg-amber-100 text-amber-900 border-amber-300',
       description: 'ขยันลงพื้นที่ เข้าประชุมสม่ำเสมอ และปิดการขายได้อย่างแม่นยำ (Super Star)',
-      action: 'ยกย่องเป็น Role Model / ให้สิทธิ์เลือกลีดพิเศษ / เชิญเป็นโค้ชประจำทีม'
+      action: 'ยกย่องเป็น Role Model / ให้สิทธิ์เลือกลีดพิเศษ / เชิญเป็นโค้ชประจำทีม',
+      agentTip: 'คุณคือระดับ Super Star! ได้รับสิทธิ์เลือกลีดพิเศษและเป็นโค้ชต้นแบบของทีมศิวาทรัพย์'
     },
     lion: {
       id: 'lion',
       name: 'Lion (สิงห์สุขุม)',
+      shortName: 'สิงห์สุขุม',
+      roleTag: '💎 Strategic Closer',
+      quote: '“ไม่ต้องวิ่งตามทุกดีล เลือกเฉพาะที่ใช่ แล้วปิดให้เป็น”',
       icon: '🦁',
+      badgeImg: 'assets/characters/badge_lion.png',
+      turnaroundImg: 'assets/characters/turnaround_lion.png',
       title: 'จ้าวป่าประหยัดพลังงาน นิ่งเล็งเป้าใหญ่',
       badgeClass: 'bg-purple-100 text-purple-900 border-purple-300',
       description: 'ไม่เน้นกิจกรรมย่อย แต่คอนเนกชันกว้าง ปิดยอดขายดีลใหญ่ได้คมกริบ (Strategic Closer)',
-      action: 'ป้อนเฉพาะทรัพย์พรีเมียม / สเปกลูกค้ากระเป๋าหนัก ไม่ต้องรบกวนด้วยประชุมย่อย'
+      action: 'ป้อนเฉพาะทรัพย์พรีเมียม / สเปกลูกค้ากระเป๋าหนัก ไม่ต้องรบกวนด้วยประชุมย่อย',
+      agentTip: 'จุดแข็งของคุณคือการปิดดีลใหญ่คมกริบ! จับคู่กับสาย Wolf เพื่อขยายฐานทรัพย์ได้เร็วขึ้น'
     },
     wolf: {
       id: 'wolf',
       name: 'Wolf (หมาป่าพิทักษ์)',
+      shortName: 'หมาป่าพิทักษ์',
+      roleTag: '🛡️ Active Grinder',
+      quote: '“ลุยได้เสมอ แค่มีทีมอยู่ข้างๆ ยอดก็ไปถึง”',
       icon: '🐺',
+      badgeImg: 'assets/characters/badge_wolf.png',
+      turnaroundImg: 'assets/characters/turnaround_wolf.png',
       title: 'หัวใจนักสู้ ไม่ยอมแพ้ อึดทน ลุยพื้นที่',
       badgeClass: 'bg-blue-100 text-blue-900 border-blue-300',
       description: 'ขยันปักป้าย เข้าประชุมสม่ำเสมอ พาลูกค้าชมบ้านบ่อย แต่ยังขาดทักษะปิดดีล (Active Grinder)',
-      action: 'ต้องการคนช่วยปิด! ส่งทีมงานหรือพี่เลี้ยงช่วยประกบ (Co-Closing) จะเกิดยอดเงินทันที'
+      action: 'ต้องการคนช่วยปิด! ส่งทีมงานหรือพี่เลี้ยงช่วยประกบ (Co-Closing) จะเกิดยอดเงินทันที',
+      agentTip: 'คุณขยันลุยพื้นที่ยอดเยี่ยมมาก! สามารถกดขอพี่เลี้ยงสาย Eagle/Lion ช่วยประกบปิดดีลได้ทันที'
     },
     bear: {
       id: 'bear',
       name: 'Hibernating Bear (หมีจำศีล)',
+      shortName: 'หมีจำศีล',
+      roleTag: '🌱 Waiting for Momentum',
+      quote: '“พักไว้ก็ได้... เดี๋ยวพลังกลับมา เมื่อถึงเวลา”',
       icon: '🐻',
+      badgeImg: 'assets/characters/badge_bear.png',
+      turnaroundImg: 'assets/characters/turnaround_bear.png',
       title: 'ผู้สะสมพลัง รอจังหวะเวลาที่เหมาะสม',
       badgeClass: 'bg-slate-100 text-slate-800 border-slate-300',
       description: 'สมาชิกที่กำลังพักรบหรือสังเกตการณ์ ยังไม่มีกิจกรรมในรอบเดือน (Waiting for Momentum)',
-      action: 'ส่ง LINE ทักทายด้วยทรัพย์ปล่อยง่าย หรือเคสตัวอย่างที่ปิดได้จริงเพื่อปลุกพลัง'
+      action: 'ส่ง LINE ทักทายด้วยทรัพย์ปล่อยง่าย หรือเคสตัวอย่างที่ปิดได้จริงเพื่อปลุกพลัง',
+      agentTip: 'พร้อมกลับมาลุยเมื่อไหร่ เลือกแชร์ทรัพย์ปล่อยง่ายหรือปักป้ายหน้าบ้านเพื่อปลุกโมเมนตัมได้เลย!'
     }
   };
 
@@ -2266,17 +2290,23 @@
     const act = agent.activityPoints || 0;
     const perf = agent.performancePoints || 0;
     let arch;
+    let upgradeHint = '';
     if (act >= 100 && perf >= 300) {
       arch = ANIMAL_ARCHETYPES.eagle;
+      upgradeHint = 'คุณอยู่ในสถานะสูงสุดของตาราง (พญาอินทรี Super Star) รักษามาตรฐานเพื่อรับลีด VIP ต่อเนื่อง!';
     } else if (act < 100 && perf >= 300) {
       arch = ANIMAL_ARCHETYPES.lion;
+      upgradeHint = `สะสมคะแนนกิจกรรมเพิ่มอีก ${100 - act} แต้ม เพื่อทะยานขึ้นสู่ 🦅 พญาอินทรี (Super Star)!`;
     } else if (act >= 100 && perf < 300) {
       arch = ANIMAL_ARCHETYPES.wolf;
+      upgradeHint = `สะสมคะแนนผลงานปิดดีลเพิ่มอีก ${300 - perf} แต้ม เพื่อทะยานขึ้นสู่ 🦅 พญาอินทรี (Super Star)!`;
     } else {
       arch = ANIMAL_ARCHETYPES.bear;
+      upgradeHint = `สะสมคะแนนกิจกรรมอีก ${100 - act} แต้ม (เพื่อปลดล็อก 🐺 หมาป่าพิทักษ์) หรือผลงานอีก ${300 - perf} แต้ม (สู่ 🦁 สิงห์สุขุม)!`;
     }
     return {
       ...arch,
+      upgradeHint: upgradeHint,
       svg: getAnimalSvg(arch.id)
     };
   }
@@ -2297,6 +2327,16 @@
     }
   }
 
+  function resetAllPointsToSeed() {
+    try {
+      localStorage.removeItem(STORAGE_KEY_AGENTS);
+      localStorage.removeItem(STORAGE_KEY_TXS);
+    } catch (e) {}
+    currentAgents = JSON.parse(JSON.stringify(SIWASUP_AGENTS_SEED));
+    saveAgentsToCache();
+    return currentAgents;
+  }
+
   // Initialize immediately
   initAgents();
 
@@ -2307,13 +2347,16 @@
     find: findAgent,
     search: searchAgents,
     award: awardPoints,
+    resetPoints: resetAllPointsToSeed,
     getLeaderboard: getLeaderboard,
     syncFromSheets: syncAgentsFromGoogleSheet,
     calculateTier: calculateTier,
     TIERS: TIER_LEVELS,
     RULES: SCORING_RULES,
+    rules: SCORING_RULES,
     getTransactions: getTransactions,
     ARCHETYPES: ANIMAL_ARCHETYPES,
+    archetypes: ANIMAL_ARCHETYPES,
     getArchetype: getAgentArchetype,
     getAnimalSvg: getAnimalSvg
   };
