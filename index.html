@@ -1522,31 +1522,6 @@
         <span>${bankLabel}</span>
       </span>`;
     }
-        return '';
-      }
-      const b = (bankSource || 'Siwasup').toUpperCase();
-      if (b === 'SAM') {
-        return `<span class="bg-indigo-50/95 text-indigo-700 border border-indigo-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">SAM</span>`;
-      } else if (b === 'SCB') {
-        return `<span class="bg-purple-50/95 text-purple-700 border border-purple-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">SCB</span>`;
-      } else if (b === 'KBANK') {
-        return `<span class="bg-emerald-50/95 text-emerald-700 border border-emerald-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">KBank</span>`;
-      } else if (b === 'TTB') {
-        return `<span class="bg-blue-50/95 text-blue-700 border border-blue-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">TTB</span>`;
-      } else if (b === 'KTB') {
-        return `<span class="bg-cyan-50/95 text-cyan-700 border border-cyan-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">กรุงไทย</span>`;
-      } else if (b === 'GSB') {
-        return `<span class="bg-pink-50/95 text-pink-700 border border-pink-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">ออมสิน</span>`;
-      } else if (b === 'GHB') {
-        return `<span class="bg-orange-50/95 text-orange-700 border border-orange-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">ธอส.</span>`;
-      } else if (b === 'BBL') {
-        return `<span class="bg-slate-100/95 text-slate-700 border border-slate-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">กรุงเทพ</span>`;
-      } else if (b === 'PAMCO') {
-        return `<span class="bg-teal-50/95 text-teal-700 border border-teal-200/90 text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center shadow-2xs backdrop-blur-xs">PAMCO</span>`;
-      } else {
-        return `<span class="bg-gradient-to-r from-[#8B0000] to-[#730000] text-white border border-[#C2A460]/50 text-[10px] font-semibold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1 shadow-2xs backdrop-blur-xs"><span class="text-[#E5C985]">✦</span><span>ศิวาทรัพย์ รีโนเวท</span></span>`;
-      }
-    }
 
     function renderProperties() {
       const container = document.getElementById('property-list');
