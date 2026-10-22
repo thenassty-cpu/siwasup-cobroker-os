@@ -204,36 +204,49 @@
   <!-- Responsive App Container (Mobile LINE view to Desktop Homerun Grid) -->
   <div class="w-full max-w-7xl mx-auto bg-white min-h-screen shadow-xl relative flex flex-col border-x border-neutral-200/70">
     
-    <!-- 🏛️ Top Header (Sticky, Backdrop-blur) -->
+    <!-- 🏛️ Top Header (Sticky, Backdrop-blur, Mobile Collapsible Search) -->
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80 shadow-xs">
       
-      <!-- 1. Top Role Utility Bar (แยกส่วนแอดมิน/โหมดออกจาก UI หลัก สูง ~32px) -->
-      <div class="bg-neutral-900 text-neutral-300 text-xs py-1.5 px-3 sm:px-6 border-b border-neutral-800">
-        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <!-- 1. Top Role Utility Bar: บรรทัดเดียวจบทั้งมือถือและคอม (สูง ~36px) -->
+      <div class="bg-neutral-950 text-neutral-300 text-xs py-1.5 px-3 sm:px-4 border-b border-neutral-900">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
           
-          <!-- ด้านซ้าย: สถานะโหมด + แถบสลับโหมด 5 บทบาท -->
-          <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
-            <div class="flex items-center gap-1.5 shrink-0">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span class="text-[11px] text-neutral-400 hidden sm:inline">โหมด:</span>
-              <strong id="mode-text" class="text-white font-semibold text-[11px]">Free Agent (คอม 3-5% อิสระ)</strong>
-            </div>
+          <!-- ซ้าย: สลับโหมด (บนมือถือใช้ Dropdown ประหยัดที่ / บนคอมใช้ปุ่มเรียง) -->
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
+            
+            <!-- Mobile Role Selector (< lg) -->
+            <select 
+              id="mobile-role-selector"
+              onchange="setMode(this.value)" 
+              class="lg:hidden bg-neutral-900 text-white font-semibold text-[11px] px-2 py-1 rounded-lg border border-neutral-800 focus:outline-none"
+            >
+              <option value="owner">โหมด: เจ้าของ (บัว & กูล)</option>
+              <option value="free_agent" selected>โหมด: Free Agent (3-5%)</option>
+              <option value="employee">โหมด: พนักงานประจำ (1%)</option>
+              <option value="trainee">โหมด: ฝึกหัด (Trainee)</option>
+              <option value="client">โหมด: ลูกค้า VIP</option>
+            </select>
 
-            <!-- Role Switcher Pills -->
-            <div class="flex items-center bg-neutral-800/80 p-0.5 rounded-lg border border-neutral-700/60 text-[10px]">
-              <button id="btn-owner-mode" onclick="setMode('owner')" class="px-2 py-0.5 rounded font-medium transition-all text-neutral-400 hover:text-white" title="โหมดเจ้าของ/แอดมิน">เจ้าของ</button>
-              <button id="btn-freeagent-mode" onclick="setMode('free_agent')" class="px-2.5 py-0.5 rounded-md font-bold transition-all bg-[#990000] text-white shadow-2xs" title="โหมด Free Agent">Free</button>
-              <button id="btn-employee-mode" onclick="setMode('employee')" class="px-2 py-0.5 rounded font-medium transition-all text-neutral-400 hover:text-white" title="โหมดพนักงานประจำ">พนักงาน</button>
-              <button id="btn-trainee-mode" onclick="setMode('trainee')" class="px-2 py-0.5 rounded font-medium transition-all text-neutral-400 hover:text-white" title="โหมดฝึกหัด">ฝึกหัด</button>
-              <button id="btn-client-mode" onclick="setMode('client')" class="px-2 py-0.5 rounded font-medium transition-all text-neutral-400 hover:text-white" title="โหมดลูกค้า White-label">ลูกค้า</button>
+            <!-- Desktop Role Indicator & Tabs (>= lg) -->
+            <div class="hidden lg:flex items-center gap-2">
+              <span class="text-[11px] text-neutral-400">โหมด:</span>
+              <strong id="mode-text" class="text-white font-semibold text-[11px]">Free Agent (คอม 3-5% อิสระ)</strong>
+              <div class="flex items-center bg-neutral-900 p-0.5 rounded-lg border border-neutral-800 text-[11px] ml-1">
+                <button id="btn-owner-mode" onclick="setMode('owner')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white" title="โหมดเจ้าของ/แอดมิน">เจ้าของ</button>
+                <button id="btn-freeagent-mode" onclick="setMode('free_agent')" class="px-2.5 py-0.5 rounded-md bg-[#8B0000] text-white font-semibold" title="โหมด Free Agent">Free</button>
+                <button id="btn-employee-mode" onclick="setMode('employee')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white" title="โหมดพนักงานประจำ">พนักงาน</button>
+                <button id="btn-trainee-mode" onclick="setMode('trainee')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white" title="โหมดฝึกหัด">ฝึกหัด</button>
+                <button id="btn-client-mode" onclick="setMode('client')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white" title="โหมดลูกค้า White-label">ลูกค้า</button>
+              </div>
             </div>
           </div>
 
-          <!-- ด้านขวา: ทางลัดแอดมิน & การแจ้งเตือนกระดิ่ง -->
+          <!-- ขวา: ปุ่มลัด กุญแจ, แต้ม, แจ้งเตือน (บรรทัดเดียว ไม่ตกชั้น) -->
           <div class="flex items-center gap-1.5 shrink-0">
-            <!-- กระดิ่งแจ้งเตือนทรัพย์ฝากขายใหม่ (ย้ายขึ้นมาบนนี้แทน Banner ใหญ่) -->
-            <button id="btn-owner-leads-notify" onclick="openOwnerLeadsModal()" class="hidden items-center gap-1.5 bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-0.5 rounded-full hover:bg-amber-500/30 transition text-[10.5px] active:scale-95" title="ดูรายการทรัพย์ฝากขายใหม่">
-              <span>🔔 ทรัพย์ฝากขายใหม่ (<span id="consign-count-badge">1</span>)</span>
+            <!-- กระดิ่งแจ้งเตือนทรัพย์ฝากขายใหม่ (Owner) -->
+            <button id="btn-owner-leads-notify" onclick="openOwnerLeadsModal()" class="hidden items-center gap-1.5 bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full hover:bg-amber-500/30 transition text-[10.5px] active:scale-95" title="ดูรายการทรัพย์ฝากขายใหม่">
+              <span>🔔 (<span id="consign-count-badge">1</span>)</span>
             </button>
 
             <!-- แอดมินจัดกลุ่มสัตว์ 4 กลุ่ม -->
@@ -241,78 +254,93 @@
               <span>🐾 จัดกลุ่ม</span>
             </button>
 
-            <!-- เบิกกุญแจ NPA (Demo) -->
-            <button type="button" onclick="openNpaKeyModal()" class="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-sky-500/20 text-sky-300 border border-sky-500/30 hover:bg-sky-500/30 transition active:scale-95" title="ระบบเบิกกุญแจ NPA & Messenger">
-              <i data-lucide="key" class="w-3 h-3 text-sky-400"></i>
-              <span class="hidden sm:inline">เบิกกุญแจ (Demo)</span>
-              <span class="sm:hidden">กุญแจ</span>
+            <!-- ปุ่มกุญแจ -->
+            <button type="button" onclick="openNpaKeyModal()" class="px-2 py-0.5 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-sky-400 flex items-center gap-1 hover:border-neutral-700 transition active:scale-95" title="ระบบเบิกกุญแจ NPA & Messenger">
+              <span>🔑</span>
+              <span class="hidden sm:inline">กุญแจ</span>
             </button>
 
             <!-- ทำเนียบตัวแทน 125 -->
-            <button type="button" onclick="openAgentLeaderboardModal()" class="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-neutral-800 text-neutral-300 border border-neutral-700 hover:text-white transition active:scale-95" title="ทำเนียบตัวแทน 125 ท่าน & ตารางคะแนน">
-              <i data-lucide="trophy" class="w-3 h-3 text-amber-400"></i>
-              <span class="hidden sm:inline">ทำเนียบ (125)</span>
-              <span class="sm:hidden">125</span>
+            <button type="button" onclick="openAgentLeaderboardModal()" class="px-2 py-0.5 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-amber-400 font-semibold flex items-center gap-1 hover:border-neutral-700 transition active:scale-95" title="ทำเนียบตัวแทน 125 ท่าน">
+              <span>🏆</span>
+              <span>125</span>
             </button>
 
             <!-- โปรไฟล์ตัวแทน -->
-            <button type="button" onclick="openMyProfileModal()" id="btn-header-profile" class="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-neutral-800 text-neutral-300 border border-neutral-700 hover:text-white transition active:scale-95" title="กระเป๋าคะแนน & โปรไฟล์">
+            <button type="button" onclick="openMyProfileModal()" id="btn-header-profile" class="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-neutral-300 hover:text-white transition active:scale-95" title="กระเป๋าคะแนน & โปรไฟล์">
               <span class="w-3.5 h-3.5 rounded-full bg-amber-400 text-gray-950 font-black text-[7.5px] flex items-center justify-center shrink-0" id="header-profile-avatar">S22</span>
-              <span id="bar-profile-btn-text" class="hidden sm:inline">โปรไฟล์</span>
+              <span id="bar-profile-btn-text" class="hidden sm:inline text-[10px]">โปรไฟล์</span>
             </button>
           </div>
 
         </div>
       </div>
 
-      <!-- 2. Main Clean Header & Unified Floating Pill Filter -->
-      <div class="px-3 sm:px-6 py-2.5 sm:py-3 border-b border-neutral-100">
-        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+      <!-- 2. Main Header & Responsive Search (กะทัดรัด คืนพื้นที่จอ) -->
+      <div class="px-3 sm:px-6 py-2 sm:py-2.5 border-b border-neutral-100">
+        <div class="max-w-7xl mx-auto space-y-2">
           
-          <!-- Brand Identity -->
-          <div class="flex items-center justify-between lg:justify-start gap-3 shrink-0">
-            <div class="flex items-center gap-2.5 cursor-pointer" onclick="location.reload()">
-              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#990000] to-[#660000] text-[#E5C985] border border-[#C2A460]/40 flex items-center justify-center font-bold text-lg shadow-sm shrink-0">
+          <!-- แถวโลโก้ + ปุ่มฝากขายฟรี -->
+          <div class="flex items-center justify-between gap-2">
+            
+            <!-- Brand Identity -->
+            <div class="flex items-center gap-2.5 shrink-0 cursor-pointer" onclick="location.reload()">
+              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#990000] to-[#660000] text-[#E5C985] border border-[#C2A460]/40 flex items-center justify-center font-bold text-base shadow-xs shrink-0">
                 S
               </div>
               <div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1.5">
                   <h1 class="font-bold text-neutral-900 text-sm sm:text-base tracking-tight whitespace-nowrap">ศิวาทรัพย์ แอสเซท</h1>
-                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-[#990000]/8 text-[#8B0000] border border-[#990000]/15">
+                  <span class="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-[#990000]/8 text-[#8B0000] border border-[#990000]/15">
                     NPA OS
                   </span>
                 </div>
-                <p class="text-xs text-neutral-400 whitespace-nowrap">คลังทรัพย์ธนาคาร & ระบบตัวแทนขาย</p>
+                <!-- ซ่อนคำโปรยบนจอมือถือ เพื่อประหยัดพื้นที่แนวตั้ง -->
+                <p class="hidden sm:block text-xs text-neutral-400 whitespace-nowrap">คลังทรัพย์ธนาคาร & ระบบตัวแทนขาย</p>
               </div>
             </div>
 
-            <!-- Mobile Public Consignment Action -->
-            <div class="lg:hidden flex items-center gap-1.5">
-              <button onclick="openConsignModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold text-[11px] px-3 py-1.5 rounded-full shadow-xs flex items-center gap-1 transition-transform active:scale-95">
-                <i data-lucide="tag" class="w-3 h-3 stroke-[2]"></i>
-                <span>ฝากขายฟรี</span>
-              </button>
-            </div>
+            <!-- ปุ่มฝากขายฟรี (โชว์ทั้งบนคอมและมือถือ ขนาดกะทัดรัด) -->
+            <button onclick="openConsignModal()" class="px-3 py-1.5 rounded-full bg-[#B89D68] hover:bg-[#A38854] text-white text-[11px] sm:text-xs font-semibold flex items-center gap-1 shadow-xs shrink-0 transition-transform active:scale-95">
+              <span>🏷️</span>
+              <span>ฝากขายฟรี</span>
+            </button>
           </div>
 
-          <!-- Unified Minimal Search Pill (รวม Search + ทุกตัวกรองในแคปซูลเดียว) -->
-          <div class="flex-1 max-w-4xl bg-neutral-50/90 hover:bg-white rounded-2xl lg:rounded-full border border-neutral-200/90 p-1.5 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.04)] transition-all">
-            <div class="grid grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr_1fr_auto] items-center gap-1 lg:gap-0" id="search-pill-grid">
+          <!-- 3. Mobile Compact Search Pill (โชว์เฉพาะบนมือถือ สูงแค่ 40px แตะเพื่อกาง Filter) -->
+          <button 
+            type="button"
+            id="search-mini-bar"
+            onclick="toggleMobileSearchDrawer()"
+            class="lg:hidden w-full h-10 px-3.5 rounded-full bg-neutral-100/90 hover:bg-neutral-200/80 border border-neutral-200/80 flex items-center justify-between text-xs text-neutral-500 transition-all active:scale-[0.99]"
+          >
+            <span class="flex items-center gap-2 truncate">
+              <span class="text-neutral-800">🔍</span>
+              <span id="search-mini-summary" class="truncate font-medium text-neutral-700">ค้นหาทำเล, ธนาคาร, งบประมาณ...</span>
+            </span>
+            <span id="mobile-filter-pill-badge" class="px-2 py-0.5 rounded-full bg-white text-neutral-700 text-[10px] font-semibold border border-neutral-200/70 shrink-0 shadow-2xs">
+              ตัวกรอง ▾
+            </span>
+          </button>
+
+          <!-- 4. Full Filter Box (ซ่อนไว้บนมือถือ จะกางออกเมื่อกดปุ่มด้านบน / บนจอคอมแสดงตลอดเวลา) -->
+          <div id="search-filter-drawer" class="hidden lg:block bg-neutral-50/95 lg:bg-white rounded-2xl lg:rounded-full border border-neutral-200/90 p-2.5 lg:p-1.5 shadow-sm transition-all">
+            <div class="grid grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr_1fr_auto] items-center gap-1.5 lg:gap-0" id="search-pill-grid">
               
               <!-- ช่องที่ 1: ค้นหาคำสำคัญ -->
               <div class="col-span-2 lg:col-span-1 px-3 py-1 relative">
                 <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">ค้นหาทรัพย์</label>
                 <div class="flex items-center">
                   <input type="text" id="search-input" oninput="applyAllFilters()" 
-                         placeholder="ชื่อโครงการ, รหัสทรัพย์..." 
+                         placeholder="ชื่อโครงการ, รหัส NPA..." 
                          class="w-full bg-transparent text-xs font-medium text-neutral-800 placeholder-neutral-400 focus:outline-none truncate pr-5" />
                   <button id="btn-clear-search" onclick="clearFilters()" class="hidden text-neutral-400 hover:text-neutral-600 text-sm font-bold leading-none pr-1">&times;</button>
                 </div>
               </div>
 
-              <!-- ช่องที่ 2: ประเภทอสังหาฯ (แสดงสำหรับทุกคน!) -->
+              <!-- ช่องที่ 2: ประเภทอสังหาฯ -->
               <div id="filter-category-wrapper" class="px-3 py-1 lg:border-l border-neutral-200/70">
-                <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">ประเภทอสังหาฯ</label>
+                <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">ประเภท</label>
                 <select id="filter-category" onchange="syncCategoryToChips(this.value); applyAllFilters()" class="w-full bg-transparent text-xs font-medium text-neutral-800 focus:outline-none cursor-pointer truncate">
                   <option value="all">ทุกประเภท</option>
                   <option value="ทาวน์โฮม">ทาวน์โฮม</option>
@@ -323,19 +351,19 @@
                 </select>
               </div>
 
-              <!-- ช่องที่ 3: สถาบัน/ธนาคาร (ซ่อนอัตโนมัติในโหมดลูกค้า) -->
+              <!-- ช่องที่ 3: สถาบัน/เจ้าของ (ซ่อนในโหมดลูกค้า) -->
               <div id="filter-bank-wrapper" class="px-3 py-1 lg:border-l border-neutral-200/70">
                 <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">สถาบัน/เจ้าของ</label>
                 <select id="filter-bank" onchange="applyAllFilters()" class="w-full bg-transparent text-xs font-medium text-neutral-800 focus:outline-none cursor-pointer truncate">
                   <option value="all">ทุกธนาคาร</option>
-                  <option value="Siwasup">ศิวาทรัพย์ (รีโนเวท)</option>
-                  <option value="SAM">SAM (บสส.)</option>
-                  <option value="SCB">SCB (ไทยพาณิชย์)</option>
-                  <option value="KBANK">KBank (กสิกรไทย)</option>
-                  <option value="TTB">TTB (ทีเอ็มบีธนชาต)</option>
-                  <option value="KTB">KTB (กรุงไทย)</option>
-                  <option value="GSB">GSB (ออมสิน)</option>
-                  <option value="PAMCO">PAMCO (บสส. พหลโยธิน)</option>
+                  <option value="Siwasup">ศิวาทรัพย์ รีโนเวท</option>
+                  <option value="SAM">SAM</option>
+                  <option value="SCB">SCB</option>
+                  <option value="KBANK">KBank</option>
+                  <option value="TTB">TTB</option>
+                  <option value="KTB">KTB</option>
+                  <option value="GSB">GSB</option>
+                  <option value="PAMCO">PAMCO</option>
                 </select>
               </div>
 
@@ -366,49 +394,41 @@
                 </select>
               </div>
 
-              <!-- ปุ่มค้นหา -->
+              <!-- ช่องที่ 6: ปุ่มค้นหา -->
               <div class="col-span-2 lg:col-span-1 flex justify-end p-0.5">
-                <button onclick="applyAllFilters()" class="w-full lg:w-9 h-9 rounded-xl lg:rounded-full bg-neutral-900 hover:bg-neutral-800 text-white flex items-center justify-center transition active:scale-95 shadow-xs" title="ค้นหา">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
+                <button 
+                  onclick="applyAllFilters(); toggleMobileSearchDrawer(false);" 
+                  class="w-full lg:w-9 h-9 rounded-xl lg:rounded-full bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition active:scale-95 shadow-xs" 
+                  title="ค้นหา"
+                >
+                  <span>🔍</span>
+                  <span class="lg:hidden">ค้นหาและพับเก็บ</span>
                 </button>
               </div>
 
             </div>
           </div>
 
-          <!-- Desktop Right Action: ฝากขายฟรี -->
-          <div class="hidden lg:flex items-center gap-2 shrink-0">
-            <button onclick="openConsignModal()" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold text-xs px-4 py-2 rounded-full shadow-xs flex items-center gap-1.5 transition-transform active:scale-95 whitespace-nowrap">
-              <i data-lucide="tag" class="w-3.5 h-3.5 stroke-[2]"></i>
-              <span>ฝากขายฟรี</span>
-            </button>
+          <!-- 5. แถบกรองด่วนธนาคาร (เลื่อนซ้าย-ขวาได้ บรรทัดเดียวบางๆ) -->
+          <div id="quick-chips-bar" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1 pb-0.5">
+            <span class="text-[10px] font-semibold text-neutral-400 shrink-0 uppercase tracking-wider mr-1 hidden sm:inline">กรองด่วน:</span>
+            <div id="bank-quick-chips" class="flex items-center gap-1.5 shrink-0">
+              <button type="button" onclick="selectBankChip('all', this)" class="bank-chip active h-7 px-3 rounded-full text-[11px] font-semibold bg-neutral-900 text-white shrink-0 inline-flex items-center">ทั้งหมด</button>
+              <button type="button" onclick="selectBankChip('Siwasup', this)" class="bank-chip h-7 px-3 rounded-full text-[11px] font-semibold bg-[#FAF7F2] border border-[#DFD3C3] text-[#8C734B] flex items-center gap-1 shrink-0 inline-flex items-center">
+                <span>✦</span>
+                <span>ศิวาทรัพย์ รีโนเวท</span>
+              </button>
+              <button type="button" onclick="selectBankChip('SAM', this)" class="bank-chip h-7 px-3 rounded-full text-[11px] font-medium bg-white border border-neutral-200 text-neutral-600 shrink-0 inline-flex items-center">SAM</button>
+              <button type="button" onclick="selectBankChip('SCB', this)" class="bank-chip h-7 px-3 rounded-full text-[11px] font-medium bg-white border border-neutral-200 text-neutral-600 shrink-0 inline-flex items-center">SCB</button>
+              <button type="button" onclick="selectBankChip('KBANK', this)" class="bank-chip h-7 px-3 rounded-full text-[11px] font-medium bg-white border border-neutral-200 text-neutral-600 shrink-0 inline-flex items-center">KBank</button>
+              <button type="button" onclick="selectBankChip('TTB', this)" class="bank-chip h-7 px-3 rounded-full text-[11px] font-medium bg-white border border-neutral-200 text-neutral-600 shrink-0 inline-flex items-center">TTB</button>
+              <button type="button" onclick="selectBankChip('KTB', this)" class="bank-chip h-7 px-3 rounded-full text-[11px] font-medium bg-white border border-neutral-200 text-neutral-600 shrink-0 inline-flex items-center">KTB</button>
+              <button type="button" onclick="selectBankChip('GSB', this)" class="bank-chip h-7 px-3 rounded-full text-[11px] font-medium bg-white border border-neutral-200 text-neutral-600 shrink-0 inline-flex items-center">GSB</button>
+              <button type="button" onclick="selectBankChip('PAMCO', this)" class="bank-chip h-7 px-3 rounded-full text-[11px] font-medium bg-white border border-neutral-200 text-neutral-600 shrink-0 inline-flex items-center">PAMCO</button>
+            </div>
           </div>
 
         </div>
-
-        <!-- 3. Bank Quick Chips (1-Click Filters แนวนอน - แสดงเฉพาะสถาบัน/เจ้าของ 9 ปุ่ม) -->
-        <div id="quick-chips-bar" class="max-w-7xl mx-auto pt-2.5 pb-0.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-          <span class="text-[10px] font-semibold text-neutral-400 shrink-0 uppercase tracking-wider mr-1 hidden sm:inline">กรองด่วน:</span>
-          
-          <!-- Bank Chips (แสดงในโหมด Agent/Admin) -->
-          <div id="bank-quick-chips" class="flex items-center gap-1.5 shrink-0">
-            <button type="button" onclick="selectBankChip('all', this)" class="bank-chip active h-8 px-3.5 rounded-full text-xs font-semibold bg-neutral-900 text-white shadow-xs transition whitespace-nowrap shrink-0 inline-flex items-center">ทั้งหมด</button>
-            <button type="button" onclick="selectBankChip('Siwasup', this)" class="bank-chip h-8 px-3.5 rounded-full text-xs font-semibold bg-[#FAF7F2] border border-[#DFD3C3] text-[#8C734B] hover:bg-[#F3EDE2] transition inline-flex items-center gap-1.5 whitespace-nowrap shrink-0">
-              <span class="text-[#C2A460]">✦</span>
-              <span>ศิวาทรัพย์ รีโนเวท</span>
-            </button>
-            <button type="button" onclick="selectBankChip('SAM', this)" class="bank-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center">SAM</button>
-            <button type="button" onclick="selectBankChip('SCB', this)" class="bank-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center">SCB</button>
-            <button type="button" onclick="selectBankChip('KBANK', this)" class="bank-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center">KBank</button>
-            <button type="button" onclick="selectBankChip('TTB', this)" class="bank-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center">TTB</button>
-            <button type="button" onclick="selectBankChip('KTB', this)" class="bank-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center">KTB</button>
-            <button type="button" onclick="selectBankChip('GSB', this)" class="bank-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center">GSB</button>
-            <button type="button" onclick="selectBankChip('PAMCO', this)" class="bank-chip h-8 px-3.5 rounded-full text-xs font-medium bg-white border border-neutral-200/90 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 transition whitespace-nowrap shrink-0 inline-flex items-center">PAMCO</button>
-          </div>
-        </div>
-
       </div>
     </header>
 
@@ -964,6 +984,9 @@
     function setMode(mode) {
       currentMode = mode;
       window.currentMode = mode;
+
+      const mobileRoleSelect = document.getElementById('mobile-role-selector');
+      if (mobileRoleSelect) mobileRoleSelect.value = mode;
       
       const btnOwner = document.getElementById('btn-owner-mode');
       const btnFreeAgent = document.getElementById('btn-freeagent-mode');
@@ -1354,49 +1377,29 @@
     });
 
     // 🎛️ Collapsible Search Drawer & Smart Mobile Scroll Logic
-    let isSearchDrawerOpen = true;
+    let isSearchDrawerOpen = false;
     let drawerLockUntil = 0;
 
+    function toggleMobileSearchDrawer(forceOpen = null) {
+      toggleSearchDrawer(forceOpen);
+    }
+
     function toggleSearchDrawer(forceOpen = null) {
-      drawerLockUntil = Date.now() + 1500; // Lock auto-scroll collapse for 1.5s when user explicitly toggles!
+      drawerLockUntil = Date.now() + 1500;
       const drawer = document.getElementById('search-filter-drawer');
-      const miniBar = document.getElementById('search-mini-bar');
-      const toggleIcon = document.getElementById('drawer-toggle-icon');
-      const toggleText = document.getElementById('drawer-toggle-text');
+      const badge = document.getElementById('mobile-filter-pill-badge');
+      if (!drawer) return;
 
-      if (forceOpen !== null) {
-        isSearchDrawerOpen = forceOpen;
+      const isCurrentlyOpen = !drawer.classList.contains('hidden');
+      const targetState = forceOpen !== null ? forceOpen : !isCurrentlyOpen;
+      isSearchDrawerOpen = targetState;
+
+      if (targetState) {
+        drawer.classList.remove('hidden');
+        if (badge) badge.innerHTML = `<span>ปิดตัวกรอง ▲</span>`;
       } else {
-        isSearchDrawerOpen = !isSearchDrawerOpen;
-      }
-
-      if (isSearchDrawerOpen) {
-        if (drawer) {
-          drawer.classList.remove('hidden');
-          drawer.style.maxHeight = '1800px';
-          drawer.style.opacity = '1';
-          drawer.style.pointerEvents = 'auto';
-        }
-        if (miniBar) miniBar.classList.add('hidden');
-        if (toggleIcon) toggleIcon.setAttribute('data-lucide', 'chevron-up');
-        if (toggleText) toggleText.textContent = 'ซ่อนตัวกรอง';
-
-        // If user is scrolled down, smoothly scroll to top so they see the opened drawer!
-        if (window.scrollY > 120) {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      } else {
-        if (drawer) {
-          drawer.style.maxHeight = '0px';
-          drawer.style.opacity = '0';
-          drawer.style.pointerEvents = 'none';
-          setTimeout(() => {
-            if (!isSearchDrawerOpen) drawer.classList.add('hidden');
-          }, 300);
-        }
-        if (miniBar) miniBar.classList.remove('hidden');
-        if (toggleIcon) toggleIcon.setAttribute('data-lucide', 'sliders-horizontal');
-        if (toggleText) toggleText.textContent = 'ตัวกรอง';
+        drawer.classList.add('hidden');
+        if (badge) badge.innerHTML = `<span>ตัวกรอง ▾</span>`;
       }
       updateMiniBarSummary();
       if (window.lucide) { lucide.createIcons(); }
@@ -1408,30 +1411,30 @@
       const q = document.getElementById('search-input')?.value.trim();
       const bank = document.getElementById('filter-bank')?.value;
       const cat = document.getElementById('filter-category')?.value;
+      const loc = document.getElementById('filter-location')?.value;
       const budget = document.getElementById('filter-budget')?.value;
       
       let parts = [];
       if (q) parts.push(`"${q}"`);
-      if (currentMode !== 'client' && bank && bank !== 'all') parts.push(bank);
       if (cat && cat !== 'all') parts.push(cat);
+      if (currentMode !== 'client' && bank && bank !== 'all') parts.push(bank);
+      if (loc && loc !== 'all') parts.push(loc);
       if (budget && budget !== 'all') {
         const bMap = { 'under2m': '< 2ลบ.', '2to3.5m': '2-3.5ลบ.', '3.5to5m': '3.5-5ลบ.', 'above5m': '> 5ลบ.' };
         parts.push(bMap[budget] || budget);
       }
 
       if (parts.length > 0) {
-        summaryEl.innerHTML = `<span class="text-[#990000] font-bold">ตัวกรอง: ${parts.join(' • ')}</span>`;
+        summaryEl.innerHTML = `<span class="text-[#8B0000] font-bold truncate">กรอง: ${parts.join(' • ')}</span>`;
       } else {
-        summaryEl.textContent = currentMode === 'client'
-          ? 'ค้นหา: ทำเล, งบประมาณ, ประเภทบ้าน...'
-          : 'ค้นหา: ทำเล, ธนาคาร, งบประมาณ, ประเภท...';
+        summaryEl.textContent = 'ค้นหาทำเล, ธนาคาร, งบประมาณ...';
       }
     }
 
-    // Auto-collapse only on aggressive scrolling down (> 300px)
+    // Auto-collapse only on aggressive scrolling down (> 300px) on mobile
     let lastScrollY = window.scrollY;
     window.addEventListener('scroll', () => {
-      if (Date.now() < drawerLockUntil) return; // Prevent collapse while user is interacting
+      if (Date.now() < drawerLockUntil) return;
       const currentScrollY = window.scrollY;
       if (currentScrollY > 300 && currentScrollY > lastScrollY + 30 && isSearchDrawerOpen) {
         toggleSearchDrawer(false);
