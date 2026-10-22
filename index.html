@@ -222,13 +222,16 @@
     <!-- 🏛️ Top Header (Sticky, Backdrop-blur, Mobile Collapsible Search) -->
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80 shadow-xs">
       
-      <!-- 1. Top Role Utility Bar: บรรทัดเดียวจบทั้งมือถือและคอม (สูง ~36px) -->
-      <div class="bg-neutral-950 text-neutral-300 text-xs py-1.5 px-3 sm:px-4 border-b border-neutral-900">
+      <!-- 1. Top Role Utility Bar: ล้างสีลูกกวาดออก คุมโทน Charcoal + Satin Gold (#D4BC8B) -->
+      <div class="bg-neutral-950 text-neutral-300 text-xs py-1.5 px-3 sm:px-4 border-b border-neutral-800">
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
           
-          <!-- ซ้าย: สลับโหมด (บนมือถือใช้ Dropdown ประหยัดที่ / บนคอมใช้ปุ่มเรียง) -->
-          <div class="flex items-center gap-2 min-w-0">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
+          <!-- ซ้าย: สลับโหมด -->
+          <div class="flex items-center gap-2.5 min-w-0">
+            <span class="flex items-center gap-1.5 text-[11px] text-neutral-400 shrink-0">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              <span class="hidden sm:inline">โหมด:</span>
+            </span>
             
             <!-- Mobile Role Selector (< lg) -->
             <select 
@@ -244,62 +247,61 @@
             </select>
 
             <!-- Desktop Role Indicator & Tabs (>= lg) -->
-            <div class="hidden lg:flex items-center gap-2">
-              <span class="text-[11px] text-neutral-400">โหมด:</span>
-              <strong id="mode-text" class="text-white font-semibold text-[11px]">Free Agent (คอม 3-5% อิสระ)</strong>
-              <div class="flex items-center bg-neutral-900 p-0.5 rounded-lg border border-neutral-800 text-[11px] ml-1">
-                <button id="btn-owner-mode" onclick="setMode('owner')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white" title="โหมดแอดมิน">Admin</button>
-                <button id="btn-freeagent-mode" onclick="setMode('free_agent')" class="px-2.5 py-0.5 rounded-md bg-[#8B0000] text-white font-semibold" title="โหมด Free Agent">Free</button>
-                <button id="btn-employee-mode" onclick="setMode('employee')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white" title="โหมดพนักงานประจำ">พนักงาน</button>
-                <button id="btn-trainee-mode" onclick="setMode('trainee')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white" title="โหมดฝึกหัด">ฝึกหัด</button>
-                <button id="btn-client-mode" onclick="setMode('client')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white" title="โหมดลูกค้า White-label">ลูกค้า</button>
-              </div>
+            <strong id="mode-text" class="hidden lg:inline text-white font-semibold text-[11px] whitespace-nowrap">Free Agent (คอม 3-5% อิสระ)</strong>
+            <div class="hidden lg:flex items-center bg-neutral-900 p-0.5 rounded-lg border border-neutral-800 text-[11px] ml-1">
+              <button id="btn-owner-mode" onclick="setMode('owner')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white transition" title="โหมดแอดมิน">Admin</button>
+              <button id="btn-freeagent-mode" onclick="setMode('free_agent')" class="px-2.5 py-0.5 rounded-md bg-[#8B0000] text-white font-semibold shadow-2xs" title="โหมด Free Agent">Free</button>
+              <button id="btn-employee-mode" onclick="setMode('employee')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white transition" title="โหมดพนักงานประจำ">พนักงาน</button>
+              <button id="btn-trainee-mode" onclick="setMode('trainee')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white transition" title="โหมดฝึกหัด">ฝึกหัด</button>
+              <button id="btn-client-mode" onclick="setMode('client')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white transition" title="โหมดลูกค้า White-label">ลูกค้า</button>
             </div>
           </div>
 
-          <!-- ขวา: ปุ่มลัด กุญแจ, แต้ม, แจ้งเตือน (บรรทัดเดียว ไม่ตกชั้น) -->
-          <div class="flex items-center gap-1.5 shrink-0">
+          <!-- ขวา: ยุบรวมปุ่มเครื่องมือให้ใช้สีเดียวกันหมด (Neutral-900 + ขอบเทาเข้ม + ไอคอนทอง Champagne) -->
+          <div class="flex items-center gap-1.5 shrink-0 text-[11px]">
             <!-- กระดิ่งแจ้งเตือนทรัพย์ฝากขายใหม่ (Owner) -->
-            <button id="btn-owner-leads-notify" onclick="openOwnerLeadsModal()" class="hidden items-center gap-1.5 bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full hover:bg-amber-500/30 transition text-[10.5px] active:scale-95" title="ดูรายการทรัพย์ฝากขายใหม่">
-              <span>🔔 (<span id="consign-count-badge">1</span>)</span>
+            <button id="btn-owner-leads-notify" onclick="openOwnerLeadsModal()" class="hidden h-6 px-2.5 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-300 items-center gap-1.5 transition cursor-pointer active:scale-95" title="ดูรายการทรัพย์ฝากขายใหม่">
+              <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+              <span>ฝากขาย (<span id="consign-count-badge">1</span>)</span>
             </button>
 
             <!-- แอดมินจัดกลุ่มสัตว์ 4 กลุ่ม -->
-            <button id="btn-owner-archetype-shortcut" type="button" onclick="openAgentLeaderboardModal('animal_matrix')" class="hidden items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30 hover:bg-amber-400/30 transition active:scale-95" title="วิเคราะห์ศักยภาพตัวแทน 4 กลุ่มสัตว์">
-              <span>🐾 จัดกลุ่ม</span>
+            <button id="btn-owner-archetype-shortcut" type="button" onclick="openAgentLeaderboardModal('animal_matrix')" class="hidden h-6 px-2.5 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-300 items-center gap-1 transition cursor-pointer active:scale-95" title="วิเคราะห์ศักยภาพตัวแทน 4 กลุ่มสัตว์">
+              <span class="text-[#D4BC8B]">⊞</span>
+              <span>จัดกลุ่ม</span>
             </button>
 
             <!-- ปุ่มกุญแจ -->
-            <button type="button" onclick="openNpaKeyModal()" class="px-2 py-0.5 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-sky-400 flex items-center gap-1 hover:border-neutral-700 transition active:scale-95" title="ระบบเบิกกุญแจ NPA & Messenger">
-              <span>🔑</span>
+            <button type="button" onclick="openNpaKeyModal()" class="h-6 px-2.5 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-300 flex items-center gap-1 transition cursor-pointer active:scale-95" title="ระบบเบิกกุญแจ NPA & Messenger">
+              <span class="text-[#D4BC8B]">🔑</span>
               <span class="hidden sm:inline">กุญแจ</span>
             </button>
 
             <!-- ทำเนียบตัวแทน 125 -->
-            <button type="button" onclick="openAgentLeaderboardModal()" class="px-2 py-0.5 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-amber-400 font-semibold flex items-center gap-1 hover:border-neutral-700 transition active:scale-95" title="ทำเนียบตัวแทน 125 ท่าน">
-              <span>🏆</span>
+            <button type="button" onclick="openAgentLeaderboardModal()" class="h-6 px-2.5 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-[#E5C985] font-semibold flex items-center gap-1 transition cursor-pointer active:scale-95" title="ทำเนียบตัวแทน 125 ท่าน">
+              <span>♛</span>
               <span>125</span>
             </button>
 
+            <div class="h-3.5 w-[1px] bg-neutral-800 mx-0.5 hidden sm:block"></div>
+
             <!-- โปรไฟล์ตัวแทน -->
-            <button type="button" onclick="openMyProfileModal()" id="btn-header-profile" class="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] text-neutral-300 hover:text-white transition active:scale-95" title="กระเป๋าคะแนน & โปรไฟล์">
-              <span class="w-3.5 h-3.5 rounded-full bg-amber-400 text-gray-950 font-black text-[7.5px] flex items-center justify-center shrink-0" id="header-profile-avatar">S22</span>
-              <span id="bar-profile-btn-text" class="hidden sm:inline text-[10px]">โปรไฟล์</span>
+            <button type="button" onclick="openMyProfileModal()" id="btn-header-profile" class="h-6 pl-1.5 pr-2.5 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-200 flex items-center gap-1.5 transition cursor-pointer active:scale-95" title="กระเป๋าคะแนน & โปรไฟล์">
+              <span class="px-1 py-0.2 rounded bg-[#C2A460]/20 text-[#E5C985] text-[9px] font-bold" id="header-profile-avatar">S22</span>
+              <span id="bar-profile-btn-text" class="hidden sm:inline font-medium">เจ็ม</span>
             </button>
           </div>
 
         </div>
       </div>
 
-      <!-- 2. Main Header & Responsive Search (กะทัดรัด คืนพื้นที่จอ) -->
-      <div class="px-3 sm:px-6 py-2 sm:py-2.5 border-b border-neutral-100">
-        <div class="max-w-7xl mx-auto space-y-2">
+      <!-- 2. Main Header: จัด โลโก้ (ซ้าย) + Floating Pill Search (กลาง) + ปุ่มฝากขาย (ขวา) ให้อยู่ระนาบเดียวกัน -->
+      <div class="max-w-7xl mx-auto px-3 sm:px-4 py-2.5">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2.5 sm:gap-3">
           
-          <!-- แถวโลโก้ + ปุ่มฝากขายฟรี -->
-          <div class="flex items-center justify-between gap-2">
-            
-            <!-- Brand Identity -->
-            <div class="flex items-center gap-2.5 shrink-0 cursor-pointer" onclick="location.reload()">
+          <!-- แถวบนสำหรับมือถือ / ฝั่งซ้ายสำหรับจอคอม -->
+          <div class="flex items-center justify-between lg:justify-start gap-2.5 shrink-0">
+            <div class="flex items-center gap-2.5 cursor-pointer" onclick="location.reload()">
               <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#990000] to-[#660000] text-[#E5C985] border border-[#C2A460]/40 flex items-center justify-center font-bold text-base shadow-xs shrink-0">
                 S
               </div>
@@ -310,124 +312,137 @@
                     NPA OS
                   </span>
                 </div>
-                <!-- ซ่อนคำโปรยบนจอมือถือ เพื่อประหยัดพื้นที่แนวตั้ง -->
-                <p class="hidden sm:block text-xs text-neutral-400 whitespace-nowrap">คลังทรัพย์ธนาคาร & ระบบตัวแทนขาย</p>
+                <p class="hidden xl:block text-xs text-neutral-400 whitespace-nowrap">คลังทรัพย์ธนาคาร & ระบบตัวแทนขาย</p>
               </div>
             </div>
 
-            <!-- ปุ่มฝากขายฟรี (โชว์ทั้งบนคอมและมือถือ ขนาดกะทัดรัด) -->
-            <button onclick="openConsignModal()" class="px-3 py-1.5 rounded-full bg-[#B89D68] hover:bg-[#A38854] text-white text-[11px] sm:text-xs font-semibold flex items-center gap-1 shadow-xs shrink-0 transition-transform active:scale-95">
+            <!-- ปุ่มฝากขายบนมือถือ (< lg) -->
+            <button onclick="openConsignModal()" class="lg:hidden px-3 py-1.5 rounded-full bg-[#B89D68] hover:bg-[#A38854] text-white text-[11px] font-semibold flex items-center gap-1 shadow-xs shrink-0 transition-transform active:scale-95">
               <span>🏷️</span>
               <span>ฝากขายฟรี</span>
             </button>
           </div>
 
-          <!-- 3. Mobile Compact Search Pill (โชว์เฉพาะบนมือถือ สูงแค่ 40px แตะเพื่อกาง Filter) -->
-          <button 
-            type="button"
-            id="search-mini-bar"
-            onclick="toggleMobileSearchDrawer()"
-            class="lg:hidden w-full h-10 px-3.5 rounded-full bg-neutral-100/90 hover:bg-neutral-200/80 border border-neutral-200/80 flex items-center justify-between text-xs text-neutral-500 transition-all active:scale-[0.99]"
-          >
-            <span class="flex items-center gap-2 truncate">
-              <span class="text-neutral-800">🔍</span>
-              <span id="search-mini-summary" class="truncate font-medium text-neutral-700">ค้นหาทำเล, ธนาคาร, งบประมาณ...</span>
-            </span>
-            <span id="mobile-filter-pill-badge" class="px-2 py-0.5 rounded-full bg-white text-neutral-700 text-[10px] font-semibold border border-neutral-200/70 shrink-0 shadow-2xs">
-              ตัวกรอง ▾
-            </span>
-          </button>
+          <!-- กลาง: Unified Floating Pill Search (เพรียวบาง) -->
+          <div class="flex-1 w-full lg:max-w-3xl">
+            <!-- Mobile Compact Search Pill (< lg) -->
+            <button 
+              type="button"
+              id="search-mini-bar"
+              onclick="toggleMobileSearchDrawer()"
+              class="lg:hidden w-full h-10 px-3.5 rounded-full bg-neutral-100/90 hover:bg-neutral-200/80 border border-neutral-200/80 flex items-center justify-between text-xs text-neutral-500 transition-all active:scale-[0.99]"
+            >
+              <span class="flex items-center gap-2 truncate">
+                <span class="text-neutral-800">🔍</span>
+                <span id="search-mini-summary" class="truncate font-medium text-neutral-700">ค้นหาทำเล, ธนาคาร, งบประมาณ...</span>
+              </span>
+              <span id="mobile-filter-pill-badge" class="px-2 py-0.5 rounded-full bg-white text-neutral-700 text-[10px] font-semibold border border-neutral-200/70 shrink-0 shadow-2xs">
+                ตัวกรอง ▾
+              </span>
+            </button>
 
-          <!-- 4. Full Filter Box (ซ่อนไว้บนมือถือ จะกางออกเมื่อกดปุ่มด้านบน / บนจอคอมแสดงตลอดเวลา) -->
-          <div id="search-filter-drawer" class="hidden lg:block bg-neutral-50/95 lg:bg-white rounded-2xl lg:rounded-full border border-neutral-200/90 p-2.5 lg:p-1.5 shadow-sm transition-all">
-            <div class="grid grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr_1fr_auto] items-center gap-1.5 lg:gap-0" id="search-pill-grid">
-              
-              <!-- ช่องที่ 1: ค้นหาคำสำคัญ -->
-              <div class="col-span-2 lg:col-span-1 px-3 py-1 relative">
-                <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">ค้นหาทรัพย์</label>
-                <div class="flex items-center">
-                  <input type="text" id="search-input" oninput="applyAllFilters()" 
-                         placeholder="ชื่อโครงการ, รหัส NPA..." 
-                         class="w-full bg-transparent text-xs font-medium text-neutral-800 placeholder-neutral-400 focus:outline-none truncate pr-5" />
-                  <button id="btn-clear-search" onclick="clearFilters()" class="hidden text-neutral-400 hover:text-neutral-600 text-sm font-bold leading-none pr-1">&times;</button>
+            <!-- Full Filter Box (บนมือถือซ่อน/กางตาม drawer, บนคอมแสดงตลอดเวลาใน Floating Pill ทรงแคปซูล) -->
+            <div id="search-filter-drawer" class="hidden lg:block bg-neutral-50/95 lg:bg-neutral-50/90 lg:hover:bg-white rounded-2xl lg:rounded-full border border-neutral-200/90 p-2.5 lg:py-1 lg:px-2 shadow-xs transition-all">
+              <div class="grid grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1fr_auto] items-center gap-1.5 lg:gap-0" id="search-pill-grid">
+                
+                <!-- ช่องที่ 1: ค้นหาทรัพย์ -->
+                <div class="col-span-2 lg:col-span-1 px-3 py-1 relative">
+                  <label class="block text-[9px] font-semibold text-neutral-400 uppercase tracking-wider">ค้นหาทรัพย์</label>
+                  <div class="flex items-center">
+                    <input type="text" id="search-input" oninput="applyAllFilters()" 
+                           placeholder="ชื่อโครงการ, รหัส NPA..." 
+                           class="w-full bg-transparent text-xs font-medium text-neutral-800 placeholder-neutral-400 focus:outline-none truncate pr-5" />
+                    <button id="btn-clear-search" onclick="clearFilters()" class="hidden text-neutral-400 hover:text-neutral-600 text-sm font-bold leading-none pr-1">&times;</button>
+                  </div>
                 </div>
-              </div>
 
-              <!-- ช่องที่ 2: ประเภทอสังหาฯ -->
-              <div id="filter-category-wrapper" class="px-3 py-1 lg:border-l border-neutral-200/70">
-                <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">ประเภท</label>
-                <select id="filter-category" onchange="syncCategoryToChips(this.value); applyAllFilters()" class="w-full bg-transparent text-xs font-medium text-neutral-800 focus:outline-none cursor-pointer truncate">
-                  <option value="all">ทุกประเภท</option>
-                  <option value="ทาวน์โฮม">ทาวน์โฮม</option>
-                  <option value="คอนโด">คอนโด</option>
-                  <option value="บ้านเดี่ยว">บ้านเดี่ยว</option>
-                  <option value="ที่ดิน">ที่ดิน</option>
-                  <option value="อาคารพาณิชย์">อาคารพาณิชย์</option>
-                </select>
-              </div>
+                <!-- ช่องที่ 2: ประเภท -->
+                <div id="filter-category-wrapper" class="px-3 py-1 lg:border-l border-neutral-200/70">
+                  <label class="block text-[9px] font-semibold text-neutral-400 uppercase tracking-wider">ประเภท</label>
+                  <select id="filter-category" onchange="syncCategoryToChips(this.value); applyAllFilters()" class="w-full bg-transparent text-xs font-semibold text-neutral-800 focus:outline-none cursor-pointer truncate">
+                    <option value="all">ทุกประเภท</option>
+                    <option value="ทาวน์โฮม">ทาวน์โฮม</option>
+                    <option value="คอนโด">คอนโด</option>
+                    <option value="บ้านเดี่ยว">บ้านเดี่ยว</option>
+                    <option value="ที่ดิน">ที่ดิน</option>
+                    <option value="อาคารพาณิชย์">อาคารพาณิชย์</option>
+                  </select>
+                </div>
 
-              <!-- ช่องที่ 3: สถาบัน/เจ้าของ (ซ่อนในโหมดลูกค้า) -->
-              <div id="filter-bank-wrapper" class="px-3 py-1 lg:border-l border-neutral-200/70">
-                <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">สถาบัน/เจ้าของ</label>
-                <select id="filter-bank" onchange="applyAllFilters()" class="w-full bg-transparent text-xs font-medium text-neutral-800 focus:outline-none cursor-pointer truncate">
-                  <option value="all">ทุกธนาคาร</option>
-                  <option value="Siwasup">ศิวาทรัพย์ รีโนเวท</option>
-                  <option value="SAM">SAM</option>
-                  <option value="SCB">SCB</option>
-                  <option value="KBANK">KBank</option>
-                  <option value="TTB">TTB</option>
-                  <option value="KTB">KTB</option>
-                  <option value="GSB">GSB</option>
-                  <option value="PAMCO">PAMCO</option>
-                </select>
-              </div>
+                <!-- ช่องที่ 3: สถาบัน/เจ้าของ -->
+                <div id="filter-bank-wrapper" class="px-3 py-1 lg:border-l border-neutral-200/70">
+                  <label class="block text-[9px] font-semibold text-neutral-400 uppercase tracking-wider">สถาบัน/เจ้าของ</label>
+                  <select id="filter-bank" onchange="applyAllFilters()" class="w-full bg-transparent text-xs font-medium text-neutral-800 focus:outline-none cursor-pointer truncate">
+                    <option value="all">ทุกธนาคาร</option>
+                    <option value="Siwasup">ศิวาทรัพย์ รีโนเวท</option>
+                    <option value="SAM">SAM</option>
+                    <option value="SCB">SCB</option>
+                    <option value="KBANK">KBank</option>
+                    <option value="TTB">TTB</option>
+                    <option value="KTB">KTB</option>
+                    <option value="GSB">GSB</option>
+                    <option value="PAMCO">PAMCO</option>
+                  </select>
+                </div>
 
-              <!-- ช่องที่ 4: โซนทำเล -->
-              <div class="px-3 py-1 lg:border-l border-neutral-200/70">
-                <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">โซนทำเล</label>
-                <select id="filter-location" onchange="applyAllFilters()" class="w-full bg-transparent text-xs font-medium text-neutral-800 focus:outline-none cursor-pointer truncate">
-                  <option value="all">ทุกทำเล</option>
-                  <option value="บางใหญ่">บางใหญ่/นนทบุรี</option>
-                  <option value="ลำลูกกา">ลำลูกกา/ปทุมธานี</option>
-                  <option value="พระราม 9">รัชดา/พระราม 9</option>
-                  <option value="บางนา">บางนา/สมุทรปราการ</option>
-                  <option value="วิภาวดี">วิภาวดี/รัชโยธิน</option>
-                  <option value="ลาดกระบัง">ลาดกระบัง/สุวินทวงศ์</option>
-                  <option value="บางขุนเทียน">พระราม 2/บางขุนเทียน</option>
-                </select>
-              </div>
+                <!-- ช่องที่ 4: โซนทำเล -->
+                <div class="px-3 py-1 lg:border-l border-neutral-200/70">
+                  <label class="block text-[9px] font-semibold text-neutral-400 uppercase tracking-wider">โซนทำเล</label>
+                  <select id="filter-location" onchange="applyAllFilters()" class="w-full bg-transparent text-xs font-semibold text-neutral-800 focus:outline-none cursor-pointer truncate">
+                    <option value="all">ทุกทำเล</option>
+                    <option value="บางใหญ่">บางใหญ่/นนทบุรี</option>
+                    <option value="ลำลูกกา">ลำลูกกา/ปทุมธานี</option>
+                    <option value="พระราม 9">รัชดา/พระราม 9</option>
+                    <option value="บางนา">บางนา/สมุทรปราการ</option>
+                    <option value="วิภาวดี">วิภาวดี/รัชโยธิน</option>
+                    <option value="ลาดกระบัง">ลาดกระบัง/สุวินทวงศ์</option>
+                    <option value="บางขุนเทียน">พระราม 2/บางขุนเทียน</option>
+                  </select>
+                </div>
 
-              <!-- ช่องที่ 5: งบประมาณ -->
-              <div class="col-span-2 lg:col-span-1 px-3 py-1 lg:border-l border-neutral-200/70">
-                <label class="block text-[9.5px] font-semibold text-neutral-400 uppercase tracking-wider">งบประมาณ</label>
-                <select id="filter-budget" onchange="applyAllFilters()" class="w-full bg-transparent text-xs font-medium text-neutral-800 focus:outline-none cursor-pointer truncate">
-                  <option value="all">ทุกช่วงราคา</option>
-                  <option value="under2m">ต่ำกว่า 2 ล้าน</option>
-                  <option value="2to3.5m">2 - 3.5 ล้าน</option>
-                  <option value="3.5to5m">3.5 - 5 ล้าน</option>
-                  <option value="above5m">5 ล้านขึ้นไป</option>
-                </select>
-              </div>
+                <!-- ช่องที่ 5: งบประมาณ -->
+                <div class="col-span-2 lg:col-span-1 px-3 py-1 lg:border-l border-neutral-200/70">
+                  <label class="block text-[9px] font-semibold text-neutral-400 uppercase tracking-wider">งบประมาณ</label>
+                  <select id="filter-budget" onchange="applyAllFilters()" class="w-full bg-transparent text-xs font-semibold text-neutral-800 focus:outline-none cursor-pointer truncate">
+                    <option value="all">ทุกช่วงราคา</option>
+                    <option value="under2m">ต่ำกว่า 2 ล้าน</option>
+                    <option value="2to3.5m">2 - 3.5 ล้าน</option>
+                    <option value="3.5to5m">3.5 - 5 ล้าน</option>
+                    <option value="above5m">5 ล้านขึ้นไป</option>
+                  </select>
+                </div>
 
-              <!-- ช่องที่ 6: ปุ่มค้นหา -->
-              <div class="col-span-2 lg:col-span-1 flex justify-end p-0.5">
-                <button 
-                  onclick="applyAllFilters(); toggleMobileSearchDrawer(false);" 
-                  class="w-full lg:w-9 h-9 rounded-xl lg:rounded-full bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition active:scale-95 shadow-xs" 
-                  title="ค้นหา"
-                >
-                  <span>🔍</span>
-                  <span class="lg:hidden">ค้นหาและพับเก็บ</span>
-                </button>
-              </div>
+                <!-- ช่องที่ 6: ปุ่มค้นหา -->
+                <div class="col-span-2 lg:col-span-1 flex justify-end p-0.5">
+                  <button 
+                    onclick="applyAllFilters(); toggleMobileSearchDrawer(false);" 
+                    class="w-full lg:w-8 h-8 rounded-xl lg:rounded-full bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition active:scale-95 shadow-xs cursor-pointer ml-1" 
+                    title="ค้นหา"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <span class="lg:hidden text-xs">ค้นหาและพับเก็บ</span>
+                  </button>
+                </div>
 
+              </div>
             </div>
           </div>
 
-          <!-- 5. แถบกรองด่วนธนาคาร (เลื่อนซ้าย-ขวาได้ บรรทัดเดียวบางๆ) -->
-          <div id="quick-chips-bar" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1 pb-0.5">
-            <span class="text-[10px] font-semibold text-neutral-400 shrink-0 uppercase tracking-wider mr-1 hidden sm:inline">กรองด่วน:</span>
-            <div id="bank-quick-chips" class="flex items-center gap-1.5 shrink-0">
+          <!-- ขวา: ปุ่มฝากขายฟรีสำหรับ Desktop (>= lg) -->
+          <button onclick="openConsignModal()" class="hidden lg:flex px-4 py-2 rounded-full bg-[#B89D68] hover:bg-[#A38854] text-white text-xs font-semibold items-center gap-1.5 shadow-xs transition shrink-0 cursor-pointer active:scale-95">
+            <span>🏷️</span>
+            <span>ฝากขายฟรี</span>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- 3. แถบกรองด่วนธนาคาร (เลื่อนซ้าย-ขวาได้ บรรทัดเดียวบางๆ) -->
+      <div id="quick-chips-bar" class="max-w-7xl mx-auto px-3 sm:px-4 flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-2">
+        <span class="text-[10px] font-semibold text-neutral-400 shrink-0 uppercase tracking-wider mr-1 hidden sm:inline">กรองด่วน:</span>
+        <div id="bank-quick-chips" class="flex items-center gap-1.5 shrink-0">
               <button type="button" onclick="selectBankChip('all', this)" class="bank-chip active h-7 px-3 rounded-full text-[11px] font-semibold bg-neutral-900 text-white shrink-0 inline-flex items-center">ทั้งหมด</button>
               <button type="button" onclick="selectBankChip('Siwasup', this)" class="bank-chip h-7 px-3 rounded-full text-[11px] font-semibold bg-[#FAF7F2] border border-[#DFD3C3] text-[#8C734B] flex items-center gap-1 shrink-0 inline-flex items-center">
                 <span>✦</span>
@@ -2930,7 +2945,7 @@
 
       if (headerAvatar) headerAvatar.textContent = agent.code;
       if (headerName) headerName.textContent = agent.nickname || agent.code;
-      if (barText) barText.textContent = `โปรไฟล์ (${agent.code} - ${agent.nickname || agent.name})`;
+      if (barText) barText.textContent = agent.nickname || agent.name || agent.code;
     }
 
     function renderMyProfile(code) {
@@ -3177,6 +3192,7 @@
       }
     }
 
+    window.closeLeaderboard = function() { closeAgentLeaderboardModal(); };
     function closeAgentLeaderboardModal() {
       const modal = document.getElementById('agent-leaderboard-modal');
       if (modal) modal.classList.add('hidden');
@@ -3232,9 +3248,9 @@
         const btn = document.getElementById(`lb-tab-${t}`);
         if (btn) {
           if (t === track) {
-            btn.className = "py-1 px-2.5 rounded-md font-bold bg-white text-gray-900 shadow-2xs transition-all";
+            btn.className = "px-3 py-1 rounded-lg bg-white text-neutral-900 font-semibold shadow-2xs transition-all";
           } else {
-            btn.className = "py-1 px-2 rounded-md font-medium text-gray-600 hover:text-gray-900 transition-all";
+            btn.className = "px-3 py-1 rounded-lg text-neutral-500 hover:text-neutral-900 font-medium transition-all";
           }
         }
       });
@@ -3305,35 +3321,45 @@
 
       // Render Top 3 Podium Cards (only if no search active and not filtered to single animal with <3)
       const podiumEl = document.getElementById('leaderboard-podium');
+      const hasPodium = (!currentLeaderboardQuery && list.length >= 3 && activeAnimalFilter === 'all');
+
       if (podiumEl) {
-        if (!currentLeaderboardQuery && list.length >= 3 && activeAnimalFilter === 'all') {
+        if (hasPodium) {
           const top1 = list[0];
           const top2 = list[1];
           const top3 = list[2];
           podiumEl.innerHTML = `
-            <!-- 2nd Place -->
-            <div onclick="closeAgentLeaderboardModal(); openMyProfileModal('${top2.code}');" class="bg-gradient-to-b from-slate-50 to-gray-100 p-2 sm:p-2.5 rounded-xl border border-slate-200 relative order-1 cursor-pointer hover:scale-[1.02] transition-transform shadow-2xs" title="คลิกดูโปรไฟล์">
-              <span class="absolute -top-2 left-1/2 -translate-x-1/2 bg-slate-200 text-slate-800 text-[10px] font-black px-1.5 py-0.2 rounded-full border border-slate-300">#2 🥈</span>
-              <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 font-black text-xs flex items-center justify-center mx-auto mb-1 border border-slate-300 mt-1">${top2.code}</div>
-              <div class="font-bold text-xs text-gray-900 truncate">${top2.nickname || top2.name}</div>
-              <div class="text-[9.5px] text-gray-500 font-mono">${top2.tierIcon} ${top2.totalPoints} แต้ม</div>
+            <!-- อันดับ #2 (Silver) -->
+            <div onclick="closeAgentLeaderboardModal(); openMyProfileModal('${top2.code}');" class="p-3 sm:p-3.5 rounded-2xl bg-neutral-50 border border-neutral-200/80 text-center space-y-1.5 cursor-pointer hover:scale-[1.02] transition-transform shadow-2xs order-1" title="คลิกดูโปรไฟล์">
+              <span class="inline-block px-2 py-0.5 rounded-full bg-neutral-200/80 text-neutral-700 text-[10px] font-bold">#2 Silver</span>
+              <div class="w-10 h-10 sm:w-11 sm:h-11 mx-auto rounded-full bg-white border border-neutral-200 text-neutral-800 font-bold text-xs flex items-center justify-center shadow-2xs mt-1">
+                ${top2.code}
+              </div>
+              <div class="font-bold text-neutral-900 text-xs sm:text-sm truncate">${top2.nickname || top2.name}</div>
+              <div class="text-xs font-bold text-neutral-700 font-mono">${top2.totalPoints} <span class="font-normal text-neutral-400 text-[10px]">แต้ม</span></div>
+              <div class="text-[9px] font-semibold text-neutral-400">${top2.tierName}</div>
             </div>
 
-            <!-- 1st Place (Champion) -->
-            <div onclick="closeAgentLeaderboardModal(); openMyProfileModal('${top1.code}');" class="bg-gradient-to-b from-amber-50 to-yellow-100/70 p-2.5 sm:p-3 rounded-xl border-2 border-amber-400 relative -mt-2 order-2 shadow-sm cursor-pointer hover:scale-[1.02] transition-transform" title="คลิกดูโปรไฟล์แชมป์">
-              <span class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-amber-400 text-amber-950 text-[10px] font-black px-2 py-0.2 rounded-full shadow-2xs">#1 🥇</span>
-              <div class="w-10 h-10 rounded-full bg-siwasup-gold text-gray-950 font-black text-sm flex items-center justify-center mx-auto mb-1 border-2 border-white mt-1 shadow-xs">${top1.code}</div>
-              <div class="font-black text-xs sm:text-sm text-gray-900 truncate">${top1.nickname || top1.name}</div>
-              <div class="text-[10px] font-black text-amber-900 font-mono">${top1.tierIcon} ${top1.totalPoints} แต้ม</div>
-              <div class="text-[8.5px] text-amber-800">${top1.tierName}</div>
+            <!-- อันดับ #1 (Top Agent - Warm Champagne Gold Highlight) -->
+            <div onclick="closeAgentLeaderboardModal(); openMyProfileModal('${top1.code}');" class="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-b from-[#FAF7F0] to-white border-2 border-[#C2A460] text-center space-y-1.5 shadow-md relative -top-1.5 order-2 cursor-pointer hover:scale-[1.02] transition-transform" title="คลิกดูโปรไฟล์แชมป์">
+              <span class="inline-block px-2.5 py-0.5 rounded-full bg-neutral-900 text-[#E5C985] text-[10px] font-bold">♛ #1 Top Agent</span>
+              <div class="w-12 h-12 sm:w-13 sm:h-13 mx-auto rounded-full bg-neutral-900 text-[#E5C985] border-2 border-[#C2A460] font-bold text-sm flex items-center justify-center shadow-xs mt-1">
+                ${top1.code}
+              </div>
+              <div class="font-bold text-neutral-900 text-sm sm:text-base truncate">${top1.nickname || top1.name}</div>
+              <div class="text-sm font-bold text-[#8C7038] font-mono">${top1.totalPoints} <span class="font-normal text-neutral-400 text-[11px]">แต้ม</span></div>
+              <div class="text-[10px] font-semibold text-[#9A7D46] uppercase tracking-wider">${top1.tierName}</div>
             </div>
 
-            <!-- 3rd Place -->
-            <div onclick="closeAgentLeaderboardModal(); openMyProfileModal('${top3.code}');" class="bg-gradient-to-b from-amber-50/40 to-orange-50 p-2 sm:p-2.5 rounded-xl border border-amber-200/60 relative order-3 cursor-pointer hover:scale-[1.02] transition-transform shadow-2xs" title="คลิกดูโปรไฟล์">
-              <span class="absolute -top-2 left-1/2 -translate-x-1/2 bg-amber-200 text-amber-900 text-[10px] font-black px-1.5 py-0.2 rounded-full border border-amber-300">#3 🥉</span>
-              <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-800 font-black text-xs flex items-center justify-center mx-auto mb-1 border border-amber-200 mt-1">${top3.code}</div>
-              <div class="font-bold text-xs text-gray-900 truncate">${top3.nickname || top3.name}</div>
-              <div class="text-[9.5px] text-gray-500 font-mono">${top3.tierIcon} ${top3.totalPoints} แต้ม</div>
+            <!-- อันดับ #3 (Bronze) -->
+            <div onclick="closeAgentLeaderboardModal(); openMyProfileModal('${top3.code}');" class="p-3 sm:p-3.5 rounded-2xl bg-neutral-50 border border-neutral-200/80 text-center space-y-1.5 cursor-pointer hover:scale-[1.02] transition-transform shadow-2xs order-3" title="คลิกดูโปรไฟล์">
+              <span class="inline-block px-2 py-0.5 rounded-full bg-[#EFECE6] text-[#8C734B] text-[10px] font-bold">#3 Bronze</span>
+              <div class="w-10 h-10 sm:w-11 sm:h-11 mx-auto rounded-full bg-white border border-neutral-200 text-neutral-800 font-bold text-xs flex items-center justify-center shadow-2xs mt-1">
+                ${top3.code}
+              </div>
+              <div class="font-bold text-neutral-900 text-xs sm:text-sm truncate">${top3.nickname || top3.name}</div>
+              <div class="text-xs font-bold text-neutral-700 font-mono">${top3.totalPoints} <span class="font-normal text-neutral-400 text-[10px]">แต้ม</span></div>
+              <div class="text-[9px] font-semibold text-neutral-400">${top3.tierName}</div>
             </div>
           `;
           podiumEl.classList.remove('hidden');
@@ -3342,59 +3368,69 @@
         }
       }
 
-      // Render Rank Table List
+      // Render Rank Table List (If Podium is shown, start from #4 to avoid duplicate Top 3!)
       const listEl = document.getElementById('leaderboard-list');
       if (listEl) {
-        listEl.innerHTML = list.map((a, idx) => {
-          const rank = idx + 1;
-          const rankBadge = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
-          const arch = (isOwner && window.SiwasupAgents && typeof window.SiwasupAgents.getArchetype === 'function') 
-            ? window.SiwasupAgents.getArchetype(a) 
-            : null;
+        const renderList = hasPodium ? list.slice(3) : list;
+        const startIndex = hasPodium ? 4 : 1;
 
-          return `
-            <div onclick="closeAgentLeaderboardModal(); openMyProfileModal('${a.code}');" class="p-2.5 rounded-xl bg-gray-50/80 hover:bg-amber-100/60 border border-gray-100 transition-colors cursor-pointer active:scale-[0.99]" title="คลิกเพื่อดูกระเป๋าคะแนนของ ${a.code}">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2.5 min-w-0">
-                  <span class="w-6 text-center font-black text-xs ${rank <= 3 ? 'text-amber-700 text-sm' : 'text-gray-400 font-mono'} shrink-0">${rankBadge}</span>
-                  <span class="w-7 h-7 rounded-full bg-white border border-gray-200 text-gray-800 font-black text-[10px] flex items-center justify-center shrink-0 shadow-2xs">${a.code}</span>
-                  <div class="truncate">
-                    <div class="font-bold text-xs text-gray-900 flex items-center gap-1.5 flex-wrap">
-                      <span>${a.nickname || a.name}</span>
-                      <span class="text-[9px] font-medium text-gray-400 font-normal">(${a.code})</span>
-                      ${arch ? `
-                        <span class="inline-flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 rounded-full border ${arch.badgeClass}">
-                          <span class="w-3 h-3 inline-flex items-center justify-center">${window.SiwasupAgents.getAnimalSvg(arch.id, 'w-full h-full')}</span>
-                          <span>${arch.name.split(' ')[0]}</span>
+        if (renderList.length === 0) {
+          listEl.innerHTML = `<div class="p-6 text-center text-xs text-neutral-400">ไม่พบตัวแทนที่ตรงกับคำค้นหา</div>`;
+        } else {
+          listEl.innerHTML = renderList.map((a, idx) => {
+            const rank = startIndex + idx;
+            const rankBadge = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+            const arch = (isOwner && window.SiwasupAgents && typeof window.SiwasupAgents.getArchetype === 'function') 
+              ? window.SiwasupAgents.getArchetype(a) 
+              : null;
+
+            return `
+              <div onclick="closeAgentLeaderboardModal(); openMyProfileModal('${a.code}');" class="p-3 sm:p-3.5 flex flex-col gap-1.5 hover:bg-neutral-50/80 transition cursor-pointer active:scale-[0.99]" title="คลิกเพื่อดูกระเป๋าคะแนนของ ${a.code}">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3 min-w-0">
+                    <span class="w-6 text-center text-xs font-bold ${rank <= 3 ? 'text-amber-700 text-sm' : 'text-neutral-400 font-mono'} shrink-0">${rankBadge}</span>
+                    <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-neutral-100 border border-neutral-200 text-neutral-800 font-bold text-xs flex items-center justify-center shrink-0 shadow-2xs">
+                      ${a.code}
+                    </div>
+                    <div class="min-w-0">
+                      <div class="flex items-center gap-1.5 flex-wrap">
+                        <span class="font-bold text-neutral-900 text-xs sm:text-sm">${a.nickname || a.name}</span>
+                        <span class="text-[11px] text-neutral-400 font-normal">(${a.code})</span>
+                        <span class="px-1.5 py-0.2 rounded bg-[#FAF7F0] border border-[#E5DEC9] text-[#8C7038] text-[9px] font-semibold">
+                          ✦ ${a.tierName}
                         </span>
-                      ` : ''}
-                    </div>
-                    <div class="text-[10px] text-gray-500 truncate flex items-center gap-2">
-                      <span>${a.name}</span>
-                      <span class="text-gray-300">•</span>
-                      <span class="text-amber-700 font-medium">${a.tierIcon} ${a.tierName}</span>
+                        ${arch ? `
+                          <span class="inline-flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 rounded-full border ${arch.badgeClass}">
+                            <span class="w-3 h-3 inline-flex items-center justify-center">${window.SiwasupAgents.getAnimalSvg(arch.id, 'w-full h-full')}</span>
+                            <span>${arch.name.split(' ')[0]}</span>
+                          </span>
+                        ` : ''}
+                      </div>
+                      <p class="text-[11px] text-neutral-400 truncate">${a.name}</p>
                     </div>
                   </div>
-                </div>
-                <div class="text-right shrink-0 ml-2">
-                  <div class="font-black text-xs text-gray-900 font-mono">${a.totalPoints} <span class="text-[9px] font-normal text-gray-400">แต้ม</span></div>
-                  <div class="text-[9px] text-gray-500 flex items-center justify-end gap-1 font-mono">
-                    <span class="text-emerald-700">🎪 ${a.activityPoints}</span>
-                    <span class="text-gray-300">|</span>
-                    <span class="text-blue-700">💰 ${a.performancePoints}</span>
-                  </div>
-                </div>
-              </div>
 
-              ${arch ? `
-                <div class="mt-1.5 pt-1.5 border-t border-amber-200/50 flex items-center justify-between text-[9.5px] text-amber-950 bg-amber-50/70 p-1 rounded-md">
-                  <span class="truncate">💡 <strong>แนะนำสำหรับบัว:</strong> ${arch.action}</span>
-                  <span class="text-[9px] font-bold text-amber-800 shrink-0 ml-1">ดูโปรไฟล์ →</span>
+                  <!-- Right: Typography Hierarchy (Activities & Performance) -->
+                  <div class="text-right shrink-0 ml-2">
+                    <div class="text-xs sm:text-sm font-bold text-neutral-900 font-mono">${a.totalPoints} <span class="text-[10px] font-normal text-neutral-400">แต้ม</span></div>
+                    <div class="flex items-center justify-end gap-1.5 text-[10px] text-neutral-400 mt-0.5 font-mono">
+                      <span>กิจกรรม <strong class="text-neutral-600">${a.activityPoints}</strong></span>
+                      <span>•</span>
+                      <span>ผลงาน <strong class="text-[#8C7038]">${a.performancePoints}</strong></span>
+                    </div>
+                  </div>
                 </div>
-              ` : ''}
-            </div>
-          `;
-        }).join('');
+
+                ${arch ? `
+                  <div class="mt-1 pt-1 border-t border-amber-200/40 flex items-center justify-between text-[9.5px] text-amber-950 bg-amber-50/60 p-1.5 rounded-lg">
+                    <span class="truncate">💡 <strong>แนะนำสำหรับบัว:</strong> ${arch.action}</span>
+                    <span class="text-[9px] font-bold text-amber-800 shrink-0 ml-1">ดูโปรไฟล์ →</span>
+                  </div>
+                ` : ''}
+              </div>
+            `;
+          }).join('');
+        }
       }
     }
 

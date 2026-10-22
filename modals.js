@@ -1100,129 +1100,143 @@
 
     <!-- 🏆 Agent Directory & Leaderboard Modal (125 Agents: S02-S126) -->
     <div id="agent-leaderboard-modal" class="hidden modal-backdrop !items-center px-3 pt-10 pb-6 sm:p-6">
-      <div class="modal-card max-w-xl space-y-3.5 max-h-[82dvh] sm:max-h-[88dvh] overflow-y-auto custom-scrollbar !p-4">
-        <!-- Header -->
-        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
-          <div class="flex items-center gap-2">
-            <span class="icon-circle w-7 h-7 bg-amber-500 text-white"><i data-lucide="trophy" class="w-4 h-4 stroke-[1.5]"></i></span>
+      <div class="relative w-full max-w-2xl max-h-[84dvh] bg-white rounded-3xl shadow-2xl border border-neutral-200/80 flex flex-col overflow-hidden">
+        
+        <!-- 1. Fixed Header (คลีน ขาว-ดำ-ทอง) -->
+        <div class="px-5 py-4 bg-white border-b border-neutral-100 flex items-center justify-between shrink-0">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-neutral-900 text-[#D4BC8B] flex items-center justify-center text-base shadow-xs shrink-0 font-bold">
+              ♛
+            </div>
             <div>
-              <h3 class="font-bold text-sm sm:text-base text-gray-900 leading-tight">ทำเนียบตัวแทน & Leaderboard</h3>
-              <p class="text-[10px] text-gray-500">ระบบวัดผลอัตโนมัติ 2 แทร็ก (กิจกรรม & ผลงาน) • 125 ท่าน</p>
+              <h2 class="text-base font-bold text-neutral-900 tracking-tight leading-tight">ทำเนียบตัวแทน & Leaderboard</h2>
+              <p class="text-xs text-neutral-400">ระบบวัดผลอัตโนมัติ 2 แทร็ก (กิจกรรม & ผลงาน) • 125 ท่าน</p>
             </div>
           </div>
-          <button onclick="closeAgentLeaderboardModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-lg font-bold">&times;</button>
+          <button onclick="closeAgentLeaderboardModal()" class="w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-600 flex items-center justify-center transition cursor-pointer text-sm font-bold">&times;</button>
         </div>
 
-        <!-- Quick Action Bar for Admins & Agents -->
-        <div class="grid grid-cols-2 gap-2 bg-gradient-to-r from-amber-50/60 to-red-50/60 p-2.5 rounded-xl border border-amber-200/60">
-          <button type="button" onclick="openMeetingCheckinModal()" class="bg-white hover:bg-amber-50 text-amber-900 border border-amber-300 font-bold py-1.5 px-2 rounded-lg text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-            <i data-lucide="qr-code" class="w-3.5 h-3.5 text-amber-600"></i>
-            <span id="lb-btn-meeting-label">🎟️ QR เช็คชื่อเข้าประชุม (+10)</span>
-          </button>
-          <button type="button" onclick="openVinylProofModal()" class="bg-[#990000] hover:bg-red-800 text-white font-bold py-1.5 px-2 rounded-lg text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-            <i data-lucide="camera" class="w-3.5 h-3.5"></i>
-            <span id="lb-btn-vinyl-proof-label">📸 ส่งภาพติดป้าย GPS (+15)</span>
-          </button>
-        </div>
+        <!-- 2. Scrollable Body (Single Scrollbar) -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 custom-scrollbar">
+          
+          <!-- Action Bar เก็บแต้มด่วน (Warm Champagne & Burgundy) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button type="button" onclick="openMeetingCheckinModal()" class="py-2.5 px-4 rounded-xl bg-[#FAF8F5] hover:bg-[#F3EFE6] border border-[#E5DEC9] text-neutral-800 text-xs font-semibold flex items-center justify-center gap-2 transition cursor-pointer active:scale-95 shadow-2xs">
+              <span class="text-[#9A7D46]">⊞</span>
+              <span id="lb-btn-meeting-label">QR เช็กชื่อเข้าประชุม</span>
+              <span class="px-1.5 py-0.5 rounded bg-[#C2A460]/20 text-[#8C7038] text-[10px] font-bold">+10</span>
+            </button>
 
-        <!-- 👑 Owner-Only Animal Intelligence Matrix Bar (Visible ONLY when currentMode === 'owner') -->
-        <div id="owner-animal-intelligence-bar" class="hidden bg-gradient-to-r from-amber-50 via-yellow-50 to-orange-50 p-3 rounded-2xl border-2 border-amber-300 space-y-2 shadow-xs">
-          <div class="flex items-center justify-between text-xs">
-            <span class="font-bold text-amber-950 flex items-center gap-1.5">
-              <span class="w-5 h-5 rounded-full bg-amber-400 text-amber-950 font-black flex items-center justify-center text-[11px] shadow-2xs">🐾</span>
-              <span>วิเคราะห์ศักยภาพตัวแทน 4 กลุ่ม (เฉพาะแอดมิน/บัว & กูล)</span>
-            </span>
-            <span class="text-[9.5px] bg-amber-200 text-amber-900 font-bold px-2 py-0.5 rounded-full border border-amber-300">Admin Only</span>
-          </div>
-
-          <!-- 4 Animal Filter Tabs -->
-          <div class="grid grid-cols-4 gap-1 text-[10px] font-bold">
-            <button type="button" id="animal-btn-all" onclick="filterByAnimal('all')" class="p-1.5 rounded-xl border border-amber-400 bg-amber-400 text-amber-950 shadow-2xs text-center transition-all">
-              <div>ทั้งหมด</div>
-              <div class="text-[9px] font-normal">125 ท่าน</div>
-            </button>
-            <button type="button" id="animal-btn-eagle" onclick="filterByAnimal('eagle')" class="p-1.5 rounded-xl border border-amber-200 bg-white text-amber-900 shadow-2xs text-center transition-all hover:bg-amber-100/60 active:scale-95 flex flex-col items-center justify-center">
-              <div class="flex items-center justify-center gap-1">
-                <span class="w-3.5 h-3.5 inline-flex items-center justify-center text-amber-600">${window.SiwasupAgents ? window.SiwasupAgents.getAnimalSvg('eagle', 'w-full h-full') : '🦅'}</span>
-                <span>Eagle</span>
-              </div>
-              <div class="text-[9px] text-amber-700 font-normal"><span id="animal-count-eagle">0</span> ท่าน</div>
-            </button>
-            <button type="button" id="animal-btn-lion" onclick="filterByAnimal('lion')" class="p-1.5 rounded-xl border border-purple-200 bg-white text-purple-900 shadow-2xs text-center transition-all hover:bg-purple-100/60 active:scale-95 flex flex-col items-center justify-center">
-              <div class="flex items-center justify-center gap-1">
-                <span class="w-3.5 h-3.5 inline-flex items-center justify-center text-purple-600">${window.SiwasupAgents ? window.SiwasupAgents.getAnimalSvg('lion', 'w-full h-full') : '🦁'}</span>
-                <span>Lion</span>
-              </div>
-              <div class="text-[9px] text-purple-700 font-normal"><span id="animal-count-lion">0</span> ท่าน</div>
-            </button>
-            <button type="button" id="animal-btn-wolf" onclick="filterByAnimal('wolf')" class="p-1.5 rounded-xl border border-blue-200 bg-white text-blue-900 shadow-2xs text-center transition-all hover:bg-blue-100/60 active:scale-95 flex flex-col items-center justify-center">
-              <div class="flex items-center justify-center gap-1">
-                <span class="w-3.5 h-3.5 inline-flex items-center justify-center text-blue-600">${window.SiwasupAgents ? window.SiwasupAgents.getAnimalSvg('wolf', 'w-full h-full') : '🐺'}</span>
-                <span>Wolf</span>
-              </div>
-              <div class="text-[9px] text-blue-700 font-normal"><span id="animal-count-wolf">0</span> ท่าน</div>
+            <button type="button" onclick="openVinylProofModal()" class="py-2.5 px-4 rounded-xl bg-[#8B0000] hover:bg-[#730000] text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition cursor-pointer active:scale-95">
+              <span>📷</span>
+              <span id="lb-btn-vinyl-proof-label">ส่งภาพติดป้าย GPS</span>
+              <span class="px-1.5 py-0.5 rounded bg-white/20 text-[#E5C985] text-[10px] font-bold">+15</span>
             </button>
           </div>
 
-          <!-- Bear full width row -->
-          <div class="text-[10px] font-bold bg-white/90 p-1.5 rounded-xl border border-slate-200">
-            <button type="button" id="animal-btn-bear" onclick="filterByAnimal('bear')" class="w-full text-slate-700 flex items-center justify-between px-1 hover:text-slate-900 transition-colors">
-              <span class="flex items-center gap-1.5">
-                <span class="w-4 h-4 inline-flex items-center justify-center text-slate-600">${window.SiwasupAgents ? window.SiwasupAgents.getAnimalSvg('bear', 'w-full h-full') : '🐻'}</span>
-                <span><strong>Hibernating Bear (หมีจำศีล)</strong></span>
-                <span class="text-[9px] text-gray-400 font-normal hidden sm:inline">- สมาชิกพักรบ รอจังหวะปลุกพลัง</span>
+          <!-- 👑 Owner-Only Animal Intelligence Matrix Bar (Visible ONLY when currentMode === 'owner') -->
+          <div id="owner-animal-intelligence-bar" class="hidden bg-gradient-to-r from-amber-50/70 via-yellow-50/50 to-orange-50/60 p-3 rounded-2xl border border-amber-200/80 space-y-2 shadow-2xs">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-amber-950 flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-full bg-amber-400 text-amber-950 font-black flex items-center justify-center text-[11px] shadow-2xs">🐾</span>
+                <span>วิเคราะห์ศักยภาพตัวแทน 4 กลุ่ม (Admin Only)</span>
               </span>
-              <span class="bg-slate-100 px-2 py-0.5 rounded-full border border-slate-300 text-slate-800 font-mono"><span id="animal-count-bear">0</span> ท่าน</span>
-            </button>
-          </div>
+              <span class="text-[9.5px] bg-amber-200/80 text-amber-900 font-bold px-2 py-0.5 rounded-full border border-amber-300">Admin Only</span>
+            </div>
 
-          <!-- Strategy & Archetype Visual Banner -->
-          <div id="animal-strategy-box" class="bg-white p-2.5 rounded-xl border border-amber-200 text-[10.5px] text-gray-700 leading-snug space-y-1.5">
-            <div class="flex items-start gap-2.5">
-              <img src="assets/animal_archetypes_terracotta.jpg" alt="Animal Archetypes" class="w-14 h-14 rounded-lg object-cover border border-amber-200 shadow-2xs shrink-0 cursor-pointer hover:scale-105 transition-transform" onclick="window.open('assets/animal_archetypes_terracotta.jpg', '_blank')" title="คลิกดูภาพขยายสัญลักษณ์ 4 สัตว์">
-              <div class="min-w-0 flex-1">
-                <div class="font-bold text-amber-900 flex items-center gap-1">
-                  <span>💡 คำแนะนำเชิงบริหารสำหรับบัว:</span>
+            <!-- 4 Animal Filter Tabs -->
+            <div class="grid grid-cols-4 gap-1 text-[10px] font-bold">
+              <button type="button" id="animal-btn-all" onclick="filterByAnimal('all')" class="p-1.5 rounded-xl border border-amber-400 bg-amber-400 text-amber-950 shadow-2xs text-center transition-all">
+                <div>ทั้งหมด</div>
+                <div class="text-[9px] font-normal">125 ท่าน</div>
+              </button>
+              <button type="button" id="animal-btn-eagle" onclick="filterByAnimal('eagle')" class="p-1.5 rounded-xl border border-amber-200 bg-white text-amber-900 shadow-2xs text-center transition-all hover:bg-amber-100/60 active:scale-95 flex flex-col items-center justify-center">
+                <div class="flex items-center justify-center gap-1">
+                  <span class="w-3.5 h-3.5 inline-flex items-center justify-center text-amber-600">${window.SiwasupAgents ? window.SiwasupAgents.getAnimalSvg('eagle', 'w-full h-full') : '🦅'}</span>
+                  <span>Eagle</span>
                 </div>
-                <div id="animal-strategy-title" class="font-bold text-xs text-amber-950 mt-0.5">ตัวแทนทั้งหมด 125 ท่าน</div>
-                <div id="animal-strategy-desc" class="text-gray-600 text-[10px] mt-0.5">
-                  คัดกรองตัวแทนเพื่อส่งต่อทรัพย์ให้ตรงมือ หรือส่งโค้ชไปประกบปิดการขาย (คลิกเลือกปุ่มสัตว์ด้านบน)
+                <div class="text-[9px] text-amber-700 font-normal"><span id="animal-count-eagle">0</span> ท่าน</div>
+              </button>
+              <button type="button" id="animal-btn-lion" onclick="filterByAnimal('lion')" class="p-1.5 rounded-xl border border-purple-200 bg-white text-purple-900 shadow-2xs text-center transition-all hover:bg-purple-100/60 active:scale-95 flex flex-col items-center justify-center">
+                <div class="flex items-center justify-center gap-1">
+                  <span class="w-3.5 h-3.5 inline-flex items-center justify-center text-purple-600">${window.SiwasupAgents ? window.SiwasupAgents.getAnimalSvg('lion', 'w-full h-full') : '🦁'}</span>
+                  <span>Lion</span>
+                </div>
+                <div class="text-[9px] text-purple-700 font-normal"><span id="animal-count-lion">0</span> ท่าน</div>
+              </button>
+              <button type="button" id="animal-btn-wolf" onclick="filterByAnimal('wolf')" class="p-1.5 rounded-xl border border-blue-200 bg-white text-blue-900 shadow-2xs text-center transition-all hover:bg-blue-100/60 active:scale-95 flex flex-col items-center justify-center">
+                <div class="flex items-center justify-center gap-1">
+                  <span class="w-3.5 h-3.5 inline-flex items-center justify-center text-blue-600">${window.SiwasupAgents ? window.SiwasupAgents.getAnimalSvg('wolf', 'w-full h-full') : '🐺'}</span>
+                  <span>Wolf</span>
+                </div>
+                <div class="text-[9px] text-blue-700 font-normal"><span id="animal-count-wolf">0</span> ท่าน</div>
+              </button>
+            </div>
+
+            <!-- Bear full width row -->
+            <div class="text-[10px] font-bold bg-white/90 p-1.5 rounded-xl border border-slate-200">
+              <button type="button" id="animal-btn-bear" onclick="filterByAnimal('bear')" class="w-full text-slate-700 flex items-center justify-between px-1 hover:text-slate-900 transition-colors">
+                <span class="flex items-center gap-1.5">
+                  <span class="w-4 h-4 inline-flex items-center justify-center text-slate-600">${window.SiwasupAgents ? window.SiwasupAgents.getAnimalSvg('bear', 'w-full h-full') : '🐻'}</span>
+                  <span><strong>Hibernating Bear (หมีจำศีล)</strong></span>
+                  <span class="text-[9px] text-gray-400 font-normal hidden sm:inline">- สมาชิกพักรบ รอจังหวะปลุกพลัง</span>
+                </span>
+                <span class="bg-slate-100 px-2 py-0.5 rounded-full border border-slate-300 text-slate-800 font-mono"><span id="animal-count-bear">0</span> ท่าน</span>
+              </button>
+            </div>
+
+            <!-- Strategy & Archetype Visual Banner -->
+            <div id="animal-strategy-box" class="bg-white p-2.5 rounded-xl border border-amber-200 text-[10.5px] text-gray-700 leading-snug space-y-1.5">
+              <div class="flex items-start gap-2.5">
+                <img src="assets/animal_archetypes_terracotta.jpg" alt="Animal Archetypes" class="w-14 h-14 rounded-lg object-cover border border-amber-200 shadow-2xs shrink-0 cursor-pointer hover:scale-105 transition-transform" onclick="window.open('assets/animal_archetypes_terracotta.jpg', '_blank')" title="คลิกดูภาพขยายสัญลักษณ์ 4 สัตว์">
+                <div class="min-w-0 flex-1">
+                  <div class="font-bold text-amber-900 flex items-center gap-1">
+                    <span>💡 คำแนะนำเชิงบริหารสำหรับบัว:</span>
+                  </div>
+                  <div id="animal-strategy-title" class="font-bold text-xs text-amber-950 mt-0.5">ตัวแทนทั้งหมด 125 ท่าน</div>
+                  <div id="animal-strategy-desc" class="text-gray-600 text-[10px] mt-0.5">
+                    คัดกรองตัวแทนเพื่อส่งต่อทรัพย์ให้ตรงมือ หรือส่งโค้ชไปประกบปิดการขาย (คลิกเลือกปุ่มสัตว์ด้านบน)
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Top 3 Podium Cards -->
-        <div id="leaderboard-podium" class="grid grid-cols-3 gap-1.5 sm:gap-2 text-center pt-1">
-          <!-- Injected via JS -->
-        </div>
+          <!-- Top 3 Podium (คุมโทน Alabaster, Satin Gold และ Slate) -->
+          <div id="leaderboard-podium" class="grid grid-cols-3 gap-2 sm:gap-2.5 items-end pt-2">
+            <!-- Injected via JS -->
+          </div>
 
-        <!-- Filter Tracks & Search -->
-        <div class="space-y-2 pt-1 border-t border-gray-100">
-          <div class="flex items-center justify-between gap-1 text-[11px]">
-            <div class="flex items-center gap-1 bg-gray-100 p-0.5 rounded-lg border border-gray-200">
-              <button id="lb-tab-total" onclick="filterLeaderboard('total')" class="py-1 px-2.5 rounded-md font-bold bg-white text-gray-900 shadow-2xs transition-all">รวมทุกแต้ม</button>
-              <button id="lb-tab-activity" onclick="filterLeaderboard('activity')" class="py-1 px-2 rounded-md font-medium text-gray-600 hover:text-gray-900 transition-all">🎪 กิจกรรม</button>
-              <button id="lb-tab-performance" onclick="filterLeaderboard('performance')" class="py-1 px-2 rounded-md font-medium text-gray-600 hover:text-gray-900 transition-all">💰 ผลงาน</button>
+          <!-- Filter Tracks & Search -->
+          <div class="space-y-2.5 pt-1">
+            <div class="flex items-center justify-between">
+              <div class="inline-flex p-1 rounded-xl bg-neutral-100 border border-neutral-200/60 text-xs">
+                <button id="lb-tab-total" onclick="filterLeaderboard('total')" class="px-3 py-1 rounded-lg bg-white text-neutral-900 font-semibold shadow-2xs transition-all">รวมทุกแต้ม</button>
+                <button id="lb-tab-activity" onclick="filterLeaderboard('activity')" class="px-3 py-1 rounded-lg text-neutral-500 hover:text-neutral-900 font-medium transition-all">กิจกรรม</button>
+                <button id="lb-tab-performance" onclick="filterLeaderboard('performance')" class="px-3 py-1 rounded-lg text-neutral-500 hover:text-neutral-900 font-medium transition-all">ผลงานขาย</button>
+              </div>
+              <span class="text-xs text-neutral-400">ทั้งหมด <strong id="lb-count-label" class="text-neutral-700">125</strong> ท่าน</span>
             </div>
-            <span id="lb-count-label" class="text-[10px] text-gray-400 font-mono">125 ตัวแทน</span>
+
+            <!-- Search Input -->
+            <div class="relative">
+              <input 
+                type="text" 
+                id="lb-search-input" 
+                oninput="searchLeaderboard(this.value)"
+                placeholder="🔍 ค้นหารหัส S02-S126, ชื่อเล่น หรือชื่อจริง..." 
+                class="w-full px-3.5 py-2 rounded-xl bg-neutral-50 border border-neutral-200/80 text-xs text-neutral-800 placeholder-neutral-400 focus:outline-none focus:bg-white focus:border-neutral-400 transition"
+              />
+            </div>
           </div>
 
-          <!-- Search Input -->
-          <div class="relative">
-            <input type="text" id="lb-search-input" oninput="searchLeaderboard(this.value)" 
-                   placeholder="ค้นหา: รหัส S02-S126, ชื่อเล่น, หรือชื่อจริง..." 
-                   class="w-full bg-gray-50 border border-gray-200 rounded-lg pl-8 pr-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-red-700">
-            <span class="absolute left-2.5 top-2 text-gray-400">
-              <i data-lucide="search" class="w-3.5 h-3.5"></i>
-            </span>
+          <!-- รายชื่อตารางคะแนน (ตัดอีโมจิละครสัตว์ออก ใช้ Single Scrollbar) -->
+          <div class="border border-neutral-200/80 rounded-2xl bg-white overflow-hidden shadow-2xs">
+            <div id="leaderboard-list" class="divide-y divide-neutral-100">
+              <!-- Injected via JS -->
+            </div>
           </div>
-        </div>
 
-        <!-- Leaderboard Table List -->
-        <div id="leaderboard-list" class="space-y-1.5 max-h-[52vh] sm:max-h-[58vh] overflow-y-auto custom-scrollbar pr-2">
-          <!-- Injected via JS -->
         </div>
       </div>
     </div>
