@@ -236,7 +236,7 @@
               onchange="setMode(this.value)" 
               class="lg:hidden bg-neutral-900 text-white font-semibold text-[11px] px-2 py-1 rounded-lg border border-neutral-800 focus:outline-none"
             >
-              <option value="owner">โหมด: เจ้าของ (บัว & กูล)</option>
+              <option value="owner">โหมด: Admin</option>
               <option value="free_agent" selected>โหมด: Free Agent (3-5%)</option>
               <option value="employee">โหมด: พนักงานประจำ (1%)</option>
               <option value="trainee">โหมด: ฝึกหัด (Trainee)</option>
@@ -248,7 +248,7 @@
               <span class="text-[11px] text-neutral-400">โหมด:</span>
               <strong id="mode-text" class="text-white font-semibold text-[11px]">Free Agent (คอม 3-5% อิสระ)</strong>
               <div class="flex items-center bg-neutral-900 p-0.5 rounded-lg border border-neutral-800 text-[11px] ml-1">
-                <button id="btn-owner-mode" onclick="setMode('owner')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white" title="โหมดเจ้าของ/แอดมิน">เจ้าของ</button>
+                <button id="btn-owner-mode" onclick="setMode('owner')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white" title="โหมดแอดมิน">Admin</button>
                 <button id="btn-freeagent-mode" onclick="setMode('free_agent')" class="px-2.5 py-0.5 rounded-md bg-[#8B0000] text-white font-semibold" title="โหมด Free Agent">Free</button>
                 <button id="btn-employee-mode" onclick="setMode('employee')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white" title="โหมดพนักงานประจำ">พนักงาน</button>
                 <button id="btn-trainee-mode" onclick="setMode('trainee')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white" title="โหมดฝึกหัด">ฝึกหัด</button>
@@ -1034,7 +1034,7 @@
 
       if (mode === 'owner') {
         if (btnOwner) btnOwner.className = activeBtnClass;
-        if (modeText) modeText.textContent = "เจ้าของ/แอดมิน (บัว & กูล)";
+        if (modeText) modeText.textContent = "Admin";
         if (consignments.length > 0 && ownerNotifyBtn) {
           ownerNotifyBtn.classList.remove('hidden');
           ownerNotifyBtn.classList.add('flex');
@@ -1349,7 +1349,7 @@
           // โหมดเจ้าของ (บัว & กูล): เจ้าของเป็นคนขาย ไม่ต้องมีปุ่มเสนอราคา เปลี่ยนเป็นปุ่มแก้ราคาขาย
           btnOffer.disabled = false;
           btnOffer.className = "w-full bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
-          if (btnOfferLabel) btnOfferLabel.textContent = "แก้ไขราคาขาย (โหมดเจ้าของ)";
+          if (btnOfferLabel) btnOfferLabel.textContent = "แก้ไขราคาขาย (Admin)";
           btnOffer.onclick = () => { closePropertyDetailModal(); openEditPriceModal(p.id); };
           if (waitlistRow) waitlistRow.classList.add('hidden');
         } else if (currentMode === 'client' && isBooked) {
@@ -3249,6 +3249,14 @@
     function renderLeaderboard(track = 'total') {
       if (!window.SiwasupAgents) return;
       const isOwner = (currentMode === 'owner');
+      const lbMeetingLabel = document.getElementById('lb-btn-meeting-label');
+      const lbVinylLabel = document.getElementById('lb-btn-vinyl-proof-label');
+      if (lbMeetingLabel) {
+        lbMeetingLabel.textContent = isOwner ? '🎟️ เปิด QR ประชุมให้สแกน (+10)' : '🎟️ QR เช็คชื่อเข้าประชุม (+10)';
+      }
+      if (lbVinylLabel) {
+        lbVinylLabel.textContent = isOwner ? '📝 คีย์แต้มติดป้ายแทนสมาชิก (+15)' : '📸 ส่งภาพติดป้าย GPS (+15)';
+      }
       let list = window.SiwasupAgents.getLeaderboard(track, 125);
 
       // 👑 Owner-Only Animal Matrix Bar handling
@@ -3402,6 +3410,16 @@
         dateLabel.textContent = `รอบวันที่ ${today}`;
       }
 
+      const isOwner = (currentMode === 'owner');
+      const meetingTitle = document.getElementById('meeting-modal-title');
+      const meetingSubmitLabel = document.getElementById('meeting-submit-label');
+      if (meetingTitle) {
+        meetingTitle.textContent = isOwner ? 'ฉาย QR ประชุม / อบรมทีม (Admin)' : 'เช็คชื่อเข้าอบรม / ประชุมทีม';
+      }
+      if (meetingSubmitLabel) {
+        meetingSubmitLabel.textContent = isOwner ? 'บันทึกการเข้าประชุมแทนสมาชิก (+10 แต้ม)' : 'ยืนยันเช็คชื่อรับ +10 แต้ม';
+      }
+
       if (qrImg) {
         const checkinUrl = `https://thenassty-cpu.github.io/siwasup-cobroker-os/?action=checkin&date=${today}`;
         qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(checkinUrl)}`;
@@ -3469,6 +3487,29 @@
         }
       }
 
+      const isOwner = (currentMode === 'owner');
+      const titleEl = document.getElementById('vinyl-proof-modal-title');
+      const subtitleEl = document.getElementById('vinyl-proof-modal-subtitle');
+      const agentLabelEl = document.getElementById('vinyl-proof-agent-label');
+      const photoLabelEl = document.getElementById('vinyl-proof-photo-label');
+      const submitTextEl = document.getElementById('vinyl-proof-submit-text');
+
+      if (titleEl) {
+        titleEl.textContent = isOwner ? 'บันทึกแต้มติดป้ายแทนสมาชิก (Admin Override)' : 'ส่งภาพติดป้ายหน้างานจริง';
+      }
+      if (subtitleEl) {
+        subtitleEl.textContent = isOwner ? 'กรณีตัวแทนส่งรูปทาง LINE หรือ GPS error • คีย์แต้ม +15 เข้าโปรไฟล์' : 'Proof of Installation • รับทันที +15 แต้ม';
+      }
+      if (agentLabelEl) {
+        agentLabelEl.textContent = isOwner ? 'เลือกรหัสสมาชิกที่จะให้แต้ม:' : 'รหัสตัวแทนผู้ติดป้าย:';
+      }
+      if (photoLabelEl) {
+        photoLabelEl.textContent = isOwner ? 'แนบภาพป้าย (ถ้ามี หรือเว้นว่างได้ถ้าตรวจใน LINE แล้ว):' : 'ภาพถ่ายป้ายที่ผูกหน้าบ้าน:';
+      }
+      if (submitTextEl) {
+        submitTextEl.textContent = isOwner ? 'บันทึกแต้มให้สมาชิก (+15 แต้ม)' : 'ยืนยันส่งผลงานรับ +15 แต้ม';
+      }
+
       if (propInput && propId) {
         propInput.value = propId;
       }
@@ -3528,7 +3569,11 @@
       closeVinylProofModal();
       renderLeaderboard(activeLeaderboardTrack);
       if (typeof showToast === 'function') {
-        showToast(`🌟 ยอดเยี่ยมมาก! ตรวจสอบพิกัด GPS สำเร็จ บันทึก +15 แต้ม ให้ [${agentCode}] เรียบร้อย!`);
+        if (currentMode === 'owner') {
+          showToast(`👑 บันทึกแต้มติดป้าย +15 แต้ม ให้ [${agentCode}] เรียบร้อยแล้ว!`);
+        } else {
+          showToast(`🌟 ยอดเยี่ยมมาก! ตรวจสอบพิกัด GPS สำเร็จ บันทึก +15 แต้ม ให้ [${agentCode}] เรียบร้อย!`);
+        }
       }
     }
 
