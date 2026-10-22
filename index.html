@@ -1200,7 +1200,7 @@
       renderProperties();
     }
 
-    // Homerun-style Property Detail Modal
+    // Homerun-style Property Detail Modal (Digital Luxury 75-15-5-5 & 3-Tier Layout)
     function openPropertyDetailModal(id) {
       const list = (window.allProperties && window.allProperties.length > 0)
         ? window.allProperties
@@ -1216,6 +1216,7 @@
 
       const displayTitle = getDisplayTitle(p);
       const displayDesc = getDisplayDesc(p);
+      const safeTitleAttr = (displayTitle || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
       document.getElementById('detail-code').textContent = `รหัส: ${p.id}`;
       document.getElementById('detail-category-badge').textContent = p.category || 'อสังหาฯ';
@@ -1233,11 +1234,11 @@
       if (statusPill) {
         if (isBooked) {
           statusPill.textContent = 'ติดจอง';
-          statusPill.className = 'bg-amber-500 text-white text-xs font-black px-3 py-1 rounded-full shadow-md border border-white/40';
+          statusPill.className = 'bg-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md border border-white/40';
           statusPill.classList.remove('hidden');
         } else if (p.is_new) {
           statusPill.textContent = 'New';
-          statusPill.className = 'bg-[#FF3838] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm';
+          statusPill.className = 'bg-[#8B0000] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm';
           statusPill.classList.remove('hidden');
         } else {
           statusPill.classList.add('hidden');
@@ -1309,19 +1310,19 @@
         if (currentMode === 'owner') {
           // โหมดเจ้าของ (บัว & กูล): เจ้าของเป็นคนขาย ไม่ต้องมีปุ่มเสนอราคา เปลี่ยนเป็นปุ่มแก้ราคาขาย
           btnOffer.disabled = false;
-          btnOffer.className = "w-full bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-3 rounded-full shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
+          btnOffer.className = "w-full bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
           if (btnOfferLabel) btnOfferLabel.textContent = "แก้ไขราคาขาย (โหมดเจ้าของ)";
           btnOffer.onclick = () => { closePropertyDetailModal(); openEditPriceModal(p.id); };
           if (waitlistRow) waitlistRow.classList.add('hidden');
         } else if (currentMode === 'client' && isBooked) {
           btnOffer.disabled = true;
-          btnOffer.className = "w-full bg-slate-200 text-slate-500 font-bold py-3 rounded-full flex items-center justify-center gap-2 text-xs sm:text-sm cursor-not-allowed select-none border border-slate-300";
+          btnOffer.className = "w-full bg-neutral-200 text-neutral-500 font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 text-xs sm:text-sm cursor-not-allowed select-none border border-neutral-300";
           if (btnOfferLabel) btnOfferLabel.textContent = "ทรัพย์นี้อยู่ระหว่างติดจอง (ปิดรับข้อเสนอชั่วคราว)";
           btnOffer.onclick = null;
           if (waitlistRow) {
             waitlistRow.classList.remove('hidden');
             waitlistRow.innerHTML = `
-              <button onclick="closePropertyDetailModal(); contactViaLine('${p.id}', '${safeTitleAttr}', true)" class="w-full bg-white border border-neutral-200 hover:border-emerald-500 text-neutral-800 hover:text-emerald-700 font-semibold py-2.5 rounded-full flex items-center justify-center gap-2 text-xs active:scale-95 transition-all shadow-2xs">
+              <button onclick="closePropertyDetailModal(); contactViaLine('${p.id}', '${safeTitleAttr}', true)" class="w-full bg-white border border-neutral-200 hover:border-emerald-500 text-neutral-800 hover:text-emerald-700 font-semibold py-2.5 rounded-xl flex items-center justify-center gap-2 text-xs active:scale-95 transition-all shadow-2xs">
                 <span class="w-4 h-4 rounded-full bg-[#06C755] text-white flex items-center justify-center text-[9px] font-black shrink-0">L</span>
                 <span>สอบถามคิวสำรองผ่าน LINE Official (@siwasup)</span>
               </button>
@@ -1329,7 +1330,7 @@
           }
         } else {
           btnOffer.disabled = false;
-          btnOffer.className = "w-full bg-[#B89D68] hover:bg-[#A38854] text-white font-bold py-3 rounded-full shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
+          btnOffer.className = "w-full bg-[#B89D68] hover:bg-[#A38854] text-white font-bold py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
           if (btnOfferLabel) btnOfferLabel.textContent = "เสนอราคา";
           btnOffer.onclick = () => { closePropertyDetailModal(); openOfferModal(p.id, displayTitle, p.price); };
           if (waitlistRow) waitlistRow.classList.add('hidden');
@@ -1344,6 +1345,13 @@
       const modal = document.getElementById('property-detail-modal');
       if (modal) modal.classList.add('hidden');
     }
+
+    // Global ESC key listener to close Property Detail modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        closePropertyDetailModal();
+      }
+    });
 
     // 🎛️ Collapsible Search Drawer & Smart Mobile Scroll Logic
     let isSearchDrawerOpen = true;

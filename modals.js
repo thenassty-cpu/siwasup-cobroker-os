@@ -929,137 +929,171 @@
       </div>
     </div>
 
-    <!-- Homerun-Style Clean Property Detail Modal -->
-    <div id="property-detail-modal" class="hidden modal-backdrop !items-center !p-4">
-      <div class="modal-card max-w-lg space-y-4 max-h-[92vh] overflow-y-auto">
-        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
-          <div class="flex items-center gap-2">
+    <!-- Homerun-Style Clean Property Detail Modal (Digital Luxury 75-15-5-5 & 3-Tier Layout) -->
+    <div 
+      id="property-detail-modal" 
+      onclick="if(event.target === this) closePropertyDetailModal()" 
+      class="fixed inset-0 z-50 bg-neutral-950/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 hidden"
+    >
+      <!-- Modal Container: ล็อกความสูงไม่เกิน 90vh และใช้ flex-col เพื่อแยกส่วนเลื่อน -->
+      <div class="relative w-full max-w-lg max-h-[90vh] bg-white rounded-3xl shadow-2xl border border-neutral-200/80 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        
+        <!-- 1. Floating Close Button (เกาะติดมุมขวาบนตลอดเวลา ไม่เลื่อนหายตามเนื้อหา) -->
+        <button 
+          type="button"
+          onclick="closePropertyDetailModal()" 
+          aria-label="ปิดหน้าต่าง"
+          class="absolute top-3.5 right-3.5 z-30 w-9 h-9 rounded-full bg-neutral-900/75 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90"
+        >
+          <i data-lucide="x" class="w-5 h-5 stroke-[2.5]"></i>
+        </button>
+
+        <!-- 2. Scrollable Body: ส่วนเนื้อหาที่เลื่อนได้อย่างเดียว -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 custom-scrollbar">
+          
+          <!-- Top Badges & Meta -->
+          <div class="flex items-center gap-2 pr-10">
             <span id="detail-category-badge" class="capsule-bokeh text-[11px] font-medium px-3 py-0.5">ทาวน์โฮม</span>
             <span id="detail-bank-badge"></span>
-            <span id="detail-code" class="text-xs text-slate-400 font-mono">รหัส: -</span>
+            <span id="detail-code" class="text-xs text-neutral-400 font-mono">รหัส: -</span>
           </div>
-          <button onclick="closePropertyDetailModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-lg font-bold">&times;</button>
-        </div>
 
-        <!-- Detail Image Carousel / Hero -->
-        <div class="relative aspect-[16/10] bg-slate-100 rounded-2xl overflow-hidden shadow-inner">
-          <img id="detail-main-img" src="" alt="" class="w-full h-full object-cover">
-          <div class="absolute bottom-2.5 left-2.5">
-            <span id="detail-status-pill" class="bg-[#FF3838] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">New</span>
-          </div>
-          <a id="detail-external-link" href="#" target="_blank" class="absolute bottom-2.5 right-2.5 capsule-bokeh hover:bg-slate-900/70 text-white text-[11px] font-medium px-3 py-1 flex items-center gap-1 shadow-sm">
-            <i data-lucide="external-link" class="w-3 h-3"></i>
-            <span>ดูหน้าเว็บเดิม</span>
-          </a>
-        </div>
-
-        <!-- Title & Location -->
-        <div class="space-y-1">
-          <h2 id="detail-title" class="font-bold text-slate-900 text-base md:text-lg leading-snug"></h2>
-          <div class="flex items-center gap-1.5 text-xs text-slate-500">
-            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-400 shrink-0"></i>
-            <span id="detail-location">กรุงเทพฯ และปริมณฑล</span>
-          </div>
-        </div>
-
-        <!-- Homerun Specs Grid -->
-        <div class="grid grid-cols-2 gap-2 bg-slate-50/80 p-3 rounded-2xl border border-slate-100 text-xs">
-          <div class="flex items-center gap-2">
-            <div class="w-7 h-7 rounded-full bg-white shadow-xs flex items-center justify-center text-slate-500">
-              <i data-lucide="grid" class="w-3.5 h-3.5"></i>
+          <!-- Detail Image Carousel / Hero -->
+          <div class="relative aspect-[16/10] bg-neutral-100 rounded-2xl overflow-hidden shadow-inner">
+            <img id="detail-main-img" src="" alt="" class="w-full h-full object-cover">
+            <div class="absolute bottom-2.5 left-2.5">
+              <span id="detail-status-pill" class="bg-[#8B0000] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">New</span>
             </div>
-            <div>
-              <div class="text-[10px] text-slate-400">เนื้อที่</div>
-              <div id="detail-size" class="font-bold text-slate-800">43.9 ตร.ว.</div>
+            <a id="detail-external-link" href="#" target="_blank" class="absolute bottom-2.5 right-2.5 capsule-bokeh hover:bg-neutral-900/80 text-white text-[11px] font-medium px-3 py-1 flex items-center gap-1 shadow-sm">
+              <i data-lucide="external-link" class="w-3 h-3"></i>
+              <span>ดูหน้าเว็บเดิม</span>
+            </a>
+          </div>
+
+          <!-- Title & Location -->
+          <div class="space-y-1">
+            <h2 id="detail-title" class="font-bold text-neutral-900 text-base md:text-lg leading-snug"></h2>
+            <div class="flex items-center gap-1.5 text-xs text-neutral-500">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5 text-neutral-400 shrink-0"></i>
+              <span id="detail-location">กรุงเทพฯ และปริมณฑล</span>
             </div>
           </div>
-          <div class="flex items-center gap-2">
-            <div class="w-7 h-7 rounded-full bg-white shadow-xs flex items-center justify-center text-slate-500">
-              <i data-lucide="home" class="w-3.5 h-3.5"></i>
-            </div>
-            <div>
-              <div class="text-[10px] text-slate-400">พื้นที่ใช้สอย</div>
-              <div id="detail-usable" class="font-bold text-slate-800">110 ตร.ม.</div>
-            </div>
-          </div>
-        </div>
 
-        <!-- Description -->
-        <p id="detail-desc" class="text-xs text-slate-600 leading-relaxed bg-white border border-slate-100 p-3 rounded-2xl"></p>
-
-        <!-- 🔑 NPA Key & Messenger Banner (Employee, Agent & Owner) -->
-        <div id="detail-npa-key-banner" class="bg-neutral-50 border border-neutral-200/80 rounded-2xl p-3 flex items-center justify-between gap-2 shadow-2xs">
-          <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-9 h-9 rounded-xl bg-neutral-900 text-white flex items-center justify-center shrink-0 shadow-xs">
-              <i data-lucide="key" class="w-4 h-4"></i>
-            </div>
-            <div class="min-w-0">
-              <div class="font-bold text-xs text-sky-950 flex items-center gap-1.5">
-                <span>บริการเบิกกุญแจ NPA & Messenger</span>
-                <span class="text-[9px] bg-sky-200/80 text-sky-900 px-1.5 py-0.2 rounded font-bold">พี่ลิลลี่</span>
+          <!-- Homerun Specs Grid -->
+          <div class="grid grid-cols-2 gap-2 bg-[#FAF8F5] p-3 rounded-2xl border border-neutral-200/70 text-xs">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-white shadow-xs flex items-center justify-center text-neutral-500 border border-neutral-200/50">
+                <i data-lucide="grid" class="w-3.5 h-3.5"></i>
               </div>
-              <div class="text-[10.5px] text-sky-700 truncate">มี Messenger วิ่งรับกุญแจจากแบงก์ส่งมอบหน้างาน</div>
+              <div>
+                <div class="text-[10px] text-neutral-400">เนื้อที่</div>
+                <div id="detail-size" class="font-bold text-neutral-800">43.9 ตร.ว.</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-white shadow-xs flex items-center justify-center text-neutral-500 border border-neutral-200/50">
+                <i data-lucide="home" class="w-3.5 h-3.5"></i>
+              </div>
+              <div>
+                <div class="text-[10px] text-neutral-400">พื้นที่ใช้สอย</div>
+                <div id="detail-usable" class="font-bold text-neutral-800">110 ตร.ม.</div>
+              </div>
             </div>
           </div>
-          <button type="button" id="detail-btn-banner-npa-key" onclick="" class="shrink-0 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-2xs flex items-center gap-1 transition-all active:scale-95">
-            <span>ขอนัดชม</span>
-            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-          </button>
-        </div>
 
-        <!-- Financial Breakdown (Homerun Style) -->
-        <div class="bg-neutral-50 p-3.5 rounded-2xl border border-neutral-200/80 space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-xs text-slate-600 flex items-center gap-1.5">
-              <span class="w-4 h-4 rounded-full border border-neutral-300 text-neutral-600 font-bold text-[10px] inline-flex items-center justify-center leading-none select-none">฿</span>
-              <span>ราคาก่อนต่อรอง</span>
-            </span>
-            <span id="detail-price" class="text-lg font-black text-neutral-900 tracking-tight">฿3,410,000</span>
-          </div>
-          <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/60">
-            <span class="text-slate-500 flex items-center gap-1.5">
-              <span class="w-4 h-4 rounded-full border border-slate-400 text-slate-600 font-bold text-[11px] inline-flex items-center justify-center leading-none select-none">฿</span>
-              <span>หลักประกันเพื่อต่อรองราคา</span>
-            </span>
-            <span id="detail-deposit" class="font-bold text-slate-800">฿50,000</span>
-          </div>
-          <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-200/60">
-            <span class="text-slate-500 flex items-center gap-1.5">
-              <i data-lucide="calculator" class="w-3.5 h-3.5 text-emerald-600"></i>
-              <span>ประมาณการผ่อนต่อเดือน</span>
-            </span>
-            <span id="detail-installment" class="font-bold text-emerald-700">~ 12,000 บ./เดือน</span>
-          </div>
-        </div>
+          <!-- Description -->
+          <p id="detail-desc" class="text-xs text-neutral-600 leading-relaxed bg-[#FAF8F5]/50 border border-neutral-200/70 p-3 rounded-2xl"></p>
 
-        <!-- 📄 Role-Based Document Downloads (Admin/Agent gets all Bank Offer PDFs; Client gets Sales Contract) -->
-        <div id="detail-documents-section" class="bg-slate-50/90 border border-slate-200/80 p-3.5 rounded-2xl space-y-2 text-xs">
-          <!-- Populated dynamically by renderPropertyDocumentDownloads(prop) based on currentMode -->
-        </div>
-
-        <!-- Primary Homerun-Style Action Bar -->
-        <div class="space-y-2 pt-1">
-          <div id="detail-agent-actions-row" class="space-y-1.5">
-            <div class="grid grid-cols-2 gap-2">
-              <button id="detail-btn-vinyl" onclick="" class="w-full bg-amber-50 hover:bg-amber-100 text-[#8C6D23] font-bold py-2.5 rounded-full border border-amber-300 text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-                <i data-lucide="printer" class="w-4 h-4 text-amber-600"></i>
-                <span>พิมพ์ป้ายไวนิล (Auto PDF)</span>
-              </button>
-              <button id="detail-btn-share" onclick="" class="w-full bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-2.5 rounded-full shadow-xs text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-                <i data-lucide="share-2" class="w-4 h-4"></i>
-                <span>แชร์ล็อกสิทธิ์ (3-5%)</span>
-              </button>
+          <!-- 🔑 NPA Key & Messenger Banner (Employee, Agent & Owner) -->
+          <div id="detail-npa-key-banner" class="bg-[#FAF8F5] border border-[#E8DFD1] rounded-2xl p-3 flex items-center justify-between gap-2 shadow-2xs">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-9 h-9 rounded-xl bg-neutral-900 text-white flex items-center justify-center shrink-0 shadow-xs">
+                <i data-lucide="key" class="w-4 h-4"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="font-bold text-xs text-neutral-900 flex items-center gap-1.5">
+                  <span>บริการเบิกกุญแจ NPA & Messenger</span>
+                  <span class="text-[9px] bg-[#B89D68]/15 text-[#8C6D23] px-1.5 py-0.2 rounded font-bold border border-[#B89D68]/30">พี่ลิลลี่</span>
+                </div>
+                <div class="text-[10.5px] text-neutral-600 truncate">มี Messenger วิ่งรับกุญแจจากแบงก์ส่งมอบหน้างาน</div>
+              </div>
             </div>
-            <button id="detail-btn-npa-key" onclick="" class="w-full bg-sky-50 hover:bg-sky-100 text-neutral-900 font-bold py-2 rounded-full border border-sky-300 text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-              <i data-lucide="key" class="w-3.5 h-3.5 text-neutral-900"></i>
-              <span>เบิกกุญแจ NPA & ติดตาม Messenger (Demo พี่ลิลลี่)</span>
+            <button type="button" id="detail-btn-banner-npa-key" class="shrink-0 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-2xs flex items-center gap-1 transition-all active:scale-95">
+              <span>ขอนัดชม</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </button>
           </div>
-          <button id="detail-btn-offer" onclick="" class="w-full bg-[#BFA267] hover:bg-[#b09257] text-white font-bold py-3 rounded-full shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all">
-            <i data-lucide="badge-dollar-sign" class="w-4 h-4"></i>
-            <span id="detail-btn-offer-label">เสนอราคา</span>
+
+          <!-- Financial Breakdown (Homerun Style) -->
+          <div class="bg-[#FAF8F5] p-3.5 rounded-2xl border border-neutral-200/70 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-neutral-600 flex items-center gap-1.5">
+                <span class="w-4 h-4 rounded-full border border-neutral-300 text-neutral-600 font-bold text-[10px] inline-flex items-center justify-center leading-none select-none">฿</span>
+                <span>ราคาก่อนต่อรอง</span>
+              </span>
+              <span id="detail-price" class="text-lg font-black text-neutral-900 tracking-tight">฿3,410,000</span>
+            </div>
+            <div class="flex items-center justify-between text-xs pt-1 border-t border-neutral-200/60">
+              <span class="text-neutral-500 flex items-center gap-1.5">
+                <span class="w-4 h-4 rounded-full border border-neutral-300 text-neutral-500 font-bold text-[11px] inline-flex items-center justify-center leading-none select-none">฿</span>
+                <span>หลักประกันเพื่อต่อรองราคา</span>
+              </span>
+              <span id="detail-deposit" class="font-bold text-neutral-800">฿50,000</span>
+            </div>
+            <div class="flex items-center justify-between text-xs pt-1 border-t border-neutral-200/60">
+              <span class="text-neutral-500 flex items-center gap-1.5">
+                <i data-lucide="calculator" class="w-3.5 h-3.5 text-neutral-500"></i>
+                <span>ประมาณการผ่อนต่อเดือน</span>
+              </span>
+              <span id="detail-installment" class="font-bold text-neutral-800">~ 12,000 บ./เดือน</span>
+            </div>
+          </div>
+
+          <!-- 📄 Role-Based Document Downloads -->
+          <div id="detail-documents-section" class="bg-white border border-neutral-200/70 p-3.5 rounded-2xl space-y-2 text-xs">
+            <!-- Populated dynamically by renderPropertyDocumentDownloads(prop) based on currentMode -->
+          </div>
+
+        </div>
+
+        <!-- 3. Sticky Bottom Action Bar (ล็อกติดล่างตลอดเวลา) -->
+        <div class="p-3.5 bg-white/95 backdrop-blur-md border-t border-neutral-200/80 space-y-2 z-20">
+          
+          <!-- Primary Action Bar -->
+          <div id="detail-actions-footer-bar" class="space-y-2">
+            <div id="detail-agent-actions-row" class="space-y-1.5">
+              <div class="grid grid-cols-2 gap-2">
+                <button id="detail-btn-vinyl" type="button" class="w-full bg-[#FAF8F5] hover:bg-[#F2EDE4] text-[#8C6D23] font-bold py-2 rounded-xl border border-[#E8DFD1] text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+                  <i data-lucide="printer" class="w-3.5 h-3.5 text-[#B89D68]"></i>
+                  <span>พิมพ์ป้ายไวนิล (Auto PDF)</span>
+                </button>
+                <button id="detail-btn-share" type="button" class="w-full bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-2 rounded-xl shadow-2xs text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+                  <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+                  <span>แชร์ล็อกสิทธิ์ (3-5%)</span>
+                </button>
+              </div>
+              <button id="detail-btn-npa-key" type="button" class="w-full bg-white hover:bg-neutral-50 text-neutral-800 font-bold py-1.5 rounded-xl border border-neutral-200 text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+                <i data-lucide="key" class="w-3.5 h-3.5 text-neutral-600"></i>
+                <span>เบิกกุญแจ NPA & Messenger (พี่ลิลลี่)</span>
+              </button>
+            </div>
+            
+            <button id="detail-btn-offer" type="button" class="w-full bg-[#B89D68] hover:bg-[#A38854] text-white font-bold py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all">
+              <i data-lucide="badge-dollar-sign" class="w-4 h-4"></i>
+              <span id="detail-btn-offer-label">เสนอราคา</span>
+            </button>
+            <div id="detail-waitlist-row" class="hidden"></div>
+          </div>
+
+          <!-- 4. Bottom Dismiss Button (กดปิดจากด้านล่างได้ ไม่ต้องเลื่อนกลับขึ้นไปบนสุด) -->
+          <button 
+            type="button"
+            onclick="closePropertyDetailModal()" 
+            class="w-full py-1.5 text-xs font-medium text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 rounded-xl transition-all flex items-center justify-center gap-1"
+          >
+            <span>✕ ปิดหน้าต่างนี้</span>
           </button>
-          <div id="detail-waitlist-row" class="hidden"></div>
+
         </div>
       </div>
     </div>
