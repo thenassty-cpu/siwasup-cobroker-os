@@ -785,6 +785,26 @@
 
         </div>
 
+                <!-- 📲 PWA 1-Click Install Capsule in Footer -->
+        <div class="mt-8 p-3.5 sm:p-4 rounded-2xl bg-neutral-900/95 border border-[#C2A460]/40 flex flex-col sm:flex-row items-center justify-between gap-3 text-white shadow-lg">
+          <div class="flex items-center gap-3 w-full sm:w-auto">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#8B0000] to-[#5A0000] border border-[#C2A460]/60 flex items-center justify-center font-serif font-bold text-[#E5C985] text-lg shrink-0 shadow">
+              S
+            </div>
+            <div class="min-w-0">
+              <div class="text-xs font-bold text-white flex items-center gap-1.5 flex-wrap">
+                <span>ติดตั้งแอป Siwasup OS บนมือถือและคอมพิวเตอร์</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#C2A460]/20 text-[#E5C985] font-mono font-medium">PWA Fast App</span>
+              </div>
+              <div class="text-[11px] text-neutral-400 mt-0.5">เปิดเต็มจอ ไร้แถบ URL ทำงานเร็วขึ้น ไม่ต้องง้อ App Store / Play Store</div>
+            </div>
+          </div>
+          <button type="button" onclick="triggerPwaInstall()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#C2A460] via-[#E5CF94] to-[#A98B45] text-neutral-950 font-bold text-xs flex items-center justify-center gap-2 shadow hover:opacity-95 transition cursor-pointer shrink-0 active:scale-95">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>ติดตั้งแอปลงเครื่อง</span>
+          </button>
+        </div>
+
         <!-- Divider & Bottom Strip -->
         <div class="mt-12 pt-6 border-t border-neutral-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-neutral-500">
           <div>
@@ -4770,7 +4790,95 @@ function getStoredAgentRef() {
       }
       if (window.lucide) { lucide.createIcons(); }
     });
-        // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
+        // 📲 PWA In-App Install Prompt Handler
+    let deferredPwaPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPwaPrompt = e;
+    });
+
+    function triggerPwaInstall() {
+      const ua = navigator.userAgent.toLowerCase();
+      const isLine = ua.includes('line/');
+      const isIos = /iphone|ipad|ipod/.test(ua);
+
+      if (isLine) {
+        openPwaGuideModal('line');
+        return;
+      }
+
+      if (deferredPwaPrompt) {
+        deferredPwaPrompt.prompt();
+        deferredPwaPrompt.userChoice.then((choiceResult) => {
+          deferredPwaPrompt = null;
+        });
+        return;
+      }
+
+      if (isIos) {
+        openPwaGuideModal('ios');
+        return;
+      }
+
+      // Android or Desktop where prompt is already captured or already installed
+      openPwaGuideModal('android');
+    }
+
+    function openPwaGuideModal(type) {
+      const modal = document.getElementById('pwa-guide-modal');
+      const content = document.getElementById('pwa-guide-content');
+      if (!modal || !content) return;
+
+      if (type === 'line') {
+        content.innerHTML = `
+          <div class="p-3 rounded-xl bg-amber-950/60 border border-amber-500/50 space-y-2">
+            <div class="font-bold text-amber-300 flex items-center gap-1.5">
+              <span>⚠️ กำลังเปิดในแอป LINE</span>
+            </div>
+            <p class="text-[11px] text-amber-100/90 leading-relaxed">
+              แอป LINE ไม่อนุญาตให้ติดตั้งแอปโดยตรง กรุณาทำตาม 3 ขั้นตอนนี้ครับ:
+            </p>
+            <ol class="list-decimal list-inside space-y-1 text-[11px] text-amber-200">
+              <li>แตะที่ <strong>จุด 3 จุด (⋮)</strong> หรือรูป <strong>ลูกโลก/เข็มทิศ</strong> ตรงมุมจอของ LINE</li>
+              <li>เลือก <strong>"เปิดในเบราว์เซอร์เริ่มต้น"</strong> หรือ <strong>"เปิดใน Chrome/Safari"</strong></li>
+              <li>จากนั้นจะสามารถกดติดตั้งลงหน้าจอโฮมได้ทันทีครับ!</li>
+            </ol>
+          </div>
+        `;
+      } else if (type === 'ios') {
+        content.innerHTML = `
+          <div class="p-3 rounded-xl bg-neutral-800 border border-[#C2A460]/40 space-y-2">
+            <div class="font-bold text-[#E5C985]">🍏 สำหรับ iPhone / iPad (Safari):</div>
+            <ol class="list-decimal list-inside space-y-1.5 text-[11px] text-neutral-300">
+              <li>แตะปุ่ม <strong>แชร์ (Share)</strong> รูปสี่เหลี่ยมลูกศรชี้ขึ้นที่ขอบล่างของ Safari</li>
+              <li>เลื่อนลงมาแตะคำว่า <strong>"เพิ่มไปยังหน้าจอโฮม" (Add to Home Screen)</strong></li>
+              <li>แตะ <strong>"เพิ่ม" (Add)</strong> มุมขวาบน เป็นอันเสร็จสิ้น!</li>
+            </ol>
+          </div>
+        `;
+      } else {
+        content.innerHTML = `
+          <div class="p-3 rounded-xl bg-neutral-800 border border-[#C2A460]/40 space-y-2">
+            <div class="font-bold text-[#E5C985]">🤖 สำหรับ Android (Chrome) หรือ คอมพิวเตอร์:</div>
+            <ol class="list-decimal list-inside space-y-1.5 text-[11px] text-neutral-300">
+              <li>แตะ <strong>จุด 3 จุด (⋮)</strong> ที่มุมขวาบนของเบราว์เซอร์</li>
+              <li>เลือก <strong>"ติดตั้งแอป" (Install App)</strong> หรือ <strong>"เพิ่มลงในหน้าจอหลัก"</strong></li>
+              <li>กด <strong>"ติดตั้ง"</strong> ไอคอนตัว S จะไปอยู่บนหน้าจอโฮมทันที</li>
+            </ol>
+          </div>
+        `;
+      }
+
+      modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closePwaGuideModal() {
+      const modal = document.getElementById('pwa-guide-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').then((reg) => {
@@ -4817,6 +4925,32 @@ function getStoredAgentRef() {
           <span>LINE</span>
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- 📲 PWA Guide Modal (Help for LINE in-app & iOS Safari) -->
+  <div id="pwa-guide-modal" onclick="if(event.target === this) closePwaGuideModal()" class="fixed inset-0 z-50 bg-neutral-950/70 backdrop-blur-xs flex items-center justify-center p-4 hidden modal-backdrop">
+    <div class="relative w-full max-w-sm bg-neutral-900 border border-[#C2A460] rounded-3xl p-5 text-white shadow-2xl space-y-4">
+      <button type="button" onclick="closePwaGuideModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-neutral-800 hover:bg-neutral-700 text-neutral-400 hover:text-white flex items-center justify-center cursor-pointer">
+        ✕
+      </button>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#8B0000] to-[#5A0000] border border-[#C2A460]/60 flex items-center justify-center font-serif font-bold text-[#E5C985] text-lg shadow">
+          S
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-white">วิธีติดตั้ง Siwasup OS</h3>
+          <p class="text-[11px] text-[#C2A460]">ติดตั้งลงจอมือถือ ไม่ต้องใช้ Store</p>
+        </div>
+      </div>
+
+      <div id="pwa-guide-content" class="text-xs space-y-3 text-neutral-300">
+        <!-- Content injected by JS depending on browser -->
+      </div>
+
+      <button type="button" onclick="closePwaGuideModal()" class="w-full py-2.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 font-semibold text-xs transition">
+        เข้าใจแล้ว ปิดหน้าต่าง
+      </button>
     </div>
   </div>
 
