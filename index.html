@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" class="overflow-x-hidden">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -24,7 +24,7 @@
       font-weight: normal;
       font-style: normal;
     }
-    body { font-family: 'Kanit', 'Tahoma', sans-serif; -webkit-tap-highlight-color: transparent; }
+    html, body { overflow-x: hidden; max-width: 100%; width: 100%; font-family: 'Kanit', 'Tahoma', sans-serif; -webkit-tap-highlight-color: transparent; }
     .badge-fomo { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .75; } }
 
@@ -214,7 +214,7 @@
     }
   </style>
 </head>
-<body class="bg-[#fafbfc] min-h-screen text-gray-800 pb-0">
+<body class="bg-[#fafbfc] min-h-screen text-gray-800 pb-0 overflow-x-hidden w-full max-w-full">
 
   <!-- Responsive App Container (Mobile LINE view to Desktop Homerun Grid) -->
   <div class="w-full max-w-7xl mx-auto bg-white min-h-screen shadow-xl relative flex flex-col border-x border-neutral-200/70">
@@ -766,7 +766,7 @@
         <!-- Divider & Bottom Strip -->
         <div class="mt-12 pt-6 border-t border-neutral-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-neutral-500">
           <div>
-            สงวนลิขสิทธิ์ พ.ศ. 256x <strong class="text-neutral-400 font-medium">บริษัท ศิวาทรัพย์ แอสเซท จำกัด</strong>
+            สงวนลิขสิทธิ์ พ.ศ. 2569 <strong class="text-neutral-400 font-medium">บริษัท ศิวาทรัพย์ แอสเซท จำกัด</strong>
           </div>
           <div class="flex items-center gap-4 text-[11px]">
             <span class="hover:text-neutral-400 cursor-pointer">นโยบายความเป็นส่วนตัว</span>
