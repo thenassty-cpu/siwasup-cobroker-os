@@ -287,14 +287,6 @@
               <span class="px-1 py-0.2 rounded bg-[#C2A460]/20 text-[#E5C985] text-[9px] font-bold" id="header-profile-avatar">S22</span>
               <span id="bar-profile-btn-text" class="hidden sm:inline font-medium">เจ็ม</span>
             </button>
-
-            <!-- แถบเบอร์ติดต่อด่วนสำหรับโหมดลูกค้า (แสดงเฉพาะเมื่อโหมดลูกค้า) -->
-            <div id="header-client-quick-contact" class="hidden items-center gap-1.5 sm:gap-2">
-              <a href="tel:0944629796" class="h-6 px-2.5 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-[#E5C985] flex items-center gap-1.5 font-mono text-[11px] font-bold shadow-2xs">
-                <i data-lucide="phone" class="w-3 h-3 text-[#C2A460]"></i>
-                <span>094 462 9796</span>
-              </a>
-            </div>
           </div>
 
         </div>
@@ -688,7 +680,7 @@
               </li>
               <li class="flex items-start gap-2.5">
                 <i data-lucide="phone" class="w-4 h-4 text-[#C2A460] shrink-0 mt-0.5"></i>
-                <div>
+                <div id="footer-contact-phone-box">
                   <div class="text-neutral-400 text-[11px]">สอบถามรายละเอียดเพิ่มเติม</div>
                   <a href="tel:0944629796" class="text-white hover:text-[#E5C985] transition font-mono font-bold text-sm tracking-wide">094 462 9796</a>
                 </div>
@@ -1205,13 +1197,15 @@
       const leaderboardBtn = document.getElementById('btn-header-leaderboard');
       const profileBtn = document.getElementById('btn-header-profile');
       const archetypeShortcutBtn = document.getElementById('btn-owner-archetype-shortcut');
-      const clientQuickContact = document.getElementById('header-client-quick-contact');
+      const footerPhoneBox = document.getElementById('footer-contact-phone-box');
 
       if (mode === 'client') {
         if (btnClient) btnClient.className = activeBtnClass;
         if (modeText) modeText.textContent = "ลูกค้า VIP";
         
-        // 🔒 โหมดลูกค้า: ปิดซ่อนปุ่มเอเจนต์และกุญแจ NPA 100% ลูกค้าไม่ต้องเห็น!
+        // 🔒 โหมดลูกค้า (Anti-Bypass Protection): 
+        // 1. ปิดซ่อนปุ่มเอเจนต์และกุญแจ NPA 100%
+        // 2. ซ่อนเบอร์โทรตรงสำนักงาน ไม่ให้ลูกค้าโทรตรงข้ามหัวตัวแทนเด็ดขาด!
         if (npaKeyBtn) npaKeyBtn.classList.add('hidden');
         if (leaderboardBtn) leaderboardBtn.classList.add('hidden');
         if (profileBtn) profileBtn.classList.add('hidden');
@@ -1220,18 +1214,25 @@
           ownerNotifyBtn.classList.add('hidden');
           ownerNotifyBtn.classList.remove('flex');
         }
-        if (clientQuickContact) {
-          clientQuickContact.classList.remove('hidden');
-          clientQuickContact.classList.add('flex');
+        if (footerPhoneBox) {
+          footerPhoneBox.innerHTML = `
+            <div class="text-neutral-400 text-[11px]">สอบถามข้อมูล & นัดชมทรัพย์</div>
+            <button type="button" onclick="contactViaLine('general', 'สอบถามทั่วไป')" class="text-emerald-400 hover:text-emerald-300 font-semibold text-xs flex items-center gap-1.5 cursor-pointer pt-0.5">
+              <span class="w-2 h-2 rounded-full bg-[#06C755] shrink-0"></span>
+              <span>นัดชมผ่าน LINE (คุ้มครองสิทธิ์ตัวแทน)</span>
+            </button>
+          `;
         }
       } else {
-        // โหมดทีมงาน/เอเจนต์: กู้คืนปุ่มเครื่องมือเอเจนต์
+        // โหมดทีมงาน/เอเจนต์/แอดมิน: กู้คืนปุ่มเครื่องมือเอเจนต์ และแสดงเบอร์สำนักงาน
         if (npaKeyBtn) npaKeyBtn.classList.remove('hidden');
         if (leaderboardBtn) leaderboardBtn.classList.remove('hidden');
         if (profileBtn) profileBtn.classList.remove('hidden');
-        if (clientQuickContact) {
-          clientQuickContact.classList.add('hidden');
-          clientQuickContact.classList.remove('flex');
+        if (footerPhoneBox) {
+          footerPhoneBox.innerHTML = `
+            <div class="text-neutral-400 text-[11px]">สอบถามรายละเอียดเพิ่มเติม</div>
+            <a href="tel:0944629796" class="text-white hover:text-[#E5C985] transition font-mono font-bold text-sm tracking-wide">094 462 9796</a>
+          `;
         }
 
         if (mode === 'owner') {
