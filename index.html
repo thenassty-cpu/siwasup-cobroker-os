@@ -214,7 +214,7 @@
     }
   </style>
 </head>
-<body class="bg-[#fafbfc] min-h-screen text-gray-800 pb-20">
+<body class="bg-[#fafbfc] min-h-screen text-gray-800 pb-0">
 
   <!-- Responsive App Container (Mobile LINE view to Desktop Homerun Grid) -->
   <div class="w-full max-w-7xl mx-auto bg-white min-h-screen shadow-xl relative flex flex-col border-x border-neutral-200/70">
@@ -631,6 +631,156 @@
       </div>
 
     </main>
+
+    <!-- 🏢 Corporate Footer: บริษัท ศิวาทรัพย์ แอสเซท จำกัด (SIWASUP ASSET CO., LTD.) -->
+    <footer class="mt-auto bg-[#0a0e17] text-neutral-300 border-t border-[#C2A460]/30 relative overflow-hidden">
+      <!-- Subtle Luxury Ambient Glow -->
+      <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-32 bg-[#990000]/15 blur-3xl pointer-events-none rounded-full"></div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+          
+          <!-- Column 1: Brand & Identity -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-neutral-900 border border-[#C2A460]/40 flex items-center justify-center p-1.5 shadow-md shrink-0">
+                <img src="assets/siwasup_logo.png" alt="Siwasup Logo" class="w-full h-full object-contain" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-[#C2A460] font-black text-lg\'>✦</span>'">
+              </div>
+              <div>
+                <h3 class="text-sm font-extrabold text-white tracking-wide">บริษัท ศิวาทรัพย์ แอสเซท จำกัด</h3>
+                <p class="text-[11px] text-[#C2A460] font-mono tracking-wider">SIWASUP ASSET CO., LTD.</p>
+              </div>
+            </div>
+            
+            <p class="text-xs text-neutral-400 leading-relaxed">
+              ศูนย์รวมบ้านมือสองรีโนเวทพร้อมอยู่ และคลังทรัพย์ NPA คุณภาพสูงคัดพิเศษ กรุงเทพฯ และปริมณฑล ปลอดภัยด้วยระบบ Co-Broker อัจฉริยะ และสัญญาจะซื้อจะขายมาตรฐาน
+            </p>
+
+            <div class="pt-1">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] bg-neutral-900 text-emerald-400 border border-emerald-500/30 font-medium">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>จดทะเบียนนิติบุคคลถูกต้องตามกฎหมาย</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Column 2: Contact & Office Location -->
+          <div class="space-y-3">
+            <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#C2A460]"></span>
+              <span>สำนักงาน & ติดต่อฝ่ายขาย</span>
+            </h4>
+            
+            <ul class="space-y-2.5 text-xs text-neutral-400">
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="map-pin" class="w-4 h-4 text-[#C2A460] shrink-0 mt-0.5"></i>
+                <span class="leading-relaxed">เลขที่ 48/59 ซอยรังสิต-นครนายก 33 ตำบลประชาธิปัตย์ อำเภอธัญบุรี จังหวัดปทุมธานี 12130</span>
+              </li>
+              <li class="flex items-center gap-2.5">
+                <i data-lucide="phone" class="w-4 h-4 text-[#C2A460] shrink-0"></i>
+                <div>
+                  <a href="tel:0824429965" class="hover:text-white transition font-mono font-semibold">082-442-9965</a>,
+                  <a href="tel:0958294565" class="hover:text-white transition font-mono font-semibold">095-829-4565</a>
+                </div>
+              </li>
+              <li class="flex items-center gap-2.5">
+                <i data-lucide="clock" class="w-4 h-4 text-[#C2A460] shrink-0"></i>
+                <span>วันจันทร์ - เสาร์ 09:00 - 18:00 น.</span>
+              </li>
+              <li class="flex items-center gap-2.5">
+                <i data-lucide="mail" class="w-4 h-4 text-[#C2A460] shrink-0"></i>
+                <a href="mailto:contact@siwasup.com" class="hover:text-white transition font-mono">contact@siwasup.com</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Column 3: Co-Broker Network & Tools -->
+          <div class="space-y-3">
+            <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#C2A460]"></span>
+              <span>ศูนย์รวมพันธมิตร Co-Broker</span>
+            </h4>
+            
+            <ul class="space-y-2 text-xs text-neutral-400">
+              <li>
+                <button type="button" onclick="openConsignModal(false)" class="hover:text-[#E5C985] transition flex items-center gap-2 cursor-pointer">
+                  <span class="text-[#C2A460]">›</span>
+                  <span>ฝากขายบ้าน / คอนโด / ที่ดิน (ไม่มีค่าแรกเข้า)</span>
+                </button>
+              </li>
+              <li>
+                <a href="assets/documents/siwasup_sales_contract.html" target="_blank" class="hover:text-[#E5C985] transition flex items-center gap-2">
+                  <span class="text-[#C2A460]">›</span>
+                  <span>แบบฟอร์มสัญญาจะซื้อจะขายมาตรฐาน</span>
+                </a>
+              </li>
+              <li>
+                <button type="button" onclick="openNpaKeyModal('P-01')" class="hover:text-[#E5C985] transition flex items-center gap-2 cursor-pointer">
+                  <span class="text-[#C2A460]">›</span>
+                  <span>ระบบเบิกกุญแจ NPA & Messenger นัดชม</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" onclick="openVinylModal('P-01')" class="hover:text-[#E5C985] transition flex items-center gap-2 cursor-pointer">
+                  <span class="text-[#C2A460]">›</span>
+                  <span>เครื่องมือสร้างป้ายไวนิล Auto PDF 1:1</span>
+                </button>
+              </li>
+              <li>
+                <a href="Siwasup_Brand_Color_System_Dashboard.html" target="_blank" class="hover:text-[#E5C985] transition flex items-center gap-2">
+                  <span class="text-[#C2A460]">›</span>
+                  <span>แดชบอร์ดระบบสี CI & อัตลักษณ์องค์กร (75-15-5-5)</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Column 4: LINE Official & Security Standards -->
+          <div class="space-y-4">
+            <h4 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#C2A460]"></span>
+              <span>นัดชมทรัพย์ & ช่องทางด่วน</span>
+            </h4>
+            
+            <div class="p-3.5 rounded-xl bg-neutral-900/90 border border-neutral-800 space-y-2.5">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-lg bg-[#06C755] text-white flex items-center justify-center font-black text-xs shrink-0 shadow-sm">L</span>
+                <div>
+                  <div class="text-xs font-bold text-white">LINE Official Account</div>
+                  <div class="text-[11px] text-neutral-400 font-mono">@siwasup</div>
+                </div>
+              </div>
+              <p class="text-[11px] text-neutral-400">ส่งรหัสทรัพย์เพื่อสอบถามสถานะล่าสุด หรือนัดหมายเข้าชมบ้านจริงได้ทันที</p>
+              <a href="https://line.me/ti/p/~@siwasup" target="_blank" class="w-full py-2 px-3 rounded-lg bg-[#06C755] hover:bg-[#05b34c] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95">
+                <span>เพิ่มเพื่อน LINE @siwasup</span>
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+
+            <div class="flex items-center gap-2 text-[11px] text-neutral-500">
+              <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+              <span>คุ้มครองข้อมูลส่วนบุคคลตาม พ.ร.บ. PDPA</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Divider & Bottom Strip -->
+        <div class="mt-12 pt-6 border-t border-neutral-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-neutral-500">
+          <div>
+            © 2026 <strong class="text-neutral-400 font-medium">บริษัท ศิวาทรัพย์ แอสเซท จำกัด (SIWASUP ASSET CO., LTD.)</strong> — All rights reserved.
+          </div>
+          <div class="flex items-center gap-4 text-[11px]">
+            <span class="hover:text-neutral-400 cursor-pointer">นโยบายความเป็นส่วนตัว</span>
+            <span>•</span>
+            <span class="hover:text-neutral-400 cursor-pointer">ข้อกำหนดและเงื่อนไข</span>
+            <span>•</span>
+            <span class="text-neutral-600 font-mono">Siwasup Co-Broker OS v2.2</span>
+          </div>
+        </div>
+
+      </div>
+    </footer>
 
     <!-- 🧩 Modular Components Root (Modals, Overlays & Toasts loaded from modals.js) -->
     <div id="modals-root"></div>
@@ -1570,6 +1720,11 @@
       </span>`;
     }
 
+    // ⚡ Pagination & Fast DOM Loading Config (Load More 16 per batch)
+    const PROPERTIES_PAGE_SIZE = 16;
+    let propertiesVisibleCount = PROPERTIES_PAGE_SIZE;
+    let lastFilterKey = '';
+
     function renderProperties() {
       const container = document.getElementById('property-list');
       const query = (document.getElementById('search-input') ? document.getElementById('search-input').value : '').trim().toLowerCase();
@@ -1582,6 +1737,13 @@
       if (btnClear) {
         if (query) btnClear.classList.remove('hidden');
         else btnClear.classList.add('hidden');
+      }
+
+      // Reset visible count to 16 whenever any filter criteria changes
+      const currentFilterKey = `${currentMode}|${query}|${bank}|${loc}|${budget}|${cat}|${(activeBundleFilter || []).join(',')}|${showSoldArchiveInOwnerMode}|${showTransferredInOwnerMode}`;
+      if (currentFilterKey !== lastFilterKey) {
+        propertiesVisibleCount = PROPERTIES_PAGE_SIZE;
+        lastFilterKey = currentFilterKey;
       }
 
       const filtered = allProperties.filter(p => {
@@ -1770,12 +1932,14 @@
                 <span>แผนที่</span>
               </button>
             </div>
-            <span class="text-xs text-neutral-400">ทั้งหมด <strong class="text-neutral-800">${filtered.length}</strong> รายการ</span>
+            <span class="text-xs text-neutral-400">${filtered.length > propertiesVisibleCount ? `แสดง <strong class="text-neutral-800">${Math.min(propertiesVisibleCount, filtered.length)}</strong> จาก <strong class="text-neutral-800">${filtered.length}</strong> หลัง` : `ทั้งหมด <strong class="text-neutral-800">${filtered.length}</strong> หลัง`}</span>
           </div>
         </div>
       `;
 
-      const cardsHtml = filtered.map((p, idx) => {
+      const totalCount = filtered.length;
+      const visibleProps = filtered.slice(0, propertiesVisibleCount);
+      const cardsHtml = visibleProps.map((p, idx) => {
         // ข้อ 2: เปลี่ยนจาก Sold Out เป็นคำว่า "ติดจอง" ทั้งหมด ส่วนโอนแล้วจะถูกคัดออกจากหน้าเว็บ
         const isBooked = (p.status === 'booked' || p.status === 'sold');
         const isTransferred = (p.status === 'transferred');
@@ -2037,9 +2201,61 @@
         `;
       }).join('');
 
-      container.innerHTML = ownerHeaderHtml + subHeaderHtml + `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">${cardsHtml}</div>`;
+      let paginationHtml = '';
+      if (totalCount > propertiesVisibleCount) {
+        const shownCount = Math.min(propertiesVisibleCount, totalCount);
+        const percent = Math.round((shownCount / totalCount) * 100);
+        const remaining = totalCount - shownCount;
+        const nextBatch = Math.min(PROPERTIES_PAGE_SIZE, remaining);
+
+        paginationHtml = `
+          <div id="pagination-controls" class="mt-10 mb-6 flex flex-col items-center justify-center gap-3.5">
+            <div class="flex items-center gap-2 text-xs text-neutral-500 font-medium">
+              <span>กำลังแสดง</span>
+              <span class="px-2.5 py-0.5 rounded-md bg-neutral-900 text-white font-bold text-xs">${shownCount}</span>
+              <span>จากทั้งหมด</span>
+              <span class="font-bold text-neutral-900">${totalCount}</span>
+              <span>หลัง</span>
+            </div>
+
+            <!-- Luxury Satin Progress Bar -->
+            <div class="w-64 sm:w-80 h-2 bg-neutral-100 rounded-full overflow-hidden p-0.5 border border-neutral-200/80 shadow-inner">
+              <div class="h-full bg-gradient-to-r from-[#990000] via-[#C2A460] to-[#E5C985] rounded-full transition-all duration-500" style="width: ${percent}%"></div>
+            </div>
+
+            <div class="flex items-center gap-2.5 mt-1">
+              <button type="button" onclick="loadMoreProperties()" class="px-5 py-2.5 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer active:scale-95 group">
+                <i data-lucide="chevrons-down" class="w-4 h-4 text-[#C2A460] group-hover:translate-y-0.5 transition-transform"></i>
+                <span>โหลดทรัพย์เพิ่ม (+${nextBatch} หลัง)</span>
+              </button>
+              <button type="button" onclick="showAllProperties()" class="px-3.5 py-2.5 rounded-xl bg-white hover:bg-neutral-50 border border-neutral-200 text-neutral-600 hover:text-neutral-900 text-xs font-medium transition cursor-pointer active:scale-95">
+                <span>แสดงทั้งหมด (${totalCount})</span>
+              </button>
+            </div>
+          </div>
+        `;
+      } else if (totalCount > PROPERTIES_PAGE_SIZE) {
+        paginationHtml = `
+          <div class="mt-10 mb-4 flex items-center justify-center gap-2 text-xs text-neutral-500 font-medium">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span>แสดงครบทั้งหมด ${totalCount} หลังแล้ว</span>
+          </div>
+        `;
+      }
+
+      container.innerHTML = ownerHeaderHtml + subHeaderHtml + `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">${cardsHtml}</div>` + paginationHtml;
 
       if (window.lucide) { lucide.createIcons(); }
+    }
+
+    function loadMoreProperties() {
+      propertiesVisibleCount += PROPERTIES_PAGE_SIZE;
+      renderProperties();
+    }
+
+    function showAllProperties() {
+      propertiesVisibleCount = 999999;
+      renderProperties();
     }
     // --- NEW PHASE 1 FUNCTIONS: CONSIGNMENT, MGM, OFFER, AND OWNER LEADS ---
     let pendingOfferProp = null;
@@ -4291,6 +4507,24 @@
       syncScrollLock();
     }
 
+    // 🚀 Smooth Back to Top Scroll Controller
+    function scrollToTopSmooth() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function handleBackToTopScroll() {
+      const btn = document.getElementById('btn-back-to-top');
+      if (!btn) return;
+      if (window.scrollY > 400) {
+        btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-3');
+        btn.classList.add('opacity-100', 'translate-y-0');
+      } else {
+        btn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-3');
+        btn.classList.remove('opacity-100', 'translate-y-0');
+      }
+    }
+    window.addEventListener('scroll', handleBackToTopScroll, { passive: true });
+
     // Auto-run
     checkUrlParameters();
     loadProperties();
@@ -4307,5 +4541,14 @@
     });
     if (window.lucide) { lucide.createIcons(); }
   </script>
+  <!-- 🚀 Floating Back to Top Button (Digital Luxury Frosted Glass) -->
+  <button id="btn-back-to-top"
+          type="button"
+          onclick="scrollToTopSmooth()"
+          aria-label="กลับสู่ด้านบน"
+          class="fixed bottom-6 right-5 sm:right-6 z-40 w-11 h-11 rounded-full bg-neutral-950/85 hover:bg-neutral-900 text-[#C2A460] border border-[#C2A460]/40 shadow-xl backdrop-blur-md flex items-center justify-center opacity-0 pointer-events-none translate-y-3 transition-all duration-300 active:scale-90 group cursor-pointer"
+          title="กลับสู่ด้านบน">
+    <i data-lucide="chevron-up" class="w-5 h-5 group-hover:-translate-y-0.5 transition-transform stroke-[2.2]"></i>
+  </button>
 </body>
 </html>
