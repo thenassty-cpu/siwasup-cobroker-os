@@ -1004,6 +1004,34 @@
           <!-- Description -->
           <p id="detail-desc" class="text-xs text-neutral-600 leading-relaxed bg-[#FAF8F5]/50 border border-neutral-200/70 p-3 rounded-2xl"></p>
 
+          <!-- 👤 POINT 2: INLINE AGENT PROFILE CARD (Shown in Client Mode) -->
+          <div id="detail-agent-card" class="hidden rounded-2xl bg-[#FAF9F6] border border-[#C2A460]/40 p-3.5 shadow-sm space-y-2.5">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="font-semibold text-neutral-500 uppercase tracking-wider text-[10px]">ผู้ดูแลการเข้าชม & เสนอราคา</span>
+              <span id="detail-card-cert-id" class="font-mono font-bold text-neutral-800 bg-white px-2 py-0.5 rounded border border-neutral-200 text-[10px]">ID: SW-042</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="relative shrink-0">
+                <img id="detail-card-agent-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Agent" class="w-12 h-12 rounded-full object-cover border-2 border-[#C2A460] shadow-sm">
+                <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#C2A460] text-neutral-900 flex items-center justify-center border border-white" title="Verified Partner">
+                  <i data-lucide="check" class="w-2.5 h-2.5 stroke-[3]"></i>
+                </div>
+              </div>
+              <div class="min-w-0 flex-1">
+                <h3 id="detail-card-agent-name" class="text-sm font-bold text-neutral-900 truncate">คุณธนภัทร วงศ์สุวรรณ</h3>
+                <div id="detail-card-title-badge" class="inline-flex items-center gap-1 mt-0.5 px-2 py-0.5 rounded text-[10px] font-semibold bg-neutral-900 text-[#C2A460]">
+                  <i data-lucide="award" class="w-3 h-3"></i>
+                  <span id="detail-card-agent-title">Verified Property Consultant</span>
+                </div>
+                <p class="text-[10px] text-neutral-500 mt-1 leading-snug">ตัวแทนรับรองโดย ศิวาทรัพย์ แอสเซท • ประสานงานเปิดบ้านและยื่นสินเชื่อครบวงจร</p>
+              </div>
+            </div>
+            <button type="button" onclick="contactViaLine('booking', document.getElementById('detail-title').textContent)" class="w-full py-2.5 px-3 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold flex items-center justify-center gap-2 transition shadow-sm cursor-pointer">
+              <i data-lucide="calendar-check" class="w-4 h-4 text-[#C2A460]"></i>
+              <span id="detail-card-btn-text">นัดหมายเข้าชมบ้านหลังนี้กับ คุณธนภัทร</span>
+            </button>
+          </div>
+
           <!-- 🔑 NPA Key & Messenger Banner (Employee, Agent & Owner) -->
           <div id="detail-npa-key-banner" class="bg-[#FAF8F5] border border-[#E8DFD1] rounded-2xl p-3 flex items-center justify-between gap-2 shadow-2xs">
             <div class="flex items-center gap-2.5 min-w-0">

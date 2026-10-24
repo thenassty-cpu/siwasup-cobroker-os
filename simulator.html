@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siwasup OS — Client View & Dynamic Contact Routing</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Prompt & Cinzel for Luxury Monogram -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                        serif: ['Cinzel', 'serif'],
+                    },
+                    colors: {
+                        alabaster: '#FAF9F6',
+                        charcoal: '#171717',
+                        burgundy: {
+                            DEFAULT: '#8B0000',
+                            light: '#990000',
+                            dark: '#5A0000'
+                        },
+                        satingold: {
+                            DEFAULT: '#C2A460',
+                            light: '#DFC686',
+                            dark: '#9E8242'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #111111;
+            color: #171717;
+            font-family: 'Prompt', sans-serif;
+            overflow-x: hidden;
+        }
+        /* Custom scrollbar inside mobile viewport */
+        .mobile-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .mobile-scroll::-webkit-scrollbar-track {
+            background: #FAF9F6;
+        }
+        .mobile-scroll::-webkit-scrollbar-thumb {
+            background: #D4D4D8;
+            border-radius: 10px;
+        }
+        /* Highlight pulse for annotated zones */
+        @keyframes subtlePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(194, 164, 96, 0.45); }
+            50% { box-shadow: 0 0 0 6px rgba(194, 164, 96, 0); }
+        }
+        .zone-pulse {
+            animation: subtlePulse 2.4s infinite;
+        }
+        .metallic-gold-gradient {
+            background: linear-gradient(135deg, #C2A460 0%, #E5CF94 50%, #A98B45 100%);
+        }
+        .burgundy-gradient {
+            background: linear-gradient(135deg, #8B0000 0%, #5A0000 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start py-4 px-2 sm:px-6">
+
+    <!-- ==========================================
+         TOP SIMULATOR CONTROL PANEL (FOR NAT, BUA, GUL)
+         ========================================== -->
+    <div class="w-full max-w-4xl bg-zinc-900 border border-zinc-800 rounded-2xl p-4 mb-5 shadow-2xl text-white">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-zinc-800">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg burgundy-gradient border border-satingold/40 flex items-center justify-center font-serif font-bold text-satingold text-lg shadow">
+                    S
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-sm sm:text-base font-semibold tracking-wide text-white">SIWASUP OS • Simulator ทดสอบมุมมองลูกค้า</h1>
+                        <span class="text-[11px] px-2 py-0.5 rounded-full bg-satingold/20 text-satingold border border-satingold/30 font-medium">Phase 1 Demo</span>
+                    </div>
+                    <p class="text-xs text-zinc-400">ลองกดสลับลิงก์ด้านล่างเพื่อดูการเปลี่ยนชื่อตำแหน่ง (ซ่อนชื่อสัตว์) และการซ่อน/แสดงเบอร์บริษัทอัตโนมัติ</p>
+                </div>
+            </div>
+            <!-- Toggle Annotations Button -->
+            <button id="toggleGuideBtn" onclick="toggleAnnotations()" class="self-start md:self-auto flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-satingold border border-satingold/30 transition">
+                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                <span id="guideBtnText">ซ่อนป้ายชี้จุด (1-2-3)</span>
+            </button>
+        </div>
+
+        <!-- Mode Selector Buttons -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mt-3">
+            <button onclick="setSimulationMode('wolf')" id="btn-wolf" class="mode-btn text-left p-2.5 rounded-xl border transition-all flex flex-col justify-between bg-zinc-800/90 border-satingold ring-1 ring-satingold">
+                <div class="flex items-center justify-between w-full">
+                    <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-zinc-700 text-zinc-200">หลังบ้าน: 🐺 Wolf</span>
+                    <span class="text-[10px] text-satingold font-mono">?agent=SW-042</span>
+                </div>
+                <div class="mt-1.5">
+                    <p class="text-xs font-medium text-white">ลิงก์เอเจ้นท์เริ่มต้น</p>
+                    <p class="text-[11px] text-zinc-400 truncate">ลูกค้าเห็น: Verified Consultant</p>
+                </div>
+            </button>
+
+            <button onclick="setSimulationMode('lion')" id="btn-lion" class="mode-btn text-left p-2.5 rounded-xl border border-zinc-700/80 bg-zinc-800/40 hover:bg-zinc-800 transition-all flex flex-col justify-between">
+                <div class="flex items-center justify-between w-full">
+                    <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-700/40">หลังบ้าน: 🦁 Lion</span>
+                    <span class="text-[10px] text-satingold font-mono">?agent=SW-008</span>
+                </div>
+                <div class="mt-1.5">
+                    <p class="text-xs font-medium text-white">ลิงก์เอเจ้นท์ระดับกลาง</p>
+                    <p class="text-[11px] text-zinc-400 truncate">ลูกค้าเห็น: Senior Specialist</p>
+                </div>
+            </button>
+
+            <button onclick="setSimulationMode('gryphon')" id="btn-gryphon" class="mode-btn text-left p-2.5 rounded-xl border border-zinc-700/80 bg-zinc-800/40 hover:bg-zinc-800 transition-all flex flex-col justify-between">
+                <div class="flex items-center justify-between w-full">
+                    <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-red-950 text-red-200 border border-red-800/50">หลังบ้าน: 🦅🦁 Gryphon</span>
+                    <span class="text-[10px] text-satingold font-mono">?agent=SW-001</span>
+                </div>
+                <div class="mt-1.5">
+                    <p class="text-xs font-medium text-white">ลิงก์เอเจ้นท์ระดับท็อป</p>
+                    <p class="text-[11px] text-zinc-400 truncate">ลูกค้าเห็น: Master Partner</p>
+                </div>
+            </button>
+
+            <button onclick="setSimulationMode('direct')" id="btn-direct" class="mode-btn text-left p-2.5 rounded-xl border border-zinc-700/80 bg-zinc-800/40 hover:bg-zinc-800 transition-all flex flex-col justify-between">
+                <div class="flex items-center justify-between w-full">
+                    <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-700/40">🌐 เว็บหลักบริษัท</span>
+                    <span class="text-[10px] text-zinc-400 font-mono">ไม่มี ?agent</span>
+                </div>
+                <div class="mt-1.5">
+                    <p class="text-xs font-medium text-white">ลูกค้าขาจรเข้าเว็บเอง</p>
+                    <p class="text-[11px] text-zinc-400 truncate">เข้าคิวกลางแอดมินบัว + โชว์เบอร์บริษัท</p>
+                </div>
+            </button>
+        </div>
+
+        <!-- Simulated Browser URL Bar -->
+        <div class="mt-3 flex items-center gap-2 bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-xs">
+            <i data-lucide="lock" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i>
+            <span class="text-zinc-400 truncate font-mono text-[11px] sm:text-xs" id="simulatedUrlText">
+                https://thenassty-cpu.github.io/siwasup-cobroker-os/<span class="text-satingold font-semibold">?agent=SW-042</span>
+            </span>
+            <span id="internalRulePill" class="ml-auto shrink-0 text-[10px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">
+                โหมดล็อกสิทธิ์เอเจ้นท์ (ซ่อนเบอร์ขายบริษัท)
+            </span>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MAIN LAYOUT: PHONE FRAME + EXPLANATION CARDS
+         ========================================== -->
+    <div class="w-full max-w-4xl flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6">
+
+        <!-- MOBILE PHONE VIEWPORT (390px Standard iPhone Width) -->
+        <div class="relative w-full max-w-[395px] h-[770px] bg-alabaster rounded-[42px] border-[10px] border-zinc-800 shadow-[0_25px_70px_rgba(0,0,0,0.75)] overflow-hidden flex flex-col shrink-0">
+
+            <!-- Simulated Mobile Status Bar (PWA Fullscreen Look) -->
+            <div class="bg-charcoal text-white px-6 pt-2.5 pb-1.5 flex items-center justify-between text-[11px] font-medium select-none shrink-0">
+                <span>09:41</span>
+                <div class="w-20 h-4 bg-black rounded-full"></div>
+                <div class="flex items-center gap-1.5">
+                    <i data-lucide="signal" class="w-3 h-3"></i>
+                    <i data-lucide="wifi" class="w-3 h-3"></i>
+                    <i data-lucide="battery-full" class="w-3.5 h-3.5 text-emerald-400"></i>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 POINT 3: TOP TRUST BANNER (Dynamic)
+                 ========================================== -->
+            <div id="topTrustBanner" class="relative bg-gradient-to-r from-charcoal via-zinc-900 to-charcoal text-alabaster px-3.5 py-2 border-b border-satingold/40 transition-all shrink-0">
+                <!-- Annotation Pill 3 -->
+                <span class="annotation-badge absolute right-2 -bottom-2.5 z-20 bg-burgundy text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-satingold shadow">
+                    จุดที่ 3: แถบยืนยันผู้ดูแลด้านบน
+                </span>
+                <div class="flex items-center gap-2 text-[11px] leading-tight">
+                    <span class="text-satingold font-bold">✦</span>
+                    <p id="topBannerText" class="truncate">
+                        ดูแลการเข้าชมโดย <span class="text-satingold font-medium">คุณธนภัทร</span> <span class="text-zinc-400 font-mono text-[10px]">(ID: SW-042)</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 SIWASUP COMPACT LUXURY HEADER
+                 ========================================== -->
+            <header class="bg-alabaster/95 backdrop-blur-md border-b border-zinc-200/80 px-4 py-2.5 flex items-center justify-between shrink-0 z-10">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg burgundy-gradient border border-satingold/60 flex items-center justify-center shadow-sm">
+                        <span class="font-serif font-bold text-satingold text-base tracking-tighter">S</span>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="font-serif font-bold text-xs tracking-wider text-charcoal">SIWASUP ASSET</span>
+                            <span class="text-[9px] px-1.5 py-0.5 rounded bg-burgundy/10 text-burgundy font-semibold border border-burgundy/20">NPA SELECT</span>
+                        </div>
+                        <p class="text-[10px] text-zinc-500 leading-none mt-0.5">ศูนย์รวมทรัพย์สินรอการขายและบ้านรีโนเวท</p>
+                    </div>
+                </div>
+                <!-- Collapsed Mobile Filter Capsule -->
+                <button onclick="showToast('เปิดหน้าต่างค้นหาและกรองโซนทรัพย์สิน')" class="flex items-center gap-1 bg-white border border-zinc-300 rounded-full px-2.5 py-1 text-[11px] text-charcoal shadow-sm hover:border-satingold transition">
+                    <i data-lucide="search" class="w-3 h-3 text-burgundy"></i>
+                    <span>ค้นหาทรัพย์</span>
+                </button>
+            </header>
+
+            <!-- ==========================================
+                 SCROLLABLE CONTENT AREA (75% Warm Alabaster)
+                 ========================================== -->
+            <div id="mobileScrollContainer" class="mobile-scroll flex-1 overflow-y-auto px-3.5 pt-3 pb-28 space-y-4">
+
+                <!-- Category Filter Pills -->
+                <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+                    <span class="text-[11px] px-3 py-1 rounded-full bg-charcoal text-white font-medium shrink-0 shadow-sm">
+                        ✦ ศิวาทรัพย์ รีโนเวท (14)
+                    </span>
+                    <span class="text-[11px] px-3 py-1 rounded-full bg-white text-zinc-700 border border-zinc-200 shrink-0">
+                        ทรัพย์ NPA ตามสภาพ (38)
+                    </span>
+                    <span class="text-[11px] px-3 py-1 rounded-full bg-white text-zinc-700 border border-zinc-200 shrink-0">
+                        บ้านเดี่ยวโซนกรุงเทพฯ
+                    </span>
+                </div>
+
+                <!-- FEATURED PROPERTY CARD -->
+                <article class="bg-white rounded-2xl border border-zinc-200/90 shadow-sm overflow-hidden">
+                    <!-- Property Image + Badges -->
+                    <div class="relative h-44 bg-zinc-900 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=900&q=80" 
+                             alt="บ้านเดี่ยว ศิวาทรัพย์ รีโนเวท" 
+                             onerror="this.src='https://placehold.co/600x400/171717/C2A460?text=SIWASUP+LUXURY+NPA'"
+                             class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30"></div>
+
+                        <!-- Top Left Badges -->
+                        <div class="absolute top-2.5 left-2.5 flex flex-wrap gap-1.5">
+                            <span class="text-[10px] font-semibold px-2.5 py-0.5 rounded-full burgundy-gradient text-white border border-satingold/50 shadow">
+                                ✦ ศิวาทรัพย์ รีโนเวท
+                            </span>
+                            <span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-charcoal/85 text-alabaster backdrop-blur-sm border border-white/15">
+                                รหัสทรัพย์: SW-NPA-108
+                            </span>
+                        </div>
+
+                        <!-- Key Custody Status Pill (From Previous Discussion) -->
+                        <div class="absolute bottom-2.5 left-2.5 right-2.5 flex items-end justify-between">
+                            <div>
+                                <p class="text-[10px] text-satingold font-medium tracking-wide">เลียบทางด่วนเอกมัย-รามอินทรา (ลาดพร้าว)</p>
+                                <h2 class="text-sm font-semibold text-white leading-snug">บ้านเดี่ยว 2 ชั้น โครงการพรีเมียม รีโนเวทใหม่ทั้งหลัง</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="p-3.5">
+                        <div class="flex items-baseline justify-between border-b border-zinc-100 pb-2.5">
+                            <div>
+                                <span class="text-[10px] text-zinc-400 line-through">ราคาประเมินแบงก์ 5.69 ล้าน</span>
+                                <div class="text-lg font-bold text-burgundy leading-none mt-0.5">
+                                    ฿4,890,000
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 font-medium">
+                                    <i data-lucide="check-circle-2" class="w-3 h-3 text-emerald-600"></i>
+                                    พร้อมนัดเปิดชม
+                                </span>
+                                <p class="text-[10px] text-zinc-500 mt-0.5">62 ตร.ว. • 4 นอน • 3 น้ำ • 2 จอด</p>
+                            </div>
+                        </div>
+
+                        <!-- ==========================================
+                             POINT 2: INLINE AGENT PROFILE CARD (IN PROPERTY DETAIL)
+                             ========================================== -->
+                        <div id="propertyAgentBox" class="relative mt-3 rounded-xl bg-alabaster border border-satingold/40 p-3 zone-pulse transition-all">
+                            <!-- Annotation Pill 2 -->
+                            <span class="annotation-badge absolute -top-2.5 right-2 bg-burgundy text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-satingold shadow">
+                                จุดที่ 2: การ์ดผู้ดูแลในหน้าข้อมูลบ้าน
+                            </span>
+
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                                    ผู้ดูแลการเข้าชมและยื่นข้อเสนอทรัพย์สินนี้
+                                </span>
+                                <span id="cardCertId" class="text-[10px] font-mono font-semibold text-charcoal bg-white px-2 py-0.5 rounded border border-zinc-200">
+                                    ID: SW-042
+                                </span>
+                            </div>
+
+                            <div class="flex items-center gap-3">
+                                <div class="relative shrink-0">
+                                    <img id="cardAgentAvatar" 
+                                         src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" 
+                                         alt="Agent Profile" 
+                                         class="w-12 h-12 rounded-full object-cover border-2 border-satingold shadow-sm">
+                                    <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-satingold text-charcoal flex items-center justify-center border border-white" title="Verified Partner">
+                                        <i data-lucide="check" class="w-2.5 h-2.5 stroke-[3]"></i>
+                                    </div>
+                                </div>
+
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center gap-1.5">
+                                        <h3 id="cardAgentName" class="text-sm font-semibold text-charcoal truncate">
+                                            คุณธนภัทร วงศ์สุวรรณ
+                                        </h3>
+                                    </div>
+                                    <!-- Professional Title Badge (NO Animal Name!) -->
+                                    <div id="cardTitleBadge" class="inline-flex items-center gap-1 mt-0.5 px-2 py-0.5 rounded text-[10px] font-medium bg-charcoal text-satingold">
+                                        <i data-lucide="award" class="w-3 h-3"></i>
+                                        <span id="cardAgentTitle">Verified Property Consultant</span>
+                                    </div>
+                                    <p id="cardTrustSubtext" class="text-[10px] text-zinc-500 mt-1 leading-snug">
+                                        ตัวแทนรับรองโดย ศิวาทรัพย์ แอสเซท • ประสานงานเบิกกุญแจและยื่นสินเชื่อครบวงจร
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Appointment Action Button inside Property Card -->
+                            <button onclick="openBookingPreview()" class="mt-2.5 w-full py-2 px-3 rounded-lg bg-charcoal hover:bg-zinc-800 text-white text-xs font-medium flex items-center justify-center gap-1.5 transition shadow-sm">
+                                <i data-lucide="calendar-check" class="w-3.5 h-3.5 text-satingold"></i>
+                                <span id="cardActionBtnText">นัดหมายเข้าชมบ้านหลังนี้กับ คุณธนภัทร</span>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- SECOND SAMPLE PROPERTY (Compact) -->
+                <article class="bg-white rounded-2xl border border-zinc-200/80 p-3 shadow-sm flex gap-3 items-center">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=400&q=80" 
+                         alt="ทาวน์โฮม รีโนเวท" 
+                         class="w-24 h-24 rounded-xl object-cover shrink-0">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-1">
+                            <span class="text-[9px] px-1.5 py-0.5 rounded bg-burgundy/10 text-burgundy font-semibold">✦ ศิวาทรัพย์ รีโนเวท</span>
+                            <span class="text-[9px] text-zinc-400 font-mono">SW-NPA-114</span>
+                        </div>
+                        <h4 class="text-xs font-semibold text-charcoal truncate mt-1">ทาวน์โฮม 3 ชั้น โครงการติดถนนใหญ่ พระราม 9</h4>
+                        <p class="text-[10px] text-zinc-500">28 ตร.ว. • 3 นอน • 3 น้ำ</p>
+                        <div class="flex items-center justify-between mt-1.5">
+                            <span class="text-sm font-bold text-burgundy">฿3,290,000</span>
+                            <button onclick="openBookingPreview()" class="text-[11px] text-charcoal font-medium underline decoration-satingold underline-offset-4">
+                                ดูรายละเอียด
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- ==========================================
+                     CORPORATE TRUST FOOTER (Dynamic Phone Protection)
+                     ========================================== -->
+                <footer class="bg-charcoal text-zinc-300 rounded-2xl p-4 border border-zinc-800 relative">
+                    <div class="flex items-center gap-2 pb-2.5 border-b border-zinc-800">
+                        <div class="w-6 h-6 rounded burgundy-gradient border border-satingold/50 flex items-center justify-center font-serif font-bold text-satingold text-xs">
+                            S
+                        </div>
+                        <div>
+                            <h5 class="text-xs font-semibold text-white">บริษัท ศิวาทรัพย์ แอสเซท จำกัด</h5>
+                            <p class="text-[10px] text-zinc-400">SIWASUP ASSET CO., LTD. (สำนักงานใหญ่)</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-2.5 space-y-1.5 text-[11px] text-zinc-400">
+                        <p class="flex items-start gap-1.5">
+                            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-satingold shrink-0 mt-0.5"></i>
+                            <span>การวางเงินมัดจำจะโอนเข้าบัญชีนิติบุคคล <strong class="text-zinc-200">"บจก. ศิวาทรัพย์ แอสเซท"</strong> เท่านั้น เพื่อความปลอดภัยสูงสุดของผู้ซื้อ</span>
+                        </p>
+                        <p class="flex items-start gap-1.5">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-satingold shrink-0 mt-0.5"></i>
+                            <span>กรุงเทพมหานคร • บริหารจัดการทรัพย์สิน NPA และบ้านรีโนเวทมาตรฐานธนาคาร</span>
+                        </p>
+                    </div>
+
+                    <!-- Dynamic Contact Block in Footer -->
+                    <div id="footerContactBox" class="mt-3 pt-2.5 border-t border-zinc-800">
+                        <!-- Content injected by JS depending on Agent Mode vs Direct Web Mode -->
+                    </div>
+                </footer>
+
+            </div>
+
+            <!-- ==========================================
+                 POINT 1: STICKY BOTTOM CONTACT BAR (Fixed)
+                 ========================================== -->
+            <div id="stickyBottomBar" class="absolute bottom-0 inset-x-0 bg-charcoal/95 backdrop-blur-md border-t-2 border-satingold px-3.5 py-2.5 shadow-[0_-10px_25px_rgba(0,0,0,0.35)] z-30">
+                <!-- Annotation Pill 1 -->
+                <span class="annotation-badge absolute -top-3 left-3 bg-burgundy text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-satingold shadow">
+                    จุดที่ 1: แถบติดต่อผู้ดูแลติดขอบจอล่าง (Sticky Bar)
+                </span>
+
+                <div class="flex items-center justify-between gap-2">
+                    <!-- Agent Mini Profile -->
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="relative shrink-0">
+                            <img id="stickyAvatar" 
+                                 src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" 
+                                 alt="Agent" 
+                                 class="w-10 h-10 rounded-full object-cover border border-satingold">
+                            <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-charcoal"></span>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1">
+                                <p id="stickyName" class="text-xs font-semibold text-white truncate">คุณธนภัทร (SW-042)</p>
+                            </div>
+                            <p id="stickyRole" class="text-[10px] text-satingold truncate">Verified Property Consultant</p>
+                        </div>
+                    </div>
+
+                    <!-- Direct Agent CTA Buttons -->
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button onclick="triggerCallAction()" class="px-3 py-2 rounded-xl metallic-gold-gradient text-charcoal font-semibold text-xs flex items-center gap-1 shadow hover:opacity-95 transition">
+                            <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+                            <span id="stickyCallText">โทรติดต่อ</span>
+                        </button>
+                        <button onclick="triggerLineAction()" class="px-2.5 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700 font-medium text-xs flex items-center gap-1 transition">
+                            <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-400"></i>
+                            <span>LINE</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toast Notification inside Mobile Screen -->
+            <div id="mobileToast" class="pointer-events-none opacity-0 transition-opacity duration-300 absolute top-14 inset-x-4 bg-charcoal/95 text-white border border-satingold rounded-xl p-3 shadow-2xl z-50 flex items-start gap-2.5">
+                <i data-lucide="check-circle" class="w-4 h-4 text-satingold shrink-0 mt-0.5"></i>
+                <div class="text-xs leading-relaxed" id="mobileToastText"></div>
+            </div>
+
+        </div>
+
+        <!-- ==========================================
+             RIGHT SIDEBAR: ARCHITECTURAL EXPLANATION FOR PRESENTATION
+             ========================================== -->
+        <div class="w-full lg:w-80 space-y-3 text-white">
+            <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-4">
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-satingold flex items-center gap-1.5">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                    สรุปสิ่งที่กำลังแสดงผลตอนนี้
+                </h3>
+
+                <div class="mt-3 space-y-2.5 text-xs">
+                    <div class="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800">
+                        <span class="text-[10px] text-zinc-400">ระดับในระบบหลังบ้าน (แอดมินบัวเห็น):</span>
+                        <p id="explainInternalTier" class="text-sm font-semibold text-white mt-0.5">🐺 Wolf (ระดับเริ่มต้น-กลาง)</p>
+                    </div>
+
+                    <div class="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800">
+                        <span class="text-[10px] text-zinc-400">ตำแหน่งที่โชว์ให้ลูกค้าเห็น (หน้าบ้าน):</span>
+                        <p id="explainPublicTitle" class="text-sm font-semibold text-satingold mt-0.5">Verified Property Consultant</p>
+                        <p class="text-[11px] text-zinc-400 mt-1">ไม่มีคำว่าหมาป่า/สิงโต ลูกค้ามั่นใจว่าคุยกับมืออาชีพ</p>
+                    </div>
+
+                    <div class="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800">
+                        <span class="text-[10px] text-zinc-400">การป้องกันลูกค้าข้ามหัวเอเจ้นท์ (Anti-Bypass):</span>
+                        <p id="explainBypassRule" class="text-xs text-emerald-400 font-medium mt-0.5">
+                            ✓ ซ่อนเบอร์ฝ่ายขายบริษัทที่ Footer อัตโนมัติ ปุ่มโทรทั้งหมดพุ่งตรงหาเอเจ้นท์คนนี้ 100%
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Why Agents & Bua Will Love This -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-4 space-y-2.5">
+                <h4 class="text-xs font-semibold text-white flex items-center gap-1.5">
+                    <i data-lucide="users" class="w-3.5 h-3.5 text-satingold"></i>
+                    จุดเอาไปเล่าให้ บัว & กูล ฟัง
+                </h4>
+                <ul class="text-xs text-zinc-300 space-y-2 leading-relaxed">
+                    <li class="flex items-start gap-2">
+                        <span class="text-satingold font-bold">1.</span>
+                        <span><strong>เอเจ้นท์กล้าแชร์ลิงก์เว็บเรา:</strong> เพราะพอกดแชร์ปุ๊บ หน้าเว็บทั้งหน้ากลายเป็นนามบัตรหรูๆ ของเขาเอง ลูกค้ากดโทรหาเขาโดยตรง</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-satingold font-bold">2.</span>
+                        <span><strong>บริษัทยังน่าเชื่อถือ 100%:</strong> ที่ Footer ด้านล่างยังมีชื่อ <em>บจก. ศิวาทรัพย์ แอสเซท</em> และคำเตือนเรื่องโอนเงินมัดจำเข้าบัญชีบริษัทเท่านั้น</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-satingold font-bold">3.</span>
+                        <span><strong>ถ้าลูกค้าเข้าเว็บหลักเอง (ปุ่มที่ 4):</strong> ระบบจะสลับไปเข้าคิวกลางให้ <strong>แอดมินบัว</strong> กดจ่ายงานตามลำดับ Tier ทันที</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==========================================
+         JAVASCRIPT LOGIC FOR DYNAMIC CONTACT ROUTING
+         ========================================== -->
+    <script>
+        // Agent & Mode Profiles
+        const PROFILES = {
+            wolf: {
+                urlParam: '?agent=SW-042',
+                internalTierText: '🐺 Wolf (เอเจ้นท์ระดับเริ่มต้น-กลาง)',
+                agentId: 'SW-042',
+                name: 'คุณธนภัทร วงศ์สุวรรณ',
+                shortName: 'คุณธนภัทร',
+                publicTitle: 'Verified Property Consultant',
+                badgeClass: 'bg-charcoal text-satingold border border-zinc-700',
+                avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+                phone: '089-452-xxxx (สายตรงคุณธนภัทร)',
+                isAgentLink: true
+            },
+            lion: {
+                urlParam: '?agent=SW-008',
+                internalTierText: '🦁 Lion (เอเจ้นท์ระดับอาวุโส / พี่เลี้ยง)',
+                agentId: 'SW-008',
+                name: 'คุณพิมพ์ชนก อัศวเดช',
+                shortName: 'คุณพิมพ์ชนก',
+                publicTitle: 'Senior Property Specialist',
+                badgeClass: 'bg-charcoal text-satingold border border-satingold/70',
+                avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+                phone: '081-988-xxxx (สายตรงคุณพิมพ์ชนก)',
+                isAgentLink: true
+            },
+            gryphon: {
+                urlParam: '?agent=SW-001',
+                internalTierText: '🦅🦁 Gryphon (Top 5% สูงสุดของระบบ)',
+                agentId: 'SW-001',
+                name: 'คุณอัครวินท์ เกียรติธาดา',
+                shortName: 'คุณอัครวินท์',
+                publicTitle: 'Master Exclusive Partner',
+                badgeClass: 'burgundy-gradient text-satingold border border-satingold',
+                avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80',
+                phone: '092-555-xxxx (สายตรงคุณอัครวินท์)',
+                isAgentLink: true
+            },
+            direct: {
+                urlParam: '(เข้าหน้าเว็บหลักโดยตรง ไม่มีรหัสเอเจ้นท์)',
+                internalTierText: '🌐 Public Direct (เข้าคิวกลางแอดมินบัว)',
+                agentId: 'HQ-DESK',
+                name: 'ศูนย์บริการข้อมูล ศิวาทรัพย์ แอสเซท',
+                shortName: 'ศูนย์บริการศิวาทรัพย์',
+                publicTitle: 'Official Concierge & Queue Dispatch',
+                badgeClass: 'bg-zinc-800 text-alabaster border border-zinc-600',
+                avatar: 'https://placehold.co/120x120/8B0000/C2A460?text=S',
+                phone: '02-xxx-xxxx (สำนักงานใหญ่ ศิวาทรัพย์)',
+                isAgentLink: false
+            }
+        };
+
+        let currentMode = 'wolf';
+        let annotationsVisible = true;
+
+        function setSimulationMode(modeKey) {
+            currentMode = modeKey;
+            const data = PROFILES[modeKey];
+
+            // 1. Update Top Simulator Buttons UI
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.className = 'mode-btn text-left p-2.5 rounded-xl border border-zinc-700/80 bg-zinc-800/40 hover:bg-zinc-800 transition-all flex flex-col justify-between';
+            });
+            const activeBtn = document.getElementById(`btn-${modeKey}`);
+            if (activeBtn) {
+                activeBtn.className = 'mode-btn text-left p-2.5 rounded-xl border transition-all flex flex-col justify-between bg-zinc-800/95 border-satingold ring-1 ring-satingold';
+            }
+
+            // 2. Update Simulated URL Bar
+            const urlEl = document.getElementById('simulatedUrlText');
+            const rulePill = document.getElementById('internalRulePill');
+            if (data.isAgentLink) {
+                urlEl.innerHTML = `https://thenassty-cpu.github.io/siwasup-cobroker-os/<span class="text-satingold font-semibold">${data.urlParam}</span>`;
+                rulePill.textContent = 'โหมดล็อกสิทธิ์เอเจ้นท์ (ซ่อนเบอร์ขายบริษัท)';
+                rulePill.className = 'ml-auto shrink-0 text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-700/50';
+            } else {
+                urlEl.innerHTML = `https://thenassty-cpu.github.io/siwasup-cobroker-os/ <span class="text-zinc-500">${data.urlParam}</span>`;
+                rulePill.textContent = 'โหมดเว็บกลาง (จ่ายงานเข้าคิวแอดมินบัว)';
+                rulePill.className = 'ml-auto shrink-0 text-[10px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-700/50';
+            }
+
+            // 3. Update Point 3: Top Trust Banner
+            const topBannerText = document.getElementById('topBannerText');
+            if (data.isAgentLink) {
+                topBannerText.innerHTML = `คุณกำลังเข้าชมทรัพย์สินผ่านการดูแลของ <span class="text-satingold font-medium">${data.name}</span> <span class="text-zinc-400 font-mono text-[10px]">(ID: ${data.agentId})</span>`;
+            } else {
+                topBannerText.innerHTML = `แคตตาล็อกทางการ <span class="text-satingold font-medium">ศิวาทรัพย์ แอสเซท</span> • ระบบจัดสรรผู้เชี่ยวชาญดูแลตามคิวมาตรฐาน`;
+            }
+
+            // 4. Update Point 2: Property Card Agent Box
+            document.getElementById('cardCertId').textContent = data.isAgentLink ? `Certified ID: ${data.agentId}` : 'Official Queue Dispatch';
+            document.getElementById('cardAgentAvatar').src = data.avatar;
+            document.getElementById('cardAgentName').textContent = data.name;
+            document.getElementById('cardAgentTitle').textContent = data.publicTitle;
+            document.getElementById('cardTitleBadge').className = `inline-flex items-center gap-1 mt-0.5 px-2 py-0.5 rounded text-[10px] font-medium ${data.badgeClass}`;
+            document.getElementById('cardActionBtnText').textContent = data.isAgentLink 
+                ? `นัดหมายเข้าชมบ้านหลังนี้กับ ${data.shortName}`
+                : 'ลงทะเบียนนัดชมทรัพย์ (จัดสรรผู้เชี่ยวชาญดูแลทันที)';
+
+            // 5. Update Corporate Footer Contact Routing
+            const footerBox = document.getElementById('footerContactBox');
+            if (data.isAgentLink) {
+                footerBox.innerHTML = `
+                    <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-700/80 flex items-center justify-between">
+                        <div>
+                            <p class="text-[10px] text-satingold font-medium">✓ ลิงก์นี้ได้รับการคุ้มครองสิทธิ์ผู้แนะนำ (Partner Protected)</p>
+                            <p class="text-[10px] text-zinc-400 mt-0.5">กรุณาติดต่อนัดชมทรัพย์ผ่าน <strong>${data.shortName} (${data.agentId})</strong> ที่แถบด้านล่าง</p>
+                        </div>
+                        <span class="text-[9px] px-2 py-1 rounded bg-zinc-800 text-zinc-400 border border-zinc-700 shrink-0">
+                            ฝ่ายตรวจสอบพาร์ทเนอร์
+                        </span>
+                    </div>
+                `;
+            } else {
+                footerBox.innerHTML = `
+                    <div class="p-2.5 rounded-xl bg-zinc-900 border border-satingold/40 space-y-1">
+                        <p class="text-[10px] text-satingold font-semibold">ช่องทางติดต่อสำนักงานใหญ่ (สำหรับลูกค้าตรง & ธนาคารพันธมิตร)</p>
+                        <p class="text-xs font-semibold text-white">📞 โทรศัพท์กลาง: 02-xxx-xxxx • LINE Official: @siwasup</p>
+                        <p class="text-[10px] text-zinc-400">เมื่อท่านติดต่อเข้ามา ระบบจะจัดสรรที่ปรึกษาประจำโซนเข้าดูแลตามคิวทันที</p>
+                    </div>
+                `;
+            }
+
+            // 6. Update Point 1: Sticky Bottom Bar
+            document.getElementById('stickyAvatar').src = data.avatar;
+            document.getElementById('stickyName').textContent = data.isAgentLink ? `${data.shortName} (${data.agentId})` : 'ศูนย์บริการ ศิวาทรัพย์';
+            document.getElementById('stickyRole').textContent = data.publicTitle;
+            document.getElementById('stickyCallText').textContent = data.isAgentLink ? `โทรหา${data.shortName}` : 'ติดต่อศูนย์บริการ';
+
+            // 7. Update Right Explanation Panel
+            document.getElementById('explainInternalTier').textContent = data.internalTierText;
+            document.getElementById('explainPublicTitle').textContent = data.publicTitle;
+            const bypassEl = document.getElementById('explainBypassRule');
+            if (data.isAgentLink) {
+                bypassEl.textContent = `✓ ซ่อนเบอร์ขายบริษัทที่ Footer อัตโนมัติ ปุ่มโทรทั้งหมดพุ่งตรงหา ${data.shortName} (${data.agentId}) 100%`;
+                bypassEl.className = 'text-xs text-emerald-400 font-medium mt-0.5';
+            } else {
+                bypassEl.textContent = '🌐 โชว์เบอร์สำนักงานใหญ่ที่ Footer และส่งลูกค้าเข้าคิว Round-Robin / 6-Tier ของแอดมินบัว';
+                bypassEl.className = 'text-xs text-amber-300 font-medium mt-0.5';
+            }
+
+            lucide.createIcons();
+        }
+
+        function toggleAnnotations() {
+            annotationsVisible = !annotationsVisible;
+            document.querySelectorAll('.annotation-badge').forEach(el => {
+                el.style.display = annotationsVisible ? 'inline-block' : 'none';
+            });
+            document.getElementById('guideBtnText').textContent = annotationsVisible 
+                ? 'ซ่อนป้ายชี้จุด (1-2-3)' 
+                : 'แสดงป้ายชี้จุด (1-2-3)';
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('mobileToast');
+            document.getElementById('mobileToastText').innerHTML = message;
+            toast.classList.remove('opacity-0');
+            toast.classList.add('opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0');
+            }, 3200);
+        }
+
+        function triggerCallAction() {
+            const data = PROFILES[currentMode];
+            showToast(`กำลังกดโทรออกไปยัง:<br><strong class="text-satingold">${data.phone}</strong>`);
+        }
+
+        function triggerLineAction() {
+            const data = PROFILES[currentMode];
+            if (data.isAgentLink) {
+                showToast(`เปิดแชท LINE ของ <strong>${data.name}</strong> พร้อมแนบรหัสทรัพย์ <strong>SW-NPA-108</strong> อัตโนมัติ`);
+            } else {
+                showToast(`เปิด LINE Official <strong>@siwasup</strong> เพื่อให้แอดมินบัวรับเรื่องและจ่ายคิวให้เอเจ้นท์`);
+            }
+        }
+
+        function openBookingPreview() {
+            const data = PROFILES[currentMode];
+            if (data.isAgentLink) {
+                showToast(`สร้างคำขอนัดชมบ้านผูกสิทธิ์ให้ <strong>${data.shortName} (${data.agentId})</strong> ส่งเข้าหน้าต่างอนุมัติกุญแจของแอดมินบัว`);
+            } else {
+                showToast(`ลูกค้าขาจรนัดชมบ้าน -> ระบบส่งเข้าคิวกลางให้แอดมินบัวกดจ่ายงานตามลำดับ Tier`);
+            }
+        }
+
+        window.onload = function() {
+            lucide.createIcons();
+            setSimulationMode('wolf');
+        };
+    </script>
+</body>
+</html>

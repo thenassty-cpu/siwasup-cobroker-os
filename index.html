@@ -2,7 +2,13 @@
 <html lang="th" class="overflow-x-hidden">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#171717">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Siwasup OS">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
   <title>Siwasup Co-Broker Demo - ศิวาทรัพย์ แอสเซท</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -455,6 +461,22 @@
             </div>
           </div>
     </header>
+
+    <!-- ✦ POINT 3: Top Trust Banner (Visible in Client Mode) -->
+    <div id="client-top-trust-banner" class="hidden bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 text-neutral-100 px-4 py-2 border-b border-[#C2A460]/40 transition-all text-xs shrink-0">
+      <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 truncate">
+          <span class="text-[#C2A460] font-bold">✦</span>
+          <p id="client-top-banner-text" class="truncate text-[11px] sm:text-xs">
+            ดูแลการเข้าชมโดย <span id="client-banner-agent-name" class="text-[#E5C985] font-semibold">คุณธนภัทร</span> <span id="client-banner-agent-id" class="text-neutral-400 font-mono text-[10px] sm:text-[11px]">(ID: SW-042)</span>
+            <span class="hidden sm:inline text-neutral-400">• ที่ปรึกษาอสังหาริมทรัพย์รับรองโดย ศิวาทรัพย์</span>
+          </p>
+        </div>
+        <span class="shrink-0 text-[10px] px-2 py-0.5 rounded bg-[#C2A460]/20 text-[#E5C985] border border-[#C2A460]/40 font-medium">
+          Partner Protected
+        </span>
+      </div>
+    </div>
 
     <!-- 💎 3. Contextual Banners (Compact & Clean) -->
 
@@ -1199,11 +1221,15 @@
       const archetypeShortcutBtn = document.getElementById('btn-owner-archetype-shortcut');
       const footerPhoneBox = document.getElementById('footer-contact-phone-box');
 
+      const topBanner = document.getElementById('client-top-trust-banner');
+      const stickyBottomBar = document.getElementById('client-sticky-bottom-bar');
+      const backToTopBtn = document.getElementById('btn-back-to-top');
+
       if (mode === 'client') {
         if (btnClient) btnClient.className = activeBtnClass;
         if (modeText) modeText.textContent = "ลูกค้า VIP";
         
-        // 🔒 โหมดลูกค้า (Anti-Bypass Protection): 
+        // 🔒 โหมดลูกค้า (Anti-Bypass Protection & Dual-Display Mapping): 
         // 1. ปิดซ่อนปุ่มเอเจนต์และกุญแจ NPA 100%
         // 2. ซ่อนเบอร์โทรตรงสำนักงาน ไม่ให้ลูกค้าโทรตรงข้ามหัวตัวแทนเด็ดขาด!
         if (npaKeyBtn) npaKeyBtn.classList.add('hidden');
@@ -1214,15 +1240,54 @@
           ownerNotifyBtn.classList.add('hidden');
           ownerNotifyBtn.classList.remove('flex');
         }
+
+        const storedRef = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : (localStorage.getItem('siwasup_referred_by') || 'SW-042');
+        const agentProfile = (typeof getAgentProfile === 'function') ? getAgentProfile(storedRef) : null;
+
+        // ✦ Point 3: Top Trust Banner
+        if (topBanner) {
+          topBanner.classList.remove('hidden');
+          if (agentProfile) {
+            const bName = document.getElementById('client-banner-agent-name');
+            const bId = document.getElementById('client-banner-agent-id');
+            if (bName) bName.textContent = agentProfile.name;
+            if (bId) bId.textContent = `(ID: ${agentProfile.agentId})`;
+          }
+        }
+
+        // 📞 Point 1: Sticky Bottom Contact Bar
+        if (stickyBottomBar) {
+          stickyBottomBar.classList.remove('hidden');
+          if (agentProfile) {
+            const sAvatar = document.getElementById('sticky-agent-avatar');
+            const sName = document.getElementById('sticky-agent-name');
+            const sTitle = document.getElementById('sticky-agent-title');
+            const sCallText = document.getElementById('sticky-call-text');
+            if (sAvatar) sAvatar.src = agentProfile.avatar;
+            if (sName) sName.textContent = `${agentProfile.shortName} (${agentProfile.agentId})`;
+            if (sTitle) sTitle.textContent = agentProfile.publicTitle;
+            if (sCallText) sCallText.textContent = `โทรหา${agentProfile.shortName}`;
+          }
+        }
+
+        if (backToTopBtn) {
+          backToTopBtn.classList.remove('bottom-5');
+          backToTopBtn.classList.add('bottom-20');
+        }
+
+        // Corporate Footer Protected Routing
         if (footerPhoneBox) {
-          const storedRef = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : (localStorage.getItem('siwasup_referred_by') || '');
-          const refText = storedRef ? ` (รหัสผู้ดูแล: ${storedRef})` : '';
+          const refText = agentProfile ? ` (รหัสผู้ดูแล: ${agentProfile.agentId})` : '';
+          const shortName = agentProfile ? agentProfile.shortName : 'ตัวแทนผู้ดูแล';
           footerPhoneBox.innerHTML = `
-            <div class="text-neutral-400 text-[11px]">นัดชมทรัพย์ & สอบถามข้อมูล${refText}</div>
-            <button type="button" onclick="contactViaLine('general', 'สอบถามทั่วไป')" class="text-emerald-400 hover:text-emerald-300 font-semibold text-xs flex items-center gap-1.5 cursor-pointer pt-0.5">
-              <span class="w-2 h-2 rounded-full bg-[#06C755] shrink-0"></span>
-              <span>ติดต่อตัวแทนผู้ดูแลผ่าน LINE (คุ้มครองสิทธิ์ 60 วัน)</span>
-            </button>
+            <div class="p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 text-[11px] space-y-1">
+              <div class="text-[#C2A460] font-semibold text-[10px]">✓ ลิงก์นี้ได้รับการคุ้มครองสิทธิ์ผู้แนะนำ (Partner Protected)</div>
+              <div class="text-neutral-400">นัดชมทรัพย์ & สอบถามข้อมูล${refText}</div>
+              <button type="button" onclick="contactViaLine('general', 'สอบถามข้อมูลทรัพย์')" class="text-emerald-400 hover:text-emerald-300 font-semibold text-xs flex items-center gap-1.5 cursor-pointer pt-0.5">
+                <span class="w-2 h-2 rounded-full bg-[#06C755] shrink-0"></span>
+                <span>ติดต่อ ${shortName} ผ่าน LINE (คุ้มครองสิทธิ์ 60 วัน)</span>
+              </button>
+            </div>
           `;
         }
       } else {
@@ -1230,6 +1295,14 @@
         if (npaKeyBtn) npaKeyBtn.classList.remove('hidden');
         if (leaderboardBtn) leaderboardBtn.classList.remove('hidden');
         if (profileBtn) profileBtn.classList.remove('hidden');
+
+        if (topBanner) topBanner.classList.add('hidden');
+        if (stickyBottomBar) stickyBottomBar.classList.add('hidden');
+        if (backToTopBtn) {
+          backToTopBtn.classList.add('bottom-5');
+          backToTopBtn.classList.remove('bottom-20');
+        }
+
         if (footerPhoneBox) {
           footerPhoneBox.innerHTML = `
             <div class="text-neutral-400 text-[11px]">ติดต่อสำนักงานใหญ่ / ฝ่ายประสานงานธนาคารและพาร์ทเนอร์</div>
@@ -1584,6 +1657,33 @@
           if (btnOfferLabel) btnOfferLabel.textContent = "เสนอราคา";
           btnOffer.onclick = () => { closePropertyDetailModal(); openOfferModal(p.id, displayTitle, p.price); };
           if (waitlistRow) waitlistRow.classList.add('hidden');
+        }
+      }
+
+      // 👤 Point 2: Update Inline Agent Card in Detail Modal (Client Mode)
+      const detailAgentCard = document.getElementById('detail-agent-card');
+      if (detailAgentCard) {
+        if (currentMode === 'client') {
+          const storedRef = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : (localStorage.getItem('siwasup_referred_by') || 'SW-042');
+          const agentProfile = (typeof getAgentProfile === 'function') ? getAgentProfile(storedRef) : null;
+          if (agentProfile) {
+            const certIdEl = document.getElementById('detail-card-cert-id');
+            const avatarEl = document.getElementById('detail-card-agent-avatar');
+            const nameEl = document.getElementById('detail-card-agent-name');
+            const titleEl = document.getElementById('detail-card-agent-title');
+            const badgeEl = document.getElementById('detail-card-title-badge');
+            const btnTextEl = document.getElementById('detail-card-btn-text');
+
+            if (certIdEl) certIdEl.textContent = `Certified ID: ${agentProfile.agentId}`;
+            if (avatarEl) avatarEl.src = agentProfile.avatar;
+            if (nameEl) nameEl.textContent = agentProfile.name;
+            if (titleEl) titleEl.textContent = agentProfile.publicTitle;
+            if (badgeEl) badgeEl.className = `inline-flex items-center gap-1 mt-0.5 px-2 py-0.5 rounded text-[10px] font-semibold ${agentProfile.badgeClass}`;
+            if (btnTextEl) btnTextEl.textContent = `นัดหมายเข้าชมบ้านหลังนี้กับ ${agentProfile.shortName}`;
+          }
+          detailAgentCard.classList.remove('hidden');
+        } else {
+          detailAgentCard.classList.add('hidden');
         }
       }
 
@@ -4178,7 +4278,87 @@
     });
 
     // --- CLIENT VIEW INTERACTION FUNCTIONS ---
-    function getStoredAgentRef() {
+        // 🏆 Dual-Display Mapping: แปลงยศสัตว์หลังบ้านเป็นตำแหน่งหรูสากลหน้าบ้าน (No Animal Names for Clients!)
+    const AGENT_PROFILES = {
+      'SW-042': {
+        agentId: 'SW-042',
+        name: 'คุณธนภัทร วงศ์สุวรรณ',
+        shortName: 'คุณธนภัทร',
+        tier: 'wolf',
+        publicTitle: 'Verified Property Consultant',
+        badgeClass: 'bg-neutral-900 text-[#C2A460] border border-neutral-700',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+        phone: '089-452-9796'
+      },
+      'SW-008': {
+        agentId: 'SW-008',
+        name: 'คุณพิมพ์ชนก อัศวเดช',
+        shortName: 'คุณพิมพ์ชนก',
+        tier: 'lion',
+        publicTitle: 'Senior Property Specialist',
+        badgeClass: 'bg-neutral-900 text-[#C2A460] border border-[#C2A460]/70',
+        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+        phone: '081-988-5522'
+      },
+      'SW-001': {
+        agentId: 'SW-001',
+        name: 'คุณอัครวินท์ เกียรติธาดา',
+        shortName: 'คุณอัครวินท์',
+        tier: 'gryphon',
+        publicTitle: 'Master Exclusive Partner',
+        badgeClass: 'bg-gradient-to-r from-[#8B0000] to-[#5A0000] text-[#C2A460] border border-[#C2A460]',
+        avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80',
+        phone: '092-555-8899'
+      },
+      'S22': {
+        agentId: 'S22',
+        name: 'คุณสมชาย พาเจริญ',
+        shortName: 'คุณสมชาย',
+        tier: 'falcon',
+        publicTitle: 'Senior Property Specialist',
+        badgeClass: 'bg-neutral-900 text-[#C2A460] border border-[#C2A460]/70',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
+        phone: '086-333-2211'
+      },
+      'AG-09': {
+        agentId: 'AG-09',
+        name: 'คุณณัฐ ระวังภัย',
+        shortName: 'คุณณัฐ',
+        tier: 'eagle',
+        publicTitle: 'Executive Asset Director',
+        badgeClass: 'bg-[#C2A460] text-neutral-950 font-bold border border-[#E5CF94]',
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
+        phone: '094-462-9796'
+      }
+    };
+
+    function getAgentProfile(refId) {
+      const cleanId = (refId || '').trim();
+      if (AGENT_PROFILES[cleanId]) return AGENT_PROFILES[cleanId];
+      // Dynamic fallback for any custom ref ID
+      return {
+        agentId: cleanId || 'SW-042',
+        name: cleanId ? `คุณธนภัทร (${cleanId})` : 'คุณธนภัทร วงศ์สุวรรณ',
+        shortName: cleanId ? `คุณธนภัทร` : 'คุณธนภัทร',
+        tier: 'wolf',
+        publicTitle: 'Verified Property Consultant',
+        badgeClass: 'bg-neutral-900 text-[#C2A460] border border-neutral-700',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+        phone: '089-452-9796'
+      };
+    }
+
+    function triggerClientCall() {
+      const storedRef = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : 'SW-042';
+      const profile = getAgentProfile(storedRef);
+      if (typeof openCallModal === 'function') {
+        openCallModal(profile.agentId, `ติดต่อ ${profile.name}`);
+      } else {
+        window.location.href = `tel:${profile.phone.replace(/[^0-9]/g, '')}`;
+      }
+    }
+
+function getStoredAgentRef() {
       return localStorage.getItem('siwasup_referred_by') || 'AG-09';
     }
 
@@ -4420,9 +4600,14 @@
     function checkUrlParameters() {
       const params = new URLSearchParams(window.location.search);
       
-      // Store ref & source into memory
-      if (params.has('ref')) {
-        localStorage.setItem('siwasup_referred_by', params.get('ref'));
+      // Store ref & agent into memory & auto-switch to Client View
+      const incomingRef = params.get('agent') || params.get('ref');
+      if (incomingRef) {
+        localStorage.setItem('siwasup_referred_by', incomingRef);
+        // เมื่อเปิดผ่านลิงก์ที่มีรหัสตัวแทน ให้ปรับเป็นโหมดลูกค้า VIP ทันที
+        if (typeof setMode === 'function') {
+          setMode('client');
+        }
       }
       if (params.has('src')) {
         localStorage.setItem('siwasup_referred_source', params.get('src'));
@@ -4596,5 +4781,33 @@
           title="กลับสู่ด้านบน">
     <i data-lucide="chevron-up" class="w-5 h-5 group-hover:-translate-y-0.5 transition-transform stroke-[2.2]"></i>
   </button>
+  <!-- 📞 POINT 1: Sticky Bottom Contact Bar (Visible in Client Mode) -->
+  <div id="client-sticky-bottom-bar" class="hidden fixed bottom-0 inset-x-0 z-40 bg-neutral-950/95 backdrop-blur-md border-t-2 border-[#C2A460] px-4 py-2.5 shadow-[0_-10px_25px_rgba(0,0,0,0.5)]">
+    <div class="max-w-md mx-auto flex items-center justify-between gap-2">
+      <!-- Agent Mini Profile -->
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="relative shrink-0">
+          <img id="sticky-agent-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Agent" class="w-10 h-10 rounded-full object-cover border border-[#C2A460]">
+          <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-neutral-900"></span>
+        </div>
+        <div class="min-w-0">
+          <p id="sticky-agent-name" class="text-xs font-bold text-white truncate">คุณธนภัทร (SW-042)</p>
+          <p id="sticky-agent-title" class="text-[10px] text-[#C2A460] truncate font-medium">Verified Property Consultant</p>
+        </div>
+      </div>
+      <!-- Direct Agent CTA Buttons -->
+      <div class="flex items-center gap-1.5 shrink-0">
+        <button type="button" onclick="triggerClientCall()" class="px-3 py-2 rounded-xl bg-gradient-to-r from-[#C2A460] via-[#E5CF94] to-[#A98B45] text-neutral-950 font-bold text-xs flex items-center gap-1.5 shadow hover:opacity-95 transition cursor-pointer active:scale-95">
+          <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+          <span id="sticky-call-text">โทรติดต่อ</span>
+        </button>
+        <button type="button" onclick="contactViaLine('general', 'ปรึกษาข้อมูลทรัพย์กับตัวแทนผู้ดูแล')" class="px-3 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-white border border-neutral-700 font-semibold text-xs flex items-center gap-1.5 transition cursor-pointer active:scale-95">
+          <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>LINE</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
