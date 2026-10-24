@@ -681,7 +681,7 @@
               <li class="flex items-start gap-2.5">
                 <i data-lucide="phone" class="w-4 h-4 text-[#C2A460] shrink-0 mt-0.5"></i>
                 <div id="footer-contact-phone-box">
-                  <div class="text-neutral-400 text-[11px]">สอบถามรายละเอียดเพิ่มเติม</div>
+                  <div class="text-neutral-400 text-[11px]">ติดต่อสำนักงานใหญ่ / ฝ่ายประสานงานธนาคารและพาร์ทเนอร์</div>
                   <a href="tel:0944629796" class="text-white hover:text-[#E5C985] transition font-mono font-bold text-sm tracking-wide">094 462 9796</a>
                 </div>
               </li>
@@ -1215,11 +1215,13 @@
           ownerNotifyBtn.classList.remove('flex');
         }
         if (footerPhoneBox) {
+          const storedRef = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : (localStorage.getItem('siwasup_referred_by') || '');
+          const refText = storedRef ? ` (รหัสผู้ดูแล: ${storedRef})` : '';
           footerPhoneBox.innerHTML = `
-            <div class="text-neutral-400 text-[11px]">สอบถามข้อมูล & นัดชมทรัพย์</div>
+            <div class="text-neutral-400 text-[11px]">นัดชมทรัพย์ & สอบถามข้อมูล${refText}</div>
             <button type="button" onclick="contactViaLine('general', 'สอบถามทั่วไป')" class="text-emerald-400 hover:text-emerald-300 font-semibold text-xs flex items-center gap-1.5 cursor-pointer pt-0.5">
               <span class="w-2 h-2 rounded-full bg-[#06C755] shrink-0"></span>
-              <span>นัดชมผ่าน LINE (คุ้มครองสิทธิ์ตัวแทน)</span>
+              <span>ติดต่อตัวแทนผู้ดูแลผ่าน LINE (คุ้มครองสิทธิ์ 60 วัน)</span>
             </button>
           `;
         }
@@ -1230,7 +1232,7 @@
         if (profileBtn) profileBtn.classList.remove('hidden');
         if (footerPhoneBox) {
           footerPhoneBox.innerHTML = `
-            <div class="text-neutral-400 text-[11px]">สอบถามรายละเอียดเพิ่มเติม</div>
+            <div class="text-neutral-400 text-[11px]">ติดต่อสำนักงานใหญ่ / ฝ่ายประสานงานธนาคารและพาร์ทเนอร์</div>
             <a href="tel:0944629796" class="text-white hover:text-[#E5C985] transition font-mono font-bold text-sm tracking-wide">094 462 9796</a>
           `;
         }
