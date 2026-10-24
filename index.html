@@ -815,7 +815,7 @@
             สงวนลิขสิทธิ์ พ.ศ. 2569 <strong class="text-neutral-400 font-medium">บริษัท ศิวาทรัพย์ แอสเซท จำกัด</strong>
           </div>
           <div class="flex items-center gap-4 text-[11px]">
-            <span class="hover:text-neutral-400 cursor-pointer">นโยบายความเป็นส่วนตัว</span>
+            <span onclick="openPrivacyPolicyModal()" class="hover:text-white cursor-pointer underline decoration-dotted transition">นโยบายความเป็นส่วนตัว</span>
             <span>•</span>
             <span class="hover:text-neutral-400 cursor-pointer">ข้อกำหนดและเงื่อนไข</span>
             <span>•</span>
@@ -4433,7 +4433,43 @@ function getStoredAgentRef() {
       return localStorage.getItem('siwasup_referred_source') || 'direct';
     }
 
-    function openCallModal(id, title) {
+        // 🛡️ Privacy Policy (PDPA) Modal & Consent Handlers
+    function openPrivacyPolicyModal() {
+      const modal = document.getElementById('privacy-policy-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        if (typeof lockBodyScroll === 'function') lockBodyScroll();
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    function closePrivacyPolicyModal() {
+      const modal = document.getElementById('privacy-policy-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        if (typeof unlockBodyScroll === 'function') unlockBodyScroll();
+      }
+    }
+
+    function acceptPdpaConsent() {
+      localStorage.setItem('siwasup_pdpa_consent', 'accepted');
+      const capsule = document.getElementById('pdpa-consent-capsule');
+      if (capsule) capsule.classList.add('hidden');
+    }
+
+    function checkPdpaConsent() {
+      if (!localStorage.getItem('siwasup_pdpa_consent')) {
+        const capsule = document.getElementById('pdpa-consent-capsule');
+        if (capsule) {
+          setTimeout(() => {
+            capsule.classList.remove('hidden');
+            if (window.lucide) lucide.createIcons();
+          }, 1200);
+        }
+      }
+    }
+
+function openCallModal(id, title) {
       const ref = getStoredAgentRef();
       document.getElementById('call-discount-code').textContent = `SS-${ref.replace(/[^\w\u0E00-\u0E7F]/g, '')}`;
       document.getElementById('call-modal').classList.remove('hidden');
@@ -4825,6 +4861,7 @@ function getStoredAgentRef() {
 
     // Auto-run
     checkUrlParameters();
+      checkPdpaConsent();
     loadProperties();
     initModalScrollLockObserver();
     if (typeof updateProfileButtons === 'function' && typeof getActiveAgentRef === 'function') {
@@ -4999,6 +5036,21 @@ function getStoredAgentRef() {
         เข้าใจแล้ว ปิดหน้าต่าง
       </button>
     </div>
+  </div>
+
+  <!-- 🛡️ PDPA Consent Capsule (Bottom floating banner) -->
+  <div id="pdpa-consent-capsule" class="hidden fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-40 bg-neutral-900/95 text-white border border-[#C2A460]/60 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md flex items-center justify-between gap-3 text-xs animate-in fade-in slide-in-from-bottom-4 duration-300">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <span class="w-8 h-8 rounded-full bg-[#FAF7F2] text-[#8C734B] flex items-center justify-center shrink-0 border border-[#DFD3C3]">
+        <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i>
+      </span>
+      <div class="text-[11px] text-neutral-300 leading-tight">
+        เว็บไซต์นี้ใช้คุกกี้และการจัดเก็บข้อมูลเพื่อจดจำบ้านที่คุณถูกใจ และประสานงานตัวแทนตาม <button type="button" onclick="openPrivacyPolicyModal()" class="text-[#E5C985] underline font-medium cursor-pointer">พ.ร.บ. คุ้มครองข้อมูล (PDPA)</button>
+      </div>
+    </div>
+    <button type="button" onclick="acceptPdpaConsent()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#C2A460] via-[#E5CF94] to-[#A98B45] text-neutral-950 font-bold text-xs shrink-0 shadow active:scale-95 transition cursor-pointer hover:opacity-95">
+      ยอมรับ
+    </button>
   </div>
 
 </body>

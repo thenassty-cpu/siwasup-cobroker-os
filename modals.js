@@ -443,194 +443,181 @@
     </div>
 
     <!-- 💬 Homerun-Style "เสนอราคา" (Submit Offer) Modal -->
-    <div id="offer-modal" class="hidden modal-backdrop !items-center px-3 pt-10 pb-6 sm:p-6 sm:!p-4">
-      <div class="modal-card max-w-2xl space-y-3.5 max-h-[82dvh] sm:max-h-[88dvh] overflow-y-auto custom-scrollbar !p-4 sm:!p-5">
-        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
-          <div class="flex items-center gap-2">
-            <span class="icon-circle w-6 h-6 bg-neutral-900 text-white"><i data-lucide="badge-dollar-sign" class="w-3.5 h-3.5 stroke-[1.8]"></i></span>
+    <div id="offer-modal" onclick="if(event.target === this) closeOfferModal()" class="hidden modal-backdrop !items-center px-3 pt-10 pb-6 sm:p-6 sm:!p-4 z-50">
+      <div class="modal-card max-w-2xl space-y-3.5 max-h-[82dvh] sm:max-h-[88dvh] overflow-y-auto custom-scrollbar !p-4 sm:!p-5 bg-white rounded-3xl shadow-2xl border border-neutral-200/80">
+        
+        <!-- Sticky Header with Digital Luxury Theme & Pinned Close Button -->
+        <div class="sticky top-0 z-20 flex justify-between items-center bg-white/95 backdrop-blur-md border-b border-neutral-200/80 pb-3 -mt-1 pt-1">
+          <div class="flex items-center gap-2.5">
+            <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-[#8B0000] to-[#5A0000] text-[#E5C985] flex items-center justify-center shadow-xs border border-[#C2A460]/40 shrink-0">
+              <i data-lucide="badge-dollar-sign" class="w-4 h-4 stroke-[2]"></i>
+            </span>
             <div>
-              <h3 class="font-extrabold text-base text-slate-900 leading-tight">เสนอราคา</h3>
-              <p class="text-[11px] text-slate-500">กรอกราคาที่ต้องการเสนอและข้อมูลติดต่อเพื่อดำเนินการยื่นข้อเสนอซื้อ</p>
+              <h3 class="font-bold text-base text-neutral-900 leading-tight flex items-center gap-2">
+                <span>ยื่นเสนอราคา</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#FAF7F2] text-[#8C734B] border border-[#DFD3C3] font-semibold">Fast Offer System</span>
+              </h3>
+              <p class="text-[11px] text-neutral-500">กรอกราคาที่ต้องการเสนอและข้อมูลติดต่อเพื่อดำเนินการยื่นข้อเสนอซื้อ</p>
             </div>
           </div>
-          <button onclick="closeOfferModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-lg font-bold">&times;</button>
+          <button 
+            type="button" 
+            onclick="closeOfferModal()" 
+            aria-label="ปิดหน้าต่าง"
+            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
+          >
+            <i data-lucide="x" class="w-5 h-5 stroke-[2.5]"></i>
+          </button>
         </div>
 
-        <!-- Property Summary Banner -->
-        <div id="offer-prop-info" class="bg-slate-50 border border-slate-200/90 p-3 rounded-2xl text-xs"></div>
+        <!-- Property Summary Banner (Luxury Warm Alabaster) -->
+        <div id="offer-prop-info" class="bg-[#FAF9F6] border border-neutral-200/90 p-3 rounded-2xl text-xs space-y-1"></div>
 
         <form id="homerun-offer-form" onsubmit="handleOfferSubmit(event)" class="grid grid-cols-1 md:grid-cols-12 gap-4 text-xs" novalidate>
-          <!-- Left Column: Offer Price & Buyer Details (Homerun Layout) -->
+          <!-- Left Column: Offer Price & Buyer Details -->
           <div class="md:col-span-7 space-y-3">
             <!-- รูปแบบที่ต้องการซื้อ (เงินสด / สินเชื่อ) -->
             <div>
-              <label class="block font-bold text-slate-700 mb-1.5">รูปแบบที่ต้องการซื้อ <span class="text-red-500">*</span></label>
+              <label class="block font-bold text-neutral-700 mb-1.5">รูปแบบที่ต้องการซื้อ <span class="text-red-500">*</span></label>
               <div class="grid grid-cols-2 gap-2">
                 <label class="cursor-pointer">
                   <input type="radio" name="offer_PurchaseType" value="เงินสด" checked class="peer sr-only" onchange="updateOfferSummaryBox()">
-                  <div class="p-2 rounded-xl border border-slate-200 bg-white peer-checked:border-neutral-900 peer-checked:bg-neutral-50 peer-checked:text-neutral-900 font-bold text-center transition-all flex items-center justify-center gap-1.5">
-                    <i data-lucide="banknote" class="w-3.5 h-3.5"></i>
+                  <div class="p-2.5 rounded-xl border border-neutral-200 bg-white peer-checked:border-[#C2A460] peer-checked:bg-[#FAF7F2] peer-checked:text-[#8C734B] font-bold text-center transition-all flex items-center justify-center gap-1.5 shadow-2xs">
+                    <i data-lucide="banknote" class="w-4 h-4"></i>
                     <span>ซื้อเงินสด</span>
                   </div>
                 </label>
                 <label class="cursor-pointer">
                   <input type="radio" name="offer_PurchaseType" value="สินเชื่อธนาคาร" class="peer sr-only" onchange="updateOfferSummaryBox()">
-                  <div class="p-2 rounded-xl border border-slate-200 bg-white peer-checked:border-neutral-900 peer-checked:bg-neutral-50 peer-checked:text-neutral-900 font-bold text-center transition-all flex items-center justify-center gap-1.5">
-                    <i data-lucide="landmark" class="w-3.5 h-3.5"></i>
+                  <div class="p-2.5 rounded-xl border border-neutral-200 bg-white peer-checked:border-[#C2A460] peer-checked:bg-[#FAF7F2] peer-checked:text-[#8C734B] font-bold text-center transition-all flex items-center justify-center gap-1.5 shadow-2xs">
+                    <i data-lucide="landmark" class="w-4 h-4"></i>
                     <span>ขอสินเชื่อ</span>
                   </div>
                 </label>
               </div>
             </div>
 
-            <!-- ราคาที่ต้องการเสนอ (พร้อมปุ่มกดเลือกช่วงราคาอัตโนมัติ & ล็อกเพดานขั้นต่ำ 70%) -->
+            <!-- ราคาที่ต้องการเสนอ -->
             <div>
-              <div class="flex justify-between items-center mb-1">
-                <label for="offer-price" class="font-bold text-slate-700">ราคาที่เสนอ (บาท) <span class="text-red-500">*</span></label>
-                <span id="offer-discount-badge" class="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">ระบุราคาที่ต้องการ</span>
+              <div class="flex justify-between items-baseline mb-1">
+                <label class="font-bold text-neutral-700">ราคาที่ต้องการเสนอซื้อ (บาท) <span class="text-red-500">*</span></label>
+                <span id="offer-discount-percent" class="text-[11px] font-semibold text-emerald-700"></span>
               </div>
               <div class="relative">
-                <span class="absolute left-3 top-2.5 font-extrabold text-slate-400 text-sm">฿</span>
-                <input type="number" id="offer-price" required min="50000" step="1000"
-                       oninput="updateOfferSummaryBox()"
-                       placeholder="เช่น 2,850,000"
-                       class="w-full border border-slate-300 rounded-xl py-2 pl-7 pr-3 outline-none focus:ring-2 focus:ring-neutral-900 focus:border-neutral-900 font-extrabold text-base text-neutral-900 bg-white">
+                <input type="text" id="offer-amount-input" required placeholder="เช่น 2,850,000" 
+                       class="w-full border border-neutral-200 rounded-xl p-2.5 pl-8 text-base font-extrabold text-[#8B0000] outline-none focus:ring-1 focus:ring-[#C2A460] focus:border-[#C2A460] transition font-mono bg-white"
+                       oninput="formatCurrencyInput(this); updateOfferSummaryBox();">
+                <span class="absolute left-3 top-3 text-neutral-400 font-bold">฿</span>
               </div>
-              <!-- Quick Offer Chips -->
-              <div class="flex flex-wrap items-center gap-1.5 mt-1.5">
-                <span class="text-[10px] text-slate-400">กดเลือกไว:</span>
-                <button type="button" onclick="setQuickOfferRatio(1.0)" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-neutral-900 border border-slate-200 transition-colors">ราคาตั้ง (โอกาสได้สูงสุด)</button>
-                <button type="button" onclick="setQuickOfferRatio(0.95)" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FAF7F2] hover:bg-[#F3EDE2] text-[#8C734B] border border-[#DFD3C3] transition-colors">-5% (แนะนำ)</button>
-                <button type="button" onclick="setQuickOfferRatio(0.90)" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-neutral-900 border border-slate-200 transition-colors">-10%</button>
-                <button type="button" onclick="setQuickOfferRatio(0.85)" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 hover:bg-sky-50 text-slate-700 hover:text-neutral-900 border border-slate-200 transition-colors">-15%</button>
+              <div class="flex items-center gap-1.5 mt-1.5">
+                <button type="button" onclick="quickAdjustOffer(-5)" class="px-2 py-0.5 rounded-lg bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-[10px] font-medium transition active:scale-95 cursor-pointer">-5%</button>
+                <button type="button" onclick="quickAdjustOffer(-3)" class="px-2 py-0.5 rounded-lg bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-[10px] font-medium transition active:scale-95 cursor-pointer">-3%</button>
+                <button type="button" onclick="quickAdjustOffer(0)" class="px-2 py-0.5 rounded-lg bg-[#FAF7F2] border border-[#DFD3C3] text-[#8C734B] text-[10px] font-bold transition active:scale-95 cursor-pointer">ราคาตั้งขาย</button>
+                <span class="text-[10px] text-neutral-400 ml-auto">* ปรับราคาด่วน</span>
               </div>
-              <p id="offer-price-hint" class="text-[10px] text-slate-400 mt-1">🛡️ ระบบล็อกเกณฑ์เสนอซื้อขั้นต่ำที่ 70% ของราคาตั้งขาย เพื่อป้องกันการปั่นราคา</p>
             </div>
 
-            <!-- ชื่อ - นามสกุล (แยกช่องตามแบบ Homerun) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <!-- วางเงินมัดจำจะซื้อจะขาย -->
+            <div class="p-3 rounded-xl bg-[#FAF9F6] border border-neutral-200/80 space-y-1.5">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-bold text-neutral-700 flex items-center gap-1">
+                  <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#C2A460]"></i>
+                  <span>เงินมัดจำทำสัญญาจะซื้อจะขาย</span>
+                </span>
+                <span id="offer-deposit-display" class="font-bold text-[#8B0000] font-mono">฿50,000</span>
+              </div>
+              <p class="text-[10px] text-neutral-500 leading-tight">
+                * วางมัดจำเข้าบัญชีนิติบุคคล <strong>บจก. ศิวาทรัพย์ แอสเซท</strong> เพื่อล็อกสิทธิ์และทำสัญญาจะซื้อจะขายอย่างเป็นทางการ
+              </p>
+            </div>
+
+            <!-- ข้อมูลผู้เสนอซื้อ -->
+            <div class="space-y-2 pt-1 border-t border-neutral-100">
+              <div class="font-bold text-neutral-800 text-xs flex items-center gap-1.5">
+                <i data-lucide="user" class="w-3.5 h-3.5 text-neutral-500"></i>
+                <span>ข้อมูลผู้เสนอซื้อ</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-[11px] font-medium text-neutral-600 mb-0.5">ชื่อ-นามสกุล <span class="text-red-500">*</span></label>
+                  <input type="text" id="offer-buyer-name" required placeholder="เช่น คุณสมชาย มุ่งมั่น" class="w-full border border-neutral-200 rounded-xl p-2 text-xs outline-none focus:ring-1 focus:ring-[#C2A460] focus:border-[#C2A460] bg-white">
+                </div>
+                <div>
+                  <label class="block text-[11px] font-medium text-neutral-600 mb-0.5">เบอร์โทรศัพท์ <span class="text-red-500">*</span></label>
+                  <input type="tel" id="offer-buyer-phone" required placeholder="08x-xxx-xxxx" class="w-full border border-neutral-200 rounded-xl p-2 text-xs outline-none focus:ring-1 focus:ring-[#C2A460] focus:border-[#C2A460] bg-white">
+                </div>
+              </div>
               <div>
-                <label for="offer-firstname" class="block font-bold text-slate-700 mb-1">ชื่อ <span class="text-red-500">*</span></label>
-                <input type="text" id="offer-firstname" required placeholder="กรอกชื่อจริง"
-                       oninput="updateOfferSummaryBox()"
-                       class="w-full border border-slate-300 rounded-xl p-2 outline-none focus:ring-2 focus:ring-neutral-900 bg-white">
+                <label class="block text-[11px] font-medium text-neutral-600 mb-0.5">LINE ID / ช่องทางติดต่อเพิ่มเติม (ถ้ามี)</label>
+                <input type="text" id="offer-buyer-line" placeholder="เช่น somchai_line" class="w-full border border-neutral-200 rounded-xl p-2 text-xs outline-none focus:ring-1 focus:ring-[#C2A460] focus:border-[#C2A460] bg-white">
               </div>
               <div>
-                <label for="offer-lastname" class="block font-bold text-slate-700 mb-1">นามสกุล <span class="text-red-500">*</span></label>
-                <input type="text" id="offer-lastname" required placeholder="กรอกนามสกุล"
-                       oninput="updateOfferSummaryBox()"
-                       class="w-full border border-slate-300 rounded-xl p-2 outline-none focus:ring-2 focus:ring-neutral-900 bg-white">
+                <label class="block text-[11px] font-medium text-neutral-600 mb-0.5">เงื่อนไขเพิ่มเติม / วันที่สะดวกโอนกรรมสิทธิ์</label>
+                <textarea id="offer-buyer-note" rows="2" placeholder="เช่น ขอตรวจโครงสร้างบ้านก่อนโอน หรือต้องการกู้ 100%" class="w-full border border-neutral-200 rounded-xl p-2 text-xs outline-none focus:ring-1 focus:ring-[#C2A460] focus:border-[#C2A460] bg-white resize-none"></textarea>
               </div>
             </div>
-
-            <!-- อีเมล - เบอร์โทร (ตามแบบ Homerun + ตรวจจับเบอร์ไทยแท้ 10 หลัก) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              <div>
-                <label for="offer-email" class="block font-bold text-slate-700 mb-1">อีเมล <span class="text-red-500">*</span></label>
-                <input type="email" id="offer-email" required placeholder="name@email.com"
-                       oninput="updateOfferSummaryBox()"
-                       class="w-full border border-slate-300 rounded-xl p-2 outline-none focus:ring-2 focus:ring-neutral-900 bg-white">
-              </div>
-              <div>
-                <label for="offer-phone" class="block font-bold text-slate-700 mb-1">เบอร์โทรศัพท์ <span class="text-red-500">*</span></label>
-                <input type="tel" id="offer-phone" required pattern="^0[689][0-9]{8}$" maxlength="10"
-                       placeholder="08xxxxxxxx (10 หลัก)"
-                       oninput="this.value = this.value.replace(/[^0-9]/g, ''); updateOfferSummaryBox();"
-                       class="w-full border border-slate-300 rounded-xl p-2 outline-none focus:ring-2 focus:ring-neutral-900 bg-white">
-              </div>
-            </div>
-
-            <!-- 🍯 Honeypot Bot Trap (ซ่อนจากคนจริง ดักจับสคริปต์บอทยิงฟอร์ม) -->
-            <div class="hidden" aria-hidden="true">
-              <label for="offer-company-website">Website</label>
-              <input type="text" id="offer-company-website" name="company_website" tabindex="-1" autocomplete="off">
-            </div>
-
-            <!-- เงื่อนไขเพิ่มเติม -->
-            <div>
-              <label for="offer-terms" class="block font-medium text-slate-600 mb-1">เงื่อนไขเพิ่มเติม (ถ้ามี)</label>
-              <input type="text" id="offer-terms" placeholder="เช่น พร้อมวางมัดจำภายใน 3 วัน / ต้องการปรึกษาสินเชื่อ"
-                     oninput="updateOfferSummaryBox()"
-                     class="w-full border border-slate-200 rounded-xl p-2 outline-none focus:ring-2 focus:ring-neutral-900 bg-slate-50/60">
-            </div>
-
-            <!-- ข้อกำหนดและเงื่อนไข -->
-            <label class="flex items-start gap-2 pt-0.5 cursor-pointer text-[11px] text-slate-600">
-              <input type="checkbox" id="offer-consent" required checked class="mt-0.5 rounded text-neutral-900 focus:ring-neutral-900">
-              <span>ข้าพเจ้ายืนยันความประสงค์ในการเสนอราคาซื้อทรัพย์สินข้างต้น และยินยอมให้เจ้าหน้าที่ศิวาทรัพย์ติดต่อกลับเพื่อดำเนินการด้านเอกสาร</span>
-            </label>
           </div>
 
-          <!-- Bottom-Right Column: Replaces Homerun's "ช่องทางการชำระเงิน -> QR Code" with LINE Official ศิวาทรัพย์ -->
-          <div class="md:col-span-5 flex flex-col justify-between bg-gradient-to-b from-slate-50 to-emerald-50/40 border border-slate-200 rounded-2xl p-3.5 space-y-3">
-            <div class="space-y-2.5">
-              <!-- Summary Breakdown -->
-              <div class="bg-white rounded-xl p-2.5 border border-slate-200/80 space-y-1.5">
-                <div class="text-[11px] font-bold text-slate-700 border-b border-slate-100 pb-1">สรุปรายการเสนอราคา</div>
-                <div class="flex justify-between items-center text-[11px]">
-                  <span class="text-slate-500">ราคาก่อนต่อรอง</span>
-                  <span id="offer-summary-original" class="font-semibold text-slate-700 line-through">฿0</span>
-                </div>
-                <div class="flex justify-between items-center text-xs">
-                  <span class="text-slate-700 font-bold">ราคาที่ท่านเสนอ</span>
-                  <span id="offer-summary-proposed" class="font-black text-neutral-900 text-sm">฿0</span>
-                </div>
-                <div class="flex justify-between items-center text-[11px] pt-1 border-t border-dashed border-slate-200">
-                  <span class="text-slate-500">หลักประกันการเสนอราคา</span>
-                  <span id="offer-summary-deposit" class="font-bold text-slate-900">฿50,000</span>
-                </div>
-              </div>
-
-              <!-- Bottom-Right Channel Box (LINE Official instead of QR Code) -->
-              <div class="space-y-2">
-                <div class="flex items-center justify-between">
-                  <span id="offer-line-box-header" class="font-bold text-slate-800 text-xs">ช่องทางยืนยันและวางหลักประกัน</span>
-                  <span class="text-[9.5px] bg-neutral-100 text-neutral-700 font-bold px-2 py-0.5 rounded-full">LINE Official</span>
+          <!-- Right Column: Offer Summary Box & Actions -->
+          <div class="md:col-span-5 flex flex-col justify-between space-y-3">
+            <div class="space-y-3">
+              <!-- Summary Card (Digital Luxury Style) -->
+              <div class="bg-[#FAF9F6] border border-[#C2A460]/40 rounded-2xl p-3.5 space-y-2.5">
+                <div class="flex items-center justify-between border-b border-neutral-200/80 pb-2">
+                  <span class="font-bold text-neutral-800 flex items-center gap-1.5">
+                    <i data-lucide="file-check-2" class="w-4 h-4 text-[#C2A460]"></i>
+                    <span>สรุปข้อเสนอซื้อ</span>
+                  </span>
+                  <span id="offer-summary-type-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-neutral-900 text-white">ซื้อเงินสด</span>
                 </div>
 
-                <!-- Interactive Wording Selector for Bua & Team to test live -->
-                <div id="offer-wording-selector-box" class="bg-amber-50/90 border border-amber-200 rounded-xl p-2 space-y-1">
-                  <div class="text-[10px] font-bold text-amber-900 flex items-center gap-1">
-                    <i data-lucide="sparkles" class="w-3 h-3 text-amber-600"></i>
-                    <span>ตัวเลือกคำพูดปุ่มมุมขวาล่าง (ให้บัวเลือกเทียบ):</span>
+                <div class="space-y-1.5 text-[11px]">
+                  <div class="flex justify-between text-neutral-500">
+                    <span>ราคาตั้งขายเดิม:</span>
+                    <span id="offer-summary-original-price" class="font-mono line-through">-</span>
                   </div>
-                  <select id="offer-cta-wording-preset" onchange="applyOfferLineWordingPreset(this.value)" class="w-full border border-amber-300 rounded-lg p-1 text-[10px] bg-white font-semibold text-slate-800 outline-none">
-                    <option value="option1" selected>แบบที่ 1: ยืนยันใบเสนอราคา & วางหลักประกันผ่าน LINE (แนะนำ)</option>
-                    <option value="option2">แบบที่ 2: ติดต่อเจ้าหน้าที่เพื่อรับใบวางหลักประกันทาง LINE</option>
-                    <option value="option3">แบบที่ 3: ส่งข้อเสนอซื้อและชำระเงินมัดจำผ่าน LINE ศิวาทรัพย์</option>
-                    <option value="option4">แบบที่ 4: ประสานงานยื่นข้อเสนอราคาผ่าน LINE Official</option>
-                  </select>
+                  <div class="flex justify-between items-baseline">
+                    <span class="font-semibold text-neutral-700">ราคาที่เสนอซื้อ:</span>
+                    <span id="offer-summary-final-price" class="font-mono font-black text-sm text-[#8B0000]">-</span>
+                  </div>
+                  <div class="flex justify-between text-neutral-500 pt-1 border-t border-neutral-200/60">
+                    <span>ส่วนต่างราคา:</span>
+                    <span id="offer-summary-diff" class="font-mono font-semibold text-emerald-700">-</span>
+                  </div>
                 </div>
 
-                <!-- Active LINE Channel Card (Replacing Homerun's QR Code Radio Card) -->
-                <div class="p-3 rounded-xl border border-neutral-200 bg-white shadow-2xs space-y-2 hover:border-emerald-500/60 transition">
-                  <div class="flex items-start gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center shrink-0 font-bold text-xs">
-                      L
-                    </div>
-                    <div class="min-w-0 flex-1">
-                      <div id="offer-line-card-title" class="font-extrabold text-slate-900 text-xs leading-snug">
-                        ยืนยันใบเสนอราคา & วางหลักประกันผ่าน LINE
-                      </div>
-                      <div id="offer-line-card-desc" class="text-[10.5px] text-slate-500 leading-relaxed mt-0.5">
-                        ส่งรายละเอียดราคาที่เสนอเข้า LINE ศิวาทรัพย์ (@siwasup) เพื่อรับเอกสารใบเสนอซื้อและเลขบัญชีวางหลักประกันโดยตรง
-                      </div>
-                    </div>
+                <div class="p-2.5 rounded-xl bg-white border border-neutral-200 text-[10px] space-y-1 text-neutral-600">
+                  <div class="font-bold text-neutral-800 flex items-center gap-1">
+                    <i data-lucide="clock" class="w-3 h-3 text-[#C2A460]"></i>
+                    <span>กระบวนการพิจารณา:</span>
                   </div>
+                  <p class="leading-relaxed text-neutral-500">
+                    ฝ่ายประสานงานจะนำข้อเสนอเข้าบอร์ดพิจารณาและตอบกลับผลการอนุมัติภายใน 24-48 ชั่วโมง
+                  </p>
                 </div>
               </div>
 
               <!-- Document Download Box inside Offer Modal (Role-aware) -->
-              <div id="offer-modal-docs-box" class="bg-white border border-slate-200 rounded-xl p-2.5 space-y-1.5"></div>
+              <div id="offer-modal-docs-box" class="bg-white border border-neutral-200 rounded-xl p-2.5 space-y-1.5"></div>
+
+              <!-- 🛡️ PDPA Consent Checkbox -->
+              <div class="p-2.5 rounded-xl bg-neutral-50 border border-neutral-200/80 space-y-1">
+                <label class="flex items-start gap-2 text-[11px] text-neutral-600 cursor-pointer select-none">
+                  <input type="checkbox" id="offer-pdpa-consent" required checked class="mt-0.5 w-3.5 h-3.5 rounded text-[#8B0000] focus:ring-[#C2A460] border-neutral-300 shrink-0">
+                  <span class="leading-tight text-[10px]">
+                    ยินยอมให้ บจก. ศิวาทรัพย์ แอสเซท และตัวแทนผู้ดูแล จัดเก็บข้อมูลเพื่อการนัดหมายและยื่นข้อเสนอซื้อตาม <button type="button" onclick="openPrivacyPolicyModal()" class="text-[#8B0000] underline font-semibold cursor-pointer">นโยบายความเป็นส่วนตัว (PDPA)</button>
+                  </span>
+                </label>
+              </div>
             </div>
 
-            <!-- Submit & Open LINE Button -->
+            <!-- Submit Button (Digital Luxury Gold) -->
             <div class="pt-1 space-y-1.5">
-              <button type="submit" id="offer-submit-btn" class="w-full bg-white hover:bg-neutral-50 border border-neutral-200 hover:border-emerald-500 text-neutral-900 font-bold py-3 px-3 rounded-xl shadow-2xs text-xs flex items-center justify-center gap-2 active:scale-95 transition-all">
-                <span class="w-4 h-4 rounded-full bg-[#06C755] text-white flex items-center justify-center text-[9px] font-black shrink-0">L</span>
-                <span id="offer-submit-btn-text">ส่งใบเสนอราคาผ่าน LINE ศิวาทรัพย์</span>
+              <button type="submit" id="offer-submit-btn" class="w-full bg-gradient-to-r from-[#C2A460] via-[#E5CF94] to-[#A98B45] text-neutral-950 font-bold py-3 px-3 rounded-xl shadow-md text-xs flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer hover:opacity-95">
+                <i data-lucide="send" class="w-4 h-4"></i>
+                <span id="offer-submit-btn-text">ยืนยันการยื่นเสนอราคา</span>
               </button>
-              <p class="text-[10px] text-center text-slate-400">ระบบจะสรุปข้อมูลใบเสนอราคาและเปิดแชท LINE @siwasup อัตโนมัติ</p>
+              <p class="text-[10px] text-center text-neutral-400">ระบบจะส่งข้อเสนอเข้าแผงบริหารและแจ้งเตือนผ่าน LINE Official อัตโนมัติ</p>
             </div>
           </div>
         </form>
