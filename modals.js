@@ -1181,23 +1181,14 @@
                 <div class="min-w-0 flex-1">
                   <div class="flex items-center justify-between gap-1">
                     <span id="animal-strategy-title" class="font-bold text-xs text-amber-300">ตัวแทนทั้งหมด 125 ท่าน</span>
-                    <button type="button" onclick="toggleLeaderboardTurnaroundPreview()" class="text-[9.5px] px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 font-semibold cursor-pointer shrink-0">
-                      🔄 ดูโมเดล 4 มุม
-                    </button>
+
                   </div>
                   <div id="animal-strategy-desc" class="text-slate-300 text-[10px] mt-0.5">
                     คลิกเลือกเหรียญตราสัตว์ด้านบน เพื่อกรองรายชื่อตัวแทนและดูกลยุทธ์การจับคู่ทีม Co-Broker
                   </div>
                 </div>
               </div>
-              <!-- Expandable 4-Angle Turnaround Sheet Preview inside Leaderboard -->
-              <div id="leaderboard-turnaround-box" class="hidden pt-2 border-t border-slate-800 space-y-1.5">
-                <div class="flex items-center justify-between text-[10px] text-amber-300 font-semibold px-1">
-                  <span id="leaderboard-turnaround-label">📐 Master 3D Turnaround Sheet (0° / 45° / 90° / 180°)</span>
-                  <button type="button" onclick="toggleLeaderboardTurnaroundPreview()" class="text-slate-400 hover:text-white cursor-pointer">ซ่อน ▲</button>
-                </div>
-                <img id="leaderboard-turnaround-img" src="assets/characters/turnaround_eagle.png" alt="Turnaround 4 Angles" class="w-full h-auto rounded-lg border border-slate-700 shadow-inner">
-              </div>
+
             </div>
           </div>
 
@@ -1449,19 +1440,7 @@
           <div id="profile-animal-quote" class="text-[11px] text-amber-200/90 italic font-medium">“มองไกล เห็นโอกาส พาไปได้ไกลกว่า”</div>
           <div id="profile-animal-desc" class="text-[11px] text-slate-200 font-normal leading-relaxed"></div>
 
-          <!-- Interactive 4-Angle 3D Turnaround Viewer inside Profile -->
-          <div class="bg-slate-950/90 rounded-xl p-2.5 border border-slate-800 space-y-2">
-            <div class="flex items-center justify-between">
-              <span id="profile-turnaround-title" class="text-[10px] font-bold text-amber-400">🔄 โมเดล 3D ประจำสาย (หมุนดู 4 มุม)</span>
-              <div class="flex gap-1">
-                <button type="button" onclick="setProfileTurnaroundAngle(0)" class="prof-angle-btn px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-bold text-[9.5px] cursor-pointer" data-angle="0">0° หน้า</button>
-                <button type="button" onclick="setProfileTurnaroundAngle(1)" class="prof-angle-btn px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white font-semibold text-[9.5px] cursor-pointer" data-angle="1">45° เฉียง</button>
-                <button type="button" onclick="setProfileTurnaroundAngle(2)" class="prof-angle-btn px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white font-semibold text-[9.5px] cursor-pointer" data-angle="2">90° ข้าง</button>
-                <button type="button" onclick="setProfileTurnaroundAngle(3)" class="prof-angle-btn px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white font-semibold text-[9.5px] cursor-pointer" data-angle="3">180° หลัง</button>
-              </div>
-            </div>
-            <div id="profile-turnaround-viewport" class="w-40 h-44 mx-auto rounded-lg bg-slate-900 border border-slate-800 bg-no-repeat transition-all duration-300" style="background-image: url('assets/characters/turnaround_eagle.png'); background-size: 400% 100%; background-position: 0% 0%;"></div>
-          </div>
+
 
           <!-- Dual-Track Milestone Checkpoints (Activity 0->50->100 & Performance 0->150->300) -->
           <div class="bg-slate-950/85 rounded-xl p-2.5 border border-slate-800 space-y-2.5">
@@ -1476,7 +1455,7 @@
                 <span class="font-bold text-emerald-400 flex items-center gap-1">
                   <span>🎪 หลอดความขยัน (Activity)</span>
                 </span>
-                <span id="profile-act-checkpoint-label" class="font-mono font-bold text-emerald-300">145 / 100 แต้ม (ปลดล็อก 🐺/🦅)</span>
+                <span id="profile-act-checkpoint-label" class="font-mono font-bold text-emerald-300">75 / 100 แต้ม (ปลดล็อก 🐺/🦅)</span>
               </div>
               <div class="relative w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
                 <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-400/70 z-10" title="เช็กพอยท์ 50 แต้ม: หมีตื่นตัว"></div>
@@ -1498,7 +1477,7 @@
                 <span class="font-bold text-amber-400 flex items-center gap-1">
                   <span>💰 หลอดผลงานปิดดีล (Performance)</span>
                 </span>
-                <span id="profile-perf-checkpoint-label" class="font-mono font-bold text-amber-300">620 / 300 แต้ม (ปลดล็อก 🦁/🦅)</span>
+                <span id="profile-perf-checkpoint-label" class="font-mono font-bold text-amber-300">210 / 300 แต้ม (ปลดล็อก 🦁/🦅)</span>
               </div>
               <div class="relative w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
                 <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-400/70 z-10" title="เช็กพอยท์ 150 แต้ม: นักเจรจาเปิดดีล"></div>

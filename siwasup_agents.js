@@ -370,9 +370,9 @@
     "phone": "",
     "lineId": "ggemmie",
     "email": "kumtronsiriwat@hotmail.com",
-    "activityPoints": 145,
-    "performancePoints": 620,
-    "totalPoints": 765,
+    "activityPoints": 75,
+    "performancePoints": 210,
+    "totalPoints": 285,
     "tierId": "gold",
     "tierName": "Gold Agent",
     "tierIcon": "🥇"
