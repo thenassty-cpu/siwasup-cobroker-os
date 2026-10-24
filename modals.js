@@ -1099,21 +1099,23 @@
     </div>
 
     <!-- 🏆 Agent Directory & Leaderboard Modal (125 Agents: S02-S126) -->
-    <div id="agent-leaderboard-modal" class="hidden modal-backdrop !items-center px-3 pt-10 pb-6 sm:p-6">
-      <div class="relative w-full max-w-2xl max-h-[84dvh] bg-white rounded-3xl shadow-2xl border border-neutral-200/80 flex flex-col overflow-hidden">
+    <div id="agent-leaderboard-modal" onclick="if(event.target === this) closeAgentLeaderboardModal()" class="hidden modal-backdrop fixed inset-0 z-50 bg-neutral-950/60 backdrop-blur-xs flex items-center justify-center px-3 pt-6 pb-6 sm:p-6">
+      <div class="relative w-full max-w-2xl max-h-[84dvh] sm:max-h-[88dvh] bg-white rounded-3xl shadow-2xl border border-neutral-200/80 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         
-        <!-- 1. Fixed Header (คลีน ขาว-ดำ-ทอง) -->
-        <div class="px-5 py-4 bg-white border-b border-neutral-100 flex items-center justify-between shrink-0">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-neutral-900 text-[#D4BC8B] flex items-center justify-center text-base shadow-xs shrink-0 font-bold">
+        <!-- 1. Fixed Header (คลีน ขาว-ดำ-ทอง พร้อมปุ่มปิดคาไว้ขนาดใหญ่ w-9 h-9) -->
+        <div class="sticky top-0 z-30 px-5 py-3.5 sm:py-4 bg-white/95 backdrop-blur-md border-b border-neutral-100 flex items-center justify-between shrink-0 shadow-xs">
+          <div class="flex items-center gap-3 min-w-0 pr-2">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-neutral-900 text-[#D4BC8B] flex items-center justify-center text-base shadow-xs shrink-0 font-bold">
               ♛
             </div>
-            <div>
-              <h2 class="text-base font-bold text-neutral-900 tracking-tight leading-tight">ทำเนียบตัวแทน & Leaderboard</h2>
-              <p class="text-xs text-neutral-400">ระบบวัดผลอัตโนมัติ 2 แทร็ก (กิจกรรม & ผลงาน) • 125 ท่าน</p>
+            <div class="min-w-0">
+              <h2 class="text-sm sm:text-base font-bold text-neutral-900 tracking-tight leading-tight truncate">ทำเนียบตัวแทน & Leaderboard</h2>
+              <p class="text-[10px] sm:text-xs text-neutral-400 truncate">ระบบวัดผลอัตโนมัติ 2 แทร็ก (กิจกรรม & ผลงาน) • 125 ท่าน</p>
             </div>
           </div>
-          <button onclick="closeAgentLeaderboardModal()" class="w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-600 flex items-center justify-center transition cursor-pointer text-sm font-bold">&times;</button>
+          <button type="button" onclick="closeAgentLeaderboardModal()" aria-label="ปิดหน้าต่าง" class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0" title="ปิดหน้าต่าง">
+            <i data-lucide="x" class="w-5 h-5 stroke-[2.5]"></i>
+          </button>
         </div>
 
         <!-- 2. Scrollable Body (Single Scrollbar) -->
@@ -1331,302 +1333,235 @@
     </div>
 
     <!-- 👤 My Profile & Scorecard Modal -->
-    <div id="modal-my-profile" class="hidden modal-backdrop !items-center px-3 pt-10 pb-6 sm:p-6">
-      <div class="modal-card max-w-md space-y-3.5 max-h-[82dvh] sm:max-h-[88dvh] overflow-y-auto no-scrollbar !p-4">
-        <!-- Header -->
-        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
-          <div class="flex items-center gap-2">
-            <span class="icon-circle w-7 h-7 bg-amber-500 text-white"><i data-lucide="user-check" class="w-4 h-4 stroke-[1.5]"></i></span>
-            <div>
-              <h3 class="font-bold text-sm sm:text-base text-gray-900 leading-tight">โปรไฟล์ตัวแทน & กระเป๋าคะแนน</h3>
-              <p class="text-[10px] text-gray-500">Siwasup Co-Broker Agent Scorecard</p>
-            </div>
-          </div>
-          <button onclick="closeMyProfileModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-lg font-bold">&times;</button>
-        </div>
-
-        <!-- Identity Switcher Dropdown (Select Any Agent) -->
-        <div class="bg-gray-50 p-2 rounded-xl border border-gray-200 flex items-center justify-between text-xs">
-          <label class="text-[11px] font-medium text-gray-600 flex items-center gap-1 shrink-0">
-            <i data-lucide="users" class="w-3.5 h-3.5 text-gray-500"></i>
-            <span>สลับตัวแทน:</span>
-          </label>
-          <select id="profile-agent-switcher" onchange="switchMyAgentProfile(this.value)" class="border border-gray-200 rounded-lg p-1 text-xs bg-white font-bold text-gray-800 outline-none focus:ring-1 focus:ring-amber-500 ml-2 flex-1">
-            <!-- Injected via JS -->
-          </select>
-        </div>
-
-        <!-- Profile Hero Card -->
-        <div class="bg-gradient-to-br from-amber-50/80 via-white to-red-50/40 p-3.5 rounded-2xl border border-amber-200/80 relative shadow-2xs space-y-3">
-          <div class="flex items-center gap-3">
-            <div class="relative shrink-0">
-              <img id="profile-3d-badge-img" src="assets/characters/badge_eagle.png" alt="3D Badge" class="w-16 h-16 object-contain drop-shadow-md">
-              <div id="profile-avatar-circle" class=" -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-slate-900 text-amber-300 font-mono font-black text-[10px] border border-amber-400 shadow-xs">
-                S22
-              </div>
-            </div>
-            <div class="min-w-0 flex-1">
-              <div class="flex items-center gap-1.5 flex-wrap">
-                <span id="profile-nickname" class="font-black text-base text-gray-900">เจ็ม</span>
-                <span id="profile-code-pill" class="text-[10px] font-mono font-bold bg-gray-900 text-white px-2 py-0.5 rounded-full">S22</span>
-                <span id="profile-tier-badge" class="text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 rounded-full">🥇 Gold Agent</span>
-              </div>
-              <div id="profile-fullname" class="text-xs text-gray-600 truncate mt-0.5">นางสาวกันยาวีร์ กำธรศิริวัฒน์</div>
-              <div id="profile-start-date" class="text-[10px] text-gray-400 mt-0.5">เริ่มงาน: 8 มีนาคม 2566</div>
-            </div>
-          </div>
-
-          <!-- Contact Details Grid -->
-          <div class="grid grid-cols-2 gap-1.5 text-[11px] pt-1 border-t border-amber-100/80">
-            <div class="flex items-center gap-1.5 text-gray-700 bg-white/70 p-1.5 rounded-lg border border-amber-100/60 truncate">
-              <i data-lucide="phone" class="w-3 h-3 text-emerald-600 shrink-0"></i>
-              <span id="profile-phone" class="font-mono font-bold truncate">06-2396-5161</span>
-            </div>
-            <div class="flex items-center gap-1.5 text-gray-700 bg-white/70 p-1.5 rounded-lg border border-amber-100/60 truncate">
-              <i data-lucide="message-circle" class="w-3 h-3 text-emerald-600 shrink-0"></i>
-              <span id="profile-line" class="truncate font-medium">@siwasup</span>
-            </div>
-          </div>
-
-          <!-- Tier Progress Bar -->
-          <div class="space-y-1 pt-1 border-t border-amber-100/80">
-            <div class="flex justify-between items-center text-[10.5px]">
-              <span class="font-bold text-gray-700 flex items-center gap-1">
-                <span>เลื่อนสู่</span>
-                <span id="profile-next-tier-name" class="text-purple-700 font-bold">💎 Diamond Master</span>
-              </span>
-              <span id="profile-tier-progress-text" class="font-mono text-gray-500 font-bold">765 / 1,000 แต้ม</span>
-            </div>
-            <div class="w-full bg-gray-200/80 rounded-full h-2 overflow-hidden shadow-inner">
-              <div id="profile-tier-progress-bar" class="bg-gradient-to-r from-amber-500 to-purple-600 h-2 rounded-full transition-all duration-500" style="width: 76.5%;"></div>
-            </div>
-            <p id="profile-tier-perk" class="text-[9.5px] text-gray-500 italic">สิทธิพิเศษ: สิทธิ์จองทรัพย์ Hot Deals ล่วงหน้า 24 ชม.</p>
-          </div>
-        </div>
-
-        <!-- 🦁 3D Character Archetype & Turnaround Card (Visible for Agents & Owners) -->
-        <div id="profile-owner-intelligence-box" class="p-3.5 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/90 border border-amber-500/40 space-y-2.5 text-xs shadow-md text-white">
-          <div class="flex items-center justify-between gap-2">
-            <span class="font-bold text-amber-300 flex items-center gap-1.5">
-              <span>✨ เส้นทางวิวัฒนาการตัวละคร (Evolution Path)</span>
+    <div 
+      id="modal-my-profile" 
+      onclick="if(event.target === this) closeMyProfileModal()" 
+      class="hidden modal-backdrop fixed inset-0 z-50 bg-neutral-950/60 backdrop-blur-xs flex items-center justify-center px-3 pt-6 pb-6 sm:p-6"
+    >
+      <div class="modal-card relative w-full max-w-md max-h-[84dvh] sm:max-h-[88dvh] bg-white rounded-3xl shadow-2xl border border-neutral-200/80 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200 !p-0">
+        
+        <!-- 1. Sticky Header with Pinned Luxury Close Button ("คาไว้" ตลอดเวลา & ใหญ่เท่ากันกับอันอื่น) -->
+        <div class="sticky top-0 z-30 px-4 sm:px-5 py-3.5 bg-white/95 backdrop-blur-md border-b border-neutral-100 flex items-center justify-between shrink-0 shadow-xs">
+          <div class="flex items-center gap-2.5 min-w-0 pr-2">
+            <span class="icon-circle w-8 h-8 rounded-xl bg-amber-500 text-white shadow-xs shrink-0 flex items-center justify-center">
+              <i data-lucide="user-check" class="w-4 h-4 stroke-[2]"></i>
             </span>
-            <span id="profile-animal-badge" class="px-2.5 py-0.5 rounded-full font-bold text-[10px] bg-amber-400 text-slate-950 border border-amber-300 shadow-2xs">🦅 Eagle</span>
+            <div class="min-w-0">
+              <h3 class="font-bold text-sm sm:text-base text-gray-900 leading-tight truncate">โปรไฟล์ตัวแทน & กระเป๋าคะแนน</h3>
+              <p class="text-[10px] text-gray-500 truncate">Siwasup Co-Broker Agent Scorecard</p>
+            </div>
+          </div>
+          
+          <!-- ปุ่มปิดหรูแบบลอยคาไว้ (ขนาดใหญ่มาตรฐาน w-9 h-9 เท่ากับป๊อปอัปอื่น) -->
+          <button 
+            type="button" 
+            onclick="closeMyProfileModal()" 
+            aria-label="ปิดหน้าต่าง"
+            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
+            title="ปิดหน้าต่าง"
+          >
+            <i data-lucide="x" class="w-5 h-5 stroke-[2.5]"></i>
+          </button>
+        </div>
+
+        <!-- 2. Scrollable Body (เลื่อนดูข้อมูลได้ โดยที่หัวและปุ่มปิดยังคาอยู่ด้านบนเสมอ) -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3.5 custom-scrollbar">
+          <!-- Identity Switcher Dropdown (Select Any Agent) -->
+          <div class="bg-gray-50 p-2 rounded-xl border border-gray-200 flex items-center justify-between text-xs">
+            <label class="text-[11px] font-medium text-gray-600 flex items-center gap-1 shrink-0">
+              <i data-lucide="users" class="w-3.5 h-3.5 text-gray-500"></i>
+              <span>สลับตัวแทน:</span>
+            </label>
+            <select id="profile-agent-switcher" onchange="switchMyAgentProfile(this.value)" class="border border-gray-200 rounded-lg p-1 text-xs bg-white font-bold text-gray-800 outline-none focus:ring-1 focus:ring-amber-500 ml-2 flex-1">
+              <!-- Injected via JS -->
+            </select>
           </div>
 
-          <!-- 4-Stage Evolution Roadmap Selector -->
-          <div class="grid grid-cols-4 gap-1.5 pt-0.5">
-            <button type="button" onclick="previewProfileArchetypeStage('bear')" id="evo-stage-bear" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
-              <img src="assets/characters/badge_bear.png" alt="Bear" class="w-9 h-9 object-contain drop-shadow" />
-              <span class="text-[9.5px] font-bold text-slate-300 mt-0.5">🐻 หมีจำศีล</span>
-              <span class="text-[8px] text-slate-400">เริ่มต้น</span>
-            </button>
-            <button type="button" onclick="previewProfileArchetypeStage('wolf')" id="evo-stage-wolf" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
-              <img src="assets/characters/badge_wolf.png" alt="Wolf" class="w-9 h-9 object-contain drop-shadow" />
-              <span class="text-[9.5px] font-bold text-emerald-300 mt-0.5">🐺 หมาป่า</span>
-              <span class="text-[8px] text-emerald-400/80">ขยัน ≥100</span>
-            </button>
-            <button type="button" onclick="previewProfileArchetypeStage('lion')" id="evo-stage-lion" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
-              <img src="assets/characters/badge_lion.png" alt="Lion" class="w-9 h-9 object-contain drop-shadow" />
-              <span class="text-[9.5px] font-bold text-amber-300 mt-0.5">🦁 สิงห์สุขุม</span>
-              <span class="text-[8px] text-amber-400/80">ผลงาน ≥300</span>
-            </button>
-            <button type="button" onclick="previewProfileArchetypeStage('eagle')" id="evo-stage-eagle" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
-              <img src="assets/characters/badge_eagle.png" alt="Eagle" class="w-9 h-9 object-contain drop-shadow" />
-              <span class="text-[9.5px] font-bold text-yellow-300 mt-0.5">🦅 พญาอินทรี</span>
-              <span class="text-[8px] text-yellow-400/90">ครบเครื่อง!</span>
-            </button>
+          <!-- Profile Hero Card -->
+          <div class="bg-gradient-to-br from-amber-50/80 via-white to-red-50/40 p-3.5 rounded-2xl border border-amber-200/80 relative shadow-2xs space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="relative shrink-0">
+                <img id="profile-3d-badge-img" src="assets/characters/badge_eagle.png" alt="Badge" class="w-16 h-16 object-contain drop-shadow-md">
+                <div id="profile-avatar-circle" class=" -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-slate-900 text-amber-300 font-mono font-black text-[10px] border border-amber-400 shadow-xs">
+                  S22
+                </div>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span id="profile-nickname" class="font-black text-base text-gray-900">เจ็ม</span>
+                  <span id="profile-code" class="text-xs font-mono font-bold bg-neutral-900 text-white px-2 py-0.5 rounded-md shadow-2xs">S22</span>
+                  <span id="profile-tier-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">Gold</span>
+                </div>
+                <div id="profile-fullname" class="text-xs text-gray-600 truncate mt-0.5">นางสาวกัญญา คำทรศิริวัฒน์</div>
+                <div class="flex items-center gap-2 text-[10px] text-gray-500 mt-1">
+                  <span>📅 เริ่มงาน: <strong id="profile-start-date" class="text-gray-700">8/3/2566</strong></span>
+                  <span>•</span>
+                  <span>💬 LINE: <strong id="profile-line" class="text-gray-700">ggemmie</strong></span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div id="profile-animal-quote" class="text-[11px] text-amber-200/90 italic font-medium">“มองไกล เห็นโอกาส พาไปได้ไกลกว่า”</div>
-          <div id="profile-animal-desc" class="text-[11px] text-slate-200 font-normal leading-relaxed"></div>
+          <!-- 4 Archetype Stage Visual Selector (Bear -> Wolf -> Lion -> Eagle) -->
+          <div class="bg-slate-950/95 p-3 rounded-2xl border border-amber-500/30 text-white space-y-2 shadow-sm">
+            <div class="flex items-center justify-between text-xs font-bold text-amber-300">
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                <span>สายตัวละคร (Archetype Stages):</span>
+              </span>
+              <span id="profile-active-tier-name" class="text-emerald-400 font-mono font-bold">🦅 พญาอินทรี</span>
+            </div>
 
+            <div class="grid grid-cols-4 gap-1.5 pt-1">
+              <button type="button" onclick="previewProfileArchetypeStage('bear')" id="evo-stage-bear" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
+                <img src="assets/characters/badge_bear.png" alt="Bear" class="w-9 h-9 object-contain drop-shadow" />
+                <span class="text-[9.5px] font-bold text-slate-300 mt-0.5">หมีตื่นตัว</span>
+                <span class="text-[8px] text-slate-400">เริ่มต้น</span>
+              </button>
+              <button type="button" onclick="previewProfileArchetypeStage('wolf')" id="evo-stage-wolf" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
+                <img src="assets/characters/badge_wolf.png" alt="Wolf" class="w-9 h-9 object-contain drop-shadow" />
+                <span class="text-[9.5px] font-bold text-slate-300 mt-0.5">หมาป่า</span>
+                <span class="text-[8px] text-emerald-400/80">ขยัน ≥100</span>
+              </button>
+              <button type="button" onclick="previewProfileArchetypeStage('lion')" id="evo-stage-lion" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
+                <img src="assets/characters/badge_lion.png" alt="Lion" class="w-9 h-9 object-contain drop-shadow" />
+                <span class="text-[9.5px] font-bold text-slate-300 mt-0.5">สิงห์สุขุม</span>
+                <span class="text-[8px] text-amber-400/80">ผลงาน ≥300</span>
+              </button>
+              <button type="button" onclick="previewProfileArchetypeStage('eagle')" id="evo-stage-eagle" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
+                <img src="assets/characters/badge_eagle.png" alt="Eagle" class="w-9 h-9 object-contain drop-shadow" />
+                <span class="text-[9.5px] font-bold text-yellow-300 mt-0.5">🦅 พญาอินทรี</span>
+                <span class="text-[8px] text-yellow-400/90">ครบเครื่อง!</span>
+              </button>
+            </div>
 
+            <div id="profile-animal-quote" class="text-[11px] text-amber-200/90 italic font-medium">“มองไกล เห็นโอกาส พาไปได้ไกลกว่า”</div>
+            <div id="profile-animal-desc" class="text-[11px] text-slate-200 font-normal leading-relaxed"></div>
+          </div>
 
           <!-- Dual-Track Milestone Checkpoints (Activity 0->50->100 & Performance 0->150->300) -->
-          <div class="bg-slate-950/85 rounded-xl p-2.5 border border-slate-800 space-y-2.5">
+          <div class="bg-slate-950/85 rounded-xl p-3 border border-slate-800 space-y-2.5">
             <div class="text-[10.5px] font-bold text-amber-300 flex items-center justify-between">
               <span>🎯 หลอดเช็กพอยท์อัปเกรดสายตัวละคร (Dual-Track Evolution)</span>
               <span class="text-[9px] text-slate-400 font-normal">ขยับทุกครั้งที่ทำภารกิจ</span>
             </div>
 
-            <!-- Track 1: Activity Evolution Bar (Target 100 pts for Wolf/Eagle) -->
+            <!-- Track 1: Activity Evolution Bar -->
             <div class="space-y-1">
               <div class="flex justify-between items-center text-[10px]">
                 <span class="font-bold text-emerald-400 flex items-center gap-1">
                   <span>🎪 หลอดความขยัน (Activity)</span>
                 </span>
-                <span id="profile-act-checkpoint-label" class="font-mono font-bold text-emerald-300">75 / 100 แต้ม (ปลดล็อก 🐺/🦅)</span>
+                <span id="profile-act-checkpoint-label" class="font-mono font-bold text-emerald-300">75 / 100 แต้ม</span>
               </div>
               <div class="relative w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
                 <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-400/70 z-10" title="เช็กพอยท์ 50 แต้ม: หมีตื่นตัว"></div>
-                <div id="profile-act-evo-bar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+                <div id="profile-act-evo-bar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: 75%;"></div>
               </div>
               <div class="flex justify-between text-[8.5px] text-slate-400 font-medium px-0.5">
                 <span>0 เริ่มต้น</span>
-                <span id="chk-act-50" class="text-emerald-300">📍50 หมีตื่นตัว</span>
-                <span id="chk-act-100" class="text-emerald-300 font-bold">🐺100 หมาป่าพิทักษ์</span>
+                <span id="chk-act-50" class="text-emerald-300 font-bold">📍50 หมีตื่นตัว</span>
+                <span id="chk-act-100" class="text-slate-500">🐺100 หมาป่าพิทักษ์</span>
               </div>
               <div id="profile-act-quest-Breakdown" class="text-[9.5px] text-emerald-200/90 bg-emerald-950/50 border border-emerald-800/50 rounded-lg px-2 py-1">
-                ✅ ผ่านเกณฑ์สายขยันแล้ว! รักษาโมเมนตัมรับโบนัสป้ายและประชุมต่อเนื่อง
+                🔥 <strong>ผ่านครึ่งทางแล้ว!</strong> ขาดอีก <strong>25 แต้ม</strong> เพื่อปลดล็อกร่างหมาป่าพิทักษ์ ➔ ติดป้ายอีก 2 จุด (+15) หรือแชร์ทรัพย์ (+5)
               </div>
             </div>
 
-            <!-- Track 2: Performance Evolution Bar (Target 300 pts for Lion/Eagle) -->
-            <div class="space-y-1 pt-1 border-t border-slate-800/90">
+            <!-- Track 2: Performance Evolution Bar -->
+            <div class="space-y-1 pt-1.5 border-t border-slate-800/90">
               <div class="flex justify-between items-center text-[10px]">
                 <span class="font-bold text-amber-400 flex items-center gap-1">
                   <span>💰 หลอดผลงานปิดดีล (Performance)</span>
                 </span>
-                <span id="profile-perf-checkpoint-label" class="font-mono font-bold text-amber-300">210 / 300 แต้ม (ปลดล็อก 🦁/🦅)</span>
+                <span id="profile-perf-checkpoint-label" class="font-mono font-bold text-amber-300">210 / 300 แต้ม</span>
               </div>
               <div class="relative w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
                 <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-400/70 z-10" title="เช็กพอยท์ 150 แต้ม: นักเจรจาเปิดดีล"></div>
-                <div id="profile-perf-evo-bar" class="bg-gradient-to-r from-amber-500 via-yellow-400 to-orange-400 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+                <div id="profile-perf-evo-bar" class="bg-gradient-to-r from-amber-500 via-yellow-400 to-orange-400 h-full rounded-full transition-all duration-500" style="width: 70%;"></div>
               </div>
               <div class="flex justify-between text-[8.5px] text-slate-400 font-medium px-0.5">
                 <span>0 เริ่มต้น</span>
-                <span id="chk-perf-150" class="text-amber-300">📍150 เปิดดีล/กู้ผ่าน</span>
-                <span id="chk-perf-300" class="text-amber-300 font-bold">🦁/🦅300 สิงห์ & อินทรี</span>
+                <span id="chk-perf-150" class="text-amber-300 font-bold">📍150 เปิดดีล/กู้ผ่าน</span>
+                <span id="chk-perf-300" class="text-slate-500">🦁/🦅300 สิงห์ & อินทรี</span>
               </div>
               <div id="profile-perf-quest-Breakdown" class="text-[9.5px] text-amber-200/90 bg-amber-950/50 border border-amber-800/50 rounded-lg px-2 py-1">
-                ✅ ผ่านเกณฑ์นักปิดดีลแล้ว! ลุยปั้นพอร์ตสู่ Diamond Master
+                🔥 <strong>ใกล้ปลดล็อกร่างพญาอินทรี!</strong> ขาดอีกเพียง <strong>90 แต้ม</strong> ➔ ปิดใบจอง 1 เคส (+100) หรือพาชมบ้าน 2 นัด (+50)
               </div>
             </div>
 
-            <!-- ⚡ Live Activity & Evolution Simulator (Try adding points & watch evolution!) -->
-            <div class="pt-1.5 border-t border-slate-800 space-y-1.5">
+            <!-- ⚡ Live Activity & Evolution Simulator -->
+            <div class="pt-2 border-t border-slate-800 space-y-1.5">
               <div class="flex items-center justify-between text-[9.5px] text-slate-300">
-                <span class="font-bold text-amber-300">⚡ ทดลองจำลองทำภารกิจ (ดูหลอดขยับ & อัปเลเวลทันที):</span>
+                <span class="font-bold text-amber-300">⚡ ทดลองจำลองทำภารกิจ (ดูหลอดขยับ & เลื่อนขั้นทันที):</span>
                 <button type="button" onclick="resetProfileSimulatorPoints()" class="px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[8.5px] border border-slate-600 cursor-pointer transition">🔄 รีเซ็ตแต้ม</button>
               </div>
               <div class="grid grid-cols-4 gap-1">
-                <button type="button" onclick="simulateProfileQuest('smart_share_click')" class="py-1 px-1 rounded-lg bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-600/50 text-emerald-200 font-bold text-[9px] cursor-pointer active:scale-95 transition">
+                <button type="button" onclick="simulateProfileQuest('smart_share_click')" class="py-1 px-1 rounded-lg bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-600/50 text-emerald-200 font-bold text-[9px] cursor-pointer active:scale-95 transition text-center">
                   📲 แชร์ทรัพย์<br><span class="text-emerald-400">+5 ขยัน</span>
                 </button>
-                <button type="button" onclick="simulateProfileQuest('vinyl_field_proof')" class="py-1 px-1 rounded-lg bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-600/50 text-emerald-200 font-bold text-[9px] cursor-pointer active:scale-95 transition">
+                <button type="button" onclick="simulateProfileQuest('vinyl_field_proof')" class="py-1 px-1 rounded-lg bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-600/50 text-emerald-200 font-bold text-[9px] cursor-pointer active:scale-95 transition text-center">
                   🪧 ติดป้าย GPS<br><span class="text-emerald-400">+15 ขยัน</span>
                 </button>
-                <button type="button" onclick="simulateProfileQuest('customer_viewing')" class="py-1 px-1 rounded-lg bg-amber-950/90 hover:bg-amber-900 border border-amber-600/50 text-amber-200 font-bold text-[9px] cursor-pointer active:scale-95 transition">
+                <button type="button" onclick="simulateProfileQuest('customer_viewing')" class="py-1 px-1 rounded-lg bg-amber-950/90 hover:bg-amber-900 border border-amber-600/50 text-amber-200 font-bold text-[9px] cursor-pointer active:scale-95 transition text-center">
                   🏡 พาชมบ้าน<br><span class="text-amber-400">+50 ผลงาน</span>
                 </button>
-                <button type="button" onclick="simulateProfileQuest('booking_confirmed')" class="py-1 px-1 rounded-lg bg-amber-950/90 hover:bg-amber-900 border border-amber-600/50 text-amber-200 font-bold text-[9px] cursor-pointer active:scale-95 transition">
+                <button type="button" onclick="simulateProfileQuest('booking_confirmed')" class="py-1 px-1 rounded-lg bg-amber-950/90 hover:bg-amber-900 border border-amber-600/50 text-amber-200 font-bold text-[9px] cursor-pointer active:scale-95 transition text-center">
                   📝 ปิดใบจอง<br><span class="text-amber-400">+100 ผลงาน</span>
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- Upgrade Evolution Progress Hint -->
-          <div id="profile-upgrade-hint-box" class="p-2 rounded-xl bg-slate-800/80 border border-slate-700 text-[10.5px] text-amber-200 flex items-start gap-1.5">
-            <span>🚀</span>
-            <span id="profile-upgrade-hint">สะสมแต้มต่อเนื่องเพื่อปลดล็อกสิทธิพิเศษระดับสูงสุด!</span>
-          </div>
-
-          <!-- 🦁/🦅 Voluntary Mentor Opt-In Box (For Eagle & Lion to voluntarily accept Co-Closing pairs) -->
-          <div id="profile-mentor-optin-box" class="p-2.5 rounded-xl bg-amber-950/60 border border-amber-500/40 space-y-1.5">
-            <div class="flex items-center justify-between gap-2">
-              <div class="text-[10.5px] font-bold text-amber-300 flex items-center gap-1.5">
-                <span>👑 สถานะโค้ชพี่เลี้ยง (Co-Close Mentor)</span>
+          <!-- Score Breakdown Grid -->
+          <div class="grid grid-cols-2 gap-2 text-center">
+            <div class="bg-emerald-50/70 p-2.5 rounded-xl border border-emerald-200/80 space-y-0.5">
+              <div class="text-[10px] text-emerald-700 font-bold flex items-center justify-center gap-1">
+                <span>🎪 คะแนนกิจกรรม</span>
               </div>
-              <button type="button" id="profile-mentor-toggle-btn" onclick="toggleMentorOptIn()" class="px-2.5 py-0.5 rounded-full text-[9.5px] font-bold bg-emerald-500 text-slate-950 border border-emerald-300 shadow-2xs cursor-pointer transition">
-                🟢 สมัครใจรับเคสประกบคู่
-              </button>
+              <div id="profile-act-pts" class="text-xl font-black text-emerald-800 font-mono">75</div>
+              <div class="text-[9px] text-emerald-600">ประชุม / ป้าย GPS / แชร์</div>
             </div>
-            <div class="text-[9.5px] text-amber-100/90 leading-relaxed">
-              <strong>🎁 รางวัลโค้ชพี่เลี้ยง (สิงห์/อินทรี) เมื่อช่วยหมาป่าปิดดีลสำเร็จ:</strong>
-              <ul class="list-disc pl-4 mt-0.5 space-y-0.5 text-slate-200">
-                <li><strong>Commission Split:</strong> รับส่วนแบ่งค่าคอมฯ Co-Close ตามสัดส่วนมาตรฐานทีม โดยไม่ต้องลงพื้นที่หาป้ายเอง</li>
-                <li><strong>Mentor Bonus:</strong> รับแต้มผลงานพิเศษ <strong>+150 แต้ม/เคส</strong> ดันขึ้นแท่น Top Podium</li>
-                <li><strong>VIP Lead Token:</strong> ช่วยทีมครบ 2 เคส รับสิทธิ์ <strong>ลัดคิวเลือก Lead ลูกค้า VIP</strong> จากเพจบริษัทก่อนใคร</li>
-              </ul>
+
+            <div class="bg-blue-50/70 p-2.5 rounded-xl border border-blue-200/80 space-y-0.5">
+              <div class="text-[10px] text-blue-700 font-bold flex items-center justify-center gap-1">
+                <span>💰 คะแนนผลงาน</span>
+              </div>
+              <div id="profile-perf-pts" class="text-xl font-black text-blue-800 font-mono">210</div>
+              <div class="text-[9px] text-blue-600">ฝากทรัพย์ / จอง / ปิดโอน</div>
             </div>
           </div>
 
-          <!-- 1-Click Co-Closing Request Button (Especially impactful for Wolf / Bear) -->
-          <a id="profile-coclosing-btn" href="https://line.me/R/ti/p/@siwasup" target="_blank" class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-bold text-[11px] flex items-center justify-center gap-1.5 shadow hover:brightness-105 transition">
-            <span>🤝 ขอทีมพี่เลี้ยงสาย Eagle/Lion ช่วยประกบปิดดีล (LINE)</span>
-          </a>
-
-          <!-- 📊 Collapsible Rules & Scarcity Solution (For Team Presentation) -->
-          <div class="pt-1">
-            <button type="button" onclick="document.getElementById('profile-present-rules-panel').classList.toggle('hidden')" class="w-full py-1.5 px-2.5 rounded-xl bg-slate-950/90 hover:bg-slate-900 border border-slate-700 text-amber-300 font-bold text-[10px] flex items-center justify-between cursor-pointer transition">
-              <span>📋 กติการางวัล & ระบบคิวป้องกันรางวัลไม่พอ (สำหรับ Present ทีม)</span>
-              <span>▾</span>
-            </button>
-            <div id="profile-present-rules-panel" class="hidden mt-1.5 p-2.5 rounded-xl bg-slate-950/95 border border-amber-500/30 text-[9.5px] text-slate-200 space-y-2 leading-relaxed">
+          <!-- Total Points Big Pill -->
+          <div class="bg-gradient-to-r from-[#800000] via-[#990000] to-[#730000] text-white p-2.5 rounded-xl shadow-xs flex items-center justify-between px-3">
+            <div class="flex items-center gap-2">
+              <i data-lucide="award" class="w-5 h-5 text-amber-300"></i>
               <div>
-                <strong class="text-amber-300">1. แก้ปัญหารางวัล/Lead ไม่พอเมื่อคนเลื่อนชั้นเยอะ (2-Layer Reward System):</strong>
-                <div class="pl-2 mt-0.5 space-y-0.5 text-slate-300">
-                  <div>• <strong>รางวัลที่ได้ 100% ทันที (ไม่จำกัดจำนวน):</strong> ตรา 3D ทองคำบนนามบัตร & ลิงก์แชร์ทรัพย์ (เพิ่มความน่าเชื่อถือลูกค้า) + สิทธิ์เห็นทรัพย์ใหม่ล่วงหน้า (Early Access 12–24 ชม.)</div>
-                  <div>• <strong>รางวัลที่มีโควตาจำกัด (Lead ลูกค้าจากเพจ):</strong> ใช้ระบบ <strong>"ตั๋วเข้าคิวหมุนเวียน (Round-Robin VIP Queue)"</strong> ปลดล็อกสาย = ได้สิทธิ์เข้าแถวรับ Lead ตามลำดับคะแนนความขยันรายสัปดาห์ (แจกตามจำนวน Lead จริง บริษัทไม่ต้องแบกภาระเกินตัว)</div>
-                </div>
-              </div>
-              <div class="border-t border-slate-800 pt-1.5">
-                <strong class="text-emerald-300">2. ระบบประกบคู่ Co-Closing (ต้องกดสมัครใจ Opt-In เท่านั้น):</strong>
-                <div class="pl-2 mt-0.5 space-y-0.5 text-slate-300">
-                  <div>• <strong>🐺 หมาป่า (ขยันแต่ยังปิดดีลไม่คม):</strong> กดปุ่มขอพี่เลี้ยงช่วยเจรจา/ดันสินเชื่อ แทนที่จะปล่อยลูกค้าหลุดมือ (ได้ 0 บาท)</div>
-                  <div>• <strong>🦁 สิงห์ / 🦅 อินทรี:</strong> ต้องกดปุ่ม <strong>"🟢 สมัครใจรับเคส"</strong> ก่อน จึงจะถูกจัดคิวให้ประกบคู่ เมื่อปิดโอนสำเร็จได้ทั้ง <strong>ส่วนแบ่งค่าคอมฯ + แต้ม Mentor Bonus + สิทธิ์ลัดคิว Lead</strong></div>
-                </div>
+                <div class="text-[10px] text-red-200">คะแนนสะสมรวมทั้งหมด</div>
+                <div class="font-bold text-xs">จัดอันดับใน Leaderboard</div>
               </div>
             </div>
+            <div id="profile-total-pts" class="text-2xl font-black font-mono text-amber-300">285</div>
           </div>
 
-          <!-- Admin-Only Strategy Note for Bua -->
-          <div id="profile-admin-strategy-note" class="hidden p-2 rounded-xl bg-amber-500/15 border border-amber-400/40 text-[10.5px] text-amber-200">
-            <strong>💡 คำแนะนำเชิงบริหารสำหรับบัว (Admin Only):</strong> <span id="profile-animal-action"></span>
-          </div>
-        </div>
-
-        <!-- 2-Track Points Scorecard Grid -->
-        <div class="grid grid-cols-2 gap-2 text-center text-xs">
-          <!-- Activity Track -->
-          <div class="bg-emerald-50/70 p-2.5 rounded-xl border border-emerald-200/80 space-y-0.5">
-            <div class="text-[10px] text-emerald-700 font-bold flex items-center justify-center gap-1">
-              <span>🎪 คะแนนกิจกรรม</span>
-            </div>
-            <div id="profile-activity-pts" class="text-xl font-black text-emerald-800 font-mono">145</div>
-            <div class="text-[9px] text-emerald-600">ประชุม / ไวนิล / แชร์</div>
+          <!-- Quick Action Buttons -->
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <button type="button" onclick="closeMyProfileModal(); openMeetingCheckinModal();" class="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-bold py-2 px-2 rounded-xl text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer">
+              <i data-lucide="qr-code" class="w-3.5 h-3.5 text-amber-600"></i>
+              <span>เช็คชื่อเข้าประชุม (+10)</span>
+            </button>
+            <button type="button" onclick="closeMyProfileModal(); openVinylProofModal();" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold py-2 px-2 rounded-xl text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer">
+              <i data-lucide="camera" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <span>ส่งภาพติดป้าย GPS (+15)</span>
+            </button>
           </div>
 
-          <!-- Performance Track -->
-          <div class="bg-blue-50/70 p-2.5 rounded-xl border border-blue-200/80 space-y-0.5">
-            <div class="text-[10px] text-blue-700 font-bold flex items-center justify-center gap-1">
-              <span>💰 คะแนนผลงาน</span>
-            </div>
-            <div id="profile-perf-pts" class="text-xl font-black text-blue-800 font-mono">620</div>
-            <div class="text-[9px] text-blue-600">ฝากทรัพย์ / จอง / ปิดโอน</div>
-          </div>
-        </div>
-
-        <!-- Total Points Big Pill -->
-        <div class="bg-gradient-to-r from-[#800000] via-[#990000] to-[#730000] text-white p-2.5 rounded-xl shadow-xs flex items-center justify-between px-3">
-          <div class="flex items-center gap-2">
-            <i data-lucide="award" class="w-5 h-5 text-amber-300"></i>
-            <div>
-              <div class="text-[10px] text-red-200">คะแนนสะสมรวมทั้งหมด</div>
-              <div class="font-bold text-xs">จัดอันดับใน Leaderboard</div>
-            </div>
-          </div>
-          <div id="profile-total-pts" class="text-2xl font-black font-mono text-amber-300">765</div>
-        </div>
-
-        <!-- Quick Action Buttons -->
-        <div class="grid grid-cols-2 gap-2 pt-1">
-          <button type="button" onclick="closeMyProfileModal(); openMeetingCheckinModal();" class="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-bold py-2 px-2 rounded-xl text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-            <i data-lucide="qr-code" class="w-3.5 h-3.5 text-amber-600"></i>
-            <span>เช็คชื่อเข้าประชุม (+10)</span>
-          </button>
-          <button type="button" onclick="closeMyProfileModal(); openVinylProofModal();" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold py-2 px-2 rounded-xl text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-            <i data-lucide="camera" class="w-3.5 h-3.5 text-emerald-600"></i>
-            <span>ส่งภาพติดป้าย GPS (+15)</span>
+          <!-- View Full Leaderboard Link -->
+          <button type="button" onclick="closeMyProfileModal(); openAgentLeaderboardModal();" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer">
+            <i data-lucide="trophy" class="w-3.5 h-3.5 text-amber-600"></i>
+            <span>ดูอันดับในทำเนียบตัวแทน (Leaderboard 125)</span>
           </button>
         </div>
-
-        <!-- View Full Leaderboard Link -->
-        <button type="button" onclick="closeMyProfileModal(); openAgentLeaderboardModal();" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all active:scale-95">
-          <i data-lucide="trophy" class="w-3.5 h-3.5 text-amber-600"></i>
-          <span>ดูอันดับในทำเนียบตัวแทน (Leaderboard 125)</span>
-        </button>
       </div>
     </div>
 
