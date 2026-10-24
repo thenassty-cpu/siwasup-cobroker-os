@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="manifest.json">
+  <meta property="og:title" content="Siwasup Co-Broker OS — ศิวาทรัพย์ แอสเซท">
+  <meta property="og:description" content="ศูนย์รวมทรัพย์สินรอการขาย (NPA) และบ้านรีโนเวทคุณภาพมาตรฐานธนาคาร ติดต่อนัดชมทรัพย์และรับคำปรึกษาผ่านตัวแทนผู้ดูแล">
+  <meta property="og:image" content="https://thenassty-cpu.github.io/siwasup-cobroker-os/assets/icons/icon-512.png">
+  <meta property="og:type" content="website">
   <meta name="theme-color" content="#171717">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -468,7 +472,7 @@
         <div class="flex items-center gap-2 truncate">
           <span class="text-[#C2A460] font-bold">✦</span>
           <p id="client-top-banner-text" class="truncate text-[11px] sm:text-xs">
-            ดูแลการเข้าชมโดย <span id="client-banner-agent-name" class="text-[#E5C985] font-semibold">คุณธนภัทร</span> <span id="client-banner-agent-id" class="text-neutral-400 font-mono text-[10px] sm:text-[11px]">(ID: SW-042)</span>
+            ดูแลการเข้าชมโดย <span id="client-banner-agent-name" class="text-[#E5C985] font-semibold">ตัวแทนผู้ดูแล</span> <span id="client-banner-agent-id" class="text-neutral-400 font-mono text-[10px] sm:text-[11px]">(Partner Protected)</span>
             <span class="hidden sm:inline text-neutral-400">• ที่ปรึกษาอสังหาริมทรัพย์รับรองโดย ศิวาทรัพย์</span>
           </p>
         </div>
@@ -4354,17 +4358,60 @@
 
     function getAgentProfile(refId) {
       const cleanId = (refId || '').trim();
+
+      // 1. Check in custom mock profiles first if exact match
       if (AGENT_PROFILES[cleanId]) return AGENT_PROFILES[cleanId];
-      // Dynamic fallback for any custom ref ID
+
+      // 2. 🏆 Look up in the official 125 Siwasup Agents roster (siwasup_agents.js)
+      if (window.SiwasupAgents && typeof window.SiwasupAgents.find === 'function') {
+        const found = window.SiwasupAgents.find(cleanId);
+        if (found) {
+          const cleanName = (found.name || '').replace(/^(นาย|นางสาว|นาง)\s*/, '');
+          const firstName = cleanName.split(' ')[0] || cleanName;
+          const shortName = found.nickname ? `คุณ${firstName} (${found.nickname})` : `คุณ${firstName}`;
+
+          // Dual-Display Mapping: Convert internal rank to luxury public title
+          let publicTitle = 'Verified Property Consultant';
+          let badgeClass = 'bg-neutral-900 text-[#C2A460] border border-neutral-700';
+
+          const tierId = (found.tierId || '').toLowerCase();
+          if (tierId === 'diamond') {
+            publicTitle = 'Master Exclusive Partner';
+            badgeClass = 'bg-gradient-to-r from-[#8B0000] to-[#5A0000] text-[#C2A460] border border-[#C2A460]';
+          } else if (tierId === 'gold') {
+            publicTitle = 'Executive Asset Director';
+            badgeClass = 'bg-[#C2A460] text-neutral-950 font-bold border border-[#E5CF94]';
+          } else if (tierId === 'silver') {
+            publicTitle = 'Senior Property Specialist';
+            badgeClass = 'bg-neutral-900 text-[#C2A460] border border-[#C2A460]/70';
+          }
+
+          // Use default professional avatar placeholder if none
+          const defaultAvatar = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
+
+          return {
+            agentId: found.code,
+            name: found.name,
+            shortName: shortName,
+            tier: found.tierId || 'active',
+            publicTitle: publicTitle,
+            badgeClass: badgeClass,
+            avatar: found.avatar || defaultAvatar,
+            phone: found.phone || '094-462-9796'
+          };
+        }
+      }
+
+      // 3. Dynamic Fallback for any unknown code
       return {
-        agentId: cleanId || 'SW-042',
-        name: cleanId ? `คุณธนภัทร (${cleanId})` : 'คุณธนภัทร วงศ์สุวรรณ',
-        shortName: cleanId ? `คุณธนภัทร` : 'คุณธนภัทร',
+        agentId: cleanId || 'S01',
+        name: cleanId ? `ตัวแทนรหัส ${cleanId}` : 'ศูนย์บริการศิวาทรัพย์',
+        shortName: cleanId ? `ตัวแทน ${cleanId}` : 'ศูนย์บริการ',
         tier: 'wolf',
         publicTitle: 'Verified Property Consultant',
         badgeClass: 'bg-neutral-900 text-[#C2A460] border border-neutral-700',
         avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
-        phone: '089-452-9796'
+        phone: '094-462-9796'
       };
     }
 
