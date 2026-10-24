@@ -4770,6 +4770,17 @@ function getStoredAgentRef() {
       }
       if (window.lucide) { lucide.createIcons(); }
     });
+        // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then((reg) => {
+          console.log('Siwasup PWA Service Worker Registered:', reg.scope);
+        }).catch((err) => {
+          console.log('SW registration note:', err);
+        });
+      });
+    }
+
     if (window.lucide) { lucide.createIcons(); }
   </script>
   <!-- 🚀 Floating Back to Top Button (Digital Luxury Frosted Glass) -->
