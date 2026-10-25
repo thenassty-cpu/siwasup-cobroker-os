@@ -311,6 +311,134 @@
             border-left: 3px solid #C2A460;
         }
         .footer-note strong { color: #dee2e6; }
+
+        /* 4-Phase Roadmap Cards */
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .phase-card {
+            background: #181c20;
+            border: 1px solid #2d3339;
+            border-radius: 14px;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: all 0.25s ease-in-out;
+        }
+        .phase-card:hover {
+            transform: translateY(-3px);
+        }
+        .phase-card.phase-done {
+            border-color: rgba(16, 185, 129, 0.6);
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.12) 0%, #181c20 100%);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+        }
+        .phase-card.phase-next {
+            border-color: rgba(194, 164, 96, 0.7);
+            background: linear-gradient(180deg, rgba(194, 164, 96, 0.14) 0%, #181c20 100%);
+            box-shadow: 0 4px 20px rgba(194, 164, 96, 0.18);
+        }
+        .phase-card.phase-future {
+            border-color: rgba(59, 130, 246, 0.5);
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.08) 0%, #181c20 100%);
+        }
+        .phase-card.phase-scale {
+            border-color: rgba(139, 92, 246, 0.5);
+            background: linear-gradient(180deg, rgba(139, 92, 246, 0.08) 0%, #181c20 100%);
+        }
+        .phase-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .phase-tag {
+            font-size: 10px;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 9999px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .phase-badge-done {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.5);
+        }
+        .phase-badge-next {
+            background: rgba(194, 164, 96, 0.25);
+            color: #F3E3B6;
+            border: 1px solid rgba(194, 164, 96, 0.6);
+        }
+        .phase-badge-future {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+        .phase-badge-scale {
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+            border: 1px solid rgba(139, 92, 246, 0.4);
+        }
+        .phase-time {
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        .phase-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #FFFFFF;
+            margin-bottom: 6px;
+            line-height: 1.35;
+        }
+        .phase-desc {
+            font-size: 12px;
+            color: #94a3b8;
+            line-height: 1.45;
+            margin-bottom: 14px;
+        }
+        .phase-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 16px 0;
+            font-size: 11.5px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        .phase-list li {
+            margin-bottom: 6px;
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+        .phase-list span.check {
+            color: #10b981;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .phase-list span.bullet {
+            color: #C2A460;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .phase-footer {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding-top: 10px;
+            font-size: 11.5px;
+            font-weight: bold;
+        }
+        .phase-footer.done-text { color: #34d399; }
+        .phase-footer.next-text { color: #E5C985; }
+        .phase-footer.future-text { color: #93c5fd; }
+        .phase-footer.scale-text { color: #c4b5fd; }
     </style>
 </head>
 <body>
@@ -540,7 +668,100 @@
         </div>
     </div>
 
-    <!-- Footer Note -->
+    <!-- Section 4: 4-Phase Strategic Roadmap & Timeline -->
+    <div class="section-title">
+        <span>🗺️ แผนยุทธศาสตร์ 4 เฟส & กรอบเวลาการพัฒนา (4-Phase Strategic Roadmap & Timeline)</span>
+        <span class="tag">Execution Milestones</span>
+    </div>
+
+    <div class="roadmap-grid">
+        <!-- Phase 1 -->
+        <div class="phase-card phase-done">
+            <div>
+                <div class="phase-header">
+                    <span class="phase-tag phase-badge-done">PHASE 1 • เสร็จสมบูรณ์ 100%</span>
+                    <span class="phase-time">⏱️ 1 - 2 สัปดาห์</span>
+                </div>
+                <h3 class="phase-title">Quick-Win & Digital Luxury Hub</h3>
+                <div class="phase-desc">วางรากฐานหน้าร้านระดับพรีเมียม สไตล์ Digital Luxury และเครื่องมืออำนวยความสะดวกเอเจนต์ครบวงจร</div>
+                <ul class="phase-list">
+                    <li><span class="check">✓</span> แค็ตตาล็อกสืบค้นทรัพย์ Real-time 173 ทรัพย์ (&lt; 0.1s)</li>
+                    <li><span class="check">✓</span> โหมดลูกค้า (Client Mode) ซ่อนค่าคอมมิชชัน 100%</li>
+                    <li><span class="check">✓</span> ระบบสร้างป้ายไวนิล HD หน้าบ้านอัตโนมัติ</li>
+                    <li><span class="check">✓</span> Instant Bundle &amp; Smart Share แชร์เข้า LINE ทันที</li>
+                    <li><span class="check">✓</span> นโยบายคุ้มครองข้อมูลส่วนบุคคล PDPA Consent</li>
+                    <li><span class="check">✓</span> ระบบจำลองกุญแจ NPA &amp; Fail-Safe Override (#KEY-2026-089)</li>
+                </ul>
+            </div>
+            <div class="phase-footer done-text">
+                <span>🚀 สถานะ: เสร็จ 100% พร้อมเปิด Soft Launch ทันที</span>
+            </div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="phase-card phase-next">
+            <div>
+                <div class="phase-header">
+                    <span class="phase-tag phase-badge-next">PHASE 2 • NEXT SPRINT</span>
+                    <span class="phase-time">⏱️ 2 - 3 สัปดาห์</span>
+                </div>
+                <h3 class="phase-title">LINE OA Integration &amp; Cloud DB</h3>
+                <div class="phase-desc">เชื่อมโยงระบบเข้ากับ LINE Official Account และฐานข้อมูลคลาวด์สำหรับตัดสต็อกเรียลไทม์</div>
+                <ul class="phase-list">
+                    <li><span class="bullet">▸</span> ติดตั้ง Rich Menu 6 ช่องหรูบน LINE OA (@siwasup)</li>
+                    <li><span class="bullet">▸</span> เชื่อมต่อ Supabase Cloud Database ตัดสต็อกข้ามเครื่อง</li>
+                    <li><span class="bullet">▸</span> ระบบอัปโหลดสลิปเงินมัดจำ &amp; 1-Click Approval ของบัว</li>
+                    <li><span class="bullet">▸</span> ระบบแจ้งเตือนอัตโนมัติเมื่อมีทรัพย์หลุดจอง</li>
+                    <li><span class="bullet">▸</span> ระบบ Ghost Lead Profiling บันทึกลีดส่งเข้าแชต</li>
+                </ul>
+            </div>
+            <div class="phase-footer next-text">
+                <span>⏳ เริ่มทันที: หลังจบประชุมเคาะ Flow &amp; ได้สิทธิ์ LINE</span>
+            </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="phase-card phase-future">
+            <div>
+                <div class="phase-header">
+                    <span class="phase-tag phase-badge-future">PHASE 3 • MID-TERM</span>
+                    <span class="phase-time">⏱️ 3 - 4 สัปดาห์</span>
+                </div>
+                <h3 class="phase-title">Bank NPA Master &amp; Key Custody</h3>
+                <div class="phase-desc">นำเข้าพอร์ตทรัพย์ NPA ธนาคารล็อตใหญ่ และยกระดับระบบบริหารกุญแจหน้างานจริง</div>
+                <ul class="phase-list">
+                    <li><span class="bullet">▸</span> นำเข้า Master Catalog พอร์ต NPA จากพี่ลิลลี่ &amp; ธนาคาร</li>
+                    <li><span class="bullet">▸</span> ระบบติดตาม Messenger ส่งกุญแจด้วย GPS Live Tracking</li>
+                    <li><span class="bullet">▸</span> ระบบแบ่งโซน Home Area ป้องกันเอเจนต์แย่งงาน</li>
+                    <li><span class="bullet">▸</span> กลไกจับคู่พี่เลี้ยง Co-Closing อัตโนมัติ (Eagle/Lion)</li>
+                </ul>
+            </div>
+            <div class="phase-footer future-text">
+                <span>🎯 เป้าหมาย: ขยายพอร์ตทรัพย์ธนาคารเต็มสูบ</span>
+            </div>
+        </div>
+
+        <!-- Phase 4 -->
+        <div class="phase-card phase-scale">
+            <div>
+                <div class="phase-header">
+                    <span class="phase-tag phase-badge-scale">PHASE 4 • FULL SCALE</span>
+                    <span class="phase-time">⏱️ 4 - 6 สัปดาห์</span>
+                </div>
+                <h3 class="phase-title">Investor Ecosystem &amp; PropTech</h3>
+                <div class="phase-desc">ต่อยอดสู่แพลตฟอร์มการลงทุนอสังหาริมทรัพย์ครบวงจร และปัญญาประดิษฐ์แนะนำทรัพย์</div>
+                <ul class="phase-list">
+                    <li><span class="bullet">▸</span> ระบบ Flash Deals &amp; Co-Investment สำหรับนักลงทุน</li>
+                    <li><span class="bullet">▸</span> เครื่องคำนวณวงเงินกู้ &amp; AI แนะนำทรัพย์เฉพาะบุคคล 24 ชม.</li>
+                    <li><span class="bullet">▸</span> ระบบ Gamification แข่งขันชิงรางวัลประจำไตรมาส</li>
+                    <li><span class="bullet">▸</span> ขยายระบบรองรับเครือข่ายเอเจนต์ระดับประเทศ</li>
+                </ul>
+            </div>
+            <div class="phase-footer scale-text">
+                <span>💎 วิสัยทัศน์: PropTech Platform เบอร์หนึ่ง</span>
+            </div>
+        </div>
+    </div>
     <div class="footer-note">
         <strong>💡 สรุปการเตรียมตัวสำหรับวันจันทร์:</strong><br>
         • <strong>กรณีต่ออินเทอร์เน็ต:</strong> ส่งลิงก์ <code>https://thenassty-cpu.github.io/siwasup-cobroker-os/launchpad.html</code> ให้กูลเปิดใน Chrome หรือ Edge บนโน้ตบุ๊ก<br>
