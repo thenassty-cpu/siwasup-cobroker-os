@@ -439,6 +439,109 @@
         .phase-footer.next-text { color: #E5C985; }
         .phase-footer.future-text { color: #93c5fd; }
         .phase-footer.scale-text { color: #c4b5fd; }
+
+        /* Perks Matrix Grid */
+        .perks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 14px;
+            margin: 16px 0 24px 0;
+        }
+        .perk-card {
+            background: #181c20;
+            border: 1px solid #2d3339;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+        }
+        .perk-card:hover {
+            border-color: #C2A460;
+            background: #1e2329;
+            transform: translateY(-2px);
+        }
+        .perk-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .perk-icon-wrap {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: #0d0f12;
+            border: 1px solid rgba(194,164,96,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .perk-icon-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .perk-tier-title {
+            font-size: 13.5px;
+            font-weight: bold;
+            color: #FFFFFF;
+        }
+        .perk-tier-sub {
+            font-size: 11px;
+            color: #C2A460;
+        }
+        .perk-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+            color: #cbd5e1;
+            line-height: 1.55;
+        }
+        .perk-list li {
+            margin-bottom: 6px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .perk-list li span.bullet {
+            color: #C2A460;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Ideation Box for Gool & Bua */
+        .ideation-box {
+            background: linear-gradient(135deg, #1f1b13 0%, #15181b 100%);
+            border: 1px dashed rgba(194, 164, 96, 0.5);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 16px 0 28px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+        .ideation-box .icon {
+            font-size: 26px;
+            line-height: 1;
+        }
+        .ideation-box h4 {
+            font-size: 14px;
+            color: #F3E3B6;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+        .ideation-box p {
+            font-size: 12.5px;
+            color: #a0aec0;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
@@ -626,6 +729,141 @@
             <div class="stage-name">🔱 GRYPHON (กริฟฟิน)</div>
             <div class="stage-client-title">Sovereign Partner</div>
             <span class="stage-badge" style="background: rgba(139,0,0,0.4); color: #ffcccc;">หุ้นส่วนยุทธศาสตร์</span>
+        </div>
+    </div>
+
+    <!-- Sub-Section: Stage Privileges & Rewards Matrix -->
+    <div style="margin-top: 24px; margin-bottom: 8px;">
+        <span style="font-size: 14px; font-weight: bold; color: #E5C985; display: inline-flex; align-items: center; gap: 8px;">
+            🎁 สิทธิประโยชน์และรางวัลประจำตำแหน่ง (Tier Privileges &amp; Rewards Baseline)
+        </span>
+    </div>
+
+    <div class="perks-grid">
+        <!-- Perk 1: Bear -->
+        <div class="perk-card">
+            <div class="perk-card-header">
+                <div class="perk-icon-wrap">
+                    <img src="assets/badges/bear_crest.jpg" alt="Bear">
+                </div>
+                <div>
+                    <div class="perk-tier-title">🐻 BEAR (หมี)</div>
+                    <div class="perk-tier-sub">Certified Agent • รากฐาน</div>
+                </div>
+            </div>
+            <ul class="perk-list">
+                <li><span class="bullet">▸</span> <strong>โควตาพิมพ์ป้ายไวนิล HD ฟรี:</strong> เจนป้ายหน้าบ้านพร้อมเบอร์เอเจนต์ฟรี 3 ป้ายแรก</li>
+                <li><span class="bullet">▸</span> <strong>White-Label Web Portal:</strong> นำเสนอทรัพย์ซ่อนค่าคอมมิชชัน ล็อกลีด 60 วัน</li>
+                <li><span class="bullet">▸</span> <strong>Siwasup Academy Pass:</strong> เข้าเรียนคอร์สพื้นฐานสัญญา &amp; ยื่นกู้ฟรี</li>
+                <li><span class="bullet">▸</span> <strong>Agent LINE Support:</strong> สิทธิ์เข้ากลุ่มซัพพอร์ตเอเจนต์ทางการของบริษัท</li>
+            </ul>
+        </div>
+
+        <!-- Perk 2: Wolf -->
+        <div class="perk-card">
+            <div class="perk-card-header">
+                <div class="perk-icon-wrap">
+                    <img src="assets/badges/wolf_crest.jpg" alt="Wolf">
+                </div>
+                <div>
+                    <div class="perk-tier-title">🐺 WOLF (หมาป่า)</div>
+                    <div class="perk-tier-sub">Area Specialist • ทีมเวิร์ก</div>
+                </div>
+            </div>
+            <ul class="perk-list">
+                <li><span class="bullet">▸</span> <strong>Co-Broker Network Access:</strong> สิทธิ์เข้าถึงพอร์ตทรัพย์ Co-Broker ข้ามโซนทั่วเครือข่าย</li>
+                <li><span class="bullet">▸</span> <strong>เบิกกุญแจ NPA มาตรฐาน:</strong> สิทธิ์ยื่นเบิกกุญแจเข้าชมทรัพย์ (SLA 3 ชม.) กับพี่ลิลลี่</li>
+                <li><span class="bullet">▸</span> <strong>ส่วนลดสื่อการตลาด:</strong> สิทธิ์สั่งผลิตป้าย เสื้อยูนิฟอร์ม และของพรีเมียมในราคาทุน</li>
+                <li><span class="bullet">▸</span> <strong>สิทธิ์ขอจับคู่ Co-Closing:</strong> ขอดึงตัวแทนรุ่นใหญ่ (Eagle/Lion) มาช่วยประกบปิดเคส</li>
+            </ul>
+        </div>
+
+        <!-- Perk 3: Lion -->
+        <div class="perk-card" style="border-color: rgba(194,164,96,0.6); background: linear-gradient(180deg, rgba(194,164,96,0.08) 0%, #181c20 100%);">
+            <div class="perk-card-header">
+                <div class="perk-icon-wrap" style="border-color: #E5C985;">
+                    <img src="assets/badges/lion_crest.jpg" alt="Lion">
+                </div>
+                <div>
+                    <div class="perk-tier-title" style="color: #F3E3B6;">🦁 LION (สิงโต)</div>
+                    <div class="perk-tier-sub">Territory Leader • คุมโซน</div>
+                </div>
+            </div>
+            <ul class="perk-list">
+                <li><span class="bullet">▸</span> <strong>Territory Priority:</strong> สิทธิ์เห็นและจับจองทรัพย์ใหม่ในโซนของตนเองก่อนใคร 24 ชม.</li>
+                <li><span class="bullet">▸</span> <strong>กุญแจ NPA Fast-Track:</strong> ลดเวลาอนุมัติเบิกกุญแจ 50% ด้วย Trust Score 80+</li>
+                <li><span class="bullet">▸</span> <strong>งบสนับสนุนการตลาด:</strong> บริษัทร่วมสมทบงบยิง Ads โปรโมตทรัพย์เด่นในโซน</li>
+                <li><span class="bullet">▸</span> <strong>เหรียญเกียรติยศ Lion Medallion:</strong> ตราสัญลักษณ์ 3D ติดโพรไฟล์ระดับผู้นำ</li>
+            </ul>
+        </div>
+
+        <!-- Perk 4: Falcon -->
+        <div class="perk-card">
+            <div class="perk-card-header">
+                <div class="perk-icon-wrap">
+                    <img src="assets/badges/falcon_crest.jpg" alt="Falcon">
+                </div>
+                <div>
+                    <div class="perk-tier-title">⚡ FALCON (เหยี่ยว)</div>
+                    <div class="perk-tier-sub">Speed Closer • ความเร็วสูง</div>
+                </div>
+            </div>
+            <ul class="perk-list">
+                <li><span class="bullet">▸</span> <strong>Flash Liquidation Access:</strong> รับแจ้งเตือนพอร์ตทรัพย์หลุดจำนองด่วนพิเศษของแบงก์</li>
+                <li><span class="bullet">▸</span> <strong>Priority Key Dispatch:</strong> ได้คิว Messenger วิ่งส่งกุญแจด่วนพิเศษลำดับแรก</li>
+                <li><span class="bullet">▸</span> <strong>Speed Closer of the Quarter:</strong> สิทธิ์ชิงรางวัลพิเศษสำหรับตัวแทนปิดเคสไวสุด</li>
+                <li><span class="bullet">▸</span> <strong>สิทธิ์ออกบูธแฟร์อสังหาฯ:</strong> ได้รับเลือกเป็นตัวแทนร่วมบูธงานมหกรรมบ้านธนาคาร</li>
+            </ul>
+        </div>
+
+        <!-- Perk 5: Eagle -->
+        <div class="perk-card" style="border-color: rgba(194,164,96,0.6); background: linear-gradient(180deg, rgba(194,164,96,0.08) 0%, #181c20 100%);">
+            <div class="perk-card-header">
+                <div class="perk-icon-wrap" style="border-color: #E5C985;">
+                    <img src="assets/badges/eagle_crest.jpg" alt="Eagle">
+                </div>
+                <div>
+                    <div class="perk-tier-title" style="color: #F3E3B6;">👑 EAGLE (อินทรี)</div>
+                    <div class="perk-tier-sub">Master Consultant • พี่เลี้ยง</div>
+                </div>
+            </div>
+            <ul class="perk-list">
+                <li><span class="bullet">▸</span> <strong>Mentorship Overriding:</strong> รับส่วนแบ่งพิเศษ (0.5% - 1%) เมื่อช่วยโค้ชชิ่งปิดเคสให้น้องๆ</li>
+                <li><span class="bullet">▸</span> <strong>VIP Bank Direct Line:</strong> สายด่วนประสานงานผู้จัดการสินเชื่อสำนักงานใหญ่โดยตรง</li>
+                <li><span class="bullet">▸</span> <strong>Master Consultant Seal:</strong> ตราประทับรับรองที่ปรึกษาอาวุโสบนสื่อประชาสัมพันธ์</li>
+                <li><span class="bullet">▸</span> <strong>สิทธิ์เป็นวิทยากรรับเชิญ:</strong> ร่วมสอนและสร้างตัวตนในคอร์สสัมมนาของบริษัท</li>
+            </ul>
+        </div>
+
+        <!-- Perk 6: Gryphon -->
+        <div class="perk-card" style="border-color: #8B0000; background: linear-gradient(180deg, rgba(139,0,0,0.18) 0%, #181c20 100%);">
+            <div class="perk-card-header">
+                <div class="perk-icon-wrap" style="border-color: #8B0000;">
+                    <img src="assets/badges/gryphon_crest.jpg" alt="Gryphon">
+                </div>
+                <div>
+                    <div class="perk-tier-title" style="color: #ffcccc;">🔱 GRYPHON (กริฟฟิน)</div>
+                    <div class="perk-tier-sub" style="color: #ff8080;">Sovereign Partner • หุ้นส่วน</div>
+                </div>
+            </div>
+            <ul class="perk-list">
+                <li><span class="bullet">▸</span> <strong>Co-Investment Pool:</strong> สิทธิ์ร่วมลงขันและปันผลพอร์ตรีโนเวทผลตอบแทนสูง</li>
+                <li><span class="bullet">▸</span> <strong>Advisory Board Seat:</strong> สิทธิ์เข้าร่วมประชุมบอร์ดผู้บริหาร กำหนดทิศทางองค์กร</li>
+                <li><span class="bullet">▸</span> <strong>Sovereign Trophy &amp; Gold Ring:</strong> ถ้วยรางวัลเกียรติยศสูงสุดและแหวนทองคำแท้ประจำตำแหน่ง</li>
+                <li><span class="bullet">▸</span> <strong>Franchise Hub Rights:</strong> สิทธิ์เปิดศูนย์ประสานงานศิวาทรัพย์ประจำจังหวัด</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Open Ideation Box for Gool & Bua -->
+    <div class="ideation-box">
+        <span class="icon">💡</span>
+        <div>
+            <h4>เปิดเวทีระดมไอเดีย (Ideation Space for Gool &amp; Bua):</h4>
+            <p>
+                สิทธิประโยชน์ข้างต้นเป็น <strong>"โครงสร้างเกณฑ์มาตรฐาน (Baseline Framework)"</strong> เพื่อให้เห็นขั้นบันไดคุณค่าที่ชัดเจน<br>
+                ในที่ประชุมวันนี้ <strong>กูลและบัวสามารถเสนอของรางวัลและสิทธิพิเศษเสริม</strong> ได้อย่างอิสระ เช่น แพ็กเกจท่องเที่ยวต่างประเทศประจำปี, คูปองเข้าเรียนคอร์สครูเจี๊ยบ, งบตัดสูทแบรนด์ศิวาทรัพย์, หรือโควตายิงสปอนเซอร์ช่อง TikTok/Facebook ของตัวแทน เพื่อสร้างสีสันในการขับเคลื่อนทีมงาน!
+            </p>
         </div>
     </div>
 
