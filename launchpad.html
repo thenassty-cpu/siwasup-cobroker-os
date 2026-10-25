@@ -3,87 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Siwasup Co-Broker OS - Quick Presentation Launcher</title>
+    <title>Siwasup Co-Broker OS - Executive Presentation Launchpad</title>
     <link rel="icon" type="image/png" href="assets/siwasup_logo.png">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Tahoma', sans-serif;
-            background-color: #0d0f12;
+            background-color: #0b0d0f;
             color: #F8F9FA;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 24px;
+            justify-content: flex-start;
+            padding: 32px 16px;
         }
         .container {
-            max-width: 900px;
+            max-width: 1060px;
             width: 100%;
-            background: #171717;
-            border: 1px solid rgba(194, 164, 96, 0.4);
-            border-radius: 16px;
-            padding: 32px 28px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(194, 164, 96, 0.15);
+            background: #14171a;
+            border: 1px solid rgba(194, 164, 96, 0.35);
+            border-radius: 20px;
+            padding: 36px 32px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(194, 164, 96, 0.12);
         }
         .header {
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 32px;
             border-bottom: 1px solid rgba(194, 164, 96, 0.2);
-            padding-bottom: 20px;
+            padding-bottom: 24px;
         }
         .badge {
             display: inline-block;
             background: rgba(194, 164, 96, 0.15);
             border: 1px solid #C2A460;
             color: #E6CA85;
-            font-size: 13px;
-            padding: 4px 14px;
+            font-size: 12.5px;
+            padding: 5px 16px;
             border-radius: 9999px;
             margin-bottom: 12px;
             font-weight: bold;
+            letter-spacing: 0.5px;
         }
         h1 {
             color: #FFFFFF;
-            font-size: 26px;
+            font-size: 28px;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
         }
         h1 span { color: #C2A460; }
         p.subtitle {
             color: #A3A3A3;
-            font-size: 14px;
+            font-size: 14.5px;
+            line-height: 1.5;
         }
+
+        /* Section Headings */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #FFFFFF;
+            margin: 28px 0 16px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
+        }
+        .section-title span.tag {
+            font-size: 11px;
+            font-weight: normal;
+            background: rgba(194, 164, 96, 0.2);
+            color: #E6CA85;
+            border: 1px solid rgba(194, 164, 96, 0.4);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        /* Grid */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
             gap: 16px;
             margin-bottom: 24px;
         }
         .card {
-            background: #212529;
-            border: 1px solid #343a40;
-            border-radius: 12px;
+            background: #1c2024;
+            border: 1px solid #2d3339;
+            border-radius: 14px;
             padding: 20px;
             text-decoration: none;
             color: #F8F9FA;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: all 0.2s ease-in-out;
+            transition: all 0.25s ease-in-out;
             position: relative;
             overflow: hidden;
         }
         .card:hover {
             border-color: #C2A460;
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5), 0 0 12px rgba(194,164,96,0.3);
-            background: #2a2e33;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.6), 0 0 16px rgba(194,164,96,0.3);
+            background: #23282e;
         }
         .card.featured {
-            border-color: rgba(194, 164, 96, 0.6);
-            background: linear-gradient(145deg, #22201b, #171717);
+            border-color: rgba(194, 164, 96, 0.65);
+            background: linear-gradient(145deg, #24221b, #181b1e);
+        }
+        .card.spotlight {
+            border-color: #8B0000;
+            background: linear-gradient(145deg, #281414, #181b1e);
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.25);
+        }
+        .card.spotlight:hover {
+            border-color: #C2A460;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.6), 0 0 20px rgba(194,164,96,0.4);
         }
         .card-header {
             display: flex;
@@ -114,13 +149,165 @@
             align-items: center;
             gap: 6px;
         }
-        .footer-note {
-            background: #111315;
+
+        /* 6 Sovereign Progression Timeline */
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin: 16px 0 28px 0;
+        }
+        .stage-box {
+            background: #181c20;
+            border: 1px solid #2d3339;
+            border-radius: 12px;
+            padding: 14px 10px;
+            text-align: center;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        .stage-box:hover {
+            border-color: #C2A460;
+            transform: translateY(-2px);
+            background: #20262c;
+        }
+        .stage-box.active-tier {
+            border-color: #C2A460;
+            background: linear-gradient(180deg, rgba(194,164,96,0.12) 0%, #181c20 100%);
+        }
+        .stage-img-wrap {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 8px auto;
+            border-radius: 50%;
+            background: #0d0f12;
+            border: 1.5px solid #C2A460;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+        .stage-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .stage-step {
+            font-size: 10.5px;
+            color: #C2A460;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stage-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #FFFFFF;
+            margin: 2px 0;
+        }
+        .stage-client-title {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+        .stage-badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.06);
+            color: #d1d5db;
+            display: inline-block;
+        }
+
+        /* Logic & Rationale Box */
+        .logic-card {
+            background: #181c20;
+            border: 1px solid #2d3339;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 24px;
+        }
+        .logic-columns {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+            margin-top: 14px;
+        }
+        .logic-col {
+            background: #111417;
+            border: 1px solid rgba(255,255,255,0.06);
             border-radius: 10px;
-            padding: 14px 18px;
+            padding: 16px;
+        }
+        .logic-col h4 {
+            font-size: 14px;
+            color: #E6CA85;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logic-col p {
+            font-size: 12.5px;
+            color: #a0aec0;
+            line-height: 1.5;
+        }
+
+        /* Showcase Banner */
+        .showcase-banner {
+            background: linear-gradient(135deg, #1f1414 0%, #171717 50%, #1a1711 100%);
+            border: 1px solid rgba(194, 164, 96, 0.5);
+            border-radius: 14px;
+            padding: 20px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+        .showcase-banner-info {
+            max-width: 620px;
+        }
+        .showcase-banner h3 {
+            font-size: 17px;
+            color: #FFFFFF;
+            margin-bottom: 4px;
+        }
+        .showcase-banner p {
+            font-size: 13px;
+            color: #cbd5e1;
+            line-height: 1.45;
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, #C2A460 0%, #8A6A1F 100%);
+            color: #0b0d0f;
+            font-weight: bold;
+            font-size: 13.5px;
+            padding: 12px 22px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(194, 164, 96, 0.35);
+        }
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(194, 164, 96, 0.5);
+            color: #000;
+        }
+
+        .footer-note {
+            background: #101316;
+            border-radius: 12px;
+            padding: 16px 20px;
             font-size: 12.5px;
             color: #868e96;
-            line-height: 1.5;
+            line-height: 1.55;
             border-left: 3px solid #C2A460;
         }
         .footer-note strong { color: #dee2e6; }
@@ -129,10 +316,29 @@
 <body>
 
 <div class="container">
+    <!-- Header -->
     <div class="header">
-        <span class="badge">PRESENTATION READY • MONDAY LIVE</span>
+        <span class="badge">EXECUTIVE LAUNCHPAD • MONDAY LIVE</span>
         <h1>SIWASUP <span>CO-BROKER OS</span></h1>
-        <p class="subtitle">1-Click Launchpad สำหรับเปิดพรีเซนต์บนเครื่องกูล (เปิดได้ทั้งแบบ Offline และ Cloud)</p>
+        <p class="subtitle">ศูนย์กลางเปิดงานนำเสนอสำหรับที่ประชุมผู้บริหารและทีมงาน (เปิดได้ทั้ง Online และ Offline จาก Flash Drive)</p>
+    </div>
+
+    <!-- Spotlight: 6 Sovereign Archetypes Showcase -->
+    <div class="showcase-banner">
+        <div class="showcase-banner-info">
+            <span style="font-size: 11px; background: rgba(139,0,0,0.6); color: #F3E3B6; border: 1px solid rgba(194,164,96,0.4); padding: 2px 10px; border-radius: 9999px; font-weight: bold;">NEW IDENTITY 2026</span>
+            <h3 style="margin-top: 6px;">👑 คลังอัตลักษณ์สัตว์สัญลักษณ์ 6 ตระกูล (Sovereign Showcase)</h3>
+            <p>สัมผัสงานดีไซน์ระดับ Digital Luxury: เหรียญตราทองคำแท้ 3D Master Crest, ตราสัญลักษณ์ Micro-Emblem SVG, และโมเดล Mascot หมุน 4 ทิศ (Turnaround) ครบทั้ง 6 สายวิชาชีพ</p>
+        </div>
+        <a href="Siwasup_Emblem_Showcase.html" class="btn-gold" target="_blank">
+            <span>สำรวจ Sovereign Showcase</span> ➔
+        </a>
+    </div>
+
+    <!-- Section 1: Navigation Grid -->
+    <div class="section-title">
+        <span>🏛️ โหมดการเปิดใช้งานระบบ (System Navigation)</span>
+        <span class="tag">6 Live Portals</span>
     </div>
 
     <div class="grid">
@@ -145,7 +351,7 @@
                         <div class="card-title">1. ระบบหลัก (Agent Hub)</div>
                     </div>
                 </div>
-                <div class="card-desc">หน้ารวมทรัพย์ ค้นหาแบบ Real-time, ระบบกรองราคา และปุ่ม Action ต่างๆ ตามสิทธิ์</div>
+                <div class="card-desc">หน้ารวมทรัพย์ Real-time, ระบบกรองราคา, ฟังก์ชัน Instant Search, และปุ่ม Action ตามสิทธิ์เอเจนต์</div>
             </div>
             <div class="card-action">เปิดหน้ารวมทรัพย์ ➔</div>
         </a>
@@ -182,7 +388,7 @@
         <a href="index.html?ref=S02" class="card" target="_blank">
             <div>
                 <div class="card-header">
-                    <span class="icon">💼</span>
+                    <span class="icon">🤝</span>
                     <div>
                         <div class="card-title">4. พอร์ทัลตัวแทน (Agent Referral)</div>
                     </div>
@@ -201,7 +407,7 @@
                         <div class="card-title">5. Luxury Brand Tokens</div>
                     </div>
                 </div>
-                <div class="card-desc">แดชบอร์ดระบบสีแบรนด์ Digital Luxury: Obsidian, Satin Gold, Deep Burgundy และสัตว์สัญลักษณ์</div>
+                <div class="card-desc">แดชบอร์ดระบบสีแบรนด์ Digital Luxury: Obsidian, Satin Gold, Deep Burgundy และแนวคิดการจัดวางโทนสี</div>
             </div>
             <div class="card-action">เปิดดูชุดสีแบรนด์ ➔</div>
         </a>
@@ -215,16 +421,130 @@
                         <div class="card-title">6. เอกสารสรุป & Roadmap</div>
                     </div>
                 </div>
-                <div class="card-desc">เอกสารสถาปัตยกรรมและสไลด์สรุป Phase 1 สำหรับใช้อ้างอิงในที่ประชุมวันจันทร์</div>
+                <div class="card-desc">เอกสารสถาปัตยกรรมและโครงร่างสไลด์สรุป Phase 1 สำหรับใช้อ้างอิงในที่ประชุมวันจันทร์</div>
             </div>
             <div class="card-action">เปิดเอกสาร Markdown ➔</div>
         </a>
     </div>
 
+    <!-- Section 2: Progression Hierarchy Flowchart -->
+    <div class="section-title">
+        <span>📈 ผังเส้นทางการเติบโตของตัวแทน (The 6 Sovereign Progression Stages)</span>
+        <span class="tag">Career Path</span>
+    </div>
+
+    <div class="timeline-grid">
+        <!-- Tier 1: Bear -->
+        <div class="stage-box">
+            <div class="stage-img-wrap">
+                <img src="assets/badges/bear_crest.jpg" alt="Bear Crest">
+            </div>
+            <div class="stage-step">Stage 1</div>
+            <div class="stage-name">🐻 BEAR (หมี)</div>
+            <div class="stage-client-title">Certified Agent</div>
+            <span class="stage-badge">ผู้สร้างรากฐาน</span>
+        </div>
+
+        <!-- Tier 2: Wolf -->
+        <div class="stage-box">
+            <div class="stage-img-wrap">
+                <img src="assets/badges/wolf_crest.jpg" alt="Wolf Crest">
+            </div>
+            <div class="stage-step">Stage 2</div>
+            <div class="stage-name">🐺 WOLF (หมาป่า)</div>
+            <div class="stage-client-title">Area Specialist</div>
+            <span class="stage-badge">นักล่าฝูง Co-Broker</span>
+        </div>
+
+        <!-- Tier 3: Lion -->
+        <div class="stage-box active-tier">
+            <div class="stage-img-wrap" style="border-color: #E5C985;">
+                <img src="assets/badges/lion_crest.jpg" alt="Lion Crest">
+            </div>
+            <div class="stage-step" style="color: #E5C985;">Stage 3</div>
+            <div class="stage-name">🦁 LION (สิงโต)</div>
+            <div class="stage-client-title">Territory Leader</div>
+            <span class="stage-badge" style="background: rgba(194,164,96,0.25); color: #E6CA85;">ผู้นำคุมโซนพื้นที่</span>
+        </div>
+
+        <!-- Tier 4: Falcon -->
+        <div class="stage-box">
+            <div class="stage-img-wrap">
+                <img src="assets/badges/falcon_crest.jpg" alt="Falcon Crest">
+            </div>
+            <div class="stage-step">Stage 4</div>
+            <div class="stage-name">⚡ FALCON (เหยี่ยว)</div>
+            <div class="stage-client-title">Speed Closer</div>
+            <span class="stage-badge">ผู้ปิดเคสความเร็วสูง</span>
+        </div>
+
+        <!-- Tier 5: Eagle -->
+        <div class="stage-box active-tier">
+            <div class="stage-img-wrap" style="border-color: #E5C985;">
+                <img src="assets/badges/eagle_crest.jpg" alt="Eagle Crest">
+            </div>
+            <div class="stage-step" style="color: #E5C985;">Stage 5</div>
+            <div class="stage-name">👑 EAGLE (อินทรี)</div>
+            <div class="stage-client-title">Master Consultant</div>
+            <span class="stage-badge" style="background: rgba(194,164,96,0.25); color: #E6CA85;">พี่เลี้ยง & ที่ปรึกษาสัญญา</span>
+        </div>
+
+        <!-- Tier 6: Gryphon -->
+        <div class="stage-box" style="border-color: #8B0000; background: linear-gradient(180deg, rgba(139,0,0,0.2) 0%, #181c20 100%);">
+            <div class="stage-img-wrap" style="border-color: #8B0000;">
+                <img src="assets/badges/gryphon_crest.jpg" alt="Gryphon Crest">
+            </div>
+            <div class="stage-step" style="color: #ff8080;">Stage 6 (Apex)</div>
+            <div class="stage-name">🔱 GRYPHON (กริฟฟิน)</div>
+            <div class="stage-client-title">Sovereign Partner</div>
+            <span class="stage-badge" style="background: rgba(139,0,0,0.4); color: #ffcccc;">หุ้นส่วนยุทธศาสตร์</span>
+        </div>
+    </div>
+
+    <!-- Section 3: Logic, Principles & Rationale -->
+    <div class="section-title">
+        <span>🧠 โลจิก หลักการและเหตุผล (Core Logic & Psychological Rationale)</span>
+        <span class="tag">Strategy Engine</span>
+    </div>
+
+    <div class="logic-card">
+        <p style="font-size: 13.5px; color: #d1d5db; line-height: 1.6; margin-bottom: 12px;">
+            ระบบอัตลักษณ์สัตว์สัญลักษณ์ (Sovereign Archetypes) ไม่ใช่แค่การวาดภาพตัวการ์ตูน แต่เป็น <strong>โครงสร้างสถาปัตยกรรมทางจิตวิทยาองค์กรและการตลาด</strong> ที่ออกแบบมาแก้ปัญหาคลาสสิกของธุรกิจนายหน้าอสังหาริมทรัพย์ 3 ประการ:
+        </p>
+
+        <div class="logic-columns">
+            <!-- Pillar 1 -->
+            <div class="logic-col">
+                <h4>🎯 1. จิตวิทยาตัวตน (Identity & Gamification)</h4>
+                <p>
+                    เอเจนต์ในตลาดมักรู้สึกโดดเดี่ยวและเป็นเพียง "ตัวเลขรหัส S01-S125" การมีสัตว์สัญลักษณ์ทำให้เอเจนต์มี <strong>Sense of Pride (ความภาคภูมิใจในสายวิชาชีพ)</strong> และมองเห็นขั้นบันไดความสำเร็จที่ชัดเจน ผ่านการสะสมคะแนนกิจกรรม (Activity Points) และผลงานจริง (Performance Points)
+                </p>
+            </div>
+
+            <!-- Pillar 2 -->
+            <div class="logic-col">
+                <h4>🔄 2. ระบบ 2 หน้าปัด (Dual-Display System)</h4>
+                <p>
+                    <strong>ภายใน (Internal):</strong> ตัวแทนแข่งขันเก็บแต้ม เชิดชูเกียรติด้วยเหรียญตรา 3D และตัวละครมาสคอต<br>
+                    <strong>ภายนอก (Client-Facing):</strong> เมื่อส่งลิงก์ให้ลูกค้า หน้าจอจะปรับเป็นตำแหน่งสากลระดับพรีเมียม (เช่น Area Specialist หรือ Master Consultant) เพื่อสร้างความเชื่อมั่นสูงสุดแก่ลูกค้า
+                </p>
+            </div>
+
+            <!-- Pillar 3 -->
+            <div class="logic-col">
+                <h4>🤝 3. พลังผสาน Co-Closing & Mentorship</h4>
+                <p>
+                    สร้างวัฒนธรรมที่ตัวแทนรุ่นใหญ่ (Eagle / Lion) ยินดีลงมาช่วยโค้ชชิ่งและประกบคู่ปิดเคส (Co-Close) ให้กับตัวแทนรุ่นใหม่ (Bear / Wolf) โดยระบบมีกลไกจัดสรรผลตอบแทนที่เป็นธรรม ทำให้ทีมเติบโตไปด้วยกันโดยไม่ทอดทิ้งใครไว้ข้างหลัง
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Note -->
     <div class="footer-note">
-        <strong>💡 เคล็ดลับการพรีเซนต์:</strong><br>
-        • <strong>กรณีใช้เน็ต:</strong> ส่งลิงก์ <code>https://thenassty-cpu.github.io/siwasup-cobroker-os/</code> ให้กูลเปิดใน Chrome หรือ Edge<br>
-        • <strong>กรณีเปิดจาก Flash Drive (Offline):</strong> แค่ดับเบิลคลิกไฟล์ <code>00_START_HERE_เปิดพรีเซนต์ที่นี่.html</code> นี้ในแฟลชไดรฟ์ ก็จะพาไปยังทุกโหมดได้ทันทีโดยไม่ต้องจำ URL
+        <strong>💡 สรุปการเตรียมตัวสำหรับวันจันทร์:</strong><br>
+        • <strong>กรณีต่ออินเทอร์เน็ต:</strong> ส่งลิงก์ <code>https://thenassty-cpu.github.io/siwasup-cobroker-os/launchpad.html</code> ให้กูลเปิดใน Chrome หรือ Edge บนโน้ตบุ๊ก<br>
+        • <strong>กรณีเปิดแบบออฟไลน์ (จากแฟลชไดรฟ์ G:\):</strong> เสียบ HandyDrive แล้วดับเบิลคลิกไฟล์ <code>00_START_HERE_เปิดพรีเซนต์ที่นี่.html</code> ในโฟลเดอร์ <code>G:\Siwasup_Presentation_2026\</code> ได้ทันที
     </div>
 </div>
 
