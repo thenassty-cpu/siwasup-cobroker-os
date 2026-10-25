@@ -2268,6 +2268,36 @@
       description: 'สมาชิกที่กำลังพักรบหรือสังเกตการณ์ ยังไม่มีกิจกรรมในรอบเดือน (Waiting for Momentum)',
       action: 'ส่ง LINE ทักทายด้วยทรัพย์ปล่อยง่าย หรือเคสตัวอย่างที่ปิดได้จริงเพื่อปลุกพลัง',
       agentTip: 'พร้อมกลับมาลุยเมื่อไหร่ เลือกแชร์ทรัพย์ปล่อยง่ายหรือปักป้ายหน้าบ้านเพื่อปลุกโมเมนตัมได้เลย!'
+    },
+    falcon: {
+      id: 'falcon',
+      name: 'Falcon (เหยี่ยวเพเรกริน)',
+      shortName: 'เหยี่ยวเพเรกริน',
+      roleTag: '⚡ Senior Specialist',
+      quote: '“ล็อกเป้าหมาย โฉบปิดดีลได้เร็วและแม่นยำที่สุด”',
+      icon: '⚡',
+      badgeImg: 'assets/characters/badge_falcon.png',
+      turnaroundImg: 'assets/characters/turnaround_falcon.png',
+      title: 'ความเร็วสูง ทะลุทะลวง ปิดดีลฉับไว',
+      badgeClass: 'bg-neutral-900 text-[#C2A460] border border-[#C2A460]/70',
+      description: 'ตัวแทนอาวุโสผู้ชำนาญพื้นที่เฉพาะจุด เชี่ยวชาญการโฉบปิดดีลด่วนและการตลาดเชิงรุก (Senior Specialist)',
+      action: 'มอบหมายทรัพย์ด่วนที่ต้องการสภาพคล่อง / ให้สิทธิ์เบิกกุญแจก่อนใคร',
+      agentTip: 'ความเร็วและความแม่นยำของคุณคืออาวุธร้ายแรง! ลุยปิดดีลในโซนพื้นที่หลักของคุณได้เลย'
+    },
+    gryphon: {
+      id: 'gryphon',
+      name: 'Gryphon (กริฟฟอนราชันย์)',
+      shortName: 'กริฟฟอนราชันย์',
+      roleTag: '👑 Master Founder',
+      quote: '“รวมพลังผืนดินและฟากฟ้า เพื่อความเป็นหนึ่งในอสังหาฯ”',
+      icon: '👑',
+      badgeImg: 'assets/characters/badge_gryphon.png',
+      turnaroundImg: 'assets/characters/turnaround_gryphon.png',
+      title: 'อำนาจสูงสุด บารมีคู่ความสำเร็จ',
+      badgeClass: 'bg-gradient-to-r from-[#8B0000] to-[#5A0000] text-[#E5C985] border border-[#C2A460]',
+      description: 'ระดับผู้ก่อตั้งและหุ้นส่วนใหญ่ (Master Exclusive Partner) มีสิทธิ์ในการกำกับดูแลโซนและอนุมัติข้อตกลงพิเศษ',
+      action: 'เชิญร่วมประชุมบอร์ดบริหาร / ที่ปรึกษาสูงสุด / ถือกุญแจคลังทรัพย์พรีเมียม',
+      agentTip: 'คุณคือเสาหลักขององค์กร! วิสัยทัศน์และการตัดสินใจของคุณขับเคลื่อนทั้งระบบ Co-Broker'
     }
   };
 

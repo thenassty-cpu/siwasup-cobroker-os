@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Outer Ring (Gold) -->
+  <circle cx="24" cy="24" r="22" stroke="#C2A460" stroke-width="2.5" fill="#171717"/>
+  <!-- Inner Enamel Background (Burgundy) -->
+  <circle cx="24" cy="24" r="19.5" fill="#8B0000"/>
+  <!-- Minimalist Falcon Geometric Silhouette (Gold) -->
+  <!-- Designed with thick, legible strokes for 16px-24px micro display -->
+  <path d="M14 26 C14 18 20 12 30 13 C32 17 31 21 27 23 C31 23 35 25 36 29 C33 29 30 28 27 28 C26 31 23 34 18 35 C17 32 18 29 19 27 C17 27 15 27 14 26 Z" fill="#C2A460"/>
+  <!-- Falcon Sharp Eye Accent -->
+  <circle cx="27" cy="17" r="1.8" fill="#171717"/>
+  <!-- Falcon Swift Wing Slice -->
+  <path d="M12 28 C15 28 20 33 24 37 C19 36 15 33 12 28 Z" fill="#E5C985"/>
+</svg>

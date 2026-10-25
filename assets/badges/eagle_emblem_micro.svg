@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Outer Ring (Gold) -->
+  <circle cx="24" cy="24" r="22" stroke="#C2A460" stroke-width="2.5" fill="#171717"/>
+  <circle cx="24" cy="24" r="19.5" fill="#8B0000"/>
+  <!-- Imperial Eagle Profile (Facing Right with Regal Crown/Feathers) -->
+  <path d="M14 26 C14 17 21 12 30 13 C32 17 31 20 27 22 C32 22 36 24 37 28 C34 28 31 27 28 27 C26 31 24 34 19 36 C17 33 18 29 19 27 C17 27 15 27 14 26 Z" fill="#C2A460"/>
+  <!-- Hooked Beak Accent (Gold Highlight) -->
+  <path d="M29 20 C34 21 37 25 35 28 C33 28 30 27 28 27 C29 25 29 22 29 20 Z" fill="#E5C985"/>
+  <!-- Crown / Crest Feathers on Head -->
+  <path d="M20 12 L22 8 L25 12 L28 9 L29 13 Z" fill="#E5C985"/>
+  <!-- Piercing Eagle Eye -->
+  <circle cx="26" cy="18" r="1.8" fill="#171717"/>
+  <!-- Neck Feathers Texture -->
+  <path d="M14 29 L18 28 L15 32 L19 31 L17 35 Z" fill="#E5C985"/>
+</svg>

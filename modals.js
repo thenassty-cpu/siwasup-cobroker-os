@@ -15,7 +15,17 @@
             <span class="icon-circle w-5 h-5"><i data-lucide="file-text" class="w-3 h-3 stroke-[1.5]"></i></span>
             <span>แจ้งหลักฐานการจอง (วางมัดจำ)</span>
           </h3>
-          <button onclick="closeBookingModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+          <button 
+            type="button" 
+            onclick="closeBookingModal()" 
+            aria-label="ปิดหน้าต่าง"
+            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
         <div id="booking-property-info" class="bg-gray-50 p-2.5 rounded-lg text-xs space-y-1"></div>
         <form onsubmit="handleBookingSubmit(event)" class="space-y-3 text-xs">
@@ -36,7 +46,7 @@
             <input type="file" accept="image/*" class="w-full border rounded-lg p-2 bg-gray-50">
             <p class="text-[10px] text-gray-400 mt-0.5">ยอดมัดจำขั้นต่ำ 10,000 บาท</p>
           </div>
-          <button type="submit" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 rounded-lg text-sm shadow-xs flex items-center justify-center gap-1.5">
+          <button type="submit" class="w-full bg-[#8B0000] hover:bg-[#6B0000] text-white font-bold py-2.5 rounded-lg text-sm shadow-xs flex items-center justify-center gap-1.5">
             <span class="icon-circle w-4 h-4"><i data-lucide="check" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
             <span>ยืนยันส่งข้อมูลให้แอดมิน (เจี๊ยบ/บัว) ตรวจสอบ</span>
           </button>
@@ -53,7 +63,17 @@
             <span>Smart Share Center</span>
             <span class="text-[10px] text-amber-800 font-normal hidden sm:inline">(เลือกลิงก์โปรโมท)</span>
           </h3>
-          <button onclick="closeShareModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold leading-none p-1">&times;</button>
+          <button 
+            type="button" 
+            onclick="closeShareModal()" 
+            aria-label="ปิดหน้าต่าง"
+            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
         
         <!-- Adaptive Layout: Side-by-Side on Desktop/Tablet if QR open -->
@@ -217,7 +237,17 @@
             </span>
             <span>QR Code สำหรับสแกน</span>
           </div>
-          <button onclick="closeMobileQrModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold leading-none p-1">&times;</button>
+          <button 
+            type="button" 
+            onclick="closeMobileQrModal()" 
+            aria-label="ปิดหน้าต่าง"
+            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
 
         <div id="mobile-qr-prop-info" class="text-left bg-slate-50 border border-slate-200 p-2 rounded-lg text-[11px] space-y-0.5"></div>
@@ -249,7 +279,7 @@
     <!-- Client Call Discount Modal (Click to Call) -->
     <div id="call-modal" class="hidden modal-backdrop !items-center px-3 pt-10 pb-6 sm:p-6">
       <div class="modal-card-sm space-y-3 text-center">
-        <div class="icon-circle w-12 h-12 bg-amber-900/60 text-[#D4AF37] mx-auto">
+        <div class="icon-circle w-12 h-12 bg-amber-900/60 text-[#C2A460] mx-auto">
           <i data-lucide="gift" class="w-6 h-6 stroke-[1.5]"></i>
         </div>
         <h3 class="font-bold text-base text-gray-900">รับสิทธิพิเศษสำหรับคุณ!</h3>
@@ -280,7 +310,17 @@
             <span class="icon-circle w-5 h-5"><i data-lucide="calendar" class="w-3 h-3 stroke-[1.5]"></i></span>
             <span>ขอนัดหมายเข้าชมห้องจริง / ปรึกษาสินเชื่อ</span>
           </h3>
-          <button onclick="closeInquiryModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+          <button 
+            type="button" 
+            onclick="closeInquiryModal()" 
+            aria-label="ปิดหน้าต่าง"
+            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
         <div id="inquiry-prop-info" class="bg-gray-50 p-2 rounded-lg text-xs font-medium text-gray-700"></div>
         <form onsubmit="handleInquirySubmit(event)" class="space-y-2.5 text-xs">
@@ -296,7 +336,7 @@
             <label class="block font-medium mb-1">วันที่สะดวกเข้าชม (โดยประมาณ)</label>
             <input type="text" id="inquiry-date" placeholder="เช่น เสาร์นี้ ช่วงบ่าย" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900">
           </div>
-          <button type="submit" class="w-full bg-[#B89D68] hover:bg-[#A38854] text-white font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2 flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+          <button type="submit" class="w-full bg-[#C2A460] hover:bg-[#A98B45] text-neutral-900 font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2 flex items-center justify-center gap-1.5 active:scale-95 transition-all">
             <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
             <span>ยืนยันส่งข้อมูลนัดหมาย</span>
           </button>
@@ -315,7 +355,7 @@
       </div>
       <p id="admin-toast-body" class="text-gray-200 text-[11px]"></p>
       <div class="flex gap-2 pt-1">
-        <button onclick="adminApproveBooking()" class="flex-1 bg-[#D4AF37] hover:bg-[#c49f2b] text-gray-950 font-bold py-1.5 rounded text-center shadow-xs flex items-center justify-center gap-1.5">
+        <button onclick="adminApproveBooking()" class="flex-1 bg-[#C2A460] hover:bg-[#c49f2b] text-gray-950 font-bold py-1.5 rounded text-center shadow-xs flex items-center justify-center gap-1.5">
           <span class="icon-circle w-4 h-4"><i data-lucide="check" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
           <span>กดอนุมัติการจอง (1-Click)</span>
         </button>
@@ -338,7 +378,17 @@
               ฟรี! ไม่มีค่าแรกเข้า • เข้าถึงเครือข่ายเอเจนต์ทั่วประเทศ
             </p>
           </div>
-          <button onclick="closeConsignModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+          <button 
+            type="button" 
+            onclick="closeConsignModal()" 
+            aria-label="ปิดหน้าต่าง"
+            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
 
         <div class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-[11px] text-amber-900 leading-snug">
@@ -391,7 +441,7 @@
             <p class="text-[10px] text-gray-400 mt-0.5">แนบรูปช่วยให้ประเมินราคาและปล่อยขายได้ไวยิ่งขึ้น</p>
           </div>
 
-          <button type="submit" class="w-full bg-[#B89D68] hover:bg-[#A38854] text-white font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2 flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+          <button type="submit" class="w-full bg-[#C2A460] hover:bg-[#A98B45] text-neutral-900 font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2 flex items-center justify-center gap-1.5 active:scale-95 transition-all">
             <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
             <span>ยืนยันส่งข้อมูลฝากขาย (ฟรี)</span>
           </button>
@@ -407,10 +457,20 @@
             <span class="icon-circle w-5 h-5"><i data-lucide="users" class="w-3 h-3 stroke-[1.5]"></i></span>
             <span>ชวนเพื่อนมาเป็น Agent (MGM)</span>
           </h3>
-          <button onclick="closeMgmModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+          <button 
+            type="button" 
+            onclick="closeMgmModal()" 
+            aria-label="ปิดหน้าต่าง"
+            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
 
-        <div class="bg-gray-50 border border-gray-200 p-2.5 rounded-xl text-xs space-y-1 text-gray-800 border-l-4 border-[#D4AF37]">
+        <div class="bg-gray-50 border border-gray-200 p-2.5 rounded-xl text-xs space-y-1 text-gray-800 border-l-4 border-[#C2A460]">
           <div class="font-bold flex items-center gap-1.5 text-gray-900">
             <span class="icon-circle w-4 h-4"><i data-lucide="coins" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
             <span>สิทธิประโยชน์ผู้ชวน:</span>
@@ -632,7 +692,17 @@
             <span class="icon-circle w-5 h-5"><i data-lucide="inbox" class="w-3 h-3 stroke-[1.5]"></i></span>
             <span>รายการทรัพย์ฝากขายใหม่ (Lead Magnet)</span>
           </h3>
-          <button onclick="closeOwnerLeadsModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+          <button 
+            type="button" 
+            onclick="closeOwnerLeadsModal()" 
+            aria-label="ปิดหน้าต่าง"
+            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
 
         <div id="owner-leads-container" class="space-y-2 text-xs">
@@ -649,7 +719,17 @@
             <span class="icon-circle w-5 h-5"><i data-lucide="edit-3" class="w-3 h-3 stroke-[1.5]"></i></span>
             <span>แก้ไขราคาขาย (แอดมิน บัว & กูล)</span>
           </h3>
-          <button onclick="closeEditPriceModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+          <button 
+            type="button" 
+            onclick="closeEditPriceModal()" 
+            aria-label="ปิดหน้าต่าง"
+            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
 
         <div id="edit-price-prop-info" class="bg-gray-50 border border-gray-200 p-2.5 rounded-xl text-xs space-y-0.5"></div>
@@ -706,7 +786,17 @@
             <span class="icon-circle w-5 h-5"><i data-lucide="package" class="w-3 h-3 stroke-[1.5]"></i></span>
             <span>มัดรวมส่งลูกค้า (VIP Micro-Catalog)</span>
           </h3>
-          <button onclick="closeBundleModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+          <button 
+            type="button" 
+            onclick="closeBundleModal()" 
+            aria-label="ปิดหน้าต่าง"
+            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
 
         <div>
@@ -761,7 +851,17 @@
             <span class="icon-circle w-5 h-5 bg-amber-600"><i data-lucide="printer" class="w-3 h-3 stroke-[1.5]"></i></span>
             <span>Auto PDF Vinyl Sign Generator (ป้ายไวนิลหน้าบ้าน)</span>
           </h3>
-          <button onclick="closeVinylModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+          <button 
+            type="button" 
+            onclick="closeVinylModal()" 
+            aria-label="ปิดหน้าต่าง"
+            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
 
         <!-- Live Vinyl Sign Preview Container -->
@@ -824,7 +924,7 @@
                 <label class="block font-medium mb-1 text-gray-700">ประเภททรัพย์ (Ticker_Asset):</label>
                 <input type="text" id="vinyl-asset" value="บ้านเดี่ยวพร้อมอยู่" oninput="renderVinylCanvas()" 
                        placeholder="เช่น บ้านเดี่ยวพร้อมอยู่, ทาวน์โฮม 2 ชั้น"
-                       class="w-full border rounded-lg p-1.5 text-xs font-bold text-[#967C3E] outline-none focus:ring-1 focus:ring-amber-600 bg-amber-50/20">
+                       class="w-full border rounded-lg p-1.5 text-xs font-bold text-[#8A6A1F] outline-none focus:ring-1 focus:ring-amber-600 bg-amber-50/20">
               </div>
               <div>
                 <label class="block font-medium mb-1 text-gray-700">ราคาขาย (Ticker_Price):</label>
@@ -895,13 +995,13 @@
             </div>
           </div>
 
-          <!-- Download Action Buttons -->
+          <!-- Download Action Buttons (CTA Hierarchy: Primary Burgundy + Secondary Obsidian Outline) -->
           <div class="grid grid-cols-2 gap-2 pt-1">
-            <button type="button" onclick="downloadVinylPDF()" class="bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+            <button type="button" onclick="downloadVinylPDF()" class="bg-[#8B0000] hover:bg-[#6B0000] text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all border border-[#8B0000]">
               <span class="icon-circle w-4 h-4"><i data-lucide="download" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
               <span>โหลด PDF ส่งโรงพิมพ์</span>
             </button>
-            <button type="button" onclick="downloadVinylJPG()" class="bg-gray-900 hover:bg-black text-white font-bold py-2.5 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+            <button type="button" onclick="downloadVinylJPG()" class="bg-transparent hover:bg-neutral-100 text-neutral-900 border border-neutral-900 font-bold py-2.5 px-2 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
               <span class="icon-circle w-4 h-4"><i data-lucide="image" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
               <span>โหลดรูป HD ส่ง LINE</span>
             </button>
@@ -1019,22 +1119,22 @@
             </button>
           </div>
 
-          <!-- 🔑 NPA Key & Messenger Banner (Employee, Agent & Owner) -->
+          <!-- 🔑 NPA Key & Messenger Banner (Dynamic for Agent vs Admin) -->
           <div id="detail-npa-key-banner" class="bg-[#FAF8F5] border border-[#E8DFD1] rounded-2xl p-3 flex items-center justify-between gap-2 shadow-2xs">
             <div class="flex items-center gap-2.5 min-w-0">
-              <div class="w-9 h-9 rounded-xl bg-neutral-900 text-white flex items-center justify-center shrink-0 shadow-xs">
-                <i data-lucide="key" class="w-4 h-4"></i>
+              <div id="detail-npa-key-icon-box" class="w-9 h-9 rounded-xl bg-neutral-900 text-white flex items-center justify-center shrink-0 shadow-xs">
+                <i data-lucide="key" class="w-4 h-4 text-[#E5C985]"></i>
               </div>
               <div class="min-w-0">
                 <div class="font-bold text-xs text-neutral-900 flex items-center gap-1.5">
-                  <span>บริการเบิกกุญแจ NPA & Messenger</span>
-                  <span class="text-[9px] bg-[#B89D68]/15 text-[#8C6D23] px-1.5 py-0.2 rounded font-bold border border-[#B89D68]/30">พี่ลิลลี่</span>
+                  <span id="detail-npa-key-title">บริการเบิกกุญแจ NPA & Messenger</span>
+                  <span id="detail-npa-key-tag" class="text-[9px] bg-[#C2A460]/15 text-[#8C6D23] px-1.5 py-0.2 rounded font-bold border border-[#C2A460]/30">พี่ลิลลี่</span>
                 </div>
-                <div class="text-[10.5px] text-neutral-600 truncate">มี Messenger วิ่งรับกุญแจจากแบงก์ส่งมอบหน้างาน</div>
+                <div id="detail-npa-key-desc" class="text-[10.5px] text-neutral-600 truncate">มี Messenger วิ่งรับกุญแจจากแบงก์ส่งมอบหน้างาน</div>
               </div>
             </div>
-            <button type="button" id="detail-btn-banner-npa-key" class="shrink-0 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-2xs flex items-center gap-1 transition-all active:scale-95">
-              <span>ขอนัดชม</span>
+            <button type="button" id="detail-btn-banner-npa-key" class="shrink-0 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-2xs flex items-center gap-1 transition-all active:scale-95 cursor-pointer">
+              <span id="detail-btn-banner-npa-key-text">ขอนัดชม</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </button>
           </div>
@@ -1076,24 +1176,49 @@
           
           <!-- Primary Action Bar -->
           <div id="detail-actions-footer-bar" class="space-y-2">
+            <!-- Agent Action Row (สำหรับตัวแทนขาย) -->
             <div id="detail-agent-actions-row" class="space-y-1.5">
               <div class="grid grid-cols-2 gap-2">
-                <button id="detail-btn-vinyl" type="button" class="w-full bg-[#FAF8F5] hover:bg-[#F2EDE4] text-[#8C6D23] font-bold py-2 rounded-xl border border-[#E8DFD1] text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-                  <i data-lucide="printer" class="w-3.5 h-3.5 text-[#B89D68]"></i>
+                <button id="detail-btn-vinyl" type="button" class="w-full bg-[#FAF8F5] hover:bg-[#F2EDE4] text-[#8C6D23] font-bold py-2 rounded-xl border border-[#E8DFD1] text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer">
+                  <i data-lucide="printer" class="w-3.5 h-3.5 text-[#C2A460]"></i>
                   <span>พิมพ์ป้ายไวนิล (Auto PDF)</span>
                 </button>
-                <button id="detail-btn-share" type="button" class="w-full bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-2 rounded-xl shadow-2xs text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+                <button id="detail-btn-share" type="button" class="w-full bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-2 rounded-xl shadow-2xs text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer">
                   <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
                   <span>แชร์ล็อกสิทธิ์ (3-5%)</span>
                 </button>
               </div>
-              <button id="detail-btn-npa-key" type="button" class="w-full bg-white hover:bg-neutral-50 text-neutral-800 font-bold py-1.5 rounded-xl border border-neutral-200 text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+              <button id="detail-btn-npa-key" type="button" class="w-full bg-white hover:bg-neutral-50 text-neutral-800 font-bold py-1.5 rounded-xl border border-neutral-200 text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer">
                 <i data-lucide="key" class="w-3.5 h-3.5 text-neutral-600"></i>
                 <span>เบิกกุญแจ NPA & Messenger (พี่ลิลลี่)</span>
               </button>
             </div>
+
+            <!-- Admin Dedicated Operational Console (สำหรับบอร์ดบริหาร: บัว, กูล, พี่ลิลลี่) -->
+            <div id="detail-admin-actions-row" class="hidden space-y-2">
+              <div class="grid grid-cols-2 gap-2">
+                <button id="detail-admin-btn-key" type="button" class="w-full bg-neutral-900 hover:bg-neutral-800 text-[#E5C985] font-bold py-2.5 rounded-xl border border-[#C2A460]/50 text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer">
+                  <i data-lucide="key" class="w-4 h-4 text-[#C2A460]"></i>
+                  <span>ติดตามสถานะกุญแจ</span>
+                </button>
+                <button id="detail-admin-btn-appointments" type="button" class="w-full bg-white hover:bg-neutral-50 text-neutral-900 font-bold py-2.5 rounded-xl border border-neutral-300 text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer">
+                  <i data-lucide="calendar" class="w-4 h-4 text-neutral-700"></i>
+                  <span>คิวนัดชมเคสนี้ (<span id="detail-admin-app-count" class="text-[#8B0000] font-black">2</span>)</span>
+                </button>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <button id="detail-admin-btn-price" type="button" class="w-full bg-[#FAF8F5] hover:bg-[#F2EDE4] text-neutral-800 font-bold py-2 rounded-xl border border-[#E8DFD1] text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer">
+                  <i data-lucide="sliders" class="w-3.5 h-3.5 text-[#8C6D23]"></i>
+                  <span>แก้ราคา & Floor Cost</span>
+                </button>
+                <button id="detail-admin-btn-share" type="button" class="w-full bg-white hover:bg-neutral-50 text-neutral-700 font-bold py-2 rounded-xl border border-neutral-200 text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer">
+                  <i data-lucide="share-2" class="w-3.5 h-3.5 text-neutral-500"></i>
+                  <span>แชร์ลิงก์ทรัพย์ (กลาง)</span>
+                </button>
+              </div>
+            </div>
             
-            <button id="detail-btn-offer" type="button" class="w-full bg-[#B89D68] hover:bg-[#A38854] text-white font-bold py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all">
+            <button id="detail-btn-offer" type="button" class="w-full bg-[#C2A460] hover:bg-[#A98B45] text-neutral-900 font-bold py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all">
               <i data-lucide="badge-dollar-sign" class="w-4 h-4"></i>
               <span id="detail-btn-offer-label">เสนอราคา</span>
             </button>
@@ -1256,7 +1381,17 @@
             <span class="icon-circle w-6 h-6 bg-amber-600 text-white"><i data-lucide="calendar-check" class="w-3.5 h-3.5"></i></span>
             <h3 id="meeting-modal-title" class="font-bold text-sm text-gray-900">เช็คชื่อเข้าอบรม / ประชุมทีม</h3>
           </div>
-          <button onclick="closeMeetingCheckinModal()" class="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold">&times;</button>
+          <button 
+            type="button" 
+            onclick="closeMeetingCheckinModal()" 
+            aria-label="ปิดหน้าต่าง"
+            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
 
         <!-- QR Display for Zoom / Big Screen -->
@@ -1297,7 +1432,17 @@
               <p id="vinyl-proof-modal-subtitle" class="text-[9.5px] text-gray-500">Proof of Installation • รับทันที +15 แต้ม</p>
             </div>
           </div>
-          <button onclick="closeVinylProofModal()" class="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold">&times;</button>
+          <button 
+            type="button" 
+            onclick="closeVinylProofModal()" 
+            aria-label="ปิดหน้าต่าง"
+            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
 
         <form onsubmit="submitVinylProof(event)" class="space-y-2.5 text-xs">
@@ -1339,7 +1484,7 @@
                    class="w-full text-[11px] text-gray-500 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[11px] file:font-semibold file:bg-emerald-100 file:text-emerald-800 hover:file:bg-emerald-200">
           </div>
 
-          <button type="submit" id="vinyl-proof-submit-btn" class="w-full bg-[#990000] hover:bg-red-800 text-white font-bold py-2.5 px-3 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+          <button type="submit" id="vinyl-proof-submit-btn" class="w-full bg-[#8B0000] hover:bg-[#6B0000] text-white font-bold py-2.5 px-3 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
             <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i>
             <span id="vinyl-proof-submit-text">ยืนยันส่งผลงานรับ +15 แต้ม</span>
           </button>
@@ -1427,26 +1572,36 @@
               <span id="profile-active-tier-name" class="text-emerald-400 font-mono font-bold">🦅 พญาอินทรี</span>
             </div>
 
-            <div class="grid grid-cols-4 gap-1.5 pt-1">
+            <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5 pt-1">
               <button type="button" onclick="previewProfileArchetypeStage('bear')" id="evo-stage-bear" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
-                <img src="assets/characters/badge_bear.png" alt="Bear" class="w-9 h-9 object-contain drop-shadow" />
-                <span class="text-[9.5px] font-bold text-slate-300 mt-0.5">หมีตื่นตัว</span>
+                <img src="assets/characters/badge_bear.png" alt="Bear" class="w-8 h-8 object-contain drop-shadow" />
+                <span class="text-[9px] font-bold text-slate-300 mt-0.5">หมีตื่นตัว</span>
                 <span class="text-[8px] text-slate-400">เริ่มต้น</span>
               </button>
               <button type="button" onclick="previewProfileArchetypeStage('wolf')" id="evo-stage-wolf" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
-                <img src="assets/characters/badge_wolf.png" alt="Wolf" class="w-9 h-9 object-contain drop-shadow" />
-                <span class="text-[9.5px] font-bold text-slate-300 mt-0.5">หมาป่า</span>
+                <img src="assets/characters/badge_wolf.png" alt="Wolf" class="w-8 h-8 object-contain drop-shadow" />
+                <span class="text-[9px] font-bold text-slate-300 mt-0.5">หมาป่า</span>
                 <span class="text-[8px] text-emerald-400/80">ขยัน ≥100</span>
               </button>
               <button type="button" onclick="previewProfileArchetypeStage('lion')" id="evo-stage-lion" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
-                <img src="assets/characters/badge_lion.png" alt="Lion" class="w-9 h-9 object-contain drop-shadow" />
-                <span class="text-[9.5px] font-bold text-slate-300 mt-0.5">สิงห์สุขุม</span>
+                <img src="assets/characters/badge_lion.png" alt="Lion" class="w-8 h-8 object-contain drop-shadow" />
+                <span class="text-[9px] font-bold text-slate-300 mt-0.5">สิงห์สุขุม</span>
                 <span class="text-[8px] text-amber-400/80">ผลงาน ≥300</span>
               </button>
+              <button type="button" onclick="previewProfileArchetypeStage('falcon')" id="evo-stage-falcon" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
+                <img src="assets/characters/badge_falcon.png" alt="Falcon" class="w-8 h-8 object-contain drop-shadow" />
+                <span class="text-[9px] font-bold text-[#E5C985] mt-0.5">เหยี่ยว S22</span>
+                <span class="text-[8px] text-stone-300">Specialist</span>
+              </button>
               <button type="button" onclick="previewProfileArchetypeStage('eagle')" id="evo-stage-eagle" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
-                <img src="assets/characters/badge_eagle.png" alt="Eagle" class="w-9 h-9 object-contain drop-shadow" />
-                <span class="text-[9.5px] font-bold text-yellow-300 mt-0.5">🦅 พญาอินทรี</span>
-                <span class="text-[8px] text-yellow-400/90">ครบเครื่อง!</span>
+                <img src="assets/characters/badge_eagle.png" alt="Eagle" class="w-8 h-8 object-contain drop-shadow" />
+                <span class="text-[9px] font-bold text-yellow-300 mt-0.5">พญาอินทรี</span>
+                <span class="text-[8px] text-yellow-400/90">Super Star</span>
+              </button>
+              <button type="button" onclick="previewProfileArchetypeStage('gryphon')" id="evo-stage-gryphon" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
+                <img src="assets/characters/badge_gryphon.png" alt="Gryphon" class="w-8 h-8 object-contain drop-shadow" />
+                <span class="text-[9px] font-bold text-amber-300 mt-0.5">กริฟฟอน</span>
+                <span class="text-[8px] text-rose-300">Master</span>
               </button>
             </div>
 
@@ -1597,7 +1752,7 @@
             </div>
             <div class="min-w-0">
               <div class="flex flex-wrap items-center gap-1.5">
-                <h3 class="text-sm sm:text-base font-bold text-neutral-900 leading-snug">
+                <h3 id="npa-modal-title" class="text-sm sm:text-base font-bold text-neutral-900 leading-snug">
                   ระบบเบิกกุญแจ NPA & ติดตาม Messenger
                 </h3>
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-800 border border-amber-200/70 shrink-0">
@@ -1605,19 +1760,22 @@
                 </span>
               </div>
               <p class="text-[11px] text-neutral-500 mt-0.5 truncate">
-                ผู้รับผิดชอบงาน: <strong class="text-neutral-700">พี่ลิลลี่ (Admin ศิวาทรัพย์)</strong>
+                <span id="npa-modal-subtitle">ผู้รับผิดชอบงาน: <strong class="text-neutral-700">พี่ลิลลี่ (Admin ศิวาทรัพย์)</strong></span>
               </p>
             </div>
           </div>
 
           <!-- ปุ่มปิด (X) ขนาด 32x32px กดง่าย ไม่โดนเบียด -->
           <button 
-            type="button"
+            type="button" 
             onclick="closeNpaKeyModal()" 
             aria-label="ปิดหน้าต่าง"
-            class="w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-600 hover:text-neutral-900 flex items-center justify-center shrink-0 transition cursor-pointer text-sm font-bold active:scale-90"
+            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
           >
-            ✕
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
           </button>
         </div>
 
@@ -1693,13 +1851,27 @@
 
           <!-- TAB 2: Messenger & Bank Live Tracker -->
           <div id="npa-tab-track" class="hidden space-y-3">
+            <!-- Warning / Timeout Banner -->
+            <div id="key-timeout-banner" class="bg-amber-50 border border-amber-200/90 rounded-2xl p-3 flex items-start gap-2.5 text-xs text-amber-900 shadow-2xs">
+              <span class="text-base leading-none">⚠️</span>
+              <div class="space-y-0.5">
+                <div class="font-bold flex items-center gap-1.5">
+                  <span>ตรวจพบเคสอาจค้าง (14:15 น. เกินเวลานัด 15 นาที)</span>
+                  <span class="bg-amber-200 text-amber-900 text-[9px] px-1.5 py-0.2 rounded-full font-bold">Smart Alert</span>
+                </div>
+                <div class="text-[11px] text-amber-700 leading-tight">
+                  นัดหมาย 14:00 น. หาก Messenger เน็ตหลุด/แบตหมด หรือลืมกด แต่ Agent หน้างานได้รับกุญแจแล้ว สามารถใช้ปุ่ม <strong>Fail-Safe Override</strong> ด้านล่างเพื่อปลดล็อคขั้นตอนได้ทันที
+                </div>
+              </div>
+            </div>
+
             <div class="bg-neutral-50 border border-neutral-200/80 rounded-2xl p-3.5 space-y-2">
               <div class="flex items-center justify-between text-xs">
                 <span class="font-bold text-neutral-900">สถานะคำขอเบิกกุญแจ #KEY-2026-089</span>
-                <span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full text-[10px]">กำลังวิ่งส่ง</span>
+                <span id="key-track-status-pill" class="bg-sky-100 text-sky-800 font-bold px-2.5 py-0.5 rounded-full text-[10px]">กำลังวิ่งส่ง</span>
               </div>
               
-              <div class="space-y-2 pt-1 text-xs">
+              <div class="space-y-2.5 pt-1 text-xs">
                 <div class="flex items-center gap-2.5">
                   <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold">✓</span>
                   <span class="text-neutral-700">10:00 น. - Agent ยื่นคำขอเบิกกุญแจเข้าระบบ</span>
@@ -1708,18 +1880,65 @@
                   <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold">✓</span>
                   <span class="text-neutral-700">10:30 น. - <strong>พี่ลิลลี่</strong> ตรวจสอบเอกสาร & อนุมัติใบส่งตัวธนาคาร</span>
                 </div>
-                <div class="flex items-center gap-2.5">
-                  <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px] font-bold animate-pulse">🛵</span>
-                  <span class="font-bold text-sky-800">13:15 น. - Messenger (พี่สมชาย) รับกุญแจจาก สนง.ใหญ่ กำลังวิ่งไปหน้างาน</span>
+                <div class="flex items-center gap-2.5" id="key-step-3-row">
+                  <span id="key-step-3-icon" class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px] font-bold animate-pulse">🛵</span>
+                  <span id="key-step-3-text" class="font-bold text-sky-800">13:15 น. - Messenger (พี่สมชาย) รับกุญแจจาก สนง.ใหญ่ กำลังวิ่งไปหน้างาน</span>
                 </div>
-                <div class="flex items-center gap-2.5 text-neutral-400">
-                  <span class="w-5 h-5 rounded-full bg-neutral-200 text-neutral-500 flex items-center justify-center text-[10px] font-bold">4</span>
-                  <span>รอส่งมอบกุญแจให้ Agent ณ หน้าบ้าน (นัด 14:00 น.)</span>
+                <div class="flex items-center gap-2.5 text-neutral-400" id="key-step-4-row">
+                  <span id="key-step-4-icon" class="w-5 h-5 rounded-full bg-neutral-200 text-neutral-500 flex items-center justify-center text-[10px] font-bold">4</span>
+                  <span id="key-step-4-text">รอส่งมอบกุญแจให้ Agent ณ หน้าบ้าน (นัด 14:00 น.)</span>
                 </div>
-                <div class="flex items-center gap-2.5 text-neutral-400">
-                  <span class="w-5 h-5 rounded-full bg-neutral-200 text-neutral-500 flex items-center justify-center text-[10px] font-bold">5</span>
-                  <span>รอรับกุญแจคืน & ถ่ายรูปยืนยันปิดล็อกบ้าน</span>
+                <div class="flex items-center gap-2.5 text-neutral-400" id="key-step-5-row">
+                  <span id="key-step-5-icon" class="w-5 h-5 rounded-full bg-neutral-200 text-neutral-500 flex items-center justify-center text-[10px] font-bold">5</span>
+                  <span id="key-step-5-text">รอรับกุญแจคืน & ถ่ายรูปยืนยันปิดล็อกบ้าน</span>
                 </div>
+              </div>
+            </div>
+
+            <!-- Fail-Safe & Admin Override Controls -->
+            <div class="bg-gradient-to-br from-[#FAF8F5] to-white border border-[#E8DFD1] rounded-2xl p-3.5 space-y-2 text-xs shadow-2xs">
+              <div class="flex items-center justify-between">
+                <div class="font-bold text-neutral-900 flex items-center gap-1.5">
+                  <span class="text-[#C2A460]">⚡</span>
+                  <span>ระบบปลดล็อคสถานะฉุกเฉิน (Fail-Safe & Master Override)</span>
+                </div>
+                <span class="text-[10px] bg-[#F4EBD9] text-[#8A6A1F] font-bold px-2 py-0.5 rounded-full">แก้เคสค้าง</span>
+              </div>
+              <p class="text-[11px] text-neutral-500 leading-relaxed">
+                กรณี Messenger เน็ตหลุด/แบตหมด หรือลืมกด แต่หน้างานจริงส่งมอบกุญแจแล้ว สามารถเลือกวิธียืนยันด้านล่างเพื่อ <strong>บังคับเลื่อนสถานะ (Force Advance)</strong> ให้ระบบทำงานต่อได้ทันที:
+              </p>
+
+              <!-- ปุ่ม Action 4 ปุ่ม -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                <!-- 1. ปุ่มพี่ลิลลี่ Override -->
+                <button type="button" onclick="overrideKeyStep('admin_handover')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold p-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition shadow-xs cursor-pointer">
+                  <span>🔑</span>
+                  <span>พี่ลิลลี่ บังคับส่งมอบ (โทรเช็คแล้ว)</span>
+                </button>
+
+                <!-- 2. ปุ่ม Agent กดยืนยันสวนทาง -->
+                <button type="button" onclick="overrideKeyStep('agent_confirm')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold p-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition shadow-xs cursor-pointer">
+                  <span>📲</span>
+                  <span>Agent กดยืนยัน: ได้กุญแจแล้ว</span>
+                </button>
+
+                <!-- 3. ปุ่มปิดเคสส่งคืนกุญแจ -->
+                <button type="button" onclick="overrideKeyStep('complete_return')" class="bg-neutral-900 hover:bg-black text-white font-bold p-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition shadow-xs cursor-pointer">
+                  <span>🔒</span>
+                  <span>บันทึกส่งคืน & ปิดล็อกบ้าน</span>
+                </button>
+
+                <!-- 4. ปุ่มรีเซ็ตสำหรับจำลองใหม่ -->
+                <button type="button" onclick="overrideKeyStep('reset')" class="bg-white hover:bg-neutral-100 text-neutral-700 border border-neutral-300 font-semibold p-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
+                  <span>🔄</span>
+                  <span>รีเซ็ตสถานะเพื่อสาธิตใหม่</span>
+                </button>
+              </div>
+
+              <!-- บันทึก Audit Log ทันทีที่กด -->
+              <div id="key-override-log" class="hidden text-[11px] text-emerald-800 bg-emerald-50 border border-emerald-200/80 rounded-xl p-2.5 flex items-center gap-2">
+                <span class="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0">✓</span>
+                <span id="key-override-log-text">ปลดล็อคสถานะสำเร็จ</span>
               </div>
             </div>
 
@@ -1761,7 +1980,7 @@
             <!-- Quick Scoring by Lily -->
             <div class="space-y-1.5 text-xs">
               <div class="font-bold text-neutral-900 flex items-center gap-1">
-                <i data-lucide="award" class="w-3.5 h-3.5 text-[#B89D68]"></i>
+                <i data-lucide="award" class="w-3.5 h-3.5 text-[#C2A460]"></i>
                 <span>แผงตัดเกรด & บันทึกคะแนนโดยพี่ลิลลี่ (1-Click Audit):</span>
               </div>
               <div class="grid grid-cols-2 gap-1.5">
@@ -1806,6 +2025,128 @@
           >
             <i data-lucide="key" class="w-3.5 h-3.5"></i>
             <span>ยืนยันคำขอเบิกกุญแจ</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 📅 Admin Appointments & Showing Queue Modal (สำหรับบัว, กูล, พี่ลิลลี่) -->
+    <div id="admin-appointments-modal" onclick="if(event.target === this) closeAdminCaseAppointments()" class="hidden modal-backdrop fixed inset-0 z-[110] bg-neutral-950/65 backdrop-blur-xs flex items-center justify-center px-3 pt-6 pb-6 sm:p-6">
+      <div class="relative w-full max-w-lg max-h-[85dvh] bg-white rounded-3xl shadow-2xl border border-neutral-200/90 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        
+        <!-- Header -->
+        <div class="sticky top-0 z-30 px-5 py-4 bg-white/95 backdrop-blur-md border-b border-neutral-100 flex items-center justify-between shrink-0">
+          <div class="flex items-center gap-3 min-w-0 pr-2">
+            <div class="w-9 h-9 rounded-xl bg-neutral-900 text-[#E5C985] flex items-center justify-center text-sm shadow-xs shrink-0 font-bold">
+              <i data-lucide="calendar" class="w-4 h-4 text-[#C2A460]"></i>
+            </div>
+            <div class="min-w-0">
+              <h3 class="text-sm sm:text-base font-bold text-neutral-900 tracking-tight leading-tight truncate">คิวนัดหมายเข้าชมบ้าน & ลีดผู้ซื้อ</h3>
+              <p class="text-[10px] sm:text-xs text-neutral-500 truncate">ระบบติดตามสำหรับผู้บริหาร • บัว, กูล, พี่ลิลลี่</p>
+            </div>
+          </div>
+          <button type="button" onclick="closeAdminCaseAppointments()" aria-label="ปิดหน้าต่าง" class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0">
+            <i data-lucide="x" class="w-5 h-5 stroke-[2.2]"></i>
+          </button>
+        </div>
+
+        <!-- Body -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 custom-scrollbar">
+          
+          <!-- Property Mini Info -->
+          <div class="bg-neutral-50 border border-neutral-200/80 rounded-2xl p-3 flex items-center justify-between gap-3 text-xs">
+            <div class="min-w-0">
+              <div class="text-[10px] text-neutral-400 font-mono" id="admin-app-prop-id">#1069562</div>
+              <div class="font-bold text-neutral-900 truncate text-xs sm:text-sm" id="admin-app-prop-title">คอนโด เซ็นทริค ซีน รัชวิภา</div>
+              <div class="text-[11px] text-[#8C6D23] font-semibold mt-0.5" id="admin-app-prop-price">฿3,410,000</div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 shrink-0">
+              เปิดให้เข้าชม
+            </span>
+          </div>
+
+          <!-- Key Location Live Status Box -->
+          <div class="bg-gradient-to-r from-neutral-900 to-neutral-800 text-white p-3.5 rounded-2xl border border-neutral-700/60 space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-neutral-400 flex items-center gap-1.5 font-semibold">
+                <i data-lucide="key" class="w-3.5 h-3.5 text-[#C2A460]"></i>
+                <span>สถานะกุญแจปัจจุบัน (Key Custody):</span>
+              </span>
+              <span id="admin-app-key-status-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
+                พร้อมส่งมอบ (In Vault)
+              </span>
+            </div>
+            <div class="text-xs text-neutral-200 leading-relaxed" id="admin-app-key-desc">
+              ตำแหน่ง: <strong>ตู้เซฟสำนักงานใหญ่ ชั้น 2 (กล่อง A-14)</strong> • ดอกจริง 2 ดอก + คีย์การ์ด 1 ใบ ครบ 100%
+            </div>
+          </div>
+
+          <!-- Timeline Showing Queue -->
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between text-xs font-bold text-neutral-800">
+              <span>รายการนัดหมายเข้าชมบ้านจริง (Showing Queue):</span>
+              <span class="text-[11px] text-[#8B0000] font-semibold">2 นัดหมายรอเข้าชม</span>
+            </div>
+
+            <!-- Case Item 1 -->
+            <div class="bg-white border border-neutral-200/90 rounded-2xl p-3.5 space-y-2 shadow-2xs hover:border-[#C2A460]/60 transition">
+              <div class="flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-lg bg-neutral-900 text-[#E5C985] text-[10px] font-bold flex items-center justify-center">S22</span>
+                  <div>
+                    <div class="font-bold text-neutral-900">คุณสมชาย พาเจริญ (Falcon Hunter)</div>
+                    <div class="text-[10px] text-neutral-400">โทร 086-333-2211</div>
+                  </div>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                  ยืนยันแล้ว
+                </span>
+              </div>
+              <div class="text-xs text-neutral-700 pt-1.5 border-t border-neutral-100 flex items-center justify-between">
+                <span>📅 <strong>วันนี้ 14:00 น.</strong> (นัดชมห้องจริง)</span>
+                <span class="text-neutral-500">ผู้จะซื้อ: คุณวิชัย นพรัตน์</span>
+              </div>
+              <div class="text-[11px] text-neutral-500 bg-neutral-50 p-2 rounded-xl">
+                💬 <strong>บันทึกลีด:</strong> ลูกค้าทำงาน SCB สำนักงานใหญ่ สนใจกู้ร่วม 2 คน เตรียมเอกสารยื่น Pre-Approve
+              </div>
+            </div>
+
+            <!-- Case Item 2 -->
+            <div class="bg-white border border-neutral-200/90 rounded-2xl p-3.5 space-y-2 shadow-2xs hover:border-[#C2A460]/60 transition">
+              <div class="flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-lg bg-[#8B0000] text-[#E5C985] text-[10px] font-bold flex items-center justify-center">SW</span>
+                  <div>
+                    <div class="font-bold text-neutral-900">คุณอัครวินท์ (SW-001 Master Partner)</div>
+                    <div class="text-[10px] text-neutral-400">โทร 092-555-8899</div>
+                  </div>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
+                  รอยืนยันเวลา
+                </span>
+              </div>
+              <div class="text-xs text-neutral-700 pt-1.5 border-t border-neutral-100 flex items-center justify-between">
+                <span>📅 <strong>พรุ่งนี้ 10:30 น.</strong> (นัดชมห้องจริง)</span>
+                <span class="text-neutral-500">ผู้จะซื้อ: คุณพัชราภา วงศ์สุวรรณ</span>
+              </div>
+              <div class="text-[11px] text-neutral-500 bg-neutral-50 p-2 rounded-xl">
+                💬 <strong>บันทึกลีด:</strong> ผู้ซื้อเงินสด ซื้อลงทุนปล่อยเช่า พร้อมวางเงินทำสัญญาหากห้องสภาพตรงตามรูป
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="p-3.5 bg-white border-t border-neutral-100 flex items-center justify-between gap-2 shrink-0">
+          <button type="button" onclick="closeAdminCaseAppointments()" class="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-semibold transition cursor-pointer">
+            ปิดหน้าต่าง
+          </button>
+          <button type="button" onclick="closeAdminCaseAppointments(); openNpaKeyModal(currentAdminAppPropId, 'track');" class="px-4 py-2 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-[#E5C985] text-xs font-bold transition cursor-pointer flex items-center gap-1.5 shadow-xs">
+            <i data-lucide="key" class="w-3.5 h-3.5 text-[#C2A460]"></i>
+            <span>ตรวจดูสถานะกุญแจเคสนี้</span>
           </button>
         </div>
 

@@ -3,443 +3,661 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Siwasup Digital Brand Architecture - รายงานสัดส่วนสีและการเชื่อมโยงแบรนด์</title>
+  <title>ศิวาทรัพย์ Asset - The Digital Luxury Color System (75-15-5-5)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Kanit', sans-serif; background-color: #faf9f6; }
+    body { font-family: 'Kanit', sans-serif; background-color: #FAFAF9; color: #171717; }
     .font-sarabun { font-family: 'Sarabun', sans-serif; }
-    @media print {
-      body { background-color: #ffffff; }
-      .no-print { display: none !important; }
-      .page-break { page-break-before: always; }
+    
+    /* Subtle Luxury Card Styling */
+    .luxury-card {
+      background: #FFFFFF;
+      border: 1px solid #E7E5E4;
+      border-radius: 1.5rem;
+      transition: all 0.25s ease;
     }
-    .bg-siwasup-burgundy { background: linear-gradient(135deg, #990000 0%, #800000 50%, #660000 100%); }
-    .bg-siwasup-gold { background: linear-gradient(135deg, #D4BA7A 0%, #C2A460 50%, #967C3E 100%); }
-    .border-siwasup-gold { border-color: #C2A460; }
+    .luxury-card:hover {
+      box-shadow: 0 14px 35px -12px rgba(0,0,0,0.06);
+      border-color: #D6D3D1;
+    }
+
+    /* Floating Toast */
+    #copy-toast {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Live Scrollbar Interactive Demo Styling */
+    .demo-scrollbar::-webkit-scrollbar {
+      display: block !important;
+      width: 5px !important;
+    }
+    .demo-scrollbar::-webkit-scrollbar-track {
+      background: transparent !important;
+      margin: 8px 0 !important;
+    }
+    .demo-scrollbar::-webkit-scrollbar-thumb {
+      background: #D6D3D1 !important;
+      border-radius: 9999px !important;
+      transition: background-color 0.2s ease !important;
+    }
+    .demo-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #C2A460 !important;
+    }
+    .demo-scrollbar {
+      scrollbar-width: thin !important;
+      scrollbar-color: #D6D3D1 transparent !important;
+    }
+
+    @media print {
+      body { background-color: #FFFFFF !important; }
+      .no-print { display: none !important; }
+      .luxury-card { border: 1px solid #D6D3D1 !important; box-shadow: none !important; page-break-inside: avoid; }
+    }
   </style>
 </head>
-<body class="text-neutral-800 antialiased selection:bg-[#990000] selection:text-white">
+<body class="antialiased selection:bg-[#8B0000] selection:text-white pb-24">
 
-  <!-- Top Navigation Bar -->
-  <header class="bg-white/90 backdrop-blur-md border-b border-neutral-200/80 sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+  <!-- Floating Copy Feedback Toast -->
+  <div id="copy-toast" class="fixed bottom-6 right-6 z-50 bg-[#171717] text-white text-xs px-4 py-2.5 rounded-full shadow-2xl border border-[#C2A460]/40 flex items-center gap-2 translate-y-16 opacity-0 pointer-events-none">
+    <i data-lucide="check-circle" class="w-4 h-4 text-[#C2A460]"></i>
+    <span id="toast-msg">คัดลอกรหัสสีเรียบร้อยแล้ว</span>
+  </div>
+
+  <!-- Top Sticky Navigation & Quick Actions -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E7E5E4] px-4 py-3 sm:px-8">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      
+      <!-- Brand Emblem & Title -->
       <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#990000] to-[#660000] text-[#E5C985] border border-[#C2A460]/40 flex items-center justify-center font-bold text-lg shadow-sm">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#990000] to-[#6B0000] text-[#D4BC8B] border border-[#C2A460]/40 flex items-center justify-center font-bold text-lg shadow-sm shrink-0">
           S
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <span class="font-bold text-neutral-900 text-sm tracking-tight">ศิวาทรัพย์ แอสเซท</span>
-            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-[#990000]/10 text-[#8B0000] border border-[#990000]/20">
-              Executive Briefing
+            <h1 class="font-bold text-sm sm:text-base text-[#171717] tracking-tight">ศิวาทรัพย์ แอสเซท</h1>
+            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-[#8B0000]/10 text-[#8B0000] border border-[#8B0000]/20">
+              The Digital Luxury (75-15-5-5)
             </span>
           </div>
-          <p class="text-[11px] text-neutral-400">Digital Brand Color Architecture & Ratio Dashboard</p>
+          <p class="text-[11px] text-[#737373] hidden sm:block font-sarabun">Executive Brand & Color System Dashboard (ฉบับสมบูรณ์)</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-2.5 no-print">
-        <a href="index.html" target="_blank" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-neutral-900 hover:bg-neutral-800 text-white shadow-xs transition flex items-center gap-1.5">
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2 no-print">
+        <a href="index.html" target="_blank" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#171717] hover:bg-neutral-800 text-white shadow-xs transition flex items-center gap-1.5">
           <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-          <span>เปิดดูเว็บจริง (Live OS)</span>
+          <span>ดูหน้าเว็บจริง</span>
         </a>
-        <button onclick="window.print()" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white border border-neutral-300 text-neutral-700 hover:bg-neutral-50 shadow-2xs transition flex items-center gap-1.5">
-          <i data-lucide="printer" class="w-3.5 h-3.5"></i>
-          <span>พิมพ์เอกสาร A4</span>
+        <button onclick="window.print()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white border border-[#E7E5E4] hover:bg-[#F5F5F4] text-[#171717] transition flex items-center gap-1.5">
+          <i data-lucide="printer" class="w-3.5 h-3.5 text-[#737373]"></i>
+          <span class="hidden sm:inline">พิมพ์รายงาน / PDF</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Main Content Container -->
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-8 pt-8 space-y-12">
 
-    <!-- 1. Executive Hero Summary -->
-    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-neutral-200/80 shadow-[0_4px_30px_-5px_rgba(0,0,0,0.03)] relative overflow-hidden">
-      <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#C2A460]/10 via-[#990000]/5 to-transparent rounded-bl-full pointer-events-none"></div>
+    <!-- 🏛️ SECTION 1: EXECUTIVE HERO STATEMENT -->
+    <section class="luxury-card p-6 sm:p-10 relative overflow-hidden bg-gradient-to-br from-white via-[#FAFAF9] to-[#F5F5F4]">
+      <!-- Background Decorative Seal -->
+      <div class="absolute -right-10 -bottom-10 w-72 h-72 rounded-full border-[16px] border-[#C2A460]/10 pointer-events-none flex items-center justify-center font-bold text-8xl text-[#C2A460]/10 select-none">
+        75
+      </div>
 
-      <div class="max-w-3xl space-y-4">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-[#8C6D23] border border-amber-500/20 text-xs font-bold">
-          <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-          <span>วาระการประชุมบอร์ดบริหาร ศิวาทรัพย์ แอสเซท (รอบบ่ายวันจันทร์)</span>
+      <div class="max-w-3xl space-y-4 relative z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8B0000]/8 text-[#8B0000] text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-[#8B0000] animate-pulse"></span>
+          <span>คำตัดสินระดับยุทธศาสตร์แบรนด์ (Core Verdict)</span>
         </div>
-
-        <h1 class="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight leading-tight">
-          การบริหารอัตลักษณ์สีดิจิทัล: <br>
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#8B0000] to-[#C2A460]">
-            The Digital Luxury Ratio (75 - 15 - 5 - 5)
-          </span>
-        </h1>
-
-        <p class="font-sarabun text-sm sm:text-base text-neutral-600 leading-relaxed">
-          สรุปหลักการออกแบบและผลการทดสอบการใช้งานจริงของระบบ <strong>ศิวาทรัพย์ แอสเซท (NPA OS)</strong>: 
-          ทำไมการนำ <em>"สีแดง 30% ของป้ายไวนิลหน้าบ้าน"</em> มาใช้บนหน้าจอเว็บตรงๆ ถึงทำให้แพลตฟอร์มดูเป็นเต็นท์ลดราคา 
-          และวิธีแก้ปัญหาด้วยการเปลี่ยนผ่านสีแดงสู่ <strong>"Heritage Red Touchpoints (5–7%)"</strong> 
-          ที่เชื่อมโยงรอยต่อระหว่างป้ายหน้าบ้าน (Offline) สู่หน้าเว็บ (Online) ได้อย่างแนบเนียน หรูหรา และน่าเชื่อถือระดับ PropTech สากล
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-[#171717] leading-tight">
+          สีแดงของศิวาทรัพย์ <span class="text-[#8B0000]">"ไม่ได้ถูกทิ้ง"</span><br class="hidden sm:inline">
+          แต่ถูกกลั่นจาก 30% ให้เหลือ <span class="underline decoration-[#C2A460] underline-offset-8">5% ที่เข้มขลังและทรงพลังกว่าเดิม</span>
+        </h2>
+        <p class="font-sarabun text-sm sm:text-base text-[#525252] leading-relaxed">
+          ตัวเลขสัดส่วน <strong>75-15-5-5</strong> วัดจากพื้นที่ UI และกราฟิกทั้งหมด <span class="text-[#8B0000] font-semibold">โดยไม่นับพิกเซลรูปถ่ายบ้าน</span> เพราะรูปถ่ายบ้านรีโนเวทคือ <strong>"พระเอกตัวจริง"</strong> ที่ขับดันการตัดสินใจซื้อหลักล้าน หน้าที่ของแบรนด์คือสร้างกรอบที่น่าเชื่อถือระดับสถาบันการเงิน เพื่อปิดการขายอย่างสง่างาม
         </p>
       </div>
 
-      <!-- Quick Metrics Highlights -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-neutral-100 mt-6 font-sarabun">
-        <div class="p-3.5 rounded-2xl bg-neutral-50 border border-neutral-100">
-          <div class="text-xs text-neutral-400 font-medium">สัดส่วนพื้นที่ขาว-สว่าง</div>
-          <div class="text-xl font-black text-neutral-900 font-kanit">75%</div>
-          <div class="text-[11px] text-neutral-500">ขับรูปถ่ายบ้านให้เด่น</div>
+      <!-- Ratio Metric Cards Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8 border-t border-[#E7E5E4] mt-8">
+        
+        <!-- Metric 1: Canvas -->
+        <div onclick="copyHex('#FAFAF9')" class="p-4 rounded-2xl bg-white border border-[#E7E5E4] hover:border-[#C2A460] cursor-pointer transition group">
+          <div class="flex items-center justify-between text-xs text-[#737373] mb-1">
+            <span>Primary Canvas</span>
+            <span class="opacity-0 group-hover:opacity-100 text-[#C2A460] text-[10px] font-mono">คลิกก็อป</span>
+          </div>
+          <div class="text-3xl font-extrabold text-[#171717]">75%</div>
+          <div class="text-xs font-semibold text-[#171717] mt-1 font-mono">#FAFAF9 (Stone-50)</div>
+          <div class="text-[11px] text-[#737373] font-sarabun mt-1">พื้นขาวสว่าง ขับรูปบ้านเด่น</div>
         </div>
-        <div class="p-3.5 rounded-2xl bg-neutral-50 border border-neutral-100">
-          <div class="text-xs text-neutral-400 font-medium">โครงสร้างชาร์โคล/ดำ</div>
-          <div class="text-xl font-black text-neutral-900 font-kanit">15%</div>
-          <div class="text-[11px] text-neutral-500">นิ่ง หนักแน่น สไตล์ OS</div>
+
+        <!-- Metric 2: Obsidian -->
+        <div onclick="copyHex('#171717')" class="p-4 rounded-2xl bg-[#171717] text-white border border-[#171717] hover:border-[#C2A460] cursor-pointer transition group">
+          <div class="flex items-center justify-between text-xs text-neutral-400 mb-1">
+            <span>Obsidian Structure</span>
+            <span class="opacity-0 group-hover:opacity-100 text-[#C2A460] text-[10px] font-mono">คลิกก็อป</span>
+          </div>
+          <div class="text-3xl font-extrabold text-white">15%</div>
+          <div class="text-xs font-semibold text-[#D4BC8B] mt-1 font-mono">#171717 (Neutral-900)</div>
+          <div class="text-[11px] text-neutral-400 font-sarabun mt-1">โครงสร้าง OS นิ่งระดับ Private Bank</div>
         </div>
-        <div class="p-3.5 rounded-2xl bg-neutral-50 border border-neutral-100">
-          <div class="text-xs text-neutral-400 font-medium">แดงเบอร์กันดีแบรนด์</div>
-          <div class="text-xl font-black text-[#8B0000] font-kanit">5–7%</div>
-          <div class="text-[11px] text-[#8B0000]">ตราประทับศิวาทรัพย์</div>
+
+        <!-- Metric 3: Burgundy -->
+        <div onclick="copyHex('#8B0000')" class="p-4 rounded-2xl bg-gradient-to-br from-[#8B0000] to-[#6B0000] text-white border border-[#8B0000] hover:border-[#C2A460] cursor-pointer transition group">
+          <div class="flex items-center justify-between text-xs text-red-200 mb-1">
+            <span>Heritage Red</span>
+            <span class="opacity-0 group-hover:opacity-100 text-[#D4BC8B] text-[10px] font-mono">คลิกก็อป</span>
+          </div>
+          <div class="text-3xl font-extrabold text-white">5%</div>
+          <div class="text-xs font-semibold text-white mt-1 font-mono">#8B0000 (Burgundy)</div>
+          <div class="text-[11px] text-red-100 font-sarabun mt-1">ตราประทับศิวาทรัพย์ & CTA หลัก</div>
         </div>
-        <div class="p-3.5 rounded-2xl bg-neutral-50 border border-neutral-100">
-          <div class="text-xs text-neutral-400 font-medium">ทองซาตินพรีเมียม</div>
-          <div class="text-xl font-black text-[#967C3E] font-kanit">5%</div>
-          <div class="text-[11px] text-[#967C3E]">ถอดจากป้าย 3D ออฟฟิศ</div>
+
+        <!-- Metric 4: Gold -->
+        <div onclick="copyHex('#C2A460')" class="p-4 rounded-2xl bg-gradient-to-br from-[#FAF5EB] to-[#F3EAD5] border border-[#C2A460]/50 hover:border-[#8A6A1F] cursor-pointer transition group">
+          <div class="flex items-center justify-between text-xs text-[#8A6A1F] mb-1">
+            <span>Satin Gold</span>
+            <span class="opacity-0 group-hover:opacity-100 text-[#8A6A1F] text-[10px] font-mono">คลิกก็อป</span>
+          </div>
+          <div class="text-3xl font-extrabold text-[#8A6A1F]">5%</div>
+          <div class="text-xs font-semibold text-[#8A6A1F] mt-1 font-mono">#C2A460 (Satin Gold)</div>
+          <div class="text-[11px] text-[#8A6A1F]/80 font-sarabun mt-1">ถอดจากป้าย 3D ออฟฟิศจริง</div>
         </div>
+
       </div>
     </section>
 
-    <!-- 2. The Core Conflict: Why 30% Vinyl Red Fails on Web UI -->
-    <section class="space-y-4">
-      <div class="flex items-center gap-2">
-        <div class="w-2.5 h-6 rounded-full bg-[#8B0000]"></div>
-        <h2 class="text-lg sm:text-xl font-bold text-neutral-900">
-          1. เจาะลึกปัญหา: ทำไม "สีแดง 30% ของป้ายไวนิล" จึงใช้บนหน้าจอเว็บไม่ได้?
-        </h2>
+    <!-- ⚡ SECTION 2: THE 3-SENTENCE EXECUTIVE PITCH (สำหรับพูดในที่ประชุม) -->
+    <section class="bg-[#171717] text-white rounded-3xl p-6 sm:p-10 border border-[#C2A460]/30 space-y-6 shadow-xl">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-[#C2A460] text-[#171717] flex items-center justify-center font-bold text-sm">
+          💡
+        </div>
+        <div>
+          <h3 class="text-lg sm:text-xl font-bold text-white">3 ประโยคทองคำ สำหรับพรีเซนต์บอร์ดบริหาร (คุณกูล & คุณบัว)</h3>
+          <p class="text-xs text-[#D4BC8B] font-sarabun">พูดอธิบายให้เข้าใจทันทีใน 1 นาที หากมีคำถามว่า "ทำไมหน้าจอไม่ทาแดงสดเหมือนป้ายไวนิล?"</p>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-sarabun text-sm">
-        <!-- Card 1: Medium Context -->
-        <div class="bg-white p-5 rounded-2xl border border-neutral-200/80 shadow-2xs space-y-3">
-          <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
-            <i data-lucide="sun" class="w-5 h-5"></i>
-          </div>
-          <h3 class="font-bold text-neutral-900 font-kanit text-base">1. บริบทของสื่อต่างกันสุดขั้ว (Medium Context)</h3>
-          <p class="text-neutral-600 leading-relaxed">
-            <strong>ป้ายไวนิลหน้าบ้าน (Ads 43x49 / 200x160):</strong> ทำงานด้วย <em>แสงสะท้อน (Reflected Light)</em> ต้องสู้กับแสงแดด ต้นไม้ และระยะมองไกล 30–50 เมตร สีแดงสด 30% จึงจำเป็นอย่างยิ่งในการ <strong>"ตะโกนเรียกสายตา"</strong> ให้คนหยุดมอง
+        <div class="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+          <div class="text-xs font-bold text-[#C2A460] uppercase tracking-wider font-kanit">ประโยคที่ 1: การกลั่นสีแบรนด์</div>
+          <p class="text-neutral-200 leading-relaxed italic">
+            "เรายังมีสีแดงของศิวาทรัพย์ครบทุกจุดที่ลูกค้าต้องจำเรา ทั้งโลโก้ ตรา และปุ่มหลัก เพียงแต่เปลี่ยนจากการตะโกนบนป้ายริมถนน มาเป็นการเซ็นชื่อกำกับบนหน้าจอ"
           </p>
-          <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200/70 text-xs text-amber-900">
-            <strong>บนหน้าจอดิจิทัล:</strong> เป็น <em>แสงส่องตรงเข้าตา (Emissive Light)</em> ห่างตาแค่ 30 ซม. ถ้ามีสีแดง 30% สายตาจะล้าทันที และทำให้ผู้ใช้งานรีบปิดหน้าเว็บหนี
-          </div>
         </div>
 
-        <!-- Card 2: Property Value Perception -->
-        <div class="bg-white p-5 rounded-2xl border border-neutral-200/80 shadow-2xs space-y-3">
-          <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-            <i data-lucide="home" class="w-5 h-5"></i>
-          </div>
-          <h3 class="font-bold text-neutral-900 font-kanit text-base">2. มูลค่าทางจิตวิทยาของรูปถ่ายบ้าน (Perceived Value)</h3>
-          <p class="text-neutral-600 leading-relaxed">
-            ภาพบ้านรีโนเวทคุณภาพสูง โทนไม้อบอุ่น และแสงธรรมชาติ เป็น <strong>"พระเอกตัวจริง"</strong> ของการขายอสังหาฯ หากใช้กรอบหรือแถบสีแดงสดขนาดใหญ่รอบการ์ด สีแดงจะข่มโทนภาพบ้านจนดูหมอง
+        <div class="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+          <div class="text-xs font-bold text-[#C2A460] uppercase tracking-wider font-kanit">ประโยคที่ 2: มูลค่าที่รับรู้ของบ้าน</div>
+          <p class="text-neutral-200 leading-relaxed italic">
+            "แดง 30% ที่ทำให้ป้ายเห็นไกล 50 เมตร คือสิ่งเดียวกับที่ทำให้บ้านรีโนเวทดูเป็นบ้านลดราคาบนหน้าจอ ส่วนขาว 75% ที่ให้รูปบ้านเปล่งประกาย และชาร์โคลที่ให้ความน่าเชื่อถือแบบธนาคาร คือสิ่งที่ทำให้ลูกค้ายอมจ่ายตามราคาหลักล้าน"
           </p>
-          <div class="p-3 rounded-xl bg-rose-50/70 border border-rose-200/70 text-xs text-rose-900">
-            <strong>ผลกระทบ:</strong> ทำให้บ้านดูเหมือน "ทรัพย์ขายทอดตลาด / เต็นท์ลดราคาล้างสต็อก" ทันที แทนที่จะดูเป็นบ้านรีโนเวทพร้อมอยู่ระดับพรีเมียม
-          </div>
         </div>
 
-        <!-- Card 3: UX Semantic Colors -->
-        <div class="bg-white p-5 rounded-2xl border border-neutral-200/80 shadow-2xs space-y-3">
-          <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center">
-            <i data-lucide="alert-triangle" class="w-5 h-5"></i>
-          </div>
-          <h3 class="font-bold text-neutral-900 font-kanit text-base">3. ปัญหา Semantic Color ในระบบแอป (OS System)</h3>
-          <p class="text-neutral-600 leading-relaxed">
-            ในระบบเว็บแอปพลิเคชันยุคใหม่ สีแดงถูกสมองมนุษย์ผูกไว้กับความหมาย <strong>"Error / อันตราย / ลบข้อมูล / ทรัพย์โอนแล้วนำออก"</strong>
+        <div class="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+          <div class="text-xs font-bold text-[#C2A460] uppercase tracking-wider font-kanit">ประโยคที่ 3: วัดผลด้วยข้อมูลจริง</div>
+          <p class="text-neutral-200 leading-relaxed italic">
+            "นี่คือการยกระดับจาก 'ผู้ขายบ้านมือสอง' เป็น 'แบรนด์ PropTech ระดับพรีเมียม' และเราล็อกสูตรนี้ 90 วันแล้ววัดผลจริงจากอัตราคลิกติดต่อและเวลาอยู่บนหน้าทรัพย์ ถ้าตัวเลขไม่ดีขึ้น เราปรับตามข้อมูล ไม่ใช่ตามความรู้สึก"
           </p>
-          <div class="p-3 rounded-xl bg-neutral-100 border border-neutral-200 text-xs text-neutral-700">
-            <strong>ผลกระทบ:</strong> ถ้าเอาสีแดงไปทาขอบแผงควบคุมเจ้าของ จะดูเหมือน <em>"กล่องแจ้งเตือนระบบพัง"</em> มากกว่าแผงควบคุมผู้บริหารระดับสูง
-          </div>
         </div>
       </div>
     </section>
 
-    <!-- 3. Comparison Table: Before vs After -->
-    <section class="space-y-4">
+    <!-- 🌟 SECTION 3: LIVE COMPONENT SHOWCASE & DETAILED BREAKDOWN (ส่วนตัวอย่างของจริงระดับละเอียด) -->
+    <section class="space-y-6">
       <div class="flex items-center gap-2">
-        <div class="w-2.5 h-6 rounded-full bg-[#C2A460]"></div>
-        <h2 class="text-lg sm:text-xl font-bold text-neutral-900">
-          2. ตารางเปรียบเทียบวิวัฒนาการสัดส่วนสี (Color System Evolution Table)
-        </h2>
+        <div class="w-2.5 h-6 rounded-full bg-[#8B0000]"></div>
+        <div>
+          <h3 class="text-lg sm:text-xl font-bold text-[#171717]">คลังตัวอย่างชิ้นส่วนจริงของระบบ (Live Component Showcase)</h3>
+          <p class="text-xs text-[#737373] font-sarabun">ยกเอาปุ่ม, แถบสถานะ, ป้ายริบบิ้น, หน้าต่าง Popup และ Scrollbar ของจริงมาจัดแสดงพร้อมคำอธิบายแบบละเอียด</p>
+        </div>
       </div>
 
-      <div class="bg-white rounded-3xl border border-neutral-200/80 overflow-hidden shadow-xs">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- 1. BUTTON HIERARCHY SHOWCASE -->
+        <div class="luxury-card p-6 space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-[#E7E5E4]">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-[#8B0000]"></span>
+              <h4 class="font-bold text-sm text-[#171717]">1. ลำดับปุ่มกดจริง (Button Hierarchy)</h4>
+            </div>
+            <span class="text-[10px] text-[#737373] font-mono">4-Tier System</span>
+          </div>
+
+          <div class="space-y-3 font-sarabun text-xs">
+            
+            <!-- CTA Level 1 -->
+            <div class="p-3 rounded-xl bg-[#FAFAF9] border border-[#E7E5E4] space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="font-bold font-kanit text-[#8B0000] text-xs">CTA ระดับ 1: ปุ่มหลักสีเบอร์กันดี</span>
+                <span class="text-[10px] text-[#737373]">จำกัด 1 ปุ่มต่อหน้าจอ</span>
+              </div>
+              <button class="w-full py-2.5 px-3 rounded-xl bg-[#8B0000] hover:bg-[#6B0000] text-white font-kanit font-semibold text-xs shadow-xs flex items-center justify-center gap-1.5 transition active:scale-95">
+                <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                <span>ยื่นข้อเสนอราคา (หรือ ยืนยันการจอง)</span>
+              </button>
+              <p class="text-[10px] text-[#737373] leading-tight">ใช้สี `#8B0000` ตัดขาวคมกริบ ให้คอนทราสต์ 10.0:1 ผ่าน AAA สำหรับการตัดสินใจปิดดีล</p>
+            </div>
+
+            <!-- CTA Level 2 -->
+            <div class="p-3 rounded-xl bg-[#FAFAF9] border border-[#E7E5E4] space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="font-bold font-kanit text-[#171717] text-xs">CTA ระดับ 2: ปุ่มรองขอบ Obsidian</span>
+                <span class="text-[10px] text-[#737373]">Actions ทั่วไป</span>
+              </div>
+              <button class="w-full py-2 px-3 rounded-xl bg-transparent hover:bg-[#F5F5F4] text-[#171717] border border-[#171717] font-kanit font-semibold text-xs transition flex items-center justify-center gap-1.5 active:scale-95">
+                <i data-lucide="image" class="w-3.5 h-3.5"></i>
+                <span>โหลดรูป HD ส่ง LINE (หรือ ดูรายละเอียด)</span>
+              </button>
+              <p class="text-[10px] text-[#737373] leading-tight">ปุ่มเส้นขอบ `#171717` สไตล์เรียบหรู ไม่แย่งความเด่นจากปุ่มเบอร์กันดีหลัก</p>
+            </div>
+
+            <!-- CTA Gold Signature -->
+            <div class="p-3 rounded-xl bg-[#FAFAF9] border border-[#E7E5E4] space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="font-bold font-kanit text-[#8A6A1F] text-xs">Gold Signature: ปุ่มสิทธิ์พิเศษ/ฝากขาย</span>
+                <span class="text-[10px] text-[#8A6A1F]">Header CTA</span>
+              </div>
+              <button class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-[#C2A460] via-[#E5CF94] to-[#C2A460] text-[#171717] font-kanit font-bold text-xs shadow-xs transition flex items-center justify-center gap-1.5 active:scale-95">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                <span>ฝากขายบ้านฟรี (VIP Access)</span>
+              </button>
+              <p class="text-[10px] text-[#737373] leading-tight"><strong>กฎเหล็ก:</strong> ต้องใช้ตัวหนังสือสีดำ Obsidian `#171717` เท่านั้น (ห้ามใช้ตัวอักษรสีขาวบนพื้นทองเด็ดขาด เพราะอ่านไม่ออก)</p>
+            </div>
+
+            <!-- Digital Luxury Close Cross -->
+            <div class="p-3 rounded-xl bg-[#FAFAF9] border border-[#E7E5E4] flex items-center justify-between">
+              <div>
+                <span class="font-bold font-kanit text-[#171717] text-xs block">ปุ่มกากบาทปิดหน้าต่าง (Close X)</span>
+                <span class="text-[10px] text-[#737373]">วงกลมดำ w-9 h-9 เวกเตอร์ SVG 2.2px</span>
+              </div>
+              <button class="w-9 h-9 rounded-full bg-[#171717] hover:bg-neutral-800 text-white flex items-center justify-center shadow-md active:scale-90 transition shrink-0" title="ลองคลิกดู">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 2. STATUS BADGES & TIER BADGES -->
+        <div class="luxury-card p-6 space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-[#E7E5E4]">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-[#C2A460]"></span>
+              <h4 class="font-bold text-sm text-[#171717]">2. ป้ายสถานะ & ยศตัวแทน (Badges)</h4>
+            </div>
+            <span class="text-[10px] text-[#737373] font-mono">Semantic Rules</span>
+          </div>
+
+          <div class="space-y-3 font-sarabun text-xs">
+            
+            <div class="p-3 rounded-xl bg-[#FAFAF9] border border-[#E7E5E4] space-y-2">
+              <span class="font-bold font-kanit text-[#171717] text-xs block">ป้ายสถานะทรัพย์จริง 4 สถานะ:</span>
+              <div class="grid grid-cols-2 gap-2">
+                
+                <!-- Ready -->
+                <div class="p-2 rounded-lg bg-[#ECFDF5] border border-[#A7F3D0] flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-[#10B981]"></span>
+                  <span class="font-bold text-[#047857]">พร้อมขาย</span>
+                </div>
+
+                <!-- Booked -->
+                <div class="p-2 rounded-lg bg-[#FFFBEB] border border-[#FDE68A] flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-[#F59E0B]"></span>
+                  <span class="font-bold text-[#B45309]">ติดจอง</span>
+                </div>
+
+                <!-- Transferred / Sold Out -->
+                <div class="p-2 rounded-lg bg-[#F5F5F5] border border-[#E5E5E5] flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-[#A3A3A3]"></span>
+                  <span class="font-bold text-[#525252]">โอนแล้ว (นำออก)</span>
+                </div>
+
+                <!-- New -->
+                <div class="p-2 rounded-lg bg-[#8B0000] text-white flex items-center justify-center font-bold">
+                  <span>New (ทรัพย์ใหม่)</span>
+                </div>
+
+              </div>
+              <p class="text-[10px] text-[#737373] leading-tight"><strong>จุดเปลี่ยนสำคัญ:</strong> เปลี่ยนจุดสี "โอนแล้ว" จากแดงเป็นเทา `#A3A3A3` เพราะการขายได้คือความสำเร็จ ไม่ใช่สัญญาณเตือนภัยอันตราย</p>
+            </div>
+
+            <!-- Agent Tiers -->
+            <div class="p-3 rounded-xl bg-[#FAFAF9] border border-[#E7E5E4] space-y-2">
+              <span class="font-bold font-kanit text-[#171717] text-xs block">ระบบ 5 เกียรติยศตัวแทน (Co-Broker Hierarchy):</span>
+              
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between p-1.5 rounded-lg bg-white border border-[#E7E5E4]">
+                  <span class="inline-flex items-center gap-1 font-semibold text-[#525252]">
+                    <span class="w-3.5 h-3.5 rounded-full border border-neutral-400 text-neutral-400 text-[10px] flex items-center justify-center">○</span>
+                    <span>Trainee</span>
+                  </span>
+                  <span class="text-[10px] text-neutral-400">เทาด้าน #525252</span>
+                </div>
+
+                <div class="flex items-center justify-between p-1.5 rounded-lg bg-white border border-[#E7E5E4]">
+                  <span class="inline-flex items-center gap-1 font-semibold text-[#171717]">
+                    <span class="w-3.5 h-3.5 rounded-full bg-[#171717] text-white text-[10px] flex items-center justify-center">●</span>
+                    <span>Active Agent</span>
+                  </span>
+                  <span class="text-[10px] text-neutral-600 font-mono">Obsidian #171717</span>
+                </div>
+
+                <div class="flex items-center justify-between p-1.5 rounded-lg bg-white border border-[#E7E5E4]">
+                  <span class="inline-flex items-center gap-1 font-semibold text-neutral-700">
+                    <span class="text-neutral-400">★</span>
+                    <span>Silver Specialist</span>
+                  </span>
+                  <span class="text-[10px] text-neutral-500">เหล็กขัดด้าน Satin</span>
+                </div>
+
+                <div class="flex items-center justify-between p-1.5 rounded-lg bg-[#FAF7F0] border border-[#C2A460]/40">
+                  <span class="inline-flex items-center gap-1 font-bold text-[#8A6A1F]">
+                    <span class="text-[#C2A460]">✦✦</span>
+                    <span>Gold Director</span>
+                  </span>
+                  <span class="text-[10px] text-[#8A6A1F] font-mono">Satin Gold #C2A460</span>
+                </div>
+
+                <div class="flex items-center justify-between p-1.5 rounded-lg bg-[#171717] text-[#D4BC8B] border border-[#C2A460]">
+                  <span class="inline-flex items-center gap-1 font-bold">
+                    <span class="text-[#D4BC8B]">◆</span>
+                    <span>Master Diamond Partner</span>
+                  </span>
+                  <span class="text-[10px] text-[#D4BC8B]">Obsidian + ขอบทอง</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 3. LIVE SCROLLBAR & MODAL HEADER DEMO -->
+        <div class="luxury-card p-6 space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-[#E7E5E4]">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-[#171717]"></span>
+              <h4 class="font-bold text-sm text-[#171717]">3. สกอร์บาร์ & หน้าต่าง Popup จริง</h4>
+            </div>
+            <span class="text-[10px] text-[#737373] font-mono">Live Demo</span>
+          </div>
+
+          <div class="space-y-3 font-sarabun text-xs">
+            
+            <!-- Real Modal Header Sample -->
+            <div class="p-3 rounded-xl bg-white border border-[#E7E5E4] shadow-xs space-y-2">
+              <span class="text-[10px] text-[#737373] font-mono block">โครงสร้างส่วนหัว Modal จริง:</span>
+              <div class="flex items-center justify-between pb-2 border-b border-[#E7E5E4]">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-lg bg-[#8B0000] text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                    ฿
+                  </div>
+                  <div>
+                    <h5 class="font-bold font-kanit text-xs text-[#171717] leading-tight">ยื่นเสนอราคา</h5>
+                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-50 text-[#8A6A1F] border border-[#C2A460]/40 font-mono">Fast Offer</span>
+                  </div>
+                </div>
+                <div class="w-7 h-7 rounded-full bg-[#171717] text-white flex items-center justify-center shadow-xs">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Scrollable Container with Transparent Track & Gold Hover -->
+            <div class="p-3 rounded-xl bg-[#FAFAF9] border border-[#E7E5E4] space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="font-bold font-kanit text-[#171717] text-xs">ทดลองเลื่อนดู Scrollbar จริงด้านล่างนี้:</span>
+                <span class="text-[10px] text-[#C2A460] font-mono">5px Floating Pill</span>
+              </div>
+              <div class="h-36 overflow-y-auto demo-scrollbar bg-white p-3 rounded-xl border border-[#E7E5E4] text-[11px] text-[#525252] space-y-2">
+                <p class="font-semibold text-[#171717]">📜 ทดสอบการทำงานของ Scrollbar สไตล์ Digital Luxury:</p>
+                <p>1. <strong>ไม่มีรางสีเทาทึบ (Transparent Track):</strong> ทำให้ตัวเลื่อนลอยอยู่เหนือพื้นผิวสีขาวอย่างสะอาดตา ไม่เกิดเส้นสีเทาแบ่งครึ่งการ์ด</p>
+                <p>2. <strong>เพรียวบาง 5px:</strong> ไม่บดบังเนื้อหาและไม่เกะกะสายตาบนหน้าจอมือถือ</p>
+                <p>3. <strong>โทนสีหินอุ่นธรรมชาติ (#D6D3D1):</strong> สบายตา สอดรับกับพื้นหลัง 75% อย่างกลมกลืน</p>
+                <p class="text-[#8A6A1F] font-semibold">4. <strong>ลองเอาเมาส์ชี้ที่แถบเลื่อนดูสิครับ!</strong> แถบเลื่อนจะเปล่งประกายเปลี่ยนเป็นสีทองซาติน `#C2A460` ทันทีที่เอาเมาส์วางหรือคลิกลาก</p>
+                <p>5. <strong>เว้นระยะขอบมุมมน:</strong> สกอร์บาร์จะไม่ชนมุมโค้งมนของการ์ด ทำให้การ์ดยังคงความมนนุ่มนวลแบบพรีเมียม 100%</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 🏡 SECTION 4: REAL PROPERTY CARD & 5 RECOGNITION ANCHORS -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <!-- Left: 5 Recognition Anchors -->
+      <div class="luxury-card p-6 sm:p-8 space-y-4">
+        <div class="flex items-center gap-2">
+          <div class="w-2.5 h-6 rounded-full bg-[#171717]"></div>
+          <h3 class="text-lg font-bold text-[#171717]">5 จุดยึดจำแบรนด์ (Recognition Anchors)</h3>
+        </div>
+        <p class="font-sarabun text-xs text-[#525252]">
+          สมองของลูกค้าจดจำแบรนด์จาก <strong>"สัญญาณเฉพาะที่ปรากฏซ้ำ"</strong> ไม่ใช่จากปริมาณสีที่สาดเต็มจอ ศิวาทรัพย์ใช้ 5 จุดนี้เชื่อมโยงจากป้ายไวนิลสู่หน้าเว็บ 100%:
+        </p>
+
+        <div class="space-y-3 font-sarabun text-xs">
+          <div class="p-3 rounded-xl bg-[#FAFAF9] border border-[#E7E5E4] flex items-start gap-3">
+            <span class="w-6 h-6 rounded-lg bg-[#8B0000] text-white flex items-center justify-center font-bold font-kanit text-xs shrink-0">1</span>
+            <div>
+              <strong class="text-[#171717] font-kanit text-sm block">Emblem Tile ตราสี่เหลี่ยมมนเบอร์กันดี + S สีทอง</strong>
+              <span>วางที่มุมซ้ายบนของทุกหน้าจอ ไม่ว่าลูกค้าจะมาจากช่องทางไหน จะเห็นตราประทับนี้ในเสี้ยววินาทีแรก</span>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[#FAFAF9] border border-[#E7E5E4] flex items-start gap-3">
+            <span class="w-6 h-6 rounded-lg bg-[#C2A460] text-[#171717] flex items-center justify-center font-bold font-kanit text-xs shrink-0">2</span>
+            <div>
+              <strong class="text-[#171717] font-kanit text-sm block">เส้นทอง Satin Gold Divider คั่น Section</strong>
+              <span>เส้นทอง 1–2px คั่นใต้แถบหัวข้อและใต้รูป ล้อกับแถบทองที่คั่นระหว่างแถบสีแดงและขาวบนป้ายไวนิลจริง</span>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[#FAFAF9] border border-[#E7E5E4] flex items-start gap-3">
+            <span class="w-6 h-6 rounded-lg bg-[#8B0000] text-white flex items-center justify-center font-bold font-kanit text-xs shrink-0">3</span>
+            <div>
+              <strong class="text-[#171717] font-kanit text-sm block">ริบบิ้นมุมรูปบ้าน "✦ ศิวาทรัพย์ รีโนเวท"</strong>
+              <span>ขนาดกะทัดรัดไม่เกิน 3% ของรูป พื้นแดงเข้ม #990000 คาดขอบทอง #C2A460 ไม่บดบังตัวบ้าน</span>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[#FAFAF9] border border-[#E7E5E4] flex items-start gap-3">
+            <span class="w-6 h-6 rounded-lg bg-[#171717] text-white flex items-center justify-center font-bold font-kanit text-xs shrink-0">4</span>
+            <div>
+              <strong class="text-[#171717] font-kanit text-sm block">Typography ตัวเลขราคาและเบอร์โทรหนาคม (800)</strong>
+              <span>จัดวางตัวเลขราคาให้อ่านง่าย สไตล์เอกสารการเงินทางการ คู่กับสัญลักษณ์ ฿ สีทอง</span>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-[#FAFAF9] border border-[#E7E5E4] flex items-start gap-3">
+            <span class="w-6 h-6 rounded-lg bg-[#525252] text-white flex items-center justify-center font-bold font-kanit text-xs shrink-0">5</span>
+            <div>
+              <strong class="text-[#171717] font-kanit text-sm block">ข้อมูลตัวแทนตรงตัว (Information Continuity)</strong>
+              <span>รหัสตัวแทน (เช่น S04 คุณกอล์ฟเล็ก) แสดงผลตรงกับชื่อที่พิมพ์อยู่บนป้ายหน้าบ้านทันทีที่สแกน</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Real Property Card (Actual Component from index.html) -->
+      <div class="luxury-card p-6 sm:p-8 space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-2.5 h-6 rounded-full bg-[#8B0000]"></div>
+            <h3 class="text-lg font-bold text-[#171717]">การ์ดทรัพย์สินตัวจริงของระบบ (Real Card Model)</h3>
+          </div>
+          <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Verified System</span>
+        </div>
+
+        <!-- Real Property Card Replica -->
+        <div class="bg-white rounded-3xl border border-[#E7E5E4] p-4 shadow-sm space-y-3 relative overflow-hidden">
+          
+          <!-- Mock Photo with Ribbon -->
+          <div class="relative w-full h-48 rounded-2xl bg-neutral-200 overflow-hidden flex items-center justify-center text-neutral-400">
+            <img src="https://shop-image.readyplanet.com/r0lD-sC769qG3y4YJq_9q7E9b8U=/f97e79326f634351a2ad3b1e32dc3ea4" alt="House Mockup" class="w-full h-full object-cover">
+            
+            <!-- Top Badges -->
+            <div class="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+              <span class="bg-[#8B0000] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">New</span>
+              <span class="bg-gradient-to-r from-[#990000] to-[#730000] text-white border border-[#C2A460]/60 text-[10px] font-semibold px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1">
+                <span class="text-[#D4BC8B]">✦</span>
+                <span>ศิวาทรัพย์ รีโนเวท</span>
+              </span>
+            </div>
+
+            <div class="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-black/50 backdrop-blur-md text-white flex items-center justify-center hover:bg-[#8B0000] transition cursor-pointer">
+              <i data-lucide="heart" class="w-4 h-4"></i>
+            </div>
+          </div>
+
+          <!-- Card Content -->
+          <div class="space-y-1.5 pt-1">
+            <div class="text-[11px] text-[#737373] font-mono text-right">รหัสทรัพย์: 1090681</div>
+            <h4 class="font-bold text-sm text-[#171717] leading-snug">
+              ทาวน์โฮม 2 ชั้น สไตล์โมเดิร์น รีโนเวทใหม่ พร้อมเข้าอยู่ โซนบางนา-ตราด
+            </h4>
+            
+            <div class="flex items-center gap-1.5 text-xs text-[#737373] pt-0.5">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[#737373]"></i>
+              <span>ซอยบางนา-ตราด 23 แขวงบางนา เขตบางนา กรุงเทพฯ</span>
+            </div>
+
+            <!-- Specs -->
+            <div class="flex items-center gap-4 text-xs text-[#525252] font-medium pt-1">
+              <span class="flex items-center gap-1"><i data-lucide="grid" class="w-3.5 h-3.5 text-[#737373]"></i> 21.4 ตร.ว.</span>
+              <span class="flex items-center gap-1"><i data-lucide="home" class="w-3.5 h-3.5 text-[#737373]"></i> 128 ตร.ม.</span>
+            </div>
+            
+            <!-- Homerun 2-Tier Pricing Layout -->
+            <div class="pt-2.5 border-t border-[#E7E5E4] space-y-1 mt-2">
+              <div class="flex items-center justify-between text-xs">
+                <div class="flex items-center gap-1.5 font-medium text-[#525252]">
+                  <span class="w-4 h-4 rounded-full border border-[#C2A460]/40 text-[#8A6A1F] font-bold text-[10px] inline-flex items-center justify-center bg-[#F8F3E6]">฿</span>
+                  <span>ราคาก่อนต่อรอง</span>
+                </div>
+                <div class="text-base font-extrabold text-[#171717]">฿2,850,000</div>
+              </div>
+              <div class="flex items-center justify-between text-xs text-[#737373]">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-4 h-4 rounded-full border border-[#E7E5E4] text-[#737373] font-bold text-[10px] inline-flex items-center justify-center bg-[#F5F5F4]">฿</span>
+                  <span>หลักประกันเพื่อต่อรองราคา</span>
+                </div>
+                <div class="text-xs font-semibold text-[#525252]">฿50,000</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <button class="py-2.5 px-3 rounded-xl bg-white border border-[#171717] text-[#171717] font-semibold text-xs hover:bg-[#F5F5F4] transition flex items-center justify-center gap-1">
+              <span>ดูรายละเอียด</span>
+            </button>
+            <button class="py-2.5 px-3 rounded-xl bg-[#8B0000] hover:bg-[#6B0000] text-white font-semibold text-xs shadow-sm transition flex items-center justify-center gap-1">
+              <span>ยื่นข้อเสนอราคา</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- 📊 SECTION 5: VISUAL COMPARISON TABLE (ไวนิล vs ดิจิทัล) -->
+    <section class="space-y-4">
+      <div class="flex items-center gap-2">
+        <div class="w-2.5 h-6 rounded-full bg-[#8B0000]"></div>
+        <h3 class="text-lg sm:text-xl font-bold text-[#171717]">ตารางเปรียบเทียบวิวัฒนาการสัดส่วนสี (ป้ายไวนิล vs จอดิจิทัล)</h3>
+      </div>
+
+      <div class="luxury-card overflow-hidden">
         <div class="overflow-x-auto">
-          <table class="w-full text-left font-sarabun text-sm divide-y divide-neutral-200">
-            <thead class="bg-neutral-50 text-neutral-600 font-kanit font-semibold text-xs tracking-wider uppercase">
+          <table class="w-full text-left font-sarabun text-sm divide-y divide-[#E7E5E4]">
+            <thead class="bg-[#F5F5F4] text-[#737373] font-kanit font-semibold text-xs tracking-wider uppercase">
               <tr>
-                <th class="py-4 px-5">องค์ประกอบสี</th>
-                <th class="py-4 px-5">สูตรเดิม (ป้ายไวนิล 60-30-10)</th>
-                <th class="py-4 px-5">ปัญหาที่พบเมื่อขึ้นจอเว็บ</th>
-                <th class="py-4 px-5 bg-amber-50/50 text-[#8C6D23]">สูตรใหม่ The Digital Luxury (75-15-5-5)</th>
-                <th class="py-4 px-5 bg-amber-50/50 text-[#8C6D23]">บทบาททางธุรกิจบนหน้าเว็บ</th>
+                <th class="py-4 px-6">มิติการประเมิน</th>
+                <th class="py-4 px-6 text-[#171717]">ป้ายไวนิลหน้าบ้าน (Awareness)</th>
+                <th class="py-4 px-6 bg-[#FAF7F0] text-[#8A6A1F]">หน้าจอดิจิทัล & Co-Broker OS (Closing)</th>
+                <th class="py-4 px-6">เหตุผลทางสรีรวิทยาและจิตวิทยา</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-neutral-100 text-neutral-700">
-              
-              <!-- Row 1: Canvas -->
-              <tr class="hover:bg-neutral-50/50 transition">
-                <td class="py-4 px-5 font-bold text-neutral-900 font-kanit flex items-center gap-2">
-                  <span class="w-4 h-4 rounded-full bg-white border border-neutral-300 shadow-2xs shrink-0"></span>
-                  <span>Primary Canvas</span>
-                </td>
-                <td class="py-4 px-5 font-kanit font-bold">White 60%</td>
-                <td class="py-4 px-5 text-neutral-500">พื้นที่ขาวไม่พอ โดนสีแดงและกล่องควบคุมแย่งสายตา</td>
-                <td class="py-4 px-5 bg-amber-50/30 font-kanit font-bold text-neutral-900">White 75%</td>
-                <td class="py-4 px-5 bg-amber-50/30">พื้นหลังและตัวการ์ดสว่าง คลีน สไตล์ Apple / Homerun ขับรูปบ้านเด่น 100%</td>
+            <tbody class="divide-y divide-[#E7E5E4] text-[#525252]">
+              <tr class="hover:bg-[#FAFAF9] transition">
+                <td class="py-4 px-6 font-bold text-[#171717] font-kanit">ลักษณะแสง (Light Source)</td>
+                <td class="py-4 px-6">แสงสะท้อน (Reflective) ระยะ 30–50 ม. กลางแจ้ง</td>
+                <td class="py-4 px-6 bg-[#FAF7F0]/40 font-semibold text-[#171717]">แสงเปล่งตรงเข้าจอประสาทตา (Emissive) ห่าง 30 ซม.</td>
+                <td class="py-4 px-6 text-xs text-[#737373]">แสงสีแดงจ้าจ่อตาทำให้สายตาล้าเร็ว (Visual Fatigue) เกิดการกดปิดหนีทันที</td>
               </tr>
-
-              <!-- Row 2: Structure -->
-              <tr class="hover:bg-neutral-50/50 transition">
-                <td class="py-4 px-5 font-bold text-neutral-900 font-kanit flex items-center gap-2">
-                  <span class="w-4 h-4 rounded-full bg-neutral-900 shadow-2xs shrink-0"></span>
-                  <span>Structure / Charcoal</span>
-                </td>
-                <td class="py-4 px-5 text-neutral-400">- (ไม่อยู่ในสูตรหลัก)</td>
-                <td class="py-4 px-5 text-neutral-500">ใช้สีผสมกันมั่ว ทั้งเทา เขียว แดง ทำให้น้ำหนักหน้าเว็บไม่นิ่ง</td>
-                <td class="py-4 px-5 bg-amber-50/30 font-kanit font-bold text-neutral-900">Obsidian 15%</td>
-                <td class="py-4 px-5 bg-amber-50/30">ตัวหนังสือหลัก, แถบ Role Bar, และปุ่ม Action นิ่ง ขรึม น่าเชื่อถือสไตล์แอปการเงิน</td>
+              <tr class="hover:bg-[#FAFAF9] transition">
+                <td class="py-4 px-6 font-bold text-[#171717] font-kanit">หน้าที่ของสื่อ (Media Job)</td>
+                <td class="py-4 px-6 font-semibold text-[#8B0000]">"ตะโกน" ให้ผู้ขับขี่หยุดมองใน 3 วินาที</td>
+                <td class="py-4 px-6 bg-[#FAF7F0]/40 font-semibold text-[#171717]">"พูดเบาๆ อย่างมั่นใจ" ให้ข้อมูลสร้างความไว้วางใจ</td>
+                <td class="py-4 px-6 text-xs text-[#737373]">การซื้อบ้านหลักล้านต้องการความสุขุมโปร่งใส ไม่ใช่ความรู้สึกเร่งเร้าเหมือนซื้อของตลาดนัด</td>
               </tr>
-
-              <!-- Row 3: Red Brand Identity -->
-              <tr class="hover:bg-neutral-50/50 transition bg-rose-50/20">
-                <td class="py-4 px-5 font-bold text-[#8B0000] font-kanit flex items-center gap-2">
-                  <span class="w-4 h-4 rounded-full bg-[#8B0000] shadow-2xs shrink-0"></span>
-                  <span>Brand Red Identity</span>
-                </td>
-                <td class="py-4 px-5 font-kanit font-bold text-[#990000]">Red 30% (แดงสด)</td>
-                <td class="py-4 px-5 text-rose-700">แสบตา ภาพบ้านราคาตก ขอบแผงควบคุมดูเหมือนกล่อง Error</td>
-                <td class="py-4 px-5 bg-amber-50/30 font-kanit font-bold text-[#8B0000]">Deep Burgundy 5–7%</td>
-                <td class="py-4 px-5 bg-amber-50/30 text-[#8B0000]">
-                  <strong>ใช้เป็นตราประทับแบรนด์ (Emblem):</strong> โลโก้ S, ป้ายทรัพย์รีโนเวท, และ Active Quick Chip
-                </td>
+              <tr class="hover:bg-[#FAFAF9] transition">
+                <td class="py-4 px-6 font-bold text-[#171717] font-kanit">สูตรสัดส่วนสี (Formula)</td>
+                <td class="py-4 px-6 font-bold">สูตร 60-30-10 (แดง 30%)</td>
+                <td class="py-4 px-6 bg-[#FAF7F0]/40 font-bold text-[#8A6A1F]">สูตร Digital Luxury (75-15-5-5)</td>
+                <td class="py-4 px-6 text-xs text-[#737373]">ลดแดงเหลือ 5% เฉพาะตราประทับ แล้วคืนพื้นที่ 75% ให้ภาพบ้านจริงเปล่งประกาย</td>
               </tr>
-
-              <!-- Row 4: Luxury Accent -->
-              <tr class="hover:bg-neutral-50/50 transition">
-                <td class="py-4 px-5 font-bold text-[#967C3E] font-kanit flex items-center gap-2">
-                  <span class="w-4 h-4 rounded-full bg-[#C2A460] shadow-2xs shrink-0"></span>
-                  <span>Luxury Gold Accent</span>
-                </td>
-                <td class="py-4 px-5 font-kanit font-bold text-[#967C3E]">Satin Gold 10%</td>
-                <td class="py-4 px-5 text-neutral-500">ใช้ปนกับปุ่มสีสดอื่นๆ จนสีทองไม่เปล่งประกาย</td>
-                <td class="py-4 px-5 bg-amber-50/30 font-kanit font-bold text-[#967C3E]">Satin Gold 5%</td>
-                <td class="py-4 px-5 bg-amber-50/30">ป้าย VIP Curated, ประกายดาว ✦, แถบ MGM Champagne, มงกุฎผู้บริหาร</td>
+              <tr class="hover:bg-[#FAFAF9] transition">
+                <td class="py-4 px-6 font-bold text-[#171717] font-kanit">การรับรู้ราคาบ้าน (Perception)</td>
+                <td class="py-4 px-6">ป้ายประกาศขายทรัพย์พร้อมเบอร์โทร</td>
+                <td class="py-4 px-6 bg-[#FAF7F0]/40 font-semibold text-emerald-800">บ้านรีโนเวทพรีเมียม สไตล์ Homerun / Sansiri</td>
+                <td class="py-4 px-6 text-xs text-[#737373]">หากใช้ขอบแดง 30% บนจอ บ้านจะดูเป็น "ทรัพย์ยึด/ขายทอดตลาดเร่งด่วน" ทันที</td>
               </tr>
-
             </tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <!-- 4. Interactive Live Previews: 4 Strategic Brand Touchpoints -->
-    <section class="space-y-4">
-      <div class="flex items-center gap-2">
-        <div class="w-2.5 h-6 rounded-full bg-emerald-600"></div>
-        <h2 class="text-lg sm:text-xl font-bold text-neutral-900">
-          3. แดงศิวาทรัพย์ไม่ได้หายไปไหน: สำรวจ 4 จุดวางยุทธศาสตร์ (Brand Touchpoints)
-        </h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-        <!-- Touchpoint 1: Header Brand Emblem -->
-        <div class="bg-white p-6 rounded-3xl border border-neutral-200/80 shadow-2xs space-y-4">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-[#8B0000] uppercase tracking-wider">Touchpoint 1</span>
-            <span class="text-xs text-neutral-400 font-sarabun">มุมซ้ายบนสุดของทุกหน้าจอ</span>
-          </div>
-          <h3 class="font-bold text-neutral-900 font-kanit text-base">โลโก้ตราประทับ S (แดงเบอร์กันดี + ทองซาติน)</h3>
-          <p class="font-sarabun text-xs text-neutral-500">
-            เสี้ยววินาทีแรกที่ลูกค้าหรือเอเจนต์เปิดหน้าเว็บ จะเห็นคู่สีแดง-ทองของศิวาทรัพย์ทันที เชื่อมกับป้ายไวนิลและป้ายออฟฟิศ 100%
-          </p>
-
-          <!-- Live Preview Box -->
-          <div class="p-4 rounded-2xl bg-[#faf8f5] border border-neutral-200/60 flex items-center gap-3">
-            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#990000] to-[#660000] text-[#E5C985] border border-[#C2A460]/40 flex items-center justify-center font-bold text-xl shadow-sm shrink-0">
-              S
-            </div>
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="font-bold text-neutral-900 text-sm tracking-tight">ศิวาทรัพย์ แอสเซท</span>
-                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-[#990000]/8 text-[#8B0000] border border-[#990000]/15">
-                  NPA OS
-                </span>
-              </div>
-              <p class="text-xs text-neutral-400">คลังทรัพย์ธนาคาร & ระบบตัวแทนขาย</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Touchpoint 2: Property Ribbon Badge -->
-        <div class="bg-white p-6 rounded-3xl border border-neutral-200/80 shadow-2xs space-y-4">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-[#8B0000] uppercase tracking-wider">Touchpoint 2</span>
-            <span class="text-xs text-neutral-400 font-sarabun">บนมุมภาพถ่ายการ์ดทรัพย์สิน</span>
-          </div>
-          <h3 class="font-bold text-neutral-900 font-kanit text-base">ป้ายริบบิ้นการันตี "ศิวาทรัพย์ รีโนเวท"</h3>
-          <p class="font-sarabun text-xs text-neutral-500">
-            บ้านหลังไหนที่เป็นทรัพย์ของบริษัทเอง จะมีป้ายสีแดงเข้มคาดทองระบุชัดเจน สแกน QR หน้าบ้านแล้วเจอทรัพย์สีเดียวกันทันที
-          </p>
-
-          <!-- Live Preview Box -->
-          <div class="p-4 rounded-2xl bg-neutral-900/90 text-white flex items-center justify-between gap-3">
-            <div class="flex items-center gap-2">
-              <span class="bg-gradient-to-r from-[#8B0000] to-[#730000] text-white border border-[#C2A460]/50 text-xs font-semibold px-3 py-1 rounded-full inline-flex items-center gap-1.5 shadow-sm">
-                <span class="text-[#E5C985]">✦</span>
-                <span>ศิวาทรัพย์ รีโนเวท</span>
-              </span>
-              <span class="text-[11px] text-neutral-400 hidden sm:inline">(โหมดตัวแทน/แอดมิน)</span>
-            </div>
-            <span class="bg-gradient-to-r from-[#8B0000] to-[#730000] text-white border border-[#C2A460]/50 text-xs font-semibold px-3 py-1 rounded-full inline-flex items-center gap-1.5 shadow-sm">
-              <span class="text-[#E5C985]">✦</span>
-              <span>รีโนเวทพร้อมอยู่</span>
-            </span>
-          </div>
-        </div>
-
-        <!-- Touchpoint 3: Quick Filter Chips -->
-        <div class="bg-white p-6 rounded-3xl border border-neutral-200/80 shadow-2xs space-y-4">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-[#8B0000] uppercase tracking-wider">Touchpoint 3</span>
-            <span class="text-xs text-neutral-400 font-sarabun">แถบตัวกรองด่วน 1-Click Filters</span>
-          </div>
-          <h3 class="font-bold text-neutral-900 font-kanit text-base">ปุ่มแยกทรัพย์บริษัท ออกจากคลังแบงก์อื่น</h3>
-          <p class="font-sarabun text-xs text-neutral-500">
-            ในแถบกรองชื่อธนาคาร (SAM, SCB, KBank) ปุ่มศิวาทรัพย์ใช้สีครีมทองอ่อน และเมื่อคลิกจะเปล่งประกายสีแดงเบอร์กันดี
-          </p>
-
-          <!-- Live Preview Box -->
-          <div class="p-4 rounded-2xl bg-[#faf8f5] border border-neutral-200/60 flex items-center gap-2 overflow-x-auto">
-            <button class="h-8 px-3.5 rounded-full text-xs font-semibold bg-[#FAF7F2] border border-[#DFD3C3] text-[#8C734B] flex items-center gap-1.5 shrink-0 shadow-2xs">
-              <span class="text-[#C2A460]">✦</span>
-              <span>ศิวาทรัพย์ รีโนเวท</span>
-            </button>
-            <button class="h-8 px-4 rounded-full text-xs font-semibold bg-gradient-to-br from-[#990000] to-[#730000] text-white border border-[#990000] shadow-xs flex items-center gap-1.5 shrink-0">
-              <span class="text-[#E5C985]">✦</span>
-              <span>เลือกดูเฉพาะศิวาทรัพย์</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Touchpoint 4: Executive Clean Dashboard -->
-        <div class="bg-white p-6 rounded-3xl border border-neutral-200/80 shadow-2xs space-y-4">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-[#8B0000] uppercase tracking-wider">Touchpoint 4</span>
-            <span class="text-xs text-neutral-400 font-sarabun">โหมดเจ้าของ/ผู้บริหาร (บัว & กูล)</span>
-          </div>
-          <h3 class="font-bold text-neutral-900 font-kanit text-base">แผงควบคุมสไตล์ผู้บริหาร (Unified Metric Strip)</h3>
-          <p class="font-sarabun text-xs text-neutral-500">
-            ยกเลิกขอบแดงแจ้งเตือนอันตรายและกล่อง 5 สีพาสเทล เปลี่ยนเป็นเส้นแบ่งบางเฉียบ ตัด Status Dots 6px ดูแพงระดับ Private Banking
-          </p>
-
-          <!-- Live Preview Box -->
-          <div class="rounded-2xl border border-neutral-200/80 overflow-hidden bg-white shadow-2xs">
-            <div class="px-4 py-2.5 flex items-center justify-between border-b border-neutral-100 bg-neutral-50/60">
-              <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded bg-neutral-900 text-[#D4BC8B] flex items-center justify-center text-xs font-bold">♛</div>
-                <span class="text-xs font-bold text-neutral-900">แผงควบคุมผู้บริหาร (บัว & กูล)</span>
-              </div>
-              <span class="text-[10px] text-neutral-500">Real-time DB</span>
-            </div>
-            <div class="grid grid-cols-4 divide-x divide-neutral-100 text-center py-2.5">
-              <div>
-                <div class="text-[10px] text-neutral-400 font-sarabun">แสดงบนเว็บ</div>
-                <div class="text-base font-bold text-neutral-900">110</div>
-              </div>
-              <div>
-                <div class="text-[10px] text-emerald-600 font-sarabun flex items-center justify-center gap-1">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>พร้อมขาย
-                </div>
-                <div class="text-base font-bold text-neutral-900">110</div>
-              </div>
-              <div>
-                <div class="text-[10px] text-amber-600 font-sarabun flex items-center justify-center gap-1">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>ติดจอง
-                </div>
-                <div class="text-base font-bold text-neutral-400">0</div>
-              </div>
-              <div>
-                <div class="text-[10px] text-rose-600 font-sarabun flex items-center justify-center gap-1">
-                  <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>โอนแล้ว
-                </div>
-                <div class="text-base font-bold text-neutral-400">0</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- 5. Executive Pitching Guide for Monday Afternoon Meeting -->
-    <section class="bg-gradient-to-br from-neutral-900 via-neutral-950 to-neutral-900 text-white rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl font-sarabun">
-      <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-full bg-[#C2A460] text-neutral-950 flex items-center justify-center font-bold text-sm">
-          💡
-        </div>
-        <div>
-          <h2 class="text-lg sm:text-xl font-bold font-kanit text-white">
-            คู่มือตอบคำถามบอร์ดบริหาร (Executive Q&A Pitch Script สำหรับคุณต้น)
-          </h2>
-          <p class="text-xs text-neutral-400">เตรียมไว้ตอบคำถามคุณบัวและคุณกูล ในการประชุมบ่ายวันจันทร์</p>
-        </div>
-      </div>
-
-      <div class="space-y-4 text-sm">
-        
-        <!-- Q1 -->
-        <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-          <div class="font-bold text-[#E5C985] font-kanit text-sm flex items-center gap-2">
-            <span>❓ คำถาม:</span>
-            <span>"ทำไมหน้าเว็บไม่ใส่สีแดงสดเยอะๆ เหมือนป้ายไวนิลหน้าบ้านล่ะพี่ต้น?"</span>
-          </div>
-          <p class="text-neutral-300 text-xs sm:text-sm leading-relaxed pl-4 border-l-2 border-[#C2A460]">
-            <strong>แนวทางตอบ:</strong> <em>"ป้ายไวนิลเราต้องตะโกนแข่งกับเสาไฟและต้นไม้ริมถนน จึงต้องแดงสด 30% แต่บนจอมือถือ แสงไฟส่องเข้าตาลูกค้าโดยตรง ถ้าเราใส่สีแดง 30% สายตาจะล้าและปิดหนีทันที ที่สำคัญคือสีแดงจะไปข่มรูปถ่ายบ้านรีโนเวท ทำให้บ้านดูราคาถูกเหมือนเต็นท์รถหรือบ้านขายทอดตลาดครับ เราจึงใช้สูตรของแบรนด์นาฬิกาหรู (Cartier / Rolex) คือให้ <strong>พื้นขาว-ดำ 90% ขับรูปบ้านให้สว่าง แล้วใช้สีแดงเบอร์กันดี 5% ประทับเฉพาะตราสัญลักษณ์ศิวาทรัพย์</strong> ผลคือเว็บดูแพงขึ้น 10 เท่า และลูกค้ายังจำสีแดงของเราได้แม่นยำครับ"</em>
-          </p>
-        </div>
-
-        <!-- Q2 -->
-        <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-          <div class="font-bold text-[#E5C985] font-kanit text-sm flex items-center gap-2">
-            <span>❓ คำถาม:</span>
-            <span>"ลูกค้าที่ยืนสแกน QR Code หน้าป้ายไวนิลเข้ามา จะรู้สึกขัดตาหรือจำแบรนด์ไม่ได้ไหม?"</span>
-          </div>
-          <p class="text-neutral-300 text-xs sm:text-sm leading-relaxed pl-4 border-l-2 border-[#C2A460]">
-            <strong>แนวทางตอบ:</strong> <em>"จำได้แม่นยำ 100% ครับ เพราะทันทีที่กล้องสแกน QR หน้าเว็บจะเด้งขึ้นมาพร้อม <strong>โลโก้ตัว S สีแดง-ทอง</strong> ที่มุมบนสุด และการ์ดบ้านหลังนั้นจะมีป้ายริบบิ้นสีแดงเข้มคาดทอง <strong>'✦ รีโนเวทพร้อมอยู่'</strong> ตรงกับสีหัวป้ายหน้าบ้านเป๊ะ เกิดความต่อเนื่องของแบรนด์ (Visual Continuity) ทันที โดยที่ตัวบ้านยังดูพรีเมียม สบายตาครับ"</em>
-          </p>
-        </div>
-
-        <!-- Q3 -->
-        <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-          <div class="font-bold text-[#E5C985] font-kanit text-sm flex items-center gap-2">
-            <span>❓ คำถาม:</span>
-            <span>"ทำไมตัวแทนและลูกค้าภายนอกถึงชอบเว็บหน้าตาแบบนี้มากกว่าเว็บเต็นท์อสังหาฯ ทั่วไป?"</span>
-          </div>
-          <p class="text-neutral-300 text-xs sm:text-sm leading-relaxed pl-4 border-l-2 border-[#C2A460]">
-            <strong>แนวทางตอบ:</strong> <em>"เพราะเว็บนี้ถูกออกแบบให้เป็น <strong>White-Label Platform สไตล์สากล (เหมือน Apple / Homerun)</strong> เอเจนต์จะกล้าแชร์ลิงก์บ้านให้ลูกค้า VIP หรือแชร์ลงโซเชียลอย่างภาคภูมิใจ เพราะดูเหมือนเป็นระบบของตัวเอง ลูกค้าปลายทางเปิดมาดูจะรู้สึกว่าบริษัทนี้มืออาชีพ มีความน่าเชื่อถือระดับสถาบันการเงิน ไม่ใช่แค่เว็บโพสต์ขายบ้านมือสองธรรมดาครับ"</em>
-          </p>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- Footer Note -->
-    <footer class="text-center font-sarabun text-xs text-neutral-400 py-6 border-t border-neutral-200">
-      เอกสารนำเสนอเชิงกลยุทธ์แบรนด์ • จัดทำโดย ทีมที่ปรึกษาอาวุโส ฝ่ายออกแบบและพัฒนาระบบ ศิวาทรัพย์ แอสเซท (NPA OS) • ตุลาคม 2569
+    <!-- 📌 FOOTER: REFERENCE ARCHIVE -->
+    <footer class="pt-8 border-t border-[#E7E5E4] text-center space-y-2 text-xs text-[#737373] font-sarabun">
+      <p class="font-semibold text-[#171717]">บริษัท ศิวาทรัพย์ แอสเซท จำกัด • ฝ่ายสถาปัตยกรรมดิจิทัล & ระบบ Co-Broker OS</p>
+      <p>อ้างอิงเอกสารหลัก: <a href="DEFINITIVE_BRAND_COLOR_SYSTEM_GUIDELINE.md" class="underline text-[#8A6A1F] hover:text-[#C2A460]">DEFINITIVE_BRAND_COLOR_SYSTEM_GUIDELINE.md</a> | อัปเดตล่าสุด: 25 ตุลาคม 2569</p>
     </footer>
 
   </main>
 
   <script>
-    if (window.lucide) { lucide.createIcons(); }
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Clipboard Copy Helper
+    function copyHex(hex) {
+      navigator.clipboard.writeText(hex).then(() => {
+        showToast('คัดลอกรหัส ' + hex + ' เข้าคลิปบอร์ดแล้ว');
+      }).catch(() => {
+        showToast('รหัสสี: ' + hex);
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('copy-toast');
+      const toastMsg = document.getElementById('toast-msg');
+      toastMsg.innerText = msg;
+      toast.classList.remove('translate-y-16', 'opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('translate-y-16', 'opacity-0', 'pointer-events-none');
+      }, 2200);
+    }
   </script>
 </body>
 </html>

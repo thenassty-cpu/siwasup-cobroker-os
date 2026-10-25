@@ -89,7 +89,7 @@
     /* Modern Form Validation Feedback (:user-invalid / :user-valid) */
     #homerun-offer-form input:user-invalid {
       border-color: #ef4444 !important;
-      background-color: #fef2f2 !important;
+      background-color: #FAFAF9 !important;
     }
     #homerun-offer-form input:user-valid {
       border-color: #10b981 !important;
@@ -146,28 +146,66 @@
       scrollbar-width: none !important;
     }
 
-    /* Modern, Sleek Custom Scrollbar for lists & scrollable panels */
+        /* ==========================================================================
+       🏛️ THE DIGITAL LUXURY (75-15-5-5) SCROLLBAR SYSTEM
+       Slender 5px floating pill, transparent track, Satin Gold hover
+       ========================================================================== */
+    * {
+      scrollbar-width: thin !important;
+      scrollbar-color: #D6D3D1 transparent !important;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px !important;
+      height: 5px !important;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent !important;
+      margin: 8px 0 !important;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #D6D3D1 !important; /* Warm Stone-300 */
+      border-radius: 9999px !important;
+      border: 1px solid transparent !important;
+      background-clip: padding-box !important;
+      transition: background-color 0.2s ease !important;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #C2A460 !important; /* Satin Architectural Gold */
+    }
+
+    ::-webkit-scrollbar-corner {
+      background: transparent !important;
+    }
+
+    /* Modal & Panel Specific Scrollbar */
     .custom-scrollbar::-webkit-scrollbar {
       display: block !important;
-      width: 6px !important;
-      height: 6px !important;
+      width: 5px !important;
+      height: 5px !important;
     }
+
     .custom-scrollbar::-webkit-scrollbar-track {
-      background: #f1f5f9 !important;
-      border-radius: 9999px !important;
+      background: transparent !important;
+      margin: 10px 0 !important;
     }
+
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #cbd5e1 !important;
+      background: #D6D3D1 !important;
       border-radius: 9999px !important;
-      border: 1px solid #f1f5f9 !important;
     }
+
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8 !important;
+      background: #C2A460 !important;
     }
+
     .custom-scrollbar {
       -ms-overflow-style: auto !important;
       scrollbar-width: thin !important;
-      scrollbar-color: #cbd5e1 #f1f5f9 !important;
+      scrollbar-color: #D6D3D1 transparent !important;
     }
 
     @keyframes fadeIn {
@@ -233,7 +271,7 @@
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200/80 shadow-xs">
       
       <!-- 1. Top Role Utility Bar: ล้างสีลูกกวาดออก คุมโทน Charcoal + Satin Gold (#D4BC8B) -->
-      <div class="bg-neutral-950 text-neutral-300 text-xs py-1.5 px-3 sm:px-4 border-b border-neutral-800">
+      <div class="bg-neutral-900 text-neutral-300 text-xs py-1.5 px-3 sm:px-4 border-b border-neutral-800">
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-1.5 sm:gap-2">
           
           <!-- ซ้าย: สลับโหมด (ล็อก shrink-0 และ min-w เพื่อไม่ให้โดนเบียดหายบนจอมือถือ) -->
@@ -324,7 +362,7 @@
             </div>
 
             <!-- ปุ่มฝากขายบนมือถือ (< lg) -->
-            <button onclick="openConsignModal()" class="lg:hidden px-3 py-1.5 rounded-full bg-[#B89D68] hover:bg-[#A38854] text-white text-[11px] font-semibold flex items-center gap-1 shadow-xs shrink-0 transition-transform active:scale-95">
+            <button onclick="openConsignModal()" class="lg:hidden px-3 py-1.5 rounded-full bg-[#C2A460] hover:bg-[#A98B45] text-white text-[11px] font-semibold flex items-center gap-1 shadow-xs shrink-0 transition-transform active:scale-95">
               <span>🏷️</span>
               <span>ฝากขายฟรี</span>
             </button>
@@ -438,7 +476,7 @@
           </div>
 
           <!-- ขวา: ปุ่มฝากขายฟรีสำหรับ Desktop (>= lg) -->
-          <button onclick="openConsignModal()" class="hidden lg:flex px-4 py-2 rounded-full bg-[#B89D68] hover:bg-[#A38854] text-white text-xs font-semibold items-center gap-1.5 shadow-xs transition shrink-0 cursor-pointer active:scale-95">
+          <button onclick="openConsignModal()" class="hidden lg:flex px-4 py-2 rounded-full bg-[#C2A460] hover:bg-[#A98B45] text-white text-xs font-semibold items-center gap-1.5 shadow-xs transition shrink-0 cursor-pointer active:scale-95">
             <span>🏷️</span>
             <span>ฝากขายฟรี</span>
           </button>
@@ -1064,7 +1102,7 @@
         container.innerHTML = `
           <div class="flex items-center justify-between">
             <span class="font-bold text-slate-800 flex items-center gap-1.5">
-              <i data-lucide="file-check-2" class="w-4 h-4 text-[#B89D68]"></i>
+              <i data-lucide="file-check-2" class="w-4 h-4 text-[#C2A460]"></i>
               <span>เอกสารประกอบการซื้อขาย (สำหรับลูกค้า)</span>
             </span>
             <span class="text-[10px] bg-neutral-50 text-neutral-600 border border-neutral-200 font-semibold px-2 py-0.5 rounded-full">ดาวน์โหลดได้</span>
@@ -1123,7 +1161,7 @@
               <div class="text-xs font-bold text-slate-900 truncate">${matchedDoc.title}</div>
             </div>
             <a href="${matchedDoc.fileUrl}" download="${matchedDoc.fileName}" target="_blank"
-               class="shrink-0 bg-[#990000] hover:bg-red-800 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg shadow-2xs flex items-center gap-1">
+               class="shrink-0 bg-[#8B0000] hover:bg-[#6B0000] text-white text-[11px] font-bold px-3 py-1.5 rounded-lg shadow-2xs flex items-center gap-1">
               <i data-lucide="download" class="w-3.5 h-3.5"></i>
               <span>โหลดฟอร์ม ${matchedDoc.bankKey}</span>
             </a>
@@ -1342,7 +1380,18 @@
             ownerNotifyBtn.classList.remove('hidden');
             ownerNotifyBtn.classList.add('flex');
           }
+          // ปรับแต่งปุ่มกุญแจใน Header สำหรับ Admin ให้เป็น "ตู้กุญแจ (Key Custody)"
+          if (npaKeyBtn) {
+            npaKeyBtn.title = "ศูนย์ควบคุมสถานะกุญแจ & ตู้เซฟ (Key Custody Console)";
+            npaKeyBtn.innerHTML = '<span class="text-[#E5C985]">🔑</span><span class="hidden md:inline font-semibold">ตู้กุญแจ</span>';
+            npaKeyBtn.onclick = () => openNpaKeyModal(null, 'track');
+          }
         } else {
+          if (npaKeyBtn) {
+            npaKeyBtn.title = "ระบบเบิกกุญแจ NPA & Messenger";
+            npaKeyBtn.innerHTML = '<span class="text-[#D4BC8B]">🔑</span><span class="hidden md:inline">กุญแจ</span>';
+            npaKeyBtn.onclick = () => openNpaKeyModal(null, 'req');
+          }
           if (archetypeShortcutBtn) archetypeShortcutBtn.classList.add('hidden');
           if (ownerNotifyBtn) {
             ownerNotifyBtn.classList.add('hidden');
@@ -1365,8 +1414,7 @@
         }
       }
 
-      // สลับการแสดงผลของ Quick Chips Bar & VIP Banner ตามโหมด
-      const quickChipsBar = document.getElementById('quick-chips-bar');
+            const quickChipsBar = document.getElementById('quick-chips-bar');
       const bankChips = document.getElementById('bank-quick-chips');
       const filterBankWrapper = document.getElementById('filter-bank-wrapper');
       const filterBankEl = document.getElementById('filter-bank');
@@ -1611,28 +1659,49 @@
         }
       }
 
-      // ซ่อนปุ่มสำหรับเอเจนต์ (พิมพ์ป้ายไวนิล / แชร์ล็อกสิทธิ์ 3-5% / เบิกกุญแจ) เมื่ออยู่ในโหมดลูกค้า
-      const agentActionsRow = document.getElementById('detail-agent-actions-row');
-      if (agentActionsRow) {
-        if (currentMode === 'client') {
-          agentActionsRow.classList.add('hidden');
-        } else {
-          agentActionsRow.classList.remove('hidden');
-        }
-      }
 
-      // แสดง/ซ่อน แถบเบิกกุญแจ NPA ด้านบน (แสดงเฉพาะโหมดพนักงาน, เอเจนต์, เจ้าของ)
+
+      // แสดง/ปรับแต่ง แถบสถานะกุญแจ NPA ด้านบน (แยกโหมดชัดเจนระหว่าง Agent vs Admin)
       const npaKeyBanner = document.getElementById('detail-npa-key-banner');
       const btnBannerNpaKey = document.getElementById('detail-btn-banner-npa-key');
+      const bannerTitleEl = document.getElementById('detail-npa-key-title');
+      const bannerTagEl = document.getElementById('detail-npa-key-tag');
+      const bannerDescEl = document.getElementById('detail-npa-key-desc');
+      const bannerBtnTextEl = document.getElementById('detail-btn-banner-npa-key-text');
+
       if (npaKeyBanner) {
         if (currentMode === 'client') {
           npaKeyBanner.classList.add('hidden');
-        } else {
+        } else if (currentMode === 'owner') {
+          // 🛡️ โหมด ADMIN: แปลงเป็นแผงติดตามสถานะกุญแจ (Key Custody Tracking) ไม่ใช่ "ขอเบิก" หรือ "ขอนัดชม"
           npaKeyBanner.classList.remove('hidden');
+          if (bannerTitleEl) bannerTitleEl.innerHTML = '<span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span><span>สถานะกุญแจ: พร้อมในตู้เซฟออฟฟิศ (กล่อง A-14)</span></span>';
+          if (bannerTagEl) {
+            bannerTagEl.textContent = 'Admin Console';
+            bannerTagEl.className = 'text-[9px] bg-neutral-900 text-[#E5C985] px-1.5 py-0.2 rounded font-bold border border-[#C2A460]/40';
+          }
+          if (bannerDescEl) bannerDescEl.textContent = 'ผู้ดูแลคลังกุญแจ: พี่ลิลลี่ • ดอกจริง 2 ดอก + คีย์การ์ด ครบ 100% (คลิกเพื่อดูบันทึก)';
+          if (bannerBtnTextEl) bannerBtnTextEl.textContent = 'ติดตามกุญแจ';
           if (btnBannerNpaKey) {
             btnBannerNpaKey.onclick = () => {
               closePropertyDetailModal();
-              openNpaKeyModal(p.id);
+              openNpaKeyModal(p.id, 'track');
+            };
+          }
+        } else {
+          // 👔 โหมด AGENT: โชว์บริการเบิกกุญแจนำทาง
+          npaKeyBanner.classList.remove('hidden');
+          if (bannerTitleEl) bannerTitleEl.textContent = 'บริการเบิกกุญแจ NPA & Messenger';
+          if (bannerTagEl) {
+            bannerTagEl.textContent = 'พี่ลิลลี่';
+            bannerTagEl.className = 'text-[9px] bg-[#C2A460]/15 text-[#8C6D23] px-1.5 py-0.2 rounded font-bold border border-[#C2A460]/30';
+          }
+          if (bannerDescEl) bannerDescEl.textContent = 'มี Messenger วิ่งรับกุญแจจากแบงก์ส่งมอบหน้างาน';
+          if (bannerBtnTextEl) bannerBtnTextEl.textContent = 'ขอนัดชม';
+          if (btnBannerNpaKey) {
+            btnBannerNpaKey.onclick = () => {
+              closePropertyDetailModal();
+              openNpaKeyModal(p.id, 'req');
             };
           }
         }
@@ -1641,25 +1710,50 @@
       // Render Role-Based Document Downloads inside Detail Modal
       renderPropertyDocumentDownloads(p);
 
-      const btnVinyl = document.getElementById('detail-btn-vinyl');
-      if (btnVinyl) btnVinyl.onclick = () => { closePropertyDetailModal(); openVinylModal(p.id); };
+      // จัดการปุ่ม Action ด้านล่าง (แยก Admin Suite ออกจาก Agent อย่างเด็ดขาด)
+      const agentActionsRow = document.getElementById('detail-agent-actions-row');
+      const adminActionsRow = document.getElementById('detail-admin-actions-row');
 
-      const btnShare = document.getElementById('detail-btn-share');
-      if (btnShare) btnShare.onclick = () => { openSmartShare(p.id, displayTitle); };
+      if (currentMode === 'owner') {
+        // โหมด Admin: ปิดแถวเอเจนต์ และเปิด Admin Operational Console
+        if (agentActionsRow) agentActionsRow.classList.add('hidden');
+        if (adminActionsRow) {
+          adminActionsRow.classList.remove('hidden');
+          const btnAdminKey = document.getElementById('detail-admin-btn-key');
+          const btnAdminApp = document.getElementById('detail-admin-btn-appointments');
+          const btnAdminPrice = document.getElementById('detail-admin-btn-price');
+          const btnAdminShare = document.getElementById('detail-admin-btn-share');
 
-      const btnNpaKey = document.getElementById('detail-btn-npa-key');
-      if (btnNpaKey) btnNpaKey.onclick = () => { closePropertyDetailModal(); openNpaKeyModal(p.id); };
+          if (btnAdminKey) btnAdminKey.onclick = () => { closePropertyDetailModal(); openNpaKeyModal(p.id, 'track'); };
+          if (btnAdminApp) btnAdminApp.onclick = () => { closePropertyDetailModal(); openAdminCaseAppointments(p.id); };
+          if (btnAdminPrice) btnAdminPrice.onclick = () => { closePropertyDetailModal(); openEditPriceModal(p.id); };
+          if (btnAdminShare) btnAdminShare.onclick = () => { openSmartShare(p.id, displayTitle); };
+        }
+      } else if (currentMode === 'client') {
+        if (agentActionsRow) agentActionsRow.classList.add('hidden');
+        if (adminActionsRow) adminActionsRow.classList.add('hidden');
+      } else {
+        // Agent Modes
+        if (agentActionsRow) agentActionsRow.classList.remove('hidden');
+        if (adminActionsRow) adminActionsRow.classList.add('hidden');
+
+        const btnVinyl = document.getElementById('detail-btn-vinyl');
+        if (btnVinyl) btnVinyl.onclick = () => { closePropertyDetailModal(); openVinylModal(p.id); };
+
+        const btnShare = document.getElementById('detail-btn-share');
+        if (btnShare) btnShare.onclick = () => { openSmartShare(p.id, displayTitle); };
+
+        const btnNpaKey = document.getElementById('detail-btn-npa-key');
+        if (btnNpaKey) btnNpaKey.onclick = () => { closePropertyDetailModal(); openNpaKeyModal(p.id, 'req'); };
+      }
 
       const btnOffer = document.getElementById('detail-btn-offer');
       const btnOfferLabel = document.getElementById('detail-btn-offer-label');
       const waitlistRow = document.getElementById('detail-waitlist-row');
       if (btnOffer) {
         if (currentMode === 'owner') {
-          // โหมดเจ้าของ (บัว & กูล): เจ้าของเป็นคนขาย ไม่ต้องมีปุ่มเสนอราคา เปลี่ยนเป็นปุ่มแก้ราคาขาย
-          btnOffer.disabled = false;
-          btnOffer.className = "w-full bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
-          if (btnOfferLabel) btnOfferLabel.textContent = "แก้ไขราคาขาย (Admin)";
-          btnOffer.onclick = () => { closePropertyDetailModal(); openEditPriceModal(p.id); };
+          // โหมด Admin: ซ่อนปุ่มเสนอราคา เพราะมีปุ่มจัดการราคาใน Admin Suite ด้านบนแล้ว
+          btnOffer.classList.add('hidden');
           if (waitlistRow) waitlistRow.classList.add('hidden');
         } else if (currentMode === 'client' && isBooked) {
           btnOffer.disabled = true;
@@ -1677,7 +1771,7 @@
           }
         } else {
           btnOffer.disabled = false;
-          btnOffer.className = "w-full bg-[#B89D68] hover:bg-[#A38854] text-white font-bold py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
+          btnOffer.className = "w-full bg-[#C2A460] hover:bg-[#A98B45] text-white font-bold py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
           if (btnOfferLabel) btnOfferLabel.textContent = "เสนอราคา";
           btnOffer.onclick = () => { closePropertyDetailModal(); openOfferModal(p.id, displayTitle, p.price); };
           if (waitlistRow) waitlistRow.classList.add('hidden');
@@ -2052,9 +2146,9 @@
                 <div class="text-2xl font-bold ${soldArchiveCount > 0 ? 'text-neutral-700' : 'text-neutral-400'} tracking-tight">${soldArchiveCount}</div>
               </div>
 
-              <div onclick="toggleShowTransferred()" class="col-span-2 sm:col-span-1 p-3.5 sm:p-4 text-center hover:bg-neutral-50/50 transition cursor-pointer ${showTransferredInOwnerMode ? 'bg-rose-50 ring-2 ring-inset ring-rose-400' : ''}" title="คลิกเพื่อดู/ซ่อนทรัพย์ที่โอนแล้ว">
+              <div onclick="toggleShowTransferred()" class="col-span-2 sm:col-span-1 p-3.5 sm:p-4 text-center hover:bg-neutral-50/50 transition cursor-pointer ${showTransferredInOwnerMode ? 'bg-neutral-100 ring-2 ring-inset ring-neutral-400' : ''}" title="คลิกเพื่อดู/ซ่อนทรัพย์ที่โอนแล้ว">
                 <div class="flex items-center justify-center gap-1.5 text-xs text-neutral-500 font-medium mb-1">
-                  <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-neutral-400"></span>
                   <span>โอนแล้ว (นำออก)</span>
                 </div>
                 <div class="text-2xl font-bold ${transferredCount > 0 ? 'text-neutral-900' : 'text-neutral-400'} tracking-tight">${transferredCount}</div>
@@ -2173,7 +2267,7 @@
                     <span>ติดจอง</span>
                   </span>
                 ` : (p.is_new || idx < 6) ? `
-                  <span class="bg-[#FF3838] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">New</span>
+                  <span class="bg-[#8B0000] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">New</span>
                 ` : ''}
                 ${bankBadge}
               </div>
@@ -2205,7 +2299,7 @@
             <div class="p-4 space-y-2 flex-1 flex flex-col justify-between">
               <div class="space-y-1.5">
                 <!-- Property Code -->
-                <div class="text-[11px] text-slate-400 font-mono text-right">รหัสทรัพย์: ${p.id}</div>
+                <div class="text-[11px] text-neutral-500 font-mono text-right">รหัสทรัพย์: ${p.id}</div>
                 
                 <!-- Title (White-labeled in Client Mode) -->
                 <h3 class="font-bold text-slate-900 text-sm md:text-base leading-snug line-clamp-2 hover:text-[#990000] transition-colors cursor-pointer" onclick="openPropertyDetailModal('${p.id}')">
@@ -2229,14 +2323,14 @@
               <div class="pt-2.5 border-t border-slate-100 space-y-1 mt-2">
                 <div class="flex items-center justify-between text-xs">
                   <span class="text-neutral-500 flex items-center gap-1.5 font-medium">
-                    <span class="w-4 h-4 rounded-full border border-neutral-300 text-neutral-600 font-bold text-[10px] inline-flex items-center justify-center leading-none select-none">฿</span>
+                    <span class="w-4 h-4 rounded-full border border-[#C2A460]/40 text-[#8A6A1F] font-bold text-[10px] inline-flex items-center justify-center leading-none select-none bg-[#F8F3E6]">฿</span>
                     <span>${currentMode === 'owner' ? 'ราคาตั้งขาย' : 'ราคาก่อนต่อรอง'}</span>
                   </span>
                   <span class="text-base font-extrabold text-neutral-900 tracking-tight">฿${formatPriceClean(p.price)}</span>
                 </div>
                 <div class="flex items-center justify-between text-xs">
-                  <span class="text-neutral-400 flex items-center gap-1.5">
-                    <span class="w-4 h-4 rounded-full border border-neutral-200 text-neutral-400 font-bold text-[10px] inline-flex items-center justify-center leading-none select-none">฿</span>
+                  <span class="text-neutral-500 flex items-center gap-1.5">
+                    <span class="w-4 h-4 rounded-full border border-neutral-300 text-neutral-500 font-bold text-[10px] inline-flex items-center justify-center leading-none select-none">฿</span>
                     <span>หลักประกันเพื่อต่อรองราคา</span>
                   </span>
                   <span class="text-xs font-semibold text-neutral-600 tracking-tight">฿${calcDeposit(p.price)}</span>
@@ -2300,10 +2394,14 @@
                         <span class="text-[10px] text-neutral-400">▾</span>
                       </button>
 
-                      <div id="card-menu-${p.id}" class="card-action-menu hidden absolute right-0 bottom-full mb-1.5 w-52 bg-white rounded-xl shadow-xl border border-neutral-200/90 py-1.5 z-30 animate-fadeIn" onclick="event.stopPropagation()">
-                        <button type="button" onclick="openNpaKeyModal('${p.id}'); toggleCardActionMenu('${p.id}')" class="w-full px-3.5 py-2 text-left text-xs font-medium text-neutral-700 hover:bg-neutral-50 flex items-center gap-2.5 transition">
-                          <i data-lucide="key" class="w-3.5 h-3.5 text-neutral-400"></i>
-                          <span>เบิกกุญแจ NPA & Messenger</span>
+                      <div id="card-menu-${p.id}" class="card-action-menu hidden absolute right-0 bottom-full mb-1.5 w-56 bg-white rounded-xl shadow-xl border border-neutral-200/90 py-1.5 z-30 animate-fadeIn" onclick="event.stopPropagation()">
+                        <button type="button" onclick="openNpaKeyModal('${p.id}', 'track'); toggleCardActionMenu('${p.id}')" class="w-full px-3.5 py-2 text-left text-xs font-semibold text-neutral-800 hover:bg-neutral-50 flex items-center gap-2.5 transition">
+                          <i data-lucide="key" class="w-3.5 h-3.5 text-[#C2A460]"></i>
+                          <span>ติดตามสถานะกุญแจ (Key Custody)</span>
+                        </button>
+                        <button type="button" onclick="openAdminCaseAppointments('${p.id}'); toggleCardActionMenu('${p.id}')" class="w-full px-3.5 py-2 text-left text-xs font-semibold text-neutral-800 hover:bg-neutral-50 flex items-center gap-2.5 transition border-t border-neutral-100">
+                          <i data-lucide="calendar" class="w-3.5 h-3.5 text-neutral-500"></i>
+                          <span>ดูคิวนัดหมายชมบ้าน</span>
                         </button>
                         <button type="button" onclick="openPropertyDetailModal('${p.id}'); toggleCardActionMenu('${p.id}')" class="w-full px-3.5 py-2 text-left text-xs font-medium text-neutral-700 hover:bg-neutral-50 flex items-center gap-2.5 transition border-t border-neutral-100">
                           <i data-lucide="folder-down" class="w-3.5 h-3.5 text-neutral-400"></i>
@@ -2721,7 +2819,7 @@
         if (!isAdminOrAgent) {
           docsBox.innerHTML = `
             <div class="text-[10.5px] font-bold text-slate-700 flex items-center gap-1">
-              <i data-lucide="file-text" class="w-3.5 h-3.5 text-[#B89D68]"></i>
+              <i data-lucide="file-text" class="w-3.5 h-3.5 text-[#C2A460]"></i>
               <span>เอกสารสำหรับลูกค้า:</span>
             </div>
             <a href="${contractUrl}" target="_blank" class="w-full bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 text-neutral-800 rounded-lg p-1.5 text-[10.5px] font-bold flex items-center justify-between transition-colors">
@@ -2940,10 +3038,41 @@
       }
     }
 
+    // 📅 Admin Case Appointments Controller (สำหรับผู้บริหาร: บัว, กูล, พี่ลิลลี่)
+    let currentAdminAppPropId = null;
+
+    function openAdminCaseAppointments(propId) {
+      currentAdminAppPropId = propId;
+      const list = (window.allProperties && window.allProperties.length > 0)
+        ? window.allProperties
+        : (window.SIWASUP_PROPERTIES || allProperties || []);
+      const p = list.find(item => String(item.id) === String(propId));
+      
+      const modal = document.getElementById('admin-appointments-modal');
+      if (!modal) return;
+
+      if (p) {
+        const titleEl = document.getElementById('admin-app-prop-title');
+        const idEl = document.getElementById('admin-app-prop-id');
+        const priceEl = document.getElementById('admin-app-prop-price');
+        if (titleEl) titleEl.textContent = getDisplayTitle(p);
+        if (idEl) idEl.textContent = `รหัสทรัพย์ #${p.id}`;
+        if (priceEl) priceEl.textContent = `฿${formatPriceClean(p.price)}`;
+      }
+
+      modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeAdminCaseAppointments() {
+      const modal = document.getElementById('admin-appointments-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
     // 🔑 NPA Key Dispatch & Messenger Demo (พี่ลิลลี่ Admin)
     let currentNpaKeyProp = null;
 
-    function openNpaKeyModal(propId = null) {
+    function openNpaKeyModal(propId = null, initialTab = null) {
       const list = (window.allProperties && window.allProperties.length > 0)
         ? window.allProperties
         : (window.SIWASUP_PROPERTIES || allProperties || []);
@@ -2975,7 +3104,20 @@
         dateEl.value = tomorrow.toISOString().split('T')[0];
       }
 
-      switchNpaKeyTab('req');
+      // ปรับแต่ง Title และ Subtitle ของหน้าต่างกุญแจตาม Role (Admin vs Agent)
+      const npaModalTitle = document.getElementById('npa-modal-title');
+      const npaModalSubtitle = document.getElementById('npa-modal-subtitle');
+      if (currentMode === 'owner') {
+        if (npaModalTitle) npaModalTitle.textContent = 'ศูนย์ควบคุมสถานะกุญแจ & ส่งมอบ (Key Custody)';
+        if (npaModalSubtitle) npaModalSubtitle.innerHTML = 'ผู้ดูแลคลังกุญแจ: <strong class="text-neutral-700">พี่ลิลลี่ (Admin ศิวาทรัพย์)</strong> • บัว & กูล';
+      } else {
+        if (npaModalTitle) npaModalTitle.textContent = 'ระบบเบิกกุญแจ NPA & ติดตาม Messenger';
+        if (npaModalSubtitle) npaModalSubtitle.innerHTML = 'ผู้รับผิดชอบงาน: <strong class="text-neutral-700">พี่ลิลลี่ (Admin ศิวาทรัพย์)</strong>';
+      }
+
+      // หากเป็น Admin ให้เปิดหน้าติดตามสถานะกุญแจเป็นค่าเริ่มต้น
+      const targetTab = initialTab || (currentMode === 'owner' ? 'track' : 'req');
+      switchNpaKeyTab(targetTab);
       const modal = document.getElementById('npa-key-dispatch-modal');
       if (modal) modal.classList.remove('hidden');
       if (window.lucide) lucide.createIcons();
@@ -3025,6 +3167,117 @@
         showToast("📝 พี่ลิลลี่บันทึก: +3 แต้ม (Agent ส่งรายงานผลลูกค้าใน 24 ชม.)");
       } else if (type === 'late') {
         showToast("⚠️ พี่ลิลลี่บันทึก: -5 แต้ม (Agent มาสายเกินกำหนด)");
+      }
+    }
+
+    // 🔑 Fail-Safe & Master Override for NPA Key Tracker (แก้ปัญหาเคสค้าง/เน็ตหลุด)
+    function overrideKeyStep(action) {
+      const statusPill = document.getElementById('key-track-status-pill');
+      const timeoutBanner = document.getElementById('key-timeout-banner');
+      const step3Icon = document.getElementById('key-step-3-icon');
+      const step3Text = document.getElementById('key-step-3-text');
+      const step4Row = document.getElementById('key-step-4-row');
+      const step4Icon = document.getElementById('key-step-4-icon');
+      const step4Text = document.getElementById('key-step-4-text');
+      const step5Row = document.getElementById('key-step-5-row');
+      const step5Icon = document.getElementById('key-step-5-icon');
+      const step5Text = document.getElementById('key-step-5-text');
+      const logBox = document.getElementById('key-override-log');
+      const logText = document.getElementById('key-override-log-text');
+
+      if (action === 'admin_handover') {
+        if (statusPill) {
+          statusPill.className = "bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full text-[10px]";
+          statusPill.textContent = "ส่งมอบหน้าบ้านแล้ว (Admin Override)";
+        }
+        if (timeoutBanner) timeoutBanner.classList.add('hidden');
+        if (step3Icon) {
+          step3Icon.className = "w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold";
+          step3Icon.textContent = "✓";
+        }
+        if (step4Row) step4Row.className = "flex items-center gap-2.5 text-neutral-800 font-semibold";
+        if (step4Icon) {
+          step4Icon.className = "w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold";
+          step4Icon.textContent = "✓";
+        }
+        if (step4Text) {
+          step4Text.innerHTML = '<span class="text-emerald-700 font-bold">14:02 น. - พี่ลิลลี่ Master Override:</span> ส่งมอบกุญแจให้ Agent เรียบร้อย (โทรเช็คหน้างานแล้ว)';
+        }
+        if (logBox) logBox.classList.remove('hidden');
+        if (logText) logText.textContent = "✓ พี่ลิลลี่ (Admin) ปลดล็อคขั้นตอนสำเร็จ: บันทึกว่า Agent ได้รับกุญแจและกำลังพาลูกค้าชมบ้าน";
+        showToast("⚡ พี่ลิลลี่ Master Override: ส่งมอบกุญแจให้ Agent สำเร็จ!");
+      } 
+      else if (action === 'agent_confirm') {
+        if (statusPill) {
+          statusPill.className = "bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full text-[10px]";
+          statusPill.textContent = "Agent ได้รับกุญแจแล้ว (Self-Confirm)";
+        }
+        if (timeoutBanner) timeoutBanner.classList.add('hidden');
+        if (step3Icon) {
+          step3Icon.className = "w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold";
+          step3Icon.textContent = "✓";
+        }
+        if (step4Row) step4Row.className = "flex items-center gap-2.5 text-neutral-800 font-semibold";
+        if (step4Icon) {
+          step4Icon.className = "w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold";
+          step4Icon.textContent = "✓";
+        }
+        if (step4Text) {
+          step4Text.innerHTML = '<span class="text-emerald-700 font-bold">14:03 น. - Agent (คุณบัว) ยืนยันสวนทาง:</span> ได้รับกุญแจจาก Messenger เรียบร้อยแล้ว (ไม่รอเน็ต)';
+        }
+        if (logBox) logBox.classList.remove('hidden');
+        if (logText) logText.textContent = "✓ Agent กดยืนยันสวนทางสำเร็จ: ระบบข้ามขั้นตอนทันที ไม่ติดขัดปัญหาสัญญาณเน็ต";
+        showToast("📲 Agent ยืนยันรับกุญแจหน้างานสำเร็จ!");
+      } 
+      else if (action === 'complete_return') {
+        if (step4Row) step4Row.className = "flex items-center gap-2.5 text-neutral-700";
+        if (step4Icon) {
+          step4Icon.className = "w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold";
+          step4Icon.textContent = "✓";
+        }
+        if (step4Text) step4Text.textContent = "14:00 น. - ส่งมอบกุญแจให้ Agent ณ หน้าบ้านเรียบร้อย";
+
+        if (statusPill) {
+          statusPill.className = "bg-neutral-900 text-[#C2A460] font-bold px-2.5 py-0.5 rounded-full text-[10px]";
+          statusPill.textContent = "🔒 คืนกุญแจ & ปิดล็อกบ้านสมบูรณ์";
+        }
+        if (timeoutBanner) timeoutBanner.classList.add('hidden');
+        if (step5Row) step5Row.className = "flex items-center gap-2.5 text-neutral-800 font-semibold";
+        if (step5Icon) {
+          step5Icon.className = "w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold";
+          step5Icon.textContent = "✓";
+        }
+        if (step5Text) {
+          step5Text.innerHTML = '<span class="text-emerald-700 font-bold">15:15 น. - ปิดเคสสำเร็จ:</span> Messenger รับกุญแจคืน & ถ่ายรูปยืนยันปิดล็อกบ้าน 100%';
+        }
+        if (logBox) logBox.classList.remove('hidden');
+        if (logText) logText.textContent = "🔒 ปิดเคส #KEY-2026-089 สมบูรณ์: กุญแจส่งคืนถึง สนง.ใหญ่ และผ่านการตรวจรูปภาพเรียบร้อย";
+        showToast("🔒 ปิดเคสกุญแจ #KEY-2026-089 สมบูรณ์ 100%!");
+      } 
+      else if (action === 'reset') {
+        if (statusPill) {
+          statusPill.className = "bg-sky-100 text-sky-800 font-bold px-2.5 py-0.5 rounded-full text-[10px]";
+          statusPill.textContent = "กำลังวิ่งส่ง";
+        }
+        if (timeoutBanner) timeoutBanner.classList.remove('hidden');
+        if (step3Icon) {
+          step3Icon.className = "w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px] font-bold animate-pulse";
+          step3Icon.textContent = "🛵";
+        }
+        if (step4Row) step4Row.className = "flex items-center gap-2.5 text-neutral-400";
+        if (step4Icon) {
+          step4Icon.className = "w-5 h-5 rounded-full bg-neutral-200 text-neutral-500 flex items-center justify-center text-[10px] font-bold";
+          step4Icon.textContent = "4";
+        }
+        if (step4Text) step4Text.textContent = "รอส่งมอบกุญแจให้ Agent ณ หน้าบ้าน (นัด 14:00 น.)";
+        if (step5Row) step5Row.className = "flex items-center gap-2.5 text-neutral-400";
+        if (step5Icon) {
+          step5Icon.className = "w-5 h-5 rounded-full bg-neutral-200 text-neutral-500 flex items-center justify-center text-[10px] font-bold";
+          step5Icon.textContent = "5";
+        }
+        if (step5Text) step5Text.textContent = "รอรับกุญแจคืน & ถ่ายรูปยืนยันปิดล็อกบ้าน";
+        if (logBox) logBox.classList.add('hidden');
+        showToast("🔄 รีเซ็ตสถานะคำขอเบิกกุญแจกลับจุดเริ่มต้น");
       }
     }
 
@@ -3347,7 +3600,7 @@
       const arch = archMap[archKey];
       if (!arch) return;
 
-      ['bear', 'wolf', 'lion', 'eagle'].forEach(stageId => {
+      ['bear', 'wolf', 'lion', 'falcon', 'eagle', 'gryphon'].forEach(stageId => {
         const btn = document.getElementById(`evo-stage-${stageId}`);
         if (!btn) return;
         if (stageId === archKey) {
@@ -3554,7 +3807,7 @@
         const coClosingBtn = document.getElementById('profile-coclosing-btn');
 
         // Highlight current stage on the 4-Stage Evolution Roadmap
-        ['bear', 'wolf', 'lion', 'eagle'].forEach(stageId => {
+        ['bear', 'wolf', 'lion', 'falcon', 'eagle', 'gryphon'].forEach(stageId => {
           const btn = document.getElementById(`evo-stage-${stageId}`);
           if (!btn) return;
           if (stageId === arch.id) {
@@ -4966,7 +5219,9 @@ function openCallModal(id, title) {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').then((reg) => {
-          console.log('Siwasup PWA Service Worker Registered:', reg.scope);
+          console.log('Siwasup PWA Service Worker Registered (v2):', reg.scope);
+          // Auto check for updates on each load
+          if (reg.update) reg.update();
         }).catch((err) => {
           console.log('SW registration note:', err);
         });
@@ -5015,8 +5270,8 @@ function openCallModal(id, title) {
   <!-- 📲 PWA Guide Modal (Help for LINE in-app & iOS Safari) -->
   <div id="pwa-guide-modal" onclick="if(event.target === this) closePwaGuideModal()" class="fixed inset-0 z-50 bg-neutral-950/70 backdrop-blur-xs flex items-center justify-center p-4 hidden modal-backdrop">
     <div class="relative w-full max-w-sm bg-neutral-900 border border-[#C2A460] rounded-3xl p-5 text-white shadow-2xl space-y-4">
-      <button type="button" onclick="closePwaGuideModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-neutral-800 hover:bg-neutral-700 text-neutral-400 hover:text-white flex items-center justify-center cursor-pointer">
-        ✕
+      <button type="button" onclick="closePwaGuideModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0 border border-neutral-700/60" aria-label="ปิดหน้าต่าง">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#8B0000] to-[#5A0000] border border-[#C2A460]/60 flex items-center justify-center font-serif font-bold text-[#E5C985] text-lg shadow">

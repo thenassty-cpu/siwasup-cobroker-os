@@ -64,6 +64,13 @@
     - แอดมินกดยืนยันการจองบ้าน: ยิง **+100 แต้มผลงาน** เข้าตัวแทนผู้ดูแลเคสอัตโนมัติทันที
 - [x] **Database Schema Update:** อัปเดต `supabase_schema_phase1.sql` เพิ่มตาราง `agent_point_transactions` และฟิลด์คะแนน/ระดับในตาราง `profiles`
 
+### 🏛️ Phase 4: Future Scale & Engine v2.0 (Area-Based Sharding & Home Area Expansion)
+- [ ] **Home Area Architecture & Alert System ([ARCHITECTURE_ENGINE_V2_HOME_AREA_SHARDING.md](file:///C:/Users/ITss-Advice/Documents/GitHub/siwasup-cobroker-os/ARCHITECTURE_ENGINE_V2_HOME_AREA_SHARDING.md)):**
+  - เกณฑ์คณิตศาสตร์เปลี่ยนผ่านจาก Global Pool (ฐาน 125 Agents) สู่ระบบ Home Area (7 โซนหลัก)
+  - 4 มิติคอขวด: Eagle Quota Cap (ชนเพดาน 15 คน), Erlang-C Co-Close Surge (>48 ชม.), Key Dispatch SLA (กูล/พี่ลิลลี่วิ่งข้ามโซน), Zone Density (45-50 Agents / 25 ทรัพย์)
+  - Hybrid Soft Sharding 3 ระยะ: เก็บพิกัด Home Area ล่วงหน้า -> Carve-out Hot Zones -> Global Overflow Fallback 30 นาที
+  - UI Executive Alert สไตล์ The Digital Luxury Ratio 75-15-5-5 (Amber 500 & Burgundy 900)
+
 ### 🧩 Architectural Optimization & Token Economy (100% Completed)
 - [x] **Modal Component Extraction:** สกัด Template ของ Modals ทั้งหมด 10 ตัวออกจาก `index.html` ไปไว้ใน `modals.js` ช่วยลดโค้ดใน `index.html` ลงกว่า 530 บรรทัด (จาก 2,062 เหลือ 1,532 บรรทัด) ประหยัด Token สูงสุด
 - [x] **Global CSS Style Presets:** กำหนด Class Utility กลาง `.capsule-glass-20` (`rounded-full bg-white/20 backdrop-blur-md border border-white/40`) และชุด Modal `.modal-backdrop`, `.modal-card`, `.modal-card-sm` ทำให้การปรับจูนสไตล์แก้เพียง 1 จุดแล้วมีผลทั่วทั้งระบบทันที

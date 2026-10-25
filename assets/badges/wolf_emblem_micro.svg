@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Outer Ring (Gold) -->
+  <circle cx="24" cy="24" r="22" stroke="#C2A460" stroke-width="2.5" fill="#171717"/>
+  <circle cx="24" cy="24" r="19.5" fill="#8B0000"/>
+  <!-- Minimalist Wolf Silhouette (Sharp Triangular Head & Alert Ears) -->
+  <!-- Left Ear -->
+  <path d="M16 11 L21 21 L13 18 Z" fill="#E5C985"/>
+  <!-- Right Ear -->
+  <path d="M32 11 L35 18 L27 21 Z" fill="#E5C985"/>
+  <!-- Head & Muzzle -->
+  <path d="M14 20 L24 16 L34 20 L32 28 L24 37 L16 28 Z" fill="#C2A460"/>
+  <!-- Cheek Tuft Accents -->
+  <path d="M12 25 L16 23 L15 28 Z" fill="#E5C985"/>
+  <path d="M36 25 L33 28 L32 23 Z" fill="#E5C985"/>
+  <!-- Eyes -->
+  <polygon points="19,23 23,24 20,25" fill="#171717"/>
+  <polygon points="29,23 28,25 25,24" fill="#171717"/>
+  <!-- Nose -->
+  <polygon points="22,33 26,33 24,35" fill="#171717"/>
+</svg>

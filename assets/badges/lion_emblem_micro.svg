@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Outer Ring (Gold) -->
+  <circle cx="24" cy="24" r="22" stroke="#C2A460" stroke-width="2.5" fill="#171717"/>
+  <circle cx="24" cy="24" r="19.5" fill="#8B0000"/>
+  <!-- Regal Lion Mane (Stylized Sunburst Crown Mane) -->
+  <path d="M24 8 L27 13 L32 10 L33 16 L38 15 L36 21 L40 23 L36 27 L39 31 L34 32 L35 37 L30 36 L28 40 L24 37 L20 40 L18 36 L13 37 L14 32 L9 31 L12 27 L8 23 L12 21 L10 15 L15 16 L16 10 L21 13 Z" fill="#E5C985"/>
+  <!-- Lion Face Center -->
+  <path d="M17 19 C17 16 20 14 24 14 C28 14 31 16 31 19 C32 23 31 29 28 32 C26 34 22 34 20 32 C17 29 16 23 17 19 Z" fill="#C2A460"/>
+  <!-- Eyes -->
+  <circle cx="20.5" cy="21" r="1.3" fill="#171717"/>
+  <circle cx="27.5" cy="21" r="1.3" fill="#171717"/>
+  <!-- Nose & Whiskers Pad -->
+  <path d="M22 25 L26 25 L24 27.5 Z" fill="#171717"/>
+  <ellipse cx="24" cy="28.5" rx="3" ry="1.5" fill="#171717"/>
+</svg>

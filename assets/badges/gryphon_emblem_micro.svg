@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <!-- Outer Ring (Double Gold Regal Border) -->
+  <circle cx="24" cy="24" r="22" stroke="#C2A460" stroke-width="2.5" fill="#171717"/>
+  <circle cx="24" cy="24" r="19.5" fill="#8B0000"/>
+  <!-- Regal Laurel / Crown Accents at Top -->
+  <path d="M20 9 L24 6 L28 9 L26 12 L22 12 Z" fill="#E5C985"/>
+  <!-- Minimalist Gryphon Silhouette (Rampant Eagle-Lion Fusion in Gold) -->
+  <path d="M16 35 C17 31 18 28 20 27 C17 26 15 22 17 18 C19 14 24 13 28 15 C33 17 35 22 34 26 C31 25 28 25 26 27 C29 28 32 31 32 35 C28 35 25 33 24 30 C22 33 19 35 16 35 Z" fill="#C2A460"/>
+  <!-- Beak & Claw Cutout Details -->
+  <path d="M28 17 C31 18 33 21 30 22 C29 20 28 19 28 17 Z" fill="#E5C985"/>
+  <circle cx="24" cy="18" r="1.8" fill="#171717"/>
+  <!-- Wings Crest Slash -->
+  <path d="M13 22 C18 19 23 22 21 26 C17 26 14 24 13 22 Z" fill="#E5C985"/>
+</svg>

@@ -8,6 +8,22 @@
   "background_color": "#171717",
   "theme_color": "#171717",
   "orientation": "portrait-primary",
+  "shortcuts": [
+    {
+      "name": "คลังทรัพย์รีโนเวท",
+      "short_name": "คลังทรัพย์",
+      "description": "ค้นหาบ้านและห้องชุดพร้อมขาย",
+      "url": "./index.html",
+      "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "หอเกียรติยศตัวละคร",
+      "short_name": "สายตัวละคร",
+      "description": "ตรวจดูยศ 6 ตัวละครและเหรียญเกียรติยศ",
+      "url": "./Siwasup_Emblem_Showcase.html",
+      "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
   "icons": [
     {
       "src": "assets/icons/icon-192.png",
