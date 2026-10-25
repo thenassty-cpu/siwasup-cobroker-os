@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siwasup Co-Broker OS - Quick Presentation Launcher</title>
+    <link rel="icon" type="image/png" href="assets/siwasup_logo.png">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background-color: #0d0f12;
+            color: #F8F9FA;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: #171717;
+            border: 1px solid rgba(194, 164, 96, 0.4);
+            border-radius: 16px;
+            padding: 32px 28px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(194, 164, 96, 0.15);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+            border-bottom: 1px solid rgba(194, 164, 96, 0.2);
+            padding-bottom: 20px;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(194, 164, 96, 0.15);
+            border: 1px solid #C2A460;
+            color: #E6CA85;
+            font-size: 13px;
+            padding: 4px 14px;
+            border-radius: 9999px;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        h1 {
+            color: #FFFFFF;
+            font-size: 26px;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        h1 span { color: #C2A460; }
+        p.subtitle {
+            color: #A3A3A3;
+            font-size: 14px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .card {
+            background: #212529;
+            border: 1px solid #343a40;
+            border-radius: 12px;
+            padding: 20px;
+            text-decoration: none;
+            color: #F8F9FA;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover {
+            border-color: #C2A460;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5), 0 0 12px rgba(194,164,96,0.3);
+            background: #2a2e33;
+        }
+        .card.featured {
+            border-color: rgba(194, 164, 96, 0.6);
+            background: linear-gradient(145deg, #22201b, #171717);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .icon {
+            font-size: 28px;
+            line-height: 1;
+        }
+        .card-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #FFFFFF;
+        }
+        .card-desc {
+            font-size: 13px;
+            color: #adb5bd;
+            line-height: 1.45;
+            margin-bottom: 14px;
+        }
+        .card-action {
+            font-size: 13px;
+            color: #C2A460;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .footer-note {
+            background: #111315;
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-size: 12.5px;
+            color: #868e96;
+            line-height: 1.5;
+            border-left: 3px solid #C2A460;
+        }
+        .footer-note strong { color: #dee2e6; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <span class="badge">PRESENTATION READY • MONDAY LIVE</span>
+        <h1>SIWASUP <span>CO-BROKER OS</span></h1>
+        <p class="subtitle">1-Click Launchpad สำหรับเปิดพรีเซนต์บนเครื่องกูล (เปิดได้ทั้งแบบ Offline และ Cloud)</p>
+    </div>
+
+    <div class="grid">
+        <!-- Card 1: Main Platform -->
+        <a href="index.html" class="card featured" target="_blank">
+            <div>
+                <div class="card-header">
+                    <span class="icon">🏛️</span>
+                    <div>
+                        <div class="card-title">1. ระบบหลัก (Agent Hub)</div>
+                    </div>
+                </div>
+                <div class="card-desc">หน้ารวมทรัพย์ ค้นหาแบบ Real-time, ระบบกรองราคา และปุ่ม Action ต่างๆ ตามสิทธิ์</div>
+            </div>
+            <div class="card-action">เปิดหน้ารวมทรัพย์ ➔</div>
+        </a>
+
+        <!-- Card 2: White Label for Clients (Bua) -->
+        <a href="index.html?mode=client" class="card" target="_blank">
+            <div>
+                <div class="card-header">
+                    <span class="icon">💼</span>
+                    <div>
+                        <div class="card-title">2. โหมดลูกค้า (Client Mode)</div>
+                    </div>
+                </div>
+                <div class="card-desc">ซ่อนค่าคอม ซ่อนชื่อเอเจนท์คู่แข่ง สำหรับให้บัวหรือทีมเซลส์ใช้เปิดคุยกับลูกค้าโดยตรง</div>
+            </div>
+            <div class="card-action">เปิดโหมดลูกค้า ➔</div>
+        </a>
+
+        <!-- Card 3: Key Custody & Fail-Safe Demo (Lily) -->
+        <a href="index.html?mode=owner" class="card featured" target="_blank">
+            <div>
+                <div class="card-header">
+                    <span class="icon">🔑</span>
+                    <div>
+                        <div class="card-title">3. แอดมิน & กุญแจ NPA (Lily)</div>
+                    </div>
+                </div>
+                <div class="card-desc">โชว์สถานะเบิกกุญแจ #KEY-2026-089 พร้อมปุ่ม Smart Fail-Safe Override แก้เคสคนส่งแบตหมด</div>
+            </div>
+            <div class="card-action">เปิดโหมดแอดมินเบิกกุญแจ ➔</div>
+        </a>
+
+        <!-- Card 4: Bua's Referral Portal -->
+        <a href="index.html?ref=S02" class="card" target="_blank">
+            <div>
+                <div class="card-header">
+                    <span class="icon">🦁</span>
+                    <div>
+                        <div class="card-title">4. พอร์ทัลบัว (Lion Tier)</div>
+                    </div>
+                </div>
+                <div class="card-desc">พอร์ทัลส่วนตัวของ ภมรมาศ (รหัส S02) อัตราคอมมิชชัน Lion 60% พร้อมระบบล็อกลูกค้า</div>
+            </div>
+            <div class="card-action">เปิดพอร์ทัลบัว ➔</div>
+        </a>
+
+        <!-- Card 5: Brand Color System -->
+        <a href="Siwasup_Brand_Color_System_Dashboard.html" class="card" target="_blank">
+            <div>
+                <div class="card-header">
+                    <span class="icon">🎨</span>
+                    <div>
+                        <div class="card-title">5. Luxury Brand Tokens</div>
+                    </div>
+                </div>
+                <div class="card-desc">แดชบอร์ดระบบสีแบรนด์ Digital Luxury: Obsidian, Satin Gold, Deep Burgundy และสัตว์สัญลักษณ์</div>
+            </div>
+            <div class="card-action">เปิดดูชุดสีแบรนด์ ➔</div>
+        </a>
+
+        <!-- Card 6: Pitch Deck Document -->
+        <a href="PITCH_DECK_AND_PHASE1_SUMMARY.md" class="card" target="_blank">
+            <div>
+                <div class="card-header">
+                    <span class="icon">📊</span>
+                    <div>
+                        <div class="card-title">6. เอกสารสรุป & Roadmap</div>
+                    </div>
+                </div>
+                <div class="card-desc">เอกสารสถาปัตยกรรมและสไลด์สรุป Phase 1 สำหรับใช้อ้างอิงในที่ประชุมวันจันทร์</div>
+            </div>
+            <div class="card-action">เปิดเอกสาร Markdown ➔</div>
+        </a>
+    </div>
+
+    <div class="footer-note">
+        <strong>💡 เคล็ดลับการพรีเซนต์:</strong><br>
+        • <strong>กรณีใช้เน็ต:</strong> ส่งลิงก์ <code>https://thenassty-cpu.github.io/siwasup-cobroker-os/</code> ให้กูลเปิดใน Chrome หรือ Edge<br>
+        • <strong>กรณีเปิดจาก Flash Drive (Offline):</strong> แค่ดับเบิลคลิกไฟล์ <code>00_START_HERE_เปิดพรีเซนต์ที่นี่.html</code> นี้ในแฟลชไดรฟ์ ก็จะพาไปยังทุกโหมดได้ทันทีโดยไม่ต้องจำ URL
+    </div>
+</div>
+
+</body>
+</html>
