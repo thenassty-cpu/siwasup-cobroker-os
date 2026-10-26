@@ -325,14 +325,62 @@
               <strong class="text-emerald-400">6.5% (สูงกว่าเกณฑ์ตลาด)</strong>
             </div>
           </div>
-
         </div>
 
+        <!-- 3-Tier Lead Triage & Charging Queue (คัดกรองข้อเสนอต่อรองราคา) -->
+        <div class="bg-slate-900/90 rounded-3xl border border-slate-800 p-5 space-y-4 shadow-xl">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div>
+              <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <i data-lucide="inbox" class="w-5 h-5 text-amber-400"></i>
+                <span>📥 คิวจัดหมวดข้อเสนอซื้อ (3-Tier Lead Triage & Charging Queue)</span>
+                <span class="text-[10px] bg-[#C2A460]/20 text-[#E6CA85] border border-[#C2A460]/40 px-2 py-0.5 rounded-full font-bold">
+                  ระบบคัดกรองอัจฉริยะ
+                </span>
+              </h3>
+              <p class="text-xs text-slate-400 mt-0.5">
+                แยกหมวดลีดตามระดับส่วนลด: <strong class="text-emerald-400">Tier 1 เข้าชาร์จด่วน (ลด 0-15%)</strong> เพื่อปิดยอดทันที | <strong class="text-amber-400">Tier 2 เจรจารอบปกติ (ลด 16-30%)</strong> | <strong class="text-purple-400">Tier 3 พิจารณาพิเศษ (ลด 31-50%)</strong> ทรัพย์ค้างสต็อกลุ้นต่อผ่าน
+              </p>
+            </div>
+            <!-- Filter Pills -->
+            <div class="flex items-center gap-1.5 overflow-x-auto text-xs">
+              <button onclick="filterOffersTriage('all')" id="btn-triage-all" class="px-2.5 py-1 rounded-lg bg-[#C2A460] text-slate-950 font-bold transition">ทั้งหมด</button>
+              <button onclick="filterOffersTriage('CHARGING_PRIORITY_1')" id="btn-triage-tier1" class="px-2.5 py-1 rounded-lg bg-slate-800 text-emerald-400 hover:bg-emerald-500/20 font-bold transition flex items-center gap-1">
+                <span>⚡ เข้าชาร์จด่วน (0-15%)</span>
+              </button>
+              <button onclick="filterOffersTriage('STANDARD_NEGOTIATION')" id="btn-triage-tier2" class="px-2.5 py-1 rounded-lg bg-slate-800 text-amber-400 hover:bg-amber-500/20 font-bold transition">
+                <span>📋 เจรจาปกติ (16-30%)</span>
+              </button>
+              <button onclick="filterOffersTriage('SPECIAL_HAIRCUT_REVIEW')" id="btn-triage-tier3" class="px-2.5 py-1 rounded-lg bg-slate-800 text-purple-400 hover:bg-purple-500/20 font-bold transition">
+                <span>🎯 ตรวจสต็อกแบงก์ (31-50%)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Triage Leads Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-300">
+              <thead class="text-[11px] uppercase bg-slate-950/60 text-slate-400 font-semibold border-b border-slate-800">
+                <tr>
+                  <th class="p-3">รหัสทรัพย์ & รายการ</th>
+                  <th class="p-3">ราคาตั้งเดิม</th>
+                  <th class="p-3">ราคาเสนอซื้อ</th>
+                  <th class="p-3">ส่วนลด</th>
+                  <th class="p-3">ผู้เสนอ & เบอร์โทร</th>
+                  <th class="p-3">การจัดหมวดหมู่</th>
+                  <th class="p-3 text-right">การจัดการ</th>
+                </tr>
+              </thead>
+              <tbody id="offers-triage-body" class="divide-y divide-slate-800/60 font-sans">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
-      <!-- ========================================== -->
-      <!-- TAB 2: 17. สถิติและการคลิก (Property Report) -->
-      <!-- ========================================== -->
+      <!-- ==========================================
+      <!-- TAB 2: 17. สถิติและการคลิก       <!-- ========================================== -->
       <section id="pane-analytics" class="tab-pane hidden space-y-6">
         
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -993,7 +1041,7 @@
 
       // Initialize Chart & Tables
       initMonthlySalesChart();
-      renderTrafficTable();
+      renderTrafficTable(); renderOffersTriageTable();
 
       // Adjust views based on role
       applyRoleRestrictions(role);
@@ -1161,6 +1209,172 @@
 
     function openOfferManagementModal() {
       alert('กล่องเคสต่อรองราคา: ระบบจำแนก 🟢 14 เคสชาร์จด่วน และ 🟣 6 เคสต่อหนัก NPA พร้อมเชื่อมต่อทีมงาน');
+    }
+
+    
+    // 5. 📥 3-TIER OFFERS TRIAGE ENGINE
+    let currentTriageFilter = 'all';
+
+    const SAMPLE_TRIAGE_OFFERS = [
+      {
+        propId: '102',
+        propTitle: 'ทาวน์โฮม 2 ชั้น พลีโน่ รังสิตคลอง 4',
+        askPrice: '2,690,000',
+        offerPrice: 2450000,
+        discountPct: '8.9',
+        routingCategory: 'CHARGING_PRIORITY_1',
+        routingTag: '[⚡ เข้าชาร์จด่วน - Priority 1]',
+        buyerName: 'คุณธนภัทร วงศ์เจริญ',
+        phone: '081-987-6543',
+        purchaseType: 'เงินสด',
+        submittedAt: '10 นาทีที่แล้ว'
+      },
+      {
+        propId: '108',
+        propTitle: 'บ้านเดี่ยว มัณฑนา บางนา กม.7',
+        askPrice: '8,900,000',
+        offerPrice: 8200000,
+        discountPct: '7.8',
+        routingCategory: 'CHARGING_PRIORITY_1',
+        routingTag: '[⚡ เข้าชาร์จด่วน - Priority 1]',
+        buyerName: 'คุณกิตติศักดิ์ เลิศฤทธิ์',
+        phone: '089-456-1122',
+        purchaseType: 'สินเชื่อธนาคาร',
+        submittedAt: '35 นาทีที่แล้ว'
+      },
+      {
+        propId: '115',
+        propTitle: 'คอนโด ลุมพินี พาร์ค พระราม 9',
+        askPrice: '2,400,000',
+        offerPrice: 1950000,
+        discountPct: '18.8',
+        routingCategory: 'STANDARD_NEGOTIATION',
+        routingTag: '[📋 เจรจาตามเกณฑ์ปกติ]',
+        buyerName: 'คุณวิมลวรรณ ชัยโรจน์',
+        phone: '086-333-8899',
+        purchaseType: 'สินเชื่อธนาคาร',
+        submittedAt: '2 ชม. ที่แล้ว'
+      },
+      {
+        propId: '124',
+        propTitle: 'อาคารพาณิชย์ 3.5 ชั้น ถนนจันทน์ สาทร',
+        askPrice: '7,500,000',
+        offerPrice: 4200000,
+        discountPct: '44.0',
+        routingCategory: 'SPECIAL_HAIRCUT_REVIEW',
+        routingTag: '[🎯 พิจารณาพิเศษ - ทรัพย์ค้างสต็อก]',
+        buyerName: 'คุณสมเกียรติ พูลทรัพย์',
+        phone: '081-555-7766',
+        purchaseType: 'เงินสด',
+        submittedAt: '4 ชม. ที่แล้ว'
+      }
+    ];
+
+    function filterOffersTriage(cat) {
+      currentTriageFilter = cat;
+      ['all', 'tier1', 'tier2', 'tier3'].forEach(k => {
+        const btn = document.getElementById(`btn-triage-${k}`);
+        if (!btn) return;
+        btn.classList.remove('bg-[#C2A460]', 'text-slate-950');
+        btn.classList.add('bg-slate-800');
+      });
+
+      const activeBtnMap = {
+        'all': 'btn-triage-all',
+        'CHARGING_PRIORITY_1': 'btn-triage-tier1',
+        'STANDARD_NEGOTIATION': 'btn-triage-tier2',
+        'SPECIAL_HAIRCUT_REVIEW': 'btn-triage-tier3'
+      };
+      const activeBtn = document.getElementById(activeBtnMap[cat]);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-slate-800');
+        activeBtn.classList.add('bg-[#C2A460]', 'text-slate-950');
+      }
+
+      renderOffersTriageTable();
+    }
+
+    function renderOffersTriageTable() {
+      const tbody = document.getElementById('offers-triage-body');
+      if (!tbody) return;
+
+      let stored = [];
+      try {
+        stored = JSON.parse(localStorage.getItem('siwasup_submitted_offers') || '[]');
+      } catch(e) {}
+
+      const allOffers = [...stored, ...SAMPLE_TRIAGE_OFFERS];
+      const filtered = allOffers.filter(item => {
+        if (currentTriageFilter === 'all') return true;
+        return item.routingCategory === currentTriageFilter;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="p-8 text-center text-slate-500">
+              ไม่มีข้อเสนอในหมวดนี้
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(item => {
+        const isTier1 = item.routingCategory === 'CHARGING_PRIORITY_1';
+        const isTier2 = item.routingCategory === 'STANDARD_NEGOTIATION';
+        const isTier3 = item.routingCategory === 'SPECIAL_HAIRCUT_REVIEW';
+
+        let badge = '<span class="px-2 py-0.5 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">⚡ เข้าชาร์จด่วน</span>';
+        if (isTier2) {
+          badge = '<span class="px-2 py-0.5 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">📋 เจรจาตามเกณฑ์</span>';
+        } else if (isTier3) {
+          badge = '<span class="px-2 py-0.5 rounded-full font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">🎯 ตรวจสต็อกแบงก์</span>';
+        }
+
+        let actionBtn = isTier1 
+          ? `<button onclick="callLead('${item.phone}')" class="px-3 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition flex items-center gap-1 shadow-sm ml-auto">
+               <i data-lucide="phone-call" class="w-3 h-3"></i>
+               <span>โทรชาร์จลีด</span>
+             </button>`
+          : `<button onclick="routeLead('${item.propId}')" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-[#C2A460] text-slate-300 hover:text-slate-950 font-bold transition flex items-center gap-1 ml-auto">
+               <i data-lucide="send" class="w-3 h-3"></i>
+               <span>ส่งบอร์ดพิจารณา</span>
+             </button>`;
+
+        return `
+          <tr class="hover:bg-slate-800/40 transition">
+            <td class="p-3">
+              <div class="font-bold text-white flex items-center gap-1.5">
+                <span class="text-amber-400 font-mono">#${item.propId}</span>
+                <span class="max-w-[200px] truncate" title="${item.propTitle}">${item.propTitle}</span>
+              </div>
+              <div class="text-[10px] text-slate-500">${item.submittedAt || 'ล่าสุด'} • ${item.purchaseType || 'เงินสด'}</div>
+            </td>
+            <td class="p-3 font-mono text-slate-400">฿${item.askPrice}</td>
+            <td class="p-3 font-mono font-bold text-white">฿${Number(item.offerPrice).toLocaleString()}</td>
+            <td class="p-3 font-mono font-bold ${isTier1 ? 'text-emerald-400' : isTier2 ? 'text-amber-400' : 'text-purple-400'}">
+              -${item.discountPct}%
+            </td>
+            <td class="p-3">
+              <div class="font-medium text-slate-200">${item.buyerName || 'ไม่ระบุชื่อ'}</div>
+              <div class="text-[10px] text-slate-400 font-mono">${item.phone || '-'}</div>
+            </td>
+            <td class="p-3">${badge}</td>
+            <td class="p-3 text-right">${actionBtn}</td>
+          </tr>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function callLead(phone) {
+      alert(`📞 เริ่มสายติดต่อผู้เสนอซื้อ: ${phone} เพื่อเข้าชาร์จลีดทันที!`);
+    }
+
+    function routeLead(propId) {
+      alert(`📋 นำข้อเสนอทรัพย์ #${propId} ส่งต่อฝ่ายวิเคราะห์เพื่อประสานงานเจ้าของทรัพย์/สถาบันการเงิน`);
     }
 
     function openNewArticleModal() {

@@ -557,7 +557,7 @@
               </div>
             </div>
 
-            <!-- ราคาที่ต้องการเสนอ -->
+            <!-- ราคาที่ต้องการเสนอ (ให้ใส่ราคาอย่างอิสระ ไม่แสดงตัวเลขเพดาน 50% ให้ติดตา) -->
             <div>
               <div class="flex justify-between items-baseline mb-1">
                 <label class="font-bold text-neutral-700">ราคาที่ต้องการเสนอซื้อ (บาท) <span class="text-red-500">*</span></label>
@@ -569,13 +569,16 @@
                        oninput="formatCurrencyInput(this); updateOfferSummaryBox();">
                 <span class="absolute left-3 top-3 text-neutral-400 font-bold">฿</span>
               </div>
-              <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
-                <button type="button" onclick="quickAdjustOffer(0)" class="px-2 py-0.5 rounded-lg bg-[#FAF7F2] border border-[#DFD3C3] text-[#8C734B] text-[10px] font-bold transition active:scale-95 cursor-pointer">ราคาตั้ง</button>
-                <button type="button" onclick="quickAdjustOffer(-10)" class="px-2 py-0.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-[10px] font-bold transition active:scale-95 cursor-pointer">-10% (ชาร์จด่วน)</button>
-                <button type="button" onclick="quickAdjustOffer(-20)" class="px-2 py-0.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-[10px] font-bold transition active:scale-95 cursor-pointer">-20%</button>
-                <button type="button" onclick="quickAdjustOffer(-30)" class="px-2 py-0.5 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 text-[10px] font-bold transition active:scale-95 cursor-pointer">-30%</button>
-                <button type="button" onclick="quickAdjustOffer(-50)" class="px-2 py-0.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 text-[10px] font-black transition active:scale-95 cursor-pointer">-50% (เพดานสูงสุด)</button>
-                <span class="text-[10px] text-neutral-400 ml-auto">* ปรับราคาด่วน (ลดได้ไม่เกิน 50%)</span>
+              
+              <!-- ข้อความช่วยเหลือ & กล่องแจ้งเตือนเมื่อลดเกิน 50% (จะ disable ปุ่มส่งทันที) -->
+              <div class="mt-1.5 space-y-1">
+                <p id="offer-price-hint" class="text-[10.5px] text-neutral-400">
+                  ระบุราคาที่ต้องการเสนอซื้ออย่างอิสระ ระบบจะประเมินความเป็นไปได้อัตโนมัติ
+                </p>
+                <div id="offer-exceed-warning" class="hidden p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-[11px] flex items-center gap-2 font-medium">
+                  <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 text-rose-600"></i>
+                  <span>ราคาที่เสนอซื้อต่ำกว่าเกณฑ์การพิจารณาเบื้องต้น กรุณาระบุราคาเสนอซื้อใหม่</span>
+                </div>
               </div>
             </div>
 

@@ -2693,17 +2693,17 @@
       return Math.max(50000, Math.round((askNum * MIN_OFFER_RATIO) / 10000) * 10000);
     }
 
-    function setQuickOfferRatio(ratio) {
-      if (!pendingOfferProp) return;
-      const askNum = parsePriceNumber(pendingOfferProp.price);
-      if (!askNum || askNum <= 0) return;
-      const targetPrice = Math.round((askNum * ratio) / 10000) * 10000;
-      const priceInput = document.getElementById('offer-price');
-      if (priceInput) {
-        priceInput.value = targetPrice;
-        priceInput.setAttribute('aria-invalid', 'false');
+    function formatCurrencyInput(input) {
+      if (!input) return;
+      const clean = input.value.replace(/\D/g, '');
+      if (!clean) {
+        input.value = '';
         updateOfferSummaryBox();
+        return;
       }
+      const num = parseInt(clean, 10);
+      input.value = num.toLocaleString('th-TH');
+      updateOfferSummaryBox();
     }
 
     function isValidThaiMobile(phone) {
@@ -2720,72 +2720,161 @@
       const askNum = parsePriceNumber(pendingOfferProp.price);
       const minAllowed = getMinAllowedOfferPrice(askNum);
       const depositStr = calcDeposit(pendingOfferProp.price);
-      const priceInput = document.getElementById('offer-price');
-      const proposedVal = priceInput ? parseInt(priceInput.value, 10) : 0;
+      
+      const priceInput = document.getElementById('offer-amount-input') || document.getElementById('offer-price');
+      const rawVal = priceInput ? priceInput.value.replace(/\D/g, '') : '';
+      const proposedVal = rawVal ? parseInt(rawVal, 10) : 0;
 
-      const origEl = document.getElementById('offer-summary-original');
-      const propEl = document.getElementById('offer-summary-proposed');
-      const depEl = document.getElementById('offer-summary-deposit');
-      const badgeEl = document.getElementById('offer-discount-badge');
+      // DOM Summary Elements
+      const origEl = document.getElementById('offer-summary-original-price') || document.getElementById('offer-summary-original');
+      const propEl = document.getElementById('offer-summary-final-price') || document.getElementById('offer-summary-proposed');
+      const diffEl = document.getElementById('offer-summary-diff');
+      const depEl = document.getElementById('offer-deposit-display') || document.getElementById('offer-summary-deposit');
+      const discountPctEl = document.getElementById('offer-discount-percent') || document.getElementById('offer-discount-badge');
       const hintEl = document.getElementById('offer-price-hint');
+      const warningEl = document.getElementById('offer-exceed-warning');
+      const submitBtn = document.getElementById('offer-submit-btn');
+      const submitBtnText = document.getElementById('offer-submit-btn-text');
 
       if (origEl) origEl.textContent = `฿${askNum > 0 ? askNum.toLocaleString() : pendingOfferProp.price}`;
       if (depEl) depEl.textContent = `฿${depositStr}`;
 
       if (proposedVal && proposedVal > 0) {
         if (propEl) propEl.textContent = `฿${proposedVal.toLocaleString()}`;
-        if (badgeEl && askNum > 0) {
+        
+        if (askNum > 0) {
           const diff = askNum - proposedVal;
-          const pct = ((diff / askNum) * 100).toFixed(1);
-          if (proposedVal < minAllowed) {
-            badgeEl.textContent = `⚠️ เกินเพดานส่วนลด 50% (ขั้นต่ำ ฿${minAllowed.toLocaleString()})`;
-            badgeEl.className = 'text-[10px] font-bold text-red-700 bg-red-50 border border-red-300 px-2 py-0.5 rounded-full';
-            if (hintEl) {
-              hintEl.textContent = `ระบบล็อกเกณฑ์เสนอซื้อลดได้สูงสุดไม่เกิน 50% (ขั้นต่ำ ฿${minAllowed.toLocaleString()} บาท)`;
-              hintEl.className = 'text-[10px] text-red-600 font-semibold mt-1';
+          const pct = ((diff / askNum) * 100);
+          const pctStr = pct.toFixed(1);
+
+          // ⚠️ ตรวจสอบว่าต่อราคาลดเกิน 50% หรือไม่
+          if (proposedVal < minAllowed || pct > 50) {
+            // 🛑 DISABLE ปุ่มส่งทันที (ไม่ให้กดส่งได้)
+            if (submitBtn) {
+              submitBtn.disabled = true;
+              submitBtn.className = 'w-full bg-neutral-200 text-neutral-400 font-bold py-3 px-3 rounded-xl text-xs flex items-center justify-center gap-2 cursor-not-allowed shadow-none transition-all';
             }
-          } else if (diff > 0) {
-            const numPct = parseFloat(pct);
-            if (numPct <= 15) {
-              badgeEl.textContent = `🟢 เป็นไปได้สูงมาก: ลด ${pct}% (-฿${diff.toLocaleString()})`;
-              badgeEl.className = 'text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-full';
-              if (hintEl) {
-                hintEl.textContent = `⚡ [Priority 1: เข้าชาร์จด่วน] เคสนี้โอกาสอนุมัติสูงมาก ทีมงานจะรีบประสานงานทันที`;
-                hintEl.className = 'text-[10px] text-emerald-700 font-semibold mt-1';
-              }
-            } else if (numPct <= 30) {
-              badgeEl.textContent = `🟡 เป็นไปได้ปานกลาง: ลด ${pct}% (-฿${diff.toLocaleString()})`;
-              badgeEl.className = 'text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-300 px-2.5 py-0.5 rounded-full';
-              if (hintEl) {
-                hintEl.textContent = `📋 อยู่ในเกณฑ์เจรจาตามระเบียบแบงก์ (แนะนำระบุความพร้อมทางการเงินเพื่อเพิ่มโอกาส)`;
-                hintEl.className = 'text-[10px] text-amber-700 font-medium mt-1';
-              }
-            } else {
-              badgeEl.textContent = `🟣 เคสต่อหนัก: ลด ${pct}% (-฿${diff.toLocaleString()})`;
-              badgeEl.className = 'text-[10px] font-bold text-purple-800 bg-purple-50 border border-purple-300 px-2.5 py-0.5 rounded-full';
-              if (hintEl) {
-                hintEl.textContent = `🎯 โอกาสพิเศษ: ทรัพย์ NPA ที่ค้างสต็อกหรือปิดงบสิ้นปี แบงก์อาจเคาะผ่าน ทีมงานจะตรวจสอบสต็อกแบงก์ให้`;
-                hintEl.className = 'text-[10px] text-purple-700 font-semibold mt-1';
-              }
+            if (submitBtnText) submitBtnText.textContent = 'ระบุราคาที่เหมาะสมเพื่อดำเนินการต่อ';
+            
+            // แสดงกล่องแจ้งเตือนนุ่มนวล
+            if (warningEl) {
+              warningEl.classList.remove('hidden');
+              warningEl.innerHTML = `
+                <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 text-rose-600"></i>
+                <span>ราคาที่เสนอซื้อต่ำกว่าเกณฑ์การพิจารณาเบื้องต้น กรุณาระบุราคาเสนอซื้อใหม่</span>
+              `;
+              if (window.lucide) lucide.createIcons();
             }
-          } else if (diff === 0) {
-            badgeEl.textContent = `เท่าราคาตั้งขาย (โอกาสอนุมัติ 100%)`;
-            badgeEl.className = 'text-[10px] font-bold text-sky-700 bg-sky-50 border border-sky-200 px-2 py-0.5 rounded-full';
-            if (hintEl) {
-              hintEl.textContent = `✨ ยื่นเสนอราคาตั้งขาย ซื้อได้ทันทีโดยไม่ต้องรอพิจารณาส่วนลด`;
-              hintEl.className = 'text-[10px] text-sky-700 font-medium mt-1';
+            if (hintEl) hintEl.classList.add('hidden');
+
+            if (discountPctEl) {
+              discountPctEl.textContent = `ต่ำกว่าเกณฑ์ (-${pctStr}%)`;
+              discountPctEl.className = 'text-[11px] font-bold text-rose-600';
+            }
+            if (diffEl) {
+              diffEl.textContent = `-฿${diff.toLocaleString()} (ต่ำกว่าเกณฑ์)`;
+              diffEl.className = 'font-mono font-semibold text-rose-600';
             }
           } else {
-            badgeEl.textContent = `สูงกว่าราคาตั้ง +฿${Math.abs(diff).toLocaleString()}`;
-            badgeEl.className = 'text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full';
+            // ✅ ENABLE ปุ่มส่งข้อเสนอตามปกติ
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.className = 'w-full bg-gradient-to-r from-[#C2A460] via-[#E5CF94] to-[#A98B45] text-neutral-950 font-bold py-3 px-3 rounded-xl shadow-md text-xs flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer hover:opacity-95';
+            }
+            if (submitBtnText) submitBtnText.textContent = 'ยืนยันการยื่นเสนอราคา';
+
+            // ซ่อนกล่องเตือน
+            if (warningEl) warningEl.classList.add('hidden');
+            if (hintEl) hintEl.classList.remove('hidden');
+
+            if (diff > 0) {
+              if (pct <= 15) {
+                // Tier 1: เข้าชาร์จด่วน
+                if (discountPctEl) {
+                  discountPctEl.textContent = `ลด ${pctStr}% (โอกาสสูง)`;
+                  discountPctEl.className = 'text-[11px] font-bold text-emerald-600';
+                }
+                if (diffEl) {
+                  diffEl.textContent = `-฿${diff.toLocaleString()} (ชาร์จด่วน)`;
+                  diffEl.className = 'font-mono font-semibold text-emerald-600';
+                }
+                if (hintEl) {
+                  hintEl.textContent = '⚡ อยู่ในเกณฑ์ที่โอกาสอนุมัติสูงมาก ทีมงานจะรีบนำเสนอทันที';
+                  hintEl.className = 'text-[10.5px] text-emerald-600 font-medium';
+                }
+              } else if (pct <= 30) {
+                // Tier 2: เจรจารอบปกติ
+                if (discountPctEl) {
+                  discountPctEl.textContent = `ลด ${pctStr}% (เกณฑ์เจรจา)`;
+                  discountPctEl.className = 'text-[11px] font-bold text-amber-600';
+                }
+                if (diffEl) {
+                  diffEl.textContent = `-฿${diff.toLocaleString()}`;
+                  diffEl.className = 'font-mono font-semibold text-amber-600';
+                }
+                if (hintEl) {
+                  hintEl.textContent = '📋 อยู่ในเกณฑ์เจรจาตามระเบียบของสถาบันการเงิน/เจ้าของทรัพย์';
+                  hintEl.className = 'text-[10.5px] text-amber-600 font-medium';
+                }
+              } else {
+                // Tier 3: พิจารณาพิเศษ / ทรัพย์ค้างสต็อก
+                if (discountPctEl) {
+                  discountPctEl.textContent = `ลด ${pctStr}% (พิจารณาพิเศษ)`;
+                  discountPctEl.className = 'text-[11px] font-bold text-purple-600';
+                }
+                if (diffEl) {
+                  diffEl.textContent = `-฿${diff.toLocaleString()}`;
+                  diffEl.className = 'font-mono font-semibold text-purple-600';
+                }
+                if (hintEl) {
+                  hintEl.textContent = '🎯 สำหรับทรัพย์ NPA หรือรอบพิจารณาตัดจำหน่ายพิเศษ ทีมงานจะตรวจสอบสต็อกแบงก์ให้';
+                  hintEl.className = 'text-[10.5px] text-purple-600 font-medium';
+                }
+              }
+            } else if (diff === 0) {
+              if (discountPctEl) {
+                discountPctEl.textContent = 'เท่าราคาตั้งขาย (100%)';
+                discountPctEl.className = 'text-[11px] font-bold text-sky-600';
+              }
+              if (diffEl) {
+                diffEl.textContent = '฿0 (ซื้อตามราคาตั้ง)';
+                diffEl.className = 'font-mono font-semibold text-sky-600';
+              }
+              if (hintEl) {
+                hintEl.textContent = '✨ ซื้อตามราคาตั้งขาย ดำเนินการล็อกสิทธิ์ได้ทันที';
+                hintEl.className = 'text-[10.5px] text-sky-600 font-medium';
+              }
+            } else {
+              if (discountPctEl) {
+                discountPctEl.textContent = `+฿${Math.abs(diff).toLocaleString()}`;
+                discountPctEl.className = 'text-[11px] font-bold text-slate-600';
+              }
+              if (diffEl) {
+                diffEl.textContent = `+฿${Math.abs(diff).toLocaleString()}`;
+                diffEl.className = 'font-mono font-semibold text-slate-600';
+              }
+              if (hintEl) {
+                hintEl.textContent = 'เสนอราคาสูงกว่าราคาตั้งขาย';
+                hintEl.className = 'text-[10.5px] text-slate-500 font-medium';
+              }
+            }
           }
         }
       } else {
         if (propEl) propEl.textContent = 'รอระบุราคา';
-        if (badgeEl) {
-          badgeEl.textContent = 'ระบุราคาที่ต้องการ';
-          badgeEl.className = 'text-[10px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full';
+        if (diffEl) diffEl.textContent = '-';
+        if (discountPctEl) discountPctEl.textContent = '';
+        if (warningEl) warningEl.classList.add('hidden');
+        if (hintEl) {
+          hintEl.classList.remove('hidden');
+          hintEl.textContent = 'ระบุราคาที่ต้องการเสนอซื้ออย่างอิสระ ระบบจะประเมินความเป็นไปได้อัตโนมัติ';
+          hintEl.className = 'text-[10.5px] text-neutral-400';
         }
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.className = 'w-full bg-gradient-to-r from-[#C2A460] via-[#E5CF94] to-[#A98B45] text-neutral-950 font-bold py-3 px-3 rounded-xl shadow-md text-xs flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer hover:opacity-95';
+        }
+        if (submitBtnText) submitBtnText.textContent = 'ยืนยันการยื่นเสนอราคา';
       }
     }
 
@@ -2808,8 +2897,6 @@
       };
 
       const askNum = parsePriceNumber(price);
-      const minAllowed = getMinAllowedOfferPrice(askNum);
-      const suggestedOffer = askNum > 0 ? Math.round((askNum * 0.95) / 10000) * 10000 : '';
 
       document.getElementById('offer-prop-info').innerHTML = `
         <div class="flex items-center gap-3">
@@ -2828,10 +2915,10 @@
         </div>
       `;
 
-      const priceInput = document.getElementById('offer-price');
+      // ปล่อยให้เป็นช่องว่างอิสระ ไม่ใส่ตัวเลขหรือชิปส่วนลดล่วงหน้า
+      const priceInput = document.getElementById('offer-amount-input') || document.getElementById('offer-price');
       if (priceInput) {
-        priceInput.min = String(minAllowed);
-        priceInput.value = suggestedOffer;
+        priceInput.value = '';
       }
 
       const honeypotEl = document.getElementById('offer-company-website');
@@ -2924,27 +3011,27 @@
       }
 
       // เกราะชั้นที่ 3: ตรวจสอบเพดานราคาขั้นต่ำ (50% Price Floor)
-      const offerPriceRaw = document.getElementById('offer-price').value;
+      const priceInput = document.getElementById('offer-amount-input') || document.getElementById('offer-price');
+      const offerPriceRaw = priceInput ? priceInput.value.replace(/\D/g, '') : '0';
       const offerNum = parseInt(offerPriceRaw, 10) || 0;
       const askNum = pendingOfferProp ? parsePriceNumber(pendingOfferProp.price) : 0;
       const minAllowed = getMinAllowedOfferPrice(askNum);
       if (offerNum < minAllowed) {
-        const priceEl = document.getElementById('offer-price');
-        if (priceEl) {
-          priceEl.setAttribute('aria-invalid', 'true');
-          priceEl.focus();
+        if (priceInput) {
+          priceInput.setAttribute('aria-invalid', 'true');
+          priceInput.focus();
         }
-        showToast(`❌ ราคาที่เสนอต่ำเกินเกณฑ์: กรุณาเสนอราคาไม่ต่ำกว่า ฿${minAllowed.toLocaleString()} บาท (50% ของราคาตั้งขาย)`);
+        showToast(`❌ ราคาที่เสนอต่ำกว่าเกณฑ์การพิจารณาเบื้องต้น กรุณาระบุราคาที่เหมาะสมค่ะ`);
         return;
       }
 
       // เกราะชั้นที่ 4: ตรวจสอบเบอร์โทรศัพท์มือถือไทยแท้ 10 หลัก (กันเบอร์มั่ว/เลขตอง)
-      const phone = (document.getElementById('offer-phone')?.value || '').trim();
+      const phoneInput = document.getElementById('offer-buyer-phone') || document.getElementById('offer-phone');
+      const phone = (phoneInput?.value || '').trim();
       if (!isValidThaiMobile(phone)) {
-        const phoneEl = document.getElementById('offer-phone');
-        if (phoneEl) {
-          phoneEl.setAttribute('aria-invalid', 'true');
-          phoneEl.focus();
+        if (phoneInput) {
+          phoneInput.setAttribute('aria-invalid', 'true');
+          phoneInput.focus();
         }
         showToast("⚠️ กรุณากรอกเบอร์มือถือไทย 10 หลักที่ถูกต้อง (ขึ้นต้น 06, 08, 09)");
         return;
@@ -2963,31 +3050,58 @@
 
       localStorage.setItem('siwasup_last_offer_ts', String(nowTs));
 
-      const firstName = (document.getElementById('offer-firstname')?.value || '').trim();
-      const lastName = (document.getElementById('offer-lastname')?.value || '').trim();
-      const email = (document.getElementById('offer-email')?.value || '').trim();
-      const terms = (document.getElementById('offer-terms')?.value || '').trim();
+      const fullName = (document.getElementById('offer-buyer-name')?.value || `${document.getElementById('offer-firstname')?.value || ''} ${document.getElementById('offer-lastname')?.value || ''}`).trim();
+      const lineId = (document.getElementById('offer-buyer-line')?.value || '').trim();
+      const notes = (document.getElementById('offer-buyer-note')?.value || document.getElementById('offer-terms')?.value || '').trim();
       const purchaseTypeEl = document.querySelector('input[name="offer_PurchaseType"]:checked');
       const purchaseType = purchaseTypeEl ? purchaseTypeEl.value : 'เงินสด';
 
-      const fullName = `${firstName} ${lastName}`.trim();
       const formattedOfferPrice = offerNum.toLocaleString();
       const propId = pendingOfferProp ? pendingOfferProp.id : '-';
       const propTitle = pendingOfferProp ? pendingOfferProp.title : '-';
       const askPrice = pendingOfferProp ? formatPriceClean(pendingOfferProp.price) : '-';
       const depositAmt = pendingOfferProp ? calcDeposit(pendingOfferProp.price) : '50,000';
 
-      // คำนวณเกณฑ์โอกาสความเป็นไปได้ (3 Tiers Priority)
+      // คำนวณเกณฑ์โอกาสความเป็นไปได้ (3 Tiers Priority) เพื่อแยกหมวดเข้าชาร์จด่วนหรือพิจารณาถัดไป
       const numPct = askNum > 0 ? ((askNum - offerNum) / askNum) * 100 : 0;
       let feasibilityTier = "🟢 เป็นไปได้สูง (Priority 1: ทีมงานเข้าชาร์จด่วน)";
+      let routingTag = "[⚡ เข้าชาร์จด่วน - Priority 1]";
+      let routingCategory = "CHARGING_PRIORITY_1";
       if (numPct > 30) {
         feasibilityTier = "🟣 เคสต่อหนัก (โอกาสทอง NPA สต็อกเก่า / ยื่นพิจารณาพิเศษ)";
+        routingTag = "[🎯 พิจารณาพิเศษ - ทรัพย์ค้างสต็อก]";
+        routingCategory = "SPECIAL_HAIRCUT_REVIEW";
       } else if (numPct > 15) {
         feasibilityTier = "🟡 เป็นไปได้ปานกลาง (เจรจายื่นต่อรองตามขั้นตอนแบงก์)";
+        routingTag = "[📋 เจรจาตามเกณฑ์ปกติ]";
+        routingCategory = "STANDARD_NEGOTIATION";
       }
+
+      // บันทึกลง Leads Storage เพื่อให้ Admin Dashboard นำไปแยกแสดงในหมวดหมู่
+      try {
+        const leadRecord = {
+          propId,
+          propTitle,
+          askPrice,
+          offerPrice: offerNum,
+          discountPct: numPct.toFixed(1),
+          routingCategory,
+          routingTag,
+          feasibilityTier,
+          buyerName: fullName,
+          phone,
+          lineId,
+          notes,
+          purchaseType,
+          submittedAt: new Date().toISOString()
+        };
+        const existingLeads = JSON.parse(localStorage.getItem('siwasup_submitted_offers') || '[]');
+        existingLeads.unshift(leadRecord);
+        localStorage.setItem('siwasup_submitted_offers', JSON.stringify(existingLeads.slice(0, 100)));
+      } catch (e) {}
+
       closeOfferModal();
 
-      // Build LINE Official message for @siwasup
       const lineMessage = [
         `📋 ใบเสนอราคาซื้อทรัพย์ (ศิวาทรัพย์)`,
         `━━━━━━━━━━━━━━`,
