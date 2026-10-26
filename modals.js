@@ -569,11 +569,13 @@
                        oninput="formatCurrencyInput(this); updateOfferSummaryBox();">
                 <span class="absolute left-3 top-3 text-neutral-400 font-bold">฿</span>
               </div>
-              <div class="flex items-center gap-1.5 mt-1.5">
-                <button type="button" onclick="quickAdjustOffer(-5)" class="px-2 py-0.5 rounded-lg bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-[10px] font-medium transition active:scale-95 cursor-pointer">-5%</button>
-                <button type="button" onclick="quickAdjustOffer(-3)" class="px-2 py-0.5 rounded-lg bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-[10px] font-medium transition active:scale-95 cursor-pointer">-3%</button>
-                <button type="button" onclick="quickAdjustOffer(0)" class="px-2 py-0.5 rounded-lg bg-[#FAF7F2] border border-[#DFD3C3] text-[#8C734B] text-[10px] font-bold transition active:scale-95 cursor-pointer">ราคาตั้งขาย</button>
-                <span class="text-[10px] text-neutral-400 ml-auto">* ปรับราคาด่วน</span>
+              <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
+                <button type="button" onclick="quickAdjustOffer(0)" class="px-2 py-0.5 rounded-lg bg-[#FAF7F2] border border-[#DFD3C3] text-[#8C734B] text-[10px] font-bold transition active:scale-95 cursor-pointer">ราคาตั้ง</button>
+                <button type="button" onclick="quickAdjustOffer(-10)" class="px-2 py-0.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-[10px] font-bold transition active:scale-95 cursor-pointer">-10% (ชาร์จด่วน)</button>
+                <button type="button" onclick="quickAdjustOffer(-20)" class="px-2 py-0.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-[10px] font-bold transition active:scale-95 cursor-pointer">-20%</button>
+                <button type="button" onclick="quickAdjustOffer(-30)" class="px-2 py-0.5 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 text-[10px] font-bold transition active:scale-95 cursor-pointer">-30%</button>
+                <button type="button" onclick="quickAdjustOffer(-50)" class="px-2 py-0.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 text-[10px] font-black transition active:scale-95 cursor-pointer">-50% (เพดานสูงสุด)</button>
+                <span class="text-[10px] text-neutral-400 ml-auto">* ปรับราคาด่วน (ลดได้ไม่เกิน 50%)</span>
               </div>
             </div>
 

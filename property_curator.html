@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบคัดเลือกทรัพย์จากเว็บเก่า - ศิวาทรัพย์ แอสเซท</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts Kanit & Prompt -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      font-family: 'Prompt', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .heart-btn.active svg {
+      fill: #ef4444;
+      stroke: #ef4444;
+      transform: scale(1.15);
+    }
+    .heart-btn svg {
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .card-selected {
+      border-color: #ef4444 !important;
+      box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.15), 0 8px 10px -6px rgba(239, 68, 68, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- TOP HEADER / NAV -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-amber-500/20">
+          🏛️
+        </div>
+        <div>
+          <h1 class="text-lg sm:text-xl font-bold text-slate-900 leading-tight">
+            ระบบคัดเลือกทรัพย์จากเว็บเก่า <span class="text-xs font-normal text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full ml-1">แยกส่วนกระดาน NPA</span>
+          </h1>
+          <p class="text-xs text-slate-500">กดหัวใจ ❤️ ที่การ์ดเพื่อเลือกทรัพย์ดึงเข้าสู่เว็บใหม่</p>
+        </div>
+      </div>
+
+      <!-- Live Selection Counter & Export Tools -->
+      <div class="flex items-center gap-2 sm:gap-3 ml-auto flex-wrap">
+        <div class="bg-rose-50 border border-rose-200 text-rose-700 px-3 py-1.5 rounded-xl font-semibold text-sm flex items-center gap-1.5 shadow-sm">
+          <i data-lucide="heart" class="w-4 h-4 fill-rose-500 text-rose-500"></i>
+          <span>คัดเลือกแล้ว:</span>
+          <span id="selected-count-badge" class="bg-rose-500 text-white px-2 py-0.2 rounded-full text-xs font-bold">0</span>
+          <span class="text-rose-400 text-xs">/ <span id="total-count-badge">0</span></span>
+        </div>
+
+        <!-- Export Dropdown / Buttons -->
+        <button onclick="exportSelectedJSON()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-1.5 shadow-sm transition-all">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>ส่งออก JSON</span>
+        </button>
+
+        <button onclick="copySelectedJSON()" class="bg-slate-800 hover:bg-slate-900 active:scale-95 text-white px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-1.5 shadow-sm transition-all">
+          <i data-lucide="copy" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">คัดลอก JSON</span>
+        </button>
+
+        <button onclick="exportSelectedCSV()" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium flex items-center gap-1.5 shadow-sm transition-all" title="ส่งออก Excel / CSV">
+          <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+          <span class="hidden md:inline">CSV</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTROLS & FILTER BAR -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-2 w-full">
+    <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+      
+      <!-- Search Box -->
+      <div class="relative flex-1">
+        <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="ค้นหาชื่อทรัพย์, โครงการ, รหัสทรัพย์, หรือทำเล..." 
+          class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-all"
+        >
+      </div>
+
+      <!-- Quick Filter Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 text-xs font-medium">
+        <button onclick="setTabFilter('all')" id="tab-all" class="tab-btn px-3.5 py-2 rounded-xl bg-slate-900 text-white whitespace-nowrap shadow-sm">
+          ทั้งหมด (<span id="tab-count-all">0</span>)
+        </button>
+        <button onclick="setTabFilter('selected')" id="tab-selected" class="tab-btn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 whitespace-nowrap transition">
+          ❤️ คัดเลือกแล้ว (<span id="tab-count-selected">0</span>)
+        </button>
+        <button onclick="setTabFilter('unselected')" id="tab-unselected" class="tab-btn px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 whitespace-nowrap transition">
+          🤍 ยังไม่เลือก (<span id="tab-count-unselected">0</span>)
+        </button>
+        
+        <!-- Category Filter -->
+        <select id="category-filter" onchange="applyFilters()" class="px-3 py-2 bg-slate-100 border-none rounded-xl text-slate-700 text-xs focus:ring-2 focus:ring-amber-500/30 focus:outline-none">
+          <option value="">ทุกประเภททรัพย์</option>
+        </select>
+
+        <!-- Soldout Toggle -->
+        <label class="flex items-center gap-1.5 text-xs text-slate-600 cursor-pointer ml-1 whitespace-nowrap select-none bg-slate-100 px-3 py-2 rounded-xl">
+          <input type="checkbox" id="hide-soldout-toggle" onchange="applyFilters()" class="rounded text-amber-600 focus:ring-amber-500">
+          <span>ซ่อนทรัพย์ขายแล้ว</span>
+        </label>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROPERTY GRID -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex-1 w-full">
+    <div id="property-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      <!-- Loading Skeleton or Property Cards injected by JS -->
+      <div class="col-span-full py-16 text-center text-slate-400">
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-amber-500 border-t-transparent"></div>
+        <p class="mt-3 text-sm">กำลังโหลดข้อมูลทรัพย์...</p>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="hidden py-20 text-center">
+      <div class="w-16 h-16 mx-auto bg-slate-100 rounded-2xl flex items-center justify-center text-3xl mb-3">
+        🔍
+      </div>
+      <h3 class="text-base font-semibold text-slate-800">ไม่พบทรัพย์ตามเงื่อนไขที่ค้นหา</h3>
+      <p class="text-xs text-slate-500 mt-1">ลองเปลี่ยนคำค้นหาหรือเลือกหมวดหมู่อื่นดูนะครับ</p>
+    </div>
+  </main>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white text-xs sm:text-sm px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toast-message">บันทึกสำเร็จ</span>
+  </div>
+
+  <!-- LOAD EXISTING DATA SCRIPT -->
+  <script src="siwasup_all_properties.js"></script>
+
+  <script>
+    // LOCAL STORAGE KEYS
+    const STORAGE_KEY_SELECTED = 'siwasup_curated_properties_v1';
+    const STORAGE_KEY_NOTES = 'siwasup_curated_notes_v1';
+
+    // APP STATE
+    let allProperties = [];
+    let selectedSet = new Set();
+    let notesMap = {};
+    let currentTab = 'all'; // 'all' | 'selected' | 'unselected'
+    let currentSearch = '';
+    let currentCategory = '';
+    let hideSoldOut = false;
+
+    // INITIALIZE
+    window.addEventListener('DOMContentLoaded', () => {
+      // 1. Load from localStorage
+      loadSavedState();
+
+      // 2. Read dataset from siwasup_all_properties.js
+      if (typeof ALL_PROPERTIES_DATA !== 'undefined' && Array.isArray(ALL_PROPERTIES_DATA)) {
+        allProperties = ALL_PROPERTIES_DATA;
+      } else {
+        console.warn('ALL_PROPERTIES_DATA not found. Trying fetch or dummy data.');
+        allProperties = [];
+      }
+
+      // 3. Populate Category Filter
+      populateCategories();
+
+      // 4. Render Grid & Update Counts
+      updateHeaderBadges();
+      renderGrid();
+
+      // 5. Search debounce
+      document.getElementById('search-input').addEventListener('input', (e) => {
+        currentSearch = e.target.value.trim().toLowerCase();
+        applyFilters();
+      });
+
+      // 6. Init Lucide Icons
+      lucide.createIcons();
+    });
+
+    function loadSavedState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY_SELECTED);
+        if (saved) {
+          const arr = JSON.parse(saved);
+          selectedSet = new Set(arr);
+        }
+        const savedNotes = localStorage.getItem(STORAGE_KEY_NOTES);
+        if (savedNotes) {
+          notesMap = JSON.parse(savedNotes);
+        }
+      } catch (err) {
+        console.error('Failed to parse localStorage:', err);
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY_SELECTED, JSON.stringify(Array.from(selectedSet)));
+        localStorage.setItem(STORAGE_KEY_NOTES, JSON.stringify(notesMap));
+      } catch (err) {
+        console.error('Failed to save to localStorage:', err);
+      }
+      updateHeaderBadges();
+    }
+
+    function populateCategories() {
+      const select = document.getElementById('category-filter');
+      const cats = Array.from(new Set(allProperties.map(p => p.category).filter(Boolean)));
+      cats.sort();
+      cats.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        select.appendChild(opt);
+      });
+    }
+
+    function updateHeaderBadges() {
+      const selectedCount = selectedSet.size;
+      const totalCount = allProperties.length;
+      const unselectedCount = totalCount - selectedCount;
+
+      document.getElementById('selected-count-badge').textContent = selectedCount;
+      document.getElementById('total-count-badge').textContent = totalCount;
+
+      document.getElementById('tab-count-all').textContent = totalCount;
+      document.getElementById('tab-count-selected').textContent = selectedCount;
+      document.getElementById('tab-count-unselected').textContent = unselectedCount;
+    }
+
+    function setTabFilter(tab) {
+      currentTab = tab;
+      // Style active button
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-slate-900', 'text-white', 'shadow-sm');
+        btn.classList.add('bg-slate-100', 'text-slate-700');
+      });
+      const activeBtn = document.getElementById(`tab-${tab}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-slate-100', 'text-slate-700');
+        activeBtn.classList.add('bg-slate-900', 'text-white', 'shadow-sm');
+      }
+      applyFilters();
+    }
+
+    function applyFilters() {
+      currentCategory = document.getElementById('category-filter').value;
+      hideSoldOut = document.getElementById('hide-soldout-toggle').checked;
+      renderGrid();
+    }
+
+    function getFilteredProperties() {
+      return allProperties.filter(item => {
+        const isSelected = selectedSet.has(String(item.id));
+
+        // Tab filter
+        if (currentTab === 'selected' && !isSelected) return false;
+        if (currentTab === 'unselected' && isSelected) return false;
+
+        // Category filter
+        if (currentCategory && item.category !== currentCategory) return false;
+
+        // Sold out filter
+        if (hideSoldOut && item.is_image_soldout) return false;
+
+        // Search query
+        if (currentSearch) {
+          const matchTitle = (item.title || '').toLowerCase().includes(currentSearch);
+          const matchId = String(item.id || '').toLowerCase().includes(currentSearch);
+          const matchCat = (item.category || '').toLowerCase().includes(currentSearch);
+          if (!matchTitle && !matchId && !matchCat) return false;
+        }
+
+        return true;
+      });
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById('property-grid');
+      const emptyState = document.getElementById('empty-state');
+      const filtered = getFilteredProperties();
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      grid.innerHTML = filtered.map(item => {
+        const isSelected = selectedSet.has(String(item.id));
+        const note = notesMap[String(item.id)] || '';
+        const isSoldout = item.is_image_soldout === true;
+
+        return `
+          <div class="bg-white rounded-2xl border ${isSelected ? 'card-selected border-rose-500 ring-2 ring-rose-500/10' : 'border-slate-200'} overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col group relative" id="card-${item.id}">
+            
+            <!-- Image & Badges -->
+            <div class="relative w-full aspect-[4/3] bg-slate-100 overflow-hidden">
+              <img 
+                src="${item.main_image || 'https://via.placeholder.com/400x300?text=No+Image'}" 
+                alt="${item.title}" 
+                loading="lazy" 
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                onerror="this.src='https://via.placeholder.com/400x300?text=Image+Unavailable'"
+              >
+              
+              <!-- Category Badge -->
+              <div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
+                <span class="bg-slate-900/80 backdrop-blur-md text-white text-[11px] px-2.5 py-0.5 rounded-lg font-medium">
+                  ${item.category || 'อสังหาฯ'}
+                </span>
+                ${isSoldout ? `
+                  <span class="bg-red-600/90 backdrop-blur-md text-white text-[11px] px-2.5 py-0.5 rounded-lg font-semibold shadow-sm">
+                    ขายแล้ว
+                  </span>
+                ` : ''}
+              </div>
+
+              <!-- HEART BUTTON (TOP RIGHT) -->
+              <button 
+                onclick="toggleSelect('${item.id}', event)" 
+                class="heart-btn ${isSelected ? 'active bg-white' : 'bg-white/90 hover:bg-white'} absolute top-3 right-3 w-10 h-10 rounded-full flex items-center justify-center shadow-md backdrop-blur-sm transition-all"
+                title="${isSelected ? 'ยกเลิกการเลือก' : 'เลือกทรัพย์นี้'}"
+              >
+                <i data-lucide="heart" class="w-5 h-5 ${isSelected ? 'fill-rose-500 text-rose-500' : 'text-slate-400 hover:text-rose-500'}"></i>
+              </button>
+
+              <!-- Gallery Count -->
+              ${item.gallery_count ? `
+                <div class="absolute bottom-2.5 right-3 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded-md flex items-center gap-1">
+                  <i data-lucide="image" class="w-3 h-3"></i>
+                  <span>${item.gallery_count} รูป</span>
+                </div>
+              ` : ''}
+            </div>
+
+            <!-- Content Details -->
+            <div class="p-4 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+                  <span>รหัส: #${item.id}</span>
+                  ${item.url ? `
+                    <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:underline flex items-center gap-0.5">
+                      <span>เปิดเว็บเดิม</span>
+                      <i data-lucide="external-link" class="w-3 h-3"></i>
+                    </a>
+                  ` : ''}
+                </div>
+
+                <h3 class="text-sm font-semibold text-slate-900 line-clamp-2 leading-snug group-hover:text-amber-600 transition-colors" title="${item.title}">
+                  ${item.title}
+                </h3>
+              </div>
+
+              <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] text-slate-400 block">ราคาเสนอขาย</span>
+                  <span class="text-sm font-bold text-amber-600">
+                    ${item.price || 'โปรดสอบถาม'}
+                  </span>
+                </div>
+
+                <!-- 1-Tap Toggle Pill -->
+                <button 
+                  onclick="toggleSelect('${item.id}', event)" 
+                  class="text-xs px-3 py-1.5 rounded-xl font-medium flex items-center gap-1 transition-all ${isSelected ? 'bg-rose-500 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}"
+                >
+                  <i data-lucide="${isSelected ? 'check' : 'plus'}" class="w-3.5 h-3.5"></i>
+                  <span>${isSelected ? 'เลือกแล้ว' : 'คัดเลือก'}</span>
+                </button>
+              </div>
+
+              <!-- Quick Note Input -->
+              <div class="mt-2.5">
+                <input 
+                  type="text" 
+                  value="${escapeHtml(note)}" 
+                  placeholder="เพิ่มโน้ตสั้นๆ (เช่น สภาพดี, น่ารีโนเวท)..." 
+                  onchange="updateNote('${item.id}', this.value)"
+                  class="w-full text-[11px] px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-600 focus:outline-none focus:border-amber-500 focus:bg-white transition"
+                >
+              </div>
+
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function toggleSelect(id, event) {
+      if (event) event.stopPropagation();
+      const strId = String(id);
+      if (selectedSet.has(strId)) {
+        selectedSet.delete(strId);
+        showToast('ยกเลิกการเลือกทรัพย์ #' + strId);
+      } else {
+        selectedSet.add(strId);
+        showToast('❤️ คัดเลือกทรัพย์ #' + strId + ' เรียบร้อย');
+      }
+      saveState();
+      renderGrid();
+    }
+
+    function updateNote(id, noteText) {
+      const strId = String(id);
+      if (!noteText.trim()) {
+        delete notesMap[strId];
+      } else {
+        notesMap[strId] = noteText.trim();
+      }
+      saveState();
+      showToast('บันทึกโน้ตสำเร็จ');
+    }
+
+    // EXPORT FUNCTIONS
+    function getSelectedObjects() {
+      return allProperties
+        .filter(p => selectedSet.has(String(p.id)))
+        .map(p => ({
+          ...p,
+          curator_note: notesMap[String(p.id)] || '',
+          selected_at: new Date().toISOString()
+        }));
+    }
+
+    function exportSelectedJSON() {
+      const selected = getSelectedObjects();
+      if (selected.length === 0) {
+        alert('ยังไม่มีทรัพย์ที่ถูกเลือก กรุณากดหัวใจ ❤️ เพื่อเลือกทรัพย์ก่อนครับ');
+        return;
+      }
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(selected, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `siwasup_curated_properties_${selected.length}_items.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+
+      showToast(`ส่งออก ${selected.length} รายการเป็นไฟล์ JSON สำเร็จ`);
+    }
+
+    function copySelectedJSON() {
+      const selected = getSelectedObjects();
+      if (selected.length === 0) {
+        alert('ยังไม่มีทรัพย์ที่ถูกเลือก กรุณากดหัวใจ ❤️ เพื่อเลือกทรัพย์ก่อนครับ');
+        return;
+      }
+
+      navigator.clipboard.writeText(JSON.stringify(selected, null, 2)).then(() => {
+        showToast(`คัดลอก JSON (${selected.length} ทรัพย์) ลง Clipboard แล้ว!`);
+      }).catch(err => {
+        console.error('Clipboard copy failed:', err);
+        alert('ไม่สามารถคัดลอกลง Clipboard ได้อัตโนมัติ');
+      });
+    }
+
+    function exportSelectedCSV() {
+      const selected = getSelectedObjects();
+      if (selected.length === 0) {
+        alert('ยังไม่มีทรัพย์ที่ถูกเลือก กรุณากดหัวใจ ❤️ เพื่อเลือกทรัพย์ก่อนครับ');
+        return;
+      }
+
+      const headers = ["ID", "Title", "Category", "Price", "SoldOut", "URL", "MainImage", "Note"];
+      const rows = selected.map(p => [
+        `"${p.id}"`,
+        `"${(p.title || '').replace(/"/g, '""')}"`,
+        `"${p.category || ''}"`,
+        `"${p.price || ''}"`,
+        `"${p.is_image_soldout ? 'YES' : 'NO'}"`,
+        `"${p.url || ''}"`,
+        `"${p.main_image || ''}"`,
+        `"${(p.curator_note || '').replace(/"/g, '""')}"`
+      ]);
+
+      const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\r\n");
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `siwasup_curated_properties_${selected.length}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      showToast(`ส่งออก CSV สำเร็จ (${selected.length} ทรัพย์)`);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-message');
+      toastMsg.textContent = message;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2500);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+</html>

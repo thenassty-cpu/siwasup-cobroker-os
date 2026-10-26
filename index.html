@@ -345,21 +345,29 @@
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2.5 sm:gap-3">
           
           <!-- แถวบนสำหรับมือถือ / ฝั่งซ้ายสำหรับจอคอม -->
-          <div class="flex items-center justify-between lg:justify-start gap-2.5 shrink-0">
-            <div class="flex items-center gap-2.5 cursor-pointer" onclick="location.reload()">
-              <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#990000] to-[#660000] text-[#E5C985] border border-[#C2A460]/40 flex items-center justify-center font-bold text-base shadow-xs shrink-0">
-                S
-              </div>
+          <div class="flex items-center justify-between lg:justify-start gap-2.5 sm:gap-3.5 shrink-0 py-0.5">
+            <a href="welcome_landing.html" class="flex items-center gap-2 sm:gap-3 group transition-transform active:scale-98" title="กลับสู่หน้าต้อนรับ">
+              <!-- โลโก้จริง: บนมือถือพองาม (h-9 sm:h-10) บน Tablet/Browser ขยายใหญ่เด่นสง่า (md:h-12 lg:h-14 xl:h-15) ไม่เหมือน tool -->
+              <img 
+                src="assets/siwasup_logo.svg" 
+                alt="ศิวาทรัพย์ แอสเซท" 
+                class="h-9 sm:h-10 md:h-12 lg:h-14 xl:h-15 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-all duration-200 shrink-0"
+                onerror="this.onerror=null; this.src='assets/icons/icon-512.png';"
+              >
               <div>
-                <div class="flex items-center gap-1.5">
-                  <h1 class="font-bold text-neutral-900 text-sm sm:text-base tracking-tight whitespace-nowrap">ศิวาทรัพย์ แอสเซท</h1>
-                  <span class="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-[#990000]/8 text-[#8B0000] border border-[#990000]/15">
-                    NPA OS
+                <div class="flex items-center gap-1.5 sm:gap-2">
+                  <span class="font-extrabold text-neutral-900 text-sm sm:text-base lg:text-lg xl:text-xl tracking-tight whitespace-nowrap block leading-tight group-hover:text-[#967C3E] transition-colors">
+                    ศิวาทรัพย์ <span class="text-[#C2A460] font-bold">แอสเซท</span>
+                  </span>
+                  <span class="text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#C2A460]/15 text-[#8C6D23] border border-[#C2A460]/30 whitespace-nowrap">
+                    NPA & ทรัพย์คัดสรร
                   </span>
                 </div>
-                <p class="hidden xl:block text-xs text-neutral-400 whitespace-nowrap">คลังทรัพย์ธนาคาร & ระบบตัวแทนขาย</p>
+                <p class="hidden sm:block text-[11px] lg:text-xs text-neutral-500 font-normal tracking-normal whitespace-nowrap mt-0.5">
+                  ศูนย์รวมทรัพย์ NPA และบ้านรีโนเวทคุณภาพมาตรฐาน
+                </p>
               </div>
-            </div>
+            </a>
 
             <!-- ปุ่มฝากขายบนมือถือ (< lg) -->
             <button onclick="openConsignModal()" class="lg:hidden px-3 py-1.5 rounded-full bg-[#C2A460] hover:bg-[#A98B45] text-white text-[11px] font-semibold flex items-center gap-1 shadow-xs shrink-0 transition-transform active:scale-95">
@@ -704,7 +712,7 @@
           <div class="space-y-3.5">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl bg-neutral-900 border border-[#C2A460]/40 flex items-center justify-center p-1.5 shadow-md shrink-0">
-                <img src="assets/siwasup_logo.png" alt="Siwasup Logo" class="w-full h-full object-contain" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-[#C2A460] font-black text-lg\'>✦</span>'">
+                <img src="assets/siwasup_logo.svg" alt="Siwasup Logo" class="w-full h-full object-contain" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-[#C2A460] font-black text-lg\'>✦</span>'">
               </div>
               <div>
                 <h3 class="text-sm font-extrabold text-white tracking-wide">บริษัท ศิวาทรัพย์ แอสเซท จำกัด</h3>
@@ -2677,7 +2685,7 @@
       if (btnTextEl) btnTextEl.textContent = preset.btnText;
     }
 
-    const MIN_OFFER_RATIO = 0.70; // ล็อกเพดานเสนอราคาขั้นต่ำที่ 70% ของราคาก่อนต่อรอง (ป้องกันคนปั่นราคาหลอก)
+    const MIN_OFFER_RATIO = 0.50; // เพดานต่อรองลดได้สูงสุดไม่เกิน 50% ของราคาตั้งขาย
     const OFFER_COOLDOWN_MS = 60 * 1000; // จำกัดความถี่การกดส่ง 1 ครั้ง ต่อ 60 วินาที
 
     function getMinAllowedOfferPrice(askNum) {
@@ -2730,22 +2738,43 @@
           const diff = askNum - proposedVal;
           const pct = ((diff / askNum) * 100).toFixed(1);
           if (proposedVal < minAllowed) {
-            badgeEl.textContent = `⚠️ ต่ำกว่าเกณฑ์ขั้นต่ำ (ขั้นต่ำ ฿${minAllowed.toLocaleString()})`;
+            badgeEl.textContent = `⚠️ เกินเพดานส่วนลด 50% (ขั้นต่ำ ฿${minAllowed.toLocaleString()})`;
             badgeEl.className = 'text-[10px] font-bold text-red-700 bg-red-50 border border-red-300 px-2 py-0.5 rounded-full';
             if (hintEl) {
-              hintEl.textContent = `ระบบกำหนดราคาเสนอซื้อขั้นต่ำที่ 70% (฿${minAllowed.toLocaleString()} บาท) เพื่อป้องกันการปั่นราคา`;
+              hintEl.textContent = `ระบบล็อกเกณฑ์เสนอซื้อลดได้สูงสุดไม่เกิน 50% (ขั้นต่ำ ฿${minAllowed.toLocaleString()} บาท)`;
               hintEl.className = 'text-[10px] text-red-600 font-semibold mt-1';
             }
           } else if (diff > 0) {
-            badgeEl.textContent = `ต่ำกว่าราคาตั้ง ${pct}% (-฿${diff.toLocaleString()})`;
-            badgeEl.className = 'text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full';
-            if (hintEl) {
-              hintEl.textContent = `อยู่ในเกณฑ์ยื่นพิจารณาได้ (ขั้นต่ำที่ระบบรับพิจารณา ฿${minAllowed.toLocaleString()} บาท)`;
-              hintEl.className = 'text-[10px] text-slate-400 mt-1';
+            const numPct = parseFloat(pct);
+            if (numPct <= 15) {
+              badgeEl.textContent = `🟢 เป็นไปได้สูงมาก: ลด ${pct}% (-฿${diff.toLocaleString()})`;
+              badgeEl.className = 'text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-300 px-2.5 py-0.5 rounded-full';
+              if (hintEl) {
+                hintEl.textContent = `⚡ [Priority 1: เข้าชาร์จด่วน] เคสนี้โอกาสอนุมัติสูงมาก ทีมงานจะรีบประสานงานทันที`;
+                hintEl.className = 'text-[10px] text-emerald-700 font-semibold mt-1';
+              }
+            } else if (numPct <= 30) {
+              badgeEl.textContent = `🟡 เป็นไปได้ปานกลาง: ลด ${pct}% (-฿${diff.toLocaleString()})`;
+              badgeEl.className = 'text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-300 px-2.5 py-0.5 rounded-full';
+              if (hintEl) {
+                hintEl.textContent = `📋 อยู่ในเกณฑ์เจรจาตามระเบียบแบงก์ (แนะนำระบุความพร้อมทางการเงินเพื่อเพิ่มโอกาส)`;
+                hintEl.className = 'text-[10px] text-amber-700 font-medium mt-1';
+              }
+            } else {
+              badgeEl.textContent = `🟣 เคสต่อหนัก: ลด ${pct}% (-฿${diff.toLocaleString()})`;
+              badgeEl.className = 'text-[10px] font-bold text-purple-800 bg-purple-50 border border-purple-300 px-2.5 py-0.5 rounded-full';
+              if (hintEl) {
+                hintEl.textContent = `🎯 โอกาสพิเศษ: ทรัพย์ NPA ที่ค้างสต็อกหรือปิดงบสิ้นปี แบงก์อาจเคาะผ่าน ทีมงานจะตรวจสอบสต็อกแบงก์ให้`;
+                hintEl.className = 'text-[10px] text-purple-700 font-semibold mt-1';
+              }
             }
           } else if (diff === 0) {
-            badgeEl.textContent = `เท่าราคาตั้งขาย (โอกาสอนุมัติไว)`;
+            badgeEl.textContent = `เท่าราคาตั้งขาย (โอกาสอนุมัติ 100%)`;
             badgeEl.className = 'text-[10px] font-bold text-sky-700 bg-sky-50 border border-sky-200 px-2 py-0.5 rounded-full';
+            if (hintEl) {
+              hintEl.textContent = `✨ ยื่นเสนอราคาตั้งขาย ซื้อได้ทันทีโดยไม่ต้องรอพิจารณาส่วนลด`;
+              hintEl.className = 'text-[10px] text-sky-700 font-medium mt-1';
+            }
           } else {
             badgeEl.textContent = `สูงกว่าราคาตั้ง +฿${Math.abs(diff).toLocaleString()}`;
             badgeEl.className = 'text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full';
@@ -2894,7 +2923,7 @@
         return;
       }
 
-      // เกราะชั้นที่ 3: ตรวจสอบเพดานราคาขั้นต่ำ (70% Price Floor)
+      // เกราะชั้นที่ 3: ตรวจสอบเพดานราคาขั้นต่ำ (50% Price Floor)
       const offerPriceRaw = document.getElementById('offer-price').value;
       const offerNum = parseInt(offerPriceRaw, 10) || 0;
       const askNum = pendingOfferProp ? parsePriceNumber(pendingOfferProp.price) : 0;
@@ -2905,7 +2934,7 @@
           priceEl.setAttribute('aria-invalid', 'true');
           priceEl.focus();
         }
-        showToast(`❌ ราคาที่เสนอต่ำเกินเกณฑ์: กรุณาเสนอราคาไม่ต่ำกว่า ฿${minAllowed.toLocaleString()} บาท (70% ของราคาตั้ง)`);
+        showToast(`❌ ราคาที่เสนอต่ำเกินเกณฑ์: กรุณาเสนอราคาไม่ต่ำกว่า ฿${minAllowed.toLocaleString()} บาท (50% ของราคาตั้งขาย)`);
         return;
       }
 
@@ -2948,6 +2977,14 @@
       const askPrice = pendingOfferProp ? formatPriceClean(pendingOfferProp.price) : '-';
       const depositAmt = pendingOfferProp ? calcDeposit(pendingOfferProp.price) : '50,000';
 
+      // คำนวณเกณฑ์โอกาสความเป็นไปได้ (3 Tiers Priority)
+      const numPct = askNum > 0 ? ((askNum - offerNum) / askNum) * 100 : 0;
+      let feasibilityTier = "🟢 เป็นไปได้สูง (Priority 1: ทีมงานเข้าชาร์จด่วน)";
+      if (numPct > 30) {
+        feasibilityTier = "🟣 เคสต่อหนัก (โอกาสทอง NPA สต็อกเก่า / ยื่นพิจารณาพิเศษ)";
+      } else if (numPct > 15) {
+        feasibilityTier = "🟡 เป็นไปได้ปานกลาง (เจรจายื่นต่อรองตามขั้นตอนแบงก์)";
+      }
       closeOfferModal();
 
       // Build LINE Official message for @siwasup
@@ -2958,6 +2995,7 @@
         `📌 รายการ: ${propTitle}`,
         `💰 ราคาก่อนต่อรอง: ฿${askPrice}`,
         `✨ ราคาที่เสนอซื้อ: ฿${formattedOfferPrice} บาท`,
+        `🎯 การประเมินโอกาส: ${feasibilityTier}`,
         `💳 รูปแบบการซื้อ: ${purchaseType}`,
         `🔐 หลักประกันการเสนอราคา: ฿${depositAmt} บาท`,
         `━━━━━━━━━━━━━━`,

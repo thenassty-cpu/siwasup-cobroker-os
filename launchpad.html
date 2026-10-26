@@ -1331,6 +1331,178 @@
             </div>
         </div>
     </div>
+
+    <!-- Section 5: Scale Telemetry: Accelerator vs Brake Triggers -->
+    <div class="section-title" id="telemetry-scale-section" style="margin-top: 40px;">
+        <span>🚦 สถาปัตยกรรมคุมสเกล: คันเร่งและเบรก (Scale Telemetry: Accelerator vs. Brake Triggers)</span>
+        <span class="tag" style="border-color:#f59e0b; color:#fbbf24; background:rgba(245,158,11,0.15);">Risk Control & Go/No-Go</span>
+    </div>
+
+    <!-- Alert / Reality Check Banner -->
+    <div class="ideation-box" style="background: linear-gradient(135deg, rgba(30, 20, 15, 0.95) 0%, rgba(20, 23, 26, 0.95) 100%); border-color: rgba(245, 158, 11, 0.5); margin-bottom: 22px;">
+        <div class="icon" style="color:#f59e0b;">⚠️</div>
+        <div>
+            <h4 style="color:#fde68a;">The Reality of 125-Agent Roster: ทำไมระบบต้องมี "คันเร่งและเบรก"?</h4>
+            <p style="color:#cbd5e1; font-size:12.8px; line-height:1.6;">
+                รายชื่อตัวแทน 125 คนใน Google Sheets เดิม (S02 - S126) สะสมมาตั้งแต่ <strong>มีนาคม 2565 (กว่า 4 ปี)</strong> หลายท่านไม่มีเบอร์โทร ไม่มี LINE ID และบางส่วนอาจพักงานไปแล้ว 
+                หากนำตัวเลข 125 คนแบบดิบๆ ไปคำนวณโควตา หรือเปิดระบบจ่ายงานอัตโนมัติทันที จะเกิดวิกฤต <strong>"Ghost Agent Trap"</strong> (โยนงานให้คนหลับ ลูกค้าคอยเก้อจนเทเคส Deal-Drop / โควตากลุ่มบนบวมเพี้ยน / พี่เลี้ยงหน้างานหมดไฟ)
+                <br><span style="color:#E6CA85; font-weight:bold;">หลักการบริหาร:</span> ระบบหลังบ้านของคุณณัฐจึงฝัง <strong>"เบรกนิรภัย"</strong> เพื่อหยุดความเสียหาย และมี <strong>"คันเร่ง 4 เกียร์"</strong> เพื่อใส่เกียร์ลุยเมื่อทีมพร้อมจริง
+            </p>
+        </div>
+    </div>
+
+    <!-- 2 Columns: Brake Triggers vs Accelerator Triggers -->
+    <div class="rollout-grid" style="margin-bottom: 24px;">
+        <!-- Left: Brake Triggers -->
+        <div class="rollout-column" style="background: rgba(40, 15, 15, 0.45); border: 1px solid rgba(239, 68, 68, 0.35);">
+            <h4 style="color: #f87171; font-size: 15px; margin-bottom: 12px; display:flex; align-items:center; gap:8px;">
+                <span>🛑 4 สัญญาณเหยียบเบรก (Brake Triggers)</span>
+            </h4>
+            <p style="font-size:12px; color:#fca5a5; margin-bottom:12px;">หาก Telemetry ตรวจพบค่าวิกฤตเหล่านี้ ระบบจะเหยียบเบรกฟังก์ชันขยายสเกลทันที:</p>
+            
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <div style="background:rgba(0,0,0,0.3); border-radius:8px; padding:10px 12px; border-left:3px solid #ef4444;">
+                    <strong style="color:#fecaca; font-size:12.5px;">1. Ghost Agent Ratio พุ่งสูง (&gt; 40%)</strong>
+                    <div style="font-size:11.5px; color:#cbd5e1; margin-top:3px;">
+                        หากตัวแทนเกิน 50 คนไม่ขยับตัวใน 60 วัน ➔ <em>เบรกการเปิด 6 ตระกูล</em> ใช้แค่ 4 กลุ่มพื้นฐาน และย้ายคนหลับเข้าโหมดจำศีล (Vault) ไม่นำมาหารโควตา
+                    </div>
+                </div>
+
+                <div style="background:rgba(0,0,0,0.3); border-radius:8px; padding:10px 12px; border-left:3px solid #ef4444;">
+                    <strong style="color:#fecaca; font-size:12.5px;">2. Co-Close SLA Timeout (&gt; 30%)</strong>
+                    <div style="font-size:11.5px; color:#cbd5e1; margin-top:3px;">
+                        ส่งงานจับคู่แล้ว Mentor ไม่ตอบรับใน 30 นาทีเกินเกณฑ์ ➔ <em>เบรกระบบจับคู่อัตโนมัติ</em> สลับมาให้แอดมินบัวประกบมือ (Semi-Auto) ชั่วคราว
+                    </div>
+                </div>
+
+                <div style="background:rgba(0,0,0,0.3); border-radius:8px; padding:10px 12px; border-left:3px solid #ef4444;">
+                    <strong style="color:#fecaca; font-size:12.5px;">3. Contact Deficit เกินเกณฑ์ (&gt; 20%)</strong>
+                    <div style="font-size:11.5px; color:#cbd5e1; margin-top:3px;">
+                        ตัวแทนไม่มีเบอร์/LINE ID ที่ติดต่อได้จริงเกิน 20% ➔ <em>เบรกการแจก Lead กลาง</em> จ่ายเฉพาะ Core Team ที่ยืนยันตัวตนแล้ว 100%
+                    </div>
+                </div>
+
+                <div style="background:rgba(0,0,0,0.3); border-radius:8px; padding:10px 12px; border-left:3px solid #ef4444;">
+                    <strong style="color:#fecaca; font-size:12.5px;">4. วินัยกุญแจพี่ลิลลี่หย่อนยาน</strong>
+                    <div style="font-size:11.5px; color:#cbd5e1; margin-top:3px;">
+                        เบิกกุญแจแล้วส่งคืนช้าเกิน 2 ชม. เกิน 2 ครั้ง/สัปดาห์ ➔ <em>เบรกการตั้งจุดพักกุญแจโซน</em> ดึงสิทธิ์เบิกคืนกลับมารวมศูนย์ที่พี่ลิลลี่ทันที
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Accelerator Triggers -->
+        <div class="rollout-column" style="background: rgba(15, 35, 25, 0.45); border: 1px solid rgba(16, 185, 129, 0.35);">
+            <h4 style="color: #34d399; font-size: 15px; margin-bottom: 12px; display:flex; align-items:center; gap:8px;">
+                <span>🟢 4 เกียร์ใส่คันเร่งเดินหน้า (Accelerator Triggers)</span>
+            </h4>
+            <p style="font-size:12px; color:#a7f3d0; margin-bottom:12px;">เมื่อตัวเลขพฤติกรรมจริงแตะเกณฑ์ ระบบจะปลดล็อกความสามารถทีละสเต็ป:</p>
+
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <div style="background:rgba(0,0,0,0.3); border-radius:8px; padding:10px 12px; border-left:3px solid #10b981;">
+                    <strong style="color:#a7f3d0; font-size:12.5px;">🟢 เกียร์ 1: Core Pack (Active จริงแตะ 30-40 คน)</strong>
+                    <div style="font-size:11.5px; color:#cbd5e1; margin-top:3px;">
+                        มีตัวแทนทำกิจกรรมจริงเกิน 30 คน ➔ เปิดระบบแต้ม 2 แกน และมอบตราประทับ 3D บน Smart Share ให้ใช้สร้างความน่าเชื่อถือกับลูกค้าทันที
+                    </div>
+                </div>
+
+                <div style="background:rgba(0,0,0,0.3); border-radius:8px; padding:10px 12px; border-left:3px solid #10b981;">
+                    <strong style="color:#a7f3d0; font-size:12.5px;">🚀 เกียร์ 2: Co-Close Ready (Mentor พร้อมโซนละ ≥ 2 คน)</strong>
+                    <div style="font-size:11.5px; color:#cbd5e1; margin-top:3px;">
+                        มีพี่เลี้ยง Lion/Eagle กดเปิดสวิตช์พร้อมรับเคสในโซน ➔ ปลดล็อกปุ่ม <em>"ขอพี่เลี้ยงช่วยปิดดีล"</em> ให้หมาป่าจับคู่แบ่งคอมมิชชันได้ทันที
+                    </div>
+                </div>
+
+                <div style="background:rgba(0,0,0,0.3); border-radius:8px; padding:10px 12px; border-left:3px solid #10b981;">
+                    <strong style="color:#a7f3d0; font-size:12.5px;">⚡ เกียร์ 3: Speed Perks (Viewing ≥ 10 นัด/สัปดาห์)</strong>
+                    <div style="font-size:11.5px; color:#cbd5e1; margin-top:3px;">
+                        รอบนัดชมบ้านไหลลื่นและปิดเคสไว ➔ สถาปนา <strong>Falcon (เหยี่ยวปิดไว)</strong> มอบสิทธิ์ Early Access เห็นทรัพย์ Hot Deal ก่อนใคร 12-24 ชม.
+                    </div>
+                </div>
+
+                <div style="background:rgba(0,0,0,0.3); border-radius:8px; padding:10px 12px; border-left:3px solid #10b981;">
+                    <strong style="color:#a7f3d0; font-size:12.5px;">🏛️ เกียร์ 4: Area Sharding (Active รวมทะลุ 140+ คน)</strong>
+                    <div style="font-size:11.5px; color:#cbd5e1; margin-top:3px;">
+                        เมื่อตัวแทนจริงแตะ 140 คน และโซนมีทรัพย์พร้อมขาย ≥ 25 หลัง ➔ ตัด Shard แยกบริหารคิวและโควตา Home Area ถาวร
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Silent Ping Feature Box -->
+    <div class="logic-card" style="background: linear-gradient(135deg, #171d24 0%, #111417 100%); border: 1px solid rgba(194, 164, 96, 0.4); margin-bottom: 35px;">
+        <h4 style="color:#E6CA85; font-size:14.5px; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+            <span>🎯 กุศโลบายคัดกรอง "คนจริง vs คนหลับ" โดยไม่ต้องทะเลาะกับใคร (The Silent Ping Strategy)</span>
+        </h4>
+        <p style="font-size:12.8px; color:#cbd5e1; line-height:1.6;">
+            <strong>ไม่ต้องให้กูลหรือบัวโทรเช็คทีละคน:</strong> ระบบใช้แคมเปญ <em>"เปิดตัวนามบัตรดิจิทัลและลิงก์ขายบ้าน Smart Share ฟรีเฉพาะผู้ยืนยันสิทธิ์ใน 7 วัน"</em> พร้อมมอบแต้มโบนัสแรกเข้า <strong>+20 แต้ม</strong><br>
+            • <strong>คนที่กดรับ (30–40 คนแรก):</strong> ระบบระบุเป็น <strong>"Core Wolf Pack"</strong> นำเข้าสู่ระบบจ่ายงานและสิทธิพิเศษทันที<br>
+            • <strong>คนที่เงียบ (&gt; 60 วัน):</strong> ระบบปรับสถานะเป็น <strong>"จำศีล (Hibernating)"</strong> เงียบๆ หลังบ้าน โดยไม่ลบชื่อทิ้ง (รักษาหน้าและศักดิ์ศรี 100%) แต่ไม่นำมานับในโควตาและไม่ส่งงานไปรบกวน
+        </p>
+    </div>
+
+    <!-- Section 6: 5 Core Academic Research Foundations -->
+    <div class="section-title" id="academic-research-section">
+        <span>📚 5 เสาหลักงานวิจัยและทฤษฎีระดับสากลที่ระบบอ้างอิง (Deep Research Foundations)</span>
+        <span class="tag" style="border-color:#38bdf8; color:#7dd3fc; background:rgba(56,189,248,0.15);">Whitepaper Synthesis</span>
+    </div>
+
+    <div class="logic-card" style="background: #14181d; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 35px;">
+        <p style="font-size:13px; color:#94a3b8; margin-bottom:16px;">
+            Siwasup Co-Broker OS ถูกออกแบบขึ้นบนรากฐานงานวิจัยและคณิตศาสตร์ประยุกต์ 5 เสาหลัก เพื่อรองรับการตอบคำถามผู้บริหาร นักลงทุน และสถาบันการเงินได้อย่างน่าเชื่อถือสูงสุด:
+        </p>
+
+        <div class="logic-columns" style="grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap:16px;">
+            <!-- Column 1 -->
+            <div class="logic-col" style="border-left: 3px solid #f59e0b;">
+                <h4 style="color:#fbbf24;">1. Game Theory & Behavioral Economics</h4>
+                <p>
+                    • <strong>Shapley Value (Lloyd Shapley - Nobel Laureate):</strong> ทฤษฎีเกมความร่วมมือในการแบ่งผลประโยชน์ตาม Marginal Contribution ใช้จัดสรรค่าคอมมิชชั่นระหว่าง Wolf (หาลูกค้า) กับ Mentor (ช่วยปิดจบ) อย่างเป็นธรรม ปราศจากการเอาเปรียบ<br>
+                    • <strong>Loss Aversion & Thai "Face" Culture:</strong> จิตวิทยาเกลียดความสูญเสียและวัฒนธรรมรักษาหน้าในสังคมไทย ระบบจึงไม่ลดขั้นหน้าบ้านแบบประจาน แต่ใช้การควบคุมสิทธิ์ความเร็ว (Early Access) แทน
+                </p>
+            </div>
+
+            <!-- Column 2 -->
+            <div class="logic-col" style="border-left: 3px solid #ec4899;">
+                <h4 style="color:#f472b6;">2. Gamification & Human Dynamics</h4>
+                <p>
+                    • <strong>Octalysis Framework (Yu-kai Chou):</strong> สมดุล White Hat (ความภาคภูมิใจ/การเติบโต) กับ Black Hat (ความเร่งด่วน) ภายใต้ปรัชญา <em>Carrot First, Algorithmic Guardrails Second</em><br>
+                    • <strong>Trophy Architecture (Jason Louro, 2026):</strong> ถอดรหัสระบบเลเวลแก้ปัญหา <em>"90-Day Ceiling Congestion"</em> พัฒนาสู่ 6-Tier Sovereign Archetypes ให้แต่ละสายเติบโตตามความถนัดจริง<br>
+                    • <strong>Goal Setting (Locke & Latham):</strong> ซอยย่อยหลอดคะแนน 0 ➔ 50 ➔ 100 ให้ตัวแทนใหม่เห็นพัฒนาการทันที
+                </p>
+            </div>
+
+            <!-- Column 3 -->
+            <div class="logic-col" style="border-left: 3px solid #38bdf8;">
+                <h4 style="color:#7dd3fc;">3. Queueing Theory & Wait Psychology</h4>
+                <p>
+                    • <strong>Non-Stationary Erlang-C Queue (Columbia Univ):</strong> ทฤษฎีคิวที่อัตราการมาถึงไม่คงที่ แก้ปัญหา <em>"Weekend Clustering"</em> (ลูกค้านัดดูบ้านเสาร์-อาทิตย์ 70-80%) ด้วยระบบ Auto-Surge Bounty ดึงดูด Mentor ข้ามโซน<br>
+                    • <strong>Wait Time Psychology (Maven AGI / Waitlist App):</strong> สถิติชี้ว่าลูกค้ารอนานเกิน 15-20 นาที อัตรา Abandonment Rate จะพุ่งแบบ Exponential จึงต้องมีระบบ <em>15-Minute Deal-Drop & Live GPS Tracking</em>
+                </p>
+            </div>
+
+            <!-- Column 4 -->
+            <div class="logic-col" style="border-left: 3px solid #a855f7;">
+                <h4 style="color:#c084fc;">4. Multivariate Statistics & MCDA</h4>
+                <p>
+                    • <strong>AHP / Weighted Sum Model (Thomas L. Saaty):</strong> การตัดสินใจหลายเกณฑ์สำหรับประมวลผล <em>7-Dimension Feature Vector ($A_i, P_i, V_i, K_i, C_i, T_i, N_i$)</em> จัดกลุ่มตัวแทนอัตโนมัติ<br>
+                    • <strong>Kurtosis Analysis (NIST Standard):</strong> คำนวณความโด่งของสถิติมูลค่าดีล ดักจับยอดขาย Super Luxury 20M–100M+ สถาปนาเป็น <strong>Lion (สิงห์เจ้าถิ่น)</strong><br>
+                    • <strong>Network Centrality:</strong> วิเคราะห์โครงสร้างเครือข่ายความร่วมมือในการสถาปนา <strong>Gryphon</strong>
+                </p>
+            </div>
+
+            <!-- Column 5 -->
+            <div class="logic-col" style="border-left: 3px solid #10b981; grid-column: 1 / -1;">
+                <h4 style="color:#34d399;">5. System Sharding & Thai Legal Shield</h4>
+                <p>
+                    • <strong>Zero-Downtime Consistent Hashing (TinyCTO, Xgrid):</strong> สถาปัตยกรรมตัด Shard แยก Home Area ด้วยเทคนิค Workflow Draining และ Dual Calculation คำนวณคะแนนต่อเนื่อง ข้อมูลไม่สูญหาย<br>
+                    • <strong>ประมวลกฎหมายแพ่งและพาณิชย์ (ป.พ.พ. ม.657-660 ฝากทรัพย์ และ ม.420 ละเมิด):</strong> เกราะคุ้มครองผู้บริหาร (Legal Shield) โดยให้ Mentor ประจำโซนทำสัญญา Key Custody Agreement เป็นผู้รับฝากทรัพย์โดยตรง หากเกิดกุญแจหายหรือบ้านเสียหาย ความรับผิดทางแพ่งจะถูกจำกัดที่ตัวแทนหน้างาน ไม่กระเด็นมาถึงผู้บริหารบริษัท (กูล / พี่ลิลลี่)
+                </p>
+            </div>
+        </div>
+    </div>
+
     <div class="footer-note">
         <strong>💡 สรุปการเตรียมตัวสำหรับวันจันทร์:</strong><br>
         • <strong>กรณีต่ออินเทอร์เน็ต:</strong> ส่งลิงก์ <code>https://thenassty-cpu.github.io/siwasup-cobroker-os/launchpad.html</code> ให้กูลเปิดใน Chrome หรือ Edge บนโน้ตบุ๊ก<br>

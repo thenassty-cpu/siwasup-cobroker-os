@@ -1,0 +1,531 @@
+﻿<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ศิวาทรัพย์ แอสเซท - ศูนย์รวมทรัพย์ NPA และบ้านรีโนเวทคุณภาพมาตรฐาน</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts Prompt -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      font-family: 'Prompt', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .hero-gradient {
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.82) 0%, rgba(26, 20, 16, 0.94) 100%), 
+                  url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+    }
+    /* 🏛️ Authentic Siwasup Satin Architectural Gold Gradient */
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #F5E6C4 0%, #D4BA7A 40%, #C2A460 75%, #967C3E 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gold-gradient-btn {
+      background: linear-gradient(135deg, #D4BA7A 0%, #C2A460 55%, #967C3E 100%);
+      color: #0f172a;
+    }
+    .gold-gradient-btn:hover {
+      background: linear-gradient(135deg, #E2CE99 0%, #D4BA7A 55%, #A98B45 100%);
+    }
+    .bronze-card {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.7) 0%, rgba(42, 29, 18, 0.5) 100%);
+      border: 1px solid rgba(194, 164, 96, 0.25);
+    }
+    .bronze-card:hover {
+      border-color: rgba(194, 164, 96, 0.55);
+      box-shadow: 0 10px 30px -10px rgba(194, 164, 96, 0.15);
+    }
+  </style>
+</head>
+<body class="bg-[#0b0f17] text-slate-100 flex flex-col min-h-screen">
+
+  <!-- TOP BRAND NAVBAR -->
+  <nav class="sticky top-0 z-50 bg-[#0b0f17]/95 backdrop-blur-md border-b border-[#C2A460]/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- LOGO & COMPANY NAME -->
+      <a href="#" class="flex items-center gap-3.5 group">
+        <!-- SVG LOGO (Official Vector Art from Illustrator) -->
+        <img 
+          src="assets/siwasup_logo.svg" 
+          alt="ศิวาทรัพย์ แอสเซท" 
+          class="h-12 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" 
+          onerror="this.onerror=null; this.src='assets/siwasup_logo.png';"
+        >
+        <div>
+          <span class="text-xl sm:text-2xl font-black tracking-tight text-white block leading-none">
+            SIWASUP <span class="gold-gradient-text font-bold">ASSET</span>
+          </span>
+          <span class="text-[11px] tracking-wider text-[#D4BA7A]/80 uppercase font-medium">
+            ศิวาทรัพย์ แอสเซท จำกัด
+          </span>
+        </div>
+      </a>
+
+      <!-- DESKTOP NAV LINKS -->
+      <div class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
+        <a href="#welcome" class="hover:text-[#D4BA7A] transition-colors">หน้าแรก</a>
+        <a href="#announcements" class="hover:text-[#D4BA7A] transition-colors">ประกาศ & Top Sales</a>
+        <a href="#articles" class="hover:text-[#D4BA7A] transition-colors">สาระอสังหาฯ & ข่าว</a>
+        <a href="#activities" class="hover:text-[#D4BA7A] transition-colors">ภาพกิจกรรม</a>
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="flex items-center gap-3">
+        <!-- เข้าสู่แคตาล็อกบ้าน -->
+        <a href="index.html" class="gold-gradient-btn font-bold px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-[#C2A460]/20 active:scale-95 transition-all">
+          <i data-lucide="home" class="w-4 h-4 text-slate-950"></i>
+          <span>เข้าสู่แคตาล็อกบ้าน</span>
+        </a>
+
+        <!-- พื้นที่ตัวแทน -->
+        <a href="launchpad.html" class="hidden sm:flex bg-slate-900/80 hover:bg-slate-800 border border-[#C2A460]/40 text-[#E6CA85] font-medium px-3.5 py-2.5 rounded-xl text-xs sm:text-sm items-center gap-1.5 transition-all">
+          <i data-lucide="shield" class="w-4 h-4 text-[#D4BA7A]"></i>
+          <span>Agent Portal</span>
+        </a>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- 1. HERO GATE / WELCOME SECTION (หน้าเกิดต้อนรับ) -->
+  <header id="welcome" class="relative hero-gradient py-24 sm:py-32 flex items-center justify-center border-b border-[#C2A460]/20 overflow-hidden">
+    <!-- Ambient Warm Gold & Deep Bronze Glow -->
+    <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[32rem] h-[32rem] bg-[#C2A460]/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 right-10 w-96 h-96 bg-[#967C3E]/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      
+      <!-- Pill Badge -->
+      <div class="inline-flex items-center gap-2 bg-[#C2A460]/10 border border-[#C2A460]/30 text-[#E6CA85] text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full mb-8 backdrop-blur-sm shadow-sm">
+        <i data-lucide="sparkles" class="w-4 h-4 text-[#D4BA7A]"></i>
+        <span>ยินดีต้อนรับสู่ศูนย์กลางทรัพย์ NPA และอสังหาริมทรัพย์เพื่อการลงทุน</span>
+      </div>
+
+      <!-- CENTER HERO LOGO (Large Vector SVG) -->
+      <div class="flex justify-center mb-8">
+        <img 
+          src="assets/siwasup_logo.svg" 
+          alt="ศิวาทรัพย์ แอสเซท" 
+          class="h-32 sm:h-44 w-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-300" 
+          onerror="this.onerror=null; this.src='assets/siwasup_logo.png';"
+        >
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight sm:leading-tight">
+        เปิดประตูสู่บ้านคุณภาพ <br class="hidden sm:inline">
+        และโอกาสการลงทุนที่ <span class="gold-gradient-text">คุ้มค่าที่สุด</span>
+      </h1>
+
+      <p class="mt-5 text-sm sm:text-lg text-slate-300 max-w-2xl mx-auto font-light leading-relaxed">
+        บริษัท ศิวาทรัพย์ แอสเซท จำกัด คัดสรรทรัพย์สินรอการขาย (NPA) เกรดเอ พร้อมบ้านรีโนเวทคุณภาพมาตรฐาน และบริการดูแลสินเชื่อครบวงจร เพื่อส่งมอบบ้านที่ดีที่สุดให้คุณ
+      </p>
+
+      <!-- Main Action Call-to-Actions -->
+      <div class="mt-9 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="index.html" class="w-full sm:w-auto gold-gradient-btn font-bold px-8 py-4 rounded-2xl text-base sm:text-lg flex items-center justify-center gap-3 shadow-xl shadow-[#C2A460]/25 active:scale-95 transition-all">
+          <i data-lucide="search" class="w-5 h-5 text-slate-950"></i>
+          <span>เลือกชมแคตาล็อกบ้านทั้งหมด</span>
+        </a>
+        <a href="#articles" class="w-full sm:w-auto bg-[#1f1914]/80 hover:bg-[#2b221a] text-[#E6CA85] border border-[#C2A460]/35 font-semibold px-6 py-4 rounded-2xl text-sm sm:text-base flex items-center justify-center gap-2 backdrop-blur-sm transition-all">
+          <i data-lucide="newspaper" class="w-4 h-4 text-[#D4BA7A]"></i>
+          <span>อัปเดตข่าว & สาระอสังหาฯ</span>
+        </a>
+      </div>
+
+      <!-- Trust Badges (Warm Architectural Bronze Tone) -->
+      <div class="mt-14 grid grid-cols-2 md:grid-cols-4 gap-4 text-center border-t border-[#C2A460]/20 pt-8">
+        <div class="p-3">
+          <span class="block text-2xl sm:text-3xl font-extrabold text-white">100+</span>
+          <span class="text-xs text-slate-400">ทรัพย์คัดสรรในพอร์ต</span>
+        </div>
+        <div class="p-3">
+          <span class="block text-2xl sm:text-3xl font-extrabold text-[#D4BA7A]">125+</span>
+          <span class="text-xs text-slate-400">เครือข่ายตัวแทนเจ้าถิ่น</span>
+        </div>
+        <div class="p-3">
+          <span class="block text-2xl sm:text-3xl font-extrabold text-white">100%</span>
+          <span class="text-xs text-slate-400">ตรวจสอบโฉนดถูกต้อง</span>
+        </div>
+        <div class="p-3">
+          <span class="block text-2xl sm:text-3xl font-extrabold text-[#D4BA7A]">0 บาท</span>
+          <span class="text-xs text-slate-400">บริการให้คำปรึกษาสินเชื่อ</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- 8. ANNOUNCEMENT & TOP SALES (ประกาศประชุม & เกียรติยศตัวแทน) -->
+  <section id="announcements" class="py-16 sm:py-20 bg-[#0e131d] border-b border-[#C2A460]/15">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <div>
+          <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#D4BA7A] bg-[#C2A460]/10 border border-[#C2A460]/30 px-3 py-1 rounded-full mb-2">
+            <i data-lucide="megaphone" class="w-3.5 h-3.5 text-[#D4BA7A]"></i>
+            <span>ข้อ 8: ANNOUNCEMENT & RECOGNITION</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">ประกาศบริษัท & เกียรติยศยอดขาย (Top Sales)</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">อัปเดตกำหนดการประชุมประจำงวด และร่วมแสดงความยินดีกับตัวแทนดีเด่น</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs bg-[#1a1410] text-[#D4BA7A] border border-[#C2A460]/30 px-3 py-1.5 rounded-lg">
+            รอบประจำงวด: ไตรมาสล่าสุด
+          </span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Meeting Announcement Card (Deep Bronze Tone) -->
+        <div class="bronze-card p-6 rounded-3xl shadow-lg flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-[#C2A460]/20 text-[#D4BA7A] flex items-center justify-center mb-4">
+              <i data-lucide="calendar" class="w-6 h-6"></i>
+            </div>
+            <span class="text-xs font-semibold text-[#D4BA7A] uppercase tracking-wider block mb-1">การประชุมใหญ่ประจำงวด</span>
+            <h3 class="text-lg font-bold text-white leading-snug">
+              การประชุมสามัญตัวแทนและสัมมนาทิศทางตลาด NPA ปี 2570
+            </h3>
+            <p class="text-xs text-slate-400 mt-2.5 leading-relaxed">
+              ขอเชิญพี่น้องตัวแทน (อินทรี, กรีฟอน และสมาชิกทุกท่าน) เข้าร่วมประชุมออนไลน์เพื่อรับฟังกลยุทธ์การตลาดและเปิดตัวระบบ WTA-APP แพลตฟอร์มใหม่
+            </p>
+            <div class="mt-4 space-y-2 text-xs text-slate-300">
+              <div class="flex items-center gap-2">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-[#D4BA7A]"></i>
+                <span>วันเสาร์ปลายเดือน เวลา 13:00 - 16:00 น.</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i data-lucide="video" class="w-3.5 h-3.5 text-[#D4BA7A]"></i>
+                <span>ถ่ายทอดสดผ่าน LINE LIVE & Zoom Meeting</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-[#C2A460]/20">
+            <a href="launchpad.html" class="inline-flex items-center gap-1.5 text-xs text-[#E6CA85] hover:text-[#D4BA7A] font-semibold">
+              <span>ลงทะเบียนเข้าร่วมประชุม</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Top Sales Ranking 1 (Gold Crest Highlight) -->
+        <div class="bg-gradient-to-br from-[#2a1d12]/90 to-[#121824]/90 p-6 rounded-3xl border-2 border-[#C2A460]/50 shadow-xl relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute -right-6 -top-6 w-28 h-28 bg-[#C2A460]/20 rounded-full blur-2xl pointer-events-none"></div>
+          
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="gold-gradient-btn font-black text-xs px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                <span>🥇 TOP SALES อันดับ 1</span>
+              </span>
+              <span class="text-xs text-[#D4BA7A] font-mono">ยอดปิดโอนสูงสุด</span>
+            </div>
+
+            <div class="flex items-center gap-4 my-3">
+              <div class="w-16 h-16 rounded-2xl bg-[#C2A460]/20 border-2 border-[#C2A460] overflow-hidden flex items-center justify-center text-3xl font-bold text-[#E6CA85] shadow-inner">
+                👑
+              </div>
+              <div>
+                <h4 class="text-base font-bold text-white">คุณเป้ (กรกฎ)</h4>
+                <p class="text-xs text-[#D4BA7A] font-medium">รหัสตัวแทน: S02 (Diamond Master)</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">โซนหลัก: รามอินทรา - วัชรพล</p>
+              </div>
+            </div>
+
+            <p class="text-xs text-slate-300 mt-2 bg-[#0b0f17]/70 p-3 rounded-xl border border-[#C2A460]/25">
+              🏆 ผลงานยอดเยี่ยม: ปิดดีลบ้านเดี่ยวและทาวน์โฮม NPA รวม 4 หลังในงวดเดียว พร้อมรางวัลตั๋วเครื่องบินท่องเที่ยวประจำปี
+            </p>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-[#C2A460]/20 flex items-center justify-between text-xs text-slate-400">
+            <span>เกียรติยศศิวาทรัพย์</span>
+            <span class="text-[#D4BA7A] font-bold">ยอดเยี่ยมระดับเพชร ✨</span>
+          </div>
+        </div>
+
+        <!-- Top Sales Runner Ups (อันดับ 2 & 3) -->
+        <div class="bronze-card p-6 rounded-3xl shadow-md flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-semibold text-[#D4BA7A]/90 uppercase tracking-wider block mb-3">ทำเนียบยอดขายดีเด่น (Hall of Fame)</span>
+            
+            <div class="space-y-3.5">
+              <!-- อันดับ 2 -->
+              <div class="flex items-center gap-3 p-2.5 rounded-xl bg-[#0b0f17]/60 border border-[#C2A460]/20">
+                <span class="text-2xl">🥈</span>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm font-bold text-white">คุณกอล์ฟ (พศวัฒพงศ์)</span>
+                    <span class="text-[11px] text-[#D4BA7A] font-semibold">อันดับ 2</span>
+                  </div>
+                  <span class="text-[11px] text-slate-400">รหัส: S03 | โซนพระราม 2 - บางแค</span>
+                </div>
+              </div>
+
+              <!-- อันดับ 3 -->
+              <div class="flex items-center gap-3 p-2.5 rounded-xl bg-[#0b0f17]/60 border border-[#C2A460]/20">
+                <span class="text-2xl">🥉</span>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm font-bold text-white">คุณสมชาย ชัยชนะ</span>
+                    <span class="text-[11px] text-[#D4BA7A] font-semibold">อันดับ 3</span>
+                  </div>
+                  <span class="text-[11px] text-slate-400">รหัส: S15 | โซนบางนา - ศรีนครินทร์</span>
+                </div>
+              </div>
+            </div>
+
+            <p class="text-xs text-slate-400 mt-4 leading-relaxed">
+              ขอขอบคุณทุกความทุ่มเทของตัวแทนศิวาทรัพย์ทุกท่าน ที่ร่วมส่งมอบความสุขและบ้านที่มีคุณภาพให้แก่ลูกค้าเสมอมา
+            </p>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-[#C2A460]/20 text-right">
+            <span class="text-[11px] text-slate-500">ระบบตัดรอบคะแนนวันที่ 25 ของทุกเดือน</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 10. CONTENT & SEO & [HOT NEWS] สำหรับลูกค้า (สาระอสังหาฯ) -->
+  <section id="articles" class="py-16 sm:py-20 bg-[#0b0f17] border-b border-[#C2A460]/15">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <div>
+          <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#D4BA7A] bg-[#C2A460]/10 border border-[#C2A460]/30 px-3 py-1 rounded-full mb-2">
+            <i data-lucide="flame" class="w-3.5 h-3.5 text-[#D4BA7A]"></i>
+            <span>ข้อ 10: KNOWLEDGE & [HOT NEWS]</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">สาระน่ารู้เรื่องบ้าน & ข่าวสารอสังหาฯ ด่วน</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">บทความวิเคราะห์เจาะลึก เคล็ดลับสินเชื่อบ้าน และข่าวสารบ้านราคาพิเศษ</p>
+        </div>
+
+        <!-- Hot News Badge -->
+        <div class="inline-flex items-center gap-2 bg-[#2a170d] border border-[#C2A460]/40 text-[#F5E6C4] text-xs font-semibold px-3 py-1.5 rounded-xl">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D4BA7A] opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#C2A460]"></span>
+          </span>
+          <span>[HOT NEWS] ดอกเบี้ยกู้บ้านปรับลดระลอกใหม่ปลายปี 2569</span>
+        </div>
+      </div>
+
+      <!-- ARTICLES GRID (SEO FOCUSED) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Article 1: NPA Buying Guide -->
+        <article class="bronze-card rounded-3xl overflow-hidden transition-all flex flex-col group">
+          <div class="aspect-[16/9] w-full bg-slate-800 relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80" alt="ทริคเลือกซื้อบ้าน NPA" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+            <span class="absolute top-3 left-3 bg-[#0b0f17]/90 backdrop-blur-md text-[#E6CA85] border border-[#C2A460]/30 text-[11px] font-semibold px-2.5 py-1 rounded-lg">
+              คู่มือผู้ซื้อ
+            </span>
+          </div>
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] text-slate-400 block mb-1">26 ต.ค. 2569 • 5 นาทีในการอ่าน</span>
+              <h3 class="text-base font-bold text-white group-hover:text-[#D4BA7A] transition-colors leading-snug">
+                5 ทริคเลือกซื้อทรัพย์ NPA ให้ได้ของดี ราคาต่ำกว่าตลาด 30% โดยไม่มีภาระผูกพัน
+              </h3>
+              <p class="text-xs text-slate-400 mt-2.5 line-clamp-3 leading-relaxed">
+                ทำความเข้าใจความต่างระหว่างทรัพย์ธนาคาร ทรัพย์บังคับคดี และทรัพย์คัดสรรจากศิวาทรัพย์ วิธีตรวจเช็คเอกสารสิทธิ์ และการตรวจสอบสภาพโครงสร้างก่อนวางเงินมัดจำ
+              </p>
+            </div>
+            <div class="mt-5 pt-4 border-t border-[#C2A460]/20 flex items-center justify-between">
+              <span class="text-xs text-slate-500 font-medium">หมวด: ทรัพย์ NPA</span>
+              <a href="#" class="text-xs font-semibold text-[#D4BA7A] hover:underline flex items-center gap-1">
+                <span>อ่านบทความเต็ม</span>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Article 2: Mortgage Loans 2570 -->
+        <article class="bronze-card rounded-3xl overflow-hidden transition-all flex flex-col group">
+          <div class="aspect-[16/9] w-full bg-slate-800 relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80" alt="เตรียมตัวกู้สินเชื่อบ้าน" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+            <span class="absolute top-3 left-3 bg-[#990000] text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-sm">
+              HOT NEWS
+            </span>
+          </div>
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] text-slate-400 block mb-1">20 ต.ค. 2569 • 4 นาทีในการอ่าน</span>
+              <h3 class="text-base font-bold text-white group-hover:text-[#D4BA7A] transition-colors leading-snug">
+                เตรียมพร้อมกู้บ้านปี 2570: เคล็ดลับเตรียม Statement ให้กู้ได้ 100% เต็ม
+              </h3>
+              <p class="text-xs text-slate-400 mt-2.5 line-clamp-3 leading-relaxed">
+                อัปเดตเกณฑ์ LTV ใหม่ มาตรการผ่อนปรนของธนาคารแห่งประเทศไทย และข้อผิดพลาดที่คนซื้อมักตกม้าตายเรื่องเครดิตบูโรก่อนยื่นขอสินเชื่อบ้านมือสอง
+              </p>
+            </div>
+            <div class="mt-5 pt-4 border-t border-[#C2A460]/20 flex items-center justify-between">
+              <span class="text-xs text-slate-500 font-medium">หมวด: สินเชื่อการเงิน</span>
+              <a href="#" class="text-xs font-semibold text-[#D4BA7A] hover:underline flex items-center gap-1">
+                <span>อ่านบทความเต็ม</span>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Article 3: Renovation Value-Add -->
+        <article class="bronze-card rounded-3xl overflow-hidden transition-all flex flex-col group">
+          <div class="aspect-[16/9] w-full bg-slate-800 relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80" alt="รีโนเวทบ้านคุ้มค่า" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+            <span class="absolute top-3 left-3 bg-[#0b0f17]/90 backdrop-blur-md text-[#E6CA85] border border-[#C2A460]/30 text-[11px] font-semibold px-2.5 py-1 rounded-lg">
+              การรีโนเวท
+            </span>
+          </div>
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] text-slate-400 block mb-1">15 ต.ค. 2569 • 6 นาทีในการอ่าน</span>
+              <h3 class="text-base font-bold text-white group-hover:text-[#D4BA7A] transition-colors leading-snug">
+                3 จุดในบ้านเก่าที่รีโนเวทแล้วคุ้มที่สุด: เพิ่มมูลค่าบ้านได้เกินต้นทุนที่ลงไป
+              </h3>
+              <p class="text-xs text-slate-400 mt-2.5 line-clamp-3 leading-relaxed">
+                ถอดรหัสงานรีโนเวทสไตล์ศิวาทรัพย์ ทำไมงานระบบน้ำ-ไฟ ห้องน้ำ และส่วนหน้าบ้าน ถึงเป็นจุดเปลี่ยนที่ช่วยให้ขายบ้านได้ไวกว่าเดิม 3 เท่า
+              </p>
+            </div>
+            <div class="mt-5 pt-4 border-t border-[#C2A460]/20 flex items-center justify-between">
+              <span class="text-xs text-slate-500 font-medium">หมวด: พลิกฟื้นทรัพย์</span>
+              <a href="#" class="text-xs font-semibold text-[#D4BA7A] hover:underline flex items-center gap-1">
+                <span>อ่านบทความเต็ม</span>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 11. COMPANY ACTIVITIES & SOCIAL PROOF (ภาพกิจกรรมบริษัท) -->
+  <section id="activities" class="py-16 sm:py-20 bg-[#0e131d] border-b border-[#C2A460]/15">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <div>
+          <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#D4BA7A] bg-[#C2A460]/10 border border-[#C2A460]/30 px-3 py-1 rounded-full mb-2">
+            <i data-lucide="camera" class="w-3.5 h-3.5 text-[#D4BA7A]"></i>
+            <span>ข้อ 11: COMPANY ACTIVITIES & CSR</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">ภาพกิจกรรม & ความประทับใจ</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">บันทึกช่วงเวลาแห่งความสุข การส่งมอบบ้าน และกิจกรรมแบ่งปันสู่สังคมของศิวาทรัพย์</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-slate-400">อัปเดตกิจกรรมล่าสุดสม่ำเสมอ</span>
+        </div>
+      </div>
+
+      <!-- GALLERY MOSAIC GRID -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        
+        <!-- Activity 1: Handover -->
+        <div class="group relative aspect-square rounded-2xl overflow-hidden bg-slate-800 border border-[#C2A460]/25 shadow-md">
+          <img src="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?auto=format&fit=crop&w=600&q=80" alt="ส่งมอบบ้าน" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent flex flex-col justify-end p-3.5">
+            <span class="text-[10px] text-[#D4BA7A] font-semibold">ส่งมอบบ้านสำเร็จ</span>
+            <span class="text-xs font-bold text-white leading-tight">ยินดีกับครอบครัวคุณวิชัย รับมอบบ้านมัณฑนา</span>
+          </div>
+        </div>
+
+        <!-- Activity 2: CSR / Merit -->
+        <div class="group relative aspect-square rounded-2xl overflow-hidden bg-slate-800 border border-[#C2A460]/25 shadow-md">
+          <img src="https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&w=600&q=80" alt="ทำบุญบริษัท" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent flex flex-col justify-end p-3.5">
+            <span class="text-[10px] text-[#E6CA85] font-semibold">CSR & บุญบริษัท</span>
+            <span class="text-xs font-bold text-white leading-tight">ทำบุญประจำปีและมอบทุนการศึกษาเด็กเยาวชน</span>
+          </div>
+        </div>
+
+        <!-- Activity 3: Training -->
+        <div class="group relative aspect-square rounded-2xl overflow-hidden bg-slate-800 border border-[#C2A460]/25 shadow-md">
+          <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80" alt="สัมมนาตัวแทน" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent flex flex-col justify-end p-3.5">
+            <span class="text-[10px] text-[#D4BA7A] font-semibold">พัฒนาศักยภาพ</span>
+            <span class="text-xs font-bold text-white leading-tight">เวิร์กชอปเทคนิคเจรจาต่อรองและกฎหมายที่ดิน</span>
+          </div>
+        </div>
+
+        <!-- Activity 4: Team Dinner -->
+        <div class="group relative aspect-square rounded-2xl overflow-hidden bg-slate-800 border border-[#C2A460]/25 shadow-md">
+          <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=600&q=80" alt="ฉลองความสำเร็จ" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent flex flex-col justify-end p-3.5">
+            <span class="text-[10px] text-[#E6CA85] font-semibold">ฉลองความสำเร็จ</span>
+            <span class="text-xs font-bold text-white leading-tight">งานเลี้ยงขอบคุณพันธมิตรและมอบรางวัลประจำปี</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BOTTOM CALL TO ACTION (Warm Mahogany / Dark Bronze Tone) -->
+  <section class="py-16 bg-gradient-to-r from-[#1f150e] via-[#332213] to-[#1a120c] border-t border-[#C2A460]/30 text-white text-center">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+        พร้อมค้นหาบ้านในฝัน หรือสนใจร่วมเป็นตัวแทนกับเรา?
+      </h2>
+      <p class="mt-3 text-sm sm:text-base text-slate-300 font-light">
+        ศิวาทรัพย์ แอสเซท พร้อมเคียงข้างคุณทุกขั้นตอน ทั้งการซื้ออยู่อาศัยและการสร้างรายได้จากอสังหาริมทรัพย์
+      </p>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+        <a href="index.html" class="gold-gradient-btn font-bold px-8 py-3.5 rounded-2xl text-sm sm:text-base shadow-xl transition-all active:scale-95">
+          <span>เข้าสู่แคตาล็อกบ้าน</span>
+        </a>
+        <a href="https://line.me/R/ti/p/@426xxejs" target="_blank" class="bg-[#0b0f17] hover:bg-slate-900 text-[#E6CA85] border border-[#C2A460]/40 font-bold px-7 py-3.5 rounded-2xl text-sm sm:text-base shadow-lg transition-all flex items-center gap-2 active:scale-95">
+          <i data-lucide="message-circle" class="w-4 h-4 text-emerald-400"></i>
+          <span>ปรึกษาผ่าน LINE OA</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#070a10] border-t border-[#C2A460]/20 text-slate-400 py-12 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      
+      <div class="flex items-center gap-3.5">
+        <img src="assets/siwasup_logo.svg" alt="ศิวาทรัพย์ แอสเซท" class="h-10 w-auto object-contain" onerror="this.onerror=null; this.src='assets/siwasup_logo.png';">
+        <div>
+          <span class="text-sm font-bold text-white block">บริษัท ศิวาทรัพย์ แอสเซท จำกัด</span>
+          <span class="text-slate-400">สำนักงานใหญ่: โซนพระราม 2 กรุงเทพมหานคร</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-6 text-slate-400">
+        <a href="#welcome" class="hover:text-[#D4BA7A]">หน้าแรก</a>
+        <a href="index.html" class="hover:text-[#D4BA7A]">แคตาล็อกทรัพย์</a>
+        <a href="launchpad.html" class="hover:text-[#D4BA7A]">สำหรับตัวแทน (Agent)</a>
+        <a href="property_curator.html" class="hover:text-[#D4BA7A]">คัดเลือกทรัพย์เก่า</a>
+      </div>
+
+      <p class="text-slate-500">
+        © 2026-2027 SIWASUP ASSET CO., LTD. All Rights Reserved.
+      </p>
+
+    </div>
+  </footer>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>
