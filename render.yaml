@@ -2,6 +2,7 @@ services:
   - type: web
     name: siwasup-line-bot
     runtime: python
+    region: singapore
     buildCommand: ""
     startCommand: python scripts/line_gemini_webhook.py
     plan: free
