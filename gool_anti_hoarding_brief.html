@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบตรวจจับการกั๊กทรัพย์และฮั้วปิดดีลนอกระบบ — Siwasup Co-Broker OS</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Prompt & Kanit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      font-family: 'Prompt', 'Tahoma', sans-serif;
+      background-color: #0b0f17;
+      color: #e2e8f0;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #111827;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #c2a460;
+    }
+  </style>
+</head>
+<body class="min-h-screen p-3 sm:p-6 lg:p-8 selection:bg-amber-500/20 selection:text-amber-300">
+
+  <div class="max-w-5xl mx-auto space-y-6">
+
+    <!-- 1. Header & Briefing Title -->
+    <header class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xl backdrop-blur-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold mb-2">
+          <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
+          <span>Internal Briefing สำหรับกูล (Sales Commander)</span>
+        </div>
+        <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug">
+          ระบบตรวจจับการกั๊กทรัพย์ & ฮั้วปิดดีลนอกระบบ
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1">
+          กลไกปกป้องสต๊อกกลางและตรวจจับลีดหลอก (Listing Hoarding & Ghost Lead Detector)
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2 self-start md:self-auto shrink-0">
+        <span class="text-xs px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 border border-slate-700/80 font-mono">
+          Status: Ready for Review
+        </span>
+        <button onclick="window.print()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium flex items-center gap-1.5 transition">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+          <span>พิมพ์ / PDF</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. The Problem Statement (สรุปปัญหาจริงในภาษาคนทำงาน) -->
+    <section class="bg-gradient-to-br from-rose-950/30 to-slate-900/90 border border-rose-900/40 rounded-2xl p-5 sm:p-6 shadow-lg">
+      <div class="flex items-start gap-3">
+        <div class="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 flex items-center justify-center shrink-0 mt-0.5">
+          <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+        </div>
+        <div class="space-y-2">
+          <h2 class="text-base sm:text-lg font-bold text-rose-200">
+            พฤติกรรมนี้คืออะไร และทำไมถึงทำลายระบบทีม?
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            ในวงการนายหน้าต่างประเทศ (โดยเฉพาะญี่ปุ่น) เรียกปัญหานี้ว่า <strong>"Kakomikomi" (การปิดล้อมทรัพย์)</strong> หรือ <strong>Listing Hoarding</strong> คือเมื่อมีบ้านเด่นราคาดีหลุดเข้ามาในพอร์ต เอเจนต์บางคนจะรีบกดจองสิทธิ์ เบิกกุญแจ หรืออ้างว่ามีลูกค้านัดโอน เพื่อ <strong>"กันซีนไม่ให้เพื่อนในทีม 20 คนแตะทรัพย์นี้ได้"</strong>
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 text-xs">
+            <div class="bg-black/30 p-3 rounded-xl border border-rose-900/30">
+              <span class="font-bold text-rose-300 block mb-1">🔴 กรณีแอบขายนอกระบบได้:</span>
+              <p class="text-slate-400">เอาบ้านไปฮั้วปิดดีลส่วนตัว กินคอมมิชชั่น 3% เต็มคนเดียว แล้วกลับมาบอกบริษัทว่า <em>"เจ้าของขายให้ญาติไปเอง ขอยกเลิกสัญญานะพี่"</em></p>
+            </div>
+            <div class="bg-black/30 p-3 rounded-xl border border-rose-900/30">
+              <span class="font-bold text-amber-300 block mb-1">🟡 กรณีขายข้างนอกไม่ได้:</span>
+              <p class="text-slate-400">ปล่อยหลุดจอง ทำให้ทรัพย์นอนตายคาพอร์ตไป 2-3 สัปดาห์ บริษัทเสียโอกาสขาย เอเจนต์คนอื่นที่มีลูกค้าพร้อมก็ไม่ได้ขาย</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. The 3 Detection Signals (3 สัญญาณที่ระบบใช้ตรวจจับเงียบๆ) -->
+    <section class="space-y-3">
+      <div class="flex items-center gap-2">
+        <i data-lucide="radar" class="w-4 h-4 text-amber-400"></i>
+        <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider">
+          ระบบตรวจจับรอยเท้าดิจิทัล 3 สัญญาณ (Digital Footprints)
+        </h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        <!-- Signal 1 -->
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4.5 space-y-2 hover:border-slate-700 transition">
+          <div class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 flex items-center justify-center font-bold text-xs font-mono">
+            01
+          </div>
+          <h4 class="font-bold text-white text-sm">ประวัติการสร้างลีดหลอก (Ghost Lead Footprint)</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            ตรวจจับความถี่ที่เอเจนต์ชอบกดจองทรัพย์หลายหลังพร้อมกัน หรือมีประวัติยกเลิกนัดชมบ่อยๆ ก่อนถึงวันนัด โดยไม่มีเหตุผลอันควร
+          </p>
+        </div>
+
+        <!-- Signal 2 -->
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4.5 space-y-2 hover:border-slate-700 transition">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center font-bold text-xs font-mono">
+            02
+          </div>
+          <h4 class="font-bold text-white text-sm">ข้อมูลขัดแย้งกับผลลัพธ์ (Engagement Mismatch)</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            ระบบเห็นว่าลิงก์บ้านหลังนี้มีคนเปิดดูแช่นาน (>30 วิ) มีการเบิกกุญแจไปเปิดบ้าน แต่จู่ๆ เอเจนต์กลับมารายงานว่า <em>"ลูกค้าไม่เอาแล้ว"</em> แบบผิดธรรมชาติ
+          </p>
+        </div>
+
+        <!-- Signal 3 -->
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4.5 space-y-2 hover:border-slate-700 transition">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center font-bold text-xs font-mono">
+            03
+          </div>
+          <h4 class="font-bold text-white text-sm">ถือครองทรัพย์นิ่งนานเกินเกณฑ์ (Velocity Stall)</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            บ้านถูกเปลี่ยนสถานะเป็น "ติดจอง/กำลังคุย" ค้างไว้นานเกินค่าเฉลี่ย โดยไม่มีหลักฐานสลิปมัดจำหรือนัดโอนอัปเดตเข้ามาในระบบ
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. The 3 Counter-Measures (3 กลไกแก้เกมด้วยทฤษฎีเกม) -->
+    <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xl">
+      <div class="flex items-center gap-2 border-b border-slate-800 pb-3">
+        <i data-lucide="cpu" class="w-5 h-5 text-amber-400"></i>
+        <h3 class="text-base font-bold text-white">
+          3 กลไกแก้เกมทางระบบ: ทำให้การกั๊ก "ไม่คุ้มที่จะทำ"
+        </h3>
+      </div>
+
+      <div class="space-y-3.5 text-xs sm:text-sm">
+        
+        <!-- Measure 1 -->
+        <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono font-bold text-[11px] border border-amber-500/30">
+                กลไกที่ 1
+              </span>
+              <span class="font-bold text-white">ระบบนับถอยหลังล็อกสิทธิ์ (Time-To-Live : TTL)</span>
+            </div>
+            <p class="text-slate-400 text-xs">
+              การจองสิทธิ์มีเวลาจำกัด (เช่น 72 ชม. สำหรับคิวนัดชม / 7 วันสำหรับวางเงินมัดจำ) ถ้าครบกำหนดแล้วไม่มีสลิปมัดจำ หรือไม่มี GPS เช็กอินหน้างานจริง <strong>ระบบจะปลดล็อกบ้านหลังนั้นคืนสู่พอร์ตกลางอัตโนมัติทันที</strong> ให้เอเจนต์คนอื่นในทีมเอาไปขายต่อได้เลย
+            </p>
+          </div>
+          <div class="shrink-0 bg-slate-900 px-3 py-2 rounded-lg border border-slate-800 text-center">
+            <span class="text-[10px] text-slate-500 block">เกณฑ์มาตรฐาน</span>
+            <span class="font-mono font-bold text-amber-400 text-xs">72 ชม. Auto-Unlock</span>
+          </div>
+        </div>
+
+        <!-- Measure 2 -->
+        <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-mono font-bold text-[11px] border border-indigo-500/30">
+                กลไกที่ 2
+              </span>
+              <span class="font-bold text-white">ยืนยันตัวตนลูกค้าจริง (Proof of Genuine Buyer)</span>
+            </div>
+            <p class="text-slate-400 text-xs">
+              เวลาเอเจนต์กดจองทรัพย์หรือขอนัดชม ระบบจะส่ง SMS / LINE แจ้งเตือนไปยังเบอร์ลูกค้าให้กดยืนยันตัวตน <strong>เอเจนต์ไม่สามารถสร้างลีดผีหรือใส่ชื่อมั่วขึ้นมาเองได้</strong> ถ้าไม่มีคนซื้อตัวจริง
+            </p>
+          </div>
+          <div class="shrink-0 bg-slate-900 px-3 py-2 rounded-lg border border-slate-800 text-center">
+            <span class="text-[10px] text-slate-500 block">ระบบตรวจสอบ</span>
+            <span class="font-mono font-bold text-indigo-400 text-xs">OTP / Client Link</span>
+          </div>
+        </div>
+
+        <!-- Measure 3 -->
+        <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-mono font-bold text-[11px] border border-rose-500/30">
+                กลไกที่ 3
+              </span>
+              <span class="font-bold text-white">ตัดแต้มความน่าเชื่อถือ & ลดโควตา (Trust Score Penalty)</span>
+            </div>
+            <p class="text-slate-400 text-xs">
+              เอเจนต์ที่กดจองแล้วปล่อยหลุดบ่อยๆ จะถูกลดคะแนน Trust Score และถูกจำกัดสิทธิ์ (Quota) จากเดิมเคยจองได้ 3 หลัง จะเหลือจองได้แค่ทีละ 1 หลัง และ <strong>หมดสิทธิ์แตะต้องทรัพย์เกรด Hero</strong> จนกว่าจะสะสมผลงานใหม่
+            </p>
+          </div>
+          <div class="shrink-0 bg-slate-900 px-3 py-2 rounded-lg border border-slate-800 text-center">
+            <span class="text-[10px] text-slate-500 block">บทลงโทษ</span>
+            <span class="font-mono font-bold text-rose-400 text-xs">ลดโควตา / ตัดสิทธิ์ Hero</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. Sales Commander Action Console (ตัวอย่างหน้าจอที่กูลจะเห็นจริง) -->
+    <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-rose-500 animate-pulse"></span>
+          <h3 class="text-base font-bold text-white">
+            ตัวอย่างหน้าจอที่กูลจะเห็นจริง เมื่อตรวจพบเคสต้องสงสัย
+          </h3>
+        </div>
+        <span class="text-[11px] font-mono text-slate-400 bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-800">
+          Real-time Live Alert
+        </span>
+      </div>
+
+      <!-- Mock Alert Card -->
+      <div class="bg-slate-950 border-2 border-rose-600/60 rounded-2xl p-4 sm:p-5 space-y-3.5 shadow-2xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-rose-600/20 text-rose-400 flex items-center justify-center font-bold text-sm">
+              🚨
+            </div>
+            <div>
+              <div class="text-xs text-rose-400 font-bold uppercase tracking-wider">
+                แจ้งเตือนตรวจจับพฤติกรรมกั๊กทรัพย์ (Flag-A)
+              </div>
+              <div class="text-sm font-bold text-white">
+                เคสทรัพย์ #1100902 — ที่ดินพร้อมบ้านคลองมหาสวัสดิ์ (33 ล้านบาท)
+              </div>
+            </div>
+          </div>
+          <span class="text-[10px] font-mono text-slate-400 bg-slate-900 px-2 py-1 rounded border border-slate-800 self-start sm:self-auto">
+            TTL เหลือ 05:42 ชม.
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs bg-slate-900/60 p-3 rounded-xl border border-slate-800/60">
+          <div>
+            <span class="text-slate-500 block text-[10px]">เอเจนต์ผู้ถือสิทธิ์:</span>
+            <span class="font-bold text-slate-200">คุณสมชาย (AG-042)</span>
+          </div>
+          <div>
+            <span class="text-slate-500 block text-[10px]">สถานะปัจจุบัน:</span>
+            <span class="font-bold text-amber-400">เบิกกุญแจแล้ว 2 ครั้ง (ไม่ส่งรายงาน)</span>
+          </div>
+          <div>
+            <span class="text-slate-500 block text-[10px]">ประวัติความเสี่ยง:</span>
+            <span class="font-bold text-rose-400">ปล่อยหลุดจอง 2 เคสติดกันใน 14 วัน</span>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-300 leading-relaxed">
+          <strong class="text-white">คำแนะนำสำหรับกูล (Actionable Decision):</strong> 
+          โทรสอบถามความคืบหน้ากับเอเจนต์ทันที หรือหากครบกำหนด TTL ภายใน 5 ชม. นี้โดยไม่มีสลิปมัดจำ ระบบพร้อมตัดสิทธิ์และปลดล็อกทรัพย์ให้เอเจนต์คิวถัดไปรับช่วงต่อทันที
+        </p>
+
+        <!-- Command Buttons for Gool -->
+        <div class="flex flex-wrap items-center gap-2 pt-1">
+          <button onclick="simulateCall()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition shadow-sm">
+            <i data-lucide="phone-call" class="w-3.5 h-3.5"></i>
+            <span>โทรสายด่วนหาเอเจนต์</span>
+          </button>
+          
+          <button onclick="simulateUnlock()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 border border-slate-700 font-medium text-xs flex items-center gap-1.5 transition">
+            <i data-lucide="unlock" class="w-3.5 h-3.5 text-rose-400"></i>
+            <span>กดปลดล็อกทรัพย์คืนพอร์ตกลางทันที</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Summary Footer for Gool -->
+    <footer class="text-center text-xs text-slate-500 py-3 border-t border-slate-800/60">
+      Siwasup Co-Broker OS • สถาปัตยกรรมป้องกันการรั่วไหลของรายได้ (Commission Protection Framework)
+    </footer>
+
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    function simulateCall() {
+      alert("📞 [จำลอง]: ระบบต่อสายถึงคุณสมชาย (AG-042) ทันที เพื่อให้กูลสอบถามความคืบหน้าเคส 33 ล้านบาท");
+    }
+
+    function simulateUnlock() {
+      if (confirm("ยืนยันปลดล็อกทรัพย์ #1100902 คืนสู่พอร์ตกลางทันทีหรือไม่? เพื่อให้เพื่อนร่วมทีม 20 คนนำไปเสนอขายต่อ")) {
+        alert("✅ ปลดล็อกทรัพย์เรียบร้อย! ส่งการแจ้งเตือนถึงทัพ 20 เอเจนต์ว่ามีทรัพย์ทองคำหลุดจองพร้อมขาย");
+      }
+    }
+  </script>
+</body>
+</html>

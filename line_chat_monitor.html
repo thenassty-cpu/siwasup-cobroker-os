@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Siwasup LINE OA (@813nyyia) — Live Chat & Q&A Monitor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Prompt', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-4 sm:p-6">
+  <div class="max-w-5xl mx-auto space-y-6">
+
+    <!-- Header -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
+      <div class="space-y-1">
+        <div class="flex items-center gap-2.5">
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="botStatusBadge">LIVE MONITOR</span>
+          </span>
+          <span class="text-xs font-mono text-amber-300">@813nyyia (Siwasupagent)</span>
+        </div>
+        <h1 class="text-xl sm:text-2xl font-bold text-white">💬 ระบบส่องประวัติถาม-ตอบ LINE OA ("น้องศิวา AI")</h1>
+        <p class="text-xs text-slate-400">ติดตามว่าเอเจนท์หรือทีมงานเข้ามาลองถามอะไร และ AI ตอบกลับว่าอย่างไรแบบ Real-Time</p>
+      </div>
+
+      <div class="flex items-center gap-2 shrink-0">
+        <button onclick="loadLogs()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition cursor-pointer shadow-lg">
+          🔄 รีเฟรชข้อมูลล่าสุด
+        </button>
+        <a href="https://manager.line.biz" target="_blank" rel="noopener" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition">
+          เปิด LINE OA Manager ↗
+        </a>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+        <div class="text-xs text-slate-400">ผู้ติดตาม (Followers)</div>
+        <div class="text-2xl font-black text-emerald-400 mt-1" id="statFollowers">2 ท่าน</div>
+        <div class="text-[11px] text-slate-500 mt-0.5">ข้อมูลตรงจาก LINE Insight API</div>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+        <div class="text-xs text-slate-400">ยอดบอทตอบกลับสะสม (29 ต.ค.)</div>
+        <div class="text-2xl font-black text-amber-300 mt-1" id="statHistReplies">18 ข้อความ</div>
+        <div class="text-[11px] text-slate-500 mt-0.5">รอบทดสอบระบบวันแรก</div>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+        <div class="text-xs text-slate-400">ข้อความที่บันทึกในสมุด Log ใหม่</div>
+        <div class="text-2xl font-black text-sky-400 mt-1" id="statLoggedCount">0 รายการ</div>
+        <div class="text-[11px] text-slate-500 mt-0.5" id="statUpdatedAt">อัปเดตล่าสุด: -</div>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+        <div class="text-xs text-slate-400">สถานะ Webhook Endpoint</div>
+        <div class="text-xs font-mono text-emerald-300 truncate mt-2" id="statWebhookUrl">กำลังตรวจสอบ...</div>
+        <div class="text-[11px] text-slate-500 mt-1">เชื่อมตรงเข้าพอร์ต 5005 + R2 Sync</div>
+      </div>
+    </div>
+
+    <!-- Historical Notice Box -->
+    <div class="bg-amber-950/30 border border-amber-500/30 rounded-2xl p-4 text-xs text-amber-200/90 leading-relaxed">
+      <strong>📌 หมายเหตุประวัติข้อความ:</strong> เมื่อวันที่ <strong>29 ต.ค. 2569</strong> มีการถาม-ตอบผ่านบอทสำเร็จทั้งหมด <strong>18 ข้อความ</strong> (แต่ตอนนั้นรันผ่านหน้าจอ Terminal ยังไม่ได้เปิดระบบเซฟลงไฟล์ และฝั่ง LINE API มีนโยบายไม่ให้ดึงข้อความเก่าก่อนเปิด Logger ย้อนหลัง) — <strong>ตั้งแต่ตอนนี้เป็นต้นไป ทุกข้อความที่ทักเข้ามาใน `@813nyyia` จะถูกบันทึกทั้งชื่อผู้ถาม คำถาม และคำตอบของ AI ไว้ในหน้านี้ทันทีครับ!</strong>
+    </div>
+
+    <!-- Search Filter -->
+    <div class="flex flex-col sm:flex-row gap-3 items-center justify-between">
+      <input
+        type="text"
+        id="searchInput"
+        oninput="renderConversations()"
+        placeholder="🔍 ค้นหาจากชื่อคนถาม, คำถาม, รหัสทรัพย์..."
+        class="w-full sm:w-96 px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-white focus:outline-none focus:border-amber-400"
+      />
+      <span class="text-xs text-slate-400" id="showingCountText">กำลังโหลดรายการ...</span>
+    </div>
+
+    <!-- Chat Feed -->
+    <div id="chatContainer" class="space-y-3"></div>
+
+  </div>
+
+  <script>
+    let allConversations = [];
+
+    async function loadLogs() {
+      const ts = Date.now();
+      let data = null;
+
+      // Try local webhook first, fallback to R2 JSON
+      const urls = [
+        `http://127.0.0.1:5005/logs?t=${ts}`,
+        `https://assets.siwasup.com/line_chat_logs.json?t=${ts}`,
+        `data/line_chat_logs.json?t=${ts}`
+      ];
+
+      for (const u of urls) {
+        try {
+          const resp = await fetch(u, { cache: 'no-store' });
+          if (resp.ok) {
+            data = await resp.json();
+            break;
+          }
+        } catch (e) {}
+      }
+
+      try {
+        const stResp = await fetch(`https://assets.siwasup.com/line_bot_status.json?t=${ts}`, { cache: 'no-store' });
+        if (stResp.ok) {
+          const st = await stResp.json();
+          document.getElementById('statWebhookUrl').innerText = st.webhook_url || 'Active';
+          document.getElementById('botStatusBadge').innerText = st.status === 'ONLINE' ? 'ONLINE 24/7' : st.status;
+        }
+      } catch (e) {}
+
+      if (!data) {
+        document.getElementById('chatContainer').innerHTML = `
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center text-slate-400 text-sm">
+            ยังไม่มีข้อมูลบันทึกแชท หรือกำลังรอข้อความแรกเข้ามาครับ
+          </div>`;
+        return;
+      }
+
+      allConversations = data.conversations || [];
+      document.getElementById('statLoggedCount').innerText = `${allConversations.length} รายการ`;
+      document.getElementById('statUpdatedAt').innerText = `อัปเดต: ${data.updated_at || '-'}`;
+      renderConversations();
+    }
+
+    function renderConversations() {
+      const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+      const filtered = allConversations.filter(c => {
+        if (!q) return true;
+        return (
+          (c.user_name || '').toLowerCase().includes(q) ||
+          (c.user_text || '').toLowerCase().includes(q) ||
+          (c.ai_reply || '').toLowerCase().includes(q) ||
+          (c.matched_codes || []).join(' ').toLowerCase().includes(q)
+        );
+      });
+
+      document.getElementById('showingCountText').innerText = `แสดง ${filtered.length} รายการล่าสุด`;
+
+      const container = document.getElementById('chatContainer');
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center space-y-2">
+            <div class="text-base font-bold text-slate-300">พร้อมดักจับและบันทึกข้อความใหม่แบบ Real-Time แล้วครับ!</div>
+            <div class="text-xs text-slate-400">ลองเปิดแอป LINE ทักหา <strong>Siwasupagent (@813nyyia)</strong> เช่น พิมพ์ว่า <em>"ทาวน์โฮม บางนา งบ 3 ล้าน"</em> หรือ <em>"ขอเบิกกุญแจต้องทำยังไง"</em> แล้วกดปุ่มรีเฟรชด้านบนได้เลยครับ</div>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => {
+        const codesHtml = (item.matched_codes && item.matched_codes.length > 0)
+          ? `<div class="flex flex-wrap gap-1.5 mt-2">
+              <span class="text-[10px] text-slate-400">ทรัพย์ที่ AI ดึงมาแนะนำ:</span>
+              ${item.matched_codes.map(c => `<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-bold">#${c}</span>`).join('')}
+             </div>`
+          : '';
+
+        return `
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3 shadow-md">
+            <div class="flex items-center justify-between border-b border-slate-800/80 pb-2.5 text-xs">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 flex items-center justify-center font-bold text-xs">
+                  ${(item.user_name || 'U').slice(0, 2)}
+                </div>
+                <div>
+                  <div class="font-bold text-white">${item.user_name || 'ผู้ใช้งาน LINE'} <span class="text-[10px] text-slate-500 font-mono">(ID ..${item.user_id_tail || ''})</span></div>
+                  <div class="text-[11px] text-slate-400">${item.timestamp || ''}</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-slate-800 text-slate-300 border border-slate-700">${item.search_mode || 'CHAT'}</span>
+                ${item.latency_ms ? `<span class="text-[10px] text-emerald-400 font-mono">${item.latency_ms} ms</span>` : ''}
+              </div>
+            </div>
+
+            <!-- User Question -->
+            <div class="bg-slate-950/80 border border-slate-800/90 rounded-xl p-3 text-xs space-y-1">
+              <div class="text-[10px] font-bold text-sky-400">🙋‍♂️ คำถามจากผู้ใช้งาน:</div>
+              <div class="text-slate-100 text-sm font-medium whitespace-pre-line">${escapeHtml(item.user_text || '')}</div>
+            </div>
+
+            <!-- AI Reply -->
+            <div class="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-3 text-xs space-y-1">
+              <div class="text-[10px] font-bold text-emerald-400">🤖 คำตอบจาก "น้องศิวา AI":</div>
+              <div class="text-slate-200 whitespace-pre-line leading-relaxed">${escapeHtml(item.ai_reply || '')}</div>
+              ${codesHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    loadLogs();
+    setInterval(loadLogs, 10000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Siwasup OS — Personalized Squad Hub System (กระดานสื่อสารภายใน 4 ทีมงาน)</title>
+  <link rel="icon" type="image/png" href="assets/siwasup_logo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+    body { font-family: 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #07090e; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+  </style>
+</head>
+<body class="bg-[#07090e] text-slate-100 min-h-screen antialiased flex flex-col selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-[#0c101a]/95 backdrop-blur-md border-b border-[#C2A460]/20 px-4 py-3 sm:px-8">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-[#C2A460]/20 border border-[#C2A460]/40 text-[#E6CA85] flex items-center justify-center font-bold text-lg shadow-inner">
+          <i data-lucide="layout-grid" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-[#C2A460]/20 text-[#E6CA85] border border-[#C2A460]/30 uppercase tracking-wider">Internal Squad Hub</span>
+            <span class="text-xs text-slate-400">• สื่อสารเฉพาะงานปัจจุบัน (Current State Only)</span>
+          </div>
+          <h1 class="text-base sm:text-lg font-bold text-white tracking-tight">
+            🏛️ Personalized Squad Hub System — กระดานภายใน 4 บุคลากรหลัก
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+        <a href="executive_quick_hub.html" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs border border-slate-800 flex items-center gap-1.5 transition">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span>กลับ Executive Hub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Squad Switcher Tabs (4 Personas) -->
+  <div class="bg-[#0b0f19] border-b border-slate-800/80 px-4 py-3 sm:px-8 sticky top-[65px] z-40 backdrop-blur-md">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-2 overflow-x-auto pb-1 sm:pb-0">
+      
+      <!-- Tab Bua -->
+      <button onclick="switchSquad('bua')" id="tab_bua" class="flex-1 min-w-[140px] px-3.5 py-2.5 rounded-2xl bg-[#C2A460] text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition">
+        <span>👩🏻‍💼</span>
+        <span>บอร์ดคุณบัว (Ops)</span>
+        <span class="w-2 h-2 rounded-full bg-rose-600 animate-ping"></span>
+      </button>
+
+      <!-- Tab Gool -->
+      <button onclick="switchSquad('gool')" id="tab_gool" class="flex-1 min-w-[140px] px-3.5 py-2.5 rounded-2xl bg-slate-900 text-slate-400 hover:text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2 border border-slate-800 transition">
+        <span>🦁</span>
+        <span>บอร์ดคุณกูล (Sales)</span>
+      </button>
+
+      <!-- Tab Lily -->
+      <button onclick="switchSquad('lily')" id="tab_lily" class="flex-1 min-w-[140px] px-3.5 py-2.5 rounded-2xl bg-slate-900 text-slate-400 hover:text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2 border border-slate-800 transition">
+        <span>⚖️</span>
+        <span>บอร์ดพี่ลิลลี่ (Legal)</span>
+      </button>
+
+      <!-- Tab Content -->
+      <button onclick="switchSquad('content')" id="tab_content" class="flex-1 min-w-[140px] px-3.5 py-2.5 rounded-2xl bg-slate-900 text-slate-400 hover:text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2 border border-slate-800 transition">
+        <span>🎨</span>
+        <span>บอร์ด Content (Media)</span>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="max-w-6xl mx-auto w-full px-4 py-6 sm:px-8 flex-1 space-y-6">
+
+    <!-- ==================== SQUAD 1: BUA (OPERATIONS & CURATION) ==================== -->
+    <div id="hub_bua" class="space-y-6">
+      
+      <!-- Persona Header Card -->
+      <div class="bg-gradient-to-r from-[#182030] to-[#0f172a] p-5 sm:p-6 rounded-3xl border border-[#C2A460]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-400 text-2xl flex items-center justify-center shadow-inner">
+            👩🏻‍💼
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-amber-300 uppercase">Head of Operations & Listing Shield</span>
+              <span class="text-xs text-slate-400">• คุณบัว</span>
+            </div>
+            <h2 class="text-lg sm:text-xl font-bold text-white">กระดานปฏิบัติการหน้างาน & ตรวจสอบสต็อกทรัพย์</h2>
+            <p class="text-xs text-slate-400 mt-0.5">คัดกรองทรัพย์ 119 แปลงเดิม, ประสานงานเบิกกุญแจ, และดูแล Checklist 20 Alpha Agents</p>
+          </div>
+        </div>
+
+        <button onclick="copyBuaBrief()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow transition active:scale-95 shrink-0">
+          <i data-lucide="copy" class="w-4 h-4"></i>
+          <span>คัดลอกสรุปส่ง LINE บัว</span>
+        </button>
+      </div>
+
+      <!-- Current Active Tasks (Max 3-5 items) -->
+      <div class="space-y-3">
+        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+          <span>⚡ รายการด่วนที่ต้องทำปัจจุบัน (Current Action Queue)</span>
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <!-- Task 1: Audit 7 Items -->
+          <div class="bg-slate-900 border border-rose-500/40 p-4 rounded-2xl space-y-3 relative overflow-hidden group">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800">URGENT ACTION</span>
+              <span class="text-xs text-slate-400 font-mono">7 ทรัพย์ติดปัญหา</span>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-white">รีเช็ก 7 ทรัพย์ที่มีปัญหา (จากรอบ 34 แปลง)</h4>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                มี 4 แปลงที่ขายไปแล้วบนเว็บเดิม (ลาดพร้าว, พระราม 2, บางบ่อ, ลำลูกกา) และ 3 แปลงราคาหลุด (วิภาวดี 0 บาท, เขาใหญ่ 5 บาท, โรงแรม 0 บาท)
+              </p>
+            </div>
+            <a href="bua_audit_board.html" target="_blank" class="w-full py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition">
+              <span>เปิดบอร์ดรีเช็กทรัพย์ 7 แปลง</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+
+          <!-- Task 2: Alpha Checklist -->
+          <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">OPERATIONS READY</span>
+              <span class="text-xs text-slate-400">เตรียมเปิดตัว</span>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-white">Checklist เตรียมรับมือ 20 Alpha Agents</h4>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                เตรียมกลุ่ม LINE ลับ, กำชับกติกาเบิกกุญแจ 3 วัน/7 วัน, และวิธีส่งต่อเคสให้พี่ลิลลี่
+              </p>
+            </div>
+            <a href="bua_alpha_checklist.html" target="_blank" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 transition">
+              <span>เปิดดู Checklist 20 เอเจนต์</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Quick Tools Grid -->
+      <div class="bg-slate-900/60 p-5 rounded-3xl border border-slate-800 space-y-3">
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">🛠️ เครื่องมือประจำตัวของคุณบัว</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+          <a href="property_curator.html" target="_blank" class="p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition text-center space-y-1">
+            <span class="text-xl block">❤️</span>
+            <span class="font-bold text-white block">คัดบ้าน 119 แปลง</span>
+          </a>
+          <a href="bua_audit_board.html" target="_blank" class="p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition text-center space-y-1">
+            <span class="text-xl block">📋</span>
+            <span class="font-bold text-white block">บอร์ดรีเช็กด่วน</span>
+          </a>
+          <a href="admin_dashboard.html" target="_blank" class="p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition text-center space-y-1">
+            <span class="text-xl block">📊</span>
+            <span class="font-bold text-white block">แอดมินบอร์ดกลาง</span>
+          </a>
+          <a href="catalog.html" target="_blank" class="p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition text-center space-y-1">
+            <span class="text-xl block">🌐</span>
+            <span class="font-bold text-white block">หน้าแคตตาล็อกจริง</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== SQUAD 2: GOOL (SALES & ALPHA AGENTS) ==================== -->
+    <div id="hub_gool" class="hidden space-y-6">
+      <div class="bg-gradient-to-r from-[#21160c] to-[#161d2b] p-5 sm:p-6 rounded-3xl border border-amber-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-400 text-2xl flex items-center justify-center shadow-inner">
+            🦁
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-amber-300 uppercase">Head of Sales & Co-Broker Network</span>
+              <span class="text-xs text-slate-400">• คุณกูล</span>
+            </div>
+            <h2 class="text-lg sm:text-xl font-bold text-white">ศูนย์บัญชาการทัพเซลส์ & 20 Alpha Agents</h2>
+            <p class="text-xs text-slate-400 mt-0.5">บุกเบิกตลาดเชียงใหม่ 234 แปลง, คุมเพดานต่อราคา 50%, และขับเคลื่อนระบบแต้มเซล 2-Track</p>
+          </div>
+        </div>
+
+        <button onclick="copyGoolBrief()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow transition active:scale-95 shrink-0">
+          <i data-lucide="copy" class="w-4 h-4"></i>
+          <span>คัดลอกสรุปส่ง LINE กูล</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-3">
+          <div class="flex items-center justify-between text-xs font-bold text-amber-300">
+            <span>🦁 GOOL'S EXECUTIVE DECK</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            สื่อนำเสนอเคลียร์วิสัยทัศน์: ไม่ต้องเทรนใช้เว็บ แต่บรีฟ 30 นาทีเรื่องกุญแจและเพดานต่อราคา พร้อมข้อความ 1 คลิกส่งหากูล
+          </p>
+          <a href="gool_executive_presentation.html" target="_blank" class="w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition">
+            <span>เปิดพรีเซนต์ของกูล</span>
+          </a>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-3">
+          <div class="flex items-center justify-between text-xs font-bold text-indigo-400">
+            <span>⚖️ SCORING DEBATE SHOWDOWN</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            ตารางเปรียบเทียบหมัดต่อหมัด: แก้ช่องโหว่สายปั่นแต้มโซเชียล สู่เกณฑ์มาตรฐาน 2-Track ให้สายโอนบ้านจริงได้แต้มเต็มเม็ดเต็มหน่วย
+          </p>
+          <a href="scoring_debate_dashboard.html" target="_blank" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 transition">
+            <span>เปิดดีเบทคะแนนเซล</span>
+          </a>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-3">
+          <div class="flex items-center justify-between text-xs font-bold text-emerald-400">
+            <span>🛡️ ANTI-HOARDING CONSOLE</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            แดชบอร์ดตรวจจับการกั๊กทรัพย์เพื่อฮั้วดีล: ระบบปลดล็อกอัตโนมัติ (TTL 72 ชม.) และหน้าต่างสั่งการตรวจเอเจนต์
+          </p>
+          <a href="gool_anti_hoarding_brief.html" target="_blank" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 transition">
+            <span>เปิดคอนโซลตรวจกั๊กทรัพย์</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== SQUAD 3: LILY (LEGAL & CONTRACT) ==================== -->
+    <div id="hub_lily" class="hidden space-y-6">
+      <div class="bg-gradient-to-r from-[#181a30] to-[#0f172a] p-5 sm:p-6 rounded-3xl border border-indigo-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-2xl bg-indigo-500/20 border border-indigo-500/40 text-indigo-400 text-2xl flex items-center justify-center shadow-inner">
+            ⚖️
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-indigo-300 uppercase">Head of Legal Shield & Key Custody</span>
+              <span class="text-xs text-slate-400">• พี่ลิลลี่</span>
+            </div>
+            <h2 class="text-lg sm:text-xl font-bold text-white">ศูนย์บัญชาการสัญญานิรภัย & วงจรควบคุมกุญแจ</h2>
+            <p class="text-xs text-slate-400 mt-0.5">สัญญาปิด Exclusive 60 วัน, มาตรการกันบายพาส 6-12 เดือน, และวงจรเบิกกุญแจ 7 สเต็ป</p>
+          </div>
+        </div>
+
+        <button onclick="copyLilyBrief()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center gap-1.5 shadow transition active:scale-95 shrink-0">
+          <i data-lucide="copy" class="w-4 h-4"></i>
+          <span>คัดลอกสรุปส่ง LINE พี่ลิลลี่</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <!-- Tester Card -->
+        <div class="bg-slate-900 border border-indigo-500/40 p-5 rounded-2xl space-y-3">
+          <div class="flex items-center justify-between text-xs font-bold text-indigo-400">
+            <span>🔑 LIVE FLOW TESTER (NEW!)</span>
+            <span class="text-[10px] bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded">สมจริง 7 สเต็ป</span>
+          </div>
+          <h4 class="text-sm font-bold text-white">เครื่องจำลองขอเปิดบ้าน & คืนกุญแจ (Key Custody Simulator)</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            ทดสอบวงจรตั้งแต่เอเจนต์ขอเปิดบ้าน ➔ ลิลลี่เช็คแบงค์ ➔ เลือกส่งแมส VS ดรอปเซฟ ➔ สแกนบ้าน ➔ คืนกุญแจ ➔ ปิดสถานะ
+          </p>
+          <a href="siwasup_viewing_flow_tester.html" target="_blank" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition shadow">
+            <span>เปิดตัวจำลองวงจรกุญแจ 7 สเต็ป</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+
+        <!-- Messenger Slip Card -->
+        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-3">
+          <div class="flex items-center justify-between text-xs font-bold text-purple-400">
+            <span>🛵 MESSENGER DISPATCH SLIP</span>
+            <span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded">ไม่ต้องลงแอป</span>
+          </div>
+          <h4 class="text-sm font-bold text-white">ใบงานส่งมอบกุญแจผ่านเว็บมือถือสำหรับไรเดอร์</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            ลิงก์ให้แมสเซนเจอร์เปิดดู: ปุ่มนำทาง Google Maps 1 คลิก, ปุ่มโทรหาเอเจนต์ 1 คลิก, และปุ่มแจ้งเหตุฉุกเฉินหาพี่ลิลลี่
+          </p>
+          <a href="messenger_dispatch_slip.html" target="_blank" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 transition">
+            <span>เปิดดูใบงานแมสเซนเจอร์</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== SQUAD 4: CONTENT & MEDIA ==================== -->
+    <div id="hub_content" class="hidden space-y-6">
+      <div class="bg-gradient-to-r from-[#21102b] to-[#0f172a] p-5 sm:p-6 rounded-3xl border border-pink-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-2xl bg-pink-500/20 border border-pink-500/40 text-pink-400 text-2xl flex items-center justify-center shadow-inner">
+            🎨
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-pink-300 uppercase">Head of Media, Social & Viral Content</span>
+              <span class="text-xs text-slate-400">• ทีมน้อง Content</span>
+            </div>
+            <h2 class="text-lg sm:text-xl font-bold text-white">สตูดิโอคลังภาพ & สื่อทำคลิปโปรโมท Hot Deals</h2>
+            <p class="text-xs text-slate-400 mt-0.5">คลังภาพคมชัด 48,000+ รูปบน Cloudflare R2, ป้ายไวนิลบังแปลง, และแคปชั่นยิงแอดสำเร็จรูป</p>
+          </div>
+        </div>
+
+        <button onclick="copyContentBrief()" class="px-4 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs flex items-center gap-1.5 shadow transition active:scale-95 shrink-0">
+          <i data-lucide="copy" class="w-4 h-4"></i>
+          <span>คัดลอกสรุปส่ง LINE น้อง Content</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-3">
+          <div class="flex items-center justify-between text-xs font-bold text-amber-400">
+            <span>🔥 30 ACTIVE PROPERTIES</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            คัดแล้ว 30 แปลงเนื้อๆ จากศิวาทรัพย์เดิม (ตัดของขายแล้วทิ้งเรียบร้อย) พร้อมนำไปขึ้นแอด/ทำคลิปรีวิวได้ทันที
+          </p>
+          <div class="text-[11px] font-mono text-slate-400 bg-slate-950 p-2 rounded-lg border border-slate-800">
+            ไฟล์: siwasup_curated_properties_30_active.csv
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-3">
+          <div class="flex items-center justify-between text-xs font-bold text-pink-400">
+            <span>🎬 R2 ASSET VAULT (48K+ IMGS)</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            คลังภาพ NPA คมชัด 48,367 รูป ดึงตรงจาก assets.siwasup.com ฟรีค่า Bandwidth โหลดไปตัดต่อคลิป TikTok ได้ไม่จำกัด
+          </p>
+          <a href="catalog.html" target="_blank" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 transition">
+            <span>เปิดค้นรูปจากแคตตาล็อก</span>
+          </a>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-3">
+          <div class="flex items-center justify-between text-xs font-bold text-emerald-400">
+            <span>🖼️ BRAND ASSETS & VINYL</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            พาเลทสีแบรนด์ Digital Luxury 60-30-10, ฟอนต์ Prompt, โลโก้เวกเตอร์, และตราสัญลักษณ์สัตว์ 4 ตระกูลสำหรับใช้ทำกราฟิก
+          </p>
+          <a href="Siwasup_Brand_Color_System_Dashboard.html" target="_blank" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 transition">
+            <span>เปิด Brand Color System</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    function switchSquad(squad) {
+      const squads = ['bua', 'gool', 'lily', 'content'];
+      squads.forEach(s => {
+        document.getElementById(`hub_${s}`).classList.add('hidden');
+        const tab = document.getElementById(`tab_${s}`);
+        tab.className = "flex-1 min-w-[140px] px-3.5 py-2.5 rounded-2xl bg-slate-900 text-slate-400 hover:text-white font-medium text-xs sm:text-sm flex items-center justify-center gap-2 border border-slate-800 transition";
+      });
+
+      document.getElementById(`hub_${squad}`).classList.remove('hidden');
+      const activeTab = document.getElementById(`tab_${squad}`);
+      
+      if (squad === 'bua') {
+        activeTab.className = "flex-1 min-w-[140px] px-3.5 py-2.5 rounded-2xl bg-[#C2A460] text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition";
+      } else if (squad === 'gool') {
+        activeTab.className = "flex-1 min-w-[140px] px-3.5 py-2.5 rounded-2xl bg-amber-500 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition";
+      } else if (squad === 'lily') {
+        activeTab.className = "flex-1 min-w-[140px] px-3.5 py-2.5 rounded-2xl bg-indigo-600 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition";
+      } else if (squad === 'content') {
+        activeTab.className = "flex-1 min-w-[140px] px-3.5 py-2.5 rounded-2xl bg-pink-600 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition";
+      }
+    }
+
+    function copyBuaBrief() {
+      const msg = 
+`[บรีฟงานประจำวัน: คุณบัว]
+1. รบกวนรีเช็ก 7 ทรัพย์ที่ติดปัญหา (4 แปลงขายแล้ว + 3 แปลงราคาหลุด) ผ่านบอร์ด: https://assets.siwasup.com/bua_audit_board.html
+2. ทรัพย์ 30 แปลงที่ผ่านฉลุย คลีนพร้อมส่งต่อให้ทีมการตลาดเรียบร้อยแล้ว
+3. ตรวจสอบความพร้อมห้อง LINE และ Checklist 20 Alpha Agents: https://assets.siwasup.com/bua_alpha_checklist.html`;
+      navigator.clipboard.writeText(msg).then(() => alert('คัดลอกสรุปงานบัวเรียบร้อย! ส่ง LINE ได้ทันทีครับ'));
+    }
+
+    function copyGoolBrief() {
+      const msg = 
+`[บรีฟงานประจำวัน: คุณกูล]
+1. สรุปพรีเซนต์เปิดตัว 20 Alpha Agents พร้อมแล้วที่: https://assets.siwasup.com/gool_executive_presentation.html
+2. ทรัพย์พร้อมดีลเชียงใหม่ 234 แปลง พร้อมต่อรองราคาสูงสุด 50%
+3. ตารางดีเบทเกณฑ์คะแนนเซล 2-Track: https://assets.siwasup.com/scoring_debate_dashboard.html`;
+      navigator.clipboard.writeText(msg).then(() => alert('คัดลอกสรุปงานกูลเรียบร้อย! ส่ง LINE ได้ทันทีครับ'));
+    }
+
+    function copyLilyBrief() {
+      const msg = 
+`[บรีฟงานประจำวัน: พี่ลิลลี่]
+1. เครื่องจำลองวงจรยืม-คืนกุญแจ 7 สเต็ป พร้อมทดสอบแล้ว: https://assets.siwasup.com/siwasup_viewing_flow_tester.html
+2. ระบบใบงานแมสเซนเจอร์ (Smart Dispatch Slip): https://assets.siwasup.com/messenger_dispatch_slip.html
+3. กติกา Buyer Lead Lock 60 วัน พร้อมคุ้มครองเอเจนต์เต็ม 100%`;
+      navigator.clipboard.writeText(msg).then(() => alert('คัดลอกสรุปงานพี่ลิลลี่เรียบร้อย! ส่ง LINE ได้ทันทีครับ'));
+    }
+
+    function copyContentBrief() {
+      const msg = 
+`[บรีฟงานประจำวัน: น้อง Content]
+1. ชุดทรัพย์พร้อมขาย 30 แปลงทองคำ คลีนข้อมูลเรียบร้อย นำไปทำคลิป/ยิงแอดได้ทันที
+2. คลังรูปภาพคมชัด 48,000+ รูปบน assets.siwasup.com พร้อมใช้งาน
+3. ระบบสีแบรนด์และป้ายไวนิล: https://assets.siwasup.com/Siwasup_Brand_Color_System_Dashboard.html`;
+      navigator.clipboard.writeText(msg).then(() => alert('คัดลอกสรุปงานน้อง Content เรียบร้อย! ส่ง LINE ได้ทันทีครับ'));
+    }
+  </script>
+</body>
+</html>

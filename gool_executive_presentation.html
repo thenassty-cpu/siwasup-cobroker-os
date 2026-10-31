@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siwasup Co-Broker OS - Executive Briefing for Gool</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Cinzel:wght@600;700;800&display=swap');
+    
+    body {
+      font-family: 'Prompt', 'Tahoma', sans-serif;
+      background-color: #0b0d11;
+      color: #e2e8f0;
+      scroll-behavior: smooth;
+    }
+    
+    .font-cinzel { font-family: 'Cinzel', serif; }
+    
+    /* Luxury Gradients & Accents */
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #FFF3D6 0%, #C2A460 50%, #997A35 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .burgundy-gradient {
+      background: linear-gradient(135deg, #5c0606 0%, #2b0202 100%);
+    }
+
+    .gold-border {
+      border: 1px solid rgba(194, 164, 96, 0.35);
+    }
+
+    .gold-border-glow {
+      border: 1px solid rgba(194, 164, 96, 0.45);
+      box-shadow: 0 0 25px rgba(194, 164, 96, 0.12);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0b0d11; }
+    ::-webkit-scrollbar-thumb { background: #262c36; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #C2A460; }
+  </style>
+</head>
+<body class="min-h-screen antialiased p-3 sm:p-6 lg:p-10 selection:bg-amber-500/30 selection:text-amber-200">
+
+  <!-- Container -->
+  <div class="max-w-6xl mx-auto space-y-8">
+
+    <!-- Top Navigation / Brand Bar -->
+    <header class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/90 border border-slate-800/80 rounded-2xl px-5 py-4 backdrop-blur-md sticky top-3 z-40 shadow-xl">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-red-900 to-red-950 border border-red-700/50 flex items-center justify-center text-amber-300 font-cinzel font-black text-xl shadow-inner">
+          S
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-bold tracking-wider text-white">SIWASUP CO-BROKER OS</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-red-900/40 text-red-300 border border-red-700/50 font-semibold uppercase">Confidential</span>
+          </div>
+          <p class="text-xs text-slate-400">Executive Briefing & Workflow Deck • จัดทำเฉพาะ: <strong class="text-amber-400">คุณกูล (Sales Commander)</strong></p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <a href="gool_anti_hoarding_brief.html" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-semibold flex items-center gap-1.5 transition-all">
+          <span>🛡️ แดชบอร์ดตรวจจับกั๊กทรัพย์</span>
+        </a>
+        <button onclick="copyLineSummary()" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-md active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+          <span id="copyBtnText">คัดลอกสรุปส่ง LINE กูล</span>
+        </button>
+        <a href="catalog.html" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-all border border-slate-700">
+          <span>เปิดดูแคตาล็อกสด</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        </a>
+      </div>
+    </header>
+
+    <!-- Hero Card: Direct Answer to Gool -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-neutral-900 to-red-950 p-6 sm:p-10 border border-red-900/40 shadow-2xl gold-border-glow">
+      <div class="absolute -right-16 -bottom-16 w-80 h-80 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-16 -top-16 w-80 h-80 bg-amber-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 space-y-6">
+        <!-- Badge & Question Quote -->
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-400/10 text-amber-300 border border-amber-400/30">
+          <span>💬 ตอบข้อความของกูล (16:37 น.)</span>
+        </div>
+
+        <div class="bg-black/40 border border-slate-700/80 rounded-2xl p-4 sm:p-5 flex items-start gap-4 backdrop-blur-md">
+          <div class="w-10 h-10 rounded-full bg-slate-800 border border-slate-600 flex items-center justify-center text-lg shrink-0">
+            👩🏻
+          </div>
+          <div class="space-y-1">
+            <span class="text-xs text-amber-400 font-semibold">ข้อความถามจากกูล:</span>
+            <p class="text-base sm:text-lg font-bold text-white italic">
+              "เราต้องเข้ามา Train หรือประชุมกับมึงไหม"
+            </p>
+          </div>
+        </div>
+
+        <!-- The Big Direct Answer -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 pt-2">
+          
+          <!-- Answer 1: Training -->
+          <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-3">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 flex items-center justify-center font-black text-sm">✕</span>
+              <h3 class="text-base font-bold text-white">เรื่องการ Train ใช้งานเว็บ: <span class="text-red-400">ไม่ต้อง!</span></h3>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              ระบบหน้าเว็บ <code class="text-amber-300 font-mono">siwasup.com</code> ถูกออกแบบให้เป็น <strong>Self-Service 100%</strong> เหมือนแอปช้อปปิ้งทั่วไป ค้นหาบ้าน กดส่งการบ้านลูกค้าได้ใน 3 วินาที ไม่ต้องจำพาสเวิร์ด ไม่ต้องเสียเวลามานั่งสอนกดปุ่ม
+            </p>
+            <div class="text-[11px] text-slate-400 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
+              💡 <em>ตัวแทนทุกคนมีสิทธิ์เปิดดูได้ทันทีผ่านลิงก์ LINE</em>
+            </div>
+          </div>
+
+          <!-- Answer 2: Meeting / Briefing -->
+          <div class="bg-gradient-to-br from-amber-950/40 to-slate-900/80 border border-amber-500/40 rounded-2xl p-5 space-y-3">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-black text-sm">✓</span>
+              <h3 class="text-base font-bold text-white">เรื่องการประชุม: <span class="text-emerald-400">ต้องคุยบรีฟสเต็ป 30 นาที!</span></h3>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              สิ่งที่ต้องประชุม <strong>ไม่ใช่การใช้เว็บ แต่คือ "กติกาและสเต็ปหลังบ้าน"</strong> เพื่อไม่ให้ตัวแทนทำงานเก้อ เช่น ขั้นตอนยืมกุญแจแบงก์ และการล็อกสิทธิ์ลูกค้า 60 วันกันโดนตัดหน้า
+            </p>
+            <div class="text-[11px] text-amber-300/90 bg-amber-950/50 p-2.5 rounded-xl border border-amber-500/30">
+              ⚡ <em>รูปแบบ: <strong>Zoom 30 นาที</strong> หรือ <strong>นัดเจอสั้นๆ พร้อม 15-20 ตัวแทนหัวหอก</strong></em>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section 1: Portfolio Powerhouse (15,117+ Assets in Hand) -->
+    <div class="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-300 border border-indigo-500/30 mb-2">
+            <span>🏛️ THE ASSET VAULT</span>
+            <span>•</span>
+            <span>คลังอาวุธสำหรับทัพเซลส์คุณกูล</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold text-white">
+            อัปเดตสถานะทรัพย์พร้อมขาย: ทะลุ <span class="gold-gradient-text font-extrabold text-2xl sm:text-3xl">15,117 แปลง</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+            พร้อมเปิดฉากขายทันทีด้วยภาพคมชัดบน Cloudflare R2 คัดกรองและแมปพิกัด GPS แม่นยำ 100%
+          </p>
+        </div>
+        <div class="bg-black/50 border border-slate-700/80 rounded-2xl px-4 py-3 shrink-0 text-center">
+          <span class="block text-[11px] text-slate-400">มูลค่าพอร์ตกลางรวม (GMV)</span>
+          <span class="text-xl sm:text-2xl font-black text-amber-300">> 60,000 ล้านบาท</span>
+        </div>
+      </div>
+
+      <!-- Bank Breakdown Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        
+        <div class="bg-slate-950/70 border border-pink-500/30 rounded-2xl p-4 text-center space-y-1 relative overflow-hidden">
+          <div class="w-2 h-2 rounded-full bg-pink-500 mx-auto"></div>
+          <span class="text-xs text-pink-300 font-semibold">GSB (ออมสิน)</span>
+          <span class="block text-xl sm:text-2xl font-black text-white">ดึงครบ 100%</span>
+          <span class="text-[10px] text-emerald-400 block font-medium">✨ ไฮไลต์เปิดตัววีคหน้า</span>
+        </div>
+
+        <div class="bg-slate-950/70 border border-purple-500/30 rounded-2xl p-4 text-center space-y-1">
+          <div class="w-2 h-2 rounded-full bg-purple-500 mx-auto"></div>
+          <span class="text-xs text-purple-300 font-semibold">SCB (ไทยพาณิชย์)</span>
+          <span class="block text-xl sm:text-2xl font-black text-white">4,207 แปลง</span>
+          <span class="text-[10px] text-slate-400 block">ภาพแท้ R2 พร้อมส่ง</span>
+        </div>
+
+        <div class="bg-slate-950/70 border border-red-500/30 rounded-2xl p-4 text-center space-y-1">
+          <div class="w-2 h-2 rounded-full bg-red-500 mx-auto"></div>
+          <span class="text-xs text-red-300 font-semibold">SAM (สุขุมวิท)</span>
+          <span class="block text-xl sm:text-2xl font-black text-white">5,100 แปลง</span>
+          <span class="text-[10px] text-slate-400 block">สปีดดึงครบหมดจด</span>
+        </div>
+
+        <div class="bg-slate-950/70 border border-blue-500/30 rounded-2xl p-4 text-center space-y-1">
+          <div class="w-2 h-2 rounded-full bg-blue-500 mx-auto"></div>
+          <span class="text-xs text-blue-300 font-semibold">TTB (ทหารไทยธนชาต)</span>
+          <span class="block text-xl sm:text-2xl font-black text-white">1,365 แปลง</span>
+          <span class="text-[10px] text-slate-400 block">บ้านเดี่ยว/ทาวน์เฮ้าส์เพียบ</span>
+        </div>
+
+      </div>
+
+      <!-- Chiang Mai Highlight Box (Gool's Home Ground) -->
+      <div class="bg-gradient-to-r from-emerald-950/40 via-slate-950/60 to-slate-950/70 border border-emerald-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3.5">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-xl shrink-0">
+            🏔️
+          </div>
+          <div>
+            <h4 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+              <span>ฐานที่มั่นเชียงใหม่ (โซนคุณกูล):</span>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-semibold">พร้อมลุย 234 แปลง</span>
+            </h4>
+            <p class="text-xs text-slate-300 mt-0.5">
+              รองรับโมเดล <strong>Cross-Region Co-Broker</strong> เอเจนต์ กทม. ส่งลีดมาให้ทีมเชียงใหม่เปิดบ้าน ปิดดีลแบ่งคอมมิชชันแฟร์ 30 : 30 : 40 ทันที
+            </p>
+          </div>
+        </div>
+        <span class="text-xs font-bold text-emerald-400 bg-emerald-900/30 border border-emerald-700/40 px-3 py-1.5 rounded-xl shrink-0">
+          พร้อมเปิดตลาดเหนือ 100%
+        </span>
+      </div>
+
+    </div>
+
+    <!-- Section 2: Why 15-20 Agents First? (ยุทธศาสตร์ Alpha Cohort) -->
+    <div class="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/30 mb-2">
+          <span>🎯 PILOT LAUNCH STRATEGY</span>
+          <span>•</span>
+          <span>เหตุผลทางยุทธศาสตร์</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-bold text-white">
+          ทำไมสัปดาห์หน้าต้องจำกัดเพียง <span class="text-amber-400">15 - 20 คนแรก?</span>
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1">
+          การปล่อยพรวดเดียว 125 คน จะทำให้เกิดปัญหาคอขวดและเสียโอกาสในการปรับจูน นี่คือ 3 เหตุผลที่กูลต้องคุมกลุ่มทดสอบ:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        <div class="bg-slate-950/70 border border-slate-800 p-5 rounded-2xl space-y-2">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm">1</div>
+          <h4 class="text-sm font-bold text-white">คัดเฉพาะ "ตัวปิดงานจริง"</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            เลือกคนที่พร้อมยิงแอด พร้อมคุยลูกค้า และปิดการขายคล่อง เช่น กลุ่มหัวแถว Leaderboard (S02, S45, S44, S26 ฯลฯ) เพื่อให้เกิดการเคาะปิดดีลจริงตัวอย่างแรก
+          </p>
+        </div>
+
+        <div class="bg-slate-950/70 border border-slate-800 p-5 rounded-2xl space-y-2">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm">2</div>
+          <h4 class="text-sm font-bold text-white">ป้องกันคอขวดเบิกกุญแจแบงก์</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            ฝ่ายปฏิบัติการ (พี่ลิลลี่ & คุณบัว) ต้องประสานงานเบิกกุญแจกับสถาบันการเงิน การเริ่มที่ 15-20 คน จะทำให้ระบบส่งมอบกุญแจไหลลื่น ไม่มีสะดุด
+          </p>
+        </div>
+
+        <div class="bg-slate-950/70 border border-slate-800 p-5 rounded-2xl space-y-2">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm">3</div>
+          <h4 class="text-sm font-bold text-white">กูลเตรียมงาน "Zero Homework"</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            กูลไม่ต้องขอเบอร์ ไม่ต้องเก็บอีเมลใหม่ แค่เคาะรหัสตัวแทน 20 คนส่งให้เรา ระบบหลังบ้านผูกสิทธิ์ชื่อ-รหัส-เบอร์ของ 125 คนไว้เรียบร้อยแล้ว
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Section 3: The 4 Operational Steps (สเต็ปที่ต้องบรีฟให้ตัวแทน) -->
+    <div class="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 mb-2">
+          <span>⚙️ OPERATIONAL BLUEPRINT</span>
+          <span>•</span>
+          <span>4 สเต็ปหลักที่ต้องบรีฟให้ 20 ขุนพล</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-bold text-white">
+          ขั้นตอนการทำงานจริง (The Workflow)
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1">
+          เมื่อกูลนัดบรีฟ 30 นาที ให้เปิดสเต็ป 4 ขั้นตอนนี้ให้ตัวแทน 20 คนฟัง เข้าใจจบพร้อมทำงานทันที:
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        
+        <!-- Step 1 -->
+        <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:border-slate-700 transition-all">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center font-black text-base shrink-0">
+              01
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-base font-bold text-white">ค้นหา & ส่งการบ้านลูกค้า (Search & Share)</h3>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-semibold">Client Mode</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-300 mt-1">
+                ตัวแทนเลือกบ้านจากคลัง 15,117 ทรัพย์ แล้วกดปุ่ม <strong>"แชร์ให้ลูกค้า (Client Mode)"</strong> ระบบจะ <strong>ซ่อนเบอร์บริษัททั้งหมด</strong> และแสดงเฉพาะข้อมูลตัวแทนคนนั้น ลูกค้าไม่มีทางข้ามหัวโทรหาบริษัทได้
+              </p>
+            </div>
+          </div>
+          <span class="text-xs font-semibold text-indigo-400 bg-indigo-950/60 px-3 py-1.5 rounded-xl border border-indigo-800/40 shrink-0">
+            🛡️ เกราะคุ้มครองเบอร์ตัวแทน
+          </span>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:border-slate-700 transition-all">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center font-black text-base shrink-0">
+              02
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-base font-bold text-white">ล็อกสิทธิ์ลูกค้าทันที (Lead Lock & PDPA)</h3>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-semibold">คุ้มครอง 60 วัน</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-300 mt-1">
+                เมื่อลูกค้าสนใจ ตัวแทนกรอกชื่อและเบอร์โทรลูกค้าลงระบบ ระบบจะออกรหัสล็อกสิทธิ์ให้ตัวแทนคนนั้นทันที <strong>60 วัน</strong> ต่อให้ลูกค้าแอบไปติดต่อแบงก์หรือมีคนอื่นพาไป ค่าคอมมิชชัน 3% ยังเป็นของตัวแทนคนเดิม
+              </p>
+            </div>
+          </div>
+          <span class="text-xs font-semibold text-amber-400 bg-amber-950/60 px-3 py-1.5 rounded-xl border border-amber-800/40 shrink-0">
+            🔒 ดักการตัดหน้า 100%
+          </span>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:border-slate-700 transition-all">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-black text-base shrink-0">
+              03
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-base font-bold text-white">ขอยืมกุญแจพาชม (P'Lily Key Protocol)</h3>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-semibold">แจ้งล่วงหน้า</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-300 mt-1">
+                <strong>กฎเหล็กที่ต้องย้ำ:</strong> SCB ต้องขอล่วงหน้า <strong>3 วันทำการ</strong> / แบงก์อื่น <strong>7 วันทำการ</strong> รับกุญแจได้ที่จุด Drop-box ออฟฟิศ หรือส่งแมสเซนเจอร์ และเมื่อเปิดบ้าน ให้ถ่ายคลิปรีวิวเพื่อรับสิทธิ์ลุ้นรับรางวัล <strong>Viral Gift Voucher</strong>
+              </p>
+            </div>
+          </div>
+          <span class="text-xs font-semibold text-emerald-400 bg-emerald-950/60 px-3 py-1.5 rounded-xl border border-emerald-800/40 shrink-0">
+            🔑 เบิกกุญแจเป็นระบบ
+          </span>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:border-slate-700 transition-all">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-2xl bg-red-500/20 text-red-400 border border-red-500/30 flex items-center justify-center font-black text-base shrink-0">
+              04
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-base font-bold text-white">ยื่นต่อรองราคา & ปิดการขาย (3-Tier Offer Engine)</h3>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-red-500/20 text-red-300 font-semibold">เพดานลดสูงสุด 50%</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-300 mt-1">
+                ลูกค้าต่อราคาได้อิสระ แต่ระบบจะตัดสิทธิ์ส่งทันทีถ้าต่อเกิน 50% และระบบหลังบ้านจะจัดลำดับให้ทีมเซลส์เข้าชาร์จลีดทันที: 
+                <span class="text-emerald-400 font-semibold">Tier 1 (ลด 0-15%) รีบโทรชาร์จด่วน</span> | 
+                <span class="text-amber-400 font-semibold">Tier 2 (ลด 16-30%) เจรจาปกติ</span> | 
+                <span class="text-purple-400 font-semibold">Tier 3 (ลด 31-50%) ลุ้น Haircut Deal แบงก์</span>
+              </p>
+            </div>
+          </div>
+          <span class="text-xs font-semibold text-red-400 bg-red-950/60 px-3 py-1.5 rounded-xl border border-red-800/40 shrink-0">
+            💰 แบ่งคอม 30 : 30 : 40
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Section 4: Interactive Offer Simulator for Gool -->
+    <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/30 border border-amber-500/30 rounded-3xl p-6 sm:p-8 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <span class="text-xs font-semibold text-amber-400 uppercase tracking-wider">🎮 Live Test Simulation</span>
+          <h3 class="text-lg sm:text-xl font-bold text-white">ลองทดสอบระบบยื่นเสนอราคา (Psychological Offer Engine)</h3>
+          <p class="text-xs text-slate-400">สมมติราคาบ้านตั้งขาย 3,000,000 บาท ลองพิมพ์ราคาต่อรองดูการทำงานของปุ่ม</p>
+        </div>
+      </div>
+
+      <div class="bg-black/60 border border-slate-800 rounded-2xl p-5 space-y-4 max-w-xl">
+        <div class="flex justify-between items-center text-xs text-slate-300">
+          <span>ราคาตั้งขาย (Original Price):</span>
+          <span class="font-bold text-white text-sm">3,000,000 บาท</span>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-amber-300">ระบุราคาเสนอซื้อที่ต้องการต่อรอง (บาท):</label>
+          <input type="number" id="simOfferInput" value="2500000" oninput="runSimCalc()" class="w-full text-base font-bold px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-amber-400">
+        </div>
+
+        <div id="simFeedback" class="p-3 rounded-xl text-xs space-y-1 bg-emerald-950/40 border border-emerald-500/40 text-emerald-300">
+          <div class="flex items-center justify-between">
+            <span>ส่วนลดที่เสนอ: <strong id="simDiscountPct">-16.7% (500,000 บาท)</strong></span>
+            <span id="simTierBadge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">Tier 2: เกณฑ์ปกติ</span>
+          </div>
+          <p id="simActionText" class="text-[11px] text-slate-300">เข้าคิวเจรจารอบปกติของสถาบันการเงิน</p>
+        </div>
+
+        <button id="simSubmitBtn" class="w-full py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 transition-all shadow-lg active:scale-98">
+          ยืนยันการยื่นเสนอราคาซื้อ
+        </button>
+      </div>
+    </div>
+
+    <!-- Section 5: Timeline & Executive Decision for Gool -->
+    <div class="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-300 border border-red-500/30 mb-2">
+            <span>📅 TIMELINE & NEXT STEP</span>
+            <span>•</span>
+            <span>ก้าวถัดไปที่กูลเลือกได้</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold text-white">
+            แผนปฏิบัติการสัปดาห์หน้า (Go-Live Week)
+          </h2>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        
+        <div class="bg-slate-950/70 border border-slate-800 p-5 rounded-2xl space-y-2">
+          <span class="text-xs font-bold text-amber-400">จันทร์ ที่จะถึง</span>
+          <h4 class="text-sm font-bold text-white">เคาะ 15-20 รายชื่อ & ตั้งห้องไลน์</h4>
+          <p class="text-xs text-slate-400">
+            กูลเลือกตัวแทน 15-20 คน (เช่น รหัส S02, S45, S44 ฯลฯ) แล้วดึงเข้ากลุ่มไลน์เฉพาะกิจ <strong>"Siwasup Alpha 20"</strong>
+          </p>
+        </div>
+
+        <div class="bg-slate-950/70 border border-slate-800 p-5 rounded-2xl space-y-2">
+          <span class="text-xs font-bold text-emerald-400">อังคาร / พุธ</span>
+          <h4 class="text-sm font-bold text-white">บรีฟสเต็ป 30 นาที (Zoom หรือ พบกัน)</h4>
+          <p class="text-xs text-slate-400">
+            นัดคุยสเต็ป 4 ข้อข้างต้น เคลียร์ความเข้าใจเรื่องเบิกกุญแจและระบบล็อกสิทธิ์ พร้อมแจกลิงก์เว็บให้เริ่มทำการบ้าน
+          </p>
+        </div>
+
+        <div class="bg-slate-950/70 border border-slate-800 p-5 rounded-2xl space-y-2">
+          <span class="text-xs font-bold text-indigo-400">พฤหัส - ศุกร์</span>
+          <h4 class="text-sm font-bold text-white">ลุยยิงแอด & เก็บสถิติลีดแรก</h4>
+          <p class="text-xs text-slate-400">
+            ตัวแทนเริ่มแชร์ทรัพย์และส่งลีดเข้าระบบ ทีมหลังบ้านสแตนด์บายรับมือ วัดผล Conversion จริงเพื่อเตรียมขยายสู่ 125 คน
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Action Choice Buttons -->
+      <div class="bg-black/40 border border-slate-800 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="space-y-1">
+          <span class="text-xs text-amber-400 font-bold uppercase tracking-wider">👉 สิ่งที่กูลตอบพี่ต้นตอนนี้:</span>
+          <p class="text-sm font-medium text-white">เลือกรูปแบบที่กูลสะดวก: นัด Zoom สั้นๆ 30 นาที หรือ เข้ามาเจอกันที่ออฟฟิศ</p>
+        </div>
+        <button onclick="copyLineSummary()" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition-all shadow-lg shrink-0">
+          📋 คัดลอกสรุปคำตอบส่งให้กูล
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-slate-500 py-4 border-t border-slate-800/60">
+      <p>© 2569 Siwasup Co-Broker OS • Executive Presentation Engine</p>
+      <p class="text-[10px] text-slate-600 mt-1">Single-Source-of-Truth Sync with hai & Offy Twin Brain Architecture</p>
+    </footer>
+
+  </div>
+
+  <!-- JavaScript for Live Simulator & Copy to LINE -->
+  <script>
+    function runSimCalc() {
+      const originalPrice = 3000000;
+      const input = document.getElementById('simOfferInput');
+      const val = parseFloat(input.value) || 0;
+      const discount = originalPrice - val;
+      const discountRatio = (discount / originalPrice);
+      const discountPct = (discountRatio * 100).toFixed(1);
+
+      const feedback = document.getElementById('simFeedback');
+      const discountPctElem = document.getElementById('simDiscountPct');
+      const tierBadge = document.getElementById('simTierBadge');
+      const actionText = document.getElementById('simActionText');
+      const submitBtn = document.getElementById('simSubmitBtn');
+
+      if (val <= 0) {
+        discountPctElem.innerText = 'กรุณาระบุราคา';
+        return;
+      }
+
+      if (discountRatio > 0.50) {
+        // EXCEEDED 50% - DISABLE BUTTON
+        discountPctElem.innerText = `ลดเกินเกณฑ์ ${discountPct}% (${discount.toLocaleString()} บาท)`;
+        feedback.className = "p-3 rounded-xl text-xs space-y-1 bg-red-950/60 border border-red-500/50 text-red-300";
+        tierBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500/20 text-red-300 border border-red-500/40";
+        tierBadge.innerText = "❌ เกินเพดานสูงสุด 50%";
+        actionText.innerText = "ราคาที่เสนอซื้อต่ำกว่าเกณฑ์การพิจารณาเบื้องต้น ระบบปิดปุ่มส่งอัตโนมัติ";
+        
+        submitBtn.disabled = true;
+        submitBtn.className = "w-full py-3 rounded-xl font-bold text-sm bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700 transition-all";
+        submitBtn.innerText = "ไม่สามารถยื่นข้อเสนอได้ (ลดเกิน 50%)";
+      } else {
+        // ALLOWED
+        submitBtn.disabled = false;
+        submitBtn.className = "w-full py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 transition-all shadow-lg active:scale-98 cursor-pointer";
+        submitBtn.innerText = "ยืนยันการยื่นเสนอราคาซื้อ";
+
+        if (discountRatio <= 0.15) {
+          // Tier 1
+          discountPctElem.innerText = `-${discountPct}% (${discount.toLocaleString()} บาท)`;
+          feedback.className = "p-3 rounded-xl text-xs space-y-1 bg-emerald-950/60 border border-emerald-500/50 text-emerald-300";
+          tierBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+          tierBadge.innerText = "🟢 Tier 1: โอกาสสูงมาก (ชาร์จด่วน)";
+          actionText.innerText = "ส่งตรงแจ้งเตือนเข้าทีมขายทันที เพื่อโทรคอนเฟิร์มและเข้าชาร์จลีดก่อนเป็นอันดับแรก";
+        } else if (discountRatio <= 0.30) {
+          // Tier 2
+          discountPctElem.innerText = `-${discountPct}% (${discount.toLocaleString()} บาท)`;
+          feedback.className = "p-3 rounded-xl text-xs space-y-1 bg-amber-950/60 border border-amber-500/50 text-amber-300";
+          tierBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40";
+          tierBadge.innerText = "🟡 Tier 2: เกณฑ์ปกติ";
+          actionText.innerText = "เข้าคิวเจรจารอบปกติของสถาบันการเงิน";
+        } else {
+          // Tier 3
+          discountPctElem.innerText = `-${discountPct}% (${discount.toLocaleString()} บาท)`;
+          feedback.className = "p-3 rounded-xl text-xs space-y-1 bg-purple-950/60 border border-purple-500/50 text-purple-300";
+          tierBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40";
+          tierBadge.innerText = "🟣 Tier 3: ห้ามทิ้ง (ลุ้น Haircut แบงก์)";
+          actionText.innerText = "ส่งฝ่ายวิเคราะห์เทียบรอบตัดหนี้สูญของทรัพย์ค้างสต็อกธนาคาร";
+        }
+      }
+    }
+
+    function copyLineSummary() {
+      const text = `สเต็ปเปิดตัว 20 Alpha Agents วีคหน้า สรุปให้กูลตามนี้เลย:
+
+1. เรื่อง Train ใช้งานเว็บ: ไม่ต้องเทรน! หน้าเว็บ siwasup.com ทำมาให้ใช้ง่ายเหมือนแอปทั่วไป กดแชร์บ้านให้ลูกค้าใน 3 วิ มีโหมดซ่อนเบอร์บริษัทกันตัดหน้าให้เสร็จสรรพ
+
+2. เรื่องการประชุม: ต้องคุยบรีฟสเต็ป 30 นาที (Zoom หรือเข้ามาเจอก็ได้) เพื่อเคลียร์ 3 กติกาหลังบ้าน:
+   - สเต็ปยืมกุญแจแบงก์กับพี่ลิลลี่ (SCB 3 วัน / แบงก์อื่น 7 วัน)
+   - สเต็ปกรอกล็อกสิทธิ์ลูกค้า (Lead Lock 60 วัน) ป้องกันถูกตัดหน้า
+   - สเต็ปยื่นต่อราคา (ระบบล็อกเพดานไว้ไม่เกิน 50% และวิธีชาร์จลีด)
+
+3. สิ่งที่กูลเตรียมแค่อย่างเดียว: เคาะรหัสตัวแทน 20 คนแรกที่พร้อมวิ่งงานจริง (เช่น S02, S45, S44...) ส่งมา ไม่ต้องขอเบอร์หรืออีเมลใหม่ มีฐานข้อมูล 125 คนพร้อมหมดแล้ว
+
+มึงสะดวกนัด Zoom 30 นาที หรือเข้ามาเจอกันวันไหน ล็อกเวลามาได้เลย!`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copyBtnText');
+        if (btn) {
+          btn.innerText = "คัดลอกสำเร็จ!";
+          setTimeout(() => { btn.innerText = "คัดลอกสรุปส่ง LINE กูล"; }, 2500);
+        }
+      }).catch(err => {
+        alert("คัดลอกข้อความสำเร็จแล้ว");
+      });
+    }
+  </script>
+</body>
+</html>

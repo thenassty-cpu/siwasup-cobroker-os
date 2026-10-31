@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Siwasup OS — NPA Vault Ingestion Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Montserrat for English UI & Prompt/Tahoma for Thai Property Cards -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Global English typography with Montserrat */
+    body {
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #E6E8EB;
+      color: #2D3748;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Preserve Thai typography on Property Cards to avoid vowel clipping */
+    .thai-font {
+      font-family: 'Prompt', 'Tahoma', sans-serif;
+    }
+
+    /* 3D Embossed Dial Styling matching Illustrator Artboard */
+    .dial-emboss {
+      background: radial-gradient(circle at 35% 35%, #FFFFFF 0%, #F4F6F8 55%, #E2E6EA 100%);
+      box-shadow: 
+        inset 0 3px 6px rgba(0, 0, 0, 0.08),
+        inset 0 -3px 6px rgba(255, 255, 255, 0.9),
+        0 8px 18px rgba(0, 0, 0, 0.07),
+        0 2px 4px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+    }
+
+    .dial-track-bg {
+      stroke: #DCE1E7;
+      stroke-linecap: round;
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.06));
+    }
+
+    .pulse-live {
+      animation: pulse-glow 2s infinite;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.75; transform: scale(1.04); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start sm:justify-center p-2.5 sm:p-8">
+
+  <!-- Main Container: fully responsive on phone & desktop -->
+  <div class="w-full max-w-4xl bg-[#EBECEF] rounded-2xl sm:rounded-3xl p-3.5 sm:p-8 shadow-xl border border-white/70">
+    
+    <!-- Top Header Bar -->
+    <div class="flex items-center justify-between gap-2 border-b border-neutral-300/60 pb-3.5 mb-4">
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-[#990000] flex items-center justify-center text-white font-black text-lg sm:text-xl shadow-md">
+          S
+        </div>
+        <div>
+          <h1 class="text-base sm:text-2xl font-black text-neutral-800 tracking-tight flex items-center gap-1.5 sm:gap-2">
+            SIWASUP ASSET
+            <span class="text-[9px] sm:text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 border border-emerald-500/25 font-bold flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+              LIVE R2 SYNC
+            </span>
+          </h1>
+          <p class="text-[10px] sm:text-xs text-neutral-500 font-medium">Overnight Ingestion Monitor — Homerun API ➔ Cloudflare R2</p>
+        </div>
+      </div>
+
+      <!-- Live Clock & Manual Refresh -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <div class="text-right">
+          <div class="text-[9px] sm:text-[10px] text-neutral-400 font-bold uppercase tracking-wider">UPDATED</div>
+          <div id="liveClock" class="text-xs sm:text-sm font-extrabold text-neutral-800 font-mono">--:--:--</div>
+        </div>
+        <button onclick="forceRefresh()" title="Refresh" class="p-2 sm:p-2.5 rounded-xl bg-white shadow-xs border border-neutral-200/80 hover:bg-neutral-50 active:scale-95 transition-all text-neutral-600">
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Memo & Action Center from Hai -->
+    <div id="liveMemoContainer" class="mb-4 bg-gradient-to-r from-red-950 via-neutral-900 to-neutral-950 rounded-2xl p-3 sm:p-4 text-white shadow-md border border-amber-500/35">
+      <div class="flex items-center justify-between gap-2 mb-2 pb-1.5 border-b border-white/10">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+          <span class="text-xs sm:text-sm font-black text-amber-300 tracking-wide flex items-center gap-1.5">
+            🛰️ HAI DISPATCH & ACTION HUB
+          </span>
+        </div>
+        <span id="memoTime" class="text-[9px] sm:text-[10px] text-neutral-400 font-mono">--:-- น.</span>
+      </div>
+      <div id="memoContent" class="text-[11px] sm:text-xs text-neutral-200 leading-relaxed thai-font">
+        hai กำลังเฝ้าเครื่องและสอยภาพ SAM ให้ในเบื้องหลังครับ...
+      </div>
+      <div id="actionItemsContainer" class="mt-2.5 pt-2 border-t border-white/10 flex flex-col gap-2">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- 4 Gauges Visual: 4-column layout on desktop, 2-column on mobile -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 py-1 sm:py-3 items-center justify-items-center">
+
+      <!-- 1. SAM GAUGE (RED) -->
+      <div class="flex flex-col items-center w-full">
+        <div class="relative w-24 h-24 sm:w-40 sm:h-40 flex items-center justify-center">
+          <svg class="w-full h-full gauge-svg" viewBox="0 0 200 200">
+            <path class="dial-track-bg" fill="none" stroke-width="12" d="M 40 160 A 75 75 0 1 1 160 160" />
+            <path id="arc-sam" fill="none" stroke="#C8232C" stroke-width="12" stroke-linecap="round"
+                  stroke-dasharray="345" stroke-dashoffset="0"
+                  d="M 40 160 A 75 75 0 1 1 160 160"
+                  class="transition-all duration-1000 ease-out" />
+          </svg>
+          <div class="absolute w-16 h-16 sm:w-24 sm:h-24 rounded-full dial-emboss flex flex-col items-center justify-center">
+            <span id="pct-sam" class="text-sm sm:text-xl font-black text-[#C8232C] tracking-tight">100%</span>
+            <span id="badge-sam" class="text-[7px] sm:text-[8px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 uppercase mt-0.5">DONE</span>
+          </div>
+        </div>
+        <div class="text-center mt-1 sm:mt-2">
+          <div class="text-xs sm:text-base font-black text-neutral-800 tracking-wider">SAM (บสส.)</div>
+          <div id="count-sam" class="text-[10px] sm:text-xs font-bold text-neutral-600 font-mono">5,100 / 5,100</div>
+        </div>
+      </div>
+
+      <!-- 2. TTB GAUGE (BLUE) -->
+      <div class="flex flex-col items-center w-full">
+        <div class="relative w-24 h-24 sm:w-40 sm:h-40 flex items-center justify-center">
+          <svg class="w-full h-full gauge-svg" viewBox="0 0 200 200">
+            <path class="dial-track-bg" fill="none" stroke-width="12" d="M 40 160 A 75 75 0 1 1 160 160" />
+            <path id="arc-ttb" fill="none" stroke="#0066B3" stroke-width="12" stroke-linecap="round"
+                  stroke-dasharray="345" stroke-dashoffset="0"
+                  d="M 40 160 A 75 75 0 1 1 160 160"
+                  class="transition-all duration-1000 ease-out" />
+          </svg>
+          <div class="absolute w-16 h-16 sm:w-24 sm:h-24 rounded-full dial-emboss flex flex-col items-center justify-center">
+            <span id="pct-ttb" class="text-sm sm:text-xl font-black text-[#0066B3] tracking-tight">100%</span>
+            <span id="badge-ttb" class="text-[7px] sm:text-[8px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 uppercase mt-0.5">DONE</span>
+          </div>
+        </div>
+        <div class="text-center mt-1 sm:mt-2">
+          <div class="text-xs sm:text-base font-black text-neutral-800 tracking-wider">TTB</div>
+          <div id="count-ttb" class="text-[10px] sm:text-xs font-bold text-neutral-600 font-mono">1,365 / 1,365</div>
+        </div>
+      </div>
+
+      <!-- 3. SCB GAUGE (PURPLE) -->
+      <div class="flex flex-col items-center w-full">
+        <div class="relative w-24 h-24 sm:w-40 sm:h-40 flex items-center justify-center">
+          <svg class="w-full h-full gauge-svg" viewBox="0 0 200 200">
+            <path class="dial-track-bg" fill="none" stroke-width="12" d="M 40 160 A 75 75 0 1 1 160 160" />
+            <path id="arc-scb" fill="none" stroke="#4E2A84" stroke-width="12" stroke-linecap="round"
+                  stroke-dasharray="345" stroke-dashoffset="0"
+                  d="M 40 160 A 75 75 0 1 1 160 160"
+                  class="transition-all duration-1000 ease-out" />
+          </svg>
+          <div class="absolute w-16 h-16 sm:w-24 sm:h-24 rounded-full dial-emboss flex flex-col items-center justify-center">
+            <span id="pct-scb" class="text-sm sm:text-xl font-black text-[#4E2A84] tracking-tight">100%</span>
+            <span id="badge-scb" class="text-[7px] sm:text-[8px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 uppercase mt-0.5">DONE</span>
+          </div>
+        </div>
+        <div class="text-center mt-1 sm:mt-2">
+          <div class="text-xs sm:text-base font-black text-neutral-800 tracking-wider">SCB (ไทยพาณิชย์)</div>
+          <div id="count-scb" class="text-[10px] sm:text-xs font-bold text-neutral-600 font-mono">4,207 / 4,207</div>
+        </div>
+      </div>
+
+      <!-- 4. GSB GAUGE (PINK ธนาคารออมสิน) -->
+      <div class="flex flex-col items-center w-full">
+        <div class="relative w-24 h-24 sm:w-40 sm:h-40 flex items-center justify-center">
+          <svg class="w-full h-full gauge-svg" viewBox="0 0 200 200">
+            <path class="dial-track-bg" fill="none" stroke-width="12" d="M 40 160 A 75 75 0 1 1 160 160" />
+            <path id="arc-gsb" fill="none" stroke="#ED008C" stroke-width="12" stroke-linecap="round"
+                  stroke-dasharray="345" stroke-dashoffset="345"
+                  d="M 40 160 A 75 75 0 1 1 160 160"
+                  class="transition-all duration-1000 ease-out" />
+          </svg>
+          <div class="absolute w-16 h-16 sm:w-24 sm:h-24 rounded-full dial-emboss flex flex-col items-center justify-center">
+            <span id="pct-gsb" class="text-sm sm:text-xl font-black text-[#ED008C] tracking-tight">0%</span>
+            <span id="badge-gsb" class="text-[7px] sm:text-[8px] font-bold px-1.5 py-0.5 rounded-full bg-pink-100 text-[#ED008C] border border-pink-200 uppercase mt-0.5 pulse-live">QUEUED</span>
+          </div>
+        </div>
+        <div class="text-center mt-1 sm:mt-2">
+          <div class="text-xs sm:text-base font-black text-neutral-800 tracking-wider">GSB (ออมสิน)</div>
+          <div id="count-gsb" class="text-[10px] sm:text-xs font-bold text-neutral-600 font-mono">0 / 4,446</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Essential Telemetry Cards -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mt-4 sm:mt-6">
+      
+      <!-- Card 1: Speed -->
+      <div class="bg-white/85 rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 border border-white shadow-xs text-center">
+        <div class="text-[9px] sm:text-[10px] text-neutral-400 font-bold uppercase tracking-wider">INGESTION SPEED</div>
+        <div id="stat-speed" class="text-xs sm:text-base font-black text-neutral-800 mt-0.5 font-mono">~9.5 props/min</div>
+        <div class="text-[9px] sm:text-[10px] text-neutral-500 font-medium">~48 images / min</div>
+      </div>
+
+      <!-- Card 2: Dynamic ETA (TTB / Total Run) -->
+      <div class="bg-white/85 rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 border border-white shadow-xs text-center">
+        <div id="stat-eta-title" class="text-[9px] sm:text-[10px] text-neutral-400 font-bold uppercase tracking-wider">TTB BATCH ETA</div>
+        <div id="stat-eta" class="text-xs sm:text-base font-black text-[#0066B3] mt-0.5 font-mono">~04:50 น.</div>
+        <div id="stat-eta-sub" class="text-[9px] sm:text-[10px] text-emerald-600 font-bold">Active Ingestion ⚡</div>
+      </div>
+
+      <!-- Card 3: Storage & Cost -->
+      <div class="bg-white/85 rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 border border-white shadow-xs text-center">
+        <div class="text-[9px] sm:text-[10px] text-neutral-400 font-bold uppercase tracking-wider">CLOUDFLARE R2</div>
+        <div id="stat-storage" class="text-xs sm:text-base font-black text-neutral-800 mt-0.5 font-mono">0 MB / 10 GB</div>
+        <div class="text-[9px] sm:text-[10px] text-emerald-600 font-bold font-mono">Egress: $0.00 FREE</div>
+      </div>
+
+      <!-- Card 4: Synced Images -->
+      <div class="bg-white/85 rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 border border-white shadow-xs text-center">
+        <div class="text-[9px] sm:text-[10px] text-neutral-400 font-bold uppercase tracking-wider">VAULT IMAGES</div>
+        <div id="stat-images" class="text-xs sm:text-base font-black text-purple-700 mt-0.5 font-mono">0 files</div>
+        <div class="text-[9px] sm:text-[10px] text-neutral-500 font-mono truncate">assets.siwasup.com</div>
+      </div>
+
+    </div>
+
+    <!-- Live Synced Properties Preview (Cards maintain Thai title/price) -->
+    <div class="mt-4 sm:mt-5 bg-white/80 rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-white shadow-xs">
+      <div class="flex items-center justify-between mb-2.5 sm:mb-3">
+        <div class="text-xs sm:text-sm font-bold text-neutral-800 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-purple-600"></span>
+          RECENTLY INGESTED PROPERTIES
+        </div>
+        <span class="text-[9px] sm:text-[10px] text-neutral-400 font-mono">Direct CDN Stream</span>
+      </div>
+
+      <div id="recentPropsGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Next Target Pipeline & Strategic Portfolio Analysis -->
+    <div class="mt-4 sm:mt-5 bg-white/85 rounded-xl sm:rounded-2xl p-3.5 sm:p-5 border border-white shadow-xs">
+      <div class="flex items-center justify-between mb-3 border-b border-neutral-200/70 pb-2.5">
+        <div>
+          <div class="text-xs sm:text-base font-black text-neutral-800 flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#990000]"></span>
+            NEXT TARGET PIPELINE & STRATEGIC VAULT (แผนการดูดข้อมูลเฟสถัดไป)
+          </div>
+          <div class="text-[10px] sm:text-xs text-neutral-500 font-medium mt-0.5">
+            วิเคราะห์คลังขุมทรัพย์ NPA ทั่วประเทศ — เตรียมดูดภาพขึ้น Cloudflare R2 ขยายพอร์ต Siwasup Co-Broker
+          </div>
+        </div>
+        <span class="px-2.5 py-1 rounded-full bg-neutral-900 text-[9px] sm:text-[10px] font-bold text-amber-300 font-mono tracking-wider">
+          EXPANDING PIPELINE
+        </span>
+      </div>
+
+      <!-- Live Active Target Status Pill -->
+      <div class="mb-3 p-2.5 rounded-xl bg-gradient-to-r from-emerald-950 via-teal-900 to-neutral-900 text-white flex flex-col sm:flex-row items-center justify-between gap-2 border border-emerald-400/40 shadow-xs">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping shrink-0"></span>
+          <span class="text-[11px] sm:text-xs font-bold text-emerald-200 thai-font">
+            🏆 <b>PHASE 1 ALL DONE 100%:</b> ครบ 10,672 แปลง (SCB 4,207 • SAM 5,100 • TTB 1,365) ➔ ⚡ <b>Phase 2 Activated:</b> เริ่มเจาะพอร์ต ธอส. (GHB)
+          </span>
+        </div>
+        <span class="text-[10px] font-mono font-bold text-amber-300 bg-black/50 px-2.5 py-1 rounded-lg border border-amber-400/30 shrink-0">
+          10,672 TRANCHES ON AIR 🚀
+        </span>
+      </div>
+
+      <!-- 6 Strategic Target Cards Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
+        
+        <!-- Target 1: GHB (ธอส.) -->
+        <div class="bg-gradient-to-br from-amber-500/10 via-white to-white rounded-xl p-3 border border-amber-300 shadow-2xs hover:shadow-xs transition-shadow">
+          <div class="flex items-center justify-between mb-1.5">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-[#FF5E00] text-white flex items-center justify-center font-black text-xs shadow-xs">GHB</span>
+              <div>
+                <div class="text-xs sm:text-sm font-extrabold text-neutral-800">ธอส. (ธนาคารอาคารสงเคราะห์)</div>
+                <div class="text-[9px] text-amber-700 font-bold">Priority #1 • Liquidity King 👑</div>
+              </div>
+            </div>
+            <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">ความยาก: ง่าย</span>
+          </div>
+          <div class="grid grid-cols-3 gap-1 text-center my-2 py-1.5 bg-white/80 rounded-lg border border-neutral-200/60 font-mono text-[9px]">
+            <div><span class="text-neutral-400 block text-[8px]">EST. VOL</span><b class="text-neutral-800 font-bold">~8,500 แปลง</b></div>
+            <div><span class="text-neutral-400 block text-[8px]">EST. GMV</span><b class="text-neutral-800 font-bold">฿18,500 M</b></div>
+            <div><span class="text-neutral-400 block text-[8px]">LIQUIDITY</span><b class="text-emerald-600 font-bold">10/10 (สูงสุด)</b></div>
+          </div>
+          <p class="text-[10px] text-neutral-600 leading-relaxed thai-font">
+            <b>บทวิเคราะห์:</b> พระเอกตลาด Mass Market (ราคา 1-3 ล้านบาท) สินเชื่อดอกเบี้ยต่ำพิเศษ ผ่อนดาวน์ตรงกับแบงก์ได้ ซื้อง่ายขายคล่องที่สุด เหมาะเป็นหัวหอกเปิดดีลสร้างยอดเงินเข้ากระเป๋าให้ทีมเอเจนต์ทันที
+          </p>
+        </div>
+
+        <!-- Target 2: KBANK (กสิกรไทย) -->
+        <div class="bg-gradient-to-br from-emerald-500/10 via-white to-white rounded-xl p-3 border border-emerald-300 shadow-2xs hover:shadow-xs transition-shadow">
+          <div class="flex items-center justify-between mb-1.5">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-[#00A950] text-white flex items-center justify-center font-black text-xs shadow-xs">K</span>
+              <div>
+                <div class="text-xs sm:text-sm font-extrabold text-neutral-800">KBANK (K-Property)</div>
+                <div class="text-[9px] text-emerald-700 font-bold">Priority #2 • Urban Prime Trust 🏢</div>
+              </div>
+            </div>
+            <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 border border-blue-300">ความยาก: ปานกลาง</span>
+          </div>
+          <div class="grid grid-cols-3 gap-1 text-center my-2 py-1.5 bg-white/80 rounded-lg border border-neutral-200/60 font-mono text-[9px]">
+            <div><span class="text-neutral-400 block text-[8px]">EST. VOL</span><b class="text-neutral-800 font-bold">~4,500 แปลง</b></div>
+            <div><span class="text-neutral-400 block text-[8px]">EST. GMV</span><b class="text-neutral-800 font-bold">฿25,000 M</b></div>
+            <div><span class="text-neutral-400 block text-[8px]">LIQUIDITY</span><b class="text-emerald-600 font-bold">8.5/10 (สูง)</b></div>
+          </div>
+          <p class="text-[10px] text-neutral-600 leading-relaxed thai-font">
+            <b>บทวิเคราะห์:</b> เด่นเรื่องคอนโดและบ้านแนวราบในเมือง Prime Area มูลค่าต่อหลังสูง เอกสารโอนกรรมสิทธิ์คลีน กติกาเบิกกุญแจ 7 วัน (ตรงกับระบบพี่ลิลลี่) ตอบโจทย์ลูกค้าระดับพรีเมียม
+          </p>
+        </div>
+
+        <!-- Target 3: KTB (กรุงไทย) -->
+        <div class="bg-gradient-to-br from-sky-500/10 via-white to-white rounded-xl p-3 border border-sky-300 shadow-2xs hover:shadow-xs transition-shadow">
+          <div class="flex items-center justify-between mb-1.5">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-[#00A3E0] text-white flex items-center justify-center font-black text-xs shadow-xs">KTB</span>
+              <div>
+                <div class="text-xs sm:text-sm font-extrabold text-neutral-800">KTB (กรุงไทย NPA)</div>
+                <div class="text-[9px] text-sky-700 font-bold">Priority #3 • Community Commercial 🏪</div>
+              </div>
+            </div>
+            <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 border border-blue-300">ความยาก: ปานกลาง</span>
+          </div>
+          <div class="grid grid-cols-3 gap-1 text-center my-2 py-1.5 bg-white/80 rounded-lg border border-neutral-200/60 font-mono text-[9px]">
+            <div><span class="text-neutral-400 block text-[8px]">EST. VOL</span><b class="text-neutral-800 font-bold">~2,200 แปลง</b></div>
+            <div><span class="text-neutral-400 block text-[8px]">EST. GMV</span><b class="text-neutral-800 font-bold">฿12,000 M</b></div>
+            <div><span class="text-neutral-400 block text-[8px]">LIQUIDITY</span><b class="text-emerald-600 font-bold">8.0/10 (สูง)</b></div>
+          </div>
+          <p class="text-[10px] text-neutral-600 leading-relaxed thai-font">
+            <b>บทวิเคราะห์:</b> โดดเด่นด้านอาคารพาณิชย์ ทำเลค้าขาย แหล่งชุมชน ตลาดสด และที่ดินต่างจังหวัด มีเครือข่ายสาขากว้างขวาง กติกาเบิกกุญแจ 7 วันทำการ ซื้อง่ายขายคล่อง
+          </p>
+        </div>
+
+        <!-- Target 4: BAM (กรุงเทพพาณิชย์) -->
+        <div class="bg-gradient-to-br from-blue-500/10 via-white to-white rounded-xl p-3 border border-blue-300 shadow-2xs hover:shadow-xs transition-shadow">
+          <div class="flex items-center justify-between mb-1.5">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-[#004B87] text-white flex items-center justify-center font-black text-xs shadow-xs">BAM</span>
+              <div>
+                <div class="text-xs sm:text-sm font-extrabold text-neutral-800">BAM (กรุงเทพพาณิชย์)</div>
+                <div class="text-[9px] text-blue-700 font-bold">Priority #4 • Nationwide Titan 🐘</div>
+              </div>
+            </div>
+            <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300">ความยาก: ปานกลาง-สูง</span>
+          </div>
+          <div class="grid grid-cols-3 gap-1 text-center my-2 py-1.5 bg-white/80 rounded-lg border border-neutral-200/60 font-mono text-[9px]">
+            <div><span class="text-neutral-400 block text-[8px]">EST. VOL</span><b class="text-neutral-800 font-bold">~20,000+ แปลง</b></div>
+            <div><span class="text-neutral-400 block text-[8px]">EST. GMV</span><b class="text-neutral-800 font-bold">฿75,000+ M</b></div>
+            <div><span class="text-neutral-400 block text-[8px]">LIQUIDITY</span><b class="text-amber-600 font-bold">7.5/10 (ปานกลาง)</b></div>
+          </div>
+          <p class="text-[10px] text-neutral-600 leading-relaxed thai-font">
+            <b>บทวิเคราะห์:</b> คลังทรัพย์ที่ใหญ่ที่สุดในประเทศ เด่นเรื่องที่ดินแปลงใหญ่ อาคารพาณิชย์ และทรัพย์ต่างจังหวัด เป็นคลังอาวุธสำคัญสำหรับเครือข่ายทีมคุณกูล (เชียงใหม่ & ภาคเหนือ)
+          </p>
+        </div>
+
+        <!-- Target 5: GSB (ธนาคารออมสิน) -->
+        <div class="bg-gradient-to-br from-pink-500/10 via-white to-white rounded-xl p-3 border border-pink-300 shadow-2xs hover:shadow-xs transition-shadow">
+          <div class="flex items-center justify-between mb-1.5">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-[#ED008C] text-white flex items-center justify-center font-black text-xs shadow-xs">GSB</span>
+              <div>
+                <div class="text-xs sm:text-sm font-extrabold text-neutral-800">GSB (ธนาคารออมสิน)</div>
+                <div class="text-[9px] text-pink-700 font-bold">Priority #5 • Regional Community 🌸</div>
+              </div>
+            </div>
+            <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">ความยาก: ง่าย</span>
+          </div>
+          <div class="grid grid-cols-3 gap-1 text-center my-2 py-1.5 bg-white/80 rounded-lg border border-neutral-200/60 font-mono text-[9px]">
+            <div><span class="text-neutral-400 block text-[8px]">EST. VOL</span><b class="text-neutral-800 font-bold">~1,210 แปลง</b></div>
+            <div><span class="text-neutral-400 block text-[8px]">EST. GMV</span><b class="text-neutral-800 font-bold">฿5,200 M</b></div>
+            <div><span class="text-neutral-400 block text-[8px]">LIQUIDITY</span><b class="text-emerald-600 font-bold">7.8/10 (ดี)</b></div>
+          </div>
+          <p class="text-[10px] text-neutral-600 leading-relaxed thai-font">
+            <b>บทวิเคราะห์:</b> มีโครงสร้างข้อมูลและภาพพร้อมอยู่ในคลัง R2 บางส่วนแล้ว เตรียมเปิดขึ้นหน้าเว็บแคตตาล็อกได้เร็ว ทรัพย์กระจายตัวตามแหล่งชุมชน เข้าถึงง่าย
+          </p>
+        </div>
+
+        <!-- Target 6: LED (กรมบังคับคดี) -->
+        <div class="bg-gradient-to-br from-purple-500/10 via-white to-white rounded-xl p-3 border border-purple-300 shadow-2xs hover:shadow-xs transition-shadow">
+          <div class="flex items-center justify-between mb-1.5">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-[#4E2A84] text-white flex items-center justify-center font-black text-xs shadow-xs">LED</span>
+              <div>
+                <div class="text-xs sm:text-sm font-extrabold text-neutral-800">LED (กรมบังคับคดี)</div>
+                <div class="text-[9px] text-purple-700 font-bold">Phase 3 • Deep Value Auction ⚖️</div>
+              </div>
+            </div>
+            <span class="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-300">ความยาก: ซับซ้อน</span>
+          </div>
+          <div class="grid grid-cols-3 gap-1 text-center my-2 py-1.5 bg-white/80 rounded-lg border border-neutral-200/60 font-mono text-[9px]">
+            <div><span class="text-neutral-400 block text-[8px]">EST. VOL</span><b class="text-neutral-800 font-bold">~35,000+ แปลง</b></div>
+            <div><span class="text-neutral-400 block text-[8px]">EST. GMV</span><b class="text-neutral-800 font-bold">฿90,000+ M</b></div>
+            <div><span class="text-neutral-400 block text-[8px]">LIQUIDITY</span><b class="text-rose-600 font-bold">6.0/10 (เฉพาะกลุ่ม)</b></div>
+          </div>
+          <p class="text-[10px] text-neutral-600 leading-relaxed thai-font">
+            <b>บทวิเคราะห์:</b> ราคาต่ำกว่าตลาด 30-50% มีความซับซ้อนเรื่องนัดประมูล วางมัดจำ และการขับไล่ผู้อยู่อาศัย เหมาะกับกลุ่มนักลงทุนกระเป๋าหนักและเอเจนต์ระดับฉลามปิดดีลเหมา
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Strategy Recommendation Summary Banner -->
+      <div class="mt-3.5 p-3 rounded-xl bg-neutral-900 text-white flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
+          <span class="text-[11px] sm:text-xs text-neutral-200 thai-font">
+            <b>ยุทธศาสตร์แนะนำ Phase 2:</b> ปิดงาน <b>TTB (1.3k แปลง คืนนี้)</b> ➔ ลุย <b>ธอส. (8.5k แปลง สภาพคล่องสูงสุด)</b> ➔ <b>KBANK (คอนโดหรูเมือง)</b> ➔ <b>BAM (คลังภาคเหนือ/คุณกูล)</b>
+          </span>
+        </div>
+        <span class="text-[10px] font-mono font-bold text-amber-300 shrink-0 bg-white/10 px-2.5 py-1 rounded-lg border border-amber-300/30">
+          POTENTIAL PIPELINE GMV: +135,700 MB
+        </span>
+      </div>
+    </div>
+
+    <!-- Mobile Wi-Fi Info Pill & Ticker -->
+    <div class="mt-3 sm:mt-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-neutral-500 px-1">
+      <div class="flex items-center gap-2 truncate w-full sm:w-auto">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+        <span id="logTicker" class="truncate font-mono text-[10px] sm:text-[11px]">Daemon running silently in background...</span>
+      </div>
+      <div class="flex items-center gap-1.5 text-[10px] sm:text-[11px] text-neutral-500 bg-white/70 px-2.5 py-1 rounded-full border border-neutral-200/60 shrink-0">
+        <span>📱 Bedside Phone:</span>
+        <span class="font-bold font-mono text-neutral-800">http://192.168.1.62:8080/crawler_dashboard.html</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Dynamic Live Script Loader -->
+  <script>
+    const TOTAL_ARC_LENGTH = 345;
+
+    function updateGauge(bank, done, total, pct, status) {
+      const arcEl = document.getElementById(`arc-${bank}`);
+      const pctEl = document.getElementById(`pct-${bank}`);
+      const countEl = document.getElementById(`count-${bank}`);
+      const badgeEl = document.getElementById(`badge-${bank}`);
+
+      if (!arcEl || !pctEl) return;
+
+      pctEl.innerText = `${pct}%`;
+      countEl.innerText = `${done.toLocaleString()} / ${total.toLocaleString()}`;
+
+      const offset = TOTAL_ARC_LENGTH - (TOTAL_ARC_LENGTH * (pct / 100));
+      arcEl.style.strokeDashoffset = offset;
+
+      if (badgeEl) {
+        if (status === 'Active') {
+          badgeEl.innerText = 'SYNCING';
+          badgeEl.className = 'text-[7px] sm:text-[9px] font-extrabold px-1.5 sm:px-2 py-0.2 sm:py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-300 uppercase mt-0.5 pulse-live';
+        } else if (status === 'Completed') {
+          badgeEl.innerText = 'DONE';
+          badgeEl.className = 'text-[7px] sm:text-[9px] font-extrabold px-1.5 sm:px-2 py-0.2 sm:py-0.5 rounded-full bg-emerald-500 text-white uppercase mt-0.5';
+        } else {
+          badgeEl.innerText = 'QUEUED';
+          badgeEl.className = 'text-[7px] sm:text-[9px] font-bold px-1.5 sm:px-2 py-0.2 sm:py-0.5 rounded-full bg-neutral-200 text-neutral-500 uppercase mt-0.5';
+        }
+      }
+    }
+
+    function applyData(data) {
+      if (!data) return;
+
+      document.getElementById('liveClock').innerText = data.updated_at || new Date().toLocaleTimeString();
+
+      // Render Executive Memo from Hai
+      if (data.executive_memo) {
+        const memoEl = document.getElementById('liveMemoContainer');
+        if (memoEl) memoEl.style.display = 'block';
+        document.getElementById('memoTime').innerText = data.executive_memo.updated_at || '';
+        document.getElementById('memoContent').innerHTML = data.executive_memo.message || '';
+        
+        const actContainer = document.getElementById('actionItemsContainer');
+        if (data.executive_memo.actions && data.executive_memo.actions.length > 0) {
+          actContainer.innerHTML = data.executive_memo.actions.map(act => `
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between w-full bg-white/5 hover:bg-white/10 rounded-xl p-2.5 border border-white/10 gap-2 transition-colors">
+              <div class="flex items-start gap-2">
+                <span class="w-2 h-2 rounded-full ${act.status === 'WAITING' ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'} mt-1.5 shrink-0"></span>
+                <div>
+                  <div class="text-[11px] sm:text-xs font-bold text-amber-200 thai-font">${act.title}</div>
+                  <div class="text-[10px] sm:text-[11px] text-neutral-300 thai-font mt-0.5">${act.desc || act.description || ''}</div>
+                </div>
+              </div>
+              <div class="shrink-0 flex items-center gap-1.5 self-end sm:self-center">
+                ${act.telegram_url ? `
+                  <a href="${act.telegram_url}" target="_blank" class="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] sm:text-[11px] flex items-center gap-1.5 shadow-sm transition-transform active:scale-95 font-mono">
+                    <span>${act.badge_text || '🟢 ดำเนินการ'}</span>
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14h2v2h-2zm0-10h2v8h-2z"/></svg>
+                  </a>
+                ` : `
+                  <span class="px-2.5 py-1 rounded-lg ${act.badge_class || 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'} font-bold text-[10px] border flex items-center gap-1">
+                    <span>${act.badge_text || '✅ สำเร็จแล้ว'}</span>
+                  </span>
+                `}
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      // Update 3 banks
+      if (data.sam) updateGauge('sam', data.sam.done, data.sam.total, data.sam.pct, data.sam.status);
+      if (data.ttb) updateGauge('ttb', data.ttb.done, data.ttb.total, data.ttb.pct, data.ttb.status);
+      if (data.scb) updateGauge('scb', data.scb.done, data.scb.total, data.scb.pct, data.scb.status);
+      if (data.gsb) updateGauge('gsb', data.gsb.done, data.gsb.total, data.gsb.pct, data.gsb.status);
+
+      // Telemetry Cards
+      if (data.speed_per_min) document.getElementById('stat-speed').innerText = `~${data.speed_per_min} props/min`;
+      if (data.eta_title) document.getElementById('stat-eta-title').innerText = data.eta_title;
+      if (data.eta_str || data.scb_eta_str) document.getElementById('stat-eta').innerText = `~${data.eta_str || data.scb_eta_str}`;
+      if (data.eta_sub) document.getElementById('stat-eta-sub').innerText = data.eta_sub;
+      if (data.storage_mb) document.getElementById('stat-storage').innerText = `${data.storage_mb} MB (${data.storage_pct}%)`;
+      if (data.total_images) document.getElementById('stat-images').innerText = `${data.total_images.toLocaleString()} files`;
+
+      // Live Recent Properties Cards (Using Thai font for title & clean card layout)
+      if (data.recent_props && data.recent_props.length > 0) {
+        const grid = document.getElementById('recentPropsGrid');
+        grid.innerHTML = data.recent_props.map(p => `
+          <div class="bg-white rounded-xl overflow-hidden border border-neutral-200/70 shadow-2xs hover:shadow-xs transition-shadow">
+            <div class="h-16 sm:h-20 bg-neutral-100 relative overflow-hidden">
+              ${p.thumbnail ? `<img src="${p.thumbnail}" alt="" class="w-full h-full object-cover">` : '<div class="w-full h-full flex items-center justify-center text-[9px] text-neutral-400">Uploading...</div>'}
+              <div class="absolute bottom-1 right-1 bg-black/75 text-white text-[8px] sm:text-[9px] px-1.5 py-0.5 rounded font-mono font-bold">
+                +${p.gallery_count} img
+              </div>
+            </div>
+            <div class="p-2">
+              <div class="text-[9px] sm:text-[10px] font-mono text-purple-700 font-bold truncate">${p.code}</div>
+              <div class="text-[10px] sm:text-[11px] font-semibold text-neutral-800 truncate thai-font" title="${p.title}">${p.title}</div>
+              <div class="text-[9px] sm:text-[10px] text-emerald-600 font-bold font-mono mt-0.5">฿${(p.price || 0).toLocaleString()}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      if (data.recent_logs && data.recent_logs.length > 0) {
+        document.getElementById('logTicker').innerText = data.recent_logs[0];
+      }
+    }
+
+    function loadLiveState() {
+      const script = document.createElement('script');
+      const isOnlineDomain = window.location.hostname === 'assets.siwasup.com' || window.location.hostname === 'siwasup.com';
+      const initialSrc = isOnlineDomain ? `crawler_live_state.js?t=${Date.now()}` : `data/crawler_live_state.js?t=${Date.now()}`;
+
+      script.src = initialSrc;
+      script.onload = () => {
+        if (window.CRAWLER_LIVE_DATA) {
+          applyData(window.CRAWLER_LIVE_DATA);
+        }
+        script.remove();
+      };
+      script.onerror = () => {
+        script.remove();
+        if (!isOnlineDomain) {
+          const fallbackScript = document.createElement('script');
+          fallbackScript.src = `https://assets.siwasup.com/crawler_live_state.js?t=${Date.now()}`;
+          fallbackScript.onload = () => {
+            if (window.CRAWLER_LIVE_DATA) {
+              applyData(window.CRAWLER_LIVE_DATA);
+            }
+            fallbackScript.remove();
+          };
+          fallbackScript.onerror = () => fallbackScript.remove();
+          document.body.appendChild(fallbackScript);
+        }
+      };
+      document.body.appendChild(script);
+    }
+
+    function forceRefresh() {
+      loadLiveState();
+    }
+
+    loadLiveState();
+    // Auto-refresh poll every 3 seconds
+    setInterval(loadLiveState, 3000);
+  </script>
+</body>
+</html>

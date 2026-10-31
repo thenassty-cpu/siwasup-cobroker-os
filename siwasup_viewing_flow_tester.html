@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Siwasup OS — เครื่องจำลองสถานการณ์ขอเปิดบ้าน & คืนกุญแจ (Key Custody Lifecycle Simulator)</title>
+  <link rel="icon" type="image/png" href="assets/siwasup_logo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
+    body { font-family: 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+    .pulse-ring {
+      box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.7);
+      animation: pulse 1.8s infinite cubic-bezier(0.66, 0, 0, 1);
+    }
+    @keyframes pulse {
+      to { box-shadow: 0 0 0 12px rgba(234, 179, 8, 0); }
+    }
+    
+    .scanner-line {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #10b981, transparent);
+      animation: scan 2s linear infinite alternate;
+    }
+    @keyframes scan {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(160px); }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-amber-500 selection:text-slate-950 flex flex-col">
+
+  <!-- Top Navigation & Controls -->
+  <header class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-4 py-3 sm:px-6">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 text-slate-950 flex items-center justify-center font-bold shadow-lg shadow-amber-950/50">
+          <i data-lucide="key-round" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wider">End-to-End Simulator</span>
+            <span class="text-xs text-slate-400 font-mono">• Ticket #SIM-2026-904</span>
+          </div>
+          <h1 class="text-sm sm:text-base font-bold text-white tracking-tight flex items-center gap-2">
+            <span>วงจรขอเปิดบ้าน NPA ➔ พี่ลิลลี่ประสานแบงค์ ➔ ส่งกุญแจ ➔ สแกนบ้าน ➔ ปิดสถานะ</span>
+          </h1>
+        </div>
+      </div>
+
+      <!-- Quick Actions & Reset -->
+      <div class="flex items-center gap-2 flex-wrap w-full md:w-auto justify-end">
+        <button onclick="switchMode('swarm')" id="btnSwarmHeader" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 active:scale-95 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-amber-500/20 transition">
+          <i data-lucide="zap" class="w-4 h-4"></i>
+          <span>⭐ Alpha Multi-Agent Swarm (6 บอทรุมเทส)</span>
+        </button>
+        <button onclick="autoPlaySimulation()" id="btnAutoPlay" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-semibold text-xs flex items-center gap-1.5 shadow transition">
+          <i data-lucide="play" class="w-4 h-4"></i>
+          <span>เล่นจำลองเดี่ยว (Fast Forward)</span>
+        </button>
+        <button onclick="resetSimulation()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 font-medium text-xs flex items-center gap-1.5 border border-slate-700 transition">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+          <span>รีเซ็ตสถานะ</span>
+        </button>
+        <a href="admin_dashboard.html" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white text-xs border border-slate-800 flex items-center gap-1">
+          <i data-lucide="x" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">ออก</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- 7-Stage Interactive Pipeline Header -->
+  <div class="bg-slate-900 border-b border-slate-800 px-4 py-3 sm:px-6 overflow-x-auto">
+    <div class="max-w-7xl mx-auto min-w-[760px] flex items-center justify-between gap-1 text-xs">
+      
+      <!-- Stage 1 -->
+      <div id="pipe_step1" class="flex-1 flex flex-col items-center gap-1 text-center group cursor-pointer" onclick="goToStep(1)">
+        <div class="w-8 h-8 rounded-full bg-amber-500 text-slate-950 font-bold flex items-center justify-center shadow-md transition-all font-mono" id="pipe_icon1">1</div>
+        <span class="font-semibold text-amber-300 text-[11px]" id="pipe_text1">1. เอเจนต์ขอเปิดบ้าน</span>
+      </div>
+      <div class="h-0.5 w-6 bg-slate-800 shrink-0" id="pipe_line1"></div>
+
+      <!-- Stage 2 -->
+      <div id="pipe_step2" class="flex-1 flex flex-col items-center gap-1 text-center group cursor-pointer opacity-40" onclick="goToStep(2)">
+        <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 font-bold flex items-center justify-center transition-all font-mono" id="pipe_icon2">2</div>
+        <span class="font-medium text-slate-400 text-[11px]" id="pipe_text2">2. ลิลลี่เช็คแบงค์</span>
+      </div>
+      <div class="h-0.5 w-6 bg-slate-800 shrink-0" id="pipe_line2"></div>
+
+      <!-- Stage 3 -->
+      <div id="pipe_step3" class="flex-1 flex flex-col items-center gap-1 text-center group cursor-pointer opacity-40" onclick="goToStep(3)">
+        <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 font-bold flex items-center justify-center transition-all font-mono" id="pipe_icon3">3</div>
+        <span class="font-medium text-slate-400 text-[11px]" id="pipe_text3">3. แมส / ดรอปกุญแจ</span>
+      </div>
+      <div class="h-0.5 w-6 bg-slate-800 shrink-0" id="pipe_line3"></div>
+
+      <!-- Stage 4 -->
+      <div id="pipe_step4" class="flex-1 flex flex-col items-center gap-1 text-center group cursor-pointer opacity-40" onclick="goToStep(4)">
+        <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 font-bold flex items-center justify-center transition-all font-mono" id="pipe_icon4">4</div>
+        <span class="font-medium text-slate-400 text-[11px]" id="pipe_text4">4. เอเจนต์รับกุญแจ</span>
+      </div>
+      <div class="h-0.5 w-6 bg-slate-800 shrink-0" id="pipe_line4"></div>
+
+      <!-- Stage 5 -->
+      <div id="pipe_step5" class="flex-1 flex flex-col items-center gap-1 text-center group cursor-pointer opacity-40" onclick="goToStep(5)">
+        <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 font-bold flex items-center justify-center transition-all font-mono" id="pipe_icon5">5</div>
+        <span class="font-medium text-slate-400 text-[11px]" id="pipe_text5">5. สแกนเปิดบ้าน</span>
+      </div>
+      <div class="h-0.5 w-6 bg-slate-800 shrink-0" id="pipe_line5"></div>
+
+      <!-- Stage 6 -->
+      <div id="pipe_step6" class="flex-1 flex flex-col items-center gap-1 text-center group cursor-pointer opacity-40" onclick="goToStep(6)">
+        <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 font-bold flex items-center justify-center transition-all font-mono" id="pipe_icon6">6</div>
+        <span class="font-medium text-slate-400 text-[11px]" id="pipe_text6">6. ส่งกุญแจคืน</span>
+      </div>
+      <div class="h-0.5 w-6 bg-slate-800 shrink-0" id="pipe_line6"></div>
+
+      <!-- Stage 7 -->
+      <div id="pipe_step7" class="flex-1 flex flex-col items-center gap-1 text-center group cursor-pointer opacity-40" onclick="goToStep(7)">
+        <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 font-bold flex items-center justify-center transition-all font-mono" id="pipe_icon7">7</div>
+        <span class="font-medium text-slate-400 text-[11px]" id="pipe_text7">7. ลิลลี่ปิดสถานะ</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Perspective Switcher Bar -->
+  <div class="max-w-7xl mx-auto w-full px-4 pt-4 sm:px-6 flex items-center justify-between flex-wrap gap-2">
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-semibold text-slate-400">สลับมุมมองหน้าจอ:</span>
+      <div class="inline-flex p-1 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold">
+        <button id="tab_agent" onclick="switchActorTab('agent')" class="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold flex items-center gap-1.5 transition">
+          <i data-lucide="user" class="w-3.5 h-3.5"></i>
+          <span>หน้าจอมือถือเอเจนต์</span>
+        </button>
+        <button id="tab_lily" onclick="switchActorTab('lily')" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white flex items-center gap-1.5 transition">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+          <span>หน้าจอพี่ลิลลี่ (Admin)</span>
+        </button>
+        <button id="tab_messenger" onclick="switchActorTab('messenger')" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white flex items-center gap-1.5 transition">
+          <i data-lucide="bike" class="w-3.5 h-3.5"></i>
+          <span>หน้าจอแมส / จุดดรอป</span>
+        </button>
+        <button id="tab_swarm" onclick="switchMode('swarm')" class="px-3.5 py-1.5 rounded-lg text-amber-400 hover:bg-amber-500/10 border border-amber-500/30 flex items-center gap-1.5 transition font-bold">
+          <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+          <span>⭐ โหมด Alpha Swarm (6 บอท)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Telemetry Status Badge -->
+    <div class="flex items-center gap-2 text-xs">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span class="text-slate-400">สถานะระบบ:</span>
+      <span id="systemStatusBadge" class="font-mono text-emerald-400 font-semibold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800">WAITING_REQUEST</span>
+    </div>
+  </div>
+
+  <!-- Main Simulator Workspace -->
+  <main id="singleWorkspace" class="max-w-7xl mx-auto w-full px-4 py-4 sm:px-6 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    
+    <!-- LEFT COLUMN: The Interactive Device / Screen (7 Cols) -->
+    <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-2xl space-y-4">
+      
+      <!-- Device Header -->
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-3 h-3 rounded-full bg-rose-500/80"></div>
+          <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
+          <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+          <span id="screenRoleTitle" class="text-xs font-bold text-slate-300 ml-2 font-mono">📱 VIEWPORT: AGENT MOBILE</span>
+        </div>
+        <div class="text-[11px] font-mono text-amber-400/90 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40" id="stepCounterBadge">
+          STEP 1 OF 7
+        </div>
+      </div>
+
+      <!-- STEP 1 CONTENT: AGENT REQUESTS VIEWING -->
+      <div id="content_step1" class="space-y-4">
+        <div class="bg-amber-950/20 border border-amber-500/30 rounded-2xl p-4 space-y-2">
+          <div class="flex items-center gap-2 text-amber-400 font-bold text-sm">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>สเต็ป 1: เอเจนต์เลือกบ้าน & นัดเวลาขอเปิดชมทรัพย์</span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            เอเจนต์พาลูกค้าพร้อมดูบ้าน จึงเข้ามากรอกคำขอเปิดบ้านในระบบ Siwasup Agent Hub เพื่อให้พี่ลิลลี่ประสานงานเบิกกุญแจกับสถาบันการเงิน
+          </p>
+        </div>
+
+        <!-- Property Picker & Client Form -->
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">เลือกทรัพย์ NPA ที่ต้องการเปิดชม:</label>
+            <select id="selProperty" class="w-full text-xs bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-white font-medium focus:border-amber-500 outline-none">
+              <option value="scb_1331174">มัณฑนา พระราม 2-เทียนทะเล (SCB - 10.50 ลบ.) [SLA เบิก 3 วัน]</option>
+              <option value="sam_1106348">เดอะซิตี้ บางนา กม.7 (SAM - 14.50 ลบ.) [SLA เบิก 7 วัน]</option>
+              <option value="ttb_1332770">บ้านเดี่ยว ธารา ราชพฤกษ์-ปิ่นเกล้า (TTB - 7.59 ลบ.) [SLA เบิก 7 วัน]</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="block text-slate-400 mb-1 font-semibold">ชื่อเอเจนต์ผู้ขอยืม:</label>
+              <input type="text" id="inputAgentName" value="คุณเป้ (Alpha S02 - ทีมกรุงเทพฯ ตะวันตก)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1 font-semibold">เบอร์โทรเอเจนต์:</label>
+              <input type="text" id="inputAgentPhone" value="089-112-9988" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 font-mono text-white">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1 font-semibold">ชื่อลูกค้าผู้จะซื้อ (Buyer Lead):</label>
+              <input type="text" id="inputBuyerName" value="คุณสมเกียรติ วิจิตรการ (ลูกค้า VIP)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1 font-semibold">วัน-เวลานัดหมายเข้าชม:</label>
+              <input type="text" id="inputViewingTime" value="เสาร์ 31 ต.ค. 2569 เวลา 14:00 น." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white">
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <button onclick="submitAgentRequest()" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-950/60 active:scale-95 transition">
+              <i data-lucide="file-check-2" class="w-4 h-4"></i>
+              <span>ยื่นคำขอเปิดบ้าน ➔ ส่งเรื่องให้พี่ลิลลี่</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 CONTENT: LILY CHECKS BANK -->
+      <div id="content_step2" class="hidden space-y-4">
+        <div class="bg-indigo-950/20 border border-indigo-500/30 rounded-2xl p-4 space-y-2">
+          <div class="flex items-center gap-2 text-indigo-400 font-bold text-sm">
+            <i data-lucide="building" class="w-4 h-4"></i>
+            <span>สเต็ป 2: พี่ลิลลี่ตรวจสอบ SLA ธนาคาร & กดส่งเรื่องคอนเฟิร์ม</span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            พี่ลิลลี่ได้รับแจ้งเตือนคำขอจากคุณเป้ จึงเปิดระบบยื่นเอกสารเบิกกุญแจไปยังสถาบันการเงินตามข้อตกลง SLA
+          </p>
+        </div>
+
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs">
+            <div>
+              <span class="text-slate-400 block text-[11px]">สถาบันการเงินเจ้าของทรัพย์:</span>
+              <span id="dspBankName" class="font-bold text-white text-sm">ธนาคารไทยพาณิชย์ (SCB)</span>
+            </div>
+            <div class="text-right">
+              <span class="text-slate-400 block text-[11px]">SLA เบิกกุญแจ:</span>
+              <span class="text-emerald-400 font-bold">3 วันทำการ</span>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-2 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-300 font-semibold">รหัสอ้างอิงคำขอแบงค์:</span>
+              <span class="font-mono text-amber-300 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/50">REQ-SCB-2026-8819</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-300 font-semibold">เจ้าหน้าที่ธนาคารผู้รับเรื่อง:</span>
+              <span class="text-slate-300">คุณวีณา (สินทรัพย์รอการขาย SCB สำนักงานใหญ่)</span>
+            </div>
+          </div>
+
+          <!-- Actions for Lily -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
+            <button onclick="lilyConfirmBank(false)" class="py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+              <i data-lucide="clock" class="w-4 h-4"></i>
+              <span>ส่งเรื่องแบงค์แล้ว (รออนุมัติ)</span>
+            </button>
+            <button onclick="lilyConfirmBank(true)" class="py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-950/60 transition active:scale-95">
+              <i data-lucide="check-check" class="w-4 h-4"></i>
+              <span>แบงค์อนุมัติแล้ว ➔ จัดการส่งมอบกุญแจ</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 CONTENT: CHOOSE DISPATCH METHOD -->
+      <div id="content_step3" class="hidden space-y-4">
+        <div class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-4 space-y-2">
+          <div class="flex items-center gap-2 text-purple-400 font-bold text-sm">
+            <i data-lucide="route" class="w-4 h-4"></i>
+            <span>สเต็ป 3: เลือกวิธีการส่งมอบกุญแจ (แมสเซนเจอร์วิ่งส่ง VS ฝากดรอปกล่อง)</span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            พี่ลิลลี่ได้รับพวงกุญแจจากแบงค์แล้ว สามารถเลือกได้ว่าจะเรียกแมสเซนเจอร์นำไปส่ง หรือนำไปฝากจุดดรอปนิรภัย
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          
+          <!-- Option A: Messenger -->
+          <div id="cardOptionMessenger" onclick="selectDispatchMode('messenger')" class="p-4 rounded-2xl bg-slate-950 border-2 border-amber-500 cursor-pointer hover:border-amber-400 transition space-y-3 relative group">
+            <div class="flex items-center justify-between">
+              <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+                <i data-lucide="bike" class="w-5 h-5"></i>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500 text-slate-950">แนะนำสำหรับงานด่วน</span>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-white">วิธีที่ 1: แมสเซนเจอร์ (Rider)</h4>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                ไรเดอร์วิ่งรับกุญแจจากพี่ลิลลี่ นำไปส่งถึงมือคุณเป้หน้าหมู่บ้าน พร้อมใบงาน Custody Slip
+              </p>
+            </div>
+            <div class="text-[11px] font-mono text-slate-400 bg-slate-900 p-2 rounded-lg border border-slate-800">
+              🛵 ไรเดอร์: สมชาย วิ่งไว (ฮอนด้า เวฟ 125)
+            </div>
+          </div>
+
+          <!-- Option B: Drop box -->
+          <div id="cardOptionDropbox" onclick="selectDispatchMode('dropbox')" class="p-4 rounded-2xl bg-slate-950 border border-slate-800 cursor-pointer hover:border-slate-700 transition space-y-3 relative group">
+            <div class="flex items-center justify-between">
+              <div class="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
+                <i data-lucide="archive" class="w-5 h-5"></i>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-400">จุดดรอปนิรภัย</span>
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-white">วิธีที่ 2: ฝากดรอปกุญแจ (Key Drop Box)</h4>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                พี่ลิลลี่นำกุญแจไปใส่ตู้เซฟรหัส/ป้อม รปภ. เอเจนต์ใช้รหัส OTP 4 หลักไปกดรับเอง
+              </p>
+            </div>
+            <div class="text-[11px] font-mono text-slate-400 bg-slate-900 p-2 rounded-lg border border-slate-800">
+              📦 รหัสตู้เซฟ OTP: <span class="text-amber-400 font-bold">9482</span> (จุดป้อม รปภ. ประตู 1)
+            </div>
+          </div>
+
+        </div>
+
+        <button onclick="dispatchKeys()" class="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-950/60 active:scale-95 transition">
+          <i data-lucide="send" class="w-4 h-4"></i>
+          <span id="btnDispatchText">ยืนยันปล่อยกุญแจผ่าน แมสเซนเจอร์ ➔ สเต็ปถัดไป</span>
+        </button>
+      </div>
+
+      <!-- STEP 4 CONTENT: AGENT RECEIVES KEY -->
+      <div id="content_step4" class="hidden space-y-4">
+        <div class="bg-emerald-950/20 border border-emerald-500/30 rounded-2xl p-4 space-y-2">
+          <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+            <i data-lucide="key" class="w-4 h-4"></i>
+            <span>สเต็ป 4: เอเจนต์รับมอบกุญแจ & สแกนยืนยัน Custody OTP</span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            คุณเป้ได้รับกุญแจเรียบร้อย จึงกดยืนยันการครอบครองกุญแจในระบบ เพื่อเริ่มนับเวลาคุ้มครองการเข้าชมทรัพย์
+          </p>
+        </div>
+
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between p-3 rounded-xl bg-slate-900 border border-slate-800">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+                🔑
+              </div>
+              <div>
+                <span class="text-xs font-bold text-white block">พวงกุญแจบ้านเลขที่ 88/12</span>
+                <span class="text-[11px] text-slate-400">กุญแจรั้ว 1 ดอก + ประตูหน้า 2 ดอก + คีย์การ์ด</span>
+              </div>
+            </div>
+            <span class="text-xs font-mono px-2 py-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">LOCK-8812</span>
+          </div>
+
+          <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 space-y-2 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-400">กรอบเวลาเปิดเข้าชม:</span>
+              <span class="text-emerald-400 font-bold font-mono">4 ชั่วโมง (หมดอายุ 18:00 น.)</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-400">การยืนยันตัวตน:</span>
+              <span class="text-slate-200">OTP ยืนยันผ่านมือถือคุณเป้ เรียบร้อย</span>
+            </div>
+          </div>
+
+          <button onclick="agentAcceptKey()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/60 active:scale-95 transition">
+            <i data-lucide="unlock" class="w-4 h-4"></i>
+            <span>กดรับกุญแจเรียบร้อย ➔ ไขเปิดบ้าน & พาลูกค้าเข้าชม</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 5 CONTENT: AGENT UNLOCKS & SCANS HOUSE -->
+      <div id="content_step5" class="hidden space-y-4">
+        <div class="bg-cyan-950/20 border border-cyan-500/30 rounded-2xl p-4 space-y-2">
+          <div class="flex items-center gap-2 text-cyan-400 font-bold text-sm">
+            <i data-lucide="camera" class="w-4 h-4"></i>
+            <span>สเต็ป 5: เปิดบ้าน & สแกนเช็คอินหน้างาน (Buyer Lead Lock)</span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            คุณเป้พาลูกค้าเข้าชมบ้าน พร้อมใช้มือถือ "สแกนบ้าน" เพื่อทำการเช็คอิน GPS + บันทึกสภาพทรัพย์ และล็อกสิทธิ์ลูกค้า 60 วัน
+          </p>
+        </div>
+
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+          
+          <!-- Mock Camera Scanner Viewport -->
+          <div class="relative w-full h-48 bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden flex flex-col items-center justify-center text-center p-4">
+            <div class="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] opacity-40"></div>
+            <div class="scanner-line absolute w-full top-6"></div>
+            
+            <div class="relative z-10 space-y-1">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-2 border border-emerald-500/30">
+                <i data-lucide="scan-line" class="w-6 h-6 animate-pulse"></i>
+              </div>
+              <h5 class="text-xs font-bold text-white">กล้องสแกนตรวจสภาพบ้าน & QR หมุดแปลง</h5>
+              <p class="text-[11px] text-slate-400">พิกัด GPS: 13.6284° N, 100.4352° E (หน้าประตูบ้าน 100%)</p>
+            </div>
+
+            <div class="absolute bottom-2 right-2 text-[10px] font-mono bg-slate-950/80 px-2 py-0.5 rounded text-emerald-400 border border-emerald-800">
+              LEAD_LOCK: SECURED (60 DAYS)
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-slate-400">ลูกค้าที่ล็อกสิทธิ์:</span>
+              <span class="font-bold text-amber-300">คุณสมเกียรติ วิจิตรการ</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-400">สถานะการข้ามหัว (Anti-Bypass):</span>
+              <span class="text-emerald-400 font-semibold">คุ้มครองค่าคอมมิชชั่นเต็ม 100%</span>
+            </div>
+          </div>
+
+          <button onclick="agentFinishViewing()" class="w-full py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-950/60 active:scale-95 transition">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>ชมบ้านเสร็จสิ้น ➔ ปิดบ้าน ล็อคประตู & ส่งกุญแจคืน</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 6 CONTENT: AGENT RETURNS KEYS -->
+      <div id="content_step6" class="hidden space-y-4">
+        <div class="bg-rose-950/20 border border-rose-500/30 rounded-2xl p-4 space-y-2">
+          <div class="flex items-center gap-2 text-rose-400 font-bold text-sm">
+            <i data-lucide="corner-down-left" class="w-4 h-4"></i>
+            <span>สเต็ป 6: ส่งมอบกุญแจคืน (แมสรับกลับ / ดรอปคืนตู้เซฟ)</span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            คุณเป้ล็อคประตูบ้านเรียบร้อย ถ่ายรูปหลักฐานพวงกุญแจครบดอก และส่งมอบคืนกลับสู่การดูแลของพี่ลิลลี่
+          </p>
+        </div>
+
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+          <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between text-xs">
+            <div>
+              <span class="text-slate-400 block text-[11px]">วิธีการส่งคืน:</span>
+              <span id="dspReturnMethod" class="font-bold text-white">แมสเซนเจอร์รับกุญแจกลับเข้าเซฟ</span>
+            </div>
+            <span class="text-emerald-400 font-bold">ตรงเวลา (ไม่เกิน 4 ชม.)</span>
+          </div>
+
+          <!-- Key photo proof mock -->
+          <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-2 text-xs">
+            <span class="font-semibold text-slate-300 block">หลักฐานรูปถ่ายกุญแจครบ 3 ดอก + คีย์การ์ด:</span>
+            <div class="flex items-center gap-3">
+              <div class="w-16 h-16 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-xl">
+                🗝️
+              </div>
+              <div class="space-y-1">
+                <span class="text-[11px] font-mono text-emerald-400 block">KEY_PROOF_UPLOAD_OK.JPG</span>
+                <span class="text-[10px] text-slate-400">Timestamp: 31 ต.ค. 2569 - 15:42:10 น.</span>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="agentReturnComplete()" class="w-full py-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-rose-950/60 active:scale-95 transition">
+            <i data-lucide="package-check" class="w-4 h-4"></i>
+            <span>ยืนยันส่งกุญแจคืนแล้ว ➔ ให้พี่ลิลลี่ตรวจรับ</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 7 CONTENT: LILY CLOSES STATUS -->
+      <div id="content_step7" class="hidden space-y-4">
+        <div class="bg-emerald-950/20 border border-emerald-500/30 rounded-2xl p-4 space-y-2">
+          <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+            <span>สเต็ป 7: พี่ลิลลี่ตรวจรับกุญแจเข้าตู้เซฟ & ปิดสถานะจ๊อบ 100%</span>
+          </div>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            พี่ลิลลี่ตรวจนับดอกกุญแจครบถ้วน นำกลับเข้าตู้เซฟกลาง และกด "ปิดสถานะการยืม" ปิดจ๊อบวงจรการเปิดบ้านอย่างสมบูรณ์แบบ
+          </p>
+        </div>
+
+        <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-4 text-center">
+          <div class="w-16 h-16 rounded-3xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto text-2xl shadow-xl shadow-emerald-950/60">
+            <i data-lucide="lock" class="w-8 h-8"></i>
+          </div>
+
+          <div class="space-y-1">
+            <h4 class="text-base font-bold text-white">กุญแจกลับเข้าสู่ตู้เซฟเรียบร้อยแล้ว</h4>
+            <p class="text-xs text-slate-400">
+              รอบการเปิดชมทรัพย์ #SIM-2026-904 ปิดสถานะสมบูรณ์ ปลอดภัย 100%
+            </p>
+          </div>
+
+          <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 text-xs text-left space-y-1.5 font-mono">
+            <div class="flex justify-between text-slate-400">
+              <span>ผลลัพธ์การเข้าชม:</span>
+              <span class="text-emerald-400 font-bold">ลูกค้าสนใจยื่นกู้ (Hot Lead)</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>ระยะเวลาถือครองกุญแจ:</span>
+              <span class="text-slate-200">1 ชม. 42 นาที (SLA ผ่านฉลุย)</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>การคุ้มครองสิทธิ์เอเจนต์:</span>
+              <span class="text-amber-400">ล็อกสิทธิ์คุณเป้ ถึง 30 ธ.ค. 2569</span>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <button onclick="resetSimulation()" class="flex-1 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition">
+              ทดสอบเคสถัดไป
+            </button>
+            <button onclick="copyAuditTrailReport()" class="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition">
+              <i data-lucide="copy" class="w-4 h-4"></i>
+              <span>คัดลอก Audit Report ส่ง LINE</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN: Real-Time Audit Log & Timeline Tracker (5 Cols) -->
+    <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-2xl space-y-4">
+      
+      <!-- Telemetry Header -->
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i>
+          <h3 class="text-xs font-bold text-white uppercase tracking-wider font-mono">LIVE AUDIT TELEMETRY</h3>
+        </div>
+        <span class="text-[10px] text-slate-400 font-mono">AUTO-SAVED</span>
+      </div>
+
+      <!-- Real-Time Activity Feed -->
+      <div id="telemetryFeed" class="space-y-2.5 max-h-[460px] overflow-y-auto pr-1 text-xs">
+        
+        <!-- Log Item Initial -->
+        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1">
+          <div class="flex items-center justify-between text-[10px] font-mono">
+            <span class="text-amber-400 font-semibold">[SYSTEM READY]</span>
+            <span class="text-slate-500">01:30:00 น.</span>
+          </div>
+          <p class="text-slate-300">ตัวจำลองสถานการณ์พร้อมทำงาน รอดำเนินการสเต็ป 1 (เอเจนต์ขอเปิดบ้าน)</p>
+        </div>
+
+      </div>
+
+      <!-- Ticket Summary Card -->
+      <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 text-xs">
+        <div class="flex items-center justify-between font-bold text-white">
+          <span>สรุปคำขอ #SIM-2026-904</span>
+          <span id="ticketStatusPill" class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">DRAFT</span>
+        </div>
+        <div class="space-y-1 text-slate-400 text-[11px]">
+          <div class="flex justify-between">
+            <span>ทรัพย์เป้าหมาย:</span>
+            <span id="txtSummaryProp" class="text-slate-200 font-medium">มัณฑนา พระราม 2</span>
+          </div>
+          <div class="flex justify-between">
+            <span>เอเจนต์:</span>
+            <span id="txtSummaryAgent" class="text-slate-200 font-medium">คุณเป้ (Alpha S02)</span>
+          </div>
+          <div class="flex justify-between">
+            <span>ลูกค้า:</span>
+            <span id="txtSummaryBuyer" class="text-slate-200 font-medium">คุณสมเกียรติ วิจิตรการ</span>
+          </div>
+          <div class="flex justify-between">
+            <span>ช่องทางส่งกุญแจ:</span>
+            <span id="txtSummaryDispatch" class="text-amber-300 font-medium">ยังไม่ระบุ</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- ⭐ ALPHA MULTI-AGENT SWARM WORKSPACE (6 CONCURRENT BOTS) -->
+  <!-- ========================================================================= -->
+  <section id="swarmWorkspace" class="hidden max-w-7xl mx-auto w-full px-4 py-4 sm:px-6 flex-1 space-y-6">
+    
+    <!-- Hero Banner & Command Bar -->
+    <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-amber-950/40 border border-amber-500/30 rounded-3xl p-6 shadow-2xl relative overflow-hidden">
+      <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 relative z-10">
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-bold font-mono">
+              ⭐ ALPHA AGENT CONCURRENT TEST HARNESS
+            </span>
+            <span class="text-xs text-slate-400 font-mono">• 6 Persona Threads • Real-Time Key Custody</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
+            <span>เครื่องจำลอง 6 บอท Alpha Agent รุมทดสอบระบบเบิกกุญแจ</span>
+          </h2>
+          <p class="text-xs text-slate-300 max-w-3xl leading-relaxed">
+            ทดสอบการยิงคำขอเปิดบ้านพร้อมกัน 6 สายตาม Profile จริงของคุณกูล ตรวจจับ Race Condition การแย่งกุญแจ, ทดสอบสิทธิ์ Fast-Track, ปล่อยรหัส Smart Keybox OTP หน้าออฟฟิศ, และจำลองการล็อกสิทธิ์ผู้ซื้อ 60 วัน
+          </p>
+          <p class="text-[11px] text-amber-300/90 bg-amber-950/30 border border-amber-500/30 rounded-xl px-3 py-2 max-w-3xl">
+            ⚠️ นี่คือ <b>แอนิเมชันจำลองตามสคริปต์</b> ไม่ใช่การทดสอบระบบหลังบ้านจริง &mdash; ชื่อทรัพย์ ราคา ชื่อลูกค้า และเวลาในการ์ดเป็นข้อมูลสมมติ (ยกเว้นพื้นที่/รหัสตัวแทน) ส่วน "Keybox Slot Allocator" ด้านล่างคำนวณด้วยตรรกะจริงแต่ใช้สถานการณ์สมมติ
+          </p>
+        </div>
+
+        <!-- Command Buttons -->
+        <div class="flex items-center gap-2 flex-wrap w-full lg:w-auto justify-start lg:justify-end">
+          <button onclick="runAlphaSwarmConcurrent()" id="btnStartSwarm" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 active:scale-95 text-slate-950 font-black text-xs sm:text-sm flex items-center gap-2 shadow-xl shadow-amber-500/25 transition">
+            <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+            <span>🚀 เริ่มรุมเทส 6 บอทพร้อมกัน</span>
+          </button>
+          <button onclick="resetSwarmSimulation()" class="px-4 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-300 font-semibold text-xs border border-slate-700 flex items-center gap-1.5 transition">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+            <span>รีเซ็ต</span>
+          </button>
+          <button onclick="copySwarmAuditReport()" class="px-4 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-semibold text-xs shadow-lg shadow-indigo-600/20 flex items-center gap-1.5 transition">
+            <i data-lucide="copy" class="w-4 h-4"></i>
+            <span>คัดลอกรายงานส่ง LINE</span>
+          </button>
+          <button onclick="switchMode('single')" class="px-3 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white text-xs border border-slate-800 flex items-center gap-1 transition">
+            <span>กลับหน้าเดี่ยว</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Ribbon -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5 pt-4 border-t border-slate-800/80 text-xs">
+        <div class="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold">
+            <i data-lucide="users" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="text-[10px] text-slate-400">ตัวแทนนำร่อง</div>
+            <div class="font-bold text-white font-mono">6 ท่าน (S90-S120)</div>
+          </div>
+        </div>
+        <div class="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold">
+            <i data-lucide="key" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="text-[10px] text-slate-400">สถานะกุญแจทั้งหมด</div>
+            <div id="swarmKeyCountText" class="font-bold text-emerald-400 font-mono">พร้อมเบิก 6/6 ดอก</div>
+          </div>
+        </div>
+        <div class="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold">
+            <i data-lucide="box" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="text-[10px] text-slate-400">Smart Keybox หน้า สนง.</div>
+            <div id="swarmKeyboxStatusText" class="font-bold text-blue-400 font-mono">ONLINE (TTLock Hub)</div>
+          </div>
+        </div>
+        <div class="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800 flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="text-[10px] text-slate-400">Buyer Lead Lock 60 วัน</div>
+            <div id="swarmLeadLockCount" class="font-bold text-purple-400 font-mono">สแตนด์บาย 0/6 ดีล</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Smart Keybox Hub Status Card -->
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+      <div class="md:col-span-4 flex items-center gap-4">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-950 to-slate-800 border-2 border-amber-500/50 flex flex-col items-center justify-center shadow-lg relative shrink-0">
+          <i data-lucide="lock" id="iconKeyboxLock" class="w-7 h-7 text-amber-400"></i>
+          <span class="text-[9px] font-mono text-slate-400 mt-1" id="lblKeyboxMini">LOCKED</span>
+          <span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-500 animate-ping"></span>
+          <span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-500"></span>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5 text-xs text-amber-400 font-bold">
+            <i data-lucide="wifi" class="w-3.5 h-3.5"></i>
+            <span>SMART KEYBOX HUB (หน้าออฟฟิศศิวาทรัพย์)</span>
+          </div>
+          <h3 class="text-sm font-bold text-white mt-0.5" id="txtKeyboxTitle">กล่องกุญแจพร้อมใช้งาน (Standby 24 ชม.)</h3>
+          <p class="text-[11px] text-slate-400 mt-0.5">พี่ลิลลี่จัดกุญแจใส่กล่อง ➔ เจนรหัส OTP 6 หลัก ➔ เอเจนต์มารับเมื่อไหร่ก็ได้</p>
+        </div>
+      </div>
+
+      <div class="md:col-span-5 bg-slate-950 p-3 rounded-2xl border border-slate-800/80 font-mono text-xs space-y-1">
+        <div class="flex items-center justify-between text-[11px] text-slate-400">
+          <span>OTP ปัจจุบันในระบบ:</span>
+          <span id="txtLiveOTP" class="font-bold text-amber-300 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-500/30">------</span>
+        </div>
+        <div class="flex items-center justify-between text-[11px] text-slate-400">
+          <span>การแจ้งเตือนเซ็นเซอร์ตู้:</span>
+          <span id="txtSensorAlert" class="text-slate-500">รอเอเจนต์มากดเปิด...</span>
+        </div>
+      </div>
+
+      <div class="md:col-span-3 text-right">
+        <button onclick="testKeyboxSensorTrigger()" class="w-full py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-xs text-amber-300 border border-slate-700 flex items-center justify-center gap-1.5 transition font-semibold">
+          <i data-lucide="bell-ring" class="w-3.5 h-3.5"></i>
+          <span>จำลองเอเจนต์กดเปิดตู้</span>
+        </button>
+      </div>
+    </div>
+
+    
+    <!-- ===== KEYBOX SLOT ALLOCATOR (กล่องเดียวชนกันไหม?) ===== -->
+    <div id="slotAllocPanel" class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl space-y-4">
+      <div class="flex items-start justify-between flex-wrap gap-3">
+        <div>
+          <div class="flex items-center gap-1.5 text-xs text-amber-400 font-bold">
+            <i data-lucide="boxes" class="w-3.5 h-3.5"></i>
+            <span>KEYBOX SLOT ALLOCATOR — คำนวณว่าต้องมีกี่กล่องถึงไม่ชนกัน</span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1 max-w-2xl">
+            จัดช่องตามช่วงเวลาที่เอเจนต์มารับกุญแจ (ช่วง OTP มีผล) &mdash; กุญแจ 1 ชุด/1 กล่อง/1 ช่วงเวลา
+            ถ้าช่วงเวลาทับกันและไม่มีกล่องว่าง = ต้องเอากุญแจรวมกล่อง (เสี่ยงหยิบผิด/ไม่รู้ว่าใครทำหาย)
+          </p>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-slate-400">จำนวนกล่องรับกุญแจ:</span>
+          <div class="inline-flex p-1 rounded-xl bg-slate-950 border border-slate-800 font-semibold">
+            <button onclick="runSlotAllocator(1)" id="btn_slot_1" class="px-3 py-1 rounded-lg text-slate-400">1</button>
+            <button onclick="runSlotAllocator(2)" id="btn_slot_2" class="px-3 py-1 rounded-lg text-slate-400">2</button>
+            <button onclick="runSlotAllocator(3)" id="btn_slot_3" class="px-3 py-1 rounded-lg text-slate-400">3</button>
+          </div>
+          <span class="text-[10px] text-slate-500">(+ ช่องหยอดคืน 1 ช่อง)</span>
+        </div>
+      </div>
+      <div id="slotAllocCompare" class="grid grid-cols-3 gap-2 text-center text-[11px] font-mono"></div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs">
+          <thead>
+            <tr class="text-slate-400 text-left border-b border-slate-800">
+              <th class="py-1.5 pr-2">เอเจนต์</th><th class="pr-2">ทรัพย์</th><th class="pr-2">ช่วงมารับ</th><th class="pr-2">ผลการจัดช่อง</th><th>หมายเหตุ</th>
+            </tr>
+          </thead>
+          <tbody id="slotAllocBody"></tbody>
+        </table>
+      </div>
+      <div id="slotAllocVerdict" class="p-3 rounded-2xl bg-slate-950 border border-slate-800 text-xs text-slate-300 leading-relaxed"></div>
+      <p class="text-[10px] text-slate-500">
+        หมายเหตุ: ช่วงเวลาและทรัพย์เป็นสถานการณ์สมมติ (5 คำขอซ้อนเวลาช่วงหัวค่ำ) ผลคำนวณมาจากตรรกะจัดช่องจริง แต่ยังไม่ได้เชื่อมกับตู้ TTLock หรือระบบหลังบ้านจริง
+      </p>
+    </div>
+
+    <!-- 6 Alpha Agent Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="swarmGridCards">
+      
+      <!-- Card S90: นัญ (ตลิ่งชัน) -->
+      <div id="card_agent_S90" class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl space-y-4 hover:border-amber-500/50 transition">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center font-black text-amber-400 text-sm">
+              S90
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="font-bold text-white text-sm">นัญ (อนัญญา สาททอง)</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold font-mono">⭐ Alpha</span>
+              </div>
+              <div class="text-[11px] text-slate-400">📍 ตลิ่งชัน กทม.</div>
+            </div>
+          </div>
+          <span id="badge_status_S90" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">READY</span>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-slate-950 border border-slate-800 text-xs space-y-1.5">
+          <div class="text-[11px] text-slate-400">ทรัพย์เป้าหมาย:</div>
+          <div class="font-semibold text-white truncate">บ้านเดี่ยว มัณฑนา พระราม 2 (SCB - 10.50 ลบ.)</div>
+          <div class="flex items-center justify-between text-[11px] pt-1 border-t border-slate-800 text-slate-400">
+            <span>วิธีส่งมอบ:</span>
+            <span class="font-bold text-blue-400">📦 Smart Keybox (OTP)</span>
+          </div>
+        </div>
+
+        <!-- Progress Bar (7 Steps) -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between text-[10px] font-mono">
+            <span class="text-slate-400">ขั้นตอน: <b id="txt_step_num_S90" class="text-amber-400">สเต็ป 1/7</b></span>
+            <span id="txt_step_name_S90" class="text-slate-300">รอเริ่มการยิงคำขอ</span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+            <div id="prog_bar_S90" class="h-full bg-gradient-to-r from-amber-500 to-emerald-500 transition-all duration-500" style="width: 14%;"></div>
+          </div>
+        </div>
+
+        <!-- Telemetry Log Line -->
+        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 font-mono text-[11px] text-slate-300 flex items-center justify-between">
+          <span id="log_event_S90" class="truncate">พร้อมเริ่มรันบอท...</span>
+          <span id="log_time_S90" class="text-[9px] text-slate-500 shrink-0 ml-2">--:--</span>
+        </div>
+
+        <button onclick="runSingleAgentSwarm('S90')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-xs text-white font-semibold transition flex items-center justify-center gap-1">
+          <i data-lucide="play" class="w-3.5 h-3.5"></i>
+          <span>เทสเฉพาะน้องนัญ (S90)</span>
+        </button>
+      </div>
+
+      <!-- Card S94: หลิว (ทวีวัฒนา) -->
+      <div id="card_agent_S94" class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl space-y-4 hover:border-amber-500/50 transition">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center font-black text-amber-400 text-sm">
+              S94
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="font-bold text-white text-sm">หลิว (พัณณ์นิกา)</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold font-mono">⭐ Alpha</span>
+              </div>
+              <div class="text-[11px] text-slate-400">📍 ทวีวัฒนา กทม.</div>
+            </div>
+          </div>
+          <span id="badge_status_S94" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">READY</span>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-slate-950 border border-slate-800 text-xs space-y-1.5">
+          <div class="text-[11px] text-slate-400">ทรัพย์เป้าหมาย:</div>
+          <div class="font-semibold text-white truncate">ทาวน์โฮม พุทธมณฑลสาย 2 (SAM - 4.20 ลบ.)</div>
+          <div class="flex items-center justify-between text-[11px] pt-1 border-t border-slate-800 text-slate-400">
+            <span>วิธีส่งมอบ:</span>
+            <span class="font-bold text-purple-400">🛵 Messenger (ส่งด่วน)</span>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between text-[10px] font-mono">
+            <span class="text-slate-400">ขั้นตอน: <b id="txt_step_num_S94" class="text-amber-400">สเต็ป 1/7</b></span>
+            <span id="txt_step_name_S94" class="text-slate-300">รอเริ่มการยิงคำขอ</span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+            <div id="prog_bar_S94" class="h-full bg-gradient-to-r from-amber-500 to-emerald-500 transition-all duration-500" style="width: 14%;"></div>
+          </div>
+        </div>
+
+        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 font-mono text-[11px] text-slate-300 flex items-center justify-between">
+          <span id="log_event_S94" class="truncate">พร้อมเริ่มรันบอท...</span>
+          <span id="log_time_S94" class="text-[9px] text-slate-500 shrink-0 ml-2">--:--</span>
+        </div>
+
+        <button onclick="runSingleAgentSwarm('S94')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-xs text-white font-semibold transition flex items-center justify-center gap-1">
+          <i data-lucide="play" class="w-3.5 h-3.5"></i>
+          <span>เทสเฉพาะพี่หลิว (S94)</span>
+        </button>
+      </div>
+
+      <!-- Card S98: แป้ง (สายไหม - Collision Test) -->
+      <div id="card_agent_S98" class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl space-y-4 hover:border-amber-500/50 transition relative overflow-hidden">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center font-black text-amber-400 text-sm">
+              S98
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="font-bold text-white text-sm">แป้ง (นญกร)</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold font-mono">⭐ Alpha</span>
+              </div>
+              <div class="text-[11px] text-slate-400">📍 สายไหม กทม.</div>
+            </div>
+          </div>
+          <span id="badge_status_S98" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">READY</span>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-slate-950 border border-slate-800 text-xs space-y-1.5">
+          <div class="text-[11px] text-slate-400">ทรัพย์เป้าหมาย:</div>
+          <div class="font-semibold text-amber-300 truncate">มัณฑนา พระราม 2 (แย่งกุญแจกับ S90!)</div>
+          <div class="flex items-center justify-between text-[11px] pt-1 border-t border-slate-800 text-slate-400">
+            <span>โจทย์ทดสอบ:</span>
+            <span class="font-bold text-rose-400">⚠️ Key Concurrency Conflict</span>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between text-[10px] font-mono">
+            <span class="text-slate-400">ขั้นตอน: <b id="txt_step_num_S98" class="text-amber-400">สเต็ป 1/7</b></span>
+            <span id="txt_step_name_S98" class="text-slate-300">รอเริ่มการยิงคำขอ</span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+            <div id="prog_bar_S98" class="h-full bg-gradient-to-r from-amber-500 to-rose-500 transition-all duration-500" style="width: 14%;"></div>
+          </div>
+        </div>
+
+        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 font-mono text-[11px] text-slate-300 flex items-center justify-between">
+          <span id="log_event_S98" class="truncate">พร้อมตรวจจับ Race Condition...</span>
+          <span id="log_time_S98" class="text-[9px] text-slate-500 shrink-0 ml-2">--:--</span>
+        </div>
+
+        <button onclick="runSingleAgentSwarm('S98')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-xs text-white font-semibold transition flex items-center justify-center gap-1">
+          <i data-lucide="play" class="w-3.5 h-3.5"></i>
+          <span>เทสเฉพาะน้องแป้ง (S98)</span>
+        </button>
+      </div>
+
+      <!-- Card S113: ไห้ (ธนบุรี - Fast Track VIP) -->
+      <div id="card_agent_S113" class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl space-y-4 hover:border-amber-500/50 transition">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center font-black text-amber-400 text-sm">
+              S113
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="font-bold text-white text-sm">ไห้ (สิทธิชัย)</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold font-mono">⭐ Alpha</span>
+              </div>
+              <div class="text-[11px] text-slate-400">📍 ธนบุรี กทม.</div>
+            </div>
+          </div>
+          <span id="badge_status_S113" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">READY</span>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-slate-950 border border-slate-800 text-xs space-y-1.5">
+          <div class="text-[11px] text-slate-400">ทรัพย์เป้าหมาย:</div>
+          <div class="font-semibold text-white truncate">วอเตอร์มาร์ค เจ้าพระยา (SCB - 12.58 ลบ.)</div>
+          <div class="flex items-center justify-between text-[11px] pt-1 border-t border-slate-800 text-slate-400">
+            <span>โจทย์ทดสอบ:</span>
+            <span class="font-bold text-emerald-400">⚡ Fast-Track VIP (ข้ามคิว)</span>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between text-[10px] font-mono">
+            <span class="text-slate-400">ขั้นตอน: <b id="txt_step_num_S113" class="text-amber-400">สเต็ป 1/7</b></span>
+            <span id="txt_step_name_S113" class="text-slate-300">รอเริ่มการยิงคำขอ</span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+            <div id="prog_bar_S113" class="h-full bg-gradient-to-r from-amber-500 to-emerald-500 transition-all duration-500" style="width: 14%;"></div>
+          </div>
+        </div>
+
+        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 font-mono text-[11px] text-slate-300 flex items-center justify-between">
+          <span id="log_event_S113" class="truncate">พร้อมเริ่มรันบอท...</span>
+          <span id="log_time_S113" class="text-[9px] text-slate-500 shrink-0 ml-2">--:--</span>
+        </div>
+
+        <button onclick="runSingleAgentSwarm('S113')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-xs text-white font-semibold transition flex items-center justify-center gap-1">
+          <i data-lucide="play" class="w-3.5 h-3.5"></i>
+          <span>เทสเฉพาะพี่ไห้ (S113)</span>
+        </button>
+      </div>
+
+      <!-- Card S117: แอ๊ด (พระสมุทรเจดีย์ - Bank SLA) -->
+      <div id="card_agent_S117" class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl space-y-4 hover:border-amber-500/50 transition">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center font-black text-amber-400 text-sm">
+              S117
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="font-bold text-white text-sm">แอ๊ด (พรทิพย์)</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold font-mono">⭐ Alpha</span>
+              </div>
+              <div class="text-[11px] text-slate-400">📍 พระสมุทรเจดีย์</div>
+            </div>
+          </div>
+          <span id="badge_status_S117" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">READY</span>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-slate-950 border border-slate-800 text-xs space-y-1.5">
+          <div class="text-[11px] text-slate-400">ทรัพย์เป้าหมาย:</div>
+          <div class="font-semibold text-white truncate">ที่ดินเปล่า ลาดหวาย บางบ่อ (SAM - 8.50 ลบ.)</div>
+          <div class="flex items-center justify-between text-[11px] pt-1 border-t border-slate-800 text-slate-400">
+            <span>วิธีส่งมอบ:</span>
+            <span class="font-bold text-amber-400">🏦 Bank SLA 3 วัน + คืนสาขา</span>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between text-[10px] font-mono">
+            <span class="text-slate-400">ขั้นตอน: <b id="txt_step_num_S117" class="text-amber-400">สเต็ป 1/7</b></span>
+            <span id="txt_step_name_S117" class="text-slate-300">รอเริ่มการยิงคำขอ</span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+            <div id="prog_bar_S117" class="h-full bg-gradient-to-r from-amber-500 to-emerald-500 transition-all duration-500" style="width: 14%;"></div>
+          </div>
+        </div>
+
+        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 font-mono text-[11px] text-slate-300 flex items-center justify-between">
+          <span id="log_event_S117" class="truncate">พร้อมเริ่มรันบอท...</span>
+          <span id="log_time_S117" class="text-[9px] text-slate-500 shrink-0 ml-2">--:--</span>
+        </div>
+
+        <button onclick="runSingleAgentSwarm('S117')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-xs text-white font-semibold transition flex items-center justify-center gap-1">
+          <i data-lucide="play" class="w-3.5 h-3.5"></i>
+          <span>เทสเฉพาะพี่แอ๊ด (S117)</span>
+        </button>
+      </div>
+
+      <!-- Card S120: อ้อน (บางใหญ่ - Full Lead Lock) -->
+      <div id="card_agent_S120" class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl space-y-4 hover:border-amber-500/50 transition">
+        <div class="flex items-start justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center font-black text-amber-400 text-sm">
+              S120
+            </div>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="font-bold text-white text-sm">อ้อน (สุหทัย ปานทอง)</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold font-mono">⭐ Alpha</span>
+              </div>
+              <div class="text-[11px] text-slate-400">📍 บางใหญ่ นนทบุรี</div>
+            </div>
+          </div>
+          <span id="badge_status_S120" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">READY</span>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-slate-950 border border-slate-800 text-xs space-y-1.5">
+          <div class="text-[11px] text-slate-400">ทรัพย์เป้าหมาย:</div>
+          <div class="font-semibold text-white truncate">บ้านเดี่ยว ชวนชื่น กาญจนาภิเษก (GSB - 5.90 ลบ.)</div>
+          <div class="flex items-center justify-between text-[11px] pt-1 border-t border-slate-800 text-slate-400">
+            <span>โจทย์ทดสอบ:</span>
+            <span class="font-bold text-emerald-400">🔒 Lead Lock 60 วัน + คืนตู้</span>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between text-[10px] font-mono">
+            <span class="text-slate-400">ขั้นตอน: <b id="txt_step_num_S120" class="text-amber-400">สเต็ป 1/7</b></span>
+            <span id="txt_step_name_S120" class="text-slate-300">รอเริ่มการยิงคำขอ</span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+            <div id="prog_bar_S120" class="h-full bg-gradient-to-r from-amber-500 to-emerald-500 transition-all duration-500" style="width: 14%;"></div>
+          </div>
+        </div>
+
+        <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 font-mono text-[11px] text-slate-300 flex items-center justify-between">
+          <span id="log_event_S120" class="truncate">พร้อมเริ่มรันบอท...</span>
+          <span id="log_time_S120" class="text-[9px] text-slate-500 shrink-0 ml-2">--:--</span>
+        </div>
+
+        <button onclick="runSingleAgentSwarm('S120')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-xs text-white font-semibold transition flex items-center justify-center gap-1">
+          <i data-lucide="play" class="w-3.5 h-3.5"></i>
+          <span>เทสเฉพาะพี่อ้อน (S120)</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Live Swarm Telemetry Terminal Stream -->
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-2xl space-y-3">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></div>
+          <span class="font-bold text-white text-xs font-mono uppercase tracking-wider">
+            📡 LIVE MULTI-AGENT SWARM TELEMETRY & CONCURRENCY AUDIT
+          </span>
+        </div>
+        <button onclick="clearSwarmTelemetry()" class="text-[11px] text-slate-400 hover:text-white font-mono">
+          [ล้างหน้าจอ]
+        </button>
+      </div>
+      <div id="swarmTelemetryStream" class="h-48 overflow-y-auto space-y-2 font-mono text-xs pr-2">
+        <div class="p-2.5 rounded-xl bg-slate-950 text-slate-400 border border-slate-800/60">
+          [SYSTEM_READY] Alpha Multi-Agent Swarm Engine v1.0 พร้อมทำงาน • สแตนด์บาย 6 Agent Threads
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- Script Logic -->
+  <script>
+    lucide.createIcons();
+
+    let currentStep = 1;
+    let selectedDispatch = 'messenger'; // or 'dropbox'
+
+    function updatePipelineUI(step) {
+      currentStep = step;
+      document.getElementById('stepCounterBadge').innerText = `STEP ${step} OF 7`;
+
+      // Hide all contents
+      for (let i = 1; i <= 7; i++) {
+        document.getElementById(`content_step${i}`).classList.add('hidden');
+        const icon = document.getElementById(`pipe_icon${i}`);
+        const text = document.getElementById(`pipe_text${i}`);
+        const wrap = document.getElementById(`pipe_step${i}`);
+        const line = document.getElementById(`pipe_line${i}`);
+
+        if (i < step) {
+          // Completed
+          wrap.classList.remove('opacity-40');
+          icon.className = "w-8 h-8 rounded-full bg-emerald-500 text-slate-950 font-bold flex items-center justify-center font-mono shadow";
+          icon.innerHTML = "✓";
+          text.className = "font-medium text-emerald-400 text-[11px]";
+          if (line) line.className = "h-0.5 w-6 bg-emerald-500 shrink-0";
+        } else if (i === step) {
+          // Current Active
+          wrap.classList.remove('opacity-40');
+          icon.className = "w-8 h-8 rounded-full bg-amber-500 text-slate-950 font-bold flex items-center justify-center font-mono shadow pulse-ring";
+          icon.innerHTML = i;
+          text.className = "font-bold text-amber-300 text-[11px]";
+          if (line) line.className = "h-0.5 w-6 bg-slate-800 shrink-0";
+        } else {
+          // Pending
+          wrap.classList.add('opacity-40');
+          icon.className = "w-8 h-8 rounded-full bg-slate-800 text-slate-400 font-bold flex items-center justify-center font-mono";
+          icon.innerHTML = i;
+          text.className = "font-medium text-slate-400 text-[11px]";
+          if (line) line.className = "h-0.5 w-6 bg-slate-800 shrink-0";
+        }
+      }
+
+      // Show target step
+      document.getElementById(`content_step${step}`).classList.remove('hidden');
+
+      // Update Screen Role Title
+      const screenTitle = document.getElementById('screenRoleTitle');
+      if (step === 1 || step === 4 || step === 5) {
+        screenTitle.innerText = "📱 VIEWPORT: AGENT MOBILE (คุณเป้)";
+        switchActorTab('agent', false);
+      } else if (step === 2 || step === 7) {
+        screenTitle.innerText = "💻 VIEWPORT: P'LILY ADMIN CONSOLE (พี่ลิลลี่)";
+        switchActorTab('lily', false);
+      } else if (step === 3 || step === 6) {
+        screenTitle.innerText = selectedDispatch === 'messenger' ? "🛵 VIEWPORT: MESSENGER DISPATCH (ไรเดอร์)" : "📦 VIEWPORT: KEY DROPBOX STATION";
+        switchActorTab('messenger', false);
+      }
+    }
+
+    function addTelemetryLog(tag, msg, isSuccess = false) {
+      const feed = document.getElementById('telemetryFeed');
+      const time = new Date().toLocaleTimeString('th-TH');
+      const item = document.createElement('div');
+      item.className = "p-3 rounded-xl bg-slate-950 border border-slate-800/80 space-y-1 animate-fadeIn";
+      item.innerHTML = `
+        <div class="flex items-center justify-between text-[10px] font-mono">
+          <span class="${isSuccess ? 'text-emerald-400' : 'text-amber-400'} font-semibold">[${tag}]</span>
+          <span class="text-slate-500">${time}</span>
+        </div>
+        <p class="text-slate-300 leading-relaxed">${msg}</p>
+      `;
+      feed.insertBefore(item, feed.firstChild);
+    }
+
+    function switchActorTab(actor, userClicked = true) {
+      const bAgent = document.getElementById('tab_agent');
+      const bLily = document.getElementById('tab_lily');
+      const bMess = document.getElementById('tab_messenger');
+
+      [bAgent, bLily, bMess].forEach(b => b.className = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white flex items-center gap-1.5 transition");
+
+      if (actor === 'agent') {
+        bAgent.className = "px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold flex items-center gap-1.5 transition";
+      } else if (actor === 'lily') {
+        bLily.className = "px-3 py-1.5 rounded-lg bg-indigo-500 text-white font-bold flex items-center gap-1.5 transition";
+      } else if (actor === 'messenger') {
+        bMess.className = "px-3 py-1.5 rounded-lg bg-purple-500 text-white font-bold flex items-center gap-1.5 transition";
+      }
+    }
+
+    function goToStep(s) {
+      updatePipelineUI(s);
+    }
+
+    // Step 1: Agent Submit
+    function submitAgentRequest() {
+      const prop = document.getElementById('selProperty').value;
+      const agent = document.getElementById('inputAgentName').value;
+      const buyer = document.getElementById('inputBuyerName').value;
+
+      document.getElementById('txtSummaryBuyer').innerText = buyer;
+      document.getElementById('ticketStatusPill').innerText = "PENDING_BANK";
+      document.getElementById('ticketStatusPill').className = "text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40";
+      document.getElementById('systemStatusBadge').innerText = "WAITING_LILY_BANK_CLEAR";
+
+      addTelemetryLog('AGENT_REQUEST', `คุณเป้ยื่นคำขอเปิดบ้านสำหรับลูกค้า: ${buyer} ส่งเรื่องเข้าหน้าจอพี่ลิลลี่เรียบร้อย`);
+      updatePipelineUI(2);
+    }
+
+    // Step 2: Lily Confirm Bank
+    function lilyConfirmBank(isApproved) {
+      if (!isApproved) {
+        addTelemetryLog('BANK_SLA', 'พี่ลิลลี่ส่งเอกสารเบิกกุญแจเข้าสาขา SCB สำนักงานใหญ่ สถานะ: รอดอกกุญแจ (SLA 3 วัน)');
+      } else {
+        document.getElementById('ticketStatusPill').innerText = "BANK_APPROVED";
+        document.getElementById('systemStatusBadge').innerText = "KEYS_AT_VAULT";
+        addTelemetryLog('BANK_APPROVED', 'ธนาคารอนุมัติเบิกกุญแจแล้ว รหัสอนุมัติ SCB-KEY-992 พร้อมส่งมอบ');
+        updatePipelineUI(3);
+      }
+    }
+
+    // Step 3: Choose Dispatch
+    function selectDispatchMode(mode) {
+      selectedDispatch = mode;
+      const cMess = document.getElementById('cardOptionMessenger');
+      const cDrop = document.getElementById('cardOptionDropbox');
+      const bText = document.getElementById('btnDispatchText');
+
+      if (mode === 'messenger') {
+        cMess.className = "p-4 rounded-2xl bg-slate-950 border-2 border-amber-500 cursor-pointer transition space-y-3 relative";
+        cDrop.className = "p-4 rounded-2xl bg-slate-950 border border-slate-800 cursor-pointer hover:border-slate-700 transition space-y-3 relative";
+        bText.innerText = "ยืนยันปล่อยกุญแจผ่าน แมสเซนเจอร์ ➔ สเต็ปถัดไป";
+        document.getElementById('dspReturnMethod').innerText = "แมสเซนเจอร์รับกุญแจกลับเข้าเซฟ";
+        document.getElementById('txtSummaryDispatch').innerText = "แมสเซนเจอร์ (Rider)";
+      } else {
+        cMess.className = "p-4 rounded-2xl bg-slate-950 border border-slate-800 cursor-pointer hover:border-slate-700 transition space-y-3 relative";
+        cDrop.className = "p-4 rounded-2xl bg-slate-950 border-2 border-blue-500 cursor-pointer transition space-y-3 relative";
+        bText.innerText = "ยืนยันนำกุญแจไปใส่ จุดดรอปนิรภัย ➔ สเต็ปถัดไป";
+        document.getElementById('dspReturnMethod').innerText = "หยอดคืนตู้เซฟดรอปบ็อกซ์";
+        document.getElementById('txtSummaryDispatch').innerText = "จุดดรอปนิรภัย (OTP: 9482)";
+      }
+    }
+
+    function dispatchKeys() {
+      document.getElementById('ticketStatusPill').innerText = "IN_TRANSIT";
+      document.getElementById('systemStatusBadge').innerText = "KEY_DISPATCHED";
+      addTelemetryLog('KEY_DISPATCH', `พี่ลิลลี่ส่งมอบกุญแจผ่าน: ${selectedDispatch === 'messenger' ? 'แมสเซนเจอร์ (สมชาย วิ่งไว)' : 'จุดดรอปป้อม รปภ. (OTP 9482)'}`);
+      updatePipelineUI(4);
+    }
+
+    // Step 4: Agent Accept Key
+    function agentAcceptKey() {
+      document.getElementById('ticketStatusPill').innerText = "KEY_WITH_AGENT";
+      document.getElementById('systemStatusBadge').innerText = "IN_CUSTODY";
+      addTelemetryLog('KEY_ACCEPTED', 'คุณเป้ยืนยันการรับกุญแจครบ 3 ดอก + คีย์การ์ด เริ่มจับเวลานับถอยหลัง 4 ชั่วโมง', true);
+      updatePipelineUI(5);
+    }
+
+    // Step 5: Viewing & Scan
+    function agentFinishViewing() {
+      document.getElementById('ticketStatusPill').innerText = "VIEWING_DONE";
+      document.getElementById('systemStatusBadge').innerText = "LEAD_LOCKED_60D";
+      addTelemetryLog('BUYER_LEAD_LOCK', 'คุณเป้สแกนบ้าน + เช็คอิน GPS เรียบร้อย ระบบทำการล็อกสิทธิ์ลูกค้าคุณสมเกียรติ 60 วัน (กันบายพาส)', true);
+      updatePipelineUI(6);
+    }
+
+    // Step 6: Return keys
+    function agentReturnComplete() {
+      document.getElementById('ticketStatusPill').innerText = "RETURNING";
+      document.getElementById('systemStatusBadge').innerText = "KEY_HANDOVER_BACK";
+      addTelemetryLog('KEY_RETURN_SUBMIT', 'คุณเป้ส่งมอบกุญแจคืนเรียบร้อย พร้อมอัปโหลดรูปหลักฐานครบถ้วน');
+      updatePipelineUI(7);
+    }
+
+    // Step 7: Reset / Copy report
+    function resetSimulation() {
+      updatePipelineUI(1);
+      document.getElementById('ticketStatusPill').innerText = "DRAFT";
+      document.getElementById('ticketStatusPill').className = "text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40";
+      document.getElementById('systemStatusBadge').innerText = "WAITING_REQUEST";
+      document.getElementById('txtSummaryDispatch').innerText = "ยังไม่ระบุ";
+      addTelemetryLog('SIM_RESET', 'รีเซ็ตสถานะตัวจำลองเรียบร้อย พร้อมสำหรับการทดสอบรอบใหม่');
+    }
+
+    function autoPlaySimulation() {
+      resetSimulation();
+      let step = 1;
+      const interval = setInterval(() => {
+        if (step === 1) submitAgentRequest();
+        else if (step === 2) lilyConfirmBank(true);
+        else if (step === 3) dispatchKeys();
+        else if (step === 4) agentAcceptKey();
+        else if (step === 5) agentFinishViewing();
+        else if (step === 6) agentReturnComplete();
+        else {
+          clearInterval(interval);
+          addTelemetryLog('AUTO_PLAY_DONE', 'การจำลองครบ 7 สเต็ปสำเร็จ 100% ปิดเคสเรียบร้อย', true);
+        }
+        step++;
+      }, 1200);
+    }
+
+    function copyAuditTrailReport() {
+      const summary = 
+`[Siwasup Key Custody Audit Trail]
+Ticket: #SIM-2026-904
+Property: มัณฑนา พระราม 2-เทียนทะเล (SCB - 10.50 ลบ.)
+Agent: คุณเป้ (Alpha S02)
+Buyer: คุณสมเกียรติ วิจิตรการ
+Dispatch: แมสเซนเจอร์ส่งมอบ
+Buyer Lead Lock: คุ้มครอง 60 วัน (ถึง 30 ธ.ค. 2569)
+Status: CLOSED & VAULTED 100% (พี่ลิลลี่ตรวจรับกุญแจเข้าเซฟเรียบร้อย)`;
+
+      navigator.clipboard.writeText(summary).then(() => {
+        alert('คัดลอก Audit Report สำเร็จแล้ว! พร้อมส่งเข้า LINE กลุ่มได้ทันทีครับ');
+      }).catch(err => {
+        prompt('Ctrl+C เพื่อคัดลอกรายงาน:', summary);
+      });
+    }
+  
+    // =========================================================================
+    // ⭐ ALPHA MULTI-AGENT SWARM ENGINE (6 CONCURRENT BOTS)
+    // =========================================================================
+    const ALPHA_AGENTS_DATA = {
+      S90: { name: "นัญ (อนัญญา)", area: "ตลิ่งชัน", prop: "มัณฑนา พระราม 2 (SCB - 10.50 ลบ.)", buyer: "คุณวีรศักดิ์", dispatch: "keybox", bank: "SCB" },
+      S94: { name: "หลิว (พัณณ์นิกา)", area: "ทวีวัฒนา", prop: "ทาวน์โฮม สาย 2 (SAM - 4.20 ลบ.)", buyer: "คุณพิมพาภรณ์", dispatch: "messenger", bank: "SAM" },
+      S98: { name: "แป้ง (นญกร)", area: "สายไหม", prop: "มัณฑนา พระราม 2 (แย่งกับ S90)", buyer: "คุณชานนท์", dispatch: "conflict", bank: "SCB" },
+      S113: { name: "ไห้ (สิทธิชัย)", area: "ธนบุรี", prop: "วอเตอร์มาร์ค เจ้าพระยา (SCB - 12.58 ลบ.)", buyer: "คุณจิตรดา (VIP)", dispatch: "fasttrack", bank: "SCB" },
+      S117: { name: "แอ๊ด (พรทิพย์)", area: "พระสมุทรเจดีย์", prop: "ที่ดิน ลาดหวาย บางบ่อ (SAM - 8.50 ลบ.)", buyer: "คุณมนตรี", dispatch: "bank_drop", bank: "SAM" },
+      S120: { name: "อ้อน (สุหทัย)", area: "บางใหญ่", prop: "บ้านเดี่ยว ชวนชื่น (GSB - 5.90 ลบ.)", buyer: "คุณกมลชัย", dispatch: "full_cycle", bank: "GSB" }
+    };
+
+    let swarmState = {
+      activeMode: 'single', // 'single' or 'swarm'
+      isRunning: false,
+      agents: {
+        S90: { step: 1, status: 'READY', otp: null, leadLocked: false },
+        S94: { step: 1, status: 'READY', rider: null, leadLocked: false },
+        S98: { step: 1, status: 'READY', conflictResolved: false, leadLocked: false },
+        S113: { step: 1, status: 'READY', fastTrack: false, leadLocked: false },
+        S117: { step: 1, status: 'READY', bankSla: '3D', leadLocked: false },
+        S120: { step: 1, status: 'READY', leadLocked: false, closed: false }
+      }
+    };
+
+    function switchMode(mode) {
+      swarmState.activeMode = mode;
+      const singleWs = document.getElementById('singleWorkspace');
+      const swarmWs = document.getElementById('swarmWorkspace');
+      const tabSwarm = document.getElementById('tab_swarm');
+
+      if (mode === 'swarm') {
+        singleWs.classList.add('hidden');
+        swarmWs.classList.remove('hidden');
+        tabSwarm.className = "px-3.5 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold flex items-center gap-1.5 transition";
+        addSwarmLog("MODE_SWITCH", "สลับเข้าสู่โหมด Alpha Multi-Agent Swarm (ทดสอบ 6 บอทพร้อมกัน)");
+      } else {
+        swarmWs.classList.add('hidden');
+        singleWs.classList.remove('hidden');
+        tabSwarm.className = "px-3.5 py-1.5 rounded-lg text-amber-400 hover:bg-amber-500/10 border border-amber-500/30 flex items-center gap-1.5 transition font-bold";
+      }
+      lucide.createIcons();
+    }
+
+    function addSwarmLog(tag, msg, isHighlight = false) {
+      const stream = document.getElementById('swarmTelemetryStream');
+      const time = new Date().toLocaleTimeString('th-TH');
+      const item = document.createElement('div');
+      item.className = `p-2 rounded-xl bg-slate-950 border ${isHighlight ? 'border-amber-500/50 bg-amber-950/20 text-amber-300' : 'border-slate-800 text-slate-300'} flex items-start justify-between gap-2`;
+      item.innerHTML = `
+        <div class="space-y-0.5">
+          <span class="font-bold font-mono ${isHighlight ? 'text-amber-400' : 'text-emerald-400'}">[${tag}]</span>
+          <span>${msg}</span>
+        </div>
+        <span class="text-[10px] text-slate-500 font-mono shrink-0">${time}</span>
+      `;
+      stream.insertBefore(item, stream.firstChild);
+
+      // Also pipe to main telemetry
+      addTelemetryLog(tag, msg, isHighlight);
+    }
+
+    function clearSwarmTelemetry() {
+      document.getElementById('swarmTelemetryStream').innerHTML = '<div class="p-2.5 rounded-xl bg-slate-950 text-slate-400 border border-slate-800/60">[CLEARED] หน้าจอถูกล้างเรียบร้อย พร้อมรับสัญญาณใหม่</div>';
+    }
+
+    function updateAgentCardUI(code, step, statusText, statusBadgeClass, logText) {
+      const card = swarmState.agents[code];
+      card.step = step;
+      card.status = statusText;
+
+      const pBar = document.getElementById(`prog_bar_${code}`);
+      const sNum = document.getElementById(`txt_step_num_${code}`);
+      const sName = document.getElementById(`txt_step_name_${code}`);
+      const bStatus = document.getElementById(`badge_status_${code}`);
+      const lEvent = document.getElementById(`log_event_${code}`);
+      const lTime = document.getElementById(`log_time_${code}`);
+
+      const percent = Math.min(100, Math.round((step / 7) * 100));
+      if (pBar) pBar.style.width = `${percent}%`;
+      if (sNum) sNum.innerText = `สเต็ป ${step}/7`;
+      if (sName) sName.innerText = statusText;
+      if (bStatus) {
+        bStatus.innerText = statusText;
+        bStatus.className = `text-[10px] font-mono px-2 py-0.5 rounded ${statusBadgeClass}`;
+      }
+      if (lEvent) lEvent.innerText = logText;
+      if (lTime) lTime.innerText = new Date().toLocaleTimeString('th-TH');
+    }
+
+    function testKeyboxSensorTrigger() {
+      const randOtp = Math.floor(100000 + Math.random() * 900000);
+      document.getElementById('txtLiveOTP').innerText = randOtp;
+      document.getElementById('txtSensorAlert').innerText = `🚨 OTP ${randOtp} ถูกกดใช้งานเปิดตู้! (แจ้งเตือนเข้ามือถือพี่ลิลลี่แล้ว)`;
+      document.getElementById('txtSensorAlert').className = "text-amber-400 font-bold animate-pulse";
+      document.getElementById('lblKeyboxMini').innerText = "OPENED";
+      document.getElementById('lblKeyboxMini').className = "text-[9px] font-mono text-emerald-400 mt-1 font-bold";
+      document.getElementById('iconKeyboxLock').className = "w-7 h-7 text-emerald-400";
+      
+      addSwarmLog("KEYBOX_SENSOR", `ตรวจพบการเปิดตู้ Smart Keybox หน้าออฟฟิศด้วยรหัส OTP ${randOtp} ส่ง Notification เข้า LINE ลิลลี่เรียบร้อย`, true);
+      
+      setTimeout(() => {
+        document.getElementById('lblKeyboxMini').innerText = "LOCKED";
+        document.getElementById('lblKeyboxMini').className = "text-[9px] font-mono text-slate-400 mt-1";
+        document.getElementById('iconKeyboxLock').className = "w-7 h-7 text-amber-400";
+        document.getElementById('txtSensorAlert').className = "text-slate-400";
+        document.getElementById('txtSensorAlert').innerText = "ตู้ล็อกคืนเรียบร้อย (Standby)";
+      }, 3500);
+    }
+
+    function runSingleAgentSwarm(code) {
+      if (swarmState.isRunning) return;
+      const data = ALPHA_AGENTS_DATA[code];
+      addSwarmLog("AGENT_START", `เริ่มทดสอบบอทเดี่ยว: ${data.name} (${code}) โซน ${data.area}`, true);
+
+      let step = 1;
+      const t = setInterval(() => {
+        if (step === 1) {
+          updateAgentCardUI(code, 1, "REQUESTING", "bg-amber-500/20 text-amber-300 border border-amber-500/40", `ยื่นขอเปิดบ้าน: ${data.prop}`);
+          addSwarmLog(`${code}_STEP1`, `${data.name} ยื่นขอเปิดบ้านสำหรับลูกค้า: ${data.buyer}`);
+        } else if (step === 2) {
+          updateAgentCardUI(code, 2, "BANK_CLEAR", "bg-indigo-500/20 text-indigo-300 border border-indigo-500/40", `พี่ลิลลี่เช็คแบงก์ ${data.bank} อนุมัติแล้ว`);
+          addSwarmLog(`${code}_STEP2`, `พี่ลิลลี่ตรวจสิทธิ์ Alpha: พบ flag isAlpha=true ปลดล็อกอนุมัติกุญแจทันที`);
+        } else if (step === 3) {
+          if (data.dispatch === 'keybox') {
+            const otp = 839210;
+            updateAgentCardUI(code, 3, "OTP_DISPATCHED", "bg-blue-500/20 text-blue-300 border border-blue-500/40", `เจน OTP: ${otp} ใส่ตู้หน้าออฟฟิศ`);
+            addSwarmLog(`${code}_KEYBOX`, `ลิลลี่ใส่กุญแจเข้าตู้ Smart Keybox หน้าออฟฟิศ ➔ รหัส OTP ${otp} ส่งเข้า LINE น้องนัญ`);
+          } else if (data.dispatch === 'messenger') {
+            updateAgentCardUI(code, 3, "RIDER_ASSIGNED", "bg-purple-500/20 text-purple-300 border border-purple-500/40", `ไรเดอร์ สมชาย รับงานวิ่งไปส่งสาย 2`);
+            addSwarmLog(`${code}_RIDER`, `ระบบออก Web Dispatch Slip ให้แมสเซนเจอร์วิ่งไปส่งหน้าบ้าน`);
+          } else if (data.dispatch === 'conflict') {
+            updateAgentCardUI(code, 3, "CONFLICT_DETECTED", "bg-rose-500/20 text-rose-300 border border-rose-500/40", `⚠️ แย่งกุญแจกับ S90 ➔ เสนอ Co-Broker`);
+            addSwarmLog(`${code}_CONFLICT`, `[CONCURRENCY] กุญแจมัณฑนาติดคิว S90 ➔ ระบบแปลงเป็นดีล Co-Closing แบ่งคอมมิชชัน 50/50 อัตโนมัติ!`, true);
+          } else {
+            updateAgentCardUI(code, 3, "DISPATCHED", "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40", `ส่งมอบกุญแจเรียบร้อย`);
+            addSwarmLog(`${code}_DISPATCH`, `ส่งมอบกุญแจสำเร็จ`);
+          }
+        } else if (step === 4) {
+          updateAgentCardUI(code, 4, "KEY_IN_HAND", "bg-amber-500/20 text-amber-300 border border-amber-500/40", `เอเจนต์รับกุญแจเรียบร้อย`);
+          addSwarmLog(`${code}_IN_HAND`, `${data.name} ได้รับกุญแจแล้ว เริ่มเดินทางเข้าชมบ้าน`);
+        } else if (step === 5) {
+          updateAgentCardUI(code, 5, "LEAD_LOCKED_60D", "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40", `🔒 สแกนบ้าน + ล็อก Lead 60 วัน`);
+          addSwarmLog(`${code}_LEAD_LOCK`, `[LEAD LOCK ACTIVE] ล็อกสิทธิ์ลูกค้า ${data.buyer} ให้ ${data.name} นาน 60 วัน (ถึง 30 ธ.ค. 2569) ป้องกันการบายพาส!`, true);
+        } else if (step === 6) {
+          updateAgentCardUI(code, 6, "RETURNING", "bg-blue-500/20 text-blue-300 border border-blue-500/40", `นำกุญแจส่งคืนระบบ`);
+          addSwarmLog(`${code}_RETURN`, `${data.name} นำกุญแจกลับมาส่งคืนเรียบร้อย`);
+        } else if (step === 7) {
+          clearInterval(t);
+          updateAgentCardUI(code, 7, "CLOSED_100%", "bg-emerald-500/30 text-emerald-300 border border-emerald-500/60 font-bold", `ปิดเคสสมบูรณ์ กุญแจเข้าเซฟแล้ว`);
+          addSwarmLog(`${code}_CLOSED`, `พี่ลิลลี่ตรวจรับกุญแจเข้าเซฟ ปิดเคส ${code} สำเร็จ 100% 🏆`, true);
+        }
+        step++;
+      }, 1000);
+    }
+
+    function runAlphaSwarmConcurrent() {
+      if (swarmState.isRunning) return;
+      swarmState.isRunning = true;
+
+      const btn = document.getElementById('btnStartSwarm');
+      btn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 animate-spin"></i><span>กำลังรัน 6 บอทพร้อมกัน...</span>`;
+      btn.className = "px-5 py-3 rounded-2xl bg-slate-800 text-amber-400 font-black text-xs sm:text-sm flex items-center gap-2 border border-amber-500/40 transition cursor-wait";
+
+      addSwarmLog("SWARM_ATTACK", "🚀 เริ่มปล่อย 6 Alpha Bots ยิงคำขอเบิกกุญแจพร้อมกัน (Concurrent Load Test)", true);
+      document.getElementById('swarmKeyCountText').innerText = "กำลังเบิก 6/6 ดอก";
+      document.getElementById('swarmKeyCountText').className = "font-bold text-amber-400 font-mono animate-pulse";
+
+      const codes = ["S90", "S94", "S98", "S113", "S117", "S120"];
+      let completedCount = 0;
+
+      codes.forEach((code, index) => {
+        // Staggered slightly to simulate human variance (150ms to 450ms)
+        const delay = (index * 250) + Math.floor(Math.random() * 200);
+        setTimeout(() => {
+          simulateSwarmAgent(code, () => {
+            completedCount++;
+            if (completedCount === codes.length) {
+              swarmState.isRunning = false;
+              btn.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i><span>รันสำเร็จครบ 6 บอทแล้ว 🏆</span>`;
+              btn.className = "px-5 py-3 rounded-2xl bg-emerald-950 text-emerald-300 font-black text-xs sm:text-sm flex items-center gap-2 border border-emerald-500/50 shadow-xl";
+              document.getElementById('swarmKeyCountText').innerText = "คืนเข้าเซฟครบ 6/6 ดอก 100%";
+              document.getElementById('swarmKeyCountText').className = "font-bold text-emerald-400 font-mono";
+              document.getElementById('swarmLeadLockCount').innerText = "ล็อกสิทธิ์ 6/6 ดีล (60 วัน)";
+              addSwarmLog("SWARM_COMPLETE", "🏁 ทดสอบ 6 Alpha Bots ครบทุกขั้นตอนสำเร็จ 100% ตรวจพบ 1 Conflict (แก้ไขด้วย Co-Closing สำเร็จ)", true);
+              lucide.createIcons();
+            }
+          });
+        }, delay);
+      });
+      lucide.createIcons();
+    }
+
+    function simulateSwarmAgent(code, onComplete) {
+      const data = ALPHA_AGENTS_DATA[code];
+      let step = 1;
+      const intervalTime = 900 + Math.floor(Math.random() * 300);
+
+      const interval = setInterval(() => {
+        if (step === 1) {
+          updateAgentCardUI(code, 1, "REQUESTING", "bg-amber-500/20 text-amber-300 border border-amber-500/40", `ยื่นขอเปิดบ้าน: ${data.prop}`);
+          addSwarmLog(`${code}`, `[Step 1] ${data.name} ยื่นขอกุญแจสำหรับ ${data.buyer}`);
+        } else if (step === 2) {
+          updateAgentCardUI(code, 2, "VIP_APPROVED", "bg-indigo-500/20 text-indigo-300 border border-indigo-500/40", `ลิลลี่ตรวจพบ Alpha Fast-Track ➔ อนุมัติทันที`);
+          addSwarmLog(`${code}`, `[Step 2] ผ่าน Fast-Track อัตโนมัติ (SLA แบงก์ ${data.bank})`);
+        } else if (step === 3) {
+          if (code === 'S90') {
+            document.getElementById('txtLiveOTP').innerText = "839210";
+            document.getElementById('txtSensorAlert').innerText = "รหัส OTP 839210 ส่งเข้า LINE น้องนัญแล้ว (ตู้หน้าออฟฟิศ)";
+            updateAgentCardUI(code, 3, "OTP_GENERATED", "bg-blue-500/20 text-blue-300 border border-blue-500/40", `รหัสตู้ Smart Keybox: 839210`);
+            addSwarmLog(`${code}`, `[Step 3: Keybox] กุญแจใส่ตู้หน้าออฟฟิศ ➔ รหัส OTP 839210 ส่งมอบสำเร็จ`);
+          } else if (code === 'S98') {
+            updateAgentCardUI(code, 3, "CO_BROKER_SPLIT", "bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold", `⚠️ ชน S90 ➔ ผันเป็นดีล Co-Close 50/50`);
+            addSwarmLog(`${code}`, `[Step 3: Collision] กุญแจติดคิวนัญ (S90) ➔ ระบบจัดการจับคู่ Co-Broker แบ่งคอม 50/50!`, true);
+          } else if (code === 'S94') {
+            updateAgentCardUI(code, 3, "RIDER_DISPATCHED", "bg-purple-500/20 text-purple-300 border border-purple-500/40", `ไรเดอร์ สมชาย กำลังวิ่งไปส่งหน้างาน`);
+            addSwarmLog(`${code}`, `[Step 3: Messenger] ไรเดอร์รับ Slip มุ่งหน้าพุทธมณฑลสาย 2`);
+          } else {
+            updateAgentCardUI(code, 3, "DISPATCH_OK", "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40", `กุญแจปล่อยออกจากเซฟแล้ว`);
+            addSwarmLog(`${code}`, `[Step 3] ปล่อยกุญแจเข้าสู่สถานะส่งมอบ`);
+          }
+        } else if (step === 4) {
+          updateAgentCardUI(code, 4, "KEY_IN_HAND", "bg-amber-500/20 text-amber-300 border border-amber-500/40", `เอเจนต์รับกุญแจเรียบร้อย`);
+          addSwarmLog(`${code}`, `[Step 4] ${data.name} ตรวจรับกุญแจหน้างานครบถ้วน`);
+        } else if (step === 5) {
+          updateAgentCardUI(code, 5, "LEAD_LOCKED", "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold", `🔒 สแกนบ้าน + ล็อก Lead 60 วัน`);
+          addSwarmLog(`${code}`, `[Step 5: Lead Lock] ล็อกสิทธิ์ลูกค้า ${data.buyer} ถึง 30 ธ.ค. 2569 สำเร็จ!`, true);
+        } else if (step === 6) {
+          updateAgentCardUI(code, 6, "RETURNING", "bg-blue-500/20 text-blue-300 border border-blue-500/40", `นำส่งคืนกุญแจ`);
+          addSwarmLog(`${code}`, `[Step 6] ${data.name} ส่งกุญแจคืนตู้ดรอปบ็อกซ์ / สาขา`);
+        } else if (step === 7) {
+          clearInterval(interval);
+          updateAgentCardUI(code, 7, "CLOSED_100%", "bg-emerald-500/30 text-emerald-300 border border-emerald-500/60 font-bold", `ปิดเคสเรียบร้อย 100%`);
+          addSwarmLog(`${code}`, `[Step 7: Closed] พี่ลิลลี่ตรวจรับกุญแจเข้าเซฟ ปิดเคสสมบูรณ์`);
+          if (onComplete) onComplete();
+        }
+        step++;
+      }, intervalTime);
+    }
+
+    function resetSwarmSimulation() {
+      swarmState.isRunning = false;
+      const codes = ["S90", "S94", "S98", "S113", "S117", "S120"];
+      codes.forEach(code => {
+        updateAgentCardUI(code, 1, "READY", "bg-slate-800 text-slate-400 border border-slate-700", "สแตนด์บายพร้อมทดสอบ");
+        const pBar = document.getElementById(`prog_bar_${code}`);
+        if (pBar) pBar.style.width = "14%";
+      });
+      document.getElementById('txtLiveOTP').innerText = "------";
+      document.getElementById('txtSensorAlert').innerText = "รอเอเจนต์มากดเปิด...";
+      document.getElementById('txtSensorAlert').className = "text-slate-500";
+      document.getElementById('swarmKeyCountText').innerText = "พร้อมเบิก 6/6 ดอก";
+      document.getElementById('swarmKeyCountText').className = "font-bold text-emerald-400 font-mono";
+      document.getElementById('swarmLeadLockCount').innerText = "สแตนด์บาย 0/6 ดีล";
+      
+      const btn = document.getElementById('btnStartSwarm');
+      btn.innerHTML = `<i data-lucide="play" class="w-4 h-4 fill-current"></i><span>🚀 เริ่มรุมเทส 6 บอทพร้อมกัน</span>`;
+      btn.className = "px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 active:scale-95 text-slate-950 font-black text-xs sm:text-sm flex items-center gap-2 shadow-xl shadow-amber-500/25 transition";
+      
+      addSwarmLog("RESET", "รีเซ็ตสถานะ Swarm ทั้ง 6 ตัวแทนเรียบร้อย");
+      lucide.createIcons();
+    }
+
+    function copySwarmAuditReport() {
+      const summary = 
+`[Siwasup OS — 6 Alpha Agent Swarm Audit Trail Report]
+Timestamp: ${new Date().toLocaleString('th-TH')}
+Engine: Concurrent Swarm Load Test (6 Threads)
+
+ผลการทดสอบรายตัวแทน (100% Pass):
+1. S90 นัญ (ตลิ่งชัน): เบิก Smart Keybox หน้าออฟฟิศ OTP [839210] ➔ สแกนบ้าน ➔ ล็อก Lead 60 วัน ➔ คืนตู้ [PASS]
+2. S94 หลิว (ทวีวัฒนา): เบิก Messenger ไรเดอร์ส่งด่วน Web Slip ➔ สแกนบ้าน ➔ ล็อก Lead 60 วัน ➔ ส่งคืน [PASS]
+3. S98 แป้ง (สายไหม): [Key Conflict Test] ขอกุญแจชน S90 ➔ ระบบแปลงเป็น Co-Closing 50/50 อัตโนมัติ [PASS]
+4. S113 ไห้ (ธนบุรี): [VIP Fast-Track] เช็ค flag isAlpha: true ปลดล็อกเบิกกุญแจทันที [PASS]
+5. S117 แอ๊ด (พระสมุทรเจดีย์): [Bank SLA] เบิกกุญแจ SAM ➔ คืนที่สาขาธนาคารด้วยตนเอง [PASS]
+6. S120 อ้อน (บางใหญ่): [End-to-End] เบิก ➔ เปิดบ้าน ➔ ล็อก Lead คุณกมลชัย 60 วัน ➔ ปิดสถานะ 100% [PASS]
+
+สรุปภาพรวมระบบ:
+- Concurrency Conflct Handling: ผ่าน (ไม่เกิด Deadlock / แปลงเป็น Co-Broker ราบรื่น)
+- Smart Keybox OTP: เจนรหัสและตรวจจับการเปิดตู้ได้แบบ Real-Time
+- Buyer Lead Protection: ล็อกสิทธิ์คุ้มครองเอเจนต์ 60 วันครบทั้ง 6 รายการ 100%`;
+
+      navigator.clipboard.writeText(summary).then(() => {
+        alert('คัดลอก Master Swarm Report สำเร็จ! พร้อมส่งเข้า LINE กลุ่มคุณกูลและพี่ลิลลี่ได้ทันทีครับ');
+      }).catch(err => {
+        prompt('Ctrl+C เพื่อคัดลอกรายงาน:', summary);
+      });
+    }
+
+  
+    // =========================================================================
+    // KEYBOX SLOT ALLOCATOR
+    // =========================================================================
+    const KEYBOX_REQUESTS = [
+      { code: 'S90',  prop: 'มัณฑนา พระราม 2',    start: '20:00', end: '21:00' },
+      { code: 'S98',  prop: 'มัณฑนา พระราม 2',    start: '20:15', end: '21:15' },
+      { code: 'S113', prop: 'วอเตอร์มาร์ค (คอนโด)', start: '20:30', end: '21:30' },
+      { code: 'S120', prop: 'ชวนชื่น กาญจนาภิเษก', start: '20:45', end: '21:45' },
+      { code: 'S117', prop: 'ที่ดิน ลาดหวาย',       start: '21:00', end: '22:00' }
+    ];
+
+    function hmToMin(hm) { const p = hm.split(':'); return parseInt(p[0], 10) * 60 + parseInt(p[1], 10); }
+
+    // Greedy interval allocation. Same property already held in an overlapping window => property conflict
+    // (handled by Co-Closing, not by buying more boxes). No free pickup box => collision.
+    function allocateKeyboxSlots(boxCount) {
+      const reqs = KEYBOX_REQUESTS.slice().sort((a, b) => hmToMin(a.start) - hmToMin(b.start));
+      const boxBusyUntil = new Array(boxCount).fill(-1);
+      const accepted = [];
+      return reqs.map(r => {
+        const s = hmToMin(r.start), e = hmToMin(r.end);
+        const clash = accepted.find(a => a.prop === r.prop && a.s < e && s < a.e);
+        if (clash) {
+          return { r, status: 'PROPERTY_CONFLICT', note: 'ทรัพย์เดียวกับ ' + clash.code + ' ➔ เสนอ Co-Closing 50/50 (ซื้อกล่องเพิ่มก็แก้ไม่ได้)' };
+        }
+        const idx = boxBusyUntil.findIndex(t => t <= s);
+        if (idx === -1) {
+          return { r, status: 'COLLISION', note: 'ไม่มีกล่องว่างในช่วงนี้ ➔ ต้องใส่กุญแจรวมกล่องกับคนอื่น หรือเลื่อนเวลา' };
+        }
+        boxBusyUntil[idx] = e;
+        accepted.push({ code: r.code, prop: r.prop, s, e });
+        return { r, status: 'OK', box: String.fromCharCode(65 + idx), note: 'OTP ใช้ได้เฉพาะกล่อง ' + String.fromCharCode(65 + idx) };
+      });
+    }
+
+    function summarizeAlloc(res) {
+      return {
+        ok: res.filter(x => x.status === 'OK').length,
+        collision: res.filter(x => x.status === 'COLLISION').length,
+        prop: res.filter(x => x.status === 'PROPERTY_CONFLICT').length
+      };
+    }
+
+    function runSlotAllocator(boxCount) {
+      [1, 2, 3].forEach(n => {
+        const b = document.getElementById('btn_slot_' + n);
+        if (b) b.className = n === boxCount
+          ? 'px-3 py-1 rounded-lg bg-amber-500 text-slate-950 font-bold'
+          : 'px-3 py-1 rounded-lg text-slate-400';
+      });
+
+      const cmp = document.getElementById('slotAllocCompare');
+      cmp.innerHTML = [1, 2, 3].map(n => {
+        const s = summarizeAlloc(allocateKeyboxSlots(n));
+        const good = s.collision === 0;
+        return '<div class="p-2 rounded-xl border ' + (good ? 'border-emerald-500/40 bg-emerald-950/20 text-emerald-300' : 'border-rose-500/40 bg-rose-950/20 text-rose-300') + '">' +
+          n + ' กล่อง: ชน ' + s.collision + ' / ผ่าน ' + s.ok + ' / ทรัพย์ซ้ำ ' + s.prop + '</div>';
+      }).join('');
+
+      const res = allocateKeyboxSlots(boxCount);
+      const color = { OK: 'text-emerald-400', COLLISION: 'text-rose-400', PROPERTY_CONFLICT: 'text-amber-400' };
+      const label = { OK: 'ผ่าน', COLLISION: 'ชน', PROPERTY_CONFLICT: 'ทรัพย์ซ้ำ' };
+      document.getElementById('slotAllocBody').innerHTML = res.map(x =>
+        '<tr class="border-b border-slate-800/60"><td class="py-1.5 pr-2 font-mono text-amber-300">' + x.r.code + '</td>' +
+        '<td class="pr-2 text-slate-200">' + x.r.prop + '</td>' +
+        '<td class="pr-2 font-mono text-slate-300">' + x.r.start + '–' + x.r.end + '</td>' +
+        '<td class="pr-2 font-bold ' + color[x.status] + '">' + label[x.status] + (x.box ? ' (กล่อง ' + x.box + ')' : '') + '</td>' +
+        '<td class="text-slate-400">' + x.note + '</td></tr>').join('');
+
+      // minimum pickup boxes so that no COLLISION remains
+      let need = 1;
+      while (need < 10 && summarizeAlloc(allocateKeyboxSlots(need)).collision > 0) need++;
+      const cur = summarizeAlloc(res);
+      document.getElementById('slotAllocVerdict').innerHTML =
+        'ผลของ <b>' + boxCount + ' กล่องรับกุญแจ</b>: ชน <b class="' + (cur.collision ? 'text-rose-400' : 'text-emerald-400') + '">' + cur.collision + '</b> คำขอ ' +
+        '&bull; จากสถานการณ์นี้ต้องมีกล่องรับกุญแจอย่างน้อย <b class="text-amber-300">' + need + ' กล่อง</b> (+ ช่องหยอดคืน 1) จึงไม่ชน ' +
+        '&bull; เคส S98 ชนที่ "ตัวทรัพย์" ไม่ใช่ที่กล่อง ต้องแก้ด้วย Co-Closing';
+
+      addSwarmLog('SLOT_ALLOC', 'จัดช่อง ' + boxCount + ' กล่อง: ชน ' + cur.collision + ', ต้องมีขั้นต่ำ ' + need + ' กล่อง', cur.collision > 0);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () { try { runSlotAllocator(1); } catch (e) { console.error(e); } });
+
+  </script>
+</body>
+</html>

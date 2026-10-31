@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: siwasup-line-bot
+    runtime: python
+    buildCommand: ""
+    startCommand: python scripts/line_gemini_webhook.py
+    plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.12

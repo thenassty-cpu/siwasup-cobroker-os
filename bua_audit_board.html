@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siwasup OS - บอร์ดรีเช็กด่วน 7 ทรัพย์ติดปัญหา (สำหรับคุณบัว)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+    body { font-family: 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- Sticky Top Header -->
+  <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3 sm:px-8">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center font-bold text-lg shadow-inner">
+          <i data-lucide="clipboard-check" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">Action Required</span>
+            <span class="text-xs text-slate-400">• มอบหมาย: คุณบัว (Curator Team)</span>
+          </div>
+          <h1 class="text-base sm:text-lg font-bold text-white tracking-tight">
+            📋 บอร์ดรีเช็กด่วน 7 ทรัพย์คัดเลือกที่ติดปัญหา (จากรอบ 34 แปลง)
+          </h1>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+        <button onclick="copyLineSummary()" class="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50 transition active:scale-95">
+          <i data-lucide="copy" class="w-4 h-4"></i>
+          <span id="btnCopyText">คัดลอกสรุปผลส่ง LINE ให้พี่ต้น</span>
+        </button>
+        <a href="admin_dashboard.html" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium border border-slate-700 transition flex items-center gap-1.5">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span class="hidden md:inline">กลับแอดมินบอร์ด</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="max-w-6xl mx-auto px-4 py-6 sm:px-8 space-y-6">
+
+    <!-- Overview Banner -->
+    <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-indigo-950/40 p-5 rounded-3xl border border-slate-800 shadow-xl">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="space-y-1.5">
+          <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+            <span>🔍 สรุปผลการตรวจสอบไฟล์ <code class="text-xs text-amber-300 bg-amber-950/50 px-2 py-0.5 rounded border border-amber-800/50">siwasup_curated_properties_34.csv</code></span>
+          </h2>
+          <p class="text-xs text-slate-400 leading-relaxed max-w-3xl">
+            จากชุดทรัพย์ 34 แปลงที่คุณบัวคัดส่งมารอบดึก ระบบตรวจพบว่า <strong class="text-emerald-400">27 แปลงผ่านฉลุยพร้อมใช้งาน</strong> แต่มี <strong class="text-rose-400">7 แปลงที่พบประเด็นขัดข้อง</strong> (ขายแล้ว 4 แปลง + ราคาหลุด 3 แปลง) รบกวนคุณบัวตรวจสอบและเลือกแนวทางแก้ไขด้านล่าง แล้วกดคัดลอกส่งกลับมาได้เลยครับ
+          </p>
+        </div>
+        <div class="flex items-center gap-3 bg-slate-950/60 p-3 rounded-2xl border border-slate-800/80 shrink-0">
+          <div class="text-center px-3 border-r border-slate-800">
+            <span class="block text-lg font-bold text-emerald-400">27</span>
+            <span class="text-[10px] text-slate-500 uppercase">ผ่านฉลุย</span>
+          </div>
+          <div class="text-center px-3 border-r border-slate-800">
+            <span class="block text-lg font-bold text-rose-400">4</span>
+            <span class="text-[10px] text-slate-500 uppercase">ขายไปแล้ว</span>
+          </div>
+          <div class="text-center px-3">
+            <span class="block text-lg font-bold text-amber-400">3</span>
+            <span class="text-[10px] text-slate-500 uppercase">ราคาหลุด</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group 1: ทรัพย์ที่ขายไปแล้ว (4 รายการ) -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-7 h-7 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center font-bold text-xs">1</span>
+          <div>
+            <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+              <span>กลุ่มที่ 1: ทรัพย์ที่สถานะ "ขายไปแล้ว (Sold Out)"</span>
+              <span class="text-xs bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded-full border border-rose-500/30 font-semibold">4 รายการ</span>
+            </h3>
+            <p class="text-xs text-slate-400">เว็บต้นทางขึ้นสถานะ Sold Out แล้ว รบกวนเลือกว่าจะตัดทิ้ง หรือมีอัปเดตสต็อกหลุดจอง</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <!-- Card 1 -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between space-y-3 relative overflow-hidden group hover:border-slate-700 transition">
+          <div class="flex gap-3">
+            <img src="https://shop-image.readyplanet.com/sEw8W-l_KZgA4oi41NbqItvkhH4=/500x500/94bb48a3c0ea42f2b021d50745e3c55b" class="w-24 h-24 rounded-xl object-cover bg-slate-950 border border-slate-800 shrink-0">
+            <div class="space-y-1 min-w-0">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">ID: 1261510</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800 font-bold">SOLD OUT</span>
+                <span class="text-[10px] text-slate-400">ทาวน์โฮม</span>
+              </div>
+              <h4 class="text-xs sm:text-sm font-semibold text-white line-clamp-2 leading-snug">
+                ทาวน์โฮม เดินไม่กี่ก้าวถึงถนนใหญ่ลาดพร้าว ปากซอย 128/1 ตรงข้ามลาดพร้าว 101 ใกล้รถไฟฟ้า
+              </h4>
+              <p class="text-xs font-bold text-amber-400">7,500,000.00 บาท</p>
+            </div>
+          </div>
+          <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2">
+            <span class="text-[11px] font-semibold text-slate-300 block">การตัดสินใจของคุณบัว:</span>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer hover:border-rose-500/50">
+                <input type="radio" name="sold_1261510" value="ตัดทิ้งออกจากชุดขาย" checked class="text-rose-500 focus:ring-0">
+                <span class="text-rose-400 font-medium">ตัดทิ้ง (แนะนำ)</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer hover:border-emerald-500/50">
+                <input type="radio" name="sold_1261510" value="มีหลุดจอง/พร้อมขาย" class="text-emerald-500 focus:ring-0">
+                <span class="text-slate-300">มีหลุดจอง</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between space-y-3 relative overflow-hidden group hover:border-slate-700 transition">
+          <div class="flex gap-3">
+            <img src="https://shop-image.readyplanet.com/YZkw1g4hVCESMLSyodiH4BDMH-w=/500x500/ce42783f24044083a60c5f7021dca33d" class="w-24 h-24 rounded-xl object-cover bg-slate-950 border border-slate-800 shrink-0">
+            <div class="space-y-1 min-w-0">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">ID: 1183445</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800 font-bold">SOLD OUT</span>
+                <span class="text-[10px] text-slate-400">ทาวน์โฮม</span>
+              </div>
+              <h4 class="text-xs sm:text-sm font-semibold text-white line-clamp-2 leading-snug">
+                ทาวน์เฮาส์ กานดา พาร์ค ริมคลอง สมุทรสาคร พันท้ายนรสิงห์ ทำเลสะดวก มี 7-11
+              </h4>
+              <p class="text-xs font-bold text-amber-400">1,650,000.00 บาท</p>
+            </div>
+          </div>
+          <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2">
+            <span class="text-[11px] font-semibold text-slate-300 block">การตัดสินใจของคุณบัว:</span>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer hover:border-rose-500/50">
+                <input type="radio" name="sold_1183445" value="ตัดทิ้งออกจากชุดขาย" checked class="text-rose-500 focus:ring-0">
+                <span class="text-rose-400 font-medium">ตัดทิ้ง (แนะนำ)</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer hover:border-emerald-500/50">
+                <input type="radio" name="sold_1183445" value="มีหลุดจอง/พร้อมขาย" class="text-emerald-500 focus:ring-0">
+                <span class="text-slate-300">มีหลุดจอง</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between space-y-3 relative overflow-hidden group hover:border-slate-700 transition">
+          <div class="flex gap-3">
+            <img src="https://shop-image.readyplanet.com/lQTFw0315wzlIWez3H1lWjwyOTc=/500x500/2cd9f7e964aa41169aec86dd70c8ca44" class="w-24 h-24 rounded-xl object-cover bg-slate-950 border border-slate-800 shrink-0">
+            <div class="space-y-1 min-w-0">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">ID: 1100927</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800 font-bold">SOLD OUT</span>
+                <span class="text-[10px] text-slate-400">ที่ดิน</span>
+              </div>
+              <h4 class="text-xs sm:text-sm font-semibold text-white line-clamp-2 leading-snug">
+                ที่ดินเปล่า ลาดหวาย บางบ่อ จากปากซอยถนนศุขแม่สอน 600 เมตร เหมาะทำโกดัง
+              </h4>
+              <p class="text-xs font-bold text-amber-400">5,500,000.00 บาท</p>
+            </div>
+          </div>
+          <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2">
+            <span class="text-[11px] font-semibold text-slate-300 block">การตัดสินใจของคุณบัว:</span>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer hover:border-rose-500/50">
+                <input type="radio" name="sold_1100927" value="ตัดทิ้งออกจากชุดขาย" checked class="text-rose-500 focus:ring-0">
+                <span class="text-rose-400 font-medium">ตัดทิ้ง (แนะนำ)</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer hover:border-emerald-500/50">
+                <input type="radio" name="sold_1100927" value="มีหลุดจอง/พร้อมขาย" class="text-emerald-500 focus:ring-0">
+                <span class="text-slate-300">มีหลุดจอง</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between space-y-3 relative overflow-hidden group hover:border-slate-700 transition">
+          <div class="flex gap-3">
+            <img src="https://shop-image.readyplanet.com/Adyye3tBdvTLySNb2oVqj-TzcRQ=/500x500/306c1eaaa85044309afa9add1a99cb7f" class="w-24 h-24 rounded-xl object-cover bg-slate-950 border border-slate-800 shrink-0">
+            <div class="space-y-1 min-w-0">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">ID: 1162874</span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800 font-bold">SOLD OUT</span>
+                <span class="text-[10px] text-slate-400">อาคารพาณิชย์</span>
+              </div>
+              <h4 class="text-xs sm:text-sm font-semibold text-white line-clamp-2 leading-snug">
+                ตึกแถว ขายพร้อมผู้เช่าระยะยาว ที่ตลาดคลอง 4 เมืองใหม่ ลำลูกกา หันหน้าออกถนน
+              </h4>
+              <p class="text-xs font-bold text-amber-400">4,950,000.00 บาท</p>
+            </div>
+          </div>
+          <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2">
+            <span class="text-[11px] font-semibold text-slate-300 block">การตัดสินใจของคุณบัว:</span>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer hover:border-rose-500/50">
+                <input type="radio" name="sold_1162874" value="ตัดทิ้งออกจากชุดขาย" checked class="text-rose-500 focus:ring-0">
+                <span class="text-rose-400 font-medium">ตัดทิ้ง (แนะนำ)</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer hover:border-emerald-500/50">
+                <input type="radio" name="sold_1162874" value="มีหลุดจอง/พร้อมขาย" class="text-emerald-500 focus:ring-0">
+                <span class="text-slate-300">มีหลุดจอง</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Group 2: ทรัพย์ที่ราคาหลุด (3 รายการ) -->
+    <section class="space-y-4 pt-4 border-t border-slate-800">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center font-bold text-xs">2</span>
+          <div>
+            <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+              <span>กลุ่มที่ 2: ทรัพย์ที่ราคาไม่ระบุ / ราคาหลุดจากต้นทาง</span>
+              <span class="text-xs bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full border border-amber-500/30 font-semibold">3 รายการ</span>
+            </h3>
+            <p class="text-xs text-slate-400">ระบบเดิมลงไว้ 0 บาท หรือ 5 บาท รบกวนคุณบัวระบุราคาจริง หรือเลือกให้แสดงว่า "ติดต่อสอบถามราคา"</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+
+        <!-- Price Item 1 -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between hover:border-slate-700 transition">
+          <div class="flex gap-4 items-center">
+            <img src="https://shop-image.readyplanet.com/keq9p5C_g52XF4G08SoEzvYMrvY=/b50d5e3ac396474c85612f3610404728" class="w-20 h-20 rounded-xl object-cover bg-slate-950 border border-slate-800 shrink-0">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">ID: 1183447</span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800 font-bold">ราคาในระบบ: 0.00 บาท</span>
+                <span class="text-[10px] text-slate-400">ที่ดิน + กิจการ</span>
+              </div>
+              <h4 class="text-sm font-semibold text-white">
+                อาคารสำนักงาน+บ้านพัก +โกดัง+ที่ดิน 1 ไร่ ริมถนน ปากซอยวิภาวดีรังสิต 62
+              </h4>
+              <p class="text-xs text-slate-400">
+                📌 หมายเหตุต้นทาง: <em class="text-amber-200/80">"ได้ทั้งกิจการในราคาที่คุยกันได้ ติดต่อขอราคาพิเศษ ต่อรองเซลศิวาทรัพย์"</em>
+              </p>
+            </div>
+          </div>
+          <div class="w-full md:w-80 bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2 shrink-0">
+            <span class="text-xs font-semibold text-slate-300">วิธีแสดงผลราคาที่ต้องการ:</span>
+            <select id="price_action_1183447" onchange="toggleCustomPrice('1183447')" class="w-full text-xs bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200">
+              <option value="แสดงเป็น [ติดต่อสอบถามราคา] (Call for Price)">แสดงเป็น "ติดต่อสอบถามราคา" (แนะนำ)</option>
+              <option value="ระบุราคาตัวเลขชัดเจน">ระบุตัวเลขราคาขาย...</option>
+            </select>
+            <input type="text" id="custom_price_1183447" placeholder="เช่น 85,000,000 บาท" class="hidden w-full text-xs bg-slate-900 border border-amber-500/50 rounded-lg px-2.5 py-1.5 text-amber-300">
+          </div>
+        </div>
+
+        <!-- Price Item 2 -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between hover:border-slate-700 transition">
+          <div class="flex gap-4 items-center">
+            <img src="https://shop-image.readyplanet.com/nCJxTA4JItJZwoCrCeTwvqCvzfM=/500x500/fe99dc5791a449a78b465c0486ba3815" class="w-20 h-20 rounded-xl object-cover bg-slate-950 border border-slate-800 shrink-0">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">ID: 1253183</span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800 font-bold">ราคาในระบบ: 5.00 บาท (หลุด)</span>
+                <span class="text-[10px] text-slate-400">บ้านเดี่ยว / พูลวิลล่า</span>
+              </div>
+              <h4 class="text-sm font-semibold text-white">
+                บ้านพักตากอากาศ & พูลวิลล่า มนตร์ลดา @เขาใหญ่ วิวพันล้าน (576 ตร.ว. 610 ตร.ม.)
+              </h4>
+              <p class="text-xs text-slate-400">
+                📌 หมายเหตุต้นทาง: <em class="text-amber-200/80">"5 ห้องนอน 6 ห้องน้ำ สระส่วนตัว สอบถาม วรินทร 094-4629796"</em>
+              </p>
+            </div>
+          </div>
+          <div class="w-full md:w-80 bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2 shrink-0">
+            <span class="text-xs font-semibold text-slate-300">วิธีแสดงผลราคาที่ต้องการ:</span>
+            <select id="price_action_1253183" onchange="toggleCustomPrice('1253183')" class="w-full text-xs bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200">
+              <option value="ระบุราคาตัวเลขชัดเจน">ระบุตัวเลขราคาขาย (เช่น 5x ล้าน)</option>
+              <option value="แสดงเป็น [ติดต่อสอบถามราคา] (Call for Price)">แสดงเป็น "ติดต่อสอบถามราคา"</option>
+            </select>
+            <input type="text" id="custom_price_1253183" placeholder="เช่น 55,000,000 บาท" class="w-full text-xs bg-slate-900 border border-amber-500/50 rounded-lg px-2.5 py-1.5 text-amber-300">
+          </div>
+        </div>
+
+        <!-- Price Item 3 -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between hover:border-slate-700 transition">
+          <div class="flex gap-4 items-center">
+            <img src="https://shop-image.readyplanet.com/JKeDaO0-l7YkwX28M8Kb8r_1kG8=/500x500/bd019b71ff4a4b7693001e9486c7d74c" class="w-20 h-20 rounded-xl object-cover bg-slate-950 border border-slate-800 shrink-0">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">ID: 1325614</span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800 font-bold">ราคาในระบบ: 0.00 บาท</span>
+                <span class="text-[10px] text-slate-400">ทรัพย์ NPA / กิจการ</span>
+              </div>
+              <h4 class="text-sm font-semibold text-white">
+                ขายโรงแรม & รีสอร์ท หาดใหญ่ ใกล้ตลาดกิมหยง (212 ห้องนอน บนที่ดิน 5 ไร่)
+              </h4>
+              <p class="text-xs text-slate-400">
+                📌 หมายเหตุต้นทาง: <em class="text-amber-200/80">"ด้วยเหตุผลทางธุรกิจ กรุณาสอบถามราคา ต่อรอง ขอราคาพิเศษกับคนขายตรง"</em>
+              </p>
+            </div>
+          </div>
+          <div class="w-full md:w-80 bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2 shrink-0">
+            <span class="text-xs font-semibold text-slate-300">วิธีแสดงผลราคาที่ต้องการ:</span>
+            <select id="price_action_1325614" onchange="toggleCustomPrice('1325614')" class="w-full text-xs bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-200">
+              <option value="แสดงเป็น [ติดต่อสอบถามราคา] (Call for Price)">แสดงเป็น "ติดต่อสอบถามราคา" (แนะนำ)</option>
+              <option value="ระบุราคาตัวเลขชัดเจน">ระบุตัวเลขราคาขาย...</option>
+            </select>
+            <input type="text" id="custom_price_1325614" placeholder="เช่น 280,000,000 บาท" class="hidden w-full text-xs bg-slate-900 border border-amber-500/50 rounded-lg px-2.5 py-1.5 text-amber-300">
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Bottom Action Card -->
+    <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="space-y-1 text-center sm:text-left">
+        <h4 class="text-sm font-bold text-white">พร้อมส่งสรุปผลการรีเช็กแล้วใช่ไหม?</h4>
+        <p class="text-xs text-slate-400">กดปุ่มด้านขวา ระบบจะจัดชุดข้อความพร้อมส่งให้คุณบัวก็อปปี้ลง LINE ส่งหาพี่ต้นได้ทันที</p>
+      </div>
+      <button onclick="copyLineSummary()" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm flex items-center gap-2 shadow-lg shadow-emerald-950/60 transition active:scale-95 shrink-0">
+        <i data-lucide="send" class="w-4 h-4"></i>
+        <span>คัดลอกผลสรุปส่งเข้า LINE</span>
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Script Logic -->
+  <script>
+    lucide.createIcons();
+
+    function toggleCustomPrice(id) {
+      const select = document.getElementById('price_action_' + id);
+      const input = document.getElementById('custom_price_' + id);
+      if (select.value === 'ระบุราคาตัวเลขชัดเจน') {
+        input.classList.remove('hidden');
+      } else {
+        input.classList.add('hidden');
+      }
+    }
+
+    function getSelectedRadio(name) {
+      const radios = document.getElementsByName(name);
+      for (const r of radios) {
+        if (r.checked) return r.value;
+      }
+      return 'ตัดทิ้งออกจากชุดขาย';
+    }
+
+    function getPriceDecision(id) {
+      const select = document.getElementById('price_action_' + id);
+      const input = document.getElementById('custom_price_' + id);
+      if (select.value === 'ระบุราคาตัวเลขชัดเจน') {
+        return input.value.trim() ? input.value.trim() : 'ระบุราคาตัวเลข (ยังไม่กรอก)';
+      }
+      return select.value;
+    }
+
+    function copyLineSummary() {
+      const d1 = getSelectedRadio('sold_1261510');
+      const d2 = getSelectedRadio('sold_1183445');
+      const d3 = getSelectedRadio('sold_1100927');
+      const d4 = getSelectedRadio('sold_1162874');
+
+      const p1 = getPriceDecision('1183447');
+      const p2 = getPriceDecision('1253183');
+      const p3 = getPriceDecision('1325614');
+
+      const summaryText = 
+`[ผลรีเช็ก 7 ทรัพย์ติดปัญหา โดย บัว]
+============================
+📌 กลุ่ม 1: ทรัพย์ Sold Out (4 แปลง)
+1. ทาวน์โฮม ลาดพร้าว 128/1 (1261510): ${d1}
+2. กานดา พาร์ค พันท้าย (1183445): ${d2}
+3. ที่ดินเปล่า บางบ่อ (1100927): ${d3}
+4. ตึกแถว คลอง 4 ลำลูกกา (1162874): ${d4}
+
+📌 กลุ่ม 2: ทรัพย์ราคาหลุด (3 แปลง)
+1. วิภาวดี 62 (1183447): ${p1}
+2. พูลวิลล่า เขาใหญ่ (1253183): ${p2}
+3. โรงแรม หาดใหญ่ (1325614): ${p3}
+============================
+(รวม 27 แปลงเดิมที่ผ่านฉลุย พร้อมเข้าระบบเรียบร้อย)`;
+
+      navigator.clipboard.writeText(summaryText).then(() => {
+        const btn = document.getElementById('btnCopyText');
+        btn.innerText = 'คัดลอกผลสรุปสำเร็จแล้ว!';
+        setTimeout(() => { btn.innerText = 'คัดลอกสรุปผลส่ง LINE ให้พี่ต้น'; }, 3000);
+        alert('คัดลอกสรุปผลเรียบร้อยแล้ว! สามารถนำไปวางลงห้อง LINE ส่งให้พี่ต้นได้ทันทีครับ');
+      }).catch(err => {
+        prompt('กรุณากด Ctrl+C เพื่อคัดลอกข้อความด้านล่างนี้:', summaryText);
+      });
+    }
+  </script>
+</body>
+</html>

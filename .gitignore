@@ -1,0 +1,22 @@
+# Security & PII Protection
+config.json
+siwasup_agents.js.PII_FULL_DO_NOT_DEPLOY
+Siwasup_Master_Credentials_Vault.md
+*.env
+*.pem
+*.key
+
+# Binary & Cache
+bin/
+__pycache__/
+*.pyc
+*.pyo
+
+# Backups & Temporary Logs
+*.bak*
+*.log
+data/daemon_run.log
+
+# OS & Editor
+.DS_Store
+Thumbs.db
