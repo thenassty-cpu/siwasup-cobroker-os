@@ -28,9 +28,15 @@
       border: 1px solid rgba(245, 158, 11, 0.2);
     }
     .phone-frame {
-      border: 10px solid #1E293B;
-      border-radius: 40px;
+      border: 6px solid #1E293B;
+      border-radius: 32px;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    }
+    @media (min-width: 640px) {
+      .phone-frame {
+        border-width: 10px;
+        border-radius: 42px;
+      }
     }
     /* ใช้ฟอนต์มีหัว Tahoma ในส่วนตารางและแชทเพื่อความชัดเจน */
     .chat-bubble, .data-text {
@@ -79,12 +85,12 @@
         <span>ลำดับสถานะงาน (Workflow Progression)</span>
         <span id="currentStepBadge" class="text-amber-400 font-mono">ขั้นตอนที่ 1 / 5</span>
       </div>
-      <div class="grid grid-cols-5 gap-2 text-[11px] font-medium text-center">
-        <div id="stepTab1" class="p-2 rounded-xl bg-amber-500 text-slate-950 font-bold transition">1. Agent ยื่นขอคิว</div>
-        <div id="stepTab2" class="p-2 rounded-xl bg-slate-800 text-slate-400 transition">2. ลิลลี่ตรวจสิทธิ์</div>
-        <div id="stepTab3" class="p-2 rounded-xl bg-slate-800 text-slate-400 transition">3. ออกรหัส OTP / กุญแจ</div>
-        <div id="stepTab4" class="p-2 rounded-xl bg-slate-800 text-slate-400 transition">4. ชมบ้าน & ถ่ายรูปส่ง</div>
-        <div id="stepTab5" class="p-2 rounded-xl bg-slate-800 text-slate-400 transition">5. คืนกุญแจ & จบเคส</div>
+      <div class="flex sm:grid sm:grid-cols-5 gap-2 text-[10.5px] sm:text-[11px] font-medium text-center overflow-x-auto pb-1.5 sm:pb-0 no-scrollbar">
+        <div id="stepTab1" class="p-2 rounded-xl bg-amber-500 text-slate-950 font-bold transition shrink-0 min-w-[125px] sm:min-w-0">1. Agent ยื่นขอคิว</div>
+        <div id="stepTab2" class="p-2 rounded-xl bg-slate-800 text-slate-400 transition shrink-0 min-w-[125px] sm:min-w-0">2. ลิลลี่ตรวจสิทธิ์</div>
+        <div id="stepTab3" class="p-2 rounded-xl bg-slate-800 text-slate-400 transition shrink-0 min-w-[135px] sm:min-w-0">3. ออกรหัส OTP / กุญแจ</div>
+        <div id="stepTab4" class="p-2 rounded-xl bg-slate-800 text-slate-400 transition shrink-0 min-w-[135px] sm:min-w-0">4. ชมบ้าน & ถ่ายรูปส่ง</div>
+        <div id="stepTab5" class="p-2 rounded-xl bg-slate-800 text-slate-400 transition shrink-0 min-w-[125px] sm:min-w-0">5. คืนกุญแจ & จบเคส</div>
       </div>
     </div>
 
@@ -92,7 +98,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
       <!-- LEFT: Mobile View of "พี่ Agent" (LINE LIFF Interface) -->
-      <div class="lg:col-span-5 space-y-4">
+      <div class="lg:col-span-5 space-y-4 max-w-md mx-auto lg:max-w-none w-full">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
@@ -317,7 +323,7 @@
               </div>
 
               <!-- Lily Action Buttons -->
-              <div class="pt-2 flex items-center gap-2.5">
+              <div class="pt-2 flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
                 <button id="btnLilyApproveOtp" onclick="lilyApproveOtp()" class="flex-1 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/20 transition">
                   <i data-lucide="key" class="w-4 h-4"></i>
                   <span>1. ออกรหัส Smart Keybox OTP ทันที</span>
