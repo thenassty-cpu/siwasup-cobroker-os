@@ -24,6 +24,11 @@
       backdrop-filter: blur(12px);
       border: 1px solid rgba(245, 158, 11, 0.2);
     }
+    /* ใช้ฟอนต์มีหัว (Tahoma) เฉพาะในตารางข้อมูลเพื่อให้อ่านข้อความยาวๆ ได้สบายตา ไม่สับสน */
+    #tablePanel table, #tablePanel th, #tablePanel td {
+      font-family: 'Tahoma', 'Segoe UI', sans-serif !important;
+      line-height: 1.6;
+    }
   </style>
 </head>
 <body class="min-h-screen p-4 sm:p-8">
