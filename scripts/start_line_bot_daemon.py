@@ -85,10 +85,7 @@ def save_and_sync_status(tunnel_url, test_res):
     if put_object_r2:
         try:
             put_object_r2("line_bot_status.json", status_bytes, "application/json; charset=utf-8")
-            if os.path.exists(CHAT_LOG_PATH):
-                with open(CHAT_LOG_PATH, "rb") as cf:
-                    put_object_r2("line_chat_logs.json", cf.read(), "application/json; charset=utf-8")
-            log_msg("[R2] Synced line_bot_status.json & line_chat_logs.json to assets.siwasup.com")
+            log_msg("[R2] Synced line_bot_status.json to assets.siwasup.com")
         except Exception as e:
             log_msg(f"[R2 Sync Warn]: {e}")
 

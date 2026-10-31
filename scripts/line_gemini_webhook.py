@@ -1,6 +1,7 @@
 import http.server
 import json
 import urllib.request
+import urllib.parse
 import ssl
 import hmac
 import hashlib
@@ -45,6 +46,7 @@ LINE_CHANNEL_SECRET = os.environ.get("LINE_CHANNEL_SECRET") or _cfg.get("line_oa
 LINE_ACCESS_TOKEN = os.environ.get("LINE_ACCESS_TOKEN") or _cfg.get("line_oa", {}).get("channel_access_token", "")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY") or _cfg.get("gemini_api", {}).get("api_key", "")
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite")
+ADMIN_EXPORT_SECRET = os.environ.get("ADMIN_EXPORT_SECRET", "SiwasupAdmin2026_SecureKey_99")
 
 # Session & Multi-Turn Memory Tracking
 USER_LAST_SEEN = {}
@@ -207,14 +209,7 @@ def append_chat_log(entry):
         except Exception as e:
             print(f"[Log Save Error]: {e}")
 
-    if put_object_r2:
-        def sync_r2():
-            try:
-                put_object_r2("line_chat_logs.json", data_bytes, "application/json; charset=utf-8")
-                print("[R2 Sync] Uploaded line_chat_logs.json to assets.siwasup.com")
-            except Exception as ex:
-                print(f"[R2 Sync Warn]: {ex}")
-        threading.Thread(target=sync_r2, daemon=True).start()
+    # PDPA Privacy Shield: Chat logs are strictly stored server-side and NEVER uploaded to public CDN/R2.
 
 
 WORKFLOW_KEYWORDS = [
@@ -582,10 +577,85 @@ def reply_line(reply_token, reply_text):
 
 
 class WebhookHandler(http.server.BaseHTTPRequestHandler):
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, X-Line-Signature, Authorization')
+        self.end_headers()
+
     def do_GET(self):
-        if self.path.startswith("/logs"):
+        parsed_url = urllib.parse.urlparse(self.path)
+        path = parsed_url.path
+        query = urllib.parse.parse_qs(parsed_url.query)
+
+        if path in ["/logs", "/api/export-logs"]:
+            secret = query.get("secret", [""])[0]
+            client_ip = self.client_address[0] if hasattr(self, 'client_address') else ''
+            is_local = client_ip in ["127.0.0.1", "localhost", "::1"]
+
+            # Security verification
+            if not is_local and secret != ADMIN_EXPORT_SECRET:
+                self.send_response(401)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": "Unauthorized. Invalid admin secret."}, ensure_ascii=False).encode('utf-8'))
+                return
+
             store = load_chat_logs()
-            body = json.dumps(store, ensure_ascii=False, indent=2).encode("utf-8")
+            convs = store.get("conversations", [])
+
+            # Filter by Days (e.g. 7, 30)
+            days_str = query.get("days", ["all"])[0]
+            if days_str.isdigit():
+                max_days = int(days_str)
+                now_ts = time.time()
+                cutoff_ts = now_ts - (max_days * 86400)
+                filtered = []
+                for c in convs:
+                    try:
+                        c_dt = datetime.strptime(c.get("timestamp", ""), "%Y-%m-%d %H:%M:%S")
+                        if c_dt.timestamp() >= cutoff_ts:
+                            filtered.append(c)
+                    except Exception:
+                        filtered.append(c)
+                convs = filtered
+
+            # Filter by Category
+            cat = query.get("category", ["all"])[0].lower()
+            if cat == "property":
+                convs = [c for c in convs if c.get("matched_codes") or "บ้าน" in c.get("user_text", "") or "คอนโด" in c.get("user_text", "")]
+            elif cat == "workflow":
+                convs = [c for c in convs if any(w in c.get("user_text", "") for w in ["เปิดบ้าน", "กุญแจ", "จองคิว", "otp", "keybox"])]
+
+            # Filter by PII Masking (Mask phone numbers for PDPA safety)
+            mask_pii = query.get("mask_pii", ["true"])[0].lower() in ["true", "1", "yes"]
+            if mask_pii:
+                masked_convs = []
+                for c in convs:
+                    c_copy = dict(c)
+                    # Mask 10-digit phone in user text or ai reply
+                    for field in ["user_text", "ai_reply"]:
+                        val = c_copy.get(field, "")
+                        val = re.sub(r'\b(0\d{2})[-.\s]?(\d{3,4})[-.\s]?(\d{4})\b', r'\1-XXX-\3', val)
+                        c_copy[field] = val
+                    masked_convs.append(c_copy)
+                convs = masked_convs
+
+            export_data = {
+                "bot_name": store.get("bot_name", "Siwasupagent"),
+                "export_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "total_exported": len(convs),
+                "filter_criteria": {
+                    "days": days_str,
+                    "category": cat,
+                    "pii_masked": mask_pii
+                },
+                "conversations": convs
+            }
+
+            body = json.dumps(export_data, ensure_ascii=False, indent=2).encode("utf-8")
             self.send_response(200)
             self.send_header('Content-Type', 'application/json; charset=utf-8')
             self.send_header('Access-Control-Allow-Origin', '*')

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siwasup OS - เครื่องมือดูดและวิเคราะห์ Chat Log ออฟไลน์ (Offline Log Exporter)</title>
+  <link rel="icon" type="image/png" href="assets/siwasup_logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      font-family: 'Prompt', sans-serif;
+      background: #090D16;
+      color: #F8FAFC;
+    }
+    .gold-gradient {
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    }
+    .card-glass {
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+  </style>
+</head>
+<body class="min-h-screen p-4 sm:p-8">
+
+  <div class="max-w-6xl mx-auto space-y-6">
+
+    <!-- Header Bar -->
+    <div class="card-glass rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4 border border-amber-500/30">
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+          <i data-lucide="shield-check" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg sm:text-xl font-bold tracking-tight text-white">เครื่องมือดูดและวิเคราะห์ Chat Log ออฟไลน์</h1>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+              PDPA Shield 100%
+            </span>
+          </div>
+          <p class="text-xs text-slate-400">ดูดข้อมูลจากบอทน้องศิวาลงเครื่องส่วนตัวได้ทันที โดยไม่ต้องล็อกอินเข้า LINE ให้เสียเวลา</p>
+        </div>
+      </div>
+
+      <!-- Quick Server Selector -->
+      <div class="flex items-center gap-2 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 text-xs w-full md:w-auto">
+        <button id="btnLocal" onclick="setServerPreset('local')" class="flex-1 md:flex-initial px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold transition">
+          💻 เครื่องนี้ (Local:5005)
+        </button>
+        <button id="btnCloud" onclick="setServerPreset('cloud')" class="flex-1 md:flex-initial px-3 py-1.5 rounded-xl text-slate-300 hover:text-white transition">
+          ☁️ คลาวด์ (Render / Live)
+        </button>
+      </div>
+    </div>
+
+    <!-- Configuration & Filter Panel -->
+    <div class="card-glass rounded-3xl p-5 sm:p-6 space-y-4">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2">
+        <i data-lucide="sliders" class="w-4 h-4"></i>
+        1. ตั้งค่าเป้าหมายและเงื่อนไขการดูดข้อมูล (Filter Criteria)
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4">
+        <!-- Server Endpoint Input -->
+        <div class="md:col-span-7 space-y-1">
+          <label class="text-[11px] font-medium text-slate-300">Server Endpoint URL</label>
+          <input type="text" id="serverUrl" value="http://127.0.0.1:5005" placeholder="http://127.0.0.1:5005 หรือ https://...onrender.com" 
+            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700 text-white text-xs font-mono focus:border-amber-500 focus:outline-hidden" />
+        </div>
+
+        <!-- Secret Key -->
+        <div class="md:col-span-5 space-y-1">
+          <label class="text-[11px] font-medium text-slate-300">Admin Secret Key (กุญแจลับเฉพาะผู้บริหาร)</label>
+          <input type="password" id="secretKey" value="SiwasupAdmin2026_SecureKey_99" 
+            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700 text-white text-xs font-mono focus:border-amber-500 focus:outline-hidden" />
+        </div>
+      </div>
+
+      <!-- Filters: Time & Category -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 border-t border-slate-800 text-xs">
+        <!-- Days Filter -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-medium text-slate-400">ช่วงเวลาย้อนหลัง</label>
+          <div class="grid grid-cols-3 gap-1.5">
+            <button onclick="setDays('7', this)" class="btn-days py-2 rounded-xl bg-slate-800 hover:bg-slate-700 font-medium">7 วัน</button>
+            <button onclick="setDays('30', this)" class="btn-days py-2 rounded-xl bg-slate-800 hover:bg-slate-700 font-medium">30 วัน</button>
+            <button onclick="setDays('all', this)" class="btn-days py-2 rounded-xl bg-amber-500 text-slate-950 font-bold active-day">ทั้งหมด</button>
+          </div>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-medium text-slate-400">หมวดหมู่บทสนทนา</label>
+          <select id="categoryFilter" class="w-full py-2 px-3 rounded-xl bg-slate-900 border border-slate-700 text-white font-medium focus:border-amber-500 focus:outline-hidden">
+            <option value="all">ทั้งหมด ทุกข้อความ</option>
+            <option value="property">🏠 เฉพาะสอบถามค้นหาบ้าน/คอนโด</option>
+            <option value="workflow">🔑 เฉพาะสอบถามเปิดบ้าน & รับกุญแจ</option>
+          </select>
+        </div>
+
+        <!-- PDPA Privacy Shield Option -->
+        <div class="space-y-1.5 flex flex-col justify-end">
+          <label class="inline-flex items-center gap-2 cursor-pointer bg-slate-900/60 p-2.5 rounded-xl border border-slate-800 hover:border-amber-500/40 transition">
+            <input type="checkbox" id="maskPhone" checked class="w-4 h-4 rounded-sm text-amber-500 focus:ring-amber-500 bg-slate-800 border-slate-700" />
+            <span class="text-[11px] text-slate-300 font-medium">
+              🛡️ ปิดบังเบอร์โทรศัพท์ (081-XXX-XXXX) ตาม PDPA
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pt-3 border-t border-slate-800/80 flex flex-wrap items-center gap-3">
+        <button id="btnFetch" onclick="fetchLogs()" class="px-5 py-3 rounded-2xl gold-gradient hover:brightness-110 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition">
+          <i data-lucide="cloud-download" class="w-4 h-4"></i>
+          <span>ดูด Log จากเซิร์ฟเวอร์ทันที</span>
+        </button>
+
+        <button id="btnDownloadCsv" onclick="downloadCsv()" disabled class="px-4 py-3 rounded-2xl bg-emerald-700 hover:bg-emerald-600 disabled:opacity-30 disabled:cursor-not-allowed text-white font-semibold text-xs flex items-center gap-2 transition active:scale-95">
+          <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-300"></i>
+          <span>ส่งออกเป็น Excel / CSV</span>
+        </button>
+
+        <button id="btnDownloadJson" onclick="downloadJson()" disabled class="px-4 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed text-slate-200 font-semibold text-xs flex items-center gap-2 transition active:scale-95">
+          <i data-lucide="file-code" class="w-4 h-4 text-amber-400"></i>
+          <span>ส่งออกเป็น JSON</span>
+        </button>
+
+        <span id="fetchStatus" class="text-xs text-slate-400 ml-auto hidden"></span>
+      </div>
+    </div>
+
+    <!-- Real-time Stats Cards -->
+    <div id="statsPanel" class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 hidden">
+      <div class="card-glass rounded-2xl p-4 space-y-1">
+        <span class="text-[10.5px] text-slate-400">ข้อความที่ดูดมาได้</span>
+        <div id="statTotal" class="text-xl font-bold text-amber-400">0</div>
+      </div>
+      <div class="card-glass rounded-2xl p-4 space-y-1">
+        <span class="text-[10.5px] text-slate-400">ผู้ใช้งานจริง (Unique Users)</span>
+        <div id="statUsers" class="text-xl font-bold text-emerald-400">0</div>
+      </div>
+      <div class="card-glass rounded-2xl p-4 space-y-1">
+        <span class="text-[10.5px] text-slate-400">ค้นหาบ้าน/คอนโด</span>
+        <div id="statProps" class="text-xl font-bold text-blue-400">0</div>
+      </div>
+      <div class="card-glass rounded-2xl p-4 space-y-1">
+        <span class="text-[10.5px] text-slate-400">สอบถามเปิดบ้าน/กุญแจ</span>
+        <div id="statWorkflow" class="text-xl font-bold text-purple-400">0</div>
+      </div>
+    </div>
+
+    <!-- Data Preview Table -->
+    <div id="tablePanel" class="card-glass rounded-3xl p-5 space-y-4 hidden">
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2">
+          <i data-lucide="table" class="w-4 h-4"></i>
+          2. พรีวิวบทสนทนาที่ดูดลงมา (Local Preview)
+        </h2>
+        <input type="text" id="searchTable" oninput="filterTable()" placeholder="ค้นหาคำในตาราง..." 
+          class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-hidden w-64" />
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-800">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-slate-900/90 text-slate-400 border-b border-slate-800">
+              <th class="p-3 w-36">เวลา</th>
+              <th class="p-3 w-40">ผู้ใช้ (LINE)</th>
+              <th class="p-3">คำถามของผู้ใช้</th>
+              <th class="p-3">คำตอบของน้องศิวา</th>
+              <th class="p-3 w-28 text-center">รหัสทรัพย์ที่แมทช์</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody" class="divide-y divide-slate-800/60 font-normal">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentLogs = [];
+    let selectedDays = "all";
+
+    function setServerPreset(mode) {
+      const urlInput = document.getElementById("serverUrl");
+      const btnLocal = document.getElementById("btnLocal");
+      const btnCloud = document.getElementById("btnCloud");
+
+      if (mode === "local") {
+        urlInput.value = "http://127.0.0.1:5005";
+        btnLocal.className = "flex-1 md:flex-initial px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold transition";
+        btnCloud.className = "flex-1 md:flex-initial px-3 py-1.5 rounded-xl text-slate-300 hover:text-white transition";
+      } else {
+        urlInput.value = "https://siwasup-line-bot.onrender.com";
+        btnCloud.className = "flex-1 md:flex-initial px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold transition";
+        btnLocal.className = "flex-1 md:flex-initial px-3 py-1.5 rounded-xl text-slate-300 hover:text-white transition";
+      }
+    }
+
+    function setDays(days, btn) {
+      selectedDays = days;
+      document.querySelectorAll(".btn-days").forEach(b => {
+        b.className = "btn-days py-2 rounded-xl bg-slate-800 hover:bg-slate-700 font-medium";
+      });
+      btn.className = "btn-days py-2 rounded-xl bg-amber-500 text-slate-950 font-bold active-day";
+    }
+
+    async function fetchLogs() {
+      const baseUrl = document.getElementById("serverUrl").value.trim().replace(/\/+$/, "");
+      const secret = document.getElementById("secretKey").value.trim();
+      const cat = document.getElementById("categoryFilter").value;
+      const maskPhone = document.getElementById("maskPhone").checked;
+      const statusEl = document.getElementById("fetchStatus");
+
+      statusEl.classList.remove("hidden");
+      statusEl.innerHTML = `<span class="text-amber-400 animate-pulse">⏳ กำลังเชื่อมต่อไปยัง ${baseUrl}...</span>`;
+
+      const targetUrl = `${baseUrl}/api/export-logs?secret=${encodeURIComponent(secret)}&days=${selectedDays}&category=${cat}&mask_pii=${maskPhone}`;
+
+      try {
+        const resp = await fetch(targetUrl, { cache: "no-store" });
+        if (!resp.ok) {
+          throw new Error(`เซิร์ฟเวอร์ตอบกลับรหัส ${resp.status} (${resp.statusText})`);
+        }
+        const data = await resp.json();
+        currentLogs = data.conversations || [];
+
+        statusEl.innerHTML = `<span class="text-emerald-400 font-medium">✓ ดูดข้อมูลสำเร็จเรียบร้อย (${currentLogs.length} ข้อความ)</span>`;
+        document.getElementById("btnDownloadCsv").disabled = currentLogs.length === 0;
+        document.getElementById("btnDownloadJson").disabled = currentLogs.length === 0;
+
+        renderStats(currentLogs);
+        renderTable(currentLogs);
+      } catch (err) {
+        statusEl.innerHTML = `<span class="text-red-400 font-medium">✕ เกิดข้อผิดพลาด: ${err.message}</span>`;
+        alert(`ไม่สามารถดึงข้อมูลได้: ${err.message}\n\nคำแนะนำ:\n1. ตรวจสอบว่าบอทเปิดอยู่หรือไม่ (หากรันในเครื่องให้เปิด START_LINE_BOT.bat)\n2. ตรวจสอบ Admin Secret Key ให้ตรงกัน`);
+      }
+    }
+
+    function renderStats(logs) {
+      document.getElementById("statsPanel").classList.remove("hidden");
+      document.getElementById("statTotal").innerText = logs.length;
+
+      const users = new Set(logs.map(l => l.user_name || l.user_id_tail)).size;
+      document.getElementById("statUsers").innerText = users;
+
+      const propCount = logs.filter(l => l.matched_codes && l.matched_codes.length > 0).length;
+      document.getElementById("statProps").innerText = propCount;
+
+      const wfCount = logs.filter(l => {
+        const txt = (l.user_text || "").toLowerCase();
+        return ["เปิดบ้าน", "กุญแจ", "จองคิว", "otp"].some(w => txt.includes(w));
+      }).length;
+      document.getElementById("statWorkflow").innerText = wfCount;
+    }
+
+    function renderTable(logs) {
+      document.getElementById("tablePanel").classList.remove("hidden");
+      const tbody = document.getElementById("tableBody");
+      let html = "";
+
+      logs.forEach(c => {
+        const pic = c.user_pic || "assets/siwasup_logo.png";
+        const codes = (c.matched_codes || []).map(code => 
+          `<span class="inline-block px-1.5 py-0.5 rounded-sm bg-amber-500/20 text-amber-300 font-mono text-[10px] m-0.5 border border-amber-500/30">${code}</span>`
+        ).join("");
+
+        html += `
+          <tr class="hover:bg-slate-800/40 transition">
+            <td class="p-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">${c.timestamp || "-"}</td>
+            <td class="p-3">
+              <div class="flex items-center gap-2">
+                <img src="${pic}" class="w-6 h-6 rounded-full object-cover bg-slate-700 shrink-0" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2394a3b8%22 stroke-width=%222%22><circle cx=%2212%22 cy=%228%22 r=%224%22/><path d=%22M20 21a8 8 0 0 0-16 0%22/></svg>'">
+                <span class="font-medium text-slate-200 truncate max-w-[120px]">${c.user_name || "ไม่ระบุชื่อ"}</span>
+              </div>
+            </td>
+            <td class="p-3 text-white max-w-xs break-words">${c.user_text || "-"}</td>
+            <td class="p-3 text-slate-300 max-w-md break-words leading-relaxed">${(c.ai_reply || "-").replace(/\n/g, '<br>')}</td>
+            <td class="p-3 text-center">${codes || '<span class="text-slate-600">-</span>'}</td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = html || `<tr><td colspan="5" class="p-6 text-center text-slate-500">ไม่มีข้อมูลตามเงื่อนไขที่เลือก</td></tr>`;
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function filterTable() {
+      const q = document.getElementById("searchTable").value.toLowerCase();
+      const filtered = currentLogs.filter(c => {
+        return (c.user_text || "").toLowerCase().includes(q) ||
+               (c.ai_reply || "").toLowerCase().includes(q) ||
+               (c.user_name || "").toLowerCase().includes(q);
+      });
+      renderTable(filtered);
+    }
+
+    function downloadJson() {
+      if (!currentLogs.length) return;
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentLogs, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `siwasup_chat_logs_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function downloadCsv() {
+      if (!currentLogs.length) return;
+      const headers = ["ID", "Timestamp", "User_Name", "User_Text", "AI_Reply", "Matched_Codes"];
+      const rows = currentLogs.map(c => [
+        `"${c.id || ''}"`,
+        `"${c.timestamp || ''}"`,
+        `"${(c.user_name || '').replace(/"/g, '""')}"`,
+        `"${(c.user_text || '').replace(/"/g, '""').replace(/\n/g, ' ')}"`,
+        `"${(c.ai_reply || '').replace(/"/g, '""').replace(/\n/g, ' ')}"`,
+        `"${(c.matched_codes || []).join(', ')}"`
+      ]);
+
+      const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(e => e.join(","))].join("\r\n");
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `siwasup_chat_logs_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
