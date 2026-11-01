@@ -734,12 +734,19 @@
               <i data-lucide="sliders" class="w-3 h-3 text-amber-600"></i>
               <span>ปรับสิทธิ์</span>
             </button>
+            ${(item.id === 'app_office_004' || item.is_tech || (item.permissions && item.permissions.systemAdmin)) ? `
+            <span class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-800 text-xs font-bold border border-rose-200 inline-flex items-center gap-1 select-none" title="บัญชีสถาปัตยกรรมระบบสูงสุด ถูกล็อกถาวร">
+              <i data-lucide="lock" class="w-3 h-3 text-rose-600"></i>
+              <span>ROOT LOCKED</span>
+            </span>
+            ` : `
             <button onclick="openRevokeModal('${item.id}', '${item.name.replace(/'/g, "\'")}')" 
                     class="px-2.5 py-1 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold border border-red-200 inline-flex items-center gap-1 shadow-2xs transition"
                     title="เพิกถอนสิทธิ์และคัดออกจากทำเนียบ">
               <i data-lucide="user-x" class="w-3 h-3 text-red-500"></i>
               <span>คัดออก</span>
             </button>
+            `}
           </td>
         </tr>
       `).join('');
@@ -849,6 +856,14 @@
       document.getElementById('chk_leadInspector').checked = !!p.leadInspector;
       document.getElementById('chk_catalogCurator').checked = !!p.catalogCurator;
       document.getElementById('chk_systemAdmin').checked = !!p.systemAdmin;
+      const isRootTarget = (member.id === 'app_office_004' || member.is_tech);
+      ['chk_standardAdmin', 'chk_executiveAuthority', 'chk_systemAdmin'].forEach(cid => {
+        const el = document.getElementById(cid);
+        if (el) {
+          if (isRootTarget) el.checked = true;
+          el.disabled = isRootTarget;
+        }
+      });
 
       const modal = document.getElementById('editPermissionModal');
       if (modal) modal.classList.remove('hidden');
@@ -1140,6 +1155,14 @@
       document.getElementById('chk_leadInspector').checked = !!p.leadInspector;
       document.getElementById('chk_catalogCurator').checked = !!p.catalogCurator;
       document.getElementById('chk_systemAdmin').checked = !!p.systemAdmin;
+      const isRootTarget = (member.id === 'app_office_004' || member.is_tech);
+      ['chk_standardAdmin', 'chk_executiveAuthority', 'chk_systemAdmin'].forEach(cid => {
+        const el = document.getElementById(cid);
+        if (el) {
+          if (isRootTarget) el.checked = true;
+          el.disabled = isRootTarget;
+        }
+      });
 
       const modal = document.getElementById('editPermissionModal');
       if (modal) modal.classList.remove('hidden');
