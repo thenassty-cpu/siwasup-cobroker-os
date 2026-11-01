@@ -112,5 +112,9 @@
       "approved_at": "2026-11-01 16:30:00",
       "approved_by": "System Architect"
     }
-  ]
+  ],
+  "audit_log": [
+    "[2026-11-01 18:15:00] เริ่มต้นระบบ Audit Trail & Rollback Archive"
+  ],
+  "rollback_history": []
 }
