@@ -83,7 +83,14 @@
     <!-- ============================================================== -->
     <div id="viewRegisterForm" class="space-y-4">
 
-      <!-- Welcome Banner -->
+      <!-- LINE connect banner -->
+      <div id="regLineBanner" class="card-light rounded-2xl p-4 border-2 border-emerald-300 bg-emerald-50/50 flex items-center justify-between gap-3">
+        <div id="regLineBannerText" class="text-xs text-emerald-900 leading-relaxed">
+          <strong>ขั้นที่ 1:</strong> เชื่อมบัญชี LINE ของท่านก่อนสมัคร เพื่อยืนยันตัวตน (ไม่ต้องตั้งรหัสผ่าน)
+        </div>
+        <button id="regLineBannerBtn" type="button" onclick="startLineLogin('register')" class="shrink-0 px-3.5 py-2 rounded-xl bg-[#06C755] hover:brightness-95 text-white font-black text-xs shadow-sm">เชื่อม LINE</button>
+      </div>
+<!-- Welcome Banner -->
       <div class="card-light rounded-3xl p-5 border border-amber-200 text-center space-y-2 relative overflow-hidden">
         <div class="w-12 h-12 mx-auto rounded-2xl bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center mb-1 shadow-sm">
           <i data-lucide="user-plus" class="w-6 h-6"></i>
@@ -216,16 +223,6 @@
           </select>
         </div>
 
-        <!-- 6. Personal Security PIN (4 Digits) -->
-        <div class="space-y-1 p-3.5 rounded-2xl bg-amber-50/60 border border-amber-200">
-          <label class="text-xs font-bold text-amber-900 flex items-center gap-1.5">
-            <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-600"></i>
-            <span>ตั้งรหัส PIN รักษาความปลอดภัย 4 หลัก (ใช้คู่กับเบอร์โทรตอน Login) *</span>
-          </label>
-          <input type="password" id="regPin" maxlength="6" inputmode="numeric" placeholder="เช่น 4 ตัวท้ายของเบอร์โทร (เว้นว่างเพื่อใช้ 4 ตัวท้ายเบอร์โทรอัตโนมัติ)" class="w-full bg-white border border-amber-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-600 font-mono tracking-widest transition">
-          <p class="text-[10px] text-amber-800">🔒 ป้องกันผู้อื่นนำเบอร์โทรบนนามบัตรของท่านไปสวมรอยเข้าสู่ระบบ</p>
-        </div>
-
         <!-- Submit to Lobby Button -->
         <div class="pt-2">
           <button onclick="submitToLobby()" class="w-full gold-gradient hover:brightness-105 text-slate-950 font-black py-3 rounded-2xl shadow-lg shadow-amber-500/20 text-sm flex items-center justify-center gap-2 transition active:scale-[0.99]">
@@ -239,88 +236,24 @@
     </div>
 
         <!-- ============================================================== -->
-    <!-- STATE 1.5: SECURE 2-FACTOR LOGIN FORM (เบอร์โทรศัพท์ + รหัส PIN 4 หลัก) -->
+    <!-- STATE 1.5: LINE LOGIN -->
     <!-- ============================================================== -->
     <div id="viewLoginForm" class="space-y-4 hidden">
-      
-      <!-- Welcome Banner -->
-      <div class="card-light rounded-3xl p-5 border border-amber-200 text-center space-y-2 relative overflow-hidden">
-        <div class="w-12 h-12 mx-auto rounded-2xl bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center mb-1 shadow-sm">
-          <i data-lucide="shield-check" class="w-6 h-6"></i>
+      <div class="card-light rounded-3xl p-6 border border-emerald-200 text-center space-y-4">
+        <div class="w-12 h-12 mx-auto rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center shadow-sm">
+          <i data-lucide="message-circle" class="w-6 h-6"></i>
         </div>
-        <h2 class="text-lg font-black text-slate-900">เข้าสู่ระบบสมาชิก &amp; ทีมงานออฟฟิศ (2-Step Auth)</h2>
+        <h2 class="text-lg font-black text-slate-900">เข้าสู่ระบบด้วย LINE</h2>
         <p class="text-xs text-slate-600 leading-relaxed">
-          ยืนยันตัวตนด้วย <strong>เบอร์โทรศัพท์ + รหัส PIN รักษาความปลอดภัย 4 หลัก</strong><br>
-          เพื่อป้องกันการสวมรอยจากบุคคลภายนอกที่เห็นเบอร์โทรบนนามบัตร
+          กดครั้งเดียว ไม่ต้องจำรหัสผ่าน ระบบจะรู้สิทธิ์ของท่านจากบัญชี LINE ที่ได้รับอนุมัติ<br>
+          สมาชิกใหม่จะถูกส่งเข้า Lobby เพื่อรอผู้บริหารอนุมัติ
         </p>
-      </div>
-
-      <!-- Phone + PIN Login Card -->
-      <div class="card-light rounded-3xl p-5 sm:p-6 space-y-4">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div class="space-y-1.5">
-            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-              <i data-lucide="phone" class="w-3.5 h-3.5 text-amber-600"></i>
-              <span>1. เบอร์โทรศัพท์ที่ลงทะเบียน *</span>
-            </label>
-            <input type="tel" id="inputLoginPhone" placeholder="08X-XXX-XXXX" class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 font-mono transition" onkeydown="if(event.key==='Enter') document.getElementById('inputLoginPin').focus()">
-          </div>
-
-          <div class="space-y-1.5">
-            <label class="text-xs font-bold text-slate-700 flex items-center justify-between">
-              <span class="flex items-center gap-1.5">
-                <i data-lucide="lock" class="w-3.5 h-3.5 text-red-600"></i>
-                <span>2. รหัส PIN ส่วนตัว (4 หลัก) *</span>
-              </span>
-              <button type="button" onclick="togglePinVisibility('inputLoginPin')" class="text-[10px] text-amber-700 hover:underline font-semibold">แสดง/ซ่อน</button>
-            </label>
-            <input type="password" id="inputLoginPin" maxlength="6" inputmode="numeric" placeholder="•••• (ค่าเริ่มต้น 4 ตัวท้ายเบอร์โทร)" class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 font-mono tracking-widest transition" onkeydown="if(event.key==='Enter') doPhoneLogin()">
-          </div>
-        </div>
-
-        <button type="button" onclick="doPhoneLogin()" class="w-full gold-gradient hover:brightness-105 text-slate-950 font-black py-3 rounded-2xl shadow-md text-xs sm:text-sm flex items-center justify-center gap-2 transition active:scale-[0.99]">
-          <i data-lucide="shield-check" class="w-4 h-4"></i>
-          <span>ยืนยันรหัส PIN &amp; เข้าสู่ระบบ (Secure Sign-In)</span>
+        <button type="button" onclick="startLineLogin('register')" class="w-full bg-[#06C755] hover:brightness-95 text-white font-black py-3 rounded-2xl shadow-md text-sm flex items-center justify-center gap-2 transition active:scale-[0.99]">
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          <span>เข้าสู่ระบบด้วย LINE</span>
         </button>
-
-        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 flex items-start gap-2">
-          <i data-lucide="info" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
-          <div>
-            <strong>หมายเหตุความปลอดภัย:</strong> สมาชิกที่เพิ่งได้รับการอนุมัติและยังไม่ได้ตั้งรหัส PIN เอง รหัสเริ่มต้นคือ <strong>ตัวเลข 4 ตัวท้ายของเบอร์โทรศัพท์ท่าน</strong> (สามารถเปลี่ยนรหัส PIN ใหม่ได้ทันทีหลังเข้าสู่ระบบ)
-          </div>
-        </div>
-
-        <!-- Hidden Developer / QA Demo Switcher (Only visible when ?demo=1 is passed) -->
-        <div id="qaDemoSwitcherBox" class="hidden pt-3 border-t border-slate-100 space-y-2">
-          <div class="flex items-center justify-between text-[11px] text-rose-700 font-bold">
-            <span>🛠️ โหมด QA ทดสอบระบบ (แสดงเฉพาะเมื่อเปิด ?demo=1):</span>
-          </div>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
-            <button type="button" onclick="quickLoginDemo('0819999999','9999')" class="p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 text-left">
-              <div class="font-bold text-amber-900">👑 เจี๊ยบ(กูล)</div>
-              <div class="text-[9px] text-slate-500 font-mono">PIN: 9999</div>
-            </button>
-            <button type="button" onclick="quickLoginDemo('0818888888','8888')" class="p-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 text-left">
-              <div class="font-bold text-amber-900">👑 คุณบัว</div>
-              <div class="text-[9px] text-slate-500 font-mono">PIN: 8888</div>
-            </button>
-            <button type="button" onclick="quickLoginDemo('0816666666','6666')" class="p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 text-left">
-              <div class="font-bold text-emerald-900">🔑 พี่ลิลลี่</div>
-              <div class="text-[9px] text-slate-500 font-mono">PIN: 6666</div>
-            </button>
-            <button type="button" onclick="quickLoginDemo('0815555555','5555')" class="p-2 rounded-xl bg-slate-50 hover:bg-rose-50 border border-slate-200 text-left">
-              <div class="font-bold text-rose-900">💻 คุณต้น</div>
-              <div class="text-[9px] text-slate-500 font-mono">PIN: 5555</div>
-            </button>
-            <button type="button" onclick="quickLoginDemo('0814444444','4444')" class="p-2 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 text-left">
-              <div class="font-bold text-blue-900">🏢 ซัพพอร์ต</div>
-              <div class="text-[9px] text-slate-500 font-mono">PIN: 4444</div>
-            </button>
-          </div>
-        </div>
-
+        <p class="text-[11px] text-slate-500">ยังไม่เป็นสมาชิก? <a href="#" onclick="switchAuthMode('register'); return false;" class="text-amber-700 font-bold hover:underline">ลงทะเบียนใหม่</a></p>
       </div>
-
     </div>
 
     <!-- ============================================================== -->
@@ -348,10 +281,6 @@
           </div>
 
           <div class="flex items-center gap-1.5">
-            <button onclick="openChangePinModal()" class="px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-[11px] font-bold border border-amber-200 transition flex items-center gap-1" title="เปลี่ยนรหัส PIN 4 หลัก">
-              <i data-lucide="key-round" class="w-3.5 h-3.5 text-amber-600"></i>
-              <span>เปลี่ยน PIN</span>
-            </button>
             <button onclick="logoutUser()" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-[11px] font-semibold border border-slate-200 transition" title="ออกจากระบบ">
               ออก
             </button>
@@ -492,32 +421,7 @@
     </div>
   </div>
 
-  <!-- CHANGE PIN MODAL -->
-  <div id="changePinModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-3xl p-6 border-2 border-amber-300 max-w-sm w-full space-y-4 shadow-2xl relative">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h3 class="text-sm font-black text-slate-900 flex items-center gap-1.5">
-          <i data-lucide="key-round" class="w-4 h-4 text-amber-600"></i>
-          <span>เปลี่ยนรหัส PIN รักษาความปลอดภัย</span>
-        </h3>
-        <button onclick="closeChangePinModal()" class="text-slate-400 hover:text-slate-700 text-xs font-bold">✕</button>
-      </div>
-      <div class="space-y-3 text-xs">
-        <div class="space-y-1">
-          <label class="font-bold text-slate-700">รหัส PIN เดิม:</label>
-          <input type="password" id="inputOldPin" maxlength="6" inputmode="numeric" placeholder="รหัส PIN ปัจจุบัน" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 font-mono tracking-widest">
-        </div>
-        <div class="space-y-1">
-          <label class="font-bold text-slate-700">ตั้งรหัส PIN ใหม่ (4-6 หลัก):</label>
-          <input type="password" id="inputNewPin" maxlength="6" inputmode="numeric" placeholder="ตัวเลข 4-6 หลัก" class="w-full bg-white border border-amber-400 rounded-xl px-3 py-2 font-mono tracking-widest">
-        </div>
-      </div>
-      <div class="flex gap-2 pt-2">
-        <button onclick="closeChangePinModal()" class="flex-1 py-2 rounded-xl border border-slate-200 text-slate-600 font-semibold text-xs">ยกเลิก</button>
-        <button onclick="saveNewPin()" class="flex-1 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-sm">บันทึกรหัส PIN ใหม่</button>
-      </div>
-    </div>
-  </div>
+  
 
   <!-- FOOTER -->
   <footer class="max-w-xl w-full mx-auto text-center text-xs text-slate-500 pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2">
@@ -583,13 +487,15 @@
     }
 
     function submitToLobby() {
+      if (!getSession()) {
+        alert('กรุณาเชื่อมบัญชี LINE ก่อนส่งข้อมูลครับ');
+        startLineLogin('register');
+        return;
+      }
       const name = document.getElementById('regName').value.trim();
       const nickname = document.getElementById('regNickname').value.trim();
       const phone = document.getElementById('regPhone').value.trim();
       const lineId = document.getElementById('regLineId').value.trim();
-      const rawPin = (document.getElementById('regPin') ? document.getElementById('regPin').value.trim() : "");
-      const cleanPhoneDigits = phone.replace(/\D/g, "");
-      const finalPin = rawPin || (cleanPhoneDigits.length >= 4 ? cleanPhoneDigits.slice(-4) : "1234");
       const zone = document.getElementById('regZone').value;
       const affiliation = document.querySelector('input[name="affiliation"]:checked').value;
 
@@ -610,7 +516,6 @@
         name: name,
         nickname: nickname || name,
         phone: phone,
-        pin: finalPin,
         line_id: lineId || "ไม่ระบุ",
         zone: zone,
         affiliation: affiliation,
@@ -629,7 +534,7 @@
       try {
         fetch('https://siwasup-cobroker-os.onrender.com/api/lobby/register', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: authHeaders(),
           body: JSON.stringify(currentApplicant)
         }).catch(err => console.error('Cloud register error:', err));
       } catch(e) {}
@@ -665,31 +570,13 @@
     }
 
     async function checkApprovalStatus() {
-      if (!currentApplicant) return;
-
-      // Check Cloud Server First
-      try {
-        const res = await fetch(`https://siwasup-cobroker-os.onrender.com/api/lobby/status?id=${encodeURIComponent(currentApplicant.id)}&phone=${encodeURIComponent(currentApplicant.phone)}`, { cache: 'no-store' });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.status === 'approved' && data.applicant) {
-            clearInterval(pollInterval);
-            handleApplicantApproved(data.applicant);
-            return;
-          }
-        }
-      } catch (e) {}
-
-      // Fallback: LocalStorage
-      const rawData = localStorage.getItem('siwasup_lobby_data');
-      if (!rawData) return;
-      const lobbyData = JSON.parse(rawData);
-      const approved = lobbyData.approved.find(a => a.id === currentApplicant.id || a.phone === currentApplicant.phone);
-      if (approved) {
+      const me = await fetchMe();
+      if (me && me.status === 'approved') {
         clearInterval(pollInterval);
-        handleApplicantApproved(approved);
+        handleApplicantApproved(me.member);
       }
     }
+
 
     function handleApplicantApproved(approvedData) {
       const card = document.getElementById('lobbyStatusCard');
@@ -729,15 +616,105 @@
     }
   
         // ==========================================
-    // SECURE 2-FACTOR AUTH & LOGIN LOGIC (Phone + PIN)
+    // LINE LOGIN (server-issued session token)
     // ==========================================
+    const API = 'https://siwasup-cobroker-os.onrender.com';
+    const SESSION_KEY = 'siwasup_session';
     let currentAuthMode = 'register';
     let loggedInMember = null;
 
-    function togglePinVisibility(inputId) {
-      const el = document.getElementById(inputId);
-      if (!el) return;
-      el.type = el.type === 'password' ? 'text' : 'password';
+    function getSession() { try { return localStorage.getItem(SESSION_KEY) || ''; } catch(e) { return ''; } }
+    function authHeaders() {
+      const h = { 'Content-Type': 'application/json' };
+      const t = getSession();
+      if (t) h['Authorization'] = 'Bearer ' + t;
+      return h;
+    }
+
+    function saveDraft() {
+      try {
+        const ids = ['regName', 'regNickname', 'regPhone', 'regLineId', 'regZone'];
+        const d = {};
+        ids.forEach(i => { const el = document.getElementById(i); if (el) d[i] = el.value; });
+        sessionStorage.setItem('siwasup_reg_draft', JSON.stringify(d));
+      } catch(e) {}
+    }
+    function restoreDraft() {
+      try {
+        const d = JSON.parse(sessionStorage.getItem('siwasup_reg_draft') || '{}');
+        Object.keys(d).forEach(i => { const el = document.getElementById(i); if (el && !el.value) el.value = d[i]; });
+      } catch(e) {}
+    }
+
+    function startLineLogin(ret) {
+      saveDraft();
+      window.location.href = API + '/api/auth/line/start?return=' + encodeURIComponent(ret || 'register');
+    }
+
+    async function fetchMe() {
+      const t = getSession();
+      if (!t) return null;
+      try {
+        const res = await fetch(API + '/api/auth/me', { headers: authHeaders(), cache: 'no-store' });
+        if (res.status === 401) { localStorage.removeItem(SESSION_KEY); return null; }
+        if (res.ok) return await res.json();
+      } catch(e) { console.log('fetchMe error', e); }
+      return null;
+    }
+
+    function renderLineBanner(me) {
+      const txt = document.getElementById('regLineBannerText');
+      const btn = document.getElementById('regLineBannerBtn');
+      if (!txt || !btn) return;
+      if (me && me.line) {
+        txt.innerHTML = '<strong>✅ เชื่อม LINE แล้ว:</strong> ' + (me.line.name || 'บัญชี LINE') + ' &mdash; กรอกข้อมูลด้านล่างแล้วส่งเข้า Lobby ได้เลย';
+        btn.classList.add('hidden');
+      } else {
+        txt.innerHTML = '<strong>ขั้นที่ 1:</strong> เชื่อมบัญชี LINE ของท่านก่อนสมัคร เพื่อยืนยันตัวตน (ไม่ต้องตั้งรหัสผ่าน)';
+        btn.classList.remove('hidden');
+      }
+    }
+
+    function showLineIdHint(userId) {
+      const card = document.getElementById('lobbyStatusCard');
+      if (!card || !userId) return;
+      let el = document.getElementById('lineIdHint');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'lineIdHint';
+        el.className = 'text-[10px] text-slate-400 font-mono break-all';
+        card.appendChild(el);
+      }
+      el.textContent = 'LINE User ID (สำหรับผู้ดูแลระบบ): ' + userId;
+    }
+
+    async function applyMe(me, mode) {
+      renderLineBanner(me);
+      if (!me) {
+        if (mode === 'login') switchAuthMode('login');
+        return;
+      }
+      if (me.status === 'approved') {
+        switchAuthMode('login');
+        renderLoggedInPortal(me.member);
+      } else if (me.status === 'pending') {
+        currentApplicant = me.applicant;
+        document.getElementById('viewRegisterForm').classList.add('hidden');
+        document.getElementById('viewLoginForm').classList.add('hidden');
+        document.getElementById('viewLobbyWaiting').classList.remove('hidden');
+        document.getElementById('displayAppCode').innerText = me.applicant.id || 'SW-APP';
+        document.getElementById('displayName').innerText = me.applicant.name || '';
+        document.getElementById('displayPhone').innerText = me.applicant.phone || '';
+        document.getElementById('displayZone').innerText = me.applicant.zone || 'สำนักงานใหญ่';
+        showLineIdHint(me.line && me.line.userId);
+        startPollingForApproval();
+        if (window.lucide) lucide.createIcons();
+      } else {
+        restoreDraft();
+        const nameEl = document.getElementById('regName');
+        if (nameEl && !nameEl.value && me.line && me.line.name) nameEl.value = me.line.name;
+        if (mode === 'login') switchAuthMode('register');
+      }
     }
 
     function switchAuthMode(mode) {
@@ -771,123 +748,11 @@
       if (window.lucide) lucide.createIcons();
     }
 
-    async function doPhoneLogin() {
-      const phoneInput = document.getElementById('inputLoginPhone');
-      const pinInput = document.getElementById('inputLoginPin');
-      const phone = (phoneInput.value || '').trim().replace(/\D/g, '');
-      const pin = (pinInput.value || '').trim();
-
-      if (!phone || phone.length < 9) {
-        alert('กรุณากรอกเบอร์โทรศัพท์ที่ถูกต้อง (9-10 หลัก)');
-        return;
-      }
-      if (!pin || pin.length < 4) {
-        alert('🔒 กรุณากรอกรหัส PIN รักษาความปลอดภัย 4 หลัก เพื่อยืนยันตัวตน');
-        pinInput.focus();
-        return;
-      }
-      await performLoginByPhoneAndPin(phone, pin);
-    }
-
-    async function quickLoginDemo(phone, pin) {
-      document.getElementById('inputLoginPhone').value = phone;
-      document.getElementById('inputLoginPin').value = pin || phone.slice(-4);
-      await performLoginByPhoneAndPin(phone, pin || phone.slice(-4));
-    }
-
-    async function performLoginByPhoneAndPin(phone, pin) {
-      const cleanPhone = phone.replace(/\D/g, '');
-      const cleanPin = String(pin || '').trim();
-
-      // 1. Verify against Cloud Server /api/lobby/login
-      try {
-        const res = await fetch('https://siwasup-cobroker-os.onrender.com/api/lobby/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: cleanPhone, pin: cleanPin })
-        });
-        if (res.status === 401) {
-          const errData = await res.json();
-          alert('❌ ' + (errData.error || 'รหัส PIN รักษาความปลอดภัยไม่ถูกต้อง!'));
-          return;
-        }
-        if (res.ok) {
-          const data = await res.json();
-          if (data.status === 'approved' && data.applicant) {
-            renderLoggedInPortal(data.applicant, cleanPin);
-            return;
-          } else if (data.status === 'pending' && data.applicant) {
-            currentApplicant = data.applicant;
-            document.getElementById('viewLoginForm').classList.add('hidden');
-            document.getElementById('viewLobbyWaiting').classList.remove('hidden');
-            document.getElementById('displayAppCode').innerText = data.applicant.id || 'SW-APP';
-            document.getElementById('displayName').innerText = data.applicant.name || '';
-            document.getElementById('displayPhone').innerText = data.applicant.phone || cleanPhone;
-            document.getElementById('displayZone').innerText = data.applicant.zone || 'สำนักงานใหญ่';
-            startPollingForApproval();
-            return;
-          }
-        }
-      } catch(e) {
-        console.log('Cloud login check fallback:', e);
-      }
-
-      // 2. LocalStorage fallback (Also enforces 4-digit PIN!)
-      const rawData = localStorage.getItem('siwasup_lobby_data');
-      if (rawData) {
-        try {
-          const lobby = JSON.parse(rawData);
-          const approved = (lobby.approved || []).find(a => (a.phone || '').replace(/\D/g, '') === cleanPhone);
-          if (approved) {
-            const expectedPin = String(approved.pin || cleanPhone.slice(-4) || '1234').trim();
-            if (cleanPin !== expectedPin) {
-              alert('❌ รหัส PIN รักษาความปลอดภัยไม่ถูกต้อง!');
-              return;
-            }
-            renderLoggedInPortal(approved, cleanPin);
-            return;
-          }
-          const pending = (lobby.pending || []).find(p => (p.phone || '').replace(/\D/g, '') === cleanPhone);
-          if (pending) {
-            const expectedPin = String(pending.pin || cleanPhone.slice(-4) || '1234').trim();
-            if (cleanPin !== expectedPin) {
-              alert('❌ รหัส PIN รักษาความปลอดภัยไม่ถูกต้อง!');
-              return;
-            }
-            currentApplicant = pending;
-            document.getElementById('viewLoginForm').classList.add('hidden');
-            document.getElementById('viewLobbyWaiting').classList.remove('hidden');
-            document.getElementById('displayAppCode').innerText = pending.id || 'SW-APP';
-            document.getElementById('displayName').innerText = pending.name || '';
-            document.getElementById('displayPhone').innerText = pending.phone || cleanPhone;
-            document.getElementById('displayZone').innerText = pending.zone || 'สำนักงานใหญ่';
-            startPollingForApproval();
-            return;
-          }
-        } catch(e) {}
-      }
-
-      alert('ไม่พบข้อมูลเบอร์นี้ในระบบ กรุณาตรวจสอบเบอร์โทรศัพท์ หรือเลือกแท็บ "1. ลงทะเบียนใหม่" ครับ');
-    }
-
-    function renderLoggedInPortal(member, verifiedPin) {
+        function renderLoggedInPortal(member, verifiedPin) {
       loggedInMember = member;
       const roleLower = (member.role || '').toLowerCase();
       const perms = member.permissions || {};
       const isAdminUser = !!(perms.standardAdmin || perms.executiveAuthority || perms.keyboxAdmin || perms.systemAdmin || roleLower.includes('ceo') || roleLower.includes('partner') || roleLower.includes('กูล') || roleLower.includes('บัว') || roleLower.includes('ลิลลี่') || roleLower.includes('ต้น'));
-
-      try {
-        sessionStorage.setItem('siwasup_active_user_phone', member.phone || '');
-        sessionStorage.setItem('siwasup_active_user_pin', verifiedPin || member.pin || '');
-        if (isAdminUser) {
-          localStorage.setItem('siwasup_admin_authed_user', JSON.stringify({
-            name: member.name,
-            phone: member.phone,
-            role: member.role,
-            ts: Date.now()
-          }));
-        }
-      } catch(e) {}
 
       document.getElementById('viewLoginForm').classList.add('hidden');
       document.getElementById('viewRegisterForm').classList.add('hidden');
@@ -1005,75 +870,24 @@
       if (window.lucide) lucide.createIcons();
     }
 
-    function openChangePinModal() {
-      document.getElementById('inputOldPin').value = '';
-      document.getElementById('inputNewPin').value = '';
-      document.getElementById('changePinModal').classList.remove('hidden');
-      if (window.lucide) lucide.createIcons();
-    }
-
-    function closeChangePinModal() {
-      document.getElementById('changePinModal').classList.add('hidden');
-    }
-
-    async function saveNewPin() {
-      if (!loggedInMember) return;
-      const oldPin = document.getElementById('inputOldPin').value.trim();
-      const newPin = document.getElementById('inputNewPin').value.trim();
-      if (!newPin || newPin.length < 4) {
-        alert('กรุณาตั้งรหัส PIN ใหม่อย่างน้อย 4 หลักครับ');
-        return;
-      }
-      try {
-        const res = await fetch('https://siwasup-cobroker-os.onrender.com/api/lobby/update-pin', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: loggedInMember.phone, oldPin: oldPin, newPin: newPin })
-        });
-        const data = await res.json();
-        if (!res.ok) {
-          alert('❌ ' + (data.error || 'ไม่สามารถเปลี่ยนรหัส PIN ได้'));
-          return;
-        }
-        loggedInMember.pin = newPin;
-        closeChangePinModal();
-        alert('✅ เปลี่ยนรหัส PIN รักษาความปลอดภัยใหม่เรียบร้อยแล้ว!');
-      } catch(e) {
-        alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
-      }
-    }
-
     function logoutUser() {
       loggedInMember = null;
-      try {
-        sessionStorage.removeItem('siwasup_active_user_phone');
-        sessionStorage.removeItem('siwasup_active_user_pin');
-        localStorage.removeItem('siwasup_active_user_phone');
-        localStorage.removeItem('siwasup_admin_authed_user');
-      } catch(e) {}
-      document.getElementById('inputLoginPin').value = '';
+      try { localStorage.removeItem(SESSION_KEY); } catch(e) {}
+      renderLineBanner(null);
       switchAuthMode('login');
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const modeParam = urlParams.get('mode');
-      const demoParam = urlParams.get('demo');
-
-      if (demoParam === '1' || demoParam === 'true') {
-        const demoBox = document.getElementById('qaDemoSwitcherBox');
-        if (demoBox) demoBox.classList.remove('hidden');
+    window.addEventListener('DOMContentLoaded', async () => {
+      const hp = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+      if (hp.get('session')) {
+        try { localStorage.setItem(SESSION_KEY, hp.get('session')); } catch(e) {}
       }
-
-      const savedPhone = sessionStorage.getItem('siwasup_active_user_phone');
-      const savedPin = sessionStorage.getItem('siwasup_active_user_pin');
-
-      if (modeParam === 'login' || (savedPhone && savedPin)) {
-        switchAuthMode('login');
-        if (savedPhone && savedPin) {
-          performLoginByPhoneAndPin(savedPhone, savedPin);
-        }
-      }
+      const authErr = hp.get('auth_error');
+      if (window.location.hash) history.replaceState(null, '', window.location.pathname + window.location.search);
+      if (authErr) alert('เข้าสู่ระบบด้วย LINE ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
+      const mode = new URLSearchParams(window.location.search).get('mode');
+      const me = await fetchMe();
+      await applyMe(me, mode);
     });
   </script>
 </body>

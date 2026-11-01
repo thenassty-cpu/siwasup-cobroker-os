@@ -615,8 +615,137 @@ def save_lobby_data(store):
             print(f"[Error] Failed to save lobby local: {e}")
 
 
+# ==============================================================================
+# LINE LOGIN + SERVER-SIDE SESSIONS (replaces phone/PIN login)
+# ==============================================================================
+import secrets
+
+SESSION_SECRET = (os.environ.get("SESSION_SECRET") or secrets.token_hex(32)).encode()
+LINE_LOGIN_CHANNEL_ID = os.environ.get("LINE_LOGIN_CHANNEL_ID", "")
+LINE_LOGIN_CHANNEL_SECRET = os.environ.get("LINE_LOGIN_CHANNEL_SECRET", "")
+PUBLIC_BASE_URL = os.environ.get("PUBLIC_BASE_URL", "https://siwasup-cobroker-os.onrender.com").rstrip("/")
+SUPER_ADMIN_LINE_USER_IDS = {x.strip() for x in os.environ.get("SUPER_ADMIN_LINE_USER_IDS", "").split(",") if x.strip()}
+FRONTEND_URLS = {
+    "register": "https://assets.siwasup.com/agent_registration.html",
+    "admin": "https://assets.siwasup.com/admin_lobby_manager.html",
+}
+ADMIN_PERM_KEYS = ("standardAdmin", "executiveAuthority", "keyboxAdmin", "systemAdmin")
+SESSION_TTL = 12 * 3600
+
+
+def _b64u(b):
+    return base64.urlsafe_b64encode(b).rstrip(b"=").decode()
+
+
+def _b64u_dec(s):
+    return base64.urlsafe_b64decode(s + "=" * (-len(s) % 4))
+
+
+def make_token(payload, ttl):
+    body = dict(payload)
+    body["exp"] = int(time.time()) + ttl
+    raw = _b64u(json.dumps(body, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
+    sig = _b64u(hmac.new(SESSION_SECRET, raw.encode(), hashlib.sha256).digest())
+    return raw + "." + sig
+
+
+def verify_token(tok):
+    try:
+        raw, sig = tok.split(".", 1)
+        expect = _b64u(hmac.new(SESSION_SECRET, raw.encode(), hashlib.sha256).digest())
+        if not hmac.compare_digest(sig, expect):
+            return None
+        body = json.loads(_b64u_dec(raw).decode("utf-8"))
+        if body.get("exp", 0) < time.time():
+            return None
+        return body
+    except Exception:
+        return None
+
+
+def is_admin_member(m):
+    perms = m.get("permissions") or {}
+    return any(perms.get(k) for k in ADMIN_PERM_KEYS)
+
+
+def sanitize_member(m):
+    """Never expose legacy PINs or raw LINE user ids to clients."""
+    if not isinstance(m, dict):
+        return m
+    out = {k: v for k, v in m.items() if k not in ("pin", "lineUserId")}
+    out["lineLinked"] = bool(m.get("lineUserId"))
+    return out
+
+
+def sanitize_store_for_admin(store):
+    out = dict(store)
+    out["approved"] = [sanitize_member(a) for a in store.get("approved", [])]
+    out["pending"] = [sanitize_member(a) for a in store.get("pending", [])]
+    hist = []
+    for rb in store.get("rollback_history", []):
+        rb2 = dict(rb)
+        if isinstance(rb2.get("member"), dict):
+            rb2["member"] = sanitize_member(rb2["member"])
+        hist.append(rb2)
+    out["rollback_history"] = hist
+    return out
+
+
+def _http_post_form(url, data):
+    req = urllib.request.Request(
+        url,
+        data=urllib.parse.urlencode(data).encode("utf-8"),
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+    )
+    with urllib.request.urlopen(req, timeout=15) as r:
+        return json.loads(r.read().decode("utf-8"))
+
+
 class WebhookHandler(http.server.BaseHTTPRequestHandler):
 
+
+
+    def _send_json(self, code, obj):
+        self.send_response(code)
+        self.send_header('Content-Type', 'application/json; charset=utf-8')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+        self.wfile.write(json.dumps(obj, ensure_ascii=False).encode('utf-8'))
+
+    def _redirect(self, url, set_cookie=None):
+        self.send_response(302)
+        self.send_header('Location', url)
+        if set_cookie:
+            self.send_header('Set-Cookie', set_cookie)
+        self.send_header('Cache-Control', 'no-store')
+        self.end_headers()
+
+    def _session(self):
+        auth = self.headers.get('Authorization', '')
+        if auth.startswith('Bearer '):
+            return verify_token(auth[7:].strip())
+        return None
+
+    def _require(self, level):
+        """Return the acting approved member, or send 401/403 and return None."""
+        s = self._session()
+        if not s or not s.get("sub"):
+            self._send_json(401, {"error": "กรุณาเข้าสู่ระบบด้วย LINE"})
+            return None
+        store = load_lobby_data()
+        m = next((a for a in store.get("approved", []) if a.get("lineUserId") == s.get("sub")), None)
+        if not m:
+            self._send_json(401, {"error": "บัญชี LINE นี้ยังไม่ได้รับอนุมัติเป็นสมาชิก"})
+            return None
+        perms = m.get("permissions") or {}
+        if level == "exec":
+            ok = bool(perms.get("executiveAuthority") or perms.get("systemAdmin"))
+        else:
+            ok = is_admin_member(m)
+        if not ok:
+            self._send_json(403, {"error": "บัญชีนี้ไม่มีสิทธิ์ดำเนินการ"})
+            return None
+        return m
 
     def do_OPTIONS(self):
         self.send_response(200)
@@ -630,32 +759,97 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
         path = parsed_url.path
         query = urllib.parse.parse_qs(parsed_url.query)
         if path == "/api/lobby/list":
-            self.send_response(200)
-            self.send_header('Content-Type', 'application/json; charset=utf-8')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            data = load_lobby_data()
-            self.wfile.write(json.dumps(data, ensure_ascii=False, indent=2).encode('utf-8'))
+            if not self._require("admin"):
+                return
+            self._send_json(200, sanitize_store_for_admin(load_lobby_data()))
             return
 
         if path == "/api/lobby/status":
-            self.send_response(200)
-            self.send_header('Content-Type', 'application/json; charset=utf-8')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            app_id = query.get("id", [""])[0]
-            phone = query.get("phone", [""])[0]
-            data = load_lobby_data()
-            approved_item = None
-            for a in data.get("approved", []):
-                if (app_id and a.get("id") == app_id) or (phone and a.get("phone") == phone):
-                    approved_item = a
-                    break
-            if approved_item:
-                resp = {"status": "approved", "applicant": approved_item}
-            else:
-                resp = {"status": "pending"}
-            self.wfile.write(json.dumps(resp, ensure_ascii=False).encode('utf-8'))
+            self._send_json(410, {"error": "deprecated: use /api/auth/me"})
+            return
+
+        if path == "/api/auth/me":
+            s = self._session()
+            if not s or not s.get("sub"):
+                self._send_json(401, {"error": "no session"})
+                return
+            sub = s["sub"]
+            store = load_lobby_data()
+            line_info = {"userId": sub, "name": s.get("name", ""), "picture": s.get("picture", "")}
+            mem = next((a for a in store.get("approved", []) if a.get("lineUserId") == sub), None)
+            if mem:
+                self._send_json(200, {"status": "approved", "member": sanitize_member(mem), "isAdmin": is_admin_member(mem), "line": line_info})
+                return
+            pend = next((a for a in store.get("pending", []) if a.get("lineUserId") == sub), None)
+            if pend:
+                self._send_json(200, {"status": "pending", "applicant": sanitize_member(pend), "line": line_info})
+                return
+            self._send_json(200, {"status": "guest", "line": line_info})
+            return
+
+        if path == "/api/auth/line/start":
+            if not LINE_LOGIN_CHANNEL_ID or not LINE_LOGIN_CHANNEL_SECRET:
+                self._send_json(503, {"error": "LINE Login ยังไม่ได้ตั้งค่าบนเซิร์ฟเวอร์"})
+                return
+            ret = query.get("return", ["register"])[0]
+            if ret not in FRONTEND_URLS:
+                ret = "register"
+            nonce = secrets.token_urlsafe(16)
+            state = make_token({"n": nonce, "r": ret}, 600)
+            params = urllib.parse.urlencode({
+                "response_type": "code",
+                "client_id": LINE_LOGIN_CHANNEL_ID,
+                "redirect_uri": PUBLIC_BASE_URL + "/api/auth/line/callback",
+                "state": state,
+                "scope": "profile openid",
+                "nonce": nonce,
+            })
+            self._redirect(
+                "https://access.line.me/oauth2/v2.1/authorize?" + params,
+                "line_state=" + nonce + "; HttpOnly; Secure; SameSite=Lax; Path=/api/auth/line; Max-Age=600",
+            )
+            return
+
+        if path == "/api/auth/line/callback":
+            clear_cookie = "line_state=; HttpOnly; Secure; SameSite=Lax; Path=/api/auth/line; Max-Age=0"
+            code = query.get("code", [""])[0]
+            st = verify_token(query.get("state", [""])[0])
+            cm = re.search(r"line_state=([^;]+)", self.headers.get("Cookie", ""))
+            if not code or not st or not cm or not hmac.compare_digest(cm.group(1), st.get("n", "")):
+                self._redirect(FRONTEND_URLS["register"] + "#auth_error=state", clear_cookie)
+                return
+            try:
+                tok = _http_post_form("https://api.line.me/oauth2/v2.1/token", {
+                    "grant_type": "authorization_code",
+                    "code": code,
+                    "redirect_uri": PUBLIC_BASE_URL + "/api/auth/line/callback",
+                    "client_id": LINE_LOGIN_CHANNEL_ID,
+                    "client_secret": LINE_LOGIN_CHANNEL_SECRET,
+                })
+                prof = _http_post_form("https://api.line.me/oauth2/v2.1/verify", {
+                    "id_token": tok["id_token"],
+                    "client_id": LINE_LOGIN_CHANNEL_ID,
+                    "nonce": st.get("n", ""),
+                })
+                sub = prof["sub"]
+                name = prof.get("name", "")
+                picture = prof.get("picture", "")
+            except Exception as e:
+                print(f"[LINE Login] token/verify failed: {e}")
+                self._redirect(FRONTEND_URLS[st.get("r", "register")] + "#auth_error=line", clear_cookie)
+                return
+
+            # Bootstrap: designated super admin LINE ids get linked to the Tech Architect seat
+            store = load_lobby_data()
+            if sub in SUPER_ADMIN_LINE_USER_IDS and not any(a.get("lineUserId") == sub for a in store.get("approved", [])):
+                seat = next((a for a in store.get("approved", []) if a.get("id") == "app_office_004" and not a.get("lineUserId")), None)
+                if seat:
+                    seat["lineUserId"] = sub
+                    store.setdefault("audit_log", []).insert(0, f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 🔗 ผูก LINE ผู้ดูแลระบบสูงสุด: {seat.get('name')}")
+                    save_lobby_data(store)
+
+            session = make_token({"sub": sub, "name": name, "picture": picture}, SESSION_TTL)
+            self._redirect(FRONTEND_URLS[st.get("r", "register")] + "#session=" + session, clear_cookie)
             return
 
         if path in ["/logs", "/api/export-logs"]:
@@ -741,139 +935,46 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
         parsed_url = urllib.parse.urlparse(self.path)
         path = parsed_url.path
 
-        if path == "/api/lobby/login":
-            content_length = int(self.headers.get('Content-Length', 0))
-            body = self.rfile.read(content_length)
-            try:
-                payload = json.loads(body.decode('utf-8'))
-                raw_phone = payload.get("phone", "")
-                clean_phone = re.sub(r"\D", "", raw_phone)
-                input_pin = str(payload.get("pin", "")).strip()
-                store = load_lobby_data()
-
-                for a in store.get("approved", []):
-                    ap_phone = re.sub(r"\D", "", a.get("phone", ""))
-                    if ap_phone == clean_phone and clean_phone:
-                        expected_pin = str(a.get("pin") or ap_phone[-4:] or "1234").strip()
-                        if input_pin == expected_pin:
-                            self.send_response(200)
-                            self.send_header('Content-Type', 'application/json; charset=utf-8')
-                            self.send_header('Access-Control-Allow-Origin', '*')
-                            self.end_headers()
-                            self.wfile.write(json.dumps({"status": "approved", "applicant": a}, ensure_ascii=False).encode('utf-8'))
-                            return
-                        else:
-                            self.send_response(401)
-                            self.send_header('Content-Type', 'application/json; charset=utf-8')
-                            self.send_header('Access-Control-Allow-Origin', '*')
-                            self.end_headers()
-                            self.wfile.write(json.dumps({"status": "invalid_pin", "error": "รหัส PIN 4 หลักไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง"}, ensure_ascii=False).encode('utf-8'))
-                            return
-
-                for p in store.get("pending", []):
-                    pp_phone = re.sub(r"\D", "", p.get("phone", ""))
-                    if pp_phone == clean_phone and clean_phone:
-                        expected_pin = str(p.get("pin") or pp_phone[-4:] or "1234").strip()
-                        if input_pin == expected_pin:
-                            self.send_response(200)
-                            self.send_header('Content-Type', 'application/json; charset=utf-8')
-                            self.send_header('Access-Control-Allow-Origin', '*')
-                            self.end_headers()
-                            self.wfile.write(json.dumps({"status": "pending", "applicant": p}, ensure_ascii=False).encode('utf-8'))
-                            return
-                        else:
-                            self.send_response(401)
-                            self.send_header('Content-Type', 'application/json; charset=utf-8')
-                            self.send_header('Access-Control-Allow-Origin', '*')
-                            self.end_headers()
-                            self.wfile.write(json.dumps({"status": "invalid_pin", "error": "รหัส PIN 4 หลักไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง"}, ensure_ascii=False).encode('utf-8'))
-                            return
-
-                self.send_response(404)
-                self.send_header('Content-Type', 'application/json; charset=utf-8')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                self.wfile.write(json.dumps({"status": "not_found", "error": "ไม่พบเบอร์โทรศัพท์นี้ในระบบ"}, ensure_ascii=False).encode('utf-8'))
-            except Exception as e:
-                self.send_response(500)
-                self.send_header('Content-Type', 'application/json; charset=utf-8')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
-            return
-
-        if path == "/api/lobby/update-pin":
-            content_length = int(self.headers.get('Content-Length', 0))
-            body = self.rfile.read(content_length)
-            try:
-                payload = json.loads(body.decode('utf-8'))
-                clean_phone = re.sub(r"\D", "", payload.get("phone", ""))
-                old_pin = str(payload.get("oldPin", "")).strip()
-                new_pin = str(payload.get("newPin", "")).strip()
-                if not new_pin or len(new_pin) < 4:
-                    self.send_response(400)
-                    self.send_header('Content-Type', 'application/json; charset=utf-8')
-                    self.send_header('Access-Control-Allow-Origin', '*')
-                    self.end_headers()
-                    self.wfile.write(json.dumps({"error": "กรุณาตั้งรหัส PIN อย่างน้อย 4 หลัก"}, ensure_ascii=False).encode('utf-8'))
-                    return
-                store = load_lobby_data()
-                for a in store.get("approved", []):
-                    ap_phone = re.sub(r"\D", "", a.get("phone", ""))
-                    if ap_phone == clean_phone:
-                        expected_pin = str(a.get("pin") or ap_phone[-4:] or "1234").strip()
-                        if old_pin and old_pin != expected_pin:
-                            self.send_response(401)
-                            self.send_header('Content-Type', 'application/json; charset=utf-8')
-                            self.send_header('Access-Control-Allow-Origin', '*')
-                            self.end_headers()
-                            self.wfile.write(json.dumps({"error": "รหัส PIN เดิมไม่ถูกต้อง"}, ensure_ascii=False).encode('utf-8'))
-                            return
-                        a["pin"] = new_pin
-                        a["updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                        store.setdefault("audit_log", []).insert(0, f"[{a['updated_at']}] 🔐 เปลี่ยนรหัส PIN ส่วนตัวสำเร็จ: {a.get('name')}")
-                        save_lobby_data(store)
-                        self.send_response(200)
-                        self.send_header('Content-Type', 'application/json; charset=utf-8')
-                        self.send_header('Access-Control-Allow-Origin', '*')
-                        self.end_headers()
-                        self.wfile.write(json.dumps({"status": "success"}, ensure_ascii=False).encode('utf-8'))
-                        return
-                self.send_response(404)
-                self.send_header('Content-Type', 'application/json; charset=utf-8')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                self.wfile.write(json.dumps({"error": "Member not found"}).encode('utf-8'))
-            except Exception as e:
-                self.send_response(500)
-                self.send_header('Content-Type', 'application/json; charset=utf-8')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
-            return
+        ADMIN_POST_LEVELS = {
+            "/api/lobby/approve": "admin",
+            "/api/lobby/reject": "admin",
+            "/api/lobby/revoke": "admin",
+            "/api/lobby/rollback": "admin",
+            "/api/lobby/backup": "admin",
+            "/api/lobby/update-permissions": "exec",
+        }
+        acting_member = None
+        if path in ADMIN_POST_LEVELS:
+            acting_member = self._require(ADMIN_POST_LEVELS[path])
+            if not acting_member:
+                return
 
         if path == "/api/lobby/register":
-            content_length = int(self.headers.get('Content-Length', 0))
-            body = self.rfile.read(content_length)
+            s = self._session()
+            if not s or not s.get("sub"):
+                self._send_json(401, {"error": "กรุณาเชื่อมบัญชี LINE ก่อนลงทะเบียน"})
+                return
             try:
-                payload = json.loads(body.decode('utf-8'))
+                content_length = int(self.headers.get('Content-Length', 0))
+                payload = json.loads(self.rfile.read(content_length).decode('utf-8'))
+                uid = s["sub"]
                 store = load_lobby_data()
-                phone = payload.get("phone", "")
-                if phone:
-                    store["pending"] = [p for p in store.get("pending", []) if p.get("phone") != phone]
-                store.setdefault("pending", []).insert(0, payload)
+                if any(a.get("lineUserId") == uid for a in store.get("approved", [])):
+                    self._send_json(409, {"error": "บัญชี LINE นี้เป็นสมาชิกอยู่แล้ว"})
+                    return
+                allowed = ("id", "name", "nickname", "phone", "line_id", "zone", "affiliation", "affiliation_label", "avatar", "submitted_at")
+                safe = {k: payload.get(k) for k in allowed if payload.get(k) is not None}
+                safe["lineUserId"] = uid
+                safe["lineDisplayName"] = s.get("name", "")
+                safe["status"] = "pending"
+                if not safe.get("id"):
+                    safe["id"] = f"SW-APP-{int(time.time()) % 100000}"
+                store["pending"] = [p for p in store.get("pending", []) if p.get("lineUserId") != uid]
+                store["pending"].insert(0, safe)
                 save_lobby_data(store)
-                self.send_response(200)
-                self.send_header('Content-Type', 'application/json; charset=utf-8')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                self.wfile.write(json.dumps({"status": "success", "applicant": payload}, ensure_ascii=False).encode('utf-8'))
+                self._send_json(200, {"status": "success", "applicant": sanitize_member(safe)})
             except Exception as e:
-                self.send_response(500)
-                self.send_header('Content-Type', 'application/json; charset=utf-8')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+                self._send_json(500, {"error": str(e)})
             return
 
         if path == "/api/lobby/approve":
@@ -890,6 +991,16 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         break
                 if target_idx != -1:
                     applicant = store["pending"].pop(target_idx)
+                    _digits = lambda v: re.sub(r"\D", "", v or "")
+                    existing = next((a for a in store.get("approved", []) if not a.get("lineUserId") and _digits(a.get("phone")) and _digits(a.get("phone")) == _digits(applicant.get("phone"))), None)
+                    if existing and applicant.get("lineUserId"):
+                        existing["lineUserId"] = applicant["lineUserId"]
+                        if applicant.get("avatar") and not existing.get("avatar"):
+                            existing["avatar"] = applicant["avatar"]
+                        store.setdefault("audit_log", []).insert(0, f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 🔗 ผูก LINE เข้ากับสมาชิกเดิม: {existing.get('name')}")
+                        save_lobby_data(store)
+                        self._send_json(200, {"status": "success", "approved": sanitize_member(existing), "linked": True})
+                        return
                     approved_item = {
                         "id": applicant.get("id"),
                         "name": applicant.get("name"),
@@ -898,7 +1009,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         "line_id": applicant.get("line_id"),
                         "zone": applicant.get("zone"),
                         "avatar": applicant.get("avatar", ""),
-                        "pin": applicant.get("pin") or re.sub(r"\D", "", applicant.get("phone", ""))[-4:] or "1234",
+                        "lineUserId": applicant.get("lineUserId"),
                         "role": payload.get("role", "Co-Broker Partner"),
                         "title": payload.get("title", ""),
                         "badges": payload.get("badges", []),
@@ -914,7 +1025,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     self.send_header('Content-Type', 'application/json; charset=utf-8')
                     self.send_header('Access-Control-Allow-Origin', '*')
                     self.end_headers()
-                    self.wfile.write(json.dumps({"status": "success", "approved": approved_item}, ensure_ascii=False).encode('utf-8'))
+                    self.wfile.write(json.dumps({"status": "success", "approved": sanitize_member(approved_item)}, ensure_ascii=False).encode('utf-8'))
                 else:
                     self.send_response(404)
                     self.send_header('Content-Type', 'application/json; charset=utf-8')
@@ -971,7 +1082,6 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     if "title" in payload: m["title"] = payload["title"]
                     if "badges" in payload: m["badges"] = payload["badges"]
                     if "permissions" in payload: m["permissions"] = payload["permissions"]
-                    if "pin" in payload and payload["pin"]: m["pin"] = str(payload["pin"]).strip()
                     m["updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     
                     audit_entry = f"[{m['updated_at']}] ⚙️ ปรับสิทธิ์: {m.get('name')} เป็น {m.get('role')} ({len(m.get('badges', []))} สิทธิ์)"
@@ -982,7 +1092,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     self.send_header('Content-Type', 'application/json; charset=utf-8')
                     self.send_header('Access-Control-Allow-Origin', '*')
                     self.end_headers()
-                    self.wfile.write(json.dumps({"status": "success", "member": m}, ensure_ascii=False).encode('utf-8'))
+                    self.wfile.write(json.dumps({"status": "success", "member": sanitize_member(m)}, ensure_ascii=False).encode('utf-8'))
                     return
                 else:
                     self.send_response(404)
@@ -1006,6 +1116,9 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 payload = json.loads(body.decode('utf-8'))
                 app_id = payload.get("applicantId")
                 reason = payload.get("reason", "Revoked by admin")
+                if acting_member and acting_member.get("id") == app_id:
+                    self._send_json(400, {"error": "ไม่สามารถคัดตัวเองออกจากระบบได้"})
+                    return
                 store = load_lobby_data()
                 target_idx = -1
                 for idx, a in enumerate(store.get("approved", [])):
@@ -1032,7 +1145,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     self.send_header('Content-Type', 'application/json; charset=utf-8')
                     self.send_header('Access-Control-Allow-Origin', '*')
                     self.end_headers()
-                    self.wfile.write(json.dumps({"status": "success", "revoked": revoked_member, "rollback_id": rollback_id}, ensure_ascii=False).encode('utf-8'))
+                    self.wfile.write(json.dumps({"status": "success", "revoked": sanitize_member(revoked_member), "rollback_id": rollback_id}, ensure_ascii=False).encode('utf-8'))
                     return
                 else:
                     self.send_response(404)
@@ -1078,7 +1191,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         self.send_header('Content-Type', 'application/json; charset=utf-8')
                         self.send_header('Access-Control-Allow-Origin', '*')
                         self.end_headers()
-                        self.wfile.write(json.dumps({"status": "success", "restored": restored_member}, ensure_ascii=False).encode('utf-8'))
+                        self.wfile.write(json.dumps({"status": "success", "restored": sanitize_member(restored_member)}, ensure_ascii=False).encode('utf-8'))
                         return
                 self.send_response(404)
                 self.send_header('Content-Type', 'application/json; charset=utf-8')
