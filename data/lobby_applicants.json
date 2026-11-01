@@ -116,7 +116,8 @@
         "systemAdmin": true
       },
       "approved_at": "2026-11-01 16:30:00",
-      "approved_by": "System Architect"
+      "approved_by": "System Architect",
+      "lineUserId": "U6a7cc4613d31b4634e489d7cd10fa5df"
     },
     {
       "id": "app_office_005",
