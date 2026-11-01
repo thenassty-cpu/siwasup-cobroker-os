@@ -30,7 +30,8 @@
         "systemAdmin": false
       },
       "approved_at": "2026-11-01 16:30:00",
-      "approved_by": "System Architect"
+      "approved_by": "System Architect",
+      "pin": "9999"
     },
     {
       "id": "app_office_002",
@@ -60,7 +61,8 @@
         "systemAdmin": false
       },
       "approved_at": "2026-11-01 16:30:00",
-      "approved_by": "System Architect"
+      "approved_by": "System Architect",
+      "pin": "8888"
     },
     {
       "id": "app_office_003",
@@ -88,7 +90,8 @@
         "systemAdmin": false
       },
       "approved_at": "2026-11-01 16:30:00",
-      "approved_by": "System Architect"
+      "approved_by": "System Architect",
+      "pin": "6666"
     },
     {
       "id": "app_office_004",
@@ -116,7 +119,8 @@
         "systemAdmin": true
       },
       "approved_at": "2026-11-01 16:30:00",
-      "approved_by": "System Architect"
+      "approved_by": "System Architect",
+      "pin": "5555"
     },
     {
       "id": "app_office_005",
@@ -144,7 +148,8 @@
         "systemAdmin": false
       },
       "approved_at": "2026-11-01 16:30:00",
-      "approved_by": "System Architect"
+      "approved_by": "System Architect",
+      "pin": "4444"
     }
   ],
   "audit_log": [
