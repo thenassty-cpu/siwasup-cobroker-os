@@ -499,12 +499,16 @@
       const zone = document.getElementById('regZone').value;
       const affiliation = document.querySelector('input[name="affiliation"]:checked').value;
 
-      if (!name) {
-        alert("กรุณาระบุชื่อ-นามสกุลจริงด้วยครับ");
+      if (!name || name.length < 3) {
+        alert("⚠️ กรุณาระบุชื่อ-นามสกุลจริงอย่างถูกต้อง (อย่างน้อย 3 ตัวอักษร) ครับ");
+        document.getElementById('regName').focus();
         return;
       }
-      if (!phone) {
-        alert("กรุณาระบุเบอร์โทรศัพท์สำหรับติดต่อด้วยครับ");
+      const cleanPhone = phone.replace(/\D/g, '');
+      const validMobileRegex = /^(06|08|09)\d{8}$/;
+      if (!validMobileRegex.test(cleanPhone)) {
+        alert("⚠️ กรุณาระบุเบอร์โทรศัพท์มือถือที่ถูกต้อง (10 หลัก ขึ้นต้นด้วย 06, 08 หรือ 09) เช่น 0812345678");
+        document.getElementById('regPhone').focus();
         return;
       }
 
@@ -515,7 +519,7 @@
         id: appId,
         name: name,
         nickname: nickname || name,
-        phone: phone,
+        phone: cleanPhone,
         line_id: lineId || "ไม่ระบุ",
         zone: zone,
         affiliation: affiliation,
@@ -712,7 +716,14 @@
       } else {
         restoreDraft();
         const nameEl = document.getElementById('regName');
-        if (nameEl && !nameEl.value && me.line && me.line.name) nameEl.value = me.line.name;
+        if (nameEl && !nameEl.value && me.line && me.line.name) {
+          nameEl.value = me.line.name;
+        }
+        if (me.line && me.line.picture) {
+          selectedAvatarUrl = me.line.picture;
+          const prevImg = document.getElementById('regPhotoPreview');
+          if (prevImg) prevImg.src = me.line.picture;
+        }
         if (mode === 'login') switchAuthMode('register');
       }
     }
