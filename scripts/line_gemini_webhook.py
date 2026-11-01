@@ -592,7 +592,32 @@ def reply_line(reply_token, reply_text):
         return False
 
 
+LOBBY_PATH = os.path.join(DATA_DIR, "lobby_applicants.json")
+LOBBY_LOCK = threading.Lock()
+
+def load_lobby_data():
+    if os.path.exists(LOBBY_PATH):
+        try:
+            with open(LOBBY_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"[Warn] Failed to read lobby_applicants.json: {e}")
+    return {"updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "pending": [], "approved": []}
+
+def save_lobby_data(store):
+    with LOBBY_LOCK:
+        store["updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        data_bytes = json.dumps(store, ensure_ascii=False, indent=2).encode("utf-8")
+        try:
+            with open(LOBBY_PATH, "wb") as f:
+                f.write(data_bytes)
+        except Exception as e:
+            print(f"[Error] Failed to save lobby local: {e}")
+
+
 class WebhookHandler(http.server.BaseHTTPRequestHandler):
+
+
     def do_OPTIONS(self):
         self.send_response(200)
         self.send_header('Access-Control-Allow-Origin', '*')
@@ -604,6 +629,34 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
         parsed_url = urllib.parse.urlparse(self.path)
         path = parsed_url.path
         query = urllib.parse.parse_qs(parsed_url.query)
+        if path == "/api/lobby/list":
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            data = load_lobby_data()
+            self.wfile.write(json.dumps(data, ensure_ascii=False, indent=2).encode('utf-8'))
+            return
+
+        if path == "/api/lobby/status":
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            app_id = query.get("id", [""])[0]
+            phone = query.get("phone", [""])[0]
+            data = load_lobby_data()
+            approved_item = None
+            for a in data.get("approved", []):
+                if (app_id and a.get("id") == app_id) or (phone and a.get("phone") == phone):
+                    approved_item = a
+                    break
+            if approved_item:
+                resp = {"status": "approved", "applicant": approved_item}
+            else:
+                resp = {"status": "pending"}
+            self.wfile.write(json.dumps(resp, ensure_ascii=False).encode('utf-8'))
+            return
 
         if path in ["/logs", "/api/export-logs"]:
             secret = query.get("secret", [""])[0]
@@ -685,6 +738,102 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
         self.wfile.write(b"<h1>Siwasup Line-Gemini Webhook v2 (Smart Context & Exact Property Match) is Running!</h1>")
 
     def do_POST(self):
+        parsed_url = urllib.parse.urlparse(self.path)
+        path = parsed_url.path
+
+        if path == "/api/lobby/register":
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            try:
+                payload = json.loads(body.decode('utf-8'))
+                store = load_lobby_data()
+                phone = payload.get("phone", "")
+                if phone:
+                    store["pending"] = [p for p in store.get("pending", []) if p.get("phone") != phone]
+                store.setdefault("pending", []).insert(0, payload)
+                save_lobby_data(store)
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "success", "applicant": payload}, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+            return
+
+        if path == "/api/lobby/approve":
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            try:
+                payload = json.loads(body.decode('utf-8'))
+                app_id = payload.get("applicantId")
+                store = load_lobby_data()
+                target_idx = -1
+                for idx, p in enumerate(store.get("pending", [])):
+                    if p.get("id") == app_id:
+                        target_idx = idx
+                        break
+                if target_idx != -1:
+                    applicant = store["pending"].pop(target_idx)
+                    approved_item = {
+                        "id": applicant.get("id"),
+                        "name": applicant.get("name"),
+                        "nickname": applicant.get("nickname"),
+                        "phone": applicant.get("phone"),
+                        "line_id": applicant.get("line_id"),
+                        "zone": applicant.get("zone"),
+                        "role": payload.get("role", "Co-Broker Partner"),
+                        "title": payload.get("title", ""),
+                        "badges": payload.get("badges", []),
+                        "permissions": payload.get("permissions", {}),
+                        "approved_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    }
+                    store.setdefault("approved", []).insert(0, approved_item)
+                    save_lobby_data(store)
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'application/json; charset=utf-8')
+                    self.send_header('Access-Control-Allow-Origin', '*')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"status": "success", "approved": approved_item}, ensure_ascii=False).encode('utf-8'))
+                else:
+                    self.send_response(404)
+                    self.send_header('Content-Type', 'application/json; charset=utf-8')
+                    self.send_header('Access-Control-Allow-Origin', '*')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"error": "Applicant not found"}).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+            return
+
+        if path == "/api/lobby/reject":
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            try:
+                payload = json.loads(body.decode('utf-8'))
+                app_id = payload.get("applicantId")
+                store = load_lobby_data()
+                store["pending"] = [p for p in store.get("pending", []) if p.get("id") != app_id]
+                save_lobby_data(store)
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "success"}, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+            return
         content_length = int(self.headers.get('Content-Length', 0))
         body = self.rfile.read(content_length)
 

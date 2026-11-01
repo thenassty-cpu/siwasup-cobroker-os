@@ -347,7 +347,15 @@
         submitted_at: "เมื่อสักครู่"
       };
 
-      // 1. Save to LocalStorage & Broadcast to Admin Tab
+      // 1. Sync to Cloud Server & LocalStorage
+      try {
+        fetch('https://siwasup-cobroker-os.onrender.com/api/lobby/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentApplicant)
+        }).catch(err => console.error('Cloud register error:', err));
+      } catch(e) {}
+
       const rawData = localStorage.getItem('siwasup_lobby_data');
       let lobbyData = rawData ? JSON.parse(rawData) : { pending: [], approved: [] };
       lobbyData.pending.unshift(currentApplicant);
@@ -378,14 +386,26 @@
       pollInterval = setInterval(checkApprovalStatus, 2000);
     }
 
-    function checkApprovalStatus() {
+    async function checkApprovalStatus() {
       if (!currentApplicant) return;
 
+      // Check Cloud Server First
+      try {
+        const res = await fetch(`https://siwasup-cobroker-os.onrender.com/api/lobby/status?id=${encodeURIComponent(currentApplicant.id)}&phone=${encodeURIComponent(currentApplicant.phone)}`, { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.status === 'approved' && data.applicant) {
+            clearInterval(pollInterval);
+            handleApplicantApproved(data.applicant);
+            return;
+          }
+        }
+      } catch (e) {}
+
+      // Fallback: LocalStorage
       const rawData = localStorage.getItem('siwasup_lobby_data');
       if (!rawData) return;
       const lobbyData = JSON.parse(rawData);
-
-      // Check if current applicant exists in approved list
       const approved = lobbyData.approved.find(a => a.id === currentApplicant.id || a.phone === currentApplicant.phone);
       if (approved) {
         clearInterval(pollInterval);

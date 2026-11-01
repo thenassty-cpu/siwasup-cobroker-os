@@ -327,8 +327,27 @@
       ]
     };
 
-    // Load from LocalStorage or use Default
+        const API_BASE = 'https://siwasup-cobroker-os.onrender.com';
     let lobbyData = JSON.parse(localStorage.getItem('siwasup_lobby_data')) || DEFAULT_DATA;
+
+    async function fetchCloudLobby() {
+      try {
+        const res = await fetch(`${API_BASE}/api/lobby/list`, { cache: 'no-store' });
+        if (res.ok) {
+          const cloudData = await res.json();
+          if (cloudData && (cloudData.pending || cloudData.approved)) {
+            lobbyData = cloudData;
+            localStorage.setItem('siwasup_lobby_data', JSON.stringify(lobbyData));
+            renderLobby();
+            return;
+          }
+        }
+      } catch (err) {
+        console.log('[Lobby] Cloud sync connecting:', err);
+      }
+      lobbyData = JSON.parse(localStorage.getItem('siwasup_lobby_data')) || DEFAULT_DATA;
+      renderLobby();
+    }
 
     function saveLobbyData() {
       localStorage.setItem('siwasup_lobby_data', JSON.stringify(lobbyData));
@@ -517,12 +536,29 @@
     }
 
     // Approve applicant with role
-    function approveWithPreset(applicantId, presetKey) {
+    async function approveWithPreset(applicantId, presetKey) {
       const idx = lobbyData.pending.findIndex(a => a.id === applicantId);
       if (idx === -1) return;
 
       const applicant = lobbyData.pending[idx];
       const preset = ROLE_PRESETS[presetKey];
+
+      // Notify Cloud Backend
+      try {
+        await fetch(`${API_BASE}/api/lobby/approve`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            applicantId: applicantId,
+            role: preset.role,
+            title: preset.title,
+            badges: preset.badges,
+            permissions: preset.permissions
+          })
+        });
+      } catch(e) {
+        console.error('Cloud approve error:', e);
+      }
 
       const approvedMember = {
         id: applicant.id,
@@ -549,8 +585,15 @@
     }
 
     // Reject applicant
-    function rejectApplicant(applicantId) {
+    async function rejectApplicant(applicantId) {
       if (!confirm("คุณต้องการปฏิเสธและดีดรายชื่อนี้ออกจาก Lobby ใช่หรือไม่?")) return;
+      try {
+        await fetch(`${API_BASE}/api/lobby/reject`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ applicantId })
+        });
+      } catch(e) {}
       lobbyData.pending = lobbyData.pending.filter(a => a.id !== applicantId);
       saveLobbyData();
       renderLobby();
@@ -606,8 +649,9 @@
       };
     } catch(e) {}
 
-    // Initial render
-    renderLobby();
+    // Initial cloud fetch and 3-second auto-polling
+    fetchCloudLobby();
+    setInterval(fetchCloudLobby, 3000);
   </script>
 </body>
 </html>
