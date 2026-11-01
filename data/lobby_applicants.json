@@ -3,94 +3,6 @@
   "pending": [],
   "approved": [
     {
-      "id": "app_office_001",
-      "name": "คุณวารินทร์ กูลจีรัง (เจี๊ยบ)",
-      "nickname": "เจี๊ยบ (กูล)",
-      "phone": "0819999999",
-      "line_id": "gool_ceo",
-      "zone": "สำนักงานใหญ่",
-      "role": "👑 CEO & Co-Broker Lead",
-      "title": "Executive Managing Partner",
-      "role_code": "OFFICE_CEO",
-      "status": "approved",
-      "badges": [
-        "💰 เคาะราคาบ้าน",
-        "👑 สิทธิ์บริหาร",
-        "💬 ดูแชทลีด",
-        "🔑 กุญแจสำรอง",
-        "🛡️ Standard Admin"
-      ],
-      "permissions": {
-        "standardAdmin": true,
-        "editPrice": true,
-        "keyboxAdmin": true,
-        "leadInspector": true,
-        "executiveAuthority": true,
-        "catalogCurator": true,
-        "systemAdmin": false
-      },
-      "approved_at": "2026-11-01 16:30:00",
-      "approved_by": "System Architect"
-    },
-    {
-      "id": "app_office_002",
-      "name": "คุณบัว",
-      "nickname": "บัว",
-      "phone": "0818888888",
-      "line_id": "bua_exec",
-      "zone": "สำนักงานใหญ่",
-      "role": "👑 Executive Partner",
-      "title": "Executive Managing Partner",
-      "role_code": "OFFICE_EXEC",
-      "status": "approved",
-      "badges": [
-        "💰 เคาะราคาบ้าน",
-        "👑 สิทธิ์บริหาร",
-        "💬 ดูแชทลีด",
-        "🔑 กุญแจสำรอง",
-        "🛡️ Standard Admin"
-      ],
-      "permissions": {
-        "standardAdmin": true,
-        "editPrice": true,
-        "keyboxAdmin": true,
-        "leadInspector": true,
-        "executiveAuthority": true,
-        "catalogCurator": true,
-        "systemAdmin": false
-      },
-      "approved_at": "2026-11-01 16:30:00",
-      "approved_by": "System Architect"
-    },
-    {
-      "id": "app_office_003",
-      "name": "พี่ลิลลี่ (ท่าข้าม 12)",
-      "nickname": "ลิลลี่",
-      "phone": "0816666666",
-      "line_id": "lily_keys",
-      "zone": "โซนท่าข้าม-พระราม 2",
-      "role": "🔑 Head of Viewing & Keys",
-      "title": "Head of Viewing & Keybox Custodian",
-      "role_code": "OFFICE_KEYBOX",
-      "status": "approved",
-      "badges": [
-        "🔑 คุมกุญแจ OTP 100%",
-        "🛡️ Standard Admin",
-        "🚫 ล็อกแก้ราคา"
-      ],
-      "permissions": {
-        "standardAdmin": true,
-        "editPrice": false,
-        "keyboxAdmin": true,
-        "leadInspector": false,
-        "executiveAuthority": false,
-        "catalogCurator": false,
-        "systemAdmin": false
-      },
-      "approved_at": "2026-11-01 16:30:00",
-      "approved_by": "System Architect"
-    },
-    {
       "id": "app_office_004",
       "name": "คุณต้น (NASSTY)",
       "nickname": "ต้น",
@@ -118,37 +30,10 @@
       "approved_at": "2026-11-01 16:30:00",
       "approved_by": "System Architect",
       "lineUserId": "U6a7cc4613d31b4634e489d7cd10fa5df"
-    },
-    {
-      "id": "app_office_005",
-      "name": "เจ้าหน้าที่ธุรการ/ซัพพอร์ต",
-      "nickname": "ซัพพอร์ต",
-      "phone": "0814444444",
-      "line_id": "support_office",
-      "zone": "สำนักงานใหญ่",
-      "role": "🏢 Support & Coordinator",
-      "title": "Office Property Coordinator",
-      "role_code": "OFFICE_SUPPORT",
-      "status": "approved",
-      "badges": [
-        "🛡️ Standard Admin",
-        "🏷️ ช่วยคัดสต๊อก",
-        "🚫 ล็อกแก้ราคา"
-      ],
-      "permissions": {
-        "standardAdmin": true,
-        "editPrice": false,
-        "keyboxAdmin": false,
-        "leadInspector": false,
-        "executiveAuthority": false,
-        "catalogCurator": true,
-        "systemAdmin": false
-      },
-      "approved_at": "2026-11-01 16:30:00",
-      "approved_by": "System Architect"
     }
   ],
   "audit_log": [
+    "[2026-11-02 02:54:30] 🧹 Reset ทำเนียบสมาชิก: ล้างรายชื่อรอให้ทีมงานสมัครผ่าน LINE ด้วยตนเอง (คงเหลือเฉพาะ Super Tech)",
     "[2026-11-02 01:12:00] เริ่มต้นระบบ Audit Trail & Rollback Archive พร้อมปฏิบัติการ 100%"
   ],
   "rollback_history": []
