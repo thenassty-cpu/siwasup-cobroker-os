@@ -159,10 +159,7 @@
         </div>
 
         <div class="flex items-center gap-2">
-          <button onclick="addSimulatedApplicant()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 border border-slate-700 flex items-center gap-1.5 transition">
-            <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-amber-400"></i>
-            <span>จำลองคนสแกนเข้ามาใหม่</span>
-          </button>
+          
           <button onclick="refreshLobbyData()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 border border-slate-700 flex items-center gap-1.5 transition">
             <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-blue-400"></i>
             <span>รีเฟรช</span>
@@ -244,30 +241,7 @@
   <script>
     // Initial State (Synced with localStorage / mock)
     const DEFAULT_DATA = {
-      pending: [
-        {
-          id: "app_20261101_001",
-          name: "คุณนภชกร (เอิร์ธ)",
-          nickname: "เอิร์ธ",
-          phone: "0891234567",
-          line_id: "earth_agent",
-          zone: "โซนท่าข้าม-พระราม 2",
-          affiliation: "agent",
-          affiliation_label: "🤝 Co-Broker พันธมิตรภายนอก",
-          submitted_at: "เมื่อสักครู่"
-        },
-        {
-          id: "app_20261101_002",
-          name: "น้องมิว (Myo)",
-          nickname: "มิว",
-          phone: "0869876543",
-          line_id: "myo_yd",
-          zone: "สำนักงานใหญ่",
-          affiliation: "office",
-          affiliation_label: "🏢 พนักงาน/ทีมงานออฟฟิศ",
-          submitted_at: "5 นาทีที่แล้ว"
-        }
-      ],
+      pending: [],
       approved: [
         {
           id: "app_office_001",

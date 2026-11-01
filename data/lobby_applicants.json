@@ -1,43 +1,6 @@
 {
   "updated_at": "2026-11-01 17:16:00",
-  "pending": [
-    {
-      "id": "app_por_eh_001",
-      "name": "คุณพ่อเอ๋",
-      "nickname": "พ่อเอ๋",
-      "phone": "081-XXX-XXXX",
-      "line_id": "por_eh_line",
-      "zone": "สำนักงานใหญ่",
-      "affiliation": "office",
-      "affiliation_label": "🏢 พนักงาน/ทีมงานออฟฟิศ",
-      "status": "pending",
-      "submitted_at": "รออนุมัติอยู่ใน Lobby ตอนนี้"
-    },
-    {
-      "id": "app_20261101_001",
-      "name": "คุณนภชกร (เอิร์ธ)",
-      "nickname": "เอิร์ธ",
-      "phone": "0891234567",
-      "line_id": "earth_agent",
-      "zone": "โซนท่าข้าม-พระราม 2",
-      "affiliation": "agent",
-      "affiliation_label": "🤝 Co-Broker พันธมิตรภายนอก",
-      "status": "pending",
-      "submitted_at": "2026-11-01 17:05:00"
-    },
-    {
-      "id": "app_20261101_002",
-      "name": "น้องมิว (Myo)",
-      "nickname": "มิว",
-      "phone": "0869876543",
-      "line_id": "myo_yd",
-      "zone": "สำนักงานใหญ่",
-      "affiliation": "office",
-      "affiliation_label": "🏢 พนักงาน/ทีมงานออฟฟิศ",
-      "status": "pending",
-      "submitted_at": "2026-11-01 17:10:00"
-    }
-  ],
+  "pending": [],
   "approved": [
     {
       "id": "app_office_001",
