@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Siwasup Co-Broker - Admin Lobby & Approval Center</title>
+  <title>ศิวาทรัพย์ Co-Broker - Admin Lobby & Approval Center</title>
   <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -27,33 +27,62 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+    .red-gradient-text {
+      background: linear-gradient(135deg, #ed1c24 0%, #b91c1c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    /* Drag & Drop Visual Styles */
+    .drag-card {
+      cursor: grab;
+      transition: all 0.2s ease;
+    }
+    .drag-card:active {
+      cursor: grabbing;
+    }
+    .drag-card.dragging {
+      opacity: 0.45;
+      transform: scale(0.98);
+      border-color: #ed1c24 !important;
+    }
+    .drop-zone {
+      transition: all 0.2s ease;
+    }
+    .drop-zone.drag-over {
+      transform: scale(1.04);
+      background-color: #fef2f2 !important;
+      border-color: #ed1c24 !important;
+      box-shadow: 0 10px 25px -5px rgba(237, 28, 36, 0.25) !important;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between p-3 sm:p-6 lg:p-8">
 
-  <!-- TOP HEADER -->
+  <!-- TOP HEADER (Red Logo + Correct Spelling + Red & Gold Light Theme) -->
   <header class="max-w-7xl w-full mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
-    <div class="flex items-center gap-3">
-      <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-amber-400 to-amber-600 flex items-center justify-center font-black text-slate-950 text-2xl shadow-md">
-        S
+    <div class="flex items-center gap-3.5">
+      <!-- Official Red Siwasup Logo -->
+      <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-white border-2 border-red-200 p-1.5 shadow-sm flex items-center justify-center shrink-0">
+        <img src="https://assets.siwasup.com/siwasup_logo.svg" alt="ศิวาทรัพย์" class="w-full h-full object-contain">
       </div>
       <div>
-        <div class="flex items-center gap-2">
-          <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-wide">
-            ศิวาสัพย์ <span class="gold-gradient-text font-black">LOBBY APPROVAL CENTER</span>
+        <div class="flex items-center gap-2 flex-wrap">
+          <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-wide flex items-center gap-1.5">
+            <span class="red-gradient-text font-black text-xl sm:text-2xl">ศิวาทรัพย์</span>
+            <span class="gold-gradient-text font-black">LOBBY APPROVAL CENTER</span>
           </h1>
-          <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 font-bold border border-amber-300">
+          <span class="text-[10px] px-2.5 py-0.5 rounded-full bg-red-50 text-[#ed1c24] font-bold border border-red-200 shadow-2xs">
             ห้องอนุมัติสิทธิ์กลาง
           </span>
         </div>
-        <p class="text-xs text-slate-500">
-          ศูนย์ควบคุมการจัดสรรสิทธิ์ทีมงาน 5 เสาหลัก & พันธมิตร Co-Broker • ควบคุมโดย <strong>คุณเจี๊ยบ(กูล) & คุณบัว</strong>
+        <p class="text-xs text-slate-500 mt-0.5">
+          ศูนย์ควบคุมการจัดสรรสิทธิ์ทีมงาน 5 เสาหลัก & พันธมิตร Co-Broker • ควบคุมโดย <strong class="text-slate-800">คุณเจี๊ยบ(กูล) & คุณบัว</strong>
         </p>
       </div>
     </div>
 
     <div class="flex flex-wrap items-center gap-2">
-      <a href="https://assets.siwasup.com/agent_onboarding_qr.html" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 border border-slate-200 flex items-center gap-1.5 shadow-sm transition">
+      <a href="https://assets.siwasup.com/agent_onboarding_qr.html" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 border border-slate-300 flex items-center gap-1.5 shadow-sm transition">
         <i data-lucide="qr-code" class="w-3.5 h-3.5 text-amber-600"></i>
         <span>ป้ายสแกน QR หน้างาน</span>
       </a>
@@ -62,7 +91,7 @@
         <span>เปิดหน้าจอมือถือผู้สมัคร</span>
       </a>
       <a href="https://assets.siwasup.com/gool_executive_dashboard.html" class="px-3.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs font-bold text-amber-800 border border-amber-300 flex items-center gap-1.5 shadow-sm transition">
-        <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
+        <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-amber-600"></i>
         <span>Executive Dashboard</span>
       </a>
     </div>
@@ -71,39 +100,39 @@
   <!-- MAIN CONTENT -->
   <main class="max-w-7xl w-full mx-auto py-6 sm:py-8 space-y-8 flex-1">
 
-    <!-- KPI STATS CARDS -->
+    <!-- KPI STATS CARDS (Red & Gold Accents) -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       
       <!-- Card 1: Pending Lobby -->
-      <div class="card-light rounded-2xl p-4 border border-amber-300 space-y-1 relative overflow-hidden bg-gradient-to-br from-amber-50/40 to-white">
+      <div class="card-light rounded-2xl p-4 border-2 border-red-300 space-y-1 relative overflow-hidden bg-gradient-to-br from-red-50/40 via-white to-amber-50/30 shadow-sm">
         <div class="flex items-center justify-between text-slate-500 text-xs">
-          <span>รอใน Lobby ตอนนี้</span>
-          <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
+          <span class="font-bold text-red-900">รอใน Lobby ตอนนี้</span>
+          <span class="w-2.5 h-2.5 rounded-full bg-[#ed1c24] animate-ping"></span>
         </div>
-        <div class="text-2xl sm:text-3xl font-black text-amber-700 flex items-baseline gap-1.5">
+        <div class="text-2xl sm:text-3xl font-black text-[#ed1c24] flex items-baseline gap-1.5">
           <span id="kpiPendingCount">0</span>
           <span class="text-xs font-normal text-slate-500">ท่าน (รอมอบสิทธิ์)</span>
         </div>
-        <div class="text-[10px] text-amber-700 font-medium">สแกน QR แล้วมารอในห้องรับรอง</div>
+        <div class="text-[10px] text-red-700 font-medium">สแกน QR แล้วมารอในห้องรับรอง</div>
       </div>
 
       <!-- Card 2: Active Members -->
-      <div class="card-light rounded-2xl p-4 border border-emerald-300 space-y-1 relative overflow-hidden bg-gradient-to-br from-emerald-50/40 to-white">
+      <div class="card-light rounded-2xl p-4 border border-amber-300 space-y-1 relative overflow-hidden bg-gradient-to-br from-amber-50/40 to-white shadow-sm">
         <div class="flex items-center justify-between text-slate-500 text-xs">
-          <span>สมาชิกที่อนุมัติแล้ว</span>
+          <span class="font-bold text-amber-900">สมาชิกที่อนุมัติแล้ว</span>
           <i data-lucide="user-check" class="w-4 h-4 text-emerald-600"></i>
         </div>
-        <div class="text-2xl sm:text-3xl font-black text-emerald-700 flex items-baseline gap-1.5">
+        <div class="text-2xl sm:text-3xl font-black text-amber-700 flex items-baseline gap-1.5">
           <span id="kpiApprovedCount">5</span>
           <span class="text-xs font-normal text-slate-500">คน (Active)</span>
         </div>
-        <div class="text-[10px] text-emerald-700 font-medium">ทีมงาน 5 เสาหลักพร้อมปฏิบัติงาน</div>
+        <div class="text-[10px] text-amber-700 font-medium">ทีมงาน 5 เสาหลักพร้อมปฏิบัติงาน</div>
       </div>
 
       <!-- Card 3: Price Authority -->
-      <div class="card-light rounded-2xl p-4 border border-rose-300 space-y-1 relative overflow-hidden bg-gradient-to-br from-rose-50/40 to-white">
+      <div class="card-light rounded-2xl p-4 border border-rose-300 space-y-1 relative overflow-hidden bg-gradient-to-br from-rose-50/40 to-white shadow-sm">
         <div class="flex items-center justify-between text-slate-500 text-xs">
-          <span>อำนาจเคาะราคาบ้าน</span>
+          <span class="font-bold text-rose-900">อำนาจเคาะราคาบ้าน</span>
           <i data-lucide="lock" class="w-4 h-4 text-rose-600"></i>
         </div>
         <div class="text-2xl sm:text-3xl font-black text-rose-700 flex items-baseline gap-1.5">
@@ -114,9 +143,9 @@
       </div>
 
       <!-- Card 4: Keybox Custodians -->
-      <div class="card-light rounded-2xl p-4 border border-blue-300 space-y-1 relative overflow-hidden bg-gradient-to-br from-blue-50/40 to-white">
+      <div class="card-light rounded-2xl p-4 border border-blue-300 space-y-1 relative overflow-hidden bg-gradient-to-br from-blue-50/40 to-white shadow-sm">
         <div class="flex items-center justify-between text-slate-500 text-xs">
-          <span>ผู้คุมกุญแจ OTP ท่าข้าม</span>
+          <span class="font-bold text-blue-900">ผู้คุมกุญแจ OTP ท่าข้าม</span>
           <i data-lucide="key" class="w-4 h-4 text-blue-600"></i>
         </div>
         <div class="text-2xl sm:text-3xl font-black text-blue-700 flex items-baseline gap-1.5">
@@ -129,25 +158,25 @@
     </div>
 
     <!-- ============================================================== -->
-    <!-- SECTION 1: APPLICANTS WAITING IN LOBBY (ห้องรออนุมัติ - ธีมสว่าง) -->
+    <!-- SECTION 1: APPLICANTS WAITING IN LOBBY WITH DRAG & DROP -->
     <!-- ============================================================== -->
-    <div class="card-light rounded-3xl p-5 sm:p-7 border border-amber-300 space-y-5">
+    <div class="card-light rounded-3xl p-5 sm:p-7 border-2 border-amber-300/80 space-y-6">
       
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
         <div>
           <div class="flex items-center gap-2.5">
-            <div class="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center font-bold">
-              <i data-lucide="inbox" class="w-4 h-4"></i>
+            <div class="w-8 h-8 rounded-xl bg-red-50 text-[#ed1c24] border border-red-200 flex items-center justify-center font-bold shadow-2xs">
+              <i data-lucide="inbox" class="w-4.5 h-4.5"></i>
             </div>
             <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
               <span>ผู้สมัครที่กำลังนั่งรอใน Lobby (Pending Approval Queue)</span>
-              <span id="badgePendingLive" class="text-xs px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 font-extrabold border border-amber-200">
+              <span id="badgePendingLive" class="text-xs px-2.5 py-0.5 rounded-full bg-red-50 text-[#ed1c24] font-extrabold border border-red-200">
                 0 รายการ
               </span>
             </h2>
           </div>
-          <p class="text-xs text-slate-500 mt-1">
-            ผู้สมัครสแกน QR Code แล้วข้อมูลเข้ามานั่งรอที่นี่ — เลือกบทบาทที่ต้องการแต่งตั้งแล้วกด <strong>"อนุมัติสิทธิ์"</strong> บัตรของผู้สมัครจะปลดล็อกทันที
+          <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5">
+            <span>✨ <strong>วิธีใช้งาน:</strong> คลิกค้างที่การ์ดผู้สมัครแล้ว <strong>"ลาก (Drag)" ไปปล่อย (Drop)</strong> ใส่กล่องบทบาทด้านล่าง หรือกดคลิก 1-Tap ได้ทันที</span>
           </p>
         </div>
 
@@ -159,23 +188,103 @@
         </div>
       </div>
 
-      <!-- PENDING CARDS CONTAINER -->
+      <!-- PENDING CARDS CONTAINER (DRAGGABLE CARDS) -->
       <div id="pendingContainer" class="space-y-4">
         <!-- Rendered dynamically via JavaScript -->
+      </div>
+
+      <!-- ============================================================== -->
+      <!-- DRAG & DROP ROLE STATION (กล่องรับการลากวาง 7 กล่อง) -->
+      <!-- ============================================================== -->
+      <div class="pt-2 border-t border-slate-200 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <label class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+            <i data-lucide="mouse-pointer-click" class="w-4 h-4 text-[#ed1c24]"></i>
+            <span>แท่นลากวางแต่งตั้งบทบาท (Drag & Drop Role Station)</span>
+          </label>
+          <span class="text-[10px] text-slate-400">ลากการ์ดมาปล่อยลงในช่องที่ต้องการ</span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5 text-xs">
+
+          <!-- Drop Zone 1: Gool -->
+          <div class="drop-zone p-3 rounded-2xl bg-amber-50/50 hover:bg-amber-50 border-2 border-dashed border-amber-300 text-center space-y-1"
+               ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'gool')">
+            <div class="text-base">👑</div>
+            <div class="font-bold text-amber-900 leading-tight">เจี๊ยบ(กูล)</div>
+            <div class="text-[9px] text-amber-700">CEO / เคาะราคา</div>
+            <div class="text-[8px] text-slate-400 pt-0.5">ปล่อยเพื่อแต่งตั้ง</div>
+          </div>
+
+          <!-- Drop Zone 2: Bua -->
+          <div class="drop-zone p-3 rounded-2xl bg-amber-50/50 hover:bg-amber-50 border-2 border-dashed border-amber-300 text-center space-y-1"
+               ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'bua')">
+            <div class="text-base">👑</div>
+            <div class="font-bold text-amber-900 leading-tight">คุณบัว</div>
+            <div class="text-[9px] text-amber-700">แทนเจี๊ยบ 100%</div>
+            <div class="text-[8px] text-slate-400 pt-0.5">ปล่อยเพื่อแต่งตั้ง</div>
+          </div>
+
+          <!-- Drop Zone 3: Lily -->
+          <div class="drop-zone p-3 rounded-2xl bg-emerald-50/50 hover:bg-emerald-50 border-2 border-dashed border-emerald-300 text-center space-y-1"
+               ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'lily')">
+            <div class="text-base">🔑</div>
+            <div class="font-bold text-emerald-900 leading-tight">พี่ลิลลี่</div>
+            <div class="text-[9px] text-emerald-700">คุมกุญแจ OTP</div>
+            <div class="text-[8px] text-slate-400 pt-0.5">ปล่อยเพื่อแต่งตั้ง</div>
+          </div>
+
+          <!-- Drop Zone 4: Ton -->
+          <div class="drop-zone p-3 rounded-2xl bg-rose-50/50 hover:bg-rose-50 border-2 border-dashed border-rose-300 text-center space-y-1"
+               ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'ton')">
+            <div class="text-base">💻</div>
+            <div class="font-bold text-rose-900 leading-tight">คุณต้น</div>
+            <div class="text-[9px] text-rose-700">Tech Architect</div>
+            <div class="text-[8px] text-slate-400 pt-0.5">ปล่อยเพื่อแต่งตั้ง</div>
+          </div>
+
+          <!-- Drop Zone 5: Support -->
+          <div class="drop-zone p-3 rounded-2xl bg-blue-50/50 hover:bg-blue-50 border-2 border-dashed border-blue-300 text-center space-y-1"
+               ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'support')">
+            <div class="text-base">🏢</div>
+            <div class="font-bold text-blue-900 leading-tight">ซัพพอร์ต</div>
+            <div class="text-[9px] text-blue-700">Standard Admin</div>
+            <div class="text-[8px] text-slate-400 pt-0.5">ปล่อยเพื่อแต่งตั้ง</div>
+          </div>
+
+          <!-- Drop Zone 6: Co-Broker -->
+          <div class="drop-zone p-3 rounded-2xl bg-emerald-50/50 hover:bg-emerald-50 border-2 border-dashed border-emerald-400 text-center space-y-1"
+               ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'agent')">
+            <div class="text-base">🤝</div>
+            <div class="font-bold text-emerald-900 leading-tight">Co-Broker</div>
+            <div class="text-[9px] text-emerald-700">พันธมิตรรับรอง</div>
+            <div class="text-[8px] text-slate-400 pt-0.5">ปล่อยเพื่อแต่งตั้ง</div>
+          </div>
+
+          <!-- Drop Zone 7: Reject Trash -->
+          <div class="drop-zone p-3 rounded-2xl bg-red-50/50 hover:bg-red-50 border-2 border-dashed border-red-300 text-center space-y-1"
+               ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'reject')">
+            <div class="text-base">🗑️</div>
+            <div class="font-bold text-red-900 leading-tight">ดีดออก</div>
+            <div class="text-[9px] text-red-600">ปฏิเสธใบสมัคร</div>
+            <div class="text-[8px] text-slate-400 pt-0.5">ปล่อยเพื่อดีดทิ้ง</div>
+          </div>
+
+        </div>
       </div>
 
     </div>
 
     <!-- ============================================================== -->
-    <!-- SECTION 2: APPROVED DIRECTORY (ทำเนียบสมาชิก & สิทธิ์ปัจจุบัน - ธีมสว่าง) -->
+    <!-- SECTION 2: APPROVED DIRECTORY (ทำเนียบสมาชิก & สิทธิ์ปัจจุบัน) -->
     <!-- ============================================================== -->
     <div class="card-light rounded-3xl p-5 sm:p-7 space-y-5">
       
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
         <div>
           <div class="flex items-center gap-2.5">
-            <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center font-bold">
-              <i data-lucide="shield-check" class="w-4 h-4"></i>
+            <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center font-bold shadow-2xs">
+              <i data-lucide="shield-check" class="w-4.5 h-4.5"></i>
             </div>
             <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
               <span>ทำเนียบสมาชิก & ผังสิทธิ์ที่ได้รับอนุมัติแล้ว (Active Directory)</span>
@@ -217,8 +326,9 @@
 
   <!-- FOOTER -->
   <footer class="max-w-7xl w-full mx-auto text-center text-xs text-slate-500 pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-    <div>
-      © 2026 Siwasup Co-Broker OS • Admin Lobby & Approval System • Confirmed by Jeab (Gool) & Bua
+    <div class="flex items-center gap-2 justify-center">
+      <img src="https://assets.siwasup.com/siwasup_logo.svg" alt="ศิวาทรัพย์" class="h-4 object-contain">
+      <span>© 2026 บริษัท ศิวาทรัพย์ แอสเสท จำกัด • Admin Lobby & Approval System</span>
     </div>
     <div class="flex items-center gap-3">
       <a href="https://assets.siwasup.com/gool_executive_dashboard.html" class="hover:text-amber-600 transition">หน้าแดชบอร์ดหลัก</a>
@@ -229,9 +339,47 @@
     </div>
   </footer>
 
-  <!-- JAVASCRIPT LOGIC -->
+  <!-- JAVASCRIPT LOGIC WITH DRAG & DROP -->
   <script>
     const API_BASE = 'https://siwasup-cobroker-os.onrender.com';
+
+    let draggedApplicantId = null;
+
+    // Drag & Drop Event Handlers
+    function handleDragStart(e, id) {
+      draggedApplicantId = id;
+      e.target.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', id);
+      e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragEnd(e) {
+      e.target.classList.remove('dragging');
+      document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drag-over'));
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      e.currentTarget.classList.add('drag-over');
+    }
+
+    function handleDragLeave(e) {
+      e.currentTarget.classList.remove('drag-over');
+    }
+
+    function handleDrop(e, targetRole) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('drag-over');
+      const applicantId = e.dataTransfer.getData('text/plain') || draggedApplicantId;
+      if (!applicantId) return;
+
+      if (targetRole === 'reject') {
+        rejectApplicant(applicantId);
+      } else {
+        approveWithPreset(applicantId, targetRole);
+      }
+    }
 
     // Zero Mocks in Pending
     const DEFAULT_DATA = {
@@ -379,25 +527,32 @@
         `;
       } else {
         pendingContainer.innerHTML = lobbyData.pending.map(item => `
-          <div class="card-light rounded-2xl p-4 sm:p-5 border border-amber-300 space-y-4 hover:border-amber-400 transition shadow-sm">
+          <div draggable="true" 
+               ondragstart="handleDragStart(event, '${item.id}')" 
+               ondragend="handleDragEnd(event)"
+               class="drag-card card-light rounded-2xl p-4 sm:p-5 border-2 border-amber-300 space-y-4 hover:border-red-400 transition shadow-sm">
             
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
               <div class="flex items-center gap-3">
+                <div class="text-slate-400 hover:text-slate-600 hidden sm:block cursor-grab" title="คลิกค้างเพื่อลาก">
+                  <i data-lucide="grip-vertical" class="w-5 h-5"></i>
+                </div>
                 <img src="${item.avatar || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80'}" 
                      class="w-12 h-12 rounded-2xl object-cover border-2 border-amber-400 shadow-sm shrink-0">
                 <div>
                   <div class="flex items-center gap-2">
                     <span class="font-bold text-slate-900 text-sm sm:text-base">${item.name}</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 font-bold border border-amber-200">
+                    <span class="text-[10px] px-2 py-0.5 rounded-md bg-red-50 text-[#ed1c24] font-bold border border-red-200">
                       🟡 รอจัดสรรสิทธิ์
                     </span>
+                    <span class="text-[10px] text-slate-400 hidden sm:inline">🖐️ ลากการ์ดนี้ไปปล่อยด้านล่างได้</span>
                   </div>
                   <div class="text-xs text-slate-500 flex flex-wrap items-center gap-2 mt-0.5">
                     <span>โทร: <strong class="text-slate-800">${item.phone}</strong></span>
                     <span>•</span>
                     <span>โซน: <strong class="text-slate-800">${item.zone}</strong></span>
                     <span>•</span>
-                    <span class="text-amber-700 font-medium">${item.affiliation_label || 'ขอสมัครทั่วไป'}</span>
+                    <span class="text-amber-800 font-medium">${item.affiliation_label || 'ขอสมัครทั่วไป'}</span>
                     <span>•</span>
                     <span class="text-slate-400">${item.submitted_at || 'เมื่อสักครู่'}</span>
                   </div>
@@ -412,34 +567,38 @@
               </div>
             </div>
 
-            <div class="space-y-2">
-              <label class="text-[11px] font-bold text-amber-800 flex items-center gap-1.5">
-                <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-600"></i>
-                <span>เลือกบทบาทเพื่อแต่งตั้ง & มอบสิทธิ์ (1-Click Role Assignment):</span>
-              </label>
+            <!-- Quick 1-Click Buttons for Mobile/Tap -->
+            <div class="space-y-1.5 pt-1">
+              <div class="flex items-center justify-between text-[11px] text-slate-600 font-bold">
+                <span class="flex items-center gap-1.5">
+                  <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-600"></i>
+                  <span>หรือแตะ 1-Click แต่งตั้งทันที:</span>
+                </span>
+                <span class="text-[10px] text-slate-400 font-normal">แตะเลือกหรือลากการ์ดด้านบนไปปล่อยก็ได้</span>
+              </div>
 
               <div class="grid grid-cols-2 sm:grid-cols-6 gap-2 text-xs">
-                <button onclick="approveWithPreset('${item.id}', 'gool')" class="p-2 rounded-xl bg-slate-50 hover:bg-amber-50 hover:border-amber-400 border border-slate-200 text-left transition space-y-0.5 shadow-2xs">
+                <button onclick="approveWithPreset('${item.id}', 'gool')" class="p-2 rounded-xl bg-slate-50 hover:bg-amber-50 hover:border-amber-400 border border-slate-200 text-left transition space-y-0.5 shadow-2xs active:scale-95">
                   <div class="font-bold text-amber-900">👑 เจี๊ยบ(กูล)</div>
                   <div class="text-[9px] text-slate-500">CEO / เคาะราคา</div>
                 </button>
-                <button onclick="approveWithPreset('${item.id}', 'bua')" class="p-2 rounded-xl bg-slate-50 hover:bg-amber-50 hover:border-amber-400 border border-slate-200 text-left transition space-y-0.5 shadow-2xs">
+                <button onclick="approveWithPreset('${item.id}', 'bua')" class="p-2 rounded-xl bg-slate-50 hover:bg-amber-50 hover:border-amber-400 border border-slate-200 text-left transition space-y-0.5 shadow-2xs active:scale-95">
                   <div class="font-bold text-amber-900">👑 คุณบัว</div>
                   <div class="text-[9px] text-slate-500">แทนเจี๊ยบ 100%</div>
                 </button>
-                <button onclick="approveWithPreset('${item.id}', 'lily')" class="p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 text-left transition space-y-0.5 shadow-2xs">
+                <button onclick="approveWithPreset('${item.id}', 'lily')" class="p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 text-left transition space-y-0.5 shadow-2xs active:scale-95">
                   <div class="font-bold text-emerald-900">🔑 พี่ลิลลี่</div>
                   <div class="text-[9px] text-slate-500">คุมกุญแจ OTP 100%</div>
                 </button>
-                <button onclick="approveWithPreset('${item.id}', 'ton')" class="p-2 rounded-xl bg-slate-50 hover:bg-rose-50 hover:border-rose-400 border border-slate-200 text-left transition space-y-0.5 shadow-2xs">
+                <button onclick="approveWithPreset('${item.id}', 'ton')" class="p-2 rounded-xl bg-slate-50 hover:bg-rose-50 hover:border-rose-400 border border-slate-200 text-left transition space-y-0.5 shadow-2xs active:scale-95">
                   <div class="font-bold text-rose-900">💻 คุณต้น</div>
                   <div class="text-[9px] text-slate-500">Tech Lead / สิทธิ์เต็ม</div>
                 </button>
-                <button onclick="approveWithPreset('${item.id}', 'support')" class="p-2 rounded-xl bg-slate-50 hover:bg-blue-50 hover:border-blue-400 border border-slate-200 text-left transition space-y-0.5 shadow-2xs">
+                <button onclick="approveWithPreset('${item.id}', 'support')" class="p-2 rounded-xl bg-slate-50 hover:bg-blue-50 hover:border-blue-400 border border-slate-200 text-left transition space-y-0.5 shadow-2xs active:scale-95">
                   <div class="font-bold text-blue-900">🏢 ซัพพอร์ต</div>
                   <div class="text-[9px] text-slate-500">Standard Admin</div>
                 </button>
-                <button onclick="approveWithPreset('${item.id}', 'agent')" class="p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 text-left transition space-y-0.5 shadow-2xs">
+                <button onclick="approveWithPreset('${item.id}', 'agent')" class="p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 text-left transition space-y-0.5 shadow-2xs active:scale-95">
                   <div class="font-bold text-emerald-800">🤝 Co-Broker</div>
                   <div class="text-[9px] text-slate-500">พันธมิตรรับรอง</div>
                 </button>
