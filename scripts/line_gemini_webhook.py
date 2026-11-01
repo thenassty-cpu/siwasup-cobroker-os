@@ -712,8 +712,23 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 user_id = event.get('source', {}).get('userId', 'anon')
 
                 if ev_type == 'follow':
-                    def process_follow(uid):
+                    reply_token = event.get('replyToken')
+                    def process_follow(uid, rtoken):
                         prof = get_line_profile(uid)
+                        user_name = prof.get("displayName", "ท่าน")
+                        welcome_msg = (
+                            f"สวัสดีครับคุณ {user_name}! ยินดีต้อนรับสู่ Siwasup Co-Broker OS ครับ 🏠✨\n\n"
+                            "น้องศิวาเป็น AI ผู้ช่วยค้นหาทรัพย์และประสานงานนำชมบ้าน พร้อมทำงาน 24 ชั่วโมงครับ\n\n"
+                            "📋 สำหรับทีมงานออฟฟิศและตัวแทนพันธมิตร เพื่อเริ่มต้นใช้งานและรับ 'นามบัตรดิจิทัลทางการ' "
+                            "กรุณาลงทะเบียนเข้าสู่ระบบที่นี่ได้เลยครับ:\n"
+                            "👉 https://assets.siwasup.com/agent_registration.html\n\n"
+                            "💡 หรือพิมพ์ค้นหาบ้านได้ทันที เช่น:\n"
+                            "• 'บ้านเดี่ยว นนทบุรี งบ 4 ล้าน'\n"
+                            "• 'ค้นหาทรัพย์ 1090965'\n"
+                            "• พิมพ์ 'นามบัตร' หรือ 'ลงทะเบียน' เพื่อเปิดดูหรือสร้างนามบัตรของคุณได้ตลอดเวลาครับ"
+                        )
+                        if rtoken:
+                            reply_line(rtoken, welcome_msg)
                         append_chat_log({
                             "id": f"LOG_{int(time.time()*1000)}",
                             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -722,12 +737,12 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                             "user_id_tail": uid[-6:] if uid else "anon",
                             "event_type": "follow",
                             "user_text": "[แอดเพื่อนเข้าสู่ระบบ LINE OA]",
-                            "ai_reply": "(ระบบส่งข้อความต้อนรับอัตโนมัติ)",
+                            "ai_reply": welcome_msg,
                             "matched_codes": [],
                             "search_mode": "FOLLOW_EVENT",
                             "latency_ms": 0
                         })
-                    threading.Thread(target=process_follow, args=(user_id,), daemon=True).start()
+                    threading.Thread(target=process_follow, args=(user_id, reply_token), daemon=True).start()
 
                 elif ev_type == 'message':
                     msg = event.get('message', {})
@@ -746,7 +761,17 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                             prof = get_line_profile(uid)
                             print(f"[User Message from {prof.get('displayName')}]: {text}")
                             if mtype == 'text':
-                                ai_reply, matched_codes, search_mode = ask_gemini(uid, text, is_continuous=continuous)
+                                text_clean = text.strip().lower()
+                                if any(k in text_clean for k in ['สมัคร', 'ลงทะเบียน', 'login', 'เข้าสู่ระบบ', 'ขอนามบัตร', 'นามบัตร', 'โปรไฟล์', 'profile']):
+                                    ai_reply = (
+                                        f"สวัสดีครับคุณ {prof.get('displayName', '')}! สำหรับการลงทะเบียนทีมงานออฟฟิศ หรือรับนามบัตรดิจิทัลทางการของ Siwasup Co-Broker OS:\n\n"
+                                        "👉 คลิกที่นี่เพื่อลงทะเบียน/เข้าสู่ระบบได้ทันทีครับ:\n"
+                                        "https://assets.siwasup.com/agent_registration.html\n\n"
+                                        "เมื่อลงทะเบียนเสร็จ ท่านจะได้นามบัตรเฉพาะตัวพร้อมลิงก์และ QR Code ส่งต่อให้ลูกค้าดูได้ทันทีครับ ✨"
+                                    )
+                                    matched_codes, search_mode = [], "ONBOARDING_REGISTRATION"
+                                else:
+                                    ai_reply, matched_codes, search_mode = ask_gemini(uid, text, is_continuous=continuous)
                             else:
                                 ai_reply = "น้องศิวาได้รับไฟล์/สติกเกอร์เรียบร้อยครับ หากต้องการค้นหาทรัพย์ พิมพ์รหัสทรัพย์หรือทำเล เช่น '1090965' หรือ 'บ้านเดี่ยว นนทบุรี งบ 4 ล้าน' ได้เลยครับ!"
                                 matched_codes, search_mode = [], "NON_TEXT"

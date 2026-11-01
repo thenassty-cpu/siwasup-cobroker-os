@@ -328,7 +328,7 @@
       <!-- Security Notice -->
       <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-2 text-[10.5px] text-emerald-800 flex items-center gap-2">
         <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600 shrink-0"></i>
-        <span>ปลอดภัย 100%: ไม่มีชื่อหรือรูปสัตว์ ลูกค้าเห็นเฉพาะป้ายทองคำทางการ</span>
+        <span>ตรวจสอบและรับรองมาตรฐานเรียบร้อย: แสดงเฉพาะข้อมูลทางการและเครื่องหมายวิชาชีพ</span>
       </div>
 
       <!-- Mini Mockup of Client Card (Clean & Responsive) -->
@@ -535,7 +535,36 @@
     };
 
     function init() {
-      const code = (getParam("code") || "S98").toUpperCase();
+      const customName = getParam("name");
+      const customPhone = getParam("phone") || getParam("tel");
+      const customZone = getParam("zone");
+      const customTitle = getParam("title");
+      const customNickname = getParam("nickname");
+      const customCode = (getParam("code") || "STAFF").toUpperCase();
+
+      if (customName) {
+        AGENTS[customCode] = {
+          code: customCode,
+          name: customName,
+          nickname: customNickname || customName,
+          phoneRaw: customPhone ? customPhone.replace(/\D/g, '') : "020000000",
+          phoneFormatted: customPhone || "02 000 0000",
+          lineId: getParam("line") || "",
+          zone: customZone ? (customZone.startsWith("📍") ? customZone : `📍 ${customZone}`) : "📍 สำนักงานใหญ่",
+          clientTitle: customTitle || "Senior Property Consultant",
+          goldBadge: "assets/badges/Golden__001_lion_web.png",
+          avatar: getParam("avatar") || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&auto=format&fit=crop&q=80"
+        };
+        const sel = document.getElementById("agentSelect");
+        if (sel) {
+          const opt = document.createElement("option");
+          opt.value = customCode;
+          opt.innerText = `${customCode}: ${customName}`;
+          sel.prepend(opt);
+        }
+      }
+
+      const code = customName ? customCode : (getParam("code") || "S98").toUpperCase();
       const mode = (getParam("mode") || "").toLowerCase();
       const metric = (getParam("metric") || "opt1").toLowerCase();
 
