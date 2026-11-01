@@ -741,6 +741,117 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
         parsed_url = urllib.parse.urlparse(self.path)
         path = parsed_url.path
 
+        if path == "/api/lobby/login":
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            try:
+                payload = json.loads(body.decode('utf-8'))
+                raw_phone = payload.get("phone", "")
+                clean_phone = re.sub(r"\D", "", raw_phone)
+                input_pin = str(payload.get("pin", "")).strip()
+                store = load_lobby_data()
+
+                for a in store.get("approved", []):
+                    ap_phone = re.sub(r"\D", "", a.get("phone", ""))
+                    if ap_phone == clean_phone and clean_phone:
+                        expected_pin = str(a.get("pin") or ap_phone[-4:] or "1234").strip()
+                        if input_pin == expected_pin:
+                            self.send_response(200)
+                            self.send_header('Content-Type', 'application/json; charset=utf-8')
+                            self.send_header('Access-Control-Allow-Origin', '*')
+                            self.end_headers()
+                            self.wfile.write(json.dumps({"status": "approved", "applicant": a}, ensure_ascii=False).encode('utf-8'))
+                            return
+                        else:
+                            self.send_response(401)
+                            self.send_header('Content-Type', 'application/json; charset=utf-8')
+                            self.send_header('Access-Control-Allow-Origin', '*')
+                            self.end_headers()
+                            self.wfile.write(json.dumps({"status": "invalid_pin", "error": "รหัส PIN 4 หลักไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง"}, ensure_ascii=False).encode('utf-8'))
+                            return
+
+                for p in store.get("pending", []):
+                    pp_phone = re.sub(r"\D", "", p.get("phone", ""))
+                    if pp_phone == clean_phone and clean_phone:
+                        expected_pin = str(p.get("pin") or pp_phone[-4:] or "1234").strip()
+                        if input_pin == expected_pin:
+                            self.send_response(200)
+                            self.send_header('Content-Type', 'application/json; charset=utf-8')
+                            self.send_header('Access-Control-Allow-Origin', '*')
+                            self.end_headers()
+                            self.wfile.write(json.dumps({"status": "pending", "applicant": p}, ensure_ascii=False).encode('utf-8'))
+                            return
+                        else:
+                            self.send_response(401)
+                            self.send_header('Content-Type', 'application/json; charset=utf-8')
+                            self.send_header('Access-Control-Allow-Origin', '*')
+                            self.end_headers()
+                            self.wfile.write(json.dumps({"status": "invalid_pin", "error": "รหัส PIN 4 หลักไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง"}, ensure_ascii=False).encode('utf-8'))
+                            return
+
+                self.send_response(404)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "not_found", "error": "ไม่พบเบอร์โทรศัพท์นี้ในระบบ"}, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+            return
+
+        if path == "/api/lobby/update-pin":
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            try:
+                payload = json.loads(body.decode('utf-8'))
+                clean_phone = re.sub(r"\D", "", payload.get("phone", ""))
+                old_pin = str(payload.get("oldPin", "")).strip()
+                new_pin = str(payload.get("newPin", "")).strip()
+                if not new_pin or len(new_pin) < 4:
+                    self.send_response(400)
+                    self.send_header('Content-Type', 'application/json; charset=utf-8')
+                    self.send_header('Access-Control-Allow-Origin', '*')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"error": "กรุณาตั้งรหัส PIN อย่างน้อย 4 หลัก"}, ensure_ascii=False).encode('utf-8'))
+                    return
+                store = load_lobby_data()
+                for a in store.get("approved", []):
+                    ap_phone = re.sub(r"\D", "", a.get("phone", ""))
+                    if ap_phone == clean_phone:
+                        expected_pin = str(a.get("pin") or ap_phone[-4:] or "1234").strip()
+                        if old_pin and old_pin != expected_pin:
+                            self.send_response(401)
+                            self.send_header('Content-Type', 'application/json; charset=utf-8')
+                            self.send_header('Access-Control-Allow-Origin', '*')
+                            self.end_headers()
+                            self.wfile.write(json.dumps({"error": "รหัส PIN เดิมไม่ถูกต้อง"}, ensure_ascii=False).encode('utf-8'))
+                            return
+                        a["pin"] = new_pin
+                        a["updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        store.setdefault("audit_log", []).insert(0, f"[{a['updated_at']}] 🔐 เปลี่ยนรหัส PIN ส่วนตัวสำเร็จ: {a.get('name')}")
+                        save_lobby_data(store)
+                        self.send_response(200)
+                        self.send_header('Content-Type', 'application/json; charset=utf-8')
+                        self.send_header('Access-Control-Allow-Origin', '*')
+                        self.end_headers()
+                        self.wfile.write(json.dumps({"status": "success"}, ensure_ascii=False).encode('utf-8'))
+                        return
+                self.send_response(404)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": "Member not found"}).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+            return
+
         if path == "/api/lobby/register":
             content_length = int(self.headers.get('Content-Length', 0))
             body = self.rfile.read(content_length)
@@ -787,6 +898,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         "line_id": applicant.get("line_id"),
                         "zone": applicant.get("zone"),
                         "avatar": applicant.get("avatar", ""),
+                        "pin": applicant.get("pin") or re.sub(r"\D", "", applicant.get("phone", ""))[-4:] or "1234",
                         "role": payload.get("role", "Co-Broker Partner"),
                         "title": payload.get("title", ""),
                         "badges": payload.get("badges", []),
@@ -859,6 +971,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     if "title" in payload: m["title"] = payload["title"]
                     if "badges" in payload: m["badges"] = payload["badges"]
                     if "permissions" in payload: m["permissions"] = payload["permissions"]
+                    if "pin" in payload and payload["pin"]: m["pin"] = str(payload["pin"]).strip()
                     m["updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     
                     audit_entry = f"[{m['updated_at']}] ⚙️ ปรับสิทธิ์: {m.get('name')} เป็น {m.get('role')} ({len(m.get('badges', []))} สิทธิ์)"

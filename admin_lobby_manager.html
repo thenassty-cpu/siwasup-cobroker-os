@@ -429,7 +429,7 @@
           id: "app_office_001",
           name: "คุณวารินทร์ กูลจีรัง (เจี๊ยบ)",
           nickname: "เจี๊ยบ (กูล)",
-          phone: "0819999999",
+          phone: "0819999999", pin: "9999",
           zone: "สำนักงานใหญ่",
           role: "👑 CEO & Co-Broker Lead",
           title: "Executive Managing Partner",
@@ -440,7 +440,7 @@
           id: "app_office_002",
           name: "คุณบัว",
           nickname: "บัว",
-          phone: "0818888888",
+          phone: "0818888888", pin: "8888",
           zone: "สำนักงานใหญ่",
           role: "👑 Executive Partner",
           title: "Executive Managing Partner",
@@ -451,7 +451,7 @@
           id: "app_office_003",
           name: "พี่ลิลลี่ (ท่าข้าม 12)",
           nickname: "ลิลลี่",
-          phone: "0816666666",
+          phone: "0816666666", pin: "6666",
           zone: "โซนท่าข้าม-พระราม 2",
           role: "🔑 Head of Viewing & Keys",
           title: "Head of Viewing & Keybox Custodian",
@@ -462,7 +462,7 @@
           id: "app_office_004",
           name: "คุณต้น (NASSTY)",
           nickname: "ต้น",
-          phone: "0815555555",
+          phone: "0815555555", pin: "5555",
           zone: "สำนักงานใหญ่",
           role: "💻 Tech Architect & Senior Advisor",
           title: "Senior Technology Architect",
@@ -473,7 +473,7 @@
           id: "app_office_005",
           name: "เจ้าหน้าที่ธุรการ/ซัพพอร์ต",
           nickname: "ซัพพอร์ต",
-          phone: "0814444444",
+          phone: "0814444444", pin: "4444",
           zone: "สำนักงานใหญ่",
           role: "🏢 Support & Coordinator",
           title: "Office Property Coordinator",
@@ -824,6 +824,8 @@
       document.getElementById('editMemberSub').innerText = `${member.phone} • ${member.zone}`;
       document.getElementById('editMemberRoleInput').value = member.role || '';
       document.getElementById('editMemberTitleInput').value = member.title || '';
+      const cleanP = (member.phone || '').replace(/\D/g, '');
+      document.getElementById('editMemberPinInput').value = member.pin || cleanP.slice(-4) || '1234';
 
       const p = member.permissions || {};
       document.getElementById('chk_standardAdmin').checked = !!p.standardAdmin;
@@ -853,6 +855,7 @@
 
       const newRole = document.getElementById('editMemberRoleInput').value.trim() || member.role;
       const newTitle = document.getElementById('editMemberTitleInput').value.trim() || member.title;
+      const newPin = document.getElementById('editMemberPinInput').value.trim() || member.pin || '1234';
 
       const newPerms = {
         standardAdmin: document.getElementById('chk_standardAdmin').checked,
@@ -878,6 +881,7 @@
 
       member.role = newRole;
       member.title = newTitle;
+      member.pin = newPin;
       member.permissions = newPerms;
       member.badges = newBadges;
 
@@ -899,6 +903,7 @@
             applicantId: member.id,
             role: newRole,
             title: newTitle,
+            pin: newPin,
             badges: newBadges,
             permissions: newPerms
           })
@@ -1115,6 +1120,8 @@
       document.getElementById('editMemberSub').innerText = `${member.phone} • ${member.zone}`;
       document.getElementById('editMemberRoleInput').value = member.role || '';
       document.getElementById('editMemberTitleInput').value = member.title || '';
+      const cleanP = (member.phone || '').replace(/\D/g, '');
+      document.getElementById('editMemberPinInput').value = member.pin || cleanP.slice(-4) || '1234';
 
       const p = member.permissions || {};
       document.getElementById('chk_standardAdmin').checked = !!p.standardAdmin;
@@ -1144,6 +1151,7 @@
 
       const newRole = document.getElementById('editMemberRoleInput').value.trim() || member.role;
       const newTitle = document.getElementById('editMemberTitleInput').value.trim() || member.title;
+      const newPin = document.getElementById('editMemberPinInput').value.trim() || member.pin || '1234';
 
       const newPerms = {
         standardAdmin: document.getElementById('chk_standardAdmin').checked,
@@ -1169,6 +1177,7 @@
 
       member.role = newRole;
       member.title = newTitle;
+      member.pin = newPin;
       member.permissions = newPerms;
       member.badges = newBadges;
 
@@ -1190,6 +1199,7 @@
             applicantId: member.id,
             role: newRole,
             title: newTitle,
+            pin: newPin,
             badges: newBadges,
             permissions: newPerms
           })
@@ -1199,8 +1209,63 @@
       }
     }
 
+    // ==========================================
+    // ADMIN SECURITY GATE LOGIC
+    // ==========================================
+    function checkAdminSecurityGate() {
+      try {
+        const authedRaw = localStorage.getItem('siwasup_admin_authed_user');
+        if (authedRaw) {
+          const authed = JSON.parse(authedRaw);
+          if (authed && authed.phone && (Date.now() - (authed.ts || 0) < 12 * 3600 * 1000)) {
+            document.getElementById('adminSecurityGateModal').classList.add('hidden');
+            return;
+          }
+        }
+      } catch(e) {}
+      document.getElementById('adminSecurityGateModal').classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    async function verifyAdminGate() {
+      const phone = (document.getElementById('gateAdminPhone').value || '').replace(/\D/g, '');
+      const pin = (document.getElementById('gateAdminPin').value || '').trim();
+      if (!phone || !pin) {
+        alert('กรุณากรอกเบอร์โทรศัพท์แอดมินและรหัส PIN 4 หลัก');
+        return;
+      }
+
+      // Check against loaded lobbyData.approved
+      const member = (lobbyData.approved || []).find(m => (m.phone || '').replace(/\D/g, '') === phone);
+      if (!member) {
+        alert('❌ ไม่พบเบอร์โทรศัพท์นี้ในทำเนียบแอดมิน');
+        return;
+      }
+      const expectedPin = String(member.pin || phone.slice(-4) || '1234').trim();
+      if (pin !== expectedPin) {
+        alert('❌ รหัส PIN 4 หลักไม่ถูกต้อง!');
+        return;
+      }
+      const roleLower = (member.role || '').toLowerCase();
+      const perms = member.permissions || {};
+      const isAdmin = !!(perms.standardAdmin || perms.executiveAuthority || perms.keyboxAdmin || perms.systemAdmin || roleLower.includes('ceo') || roleLower.includes('partner') || roleLower.includes('กูล') || roleLower.includes('บัว') || roleLower.includes('ลิลลี่') || roleLower.includes('ต้น'));
+      if (!isAdmin) {
+        alert('⛔ บัญชีนี้เป็นระดับ Co-Broker ทั่วไป ไม่มีสิทธิ์เข้าถึงห้องอนุมัติสิทธิ์ผู้บริหารครับ');
+        return;
+      }
+
+      localStorage.setItem('siwasup_admin_authed_user', JSON.stringify({
+        name: member.name,
+        phone: member.phone,
+        role: member.role,
+        ts: Date.now()
+      }));
+      document.getElementById('adminSecurityGateModal').classList.add('hidden');
+    }
+
     fetchCloudLobby();
     setInterval(fetchCloudLobby, 3000);
+    window.addEventListener('DOMContentLoaded', checkAdminSecurityGate);
   </script>
 
 <!-- REVOKE CONFIRMATION MODAL -->
@@ -1261,9 +1326,15 @@
           <input type="text" id="editMemberRoleInput" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-amber-500">
         </div>
 
-        <div class="space-y-1">
-          <label class="text-xs font-bold text-slate-700">ตำแหน่งทางการ (Official Title สำหรับนามบัตร):</label>
-          <input type="text" id="editMemberTitleInput" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-amber-500">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-slate-700">ตำแหน่งทางการ (Official Title):</label>
+            <input type="text" id="editMemberTitleInput" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-amber-500">
+          </div>
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-red-700">🔐 รหัส PIN เข้าสู่ระบบ (4-6 หลัก):</label>
+            <input type="text" id="editMemberPinInput" maxlength="6" placeholder="เช่น 9999" class="w-full bg-red-50/50 border border-red-200 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-red-500">
+          </div>
         </div>
 
         <div class="space-y-2 pt-1 border-t border-slate-100">
@@ -1340,5 +1411,40 @@
     </div>
   </div>
 
+  <!-- ADMIN SECURITY PIN GATE MODAL -->
+  <div id="adminSecurityGateModal" class="fixed inset-0 z-[60] bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border-2 border-red-300 space-y-5 text-center">
+      <div class="w-14 h-14 rounded-2xl bg-red-50 border-2 border-red-200 text-[#ed1c24] flex items-center justify-center mx-auto shadow-sm">
+        <i data-lucide="shield-lock" class="w-7 h-7"></i>
+      </div>
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-red-50 text-[#ed1c24] text-[10px] font-bold border border-red-200">
+          RESTRICTED EXECUTIVE AREA
+        </div>
+        <h3 class="text-lg font-black text-slate-900">ยืนยันตัวตนผู้บริหาร / แอดมิน</h3>
+        <p class="text-xs text-slate-500">กรุณาระบุเบอร์โทรศัพท์แอดมินและรหัส PIN 4 หลักเพื่อเข้าใช้งานห้องอนุมัติสิทธิ์</p>
+      </div>
+
+      <div class="space-y-3 text-left text-xs">
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700">เบอร์โทรศัพท์แอดมิน (5 เสาหลัก):</label>
+          <input type="tel" id="gateAdminPhone" placeholder="เช่น 0819999999" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 font-mono text-slate-900 focus:outline-none focus:border-red-500">
+        </div>
+        <div class="space-y-1">
+          <label class="font-bold text-slate-700">รหัส PIN รักษาความปลอดภัย (4 หลัก):</label>
+          <input type="password" id="gateAdminPin" maxlength="6" inputmode="numeric" placeholder="••••" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 font-mono tracking-widest text-slate-900 focus:outline-none focus:border-red-500" onkeydown="if(event.key==='Enter') verifyAdminGate()">
+        </div>
+      </div>
+
+      <button onclick="verifyAdminGate()" class="w-full py-3 rounded-2xl bg-[#ed1c24] hover:bg-red-700 text-white font-black text-xs sm:text-sm shadow-lg transition">
+        🔓 ยืนยันรหัส PIN &amp; เปิดห้องควบคุม
+      </button>
+
+      <div class="pt-2 border-t border-slate-100 text-[11px] text-slate-400 flex items-center justify-between">
+        <span>เฉพาะทีมบริหารศิวาทรัพย์เท่านั้น</span>
+        <a href="https://assets.siwasup.com/welcome_landing.html" class="text-slate-600 hover:underline font-semibold">← กลับหน้าหลัก</a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
