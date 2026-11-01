@@ -7,9 +7,10 @@ from overnight_r2_crawler import put_object_r2
 WEB_DIR = r"C:\Users\ITss-Advice\Documents\GitHub\siwasup-cobroker-os"
 
 files_to_deploy = [
-    ("agent_onboarding_qr.html", "text/html; charset=utf-8"),
+    ("agent_profile.html", "text/html; charset=utf-8"),
     ("agent_registration.html", "text/html; charset=utf-8"),
     ("admin_lobby_manager.html", "text/html; charset=utf-8"),
+    ("agent_onboarding_qr.html", "text/html; charset=utf-8"),
     ("gool_executive_dashboard.html", "text/html; charset=utf-8"),
     ("executive_quick_hub.html", "text/html; charset=utf-8"),
 ]
@@ -23,4 +24,4 @@ for filename, content_type in files_to_deploy:
     print(f"[OK] {filename} Upload Status: {st}")
     print(f"URL: https://assets.siwasup.com/{filename}")
 
-print("\n[SUCCESS] All files including Admin Lobby Manager deployed to Cloudflare R2!")
+print("\n[SUCCESS] All files including Profile & Registration deployed to Cloudflare R2!")

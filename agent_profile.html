@@ -89,19 +89,26 @@
 
       <!-- Avatar & Name Section (Always Horizontal Side-by-Side as in Illustrator) -->
       <div class="flex items-start gap-3 sm:gap-4">
-        <!-- Avatar Wrapper with 37px Rounded Corners -->
-        <div class="relative shrink-0">
+        <!-- Avatar Wrapper with 37px Rounded Corners (Clickable Anywhere to Upload) -->
+        <label for="customPhotoInput" class="relative shrink-0 cursor-pointer group block" title="แตะเพื่อเปลี่ยนรูปโปรไฟล์">
           <img id="agentAvatar" 
                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&auto=format&fit=crop&q=80" 
                alt="Agent Profile" 
-               class="w-[86px] h-[86px] sm:w-24 sm:h-24 squircle-37 object-cover bg-slate-100 border-2 border-[#E5B54F]/70 shadow-xs" />
-          <!-- Verified Badge (Enlarged 28px Vector Match from Illustrator, Zero Crowding) -->
+               class="w-[86px] h-[86px] sm:w-24 sm:h-24 squircle-37 object-cover bg-slate-100 border-2 border-amber-400 shadow-md transition group-hover:scale-105 group-hover:brightness-95" />
+          <!-- Camera Overlay Badge on Avatar -->
+          <span class="absolute -bottom-1 -left-1 w-7 h-7 sm:w-7.5 sm:h-7.5 rounded-full bg-slate-900 text-white flex items-center justify-center border-2 border-white shadow-md transition group-hover:scale-110 group-hover:bg-amber-500">
+            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+          </span>
+          <!-- Verified Badge -->
           <span class="absolute -bottom-1 -right-1 w-7 h-7 sm:w-7.5 sm:h-7.5 rounded-full bg-[#3fb354] border-[2.5px] border-white flex items-center justify-center shadow-xs" title="ที่ปรึกษาที่ผ่านการรับรอง">
             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
               <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
           </span>
-        </div>
+        </label>
 
         <!-- Info (Right Side) -->
         <div class="space-y-1 sm:space-y-1.5 flex-1 min-w-0">
@@ -115,6 +122,10 @@
 
           <!-- Position directly under name without capsule -->
           <p id="agentTitle" class="text-[11.5px] sm:text-xs text-slate-500 font-normal leading-relaxed truncate">ที่ปรึกษาด้านการซื้อ-ขายอสังหาริมทรัพย์มืออาชีพ</p>
+          <button type="button" onclick="document.getElementById('customPhotoInput').click()" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-[10.5px] font-bold transition shadow-sm mt-1 active:scale-95">
+            <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            <span>📷 แตะเปลี่ยนรูปโปรไฟล์</span>
+          </button>
         </div>
       </div>
 
@@ -598,7 +609,14 @@
       if (emblemEl) emblemEl.src = a.goldBadge;
 
       const avatarEl = document.getElementById("agentAvatar");
-      avatarEl.src = a.avatar;
+      const savedCustomAvatar = localStorage.getItem("siwasup_avatar_" + a.name) || localStorage.getItem("siwasup_current_avatar");
+      if (getParam("avatar")) {
+        avatarEl.src = getParam("avatar");
+      } else if (savedCustomAvatar) {
+        avatarEl.src = savedCustomAvatar;
+      } else {
+        avatarEl.src = a.avatar;
+      }
 
       const btnCall = document.getElementById("btnCall"); if (btnCall) btnCall.href = `tel:${a.phoneRaw}`;
       const txtPhone = document.getElementById("txtPhone"); if (txtPhone) txtPhone.innerText = a.phoneFormatted;
@@ -737,9 +755,22 @@
       if (file) {
         const reader = new FileReader();
         reader.onload = function(evt) {
-          document.getElementById("agentAvatar").src = evt.target.result;
-          confirmPhoto();
-          showToast("อัปโหลดรูปใหม่สำเร็จแล้ว");
+          const dataUrl = evt.target.result;
+          const avatarEl = document.getElementById("agentAvatar");
+          if (avatarEl) avatarEl.src = dataUrl;
+          const modalAvatar = document.getElementById("modalAvatar");
+          if (modalAvatar) modalAvatar.src = dataUrl;
+
+          // Save to localStorage
+          const agentName = (document.getElementById("agentName").innerText || "").trim();
+          try {
+            if (agentName) localStorage.setItem("siwasup_avatar_" + agentName, dataUrl);
+            localStorage.setItem("siwasup_current_avatar", dataUrl);
+          } catch(err) {
+            console.warn("Storage quota:", err);
+          }
+          if (typeof confirmPhoto === 'function') confirmPhoto();
+          showToast("✓ เปลี่ยนรูปโปรไฟล์ใหม่เรียบร้อยแล้ว");
         };
         reader.readAsDataURL(file);
       }

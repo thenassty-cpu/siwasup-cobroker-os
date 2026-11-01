@@ -911,7 +911,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                             print(f"[User Message from {prof.get('displayName')}]: {text}")
                             if mtype == 'text':
                                 text_clean = text.strip().lower()
-                                if any(k in text_clean for k in ['สมัคร', 'ลงทะเบียน', 'login', 'เข้าสู่ระบบ', 'ขอนามบัตร', 'นามบัตร', 'โปรไฟล์', 'profile']):
+                                if any(k in text_clean for k in ['สมัคร', 'ลงทะเบียน', 'login', 'เข้าสู่ระบบ', 'ขอนามบัตร', 'นามบัตร', 'โปรไฟล์', 'profile', 'เอเจนต์', 'เอเจน', 'ตัวแทน', 'ร่วมงาน', 'ขอเข้ากลุ่ม', 'เข้ากลุ่ม', 'นายหน้า', 'co-broker', 'cobroker', 'ขอลิงก์', 'ขอลิงค์', 'วิธีสมัคร', 'อยากเป็นเอเจนต์', 'ลิงก์สมัคร']):
                                     ai_reply = (
                                         f"สวัสดีครับคุณ {prof.get('displayName', '')}! สำหรับการลงทะเบียนทีมงานออฟฟิศ หรือรับนามบัตรดิจิทัลทางการของ Siwasup Co-Broker OS:\n\n"
                                         "👉 คลิกที่นี่เพื่อลงทะเบียน/เข้าสู่ระบบได้ทันทีครับ:\n"
