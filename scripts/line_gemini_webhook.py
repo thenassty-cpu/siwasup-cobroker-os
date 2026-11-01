@@ -595,7 +595,26 @@ def reply_line(reply_token, reply_text):
 LOBBY_PATH = os.path.join(DATA_DIR, "lobby_applicants.json")
 LOBBY_LOCK = threading.Lock()
 
+_R2_LOBBY_VAULT_KEY = "_vault/lobby_" + hmac.new(ADMIN_EXPORT_SECRET.encode("utf-8"), b"siwasup_lobby_vault_v2", hashlib.sha256).hexdigest()[:32] + ".json"
+_R2_LOBBY_RESTORED = False
+
 def load_lobby_data():
+    global _R2_LOBBY_RESTORED
+    if not _R2_LOBBY_RESTORED and os.environ.get("PORT"):
+        _R2_LOBBY_RESTORED = True
+        try:
+            url = f"https://assets.siwasup.com/{_R2_LOBBY_VAULT_KEY}?t={int(time.time())}"
+            req = urllib.request.Request(url, headers={"User-Agent": "SiwasupRenderVault/1.0"})
+            with urllib.request.urlopen(req, timeout=8) as r:
+                if r.status == 200:
+                    cloud_store = json.loads(r.read().decode("utf-8"))
+                    if isinstance(cloud_store, dict) and ("approved" in cloud_store or "pending" in cloud_store):
+                        with open(LOBBY_PATH, "w", encoding="utf-8") as f:
+                            json.dump(cloud_store, f, ensure_ascii=False, indent=2)
+                        print(f"[Vault] Restored lobby_applicants from R2 ({len(cloud_store.get('approved', []))} approved)")
+                        return cloud_store
+        except Exception as e:
+            print(f"[Vault] Initial R2 restore note: {e}")
     if os.path.exists(LOBBY_PATH):
         try:
             with open(LOBBY_PATH, "r", encoding="utf-8") as f:
@@ -613,6 +632,8 @@ def save_lobby_data(store):
                 f.write(data_bytes)
         except Exception as e:
             print(f"[Error] Failed to save lobby local: {e}")
+        if put_object_r2 and os.environ.get("PORT"):
+            threading.Thread(target=lambda: put_object_r2(_R2_LOBBY_VAULT_KEY, data_bytes, "application/json"), daemon=True).start()
 
 
 # ==============================================================================
@@ -815,7 +836,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             code = query.get("code", [""])[0]
             st = verify_token(query.get("state", [""])[0])
             cm = re.search(r"line_state=([^;]+)", self.headers.get("Cookie", ""))
-            if not code or not st or not cm or not hmac.compare_digest(cm.group(1), st.get("n", "")):
+            if not code or not st or (cm and not hmac.compare_digest(cm.group(1), st.get("n", ""))):
                 self._redirect(FRONTEND_URLS["register"] + "#auth_error=state", clear_cookie)
                 return
             try:
@@ -848,6 +869,11 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     store.setdefault("audit_log", []).insert(0, f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 🔗 ผูก LINE ผู้ดูแลระบบสูงสุด: {seat.get('name')}")
                     save_lobby_data(store)
 
+            for m in store.get("approved", []):
+                if m.get("lineUserId") == sub and picture and (not m.get("avatar") or "unsplash.com" in str(m.get("avatar", ""))):
+                    m["avatar"] = picture
+                    save_lobby_data(store)
+                    break
             session = make_token({"sub": sub, "name": name, "picture": picture}, SESSION_TTL)
             self._redirect(FRONTEND_URLS[st.get("r", "register")] + "#session=" + session, clear_cookie)
             return
@@ -966,6 +992,8 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 safe = {k: payload.get(k) for k in allowed if payload.get(k) is not None}
                 safe["lineUserId"] = uid
                 safe["lineDisplayName"] = s.get("name", "")
+                if s.get("picture") and (not safe.get("avatar") or "unsplash.com" in str(safe.get("avatar", ""))):
+                    safe["avatar"] = s.get("picture")
                 safe["status"] = "pending"
                 if not safe.get("id"):
                     safe["id"] = f"SW-APP-{int(time.time()) % 100000}"
