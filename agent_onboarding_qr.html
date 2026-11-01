@@ -14,22 +14,21 @@
   <style>
     body {
       font-family: 'Prompt', 'Tahoma', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: #070d18;
-      color: #f1f5f9;
+      background-color: #f8fafc;
+      color: #0f172a;
     }
-    .card-glass {
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    .card-light {
+      background: #ffffff;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 4px 25px -4px rgba(0, 0, 0, 0.08);
     }
     .gold-gradient-text {
-      background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+      background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
     .gold-border-glow {
-      box-shadow: 0 0 35px -5px rgba(245, 158, 11, 0.25);
+      box-shadow: 0 0 35px -5px rgba(245, 158, 11, 0.2);
     }
     @media print {
       body {
@@ -56,25 +55,25 @@
 <body class="min-h-screen flex flex-col justify-between p-3 sm:p-6 lg:p-8">
 
   <!-- TOP BAR / NAVIGATION (NO-PRINT) -->
-  <header class="no-print max-w-4xl w-full mx-auto flex items-center justify-between pb-6 border-b border-slate-800">
+  <header class="no-print max-w-4xl w-full mx-auto flex items-center justify-between pb-6 border-b border-slate-200">
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center font-black text-slate-950 text-xl shadow-lg shadow-amber-500/20">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center font-black text-slate-950 text-xl shadow-sm">
         S
       </div>
       <div>
-        <h1 class="text-sm sm:text-base font-bold text-white tracking-wide">
+        <h1 class="text-sm sm:text-base font-bold text-slate-900 tracking-wide">
           ศิวาสัพย์ <span class="gold-gradient-text font-black">CO-BROKER OS</span>
         </h1>
-        <p class="text-[11px] text-slate-400">ระบบสแกนลงทะเบียน & รับบัตรดิจิทัลเอเจนต์หน้างาน (Live Onboarding)</p>
+        <p class="text-[11px] text-slate-500">ระบบสแกนลงทะเบียน & รับบัตรดิจิทัลเอเจนต์หน้างาน (Live Onboarding)</p>
       </div>
     </div>
 
     <div class="flex items-center gap-2">
-      <button onclick="window.print()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 flex items-center gap-1.5 transition">
-        <i data-lucide="printer" class="w-3.5 h-3.5 text-amber-400"></i>
+      <button onclick="window.print()" class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 border border-slate-300 flex items-center gap-1.5 shadow-sm transition">
+        <i data-lucide="printer" class="w-3.5 h-3.5 text-amber-600"></i>
         <span class="hidden sm:inline">พิมพ์ป้ายตั้งโต๊ะ</span>
       </button>
-      <a href="https://assets.siwasup.com/gool_executive_dashboard.html" class="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-xs font-semibold text-amber-300 border border-amber-500/30 flex items-center gap-1.5 transition">
+      <a href="https://assets.siwasup.com/gool_executive_dashboard.html" class="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs font-semibold text-amber-800 border border-amber-300 flex items-center gap-1.5 shadow-sm transition">
         <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
         <span class="hidden sm:inline">หน้าแดชบอร์ด</span>
       </a>
@@ -86,87 +85,83 @@
 
     <!-- TAB SELECTOR (LINE OA vs DIRECT WEB) -->
     <div class="no-print flex justify-center mb-6">
-      <div class="card-glass p-1.5 rounded-2xl border border-slate-700/80 flex gap-1 shadow-lg">
-        <button id="btnTabLine" onclick="switchMode('line')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition bg-emerald-600 text-white shadow-md">
+      <div class="bg-white p-1.5 rounded-2xl border border-slate-200 flex gap-1 shadow-sm">
+        <button id="btnTabLine" onclick="switchMode('line')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition bg-emerald-600 text-white shadow-sm">
           <i data-lucide="message-circle" class="w-4 h-4"></i>
           <span>1. สแกนแอด LINE OA (@813nyyia)</span>
           <span class="text-[9px] bg-emerald-800/80 px-1.5 py-0.5 rounded-md text-emerald-100 hidden sm:inline">แนะนำสูงสุด</span>
         </button>
-        <button id="btnTabWeb" onclick="switchMode('web')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-400 hover:text-white flex items-center gap-2 transition">
+        <button id="btnTabWeb" onclick="switchMode('web')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 flex items-center gap-2 transition">
           <i data-lucide="globe" class="w-4 h-4"></i>
           <span>2. สแกนเปิดเว็บฟอร์มตรง (Web Direct)</span>
         </button>
       </div>
     </div>
 
-    <!-- KIOSK / STANDEE DISPLAY CARD -->
-    <div class="print-card card-glass rounded-3xl p-6 sm:p-10 border border-amber-500/30 gold-border-glow shadow-2xl relative overflow-hidden">
+    <!-- KIOSK / STANDEE DISPLAY CARD (ธีมสว่าง) -->
+    <div class="print-card card-light rounded-3xl p-6 sm:p-10 border-2 border-amber-300 gold-border-glow relative overflow-hidden">
       
-      <!-- Top Decorative Accent -->
-      <div class="absolute -top-24 -left-24 w-60 h-60 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-24 -right-24 w-60 h-60 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
       <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative z-10">
 
         <!-- LEFT COLUMN: Instructions & Value Prop -->
         <div class="md:col-span-7 space-y-5 text-left">
           
           <div class="space-y-2">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold">
-              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold shadow-2xs">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600"></i>
               <span id="badgeTarget">ระบบลงทะเบียนภาคสนาม (Official Co-Broker Onboarding)</span>
             </div>
-            <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight print-text-dark">
+            <h2 class="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight print-text-dark">
               ยกมือถือสแกน QR Code<br>
               <span class="gold-gradient-text print-text-dark" id="headerAction">เพื่อเริ่มงาน & รับบัตรดิจิทัล</span>
             </h2>
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed print-text-dark" id="subHeaderDesc">
-              สแกนด้วยกล้องมือถือหรือแอปพลิเคชัน LINE เพื่อเชื่อมต่อกับระบบ <strong class="text-amber-400 font-semibold print-text-dark">ศิวาสัพย์ Co-Broker OS</strong> 
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed print-text-dark" id="subHeaderDesc">
+              สแกนด้วยกล้องมือถือหรือแอปพลิเคชัน LINE เพื่อเชื่อมต่อกับระบบ <strong class="text-amber-700 font-semibold print-text-dark">ศิวาสัพย์ Co-Broker OS</strong> 
               ลงทะเบียน 1 นาที รับสิทธิ์ดูพิกัดทรัพย์ กุญแจ Keybox ท่าข้าม 12 และออกนามบัตรทางการทันที
             </p>
           </div>
 
           <!-- 3-STEP FLOW GUIDE -->
           <div class="space-y-3 pt-2">
-            <div class="flex items-start gap-3 p-3 rounded-2xl bg-slate-900/60 border border-slate-800 print-card">
-              <div class="w-7 h-7 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs shrink-0">
+            <div class="flex items-start gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-200 print-card">
+              <div class="w-7 h-7 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-xs shrink-0">
                 1
               </div>
               <div>
-                <div class="text-xs sm:text-sm font-bold text-white print-text-dark" id="step1Title">เปิดกล้องมือถือ หรือแอป LINE สแกน QR</div>
-                <div class="text-[11px] text-slate-400 print-text-dark" id="step1Desc">จ่อกล้องไปที่ QR Code ด้านขวา ระบบจะเปิดหน้ารับสมัครอัตโนมัติ</div>
+                <div class="text-xs sm:text-sm font-bold text-slate-900 print-text-dark" id="step1Title">เปิดกล้องมือถือ หรือแอป LINE สแกน QR</div>
+                <div class="text-[11px] text-slate-500 print-text-dark" id="step1Desc">จ่อกล้องไปที่ QR Code ด้านขวา ระบบจะเปิดหน้ารับสมัครอัตโนมัติ</div>
               </div>
             </div>
 
-            <div class="flex items-start gap-3 p-3 rounded-2xl bg-slate-900/60 border border-slate-800 print-card">
-              <div class="w-7 h-7 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs shrink-0">
+            <div class="flex items-start gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-200 print-card">
+              <div class="w-7 h-7 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-xs shrink-0">
                 2
               </div>
               <div>
-                <div class="text-xs sm:text-sm font-bold text-white print-text-dark">กรอกชื่อ เบอร์โทร และเลือกโซนพื้นที่</div>
-                <div class="text-[11px] text-slate-400 print-text-dark">ทีมงานออฟฟิศ 5 คนมีปุ่มลัด 1-Click สำหรับกรอกสิทธิ์แอดมินอัตโนมัติ</div>
+                <div class="text-xs sm:text-sm font-bold text-slate-900 print-text-dark">กรอกชื่อ เบอร์โทร และเลือกโซนพื้นที่</div>
+                <div class="text-[11px] text-slate-500 print-text-dark">เข้าสู่ห้องรับรอง Lobby เพื่อให้ฝ่ายบริหารจัดสรรสิทธิ์วิชาชีพ</div>
               </div>
             </div>
 
-            <div class="flex items-start gap-3 p-3 rounded-2xl bg-slate-900/60 border border-slate-800 print-card">
-              <div class="w-7 h-7 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">
+            <div class="flex items-start gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-200 print-card">
+              <div class="w-7 h-7 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs shrink-0">
                 3
               </div>
               <div>
-                <div class="text-xs sm:text-sm font-bold text-white print-text-dark">รับบัตรดิจิทัล & ล็อกสิทธิ์โคโบรกเกอร์ทันที</div>
-                <div class="text-[11px] text-slate-400 print-text-dark">แชร์นามบัตรให้ลูกค้าผ่าน LINE สบายใจด้วยระบบล็อกค่านายหน้า 60 วัน</div>
+                <div class="text-xs sm:text-sm font-bold text-slate-900 print-text-dark">รับบัตรดิจิทัล & ล็อกสิทธิ์โคโบรกเกอร์ทันที</div>
+                <div class="text-[11px] text-slate-500 print-text-dark">แชร์นามบัตรให้ลูกค้าผ่าน LINE สบายใจด้วยระบบล็อกค่านายหน้า 60 วัน</div>
               </div>
             </div>
           </div>
 
           <!-- LIVE STATUS INDICATOR -->
-          <div class="pt-1 flex items-center gap-4 text-xs text-slate-400 print-card">
+          <div class="pt-1 flex items-center gap-4 text-xs text-slate-500 print-card">
             <div class="flex items-center gap-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-              <span class="text-emerald-400 font-semibold">ระบบคลาวด์เปิดทำงาน 24 ชม.</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+              <span class="text-emerald-700 font-semibold">ระบบคลาวด์เปิดทำงาน 24 ชม.</span>
             </div>
-            <div class="text-slate-500">•</div>
-            <div>LINE OA: <strong class="text-slate-300">@813nyyia</strong></div>
+            <div class="text-slate-300">•</div>
+            <div>LINE OA: <strong class="text-slate-800">@813nyyia</strong></div>
           </div>
 
         </div>
@@ -174,25 +169,22 @@
         <!-- RIGHT COLUMN: HIGH-CONTRAST DYNAMIC QR CODE DISPLAY -->
         <div class="md:col-span-5 flex flex-col items-center justify-center text-center">
           
-          <div class="bg-white p-5 rounded-3xl shadow-2xl border-4 border-amber-400/80 relative group">
+          <div class="bg-white p-5 rounded-3xl shadow-xl border-4 border-amber-300 relative group">
             
-            <!-- Target URL & QR Image -->
             <div class="relative">
               <img id="qrImage" 
                    src="https://api.qrserver.com/v1/create-qr-code/?size=450x450&margin=12&data=https%3A%2F%2Fline.me%2FR%2Fti%2Fp%2F%40813nyyia" 
                    alt="Siwasup Onboarding QR Code" 
                    class="w-56 h-56 sm:w-64 sm:h-64 object-contain rounded-xl">
               
-              <!-- Center Logo Watermark -->
               <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div class="w-12 h-12 rounded-xl bg-slate-950 border-2 border-amber-400 flex items-center justify-center shadow-xl">
+                <div class="w-12 h-12 rounded-xl bg-slate-950 border-2 border-amber-400 flex items-center justify-center shadow-md">
                   <span class="font-black text-amber-400 text-lg">S</span>
                 </div>
               </div>
             </div>
 
-            <!-- Under-QR Description -->
-            <div class="mt-3 pt-2 border-t border-slate-200">
+            <div class="mt-3 pt-2 border-t border-slate-100">
               <div class="text-slate-900 font-black text-sm tracking-wide flex items-center justify-center gap-1.5" id="qrLabel">
                 <i data-lucide="message-circle" class="w-4 h-4 text-emerald-600"></i>
                 <span>สแกนแอด LINE: @813nyyia</span>
@@ -210,27 +202,26 @@
             <a id="btnDirectLink" 
                href="https://line.me/R/ti/p/@813nyyia" 
                target="_blank"
-               class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-emerald-600/20 transition">
+               class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-emerald-600/20 transition">
               <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-              <span id="btnDirectText">ทดลองเปิดลิงก์ทันที</span>
+              <span id="btnDirectText">ทดลองเปิด LINE OA</span>
             </a>
 
             <button onclick="downloadQR()" 
-                    class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 flex items-center gap-1.5 transition">
-              <i data-lucide="download" class="w-3.5 h-3.5 text-amber-400"></i>
+                    class="px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-300 shadow-sm flex items-center gap-1.5 transition">
+              <i data-lucide="download" class="w-3.5 h-3.5 text-amber-600"></i>
               <span>เซฟรูป QR</span>
             </button>
 
             <button onclick="copyCurrentLink()" 
-                    class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 flex items-center gap-1.5 transition">
-              <i data-lucide="copy" class="w-3.5 h-3.5 text-blue-400"></i>
+                    class="px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-300 shadow-sm flex items-center gap-1.5 transition">
+              <i data-lucide="copy" class="w-3.5 h-3.5 text-blue-600"></i>
               <span>ก๊อปลิงก์</span>
             </button>
 
           </div>
 
-          <!-- Notification Toast -->
-          <div id="copyToast" class="no-print mt-2 text-[11px] text-emerald-400 font-medium hidden">
+          <div id="copyToast" class="no-print mt-2 text-[11px] text-emerald-600 font-bold hidden">
             ✓ คัดลอกลิงก์สำเร็จแล้ว ส่งต่อได้ทันที!
           </div>
 
@@ -240,29 +231,20 @@
 
     </div>
 
-    <!-- TENT CARD PRINT INSTRUCTIONS (PRINT ONLY) -->
-    <div class="hidden print:block text-center mt-8 text-xs text-slate-600 border-t border-slate-300 pt-4">
-      <p class="font-bold">ศิวาสัพย์ Co-Broker OS • สำนักงานใหญ่ โทร 02-XXX-XXXX • LINE Official: @813nyyia</p>
-      <p class="text-[10px] text-slate-500">สำหรับวางเป็น Tent Card บนโต๊ะประชุม หรือเคาน์เตอร์ต้อนรับเอเจนต์</p>
-    </div>
-
   </main>
 
   <!-- FOOTER (NO-PRINT) -->
-  <footer class="no-print max-w-4xl w-full mx-auto text-center text-xs text-slate-500 pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3">
+  <footer class="no-print max-w-4xl w-full mx-auto text-center text-xs text-slate-500 pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
     <div>
       © 2026 Siwasup Co-Broker OS • All Rights Reserved.
     </div>
     <div class="flex items-center gap-3">
-      <a href="https://assets.siwasup.com/agent_registration.html" class="hover:text-amber-400 transition">หน้าฟอร์มกรอกข้อมูล</a>
+      <a href="https://assets.siwasup.com/agent_registration.html" class="hover:text-amber-600 transition">หน้าฟอร์มกรอกข้อมูล</a>
       <span>•</span>
-      <a href="https://assets.siwasup.com/executive_launch_strategy_horizon1.html" class="hover:text-amber-400 transition">แผนกลยุทธ์วันพุธ</a>
-      <span>•</span>
-      <a href="https://assets.siwasup.com/siwasup_keybox_interactive_roleplay.html" class="hover:text-amber-400 transition">สนามทดสอบกุญแจ OTP</a>
+      <a href="https://assets.siwasup.com/admin_lobby_manager.html" class="hover:text-amber-600 transition">ห้องแอดมินอนุมัติสิทธิ์</a>
     </div>
   </footer>
 
-  <!-- SCRIPT -->
   <script>
     lucide.createIcons();
 
@@ -287,46 +269,38 @@
       const btnDirectText = document.getElementById('btnDirectText');
 
       if (mode === 'line') {
-        // Tab Styles
-        btnTabLine.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition bg-emerald-600 text-white shadow-md';
-        btnTabWeb.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-400 hover:text-white flex items-center gap-2 transition';
+        btnTabLine.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition bg-emerald-600 text-white shadow-sm';
+        btnTabWeb.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 flex items-center gap-2 transition';
 
-        // QR Code Image
         const encodedUrl = encodeURIComponent(urls.line);
         qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=450x450&margin=12&data=${encodedUrl}`;
         qrLabel.innerHTML = `<i data-lucide="message-circle" class="w-4 h-4 text-emerald-600"></i><span>สแกนแอด LINE: @813nyyia</span>`;
         qrSubLabel.innerText = 'เปิดแอป LINE แล้วสแกนภาพนี้ได้ทันที';
 
-        // Content
         headerAction.innerText = 'เพื่อเริ่มงาน & รับบัตรดิจิทัลผ่าน LINE';
-        subHeaderDesc.innerHTML = 'สแกนด้วยกล้องมือถือหรือแอปพลิเคชัน LINE เพื่อเชื่อมต่อกับระบบ <strong class="text-amber-400 font-semibold">ศิวาสัพย์ Co-Broker OS</strong> ลงทะเบียน 1 นาที รับสิทธิ์ดูพิกัดทรัพย์ กุญแจ Keybox ท่าข้าม 12 และออกนามบัตรทางการทันที';
+        subHeaderDesc.innerHTML = 'สแกนด้วยกล้องมือถือหรือแอปพลิเคชัน LINE เพื่อเชื่อมต่อกับระบบ <strong class="text-amber-700 font-semibold">ศิวาสัพย์ Co-Broker OS</strong> ลงทะเบียน 1 นาที รับสิทธิ์ดูพิกัดทรัพย์ กุญแจ Keybox ท่าข้าม 12 และออกนามบัตรทางการทันที';
         step1Title.innerText = 'เปิดแอป LINE แล้วสแกน QR Code';
         step1Desc.innerText = 'ระบบจะเพิ่มเพื่อนบอทศิวา (@813nyyia) และส่งการ์ดต้อนรับให้ลงทะเบียนทันที';
 
-        // Direct Button
         btnDirectLink.href = urls.line;
-        btnDirectLink.className = 'px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-emerald-600/20 transition';
+        btnDirectLink.className = 'px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-emerald-600/20 transition';
         btnDirectText.innerText = 'ทดลองเปิด LINE OA';
       } else {
-        // Tab Styles
-        btnTabWeb.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition bg-amber-600 text-white shadow-md';
-        btnTabLine.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-400 hover:text-white flex items-center gap-2 transition';
+        btnTabWeb.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition bg-amber-600 text-white shadow-sm';
+        btnTabLine.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 flex items-center gap-2 transition';
 
-        // QR Code Image
         const encodedUrl = encodeURIComponent(urls.web);
         qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=450x450&margin=12&data=${encodedUrl}`;
         qrLabel.innerHTML = `<i data-lucide="globe" class="w-4 h-4 text-amber-600"></i><span>สแกนเข้าเว็บฟอร์มตรง</span>`;
         qrSubLabel.innerText = 'กล้องมือถือทั่วไปสแกนแล้วเปิดเบราว์เซอร์ทันที';
 
-        // Content
         headerAction.innerText = 'เปิดฟอร์มลงทะเบียนบนเว็บทันที';
-        subHeaderDesc.innerHTML = 'เหมาะสำหรับเอเจนต์ที่ต้องการกรอกข้อมูล ออกนามบัตรดิจิทัล และเลือกสิทธิ์แอดมิน 5 เสาหลักได้ทันทีโดยไม่ต้องผ่านแชท LINE';
+        subHeaderDesc.innerHTML = 'เหมาะสำหรับเอเจนต์ที่ต้องการกรอกข้อมูล ออกนามบัตรดิจิทัล และเข้าสู่ห้องรับรอง Lobby ได้ทันทีโดยไม่ต้องผ่านแชท LINE';
         step1Title.innerText = 'เปิดกล้องมือถือทั่วไปสแกน QR Code';
         step1Desc.innerText = 'ระบบจะเปิดหน้าเว็บลงทะเบียน Siwasup Co-Broker ให้กรอกข้อมูลได้ทันที';
 
-        // Direct Button
         btnDirectLink.href = urls.web;
-        btnDirectLink.className = 'px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-amber-600/20 transition';
+        btnDirectLink.className = 'px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-amber-600/20 transition';
         btnDirectText.innerText = 'ทดลองเปิดหน้าเว็บฟอร์ม';
       }
       lucide.createIcons();
