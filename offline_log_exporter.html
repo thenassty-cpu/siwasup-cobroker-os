@@ -52,13 +52,16 @@
         </div>
       </div>
 
-      <!-- Quick Server Selector -->
-      <div class="flex items-center gap-2 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 text-xs w-full md:w-auto">
-        <button id="btnLocal" onclick="setServerPreset('local')" class="flex-1 md:flex-initial px-3 py-1.5 rounded-xl text-slate-300 hover:text-white transition">
-          💻 เครื่องนี้ (Local:5005)
+      <!-- Quick Server Selector (3 Presets) -->
+      <div class="flex items-center gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 text-xs w-full md:w-auto flex-wrap">
+        <button id="btnCloud" onclick="setServerPreset('cloud')" class="px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold transition">
+          ☁️ Render Cloud (Live 24 ชม.)
         </button>
-        <button id="btnCloud" onclick="setServerPreset('cloud')" class="flex-1 md:flex-initial px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold transition">
-          ☁️ คลาวด์ (Render / Live)
+        <button id="btnR2" onclick="setServerPreset('r2')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white transition">
+          ⚡ Cloudflare R2 (สำรองถาวร)
+        </button>
+        <button id="btnLocal" onclick="setServerPreset('local')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white transition">
+          💻 Local:5005
         </button>
       </div>
     </div>
@@ -199,15 +202,21 @@
       const urlInput = document.getElementById("serverUrl");
       const btnLocal = document.getElementById("btnLocal");
       const btnCloud = document.getElementById("btnCloud");
+      const btnR2 = document.getElementById("btnR2");
+
+      [btnLocal, btnCloud, btnR2].forEach(b => {
+        if (b) b.className = "px-3 py-1.5 rounded-xl text-slate-300 hover:text-white transition";
+      });
 
       if (mode === "local") {
         urlInput.value = "http://127.0.0.1:5005";
-        btnLocal.className = "flex-1 md:flex-initial px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold transition";
-        btnCloud.className = "flex-1 md:flex-initial px-3 py-1.5 rounded-xl text-slate-300 hover:text-white transition";
+        btnLocal.className = "px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold transition";
+      } else if (mode === "r2") {
+        urlInput.value = "https://assets.siwasup.com/data/line_chat_logs.json";
+        btnR2.className = "px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold transition";
       } else {
         urlInput.value = "https://siwasup-cobroker-os.onrender.com";
-        btnCloud.className = "flex-1 md:flex-initial px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold transition";
-        btnLocal.className = "flex-1 md:flex-initial px-3 py-1.5 rounded-xl text-slate-300 hover:text-white transition";
+        btnCloud.className = "px-3 py-1.5 rounded-xl bg-amber-500 text-slate-950 font-bold transition";
       }
     }
 
@@ -229,7 +238,12 @@
       statusEl.classList.remove("hidden");
       statusEl.innerHTML = `<span class="text-amber-400 animate-pulse">⏳ กำลังเชื่อมต่อไปยัง ${baseUrl}...</span>`;
 
-      const targetUrl = `${baseUrl}/api/export-logs?secret=${encodeURIComponent(secret)}&days=${selectedDays}&category=${cat}&mask_pii=${maskPhone}`;
+      let targetUrl = "";
+      if (baseUrl.endsWith(".json")) {
+        targetUrl = baseUrl + "?t=" + Date.now();
+      } else {
+        targetUrl = `${baseUrl}/api/export-logs?secret=${encodeURIComponent(secret)}&days=${selectedDays}&category=${cat}&mask_pii=${maskPhone}`;
+      }
 
       try {
         const resp = await fetch(targetUrl, { cache: "no-store" });
@@ -281,7 +295,10 @@
 
         html += `
           <tr class="hover:bg-slate-800/40 transition">
-            <td class="p-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">${c.timestamp || "-"}</td>
+            <td class="p-3 text-slate-400 font-mono text-[11px] whitespace-nowrap">
+              <div>${c.timestamp || "-"}</div>
+              <span class="text-[9.5px] text-emerald-400 font-sans">✓ ล่าสุด</span>
+            </td>
             <td class="p-3">
               <div class="flex items-center gap-2">
                 <img src="${pic}" class="w-6 h-6 rounded-full object-cover bg-slate-700 shrink-0" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2394a3b8%22 stroke-width=%222%22><circle cx=%2212%22 cy=%228%22 r=%224%22/><path d=%22M20 21a8 8 0 0 0-16 0%22/></svg>'">

@@ -1,8 +1,8 @@
 {
   "project_name": "Siwasup Co-Broker OS",
-  "last_updated": "2026-11-01 11:53:00",
-  "status": "ON_BREAK_GRAB_DRIVING",
-  "summary": "คุณพ่ออนุมัติครบทั้ง 1 และ 2 เรียบร้อย! hai จัดการสร้าง Executive Launch Strategy Playbook & บทพูดสาธิต 3 นาที ดีพลอยขึ้น R2 (200 OK) และเจาะท่อดูดทรัพย์ NPA จาก BAM + JAM สำเร็จ 468 หลัง รวมข้อมูลกลางใน npa_mega_pool.json พร้อมซิงก์ Twin Brain (G:) ครบถ้วน",
+  "last_updated": "2026-11-01 16:21:00",
+  "status": "ACTIVE_WORKING",
+  "summary": "สร้าง Single-Page Executive Dashboard หน้าเดียวจบสำหรับส่งคุณกูลและคุณบัวตรวจ (gool_executive_dashboard.html): บรรจุ 4 KPI หลัก, ตารางจัดสรรสิทธิ์แอดมิน 5 เสาหลักพร้อมสิทธิ์เคาะแก้ราคา, ยุทธศาสตร์เปิดตัวสองเฟส และปุ่มทดลองระบบสด ดีพลอยขึ้น R2 (Status 200 OK) และพุชเข้า GitHub Main เรียบร้อย",
   "completed_today": [
     "1. ย้ายระบบขึ้น Render.com Cloud Server (Singapore) 24 ชม. 365 วัน ไม่ต้องเปิดคอมทิ้งไว้ (Status: 200 OK)",
     "2. ผูก LINE Messaging API Webhook เข้ากับ Render สำเร็จ",
@@ -12,18 +12,24 @@
     "6. ปรับโทนข้อความนามบัตรมุมมองลูกค้า (Client View): เปลี่ยนเป็น 'ตรวจสอบและรับรองมาตรฐานเรียบร้อย: แสดงเฉพาะข้อมูลทางการและเครื่องหมายวิชาชีพ' ให้คลาสสิก ปราศจากการพูดถึงสัตว์เชิงลบ",
     "7. Data Cleansing 90 วัน: ย้ายไฟล์สำรอง (.bak), Log เก่า, Raw Data และ cloudflared.exe (52.8 MB) รวม 61 ไฟล์ (88.25 MB) ไปเก็บที่ D:\\Recycle_Bin_90Days\\Siwasup_OS_Cleansing_20261101 (กำหนดลบ 30 ม.ค. 2570) พร้อมสคริปต์ 1-Click กู้คืน",
     "8. อัปเกรด offline_log_exporter.html: ซิงก์ประวัติแชทขึ้น Cloudflare R2 Persistent Storage อัตโนมัติ",
-    "9. อัปเดต Quick Access Portal (executive_quick_hub.html): ปักหมุด Sandbox และ Exporter ไว้บนสุด",
+    "9. อัปเดต Quick Access Portal (executive_quick_hub.html): ปักหมุด Sandbox, Exporter, Playbook และผังสิทธิ์ 5 เสาหลักไว้บนสุด",
     "10. เคลียร์ Process ผี Illustrator 2025 และปิด Daemon ในเครื่องเพื่อคืน RAM และ CPU",
     "11. ซิงก์ความรู้ทางเทคนิคทั้งหมดลง G:\\Home_Brain_Update.txt (Twin Brain Sync)",
     "12. [HORIZON 2 BREAKTHROUGH] เจาะท่อดูดทรัพย์ NPA สำเร็จ 100% (BAM 18,752 หลัง + JAM 40,607 หลัง รวมเข้า npa_mega_pool.json แล้ว 468 รายการโซนทองคำ)",
-    "13. [HORIZON 1 DELIVERED] สร้างและดีพลอย Executive Launch Strategy Playbook (executive_launch_strategy_horizon1.html) พร้อมบทพูดพรีเซนต์ 3 นาทีคำต่อคำ และ Q&A ดักข้อกังวลผู้ใหญ่ เชื่อมเข้า Quick Hub เรียบร้อย"
+    "13. [HORIZON 1 PLAYBOOK] สร้างและดีพลอย Executive Launch Strategy Playbook (executive_launch_strategy_horizon1.html) พร้อมบทพูดพรีเซนต์ 3 นาทีคำต่อคำ สำหรับนัดประชุมวันพุธ 11:30 น.",
+    "14. [OFFICE ONBOARDING & REGISTRATION] สร้างระบบลงทะเบียน & ออกนามบัตรดิจิทัลเฉพาะตัว (agent_registration.html) และอัปเดต LINE Bot ให้ส่งการ์ดต้อนรับ/สมัครทันทีเมื่อแอดเพื่อนหรือพิมพ์ 'สมัคร/ลงทะเบียน' พุชขึ้น Render เรียบร้อย",
+    "15. [PRICING PRIVILEGE & 5-PILLAR RBAC] เพิ่มสิทธิ์ปรับแก้ราคาบ้าน & ส่วนลดพิเศษ และบรรจุตารางสิทธิ์ 5 เสาหลักใน Quick Hub เรียบร้อย",
+    "16. [SINGLE-PAGE DASHBOARD FOR GOOL] สร้างและดีพลอย gool_executive_dashboard.html หน้าเดียวจบสำหรับส่งให้คุณกูลและคุณบัวดูง่ายๆ บนมือถือ พร้อมปุ่มพิมพ์ PDF"
   ],
   "pending_for_approval": [
-    "1. [อนุมัติเชื่อม NPA Mega Pool เข้า LINE Bot]: ให้บอทน้องศิวาสามารถแนะนำทรัพย์ NPA จาก BAM/JAM/GHB ที่ราคาต่ำกว่าตลาด 20-40% ให้ลูกค้าใน LINE ได้ทันที"
+    "1. คุณพ่อส่งลิงก์ gool_executive_dashboard.html ให้คุณกูลเปิดดูบนมือถือได้ทันที",
+    "2. นัดประชุมรอบใหญ่กับทีมงานในวันพุธ 11:30 น."
   ],
   "endpoints": {
     "cloud_server": "https://siwasup-cobroker-os.onrender.com",
     "webhook_url": "https://siwasup-cobroker-os.onrender.com/callback",
+    "gool_dashboard": "https://assets.siwasup.com/gool_executive_dashboard.html",
+    "agent_registration": "https://assets.siwasup.com/agent_registration.html",
     "agent_card": "https://assets.siwasup.com/agent_profile.html",
     "quick_hub": "https://assets.siwasup.com/executive_quick_hub.html",
     "log_exporter": "https://assets.siwasup.com/offline_log_exporter.html",
