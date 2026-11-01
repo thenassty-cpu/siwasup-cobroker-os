@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Siwasup OS - ระบบจำลองการเบิกกุญแจและทดสอบคอขวด (Live Roleplay & Stress Tester)</title>
+  <title>Siwasup OS - ระบบปฏิบัติการเบิกกุญแจและทดสอบคิวเปิดบ้าน (Live Roleplay & Stress Tester)</title>
   <link rel="icon" type="image/png" href="assets/siwasup_logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -80,7 +80,7 @@
               Launch Event Demo
             </span>
           </div>
-          <p class="text-xs text-slate-400">ระบบจำลองสถานการณ์เปิดบ้านจริง ทดสอบคิวพี่ลิลลี่ &amp; ทดลองใช้งานบนโต๊ะสาธิต</p>
+          <p class="text-xs text-slate-400">ระบบปฏิบัติการเปิดบ้านจริง ทดสอบคิวพี่ลิลลี่ &amp; ทดลองใช้งานบนโต๊ะสาธิต</p>
         </div>
       </div>
 
@@ -105,7 +105,7 @@
       <div class="flex items-center justify-between text-xs font-bold text-slate-400 mb-3 px-1">
         <span class="flex items-center gap-1.5">
           <i data-lucide="users" class="w-4 h-4 text-amber-400"></i>
-          เลือกมุมมองที่ต้องการจำลอง (Interactive Role Selection)
+          เลือกมุมมองการใช้งาน (Interactive Role Selection)
         </span>
         <span class="text-slate-500 hidden sm:inline text-[11px]">สลับมุมมองได้ตลอดเวลาเพื่อทดสอบคอขวด</span>
       </div>
@@ -176,7 +176,7 @@
             <!-- Fire Button -->
             <button id="btnTriggerStress" onclick="triggerStressSimulation()" class="px-4 py-2.5 rounded-xl gold-gradient hover:brightness-110 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-amber-500/25 transition active:scale-95">
               <i data-lucide="zap" class="w-4 h-4 fill-slate-950"></i>
-              <span>ยิงคำขอจำลองเข้าคิวทันที</span>
+              <span>ยิงคำขอทดสอบเข้าคิวทันที</span>
             </button>
           </div>
         </div>
@@ -248,7 +248,7 @@
             </div>
             <div class="space-y-1">
               <p class="text-sm font-bold text-slate-300">โต๊ะทำงานพี่ลิลลี่ว่าง ไม่มีคำขอค้างในระบบ</p>
-              <p class="text-xs text-slate-500">กดปุ่ม <strong>"ยิงคำขอจำลองเข้าคิวทันที"</strong> ด้านบน เพื่อจำลองเอเจนต์ 1 - 6 คนส่งคำขอเปิดบ้านเข้ามา</p>
+              <p class="text-xs text-slate-500">กดปุ่ม <strong>"ยิงคำขอทดสอบเข้าคิวทันที"</strong> ด้านบน เพื่อทดสอบเอเจนต์ 1 - 6 คนส่งคำขอเปิดบ้านเข้ามา</p>
             </div>
           </div>
 
@@ -300,7 +300,7 @@
               <span class="text-[10px] text-emerald-400 font-mono">Live Bus</span>
             </div>
             <div id="lilyBotFeed" class="space-y-1.5 max-h-80 overflow-y-auto tahoma-font text-xs">
-              <div class="text-slate-500 text-center py-4 text-[11px]">รอเริ่มการจำลอง...</div>
+              <div class="text-slate-500 text-center py-4 text-[11px]">พร้อมรับคำขอเปิดบ้าน...</div>
             </div>
           </div>
         </div>
@@ -572,7 +572,7 @@
         </div>
         <button id="btnDualAutoPlay" onclick="runDualAutoPlay()" class="px-4 py-2 rounded-xl gold-gradient hover:brightness-110 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-amber-500/20 transition">
           <i data-lucide="play" class="w-3.5 h-3.5 fill-slate-950"></i>
-          <span>เริ่มจำลองอัตโนมัติทีละสเต็ป (Auto Walkthrough)</span>
+          <span>รันสาธิตอัตโนมัติทีละสเต็ป (Auto Walkthrough)</span>
         </button>
       </div>
 
@@ -927,7 +927,7 @@
     // =========================================================================
     // 7. RESCHEDULE & VOID SLOT MANAGEMENT ENGINE
     // =========================================================================
-    let activeRescheduleCaseId = null;
+    activeRescheduleCaseId = null;
 
     function openRescheduleModal(caseId) {
       activeRescheduleCaseId = caseId;
@@ -1042,7 +1042,7 @@
     // =========================================================================
     // 8. DEDICATED FORCE MAJEURE VOID MODAL (พี่ลิลลี่ยกเลิกฉุกเฉิน)
     // =========================================================================
-    let activeVoidCaseId = null;
+    activeVoidCaseId = null;
 
     function openVoidModal(caseId) {
       activeVoidCaseId = caseId;
@@ -1208,7 +1208,7 @@
     // =========================================================================
     // 7. RESCHEDULE & VOID SLOT MANAGEMENT ENGINE
     // =========================================================================
-    let activeRescheduleCaseId = null;
+    activeRescheduleCaseId = null;
 
     function openRescheduleModal(caseId) {
       activeRescheduleCaseId = caseId;
@@ -1323,7 +1323,7 @@
     // =========================================================================
     // 8. DEDICATED FORCE MAJEURE VOID MODAL (พี่ลิลลี่ยกเลิกฉุกเฉิน)
     // =========================================================================
-    let activeVoidCaseId = null;
+    activeVoidCaseId = null;
 
     function openVoidModal(caseId) {
       activeVoidCaseId = caseId;
@@ -1427,7 +1427,7 @@
     // =========================================================================
     // 7. RESCHEDULE & VOID SLOT MANAGEMENT ENGINE
     // =========================================================================
-    let activeRescheduleCaseId = null;
+    activeRescheduleCaseId = null;
 
     function openRescheduleModal(caseId) {
       activeRescheduleCaseId = caseId;
@@ -1542,7 +1542,7 @@
     // =========================================================================
     // 8. DEDICATED FORCE MAJEURE VOID MODAL (พี่ลิลลี่ยกเลิกฉุกเฉิน)
     // =========================================================================
-    let activeVoidCaseId = null;
+    activeVoidCaseId = null;
 
     function openVoidModal(caseId) {
       activeVoidCaseId = caseId;
@@ -1724,7 +1724,7 @@
     // =========================================================================
     // 7. RESCHEDULE & VOID SLOT MANAGEMENT ENGINE
     // =========================================================================
-    let activeRescheduleCaseId = null;
+    activeRescheduleCaseId = null;
 
     function openRescheduleModal(caseId) {
       activeRescheduleCaseId = caseId;
@@ -1839,7 +1839,7 @@
     // =========================================================================
     // 8. DEDICATED FORCE MAJEURE VOID MODAL (พี่ลิลลี่ยกเลิกฉุกเฉิน)
     // =========================================================================
-    let activeVoidCaseId = null;
+    activeVoidCaseId = null;
 
     function openVoidModal(caseId) {
       activeVoidCaseId = caseId;
@@ -1943,7 +1943,7 @@
     // =========================================================================
     // 7. RESCHEDULE & VOID SLOT MANAGEMENT ENGINE
     // =========================================================================
-    let activeRescheduleCaseId = null;
+    activeRescheduleCaseId = null;
 
     function openRescheduleModal(caseId) {
       activeRescheduleCaseId = caseId;
@@ -2058,7 +2058,7 @@
     // =========================================================================
     // 8. DEDICATED FORCE MAJEURE VOID MODAL (พี่ลิลลี่ยกเลิกฉุกเฉิน)
     // =========================================================================
-    let activeVoidCaseId = null;
+    activeVoidCaseId = null;
 
     function openVoidModal(caseId) {
       activeVoidCaseId = caseId;
@@ -2198,7 +2198,7 @@
     // =========================================================================
     // 7. RESCHEDULE & VOID SLOT MANAGEMENT ENGINE
     // =========================================================================
-    let activeRescheduleCaseId = null;
+    activeRescheduleCaseId = null;
 
     function openRescheduleModal(caseId) {
       activeRescheduleCaseId = caseId;
@@ -2313,7 +2313,7 @@
     // =========================================================================
     // 8. DEDICATED FORCE MAJEURE VOID MODAL (พี่ลิลลี่ยกเลิกฉุกเฉิน)
     // =========================================================================
-    let activeVoidCaseId = null;
+    activeVoidCaseId = null;
 
     function openVoidModal(caseId) {
       activeVoidCaseId = caseId;
@@ -2417,7 +2417,7 @@
     // =========================================================================
     // 7. RESCHEDULE & VOID SLOT MANAGEMENT ENGINE
     // =========================================================================
-    let activeRescheduleCaseId = null;
+    activeRescheduleCaseId = null;
 
     function openRescheduleModal(caseId) {
       activeRescheduleCaseId = caseId;
@@ -2532,7 +2532,7 @@
     // =========================================================================
     // 8. DEDICATED FORCE MAJEURE VOID MODAL (พี่ลิลลี่ยกเลิกฉุกเฉิน)
     // =========================================================================
-    let activeVoidCaseId = null;
+    activeVoidCaseId = null;
 
     function openVoidModal(caseId) {
       activeVoidCaseId = caseId;
@@ -2952,7 +2952,7 @@
     // =========================================================================
     // 7. RESCHEDULE & VOID SLOT MANAGEMENT ENGINE
     // =========================================================================
-    let activeRescheduleCaseId = null;
+    activeRescheduleCaseId = null;
 
     function openRescheduleModal(caseId) {
       activeRescheduleCaseId = caseId;
@@ -3067,7 +3067,7 @@
     // =========================================================================
     // 8. DEDICATED FORCE MAJEURE VOID MODAL (พี่ลิลลี่ยกเลิกฉุกเฉิน)
     // =========================================================================
-    let activeVoidCaseId = null;
+    activeVoidCaseId = null;
 
     function openVoidModal(caseId) {
       activeVoidCaseId = caseId;
@@ -3171,7 +3171,7 @@
     // =========================================================================
     // 7. RESCHEDULE & VOID SLOT MANAGEMENT ENGINE
     // =========================================================================
-    let activeRescheduleCaseId = null;
+    activeRescheduleCaseId = null;
 
     function openRescheduleModal(caseId) {
       activeRescheduleCaseId = caseId;
@@ -3286,7 +3286,7 @@
     // =========================================================================
     // 8. DEDICATED FORCE MAJEURE VOID MODAL (พี่ลิลลี่ยกเลิกฉุกเฉิน)
     // =========================================================================
-    let activeVoidCaseId = null;
+    activeVoidCaseId = null;
 
     function openVoidModal(caseId) {
       activeVoidCaseId = caseId;
@@ -3493,7 +3493,7 @@
     // =========================================================================
     // 7. RESCHEDULE & VOID SLOT MANAGEMENT ENGINE
     // =========================================================================
-    let activeRescheduleCaseId = null;
+    activeRescheduleCaseId = null;
 
     function openRescheduleModal(caseId) {
       activeRescheduleCaseId = caseId;
@@ -3608,7 +3608,7 @@
     // =========================================================================
     // 8. DEDICATED FORCE MAJEURE VOID MODAL (พี่ลิลลี่ยกเลิกฉุกเฉิน)
     // =========================================================================
-    let activeVoidCaseId = null;
+    activeVoidCaseId = null;
 
     function openVoidModal(caseId) {
       activeVoidCaseId = caseId;
@@ -3712,7 +3712,7 @@
     // =========================================================================
     // 7. RESCHEDULE & VOID SLOT MANAGEMENT ENGINE
     // =========================================================================
-    let activeRescheduleCaseId = null;
+    activeRescheduleCaseId = null;
 
     function openRescheduleModal(caseId) {
       activeRescheduleCaseId = caseId;
@@ -3827,7 +3827,7 @@
     // =========================================================================
     // 8. DEDICATED FORCE MAJEURE VOID MODAL (พี่ลิลลี่ยกเลิกฉุกเฉิน)
     // =========================================================================
-    let activeVoidCaseId = null;
+    activeVoidCaseId = null;
 
     function openVoidModal(caseId) {
       activeVoidCaseId = caseId;
@@ -4008,7 +4008,7 @@
       document.getElementById("kpiPendingCount").innerText = "0 / 6";
       document.getElementById("kpiSuccessCount").innerText = "0";
       document.getElementById("kpiAvgSpeed").innerText = "-.- s";
-      document.getElementById("lilyBotFeed").innerHTML = `<div class="text-slate-500 text-center py-4 text-[11px]">รอเริ่มการจำลอง...</div>`;
+      document.getElementById("lilyBotFeed").innerHTML = `<div class="text-slate-500 text-center py-4 text-[11px]">พร้อมรับคำขอเปิดบ้าน...</div>`;
       renderLilyQueue();
       renderLilyActiveViewing();
 

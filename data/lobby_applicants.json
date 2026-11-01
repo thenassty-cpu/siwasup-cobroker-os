@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-01 17:16:00",
+  "updated_at": "2026-11-02 01:12:00",
   "pending": [],
   "approved": [
     {
@@ -9,9 +9,17 @@
       "phone": "0819999999",
       "line_id": "gool_ceo",
       "zone": "สำนักงานใหญ่",
-      "role": "CEO & Co-Broker Lead",
+      "role": "👑 CEO & Co-Broker Lead",
+      "title": "Executive Managing Partner",
       "role_code": "OFFICE_CEO",
       "status": "approved",
+      "badges": [
+        "💰 เคาะราคาบ้าน",
+        "👑 สิทธิ์บริหาร",
+        "💬 ดูแชทลีด",
+        "🔑 กุญแจสำรอง",
+        "🛡️ Standard Admin"
+      ],
       "permissions": {
         "standardAdmin": true,
         "editPrice": true,
@@ -31,9 +39,17 @@
       "phone": "0818888888",
       "line_id": "bua_exec",
       "zone": "สำนักงานใหญ่",
-      "role": "Executive Partner",
+      "role": "👑 Executive Partner",
+      "title": "Executive Managing Partner",
       "role_code": "OFFICE_EXEC",
       "status": "approved",
+      "badges": [
+        "💰 เคาะราคาบ้าน",
+        "👑 สิทธิ์บริหาร",
+        "💬 ดูแชทลีด",
+        "🔑 กุญแจสำรอง",
+        "🛡️ Standard Admin"
+      ],
       "permissions": {
         "standardAdmin": true,
         "editPrice": true,
@@ -48,14 +64,20 @@
     },
     {
       "id": "app_office_003",
-      "name": "คุณลิลลี่ (ท่าข้าม 12)",
+      "name": "พี่ลิลลี่ (ท่าข้าม 12)",
       "nickname": "ลิลลี่",
       "phone": "0816666666",
       "line_id": "lily_keys",
       "zone": "โซนท่าข้าม-พระราม 2",
-      "role": "Head of Viewing & Keys",
+      "role": "🔑 Head of Viewing & Keys",
+      "title": "Head of Viewing & Keybox Custodian",
       "role_code": "OFFICE_KEYBOX",
       "status": "approved",
+      "badges": [
+        "🔑 คุมกุญแจ OTP 100%",
+        "🛡️ Standard Admin",
+        "🚫 ล็อกแก้ราคา"
+      ],
       "permissions": {
         "standardAdmin": true,
         "editPrice": false,
@@ -75,9 +97,15 @@
       "phone": "0815555555",
       "line_id": "ton_nassty",
       "zone": "สำนักงานใหญ่",
-      "role": "Tech Architect & Senior Advisor",
+      "role": "💻 Tech Architect & Senior Advisor",
+      "title": "Senior Technology Architect",
       "role_code": "OFFICE_TECH",
       "status": "approved",
+      "badges": [
+        "⚙️ Technical Admin",
+        "💰 เคาะราคา",
+        "🛡️ Standard Admin"
+      ],
       "permissions": {
         "standardAdmin": true,
         "editPrice": true,
@@ -97,16 +125,22 @@
       "phone": "0814444444",
       "line_id": "support_office",
       "zone": "สำนักงานใหญ่",
-      "role": "Office Support",
+      "role": "🏢 Support & Coordinator",
+      "title": "Office Property Coordinator",
       "role_code": "OFFICE_SUPPORT",
       "status": "approved",
+      "badges": [
+        "🛡️ Standard Admin",
+        "🏷️ ช่วยคัดสต๊อก",
+        "🚫 ล็อกแก้ราคา"
+      ],
       "permissions": {
         "standardAdmin": true,
         "editPrice": false,
         "keyboxAdmin": false,
         "leadInspector": false,
         "executiveAuthority": false,
-        "catalogCurator": false,
+        "catalogCurator": true,
         "systemAdmin": false
       },
       "approved_at": "2026-11-01 16:30:00",
@@ -114,7 +148,7 @@
     }
   ],
   "audit_log": [
-    "[2026-11-01 18:15:00] เริ่มต้นระบบ Audit Trail & Rollback Archive"
+    "[2026-11-02 01:12:00] เริ่มต้นระบบ Audit Trail & Rollback Archive พร้อมปฏิบัติการ 100%"
   ],
   "rollback_history": []
 }

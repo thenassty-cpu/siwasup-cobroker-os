@@ -786,6 +786,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         "phone": applicant.get("phone"),
                         "line_id": applicant.get("line_id"),
                         "zone": applicant.get("zone"),
+                        "avatar": applicant.get("avatar", ""),
                         "role": payload.get("role", "Co-Broker Partner"),
                         "title": payload.get("title", ""),
                         "badges": payload.get("badges", []),
@@ -793,6 +794,9 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         "approved_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     }
                     store.setdefault("approved", []).insert(0, approved_item)
+                    audit_entry = f"[{approved_item['approved_at']}] 🟢 อนุมัติสิทธิ์: {approved_item.get('name')} ({approved_item.get('role')})"
+                    store.setdefault("audit_log", []).insert(0, audit_entry)
+                    store["audit_log"] = store["audit_log"][:100]
                     save_lobby_data(store)
                     self.send_response(200)
                     self.send_header('Content-Type', 'application/json; charset=utf-8')
@@ -850,7 +854,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         break
                 if target_idx != -1:
                     revoked_member = store["approved"].pop(target_idx)
-                    rollback_id = f"rb_{int(time.time()*1000)}"
+                    rollback_id = payload.get("rollbackId") or f"rb_{int(time.time()*1000)}"
                     rollback_record = {
                         "rollback_id": rollback_id,
                         "action": "REVOKE",

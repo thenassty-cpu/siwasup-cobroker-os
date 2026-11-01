@@ -684,7 +684,7 @@
             </div>
           </td>
           <td class="py-3 px-3.5 text-right space-x-1.5 whitespace-nowrap">
-            <a href="https://assets.siwasup.com/agent_profile.html?name=${encodeURIComponent(item.name)}&phone=${encodeURIComponent(item.phone)}&zone=${encodeURIComponent(item.zone)}&title=${encodeURIComponent(item.title || '')}&mode=client&avatar=${encodeURIComponent(item.avatar || '')}" 
+            <a href="https://assets.siwasup.com/agent_profile.html?id=${encodeURIComponent(item.id || '')}&name=${encodeURIComponent(item.name)}&phone=${encodeURIComponent(item.phone)}&zone=${encodeURIComponent(item.zone)}&title=${encodeURIComponent(item.title || '')}&mode=client${(item.avatar && item.avatar.startsWith('http')) ? '&avatar=' + encodeURIComponent(item.avatar) : ''}" 
                target="_blank"
                class="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-300 inline-flex items-center gap-1 shadow-2xs transition">
               <i data-lucide="credit-card" class="w-3 h-3 text-amber-600"></i>
@@ -744,6 +744,8 @@
 
       lobbyData.pending.splice(idx, 1);
       lobbyData.approved.unshift(approvedMember);
+      lobbyData.audit_log = lobbyData.audit_log || [];
+      lobbyData.audit_log.unshift(`[${new Date().toLocaleString('th-TH')}] 🟢 อนุมัติสิทธิ์: ${applicant.name} (${preset.role})`);
       saveLobbyData();
       renderLobby();
 
@@ -835,11 +837,18 @@
 
       // Cloud Sync
       try {
-        await fetch(`${API_BASE}/api/lobby/revoke`, {
+        const res = await fetch(`${API_BASE}/api/lobby/revoke`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ applicantId: targetId, reason: 'Revoked via Admin Lobby Manager' })
+          body: JSON.stringify({ applicantId: targetId, rollbackId: rollbackId, reason: 'Revoked via Admin Lobby Manager' })
         });
+        if (res.ok) {
+          const rData = await res.json();
+          if (rData.rollback_id && rollbackRecord) {
+            rollbackRecord.rollback_id = rData.rollback_id;
+            saveLobbyData();
+          }
+        }
       } catch (e) {
         console.log('Cloud revoke note:', e);
       }
@@ -995,9 +1004,6 @@
     </button>
     <button onclick="document.getElementById('toastUndo').classList.add('hidden')" class="text-slate-400 hover:text-white text-xs ml-1">✕</button>
   </div>
-
-</body>
-</html>
 
 </body>
 </html>

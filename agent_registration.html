@@ -43,9 +43,7 @@
   <!-- TOP HEADER -->
   <header class="max-w-xl w-full mx-auto flex items-center justify-between pb-4 border-b border-slate-200">
     <div class="flex items-center gap-2.5">
-      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center font-black text-slate-950 text-base shadow-sm">
-        S
-      </div>
+      <img src="assets/daimond.svg" alt="ศิวาทรัพย์" class="h-9 w-auto shrink-0 object-contain drop-shadow-xs">
       <div>
         <h1 class="text-sm font-bold text-slate-900 tracking-wide">
           ศิวาทรัพย์ <span class="gold-gradient-text font-black">CO-BROKER OS</span>
@@ -517,7 +515,9 @@
       document.getElementById('unlockedActions').classList.remove('hidden');
 
       // Setup Card Link
-      const cardUrl = `https://assets.siwasup.com/agent_profile.html?name=${encodeURIComponent(approvedData.name)}&phone=${encodeURIComponent(approvedData.phone)}&zone=${encodeURIComponent(approvedData.zone)}&title=${encodeURIComponent(approvedData.title || '')}&mode=client&avatar=${encodeURIComponent(approvedData.avatar || selectedAvatarUrl)}`;
+      const rawAv = approvedData.avatar || selectedAvatarUrl || '';
+      const safeAvParam = rawAv.startsWith('http') ? `&avatar=${encodeURIComponent(rawAv)}` : '';
+      const cardUrl = `https://assets.siwasup.com/agent_profile.html?id=${encodeURIComponent(approvedData.id || '')}&name=${encodeURIComponent(approvedData.name)}&phone=${encodeURIComponent(approvedData.phone)}&zone=${encodeURIComponent(approvedData.zone)}&title=${encodeURIComponent(approvedData.title || '')}&mode=client${safeAvParam}`;
       document.getElementById('btnGoCard').href = cardUrl;
 
       lucide.createIcons();
