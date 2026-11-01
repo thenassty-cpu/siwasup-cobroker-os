@@ -839,6 +839,53 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
             return
 
+        if path == "/api/lobby/update-permissions":
+            content_length = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(content_length)
+            try:
+                payload = json.loads(body.decode('utf-8'))
+                app_id = payload.get("applicantId")
+                phone = payload.get("phone")
+                store = load_lobby_data()
+                target_idx = -1
+                for idx, a in enumerate(store.get("approved", [])):
+                    if (app_id and a.get("id") == app_id) or (phone and a.get("phone") == phone):
+                        target_idx = idx
+                        break
+                if target_idx != -1:
+                    m = store["approved"][target_idx]
+                    old_role = m.get("role")
+                    if "role" in payload: m["role"] = payload["role"]
+                    if "title" in payload: m["title"] = payload["title"]
+                    if "badges" in payload: m["badges"] = payload["badges"]
+                    if "permissions" in payload: m["permissions"] = payload["permissions"]
+                    m["updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    
+                    audit_entry = f"[{m['updated_at']}] ⚙️ ปรับสิทธิ์: {m.get('name')} เป็น {m.get('role')} ({len(m.get('badges', []))} สิทธิ์)"
+                    store.setdefault("audit_log", []).insert(0, audit_entry)
+                    store["audit_log"] = store["audit_log"][:100]
+                    save_lobby_data(store)
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'application/json; charset=utf-8')
+                    self.send_header('Access-Control-Allow-Origin', '*')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"status": "success", "member": m}, ensure_ascii=False).encode('utf-8'))
+                    return
+                else:
+                    self.send_response(404)
+                    self.send_header('Content-Type', 'application/json; charset=utf-8')
+                    self.send_header('Access-Control-Allow-Origin', '*')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"error": "Member not found in approved list"}).encode('utf-8'))
+                    return
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+            return
+
         if path == "/api/lobby/revoke":
             content_length = int(self.headers.get('Content-Length', 0))
             body = self.rfile.read(content_length)
