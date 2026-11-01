@@ -1,0 +1,141 @@
+{
+  "updated_at": "2026-11-01 17:16:00",
+  "pending": [
+    {
+      "id": "app_20261101_001",
+      "name": "คุณนภชกร (เอิร์ธ)",
+      "nickname": "เอิร์ธ",
+      "phone": "0891234567",
+      "line_id": "earth_agent",
+      "zone": "โซนท่าข้าม-พระราม 2",
+      "affiliation": "agent",
+      "affiliation_label": "🤝 Co-Broker พันธมิตรภายนอก",
+      "status": "pending",
+      "submitted_at": "2026-11-01 17:05:00"
+    },
+    {
+      "id": "app_20261101_002",
+      "name": "น้องมิว (Myo)",
+      "nickname": "มิว",
+      "phone": "0869876543",
+      "line_id": "myo_yd",
+      "zone": "สำนักงานใหญ่",
+      "affiliation": "office",
+      "affiliation_label": "🏢 พนักงาน/ทีมงานออฟฟิศ",
+      "status": "pending",
+      "submitted_at": "2026-11-01 17:10:00"
+    }
+  ],
+  "approved": [
+    {
+      "id": "app_office_001",
+      "name": "คุณวารินทร์ กูลจีรัง (เจี๊ยบ)",
+      "nickname": "เจี๊ยบ (กูล)",
+      "phone": "0819999999",
+      "line_id": "gool_ceo",
+      "zone": "สำนักงานใหญ่",
+      "role": "CEO & Co-Broker Lead",
+      "role_code": "OFFICE_CEO",
+      "status": "approved",
+      "permissions": {
+        "standardAdmin": true,
+        "editPrice": true,
+        "keyboxAdmin": true,
+        "leadInspector": true,
+        "executiveAuthority": true,
+        "catalogCurator": true,
+        "systemAdmin": false
+      },
+      "approved_at": "2026-11-01 16:30:00",
+      "approved_by": "System Architect"
+    },
+    {
+      "id": "app_office_002",
+      "name": "คุณบัว",
+      "nickname": "บัว",
+      "phone": "0818888888",
+      "line_id": "bua_exec",
+      "zone": "สำนักงานใหญ่",
+      "role": "Executive Partner",
+      "role_code": "OFFICE_EXEC",
+      "status": "approved",
+      "permissions": {
+        "standardAdmin": true,
+        "editPrice": true,
+        "keyboxAdmin": true,
+        "leadInspector": true,
+        "executiveAuthority": true,
+        "catalogCurator": true,
+        "systemAdmin": false
+      },
+      "approved_at": "2026-11-01 16:30:00",
+      "approved_by": "System Architect"
+    },
+    {
+      "id": "app_office_003",
+      "name": "คุณลิลลี่ (ท่าข้าม 12)",
+      "nickname": "ลิลลี่",
+      "phone": "0816666666",
+      "line_id": "lily_keys",
+      "zone": "โซนท่าข้าม-พระราม 2",
+      "role": "Head of Viewing & Keys",
+      "role_code": "OFFICE_KEYBOX",
+      "status": "approved",
+      "permissions": {
+        "standardAdmin": true,
+        "editPrice": false,
+        "keyboxAdmin": true,
+        "leadInspector": false,
+        "executiveAuthority": false,
+        "catalogCurator": false,
+        "systemAdmin": false
+      },
+      "approved_at": "2026-11-01 16:30:00",
+      "approved_by": "System Architect"
+    },
+    {
+      "id": "app_office_004",
+      "name": "คุณต้น (NASSTY)",
+      "nickname": "ต้น",
+      "phone": "0815555555",
+      "line_id": "ton_nassty",
+      "zone": "สำนักงานใหญ่",
+      "role": "Tech Architect & Senior Advisor",
+      "role_code": "OFFICE_TECH",
+      "status": "approved",
+      "permissions": {
+        "standardAdmin": true,
+        "editPrice": true,
+        "keyboxAdmin": true,
+        "leadInspector": true,
+        "executiveAuthority": true,
+        "catalogCurator": true,
+        "systemAdmin": true
+      },
+      "approved_at": "2026-11-01 16:30:00",
+      "approved_by": "System Architect"
+    },
+    {
+      "id": "app_office_005",
+      "name": "เจ้าหน้าที่ธุรการ/ซัพพอร์ต",
+      "nickname": "ซัพพอร์ต",
+      "phone": "0814444444",
+      "line_id": "support_office",
+      "zone": "สำนักงานใหญ่",
+      "role": "Office Support",
+      "role_code": "OFFICE_SUPPORT",
+      "status": "approved",
+      "permissions": {
+        "standardAdmin": true,
+        "editPrice": false,
+        "keyboxAdmin": false,
+        "leadInspector": false,
+        "executiveAuthority": false,
+        "catalogCurator": false,
+        "systemAdmin": false
+      },
+      "approved_at": "2026-11-01 16:30:00",
+      "approved_by": "System Architect"
+    }
+  ]
+}

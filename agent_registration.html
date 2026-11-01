@@ -3,562 +3,474 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ลงทะเบียน & เข้าสู่ระบบ - Siwasup Co-Broker OS</title>
-  <!-- Tailwind CSS -->
+  <title>Siwasup Co-Broker - ลงทะเบียน & ห้องรับรองรอจัดสรรสิทธิ์ (Lobby)</title>
+  <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Prompt & Tahoma fallback -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts: Prompt & Thai Typography Support -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Prompt', 'Tahoma', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #070d18;
+      color: #f1f5f9;
     }
     .card-glass {
-      background: rgba(15, 23, 42, 0.85);
+      background: rgba(15, 23, 42, 0.8);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
     .gold-gradient {
-      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
     }
-    .gold-border {
-      border: 1px solid rgba(245, 158, 11, 0.35);
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .pulse-glow-amber {
+      box-shadow: 0 0 30px rgba(245, 158, 11, 0.25);
+    }
+    .pulse-glow-green {
+      box-shadow: 0 0 30px rgba(16, 185, 129, 0.35);
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-amber-500 selection:text-slate-950">
+<body class="min-h-screen flex flex-col justify-between p-3 sm:p-6 lg:p-8">
 
-  <!-- TOP BAR -->
-  <header class="bg-slate-900/90 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md">
-    <div class="max-w-xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-slate-950 font-black shadow-md">
-          <i data-lucide="shield-check" class="w-4 h-4"></i>
-        </div>
-        <div>
-          <h1 class="text-sm font-bold text-white tracking-tight">Siwasup Co-Broker OS</h1>
-          <p class="text-[10px] text-slate-400">ระบบสิทธิ์บทบาท (RBAC) & นามบัตรดิจิทัล</p>
-        </div>
+  <!-- TOP HEADER -->
+  <header class="max-w-xl w-full mx-auto flex items-center justify-between pb-4 border-b border-slate-800">
+    <div class="flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center font-black text-slate-950 text-base shadow-md">
+        S
       </div>
-      <a href="https://assets.siwasup.com/executive_quick_hub.html" class="text-[10px] font-bold px-2.5 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1 transition">
-        <i data-lucide="layout-grid" class="w-3 h-3 text-amber-400"></i>
-        <span>Quick Hub</span>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-wide">
+          ศิวาสัพย์ <span class="gold-gradient-text font-black">CO-BROKER OS</span>
+        </h1>
+        <p class="text-[10px] text-slate-400">ระบบลงทะเบียน & ห้องรับรองรอจัดสรรสิทธิ์ (Lobby Lounge)</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-1.5">
+      <button type="button" onclick="openQrModal()" class="text-[10px] font-bold px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1 transition">
+        <i data-lucide="qr-code" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span>ยื่น QR</span>
+      </button>
+      <a href="https://assets.siwasup.com/admin_lobby_manager.html" target="_blank" class="text-[10px] font-bold px-2.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 flex items-center gap-1 transition">
+        <i data-lucide="shield" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span>ห้องแอดมิน</span>
       </a>
     </div>
   </header>
 
-  <!-- MAIN FORM CONTAINER -->
-  <main class="max-w-xl mx-auto px-4 py-6 flex-1 w-full space-y-5">
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-xl w-full mx-auto my-auto py-4 sm:py-6 space-y-5">
 
-    <!-- WELCOME CARD -->
-    <div class="card-glass rounded-3xl p-5 border border-amber-500/30 text-center space-y-2 relative overflow-hidden shadow-xl">
-      <div class="w-12 h-12 mx-auto rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-1">
-        <i data-lucide="user-check" class="w-6 h-6"></i>
+    <!-- ============================================================== -->
+    <!-- STATE 1: REGISTRATION FORM (ผู้สมัครกรอกข้อมูลพื้นฐาน) -->
+    <!-- ============================================================== -->
+    <div id="viewRegisterForm" class="space-y-4">
+
+      <!-- Welcome Banner -->
+      <div class="card-glass rounded-3xl p-5 border border-amber-500/30 text-center space-y-2 relative overflow-hidden shadow-xl">
+        <div class="w-12 h-12 mx-auto rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-1">
+          <i data-lucide="user-plus" class="w-6 h-6"></i>
+        </div>
+        <h2 class="text-lg font-black text-white">ลงทะเบียนร่วมงาน & เข้าสู่ห้องรับรอง (Lobby)</h2>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          กรอกข้อมูล 1 นาทีเพื่อเข้าสู่ <strong>ห้องรับรองดิจิทัล (Lobby)</strong><br>
+          ฝ่ายบริหารจะทำการจัดสรรสิทธิ์วิชาชีพ และปลดล็อกบัตรดิจิทัลให้ท่านทันที
+        </p>
       </div>
-      <h2 class="text-lg font-black text-white">ระบบลงทะเบียน & สิทธิ์การใช้งาน</h2>
-      <p class="text-xs text-slate-300 leading-relaxed">
-        สำหรับทีมงานออฟฟิศ 5 เสาหลัก และตัวแทน Co-Broker พันธมิตร<br>
-        <span class="text-emerald-400 font-semibold">✓ ทุกคนในออฟฟิศได้รับสิทธิ์ Standard Admin เริ่มต้นทันที</span> 
-        และสามารถเลือกติ๊กมอบสิทธิ์เฉพาะด้านเพิ่มเติมได้ตามบทบาทหน้าที่ครับ
-      </p>
-    </div>
 
-    <!-- REGISTRATION FORM -->
-    <div id="formSection" class="card-glass rounded-3xl p-5 sm:p-6 border border-slate-800 space-y-4 shadow-xl">
-      
-      <!-- Role Selector -->
-      <div class="space-y-1.5">
-        <label class="text-xs font-bold text-slate-300">ประเภทผู้ใช้งาน / สังกัด <span class="text-amber-400">*</span></label>
-        <div class="grid grid-cols-2 gap-2 text-xs">
-          <label class="p-2.5 rounded-2xl bg-slate-900 border-2 border-amber-500 cursor-pointer flex items-center gap-2 transition" id="roleOfficeLabel">
-            <input type="radio" name="userRole" value="office" checked onchange="handleRoleChange()" class="text-amber-500 focus:ring-amber-500">
-            <div>
-              <div class="font-bold text-white text-xs">🏢 ทีมงานออฟฟิศ (5 คน)</div>
-              <div class="text-[10px] text-amber-400 font-medium">Standard Admin + สิทธิ์เฉพาะด้าน</div>
-            </div>
+      <!-- Registration Form -->
+      <div class="card-glass rounded-3xl p-5 sm:p-6 border border-slate-800 space-y-4 shadow-xl">
+
+        <!-- 1. Affiliation Selection (ทีมออฟฟิศ หรือ Co-Broker) -->
+        <div class="space-y-1.5">
+          <label class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+            <i data-lucide="briefcase" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>ความเกี่ยวข้องกับศิวาสัพย์ *</span>
           </label>
-          <label class="p-2.5 rounded-2xl bg-slate-900 border border-slate-800 hover:border-amber-500 cursor-pointer flex items-center gap-2 transition" id="roleAgentLabel">
-            <input type="radio" name="userRole" value="agent" onchange="handleRoleChange()" class="text-amber-500 focus:ring-amber-500">
-            <div>
-              <div class="font-bold text-white text-xs">⭐ เอเจนต์ Co-Broker</div>
-              <div class="text-[10px] text-slate-400">ตัวแทนพันธมิตรภายนอก</div>
-            </div>
-          </label>
-        </div>
-      </div>
-
-      <!-- Quick Preset Selection for 5 Pillars -->
-      <div id="presetContainer" class="space-y-1.5 bg-slate-900/80 p-3.5 rounded-2xl border border-slate-800">
-        <label class="text-[11px] font-bold text-amber-400 flex items-center gap-1.5">
-          <i data-lucide="zap" class="w-3.5 h-3.5"></i>
-          <span>ปุ่มลัดเลือกโปรไฟล์ทีมงาน 5 เสาหลัก (1-Click Preset):</span>
-        </label>
-        <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 text-[11px]">
-          <button type="button" onclick="applyPreset('jeab_gool')" class="p-2 rounded-xl bg-slate-800 hover:bg-amber-500/20 hover:border-amber-500/50 border border-slate-700 text-left transition">
-            <div class="font-bold text-white truncate">👑 คุณเจี๊ยบ (กูล)</div>
-            <div class="text-[9px] text-amber-400 truncate">CEO & Co-Broker Lead</div>
-          </button>
-          <button type="button" onclick="applyPreset('bua')" class="p-2 rounded-xl bg-slate-800 hover:bg-amber-500/20 hover:border-amber-500/50 border border-slate-700 text-left transition">
-            <div class="font-bold text-white truncate">👑 คุณบัว</div>
-            <div class="text-[9px] text-amber-400 truncate">เทียบเท่าเจี๊ยบ / บริหาร</div>
-          </button>
-          <button type="button" onclick="applyPreset('lily')" class="p-2 rounded-xl bg-slate-800 hover:bg-amber-500/20 hover:border-amber-500/50 border border-slate-700 text-left transition">
-            <div class="font-bold text-white truncate">🔑 พี่ลิลลี่</div>
-            <div class="text-[9px] text-emerald-400 truncate">Head of Viewing ท่าข้าม</div>
-          </button>
-          <button type="button" onclick="applyPreset('ton')" class="p-2 rounded-xl bg-slate-800 hover:bg-amber-500/20 hover:border-amber-500/50 border border-slate-700 text-left transition">
-            <div class="font-bold text-white truncate">💻 คุณต้น</div>
-            <div class="text-[9px] text-rose-400 truncate">Tech Architect</div>
-          </button>
-          <button type="button" onclick="applyPreset('support')" class="p-2 rounded-xl bg-slate-800 hover:bg-amber-500/20 hover:border-amber-500/50 border border-slate-700 text-left transition">
-            <div class="font-bold text-white truncate">🏢 ซัพพอร์ต/ธุรการ</div>
-            <div class="text-[9px] text-slate-400 truncate">เจ้าหน้าที่ออฟฟิศ</div>
-          </button>
-        </div>
-      </div>
-
-      <!-- Full Name -->
-      <div class="space-y-1">
-        <label class="text-xs font-bold text-slate-300">ชื่อ - นามสกุลจริง (แสดงบนนามบัตรทางการ) <span class="text-amber-400">*</span></label>
-        <div class="relative">
-          <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-          <input type="text" id="inputName" placeholder="เช่น คุณกูล, คุณบัว, คุณวารินทร์ หรือ คุณลิลลี่" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition">
-        </div>
-      </div>
-
-      <!-- Nickname & Phone -->
-      <div class="grid grid-cols-2 gap-3">
-        <div class="space-y-1">
-          <label class="text-xs font-bold text-slate-300">ชื่อเรียก (ให้น้องศิวาเรียก) <span class="text-amber-400">*</span></label>
-          <div class="relative">
-            <i data-lucide="smile" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-            <input type="text" id="inputNickname" placeholder="เช่น บัว, เจี๊ยบ, ลิลลี่" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition">
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex items-center gap-2.5 p-3 rounded-2xl bg-slate-900 border border-slate-800 cursor-pointer hover:border-amber-500/50 transition">
+              <input type="radio" name="affiliation" value="agent" checked class="text-amber-500 focus:ring-0">
+              <div>
+                <div class="text-xs font-bold text-white">🤝 Co-Broker อิสระ</div>
+                <div class="text-[9px] text-slate-400">พันธมิตรตัวแทนนอก</div>
+              </div>
+            </label>
+            <label class="flex items-center gap-2.5 p-3 rounded-2xl bg-slate-900 border border-slate-800 cursor-pointer hover:border-amber-500/50 transition">
+              <input type="radio" name="affiliation" value="office" class="text-amber-500 focus:ring-0">
+              <div>
+                <div class="text-xs font-bold text-white">🏢 ทีมงานออฟฟิศ</div>
+                <div class="text-[9px] text-slate-400">บุคลากรประจำออฟฟิศ</div>
+              </div>
+            </label>
           </div>
         </div>
 
+        <!-- 2. Full Name -->
         <div class="space-y-1">
-          <label class="text-xs font-bold text-slate-300">เบอร์โทรศัพท์ <span class="text-amber-400">*</span></label>
-          <div class="relative">
-            <i data-lucide="phone" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-            <input type="tel" id="inputPhone" placeholder="เช่น 0812345678" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition">
+          <label class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+            <i data-lucide="user" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>ชื่อ - นามสกุลจริง (สำหรับแสดงบนนามบัตรทางการ) *</span>
+          </label>
+          <input type="text" id="regName" placeholder="เช่น คุณวารินทร์ กูลจีรัง, คุณนภชกร" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition">
+        </div>
+
+        <!-- 3. Nickname & Phone -->
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-slate-300">ชื่อเล่น *</label>
+            <input type="text" id="regNickname" placeholder="เช่น เจี๊ยบ, บัว, ต้น, เอิร์ธ" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition">
+          </div>
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-slate-300">เบอร์โทรศัพท์มือถือ *</label>
+            <input type="tel" id="regPhone" placeholder="08X-XXX-XXXX" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition">
           </div>
         </div>
-      </div>
 
-      <!-- Zone -->
-      <div class="space-y-1">
-        <label class="text-xs font-bold text-slate-300">โซนที่ดูแลหรือต้องการทดสอบ <span class="text-amber-400">*</span></label>
-        <div class="relative">
-          <i data-lucide="map-pin" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-          <select id="selectZone" class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500 transition appearance-none">
-            <option value="สำนักงานใหญ่">📍 สำนักงานใหญ่ (HQ - All Zones)</option>
-            <option value="โซนวัชรพล-สายไหม">📍 โซนวัชรพล-สายไหม</option>
-            <option value="โซนท่าข้าม-พระราม 2">📍 โซนท่าข้าม-พระราม 2</option>
-            <option value="โซนนนทบุรี-บางใหญ่">📍 โซนนนทบุรี-บางใหญ่</option>
-            <option value="โซนบางนา-สมุทรปราการ">📍 โซนบางนา-สมุทรปราการ</option>
-            <option value="โซนรังสิต-ปทุมธานี">📍 โซนรังสิต-ปทุมธานี</option>
-            <option value="โซนลาดพร้าว-รามคำแหง">📍 โซนลาดพร้าว-รามคำแหง</option>
+        <!-- 4. Line ID -->
+        <div class="space-y-1">
+          <label class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+            <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span>LINE ID (สำหรับรับคิวเปิดบ้านและประสานงาน)</span>
+          </label>
+          <input type="text" id="regLineId" placeholder="เช่น line_id หรือ เบอร์โทร" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition">
+        </div>
+
+        <!-- 5. Territory Zone -->
+        <div class="space-y-1">
+          <label class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-400"></i>
+            <span>โซนพื้นที่ที่ท่านเชี่ยวชาญ / ปฏิบัติงาน *</span>
+          </label>
+          <select id="regZone" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500 transition">
+            <option value="โซนท่าข้าม-พระราม 2">โซนท่าข้าม - พระราม 2 (Hub ใหญ่ศิวาสัพย์)</option>
+            <option value="โซนบางนา-ศรีนครินทร์">โซนบางนา - ศรีนครินทร์ - สุขุมวิท</option>
+            <option value="โซนราชพฤกษ์-นนทบุรี">โซนราชพฤกษ์ - ปิ่นเกล้า - นนทบุรี</option>
+            <option value="โซนปทุมวัน-สยาม">โซนในเมือง ปทุมวัน - สีลม - สาทร</option>
+            <option value="สำนักงานใหญ่">สำนักงานใหญ่ / ทุกโซนพื้นที่</option>
           </select>
         </div>
-      </div>
 
-      <!-- ============================================================== -->
-      <!-- GRANULAR PERMISSION CHECKBOX MATRIX (สิทธิ์ Standard + Checkbox) -->
-      <!-- ============================================================== -->
-      <div id="permissionMatrixContainer" class="space-y-2 bg-slate-900/90 p-4 rounded-2xl border border-amber-500/40">
-        <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-          <div>
-            <div class="text-xs font-bold text-white flex items-center gap-1.5">
-              <i data-lucide="sliders" class="w-4 h-4 text-amber-400"></i>
-              <span>การกำหนดสิทธิ์เฉพาะด้าน (Permission Matrix)</span>
-            </div>
-            <div class="text-[10px] text-slate-400">ทุกคนมีสิทธิ์ Standard Admin อยู่แล้ว ติ๊กเพิ่มสิทธิ์ที่ต้องการมอบหมาย:</div>
-          </div>
-          <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-            Standard Admin ON
-          </span>
+        <!-- Submit to Lobby Button -->
+        <div class="pt-2">
+          <button onclick="submitToLobby()" class="w-full gold-gradient hover:brightness-110 text-slate-950 font-black py-3 rounded-2xl shadow-xl shadow-amber-500/20 text-sm flex items-center justify-center gap-2 transition active:scale-[0.99]">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>ยืนยันข้อมูล & เข้าสู่ห้องรับรอง (Enter Lobby)</span>
+          </button>
         </div>
 
-        <div class="space-y-2 text-xs pt-1">
-          
-          <!-- 1. Price Adjustment (สำคัญมาก: กูล/บัว) -->
-          <label class="p-2.5 rounded-xl bg-slate-950 border border-amber-500/30 hover:border-amber-400 cursor-pointer flex items-start gap-2.5 transition">
-            <input type="checkbox" id="permPrice" checked class="mt-0.5 rounded text-amber-500 focus:ring-amber-500">
-            <div class="space-y-0.5">
-              <div class="font-bold text-amber-400 text-xs flex items-center gap-1">
-                <span>💰 สิทธิ์ปรับแก้ราคาบ้าน & ส่วนลดพิเศษ (Pricing & Discount Authority)</span>
-                <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300">สำคัญ</span>
-              </div>
-              <div class="text-[10px] text-slate-400 leading-tight">เคาะราคาขายตั้งต้น, ส่วนลดโปรโมชัน Shock Price, และปรับเรตคอมมิชชัน (กูล / บัว)</div>
-            </div>
-          </label>
-
-          <!-- 2. Keybox & Viewing (พี่ลิลลี่) -->
-          <label class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-400 cursor-pointer flex items-start gap-2.5 transition">
-            <input type="checkbox" id="permKeybox" class="mt-0.5 rounded text-amber-500 focus:ring-amber-500">
-            <div class="space-y-0.5">
-              <div class="font-bold text-emerald-400 text-xs">🔑 สิทธิ์คุมกุญแจ & อนุมัติรหัส OTP (Keybox & Viewing Master)</div>
-              <div class="text-[10px] text-slate-400 leading-tight">อนุมัติคิวเปิดบ้าน, ออกรหัส OTP 6 หลัก, เลื่อนวันนัด, และยกเลิกฉุกเฉิน (พี่ลิลลี่ / ท่าข้าม 12)</div>
-            </div>
-          </label>
-
-          <!-- 3. Lead & Chat (คุณเจี๊ยบ) -->
-          <label class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-400 cursor-pointer flex items-start gap-2.5 transition">
-            <input type="checkbox" id="permLead" checked class="mt-0.5 rounded text-amber-500 focus:ring-amber-500">
-            <div class="space-y-0.5">
-              <div class="font-bold text-blue-400 text-xs">📊 สิทธิ์ตรวจลีด & ประวัติแชทลูกค้า (Lead & Chat Inspector)</div>
-              <div class="text-[10px] text-slate-400 leading-tight">ดูข้อความแชทลูกค้ากับบอทศิวา, ข้อมูลติดต่อลีด, และอนุมัติสิทธิ์ตัวแทนใหม่ (เจี๊ยบ / บัว / กูล)</div>
-            </div>
-          </label>
-
-          <!-- 4. Executive Authority (กูล/บัว) -->
-          <label class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-400 cursor-pointer flex items-start gap-2.5 transition">
-            <input type="checkbox" id="permExecutive" checked class="mt-0.5 rounded text-amber-500 focus:ring-amber-500">
-            <div class="space-y-0.5">
-              <div class="font-bold text-purple-400 text-xs">👑 สิทธิ์ผู้บริหารระดับสูง & ดูยอดคอมมิชชัน (Executive Authority)</div>
-              <div class="text-[10px] text-slate-400 leading-tight">ดูรายงาน KPI ภาพรวม, สถิติยอดขาย, และอนุมัติสัญญา Co-Broker ระดับองค์กร (กูล / บัว)</div>
-            </div>
-          </label>
-
-          <!-- 5. NPA & Catalog Curation -->
-          <label class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-400 cursor-pointer flex items-start gap-2.5 transition">
-            <input type="checkbox" id="permCatalog" checked class="mt-0.5 rounded text-amber-500 focus:ring-amber-500">
-            <div class="space-y-0.5">
-              <div class="font-bold text-amber-300 text-xs">🏷️ สิทธิ์คัดสรรทรัพย์เด่น NPA & ป้ายโปรโมชัน (Spotlight Curator)</div>
-              <div class="text-[10px] text-slate-400 leading-tight">คัดแยกบ้าน 59,000 หลังขึ้นหน้าแรก [Hero / Hot Deals / รีโนเวท] และติดป้ายทอง</div>
-            </div>
-          </label>
-
-          <!-- 6. Tech & Infrastructure (คุณต้น) -->
-          <label class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-amber-400 cursor-pointer flex items-start gap-2.5 transition">
-            <input type="checkbox" id="permTech" class="mt-0.5 rounded text-amber-500 focus:ring-amber-500">
-            <div class="space-y-0.5">
-              <div class="font-bold text-rose-400 text-xs">⚙️ สิทธิ์เทคนิค คลาวด์ & คอนฟิกระบบ (System & Infrastructure Admin)</div>
-              <div class="text-[10px] text-slate-400 leading-tight">คุม Render Cloud, LINE Webhook API, Cloudflare R2, และ Data Cleansing 90 วัน (คุณต้น)</div>
-            </div>
-          </label>
-
-        </div>
       </div>
 
-      <!-- Submit Button -->
-      <div class="pt-2">
-        <button onclick="submitRegistration()" class="w-full gold-gradient hover:brightness-110 text-slate-950 font-black py-3 rounded-2xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 active:scale-[0.98] transition">
-          <i data-lucide="check-circle" class="w-4 h-4"></i>
-          <span>บันทึกสิทธิ์ & สร้างนามบัตรดิจิทัล</span>
-        </button>
-      </div>
-
-      <div class="text-[11px] text-center text-slate-400">
-        🔒 ปลอดภัยสูงสุด ภายใต้มาตรฐานการกำกับดูแล Siwasup Asset
-      </div>
     </div>
 
-    <!-- RESULT SUCCESS CARD (Initially hidden) -->
-    <div id="resultSection" class="hidden card-glass rounded-3xl p-5 sm:p-6 border border-emerald-500/40 space-y-4 shadow-2xl animate-fade-in">
-      
-      <div class="flex items-center gap-3 pb-3 border-b border-slate-800">
-        <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-          <i data-lucide="sparkles" class="w-5 h-5"></i>
-        </div>
-        <div>
-          <h3 class="text-sm font-bold text-white">บันทึกสิทธิ์ & สร้างโปรไฟล์สำเร็จ!</h3>
-          <p class="text-[11px] text-emerald-400 font-medium">ออกนามบัตรและผูกสิทธิ์บทบาทเรียบร้อย 100%</p>
-        </div>
-      </div>
+    <!-- ============================================================== -->
+    <!-- STATE 2: LOBBY WAITING LOUNGE (ห้องรับรองรอฝ่ายบริหารจัดสรรสิทธิ์) -->
+    <!-- ============================================================== -->
+    <div id="viewLobbyWaiting" class="space-y-5 hidden">
 
-      <!-- Profile Preview Mini Card -->
-      <div class="bg-slate-900/90 rounded-2xl p-4 border border-amber-500/30 space-y-3">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 to-amber-300 p-0.5">
-            <img id="resAvatar" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-full">
-          </div>
-          <div>
-            <div class="flex items-center gap-1.5">
-              <span id="resName" class="font-bold text-white text-sm">-</span>
-              <span id="resCode" class="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">SW-OFFICE</span>
-            </div>
-            <div id="resTitle" class="text-[11px] text-amber-400 font-semibold">Senior Property Consultant</div>
-            <div id="resZone" class="text-[10px] text-slate-400">📍 สำนักงานใหญ่</div>
+      <!-- Status Card with Pulse Radar -->
+      <div id="lobbyStatusCard" class="card-glass rounded-3xl p-6 border-2 border-amber-500/50 pulse-glow-amber text-center space-y-4 shadow-2xl relative overflow-hidden transition-all duration-500">
+        
+        <!-- Radar Animation -->
+        <div class="relative w-20 h-20 mx-auto flex items-center justify-center">
+          <div id="pulseCircle1" class="absolute inset-0 rounded-full bg-amber-500/20 animate-ping"></div>
+          <div id="pulseCircle2" class="absolute inset-2 rounded-full bg-amber-500/30 animate-pulse"></div>
+          <div id="iconBadgeBox" class="relative w-14 h-14 rounded-2xl bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-amber-400 shadow-xl">
+            <i id="statusIcon" data-lucide="clock" class="w-7 h-7"></i>
           </div>
         </div>
 
-        <!-- Badges of Granted Permissions -->
-        <div class="pt-2 border-t border-slate-800 space-y-1">
-          <div class="text-[10px] text-slate-400 font-bold">สิทธิ์ที่ได้รับมอบหมาย:</div>
-          <div id="resPermBadges" class="flex flex-wrap gap-1">
-            <!-- Dynamic Badges -->
+        <div class="space-y-1.5">
+          <div id="statusBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+            <span>อยู่ในห้องรับรอง • กำลังรอจัดสรรสิทธิ์</span>
+          </div>
+
+          <h2 id="statusTitle" class="text-xl sm:text-2xl font-black text-white">
+            ยินดีต้อนรับเข้าสู่ Lobby ศิวาสัพย์
+          </h2>
+
+          <p id="statusDesc" class="text-xs text-slate-300 max-w-sm mx-auto leading-relaxed">
+            ข้อมูลของท่านส่งถึง <strong>คุณเจี๊ยบ(กูล) & คุณบัว</strong> เรียบร้อยแล้ว<br>
+            ระบบกำลังรอฝ่ายบริหารจัดสรรสิทธิ์วิชาชีพ หน้าจอนี้จะปลดล็อกอัตโนมัติทันที
+          </p>
+        </div>
+
+        <!-- Applicant Summary Box -->
+        <div class="bg-slate-900/80 rounded-2xl p-4 border border-slate-800 text-left text-xs space-y-2">
+          <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+            <span class="text-slate-400">รหัสผู้สมัคร:</span>
+            <strong id="displayAppCode" class="text-amber-400 font-mono">SW-APP-001</strong>
+          </div>
+          <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+            <span class="text-slate-400">ชื่อผู้สมัคร:</span>
+            <strong id="displayName" class="text-white">คุณ...</strong>
+          </div>
+          <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+            <span class="text-slate-400">เบอร์โทรศัพท์:</span>
+            <span id="displayPhone" class="text-slate-300">08X-XXX-XXXX</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-400">โซนที่ปฏิบัติงาน:</span>
+            <span id="displayZone" class="text-slate-300">โซนท่าข้าม-พระราม 2</span>
           </div>
         </div>
 
-        <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-800/60 text-slate-300">
-          <span>เบอร์ติดต่อ: <strong id="resPhone" class="text-white">-</strong></span>
-          <span class="text-emerald-400 font-bold">● Active ในระบบ</span>
+        <!-- UNLOCK ACTION BUTTONS (HIDDEN INITIALLY, SHOWN WHEN APPROVED) -->
+        <div id="unlockedActions" class="space-y-2.5 hidden pt-2">
+          <div class="p-3 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold text-center">
+            🎉 ยินดีด้วยครับ! ท่านได้รับการแต่งตั้งเป็น: <span id="grantedRoleName" class="underline text-white font-black text-sm"></span>
+          </div>
+
+          <a id="btnGoCard" href="#" target="_blank" class="w-full gold-gradient hover:brightness-110 text-slate-950 font-black py-3 rounded-2xl shadow-xl text-sm flex items-center justify-center gap-2 transition">
+            <i data-lucide="credit-card" class="w-4 h-4"></i>
+            <span>เปิดดูนามบัตรดิจิทัลทางการของท่าน</span>
+          </a>
+
+          <a href="https://assets.siwasup.com/siwasup_keybox_interactive_roleplay.html" target="_blank" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 rounded-2xl border border-slate-700 text-xs flex items-center justify-center gap-2 transition">
+            <i data-lucide="key" class="w-4 h-4 text-emerald-400"></i>
+            <span>เข้าสู่ระบบกล่องกุญแจ OTP & แผนที่ทรัพย์</span>
+          </a>
         </div>
+
       </div>
 
-      <!-- Action Buttons -->
-      <div class="space-y-2 pt-1">
-        <a id="btnPrimaryRoleAction" href="#" target="_blank" class="w-full gold-gradient text-slate-950 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 shadow-md active:scale-95 transition">
-          <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
-          <span id="btnPrimaryRoleActionText">เข้าสู่หน้าจอทำงานของฉัน</span>
-        </a>
-
-        <a id="btnOpenCard" href="#" target="_blank" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 border border-slate-700 transition">
-          <i data-lucide="credit-card" class="w-3.5 h-3.5 text-amber-400"></i>
-          <span>📱 เปิดดูนามบัตรดิจิทัลทางการของฉัน</span>
-        </a>
-
-        <button onclick="copyCardUrl()" class="w-full bg-slate-900 hover:bg-slate-850 text-slate-300 font-medium py-2 rounded-xl text-xs flex items-center justify-center gap-2 border border-slate-800 transition">
-          <i data-lucide="copy" class="w-3.5 h-3.5 text-slate-400"></i>
-          <span id="btnCopyText">คัดลอกลิงก์นามบัตร (ส่งให้ลูกค้าใน LINE)</span>
-        </button>
-      </div>
-
-      <!-- Shortcut to Quick Hub -->
-      <div class="text-center pt-2">
-        <a href="https://assets.siwasup.com/executive_quick_hub.html" class="text-xs text-amber-400 hover:underline inline-flex items-center gap-1 font-semibold">
-          <span>เปิดหน้าควบคุมรวม Executive Quick Hub</span>
-          <i data-lucide="arrow-right" class="w-3 h-3"></i>
-        </a>
+      <!-- Quick Simulation Bar (For easy 1-click test without switching windows) -->
+      <div class="card-glass rounded-2xl p-3 border border-slate-800 text-center space-y-1.5">
+        <div class="text-[10px] text-slate-400 font-medium">⚡ แถบทดสอบด่วนสำหรับคุณพ่อ (Demo Shortcuts):</div>
+        <div class="flex flex-wrap items-center justify-center gap-2 text-xs">
+          <button onclick="simulateApproval('agent')" class="px-2.5 py-1 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-300 border border-emerald-500/40 font-bold transition">
+            ลองจำลอง: อนุมัติเป็น Co-Broker
+          </button>
+          <button onclick="simulateApproval('lily')" class="px-2.5 py-1 rounded-lg bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 border border-blue-500/40 font-bold transition">
+            ลองจำลอง: มอบสิทธิ์พี่ลิลลี่
+          </button>
+          <button onclick="resetLobbyView()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 transition">
+            กรอกใหม่
+          </button>
+        </div>
       </div>
 
     </div>
 
   </main>
 
+  <!-- QR CODE MODAL POPUP -->
+  <div id="qrModal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="card-glass rounded-3xl p-6 border border-amber-500/40 max-w-sm w-full text-center space-y-4 shadow-2xl relative">
+      <button onclick="closeQrModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-xl bg-slate-800/80">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[10px] font-bold">
+          <i data-lucide="scan" class="w-3 h-3"></i>
+          <span>สแกนเข้าสู่ห้องรับรอง Lobby</span>
+        </div>
+        <h3 class="text-base font-bold text-white">ยื่น QR Code ให้เพื่อนร่วมงานสแกน</h3>
+        <p class="text-[11px] text-slate-300">ใช้กล้องมือถือหรือแอป LINE สแกนเพื่อเปิดฟอร์มสมัครทันที</p>
+      </div>
+
+      <div class="bg-white p-4 rounded-2xl shadow-xl inline-block border-2 border-amber-400/80">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=8&data=https%3A%2F%2Fassets.siwasup.com%2Fagent_registration.html" 
+             alt="Registration QR Code" 
+             class="w-52 h-52 object-contain mx-auto rounded-lg">
+        <div class="mt-2 pt-1 border-t border-slate-200 text-[11px] font-black text-slate-900">
+          Siwasup Co-Broker Registration
+        </div>
+      </div>
+
+      <div class="flex items-center justify-center gap-2 pt-1">
+        <a href="https://assets.siwasup.com/agent_onboarding_qr.html" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 flex items-center justify-center gap-1.5 transition">
+          <i data-lucide="monitor" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>เปิดหน้าจอ Kiosk / พิมพ์ป้าย</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
-  <footer class="border-t border-slate-900 bg-slate-950 py-4 text-center text-[11px] text-slate-500">
-    Siwasup Co-Broker OS &copy; 2026 • ระบบจัดการสิทธิ์และความปลอดภัยองค์กร
+  <footer class="max-w-xl w-full mx-auto text-center text-xs text-slate-500 pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-2">
+    <div>© 2026 Siwasup Co-Broker OS • Lobby Lounge</div>
+    <div class="flex items-center gap-3">
+      <a href="https://assets.siwasup.com/agent_onboarding_qr.html" class="hover:text-amber-400 transition">ป้าย QR Code</a>
+      <span>•</span>
+      <a href="https://assets.siwasup.com/admin_lobby_manager.html" class="hover:text-amber-400 transition">ห้องแอดมินอนุมัติสิทธิ์</a>
+    </div>
   </footer>
 
+  <!-- SCRIPT -->
   <script>
-    let generatedCardUrl = "";
+    lucide.createIcons();
 
-    function handleRoleChange() {
-      const isOffice = document.querySelector('input[name="userRole"]:checked').value === 'office';
-      const officeLabel = document.getElementById('roleOfficeLabel');
-      const agentLabel = document.getElementById('roleAgentLabel');
-      const presetContainer = document.getElementById('presetContainer');
-      const permMatrix = document.getElementById('permissionMatrixContainer');
-      
-      if (isOffice) {
-        officeLabel.classList.add('border-amber-500', 'border-2');
-        officeLabel.classList.remove('border-slate-800');
-        agentLabel.classList.remove('border-amber-500', 'border-2');
-        agentLabel.classList.add('border-slate-800');
-        presetContainer.classList.remove('hidden');
-        permMatrix.classList.remove('hidden');
-      } else {
-        agentLabel.classList.add('border-amber-500', 'border-2');
-        agentLabel.classList.remove('border-slate-800');
-        officeLabel.classList.remove('border-amber-500', 'border-2');
-        officeLabel.classList.add('border-slate-800');
-        presetContainer.classList.add('hidden');
-        permMatrix.classList.add('hidden');
-      }
-    }
+    let currentApplicant = null;
+    let pollInterval = null;
 
-    function applyPreset(who) {
-      if (who === 'jeab_gool') {
-        document.getElementById('inputName').value = "คุณวารินทร์ กูลจีรัง (เจี๊ยบ)";
-        document.getElementById('inputNickname').value = "เจี๊ยบ (กูล)";
-        document.getElementById('inputPhone').value = "0819999999";
-        document.getElementById('selectZone').value = "สำนักงานใหญ่";
-        document.getElementById('permPrice').checked = true;
-        document.getElementById('permExecutive').checked = true;
-        document.getElementById('permLead').checked = true;
-        document.getElementById('permCatalog').checked = true;
-        document.getElementById('permKeybox').checked = true;
-        document.getElementById('permTech').checked = false;
-      } else if (who === 'bua') {
-        document.getElementById('inputName').value = "คุณบัว";
-        document.getElementById('inputNickname').value = "บัว";
-        document.getElementById('inputPhone').value = "0818888888";
-        document.getElementById('selectZone').value = "สำนักงานใหญ่";
-        document.getElementById('permPrice').checked = true;
-        document.getElementById('permExecutive').checked = true;
-        document.getElementById('permLead').checked = true;
-        document.getElementById('permCatalog').checked = true;
-        document.getElementById('permKeybox').checked = true;
-        document.getElementById('permTech').checked = false;
-      } else if (who === 'lily') {
-        document.getElementById('inputName').value = "คุณลิลลี่ (ท่าข้าม 12)";
-        document.getElementById('inputNickname').value = "ลิลลี่";
-        document.getElementById('inputPhone').value = "0816666666";
-        document.getElementById('selectZone').value = "โซนท่าข้าม-พระราม 2";
-        document.getElementById('permPrice').checked = false;
-        document.getElementById('permExecutive').checked = false;
-        document.getElementById('permLead').checked = false;
-        document.getElementById('permCatalog').checked = false;
-        document.getElementById('permKeybox').checked = true; // คุมกุญแจ 100%
-        document.getElementById('permTech').checked = false;
-      } else if (who === 'ton') {
-        document.getElementById('inputName').value = "คุณต้น (NASSTY)";
-        document.getElementById('inputNickname').value = "ต้น";
-        document.getElementById('inputPhone').value = "0815555555";
-        document.getElementById('selectZone').value = "สำนักงานใหญ่";
-        document.getElementById('permPrice').checked = true;
-        document.getElementById('permExecutive').checked = true;
-        document.getElementById('permLead').checked = true;
-        document.getElementById('permCatalog').checked = true;
-        document.getElementById('permKeybox').checked = true;
-        document.getElementById('permTech').checked = true;
-      } else if (who === 'support') {
-        document.getElementById('inputName').value = "เจ้าหน้าที่ธุรการ/ซัพพอร์ต";
-        document.getElementById('inputNickname').value = "ซัพพอร์ต";
-        document.getElementById('inputPhone').value = "0814444444";
-        document.getElementById('selectZone').value = "สำนักงานใหญ่";
-        document.getElementById('permPrice').checked = false;
-        document.getElementById('permExecutive').checked = false;
-        document.getElementById('permLead').checked = false;
-        document.getElementById('permCatalog').checked = false;
-        document.getElementById('permKeybox').checked = false;
-        document.getElementById('permTech').checked = false;
-      } else {
-        document.getElementById('inputName').value = "";
-        document.getElementById('inputNickname').value = "";
-        document.getElementById('inputPhone').value = "";
-        document.getElementById('permPrice').checked = false;
-        document.getElementById('permExecutive').checked = false;
-        document.getElementById('permLead').checked = false;
-        document.getElementById('permCatalog').checked = false;
-        document.getElementById('permKeybox').checked = false;
-        document.getElementById('permTech').checked = false;
-      }
-    }
-
-    function submitRegistration() {
-      const name = document.getElementById("inputName").value.trim();
-      const nickname = document.getElementById("inputNickname").value.trim();
-      const phone = document.getElementById("inputPhone").value.trim();
-      const zone = document.getElementById("selectZone").value;
-      const isOffice = document.querySelector('input[name="userRole"]:checked').value === 'office';
+    function submitToLobby() {
+      const name = document.getElementById('regName').value.trim();
+      const nickname = document.getElementById('regNickname').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const lineId = document.getElementById('regLineId').value.trim();
+      const zone = document.getElementById('regZone').value;
+      const affiliation = document.querySelector('input[name="affiliation"]:checked').value;
 
       if (!name) {
-        alert("กรุณาระบุชื่อ-นามสกุลจริงสำหรับแสดงบนนามบัตรครับ");
+        alert("กรุณาระบุชื่อ-นามสกุลจริงด้วยครับ");
         return;
       }
       if (!phone) {
-        alert("กรุณาระบุเบอร์โทรศัพท์สำหรับติดต่อครับ");
+        alert("กรุณาระบุเบอร์โทรศัพท์สำหรับติดต่อด้วยครับ");
         return;
       }
 
-      // Collect Granted Permissions
-      const permissions = {
-        standardAdmin: isOffice,
-        editPrice: isOffice ? document.getElementById("permPrice").checked : false,
-        keyboxAdmin: isOffice ? document.getElementById("permKeybox").checked : false,
-        leadInspector: isOffice ? document.getElementById("permLead").checked : false,
-        executiveAuthority: isOffice ? document.getElementById("permExecutive").checked : false,
-        catalogCurator: isOffice ? document.getElementById("permCatalog").checked : false,
-        systemAdmin: isOffice ? document.getElementById("permTech").checked : false
-      };
-
-      const roleCode = isOffice ? "OFFICE" : "AGENT";
       const randomSuffix = Math.floor(100 + Math.random() * 900);
-      const userCode = `SW-${roleCode}-${randomSuffix}`;
-      
-      let title = "Senior Property Advisor";
-      if (isOffice) {
-        if (permissions.executiveAuthority) title = "Executive Managing Partner";
-        else if (permissions.keyboxAdmin && !permissions.leadInspector) title = "Head of Viewing & Security";
-        else title = "Senior Property Consultant";
-      }
+      const appId = `SW-APP-${randomSuffix}`;
 
-      // Save to localStorage
-      const profile = {
-        code: userCode,
+      currentApplicant = {
+        id: appId,
         name: name,
         nickname: nickname || name,
         phone: phone,
+        line_id: lineId || "ไม่ระบุ",
         zone: zone,
-        role: roleCode,
-        title: title,
-        permissions: permissions,
-        registeredAt: new Date().toISOString()
+        affiliation: affiliation,
+        affiliation_label: affiliation === 'office' ? "🏢 พนักงาน/ทีมงานออฟฟิศ" : "🤝 Co-Broker พันธมิตรภายนอก",
+        status: "pending",
+        submitted_at: "เมื่อสักครู่"
       };
-      localStorage.setItem("siwasup_user_profile", JSON.stringify(profile));
 
-      // Construct dynamic agent profile URL
-      const params = new URLSearchParams({
-        code: userCode,
-        name: name,
-        nickname: nickname || name,
-        phone: phone,
-        zone: zone,
-        title: title,
-        mode: "client"
-      });
-      generatedCardUrl = `https://assets.siwasup.com/agent_profile.html?${params.toString()}`;
+      // 1. Save to LocalStorage & Broadcast to Admin Tab
+      const rawData = localStorage.getItem('siwasup_lobby_data');
+      let lobbyData = rawData ? JSON.parse(rawData) : { pending: [], approved: [] };
+      lobbyData.pending.unshift(currentApplicant);
+      localStorage.setItem('siwasup_lobby_data', JSON.stringify(lobbyData));
 
-      // Update UI Result
-      document.getElementById("resName").innerText = name;
-      document.getElementById("resCode").innerText = userCode;
-      document.getElementById("resTitle").innerText = title;
-      document.getElementById("resZone").innerText = zone.startsWith("📍") ? zone : `📍 ${zone}`;
-      document.getElementById("resPhone").innerText = phone;
-      document.getElementById("btnOpenCard").href = generatedCardUrl;
+      try {
+        const bc = new BroadcastChannel('siwasup_lobby_channel');
+        bc.postMessage({ type: 'NEW_APPLICANT', applicant: currentApplicant });
+      } catch(e) {}
 
-      // Render Granted Permission Badges
-      const badgesContainer = document.getElementById("resPermBadges");
-      badgesContainer.innerHTML = "";
-      
-      if (isOffice) {
-        badgesContainer.innerHTML += `<span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700 text-[10px]">🛡️ Standard Admin</span>`;
-        if (permissions.editPrice) badgesContainer.innerHTML += `<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 text-[10px] font-bold">💰 สิทธิ์แก้ราคาบ้าน</span>`;
-        if (permissions.keyboxAdmin) badgesContainer.innerHTML += `<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold">🔑 สิทธิ์คุมกุญแจ OTP</span>`;
-        if (permissions.leadInspector) badgesContainer.innerHTML += `<span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[10px] font-bold">📊 ตรวจลีด/แชท</span>`;
-        if (permissions.executiveAuthority) badgesContainer.innerHTML += `<span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-400 border border-purple-500/30 text-[10px] font-bold">👑 สิทธิ์ผู้บริหาร</span>`;
-        if (permissions.catalogCurator) badgesContainer.innerHTML += `<span class="px-2 py-0.5 rounded bg-amber-300/20 text-amber-300 border border-amber-300/30 text-[10px]">🏷️ คัดทรัพย์ NPA</span>`;
-        if (permissions.systemAdmin) badgesContainer.innerHTML += `<span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30 text-[10px] font-bold">⚙️ ซูเปอร์แอดมิน</span>`;
-      } else {
-        badgesContainer.innerHTML += `<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold">⭐ Co-Broker Agent (ล็อกคอมมิชชัน 60 วัน)</span>`;
+      // 2. Switch UI to Lobby Waiting Room
+      document.getElementById('viewRegisterForm').classList.add('hidden');
+      document.getElementById('viewLobbyWaiting').classList.remove('hidden');
+
+      document.getElementById('displayAppCode').innerText = appId;
+      document.getElementById('displayName').innerText = `${name} (${nickname || name})`;
+      document.getElementById('displayPhone').innerText = phone;
+      document.getElementById('displayZone').innerText = zone;
+
+      lucide.createIcons();
+
+      // 3. Start Polling for Approval
+      startPollingForApproval();
+    }
+
+    function startPollingForApproval() {
+      if (pollInterval) clearInterval(pollInterval);
+      pollInterval = setInterval(checkApprovalStatus, 2000);
+    }
+
+    function checkApprovalStatus() {
+      if (!currentApplicant) return;
+
+      const rawData = localStorage.getItem('siwasup_lobby_data');
+      if (!rawData) return;
+      const lobbyData = JSON.parse(rawData);
+
+      // Check if current applicant exists in approved list
+      const approved = lobbyData.approved.find(a => a.id === currentApplicant.id || a.phone === currentApplicant.phone);
+      if (approved) {
+        clearInterval(pollInterval);
+        handleApplicantApproved(approved);
       }
+    }
 
-      // Set Primary Role Action Button
-      const btnAction = document.getElementById("btnPrimaryRoleAction");
-      const btnActionText = document.getElementById("btnPrimaryRoleActionText");
-      if (permissions.keyboxAdmin && !permissions.executiveAuthority) {
-        btnAction.href = "https://assets.siwasup.com/siwasup_keybox_interactive_roleplay.html?view=lily";
-        btnActionText.innerText = "🔑 เข้าหน้าจอคิวขอกุญแจ (Lily Cockpit)";
-      } else if (permissions.executiveAuthority) {
-        btnAction.href = "https://assets.siwasup.com/executive_launch_strategy_horizon1.html";
-        btnActionText.innerText = "👑 เปิด Executive Strategy Playbook";
-      } else if (permissions.leadInspector) {
-        btnAction.href = "https://assets.siwasup.com/offline_log_exporter.html";
-        btnActionText.innerText = "📊 เปิดดูประวัติแชท & ลีดลูกค้า";
-      } else {
-        btnAction.href = "https://assets.siwasup.com/executive_quick_hub.html";
-        btnActionText.innerText = "เข้าสู่หน้าจอทำงานของฉัน (Quick Hub)";
-      }
+    function handleApplicantApproved(approvedData) {
+      const card = document.getElementById('lobbyStatusCard');
+      card.className = "card-glass rounded-3xl p-6 border-2 border-emerald-500/60 pulse-glow-green text-center space-y-4 shadow-2xl relative overflow-hidden transition-all duration-500";
 
-      // Switch View
-      document.getElementById("formSection").classList.add("hidden");
-      document.getElementById("resultSection").classList.remove("hidden");
+      document.getElementById('pulseCircle1').className = "absolute inset-0 rounded-full bg-emerald-500/20";
+      document.getElementById('pulseCircle2').className = "absolute inset-2 rounded-full bg-emerald-500/30";
+      document.getElementById('iconBadgeBox').className = "relative w-14 h-14 rounded-2xl bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-emerald-400 shadow-xl";
+      document.getElementById('statusIcon').setAttribute('data-lucide', 'check-circle');
+
+      const badge = document.getElementById('statusBadge');
+      badge.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold";
+      badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>อนุมัติสิทธิ์เรียบร้อยแล้ว (Active)</span>`;
+
+      document.getElementById('statusTitle').innerText = "ปลดล็อกสิทธิ์ & เข้าสู่ระบบสำเร็จ!";
+      document.getElementById('statusDesc').innerText = "ฝ่ายบริหารได้ตรวจสอบและแต่งตั้งบทบาทวิชาชีพให้ท่านเรียบร้อยแล้ว";
+
+      document.getElementById('grantedRoleName').innerText = approvedData.role;
+      document.getElementById('unlockedActions').classList.remove('hidden');
+
+      // Setup Card Link
+      const cardUrl = `https://assets.siwasup.com/agent_profile.html?name=${encodeURIComponent(approvedData.name)}&phone=${encodeURIComponent(approvedData.phone)}&zone=${encodeURIComponent(approvedData.zone)}&title=${encodeURIComponent(approvedData.title || '')}&mode=client`;
+      document.getElementById('btnGoCard').href = cardUrl;
 
       lucide.createIcons();
     }
 
-    function copyCardUrl() {
-      if (!generatedCardUrl) return;
-      navigator.clipboard.writeText(generatedCardUrl).then(() => {
-        const btn = document.getElementById("btnCopyText");
-        btn.innerText = "✓ คัดลอกเรียบร้อย! พร้อมส่งใน LINE แล้ว";
-        setTimeout(() => {
-          btn.innerText = "คัดลอกลิงก์นามบัตร (ส่งให้ลูกค้าใน LINE)";
-        }, 3000);
+    // Direct Simulation Button
+    function simulateApproval(roleType) {
+      if (!currentApplicant) {
+        currentApplicant = {
+          id: "SW-APP-SIM",
+          name: "คุณทดสอบ",
+          nickname: "เทส",
+          phone: "089-999-9999",
+          zone: "โซนท่าข้าม-พระราม 2"
+        };
+      }
+
+      const roleObj = roleType === 'lily' 
+        ? { role: "🔑 พี่ลิลลี่ / Head of Viewing", title: "Head of Viewing & Keybox Custodian" }
+        : { role: "🤝 Co-Broker พันธมิตรทางการ", title: "Certified Co-Broker Partner" };
+
+      handleApplicantApproved({
+        id: currentApplicant.id,
+        name: currentApplicant.name,
+        phone: currentApplicant.phone,
+        zone: currentApplicant.zone,
+        role: roleObj.role,
+        title: roleObj.title
       });
     }
 
-    window.onload = function() {
+    function resetLobbyView() {
+      if (pollInterval) clearInterval(pollInterval);
+      document.getElementById('viewLobbyWaiting').classList.add('hidden');
+      document.getElementById('viewRegisterForm').classList.remove('hidden');
+    }
+
+    // Listen to changes from Admin Tab via Storage or BroadcastChannel
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'siwasup_lobby_data') checkApprovalStatus();
+    });
+
+    try {
+      const bc = new BroadcastChannel('siwasup_lobby_channel');
+      bc.onmessage = (msg) => {
+        if (msg.data && msg.data.type === 'LOBBY_UPDATED') checkApprovalStatus();
+      };
+    } catch(e) {}
+
+    // QR Modal Controls
+    function openQrModal() {
+      document.getElementById('qrModal').classList.remove('hidden');
       lucide.createIcons();
-      handleRoleChange();
-    };
+    }
+    function closeQrModal() {
+      document.getElementById('qrModal').classList.add('hidden');
+    }
   </script>
 </body>
 </html>

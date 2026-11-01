@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siwasup Co-Broker - Admin Lobby & Approval Center</title>
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts: Prompt & Thai Typography Support -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Prompt', 'Tahoma', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #070d18;
+      color: #f1f5f9;
+    }
+    .card-glass {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .badge-glow-amber {
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.35);
+    }
+    .badge-glow-green {
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.35);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-3 sm:p-6 lg:p-8">
+
+  <!-- TOP HEADER -->
+  <header class="max-w-7xl w-full mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-amber-400 to-amber-600 flex items-center justify-center font-black text-slate-950 text-2xl shadow-xl shadow-amber-500/25">
+        S
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="text-lg sm:text-xl font-bold text-white tracking-wide">
+            ศิวาสัพย์ <span class="gold-gradient-text font-black">LOBBY APPROVAL CENTER</span>
+          </h1>
+          <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40">
+            ห้องอนุมัติสิทธิ์กลาง
+          </span>
+        </div>
+        <p class="text-xs text-slate-400">
+          ศูนย์ควบคุมการจัดสรรสิทธิ์ทีมงาน 5 เสาหลัก & พันธมิตร Co-Broker • ควบคุมโดย <strong>คุณเจี๊ยบ(กูล) & คุณบัว</strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <a href="https://assets.siwasup.com/agent_onboarding_qr.html" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 flex items-center gap-1.5 transition">
+        <i data-lucide="qr-code" class="w-3.5 h-3.5 text-amber-400"></i>
+        <span>ป้ายสแกน QR หน้างาน</span>
+      </a>
+      <a href="https://assets.siwasup.com/agent_registration.html" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-xs font-semibold text-blue-300 border border-blue-500/30 flex items-center gap-1.5 transition">
+        <i data-lucide="smartphone" class="w-3.5 h-3.5 text-blue-400"></i>
+        <span>เปิดหน้าจอมือถือผู้สมัคร</span>
+      </a>
+      <a href="https://assets.siwasup.com/gool_executive_dashboard.html" class="px-3.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-xs font-bold text-amber-300 border border-amber-500/40 flex items-center gap-1.5 transition">
+        <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
+        <span>Executive Dashboard</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-7xl w-full mx-auto py-6 sm:py-8 space-y-8 flex-1">
+
+    <!-- KPI STATS CARDS -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      
+      <!-- Card 1: Pending Lobby -->
+      <div class="card-glass rounded-2xl p-4 border border-amber-500/40 space-y-1 relative overflow-hidden shadow-lg">
+        <div class="flex items-center justify-between text-slate-400 text-xs">
+          <span>รอใน Lobby ตอนนี้</span>
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
+        </div>
+        <div class="text-2xl sm:text-3xl font-black text-amber-400 flex items-baseline gap-1.5">
+          <span id="kpiPendingCount">2</span>
+          <span class="text-xs font-normal text-slate-400">ท่าน (รอมอบสิทธิ์)</span>
+        </div>
+        <div class="text-[10px] text-amber-300/80 font-medium">สแกน QR แล้วมารอในห้องรับรอง</div>
+      </div>
+
+      <!-- Card 2: Active Members -->
+      <div class="card-glass rounded-2xl p-4 border border-emerald-500/40 space-y-1 relative overflow-hidden shadow-lg">
+        <div class="flex items-center justify-between text-slate-400 text-xs">
+          <span>สมาชิกที่อนุมัติแล้ว</span>
+          <i data-lucide="user-check" class="w-4 h-4 text-emerald-400"></i>
+        </div>
+        <div class="text-2xl sm:text-3xl font-black text-emerald-400 flex items-baseline gap-1.5">
+          <span id="kpiApprovedCount">5</span>
+          <span class="text-xs font-normal text-slate-400">คน (Active)</span>
+        </div>
+        <div class="text-[10px] text-emerald-300/80 font-medium">ทีมงาน 5 เสาหลักพร้อมปฏิบัติงาน</div>
+      </div>
+
+      <!-- Card 3: Price Authority -->
+      <div class="card-glass rounded-2xl p-4 border border-rose-500/40 space-y-1 relative overflow-hidden shadow-lg">
+        <div class="flex items-center justify-between text-slate-400 text-xs">
+          <span>อำนาจเคาะราคาบ้าน</span>
+          <i data-lucide="lock" class="w-4 h-4 text-rose-400"></i>
+        </div>
+        <div class="text-2xl sm:text-3xl font-black text-rose-400 flex items-baseline gap-1.5">
+          <span>3</span>
+          <span class="text-xs font-normal text-slate-400">ท่านสูงสุด</span>
+        </div>
+        <div class="text-[10px] text-rose-300/80 font-medium">เจี๊ยบ(กูล) • บัว • ต้น (ล็อกสิทธิ์เข้มงวด)</div>
+      </div>
+
+      <!-- Card 4: Keybox Custodians -->
+      <div class="card-glass rounded-2xl p-4 border border-blue-500/40 space-y-1 relative overflow-hidden shadow-lg">
+        <div class="flex items-center justify-between text-slate-400 text-xs">
+          <span>ผู้คุมกุญแจ OTP ท่าข้าม</span>
+          <i data-lucide="key" class="w-4 h-4 text-blue-400"></i>
+        </div>
+        <div class="text-2xl sm:text-3xl font-black text-blue-400 flex items-baseline gap-1.5">
+          <span>พี่ลิลลี่</span>
+          <span class="text-xs font-normal text-slate-400">(หลัก 100%)</span>
+        </div>
+        <div class="text-[10px] text-blue-300/80 font-medium">อนุมัติ OTP สด 5 นาที / เลื่อนนัดฉุกเฉิน</div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- SECTION 1: APPLICANTS WAITING IN LOBBY (ห้องรออนุมัติ) -->
+    <!-- ============================================================== -->
+    <div class="card-glass rounded-3xl p-5 sm:p-7 border border-amber-500/30 space-y-5 shadow-2xl">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+        <div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+              <i data-lucide="inbox" class="w-4 h-4"></i>
+            </div>
+            <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+              <span>ผู้สมัครที่กำลังนั่งรอใน Lobby (Pending Approval Queue)</span>
+              <span id="badgePendingLive" class="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-extrabold border border-amber-500/30">
+                2 รายการ
+              </span>
+            </h2>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">
+            ผู้สมัครสแกน QR Code แล้วข้อมูลเข้ามานั่งรอที่นี่ — เลือกบทบาทที่ต้องการแต่งตั้งแล้วกด <strong>"อนุมัติสิทธิ์"</strong> บัตรของผู้สมัครจะปลดล็อกทันที
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="addSimulatedApplicant()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 border border-slate-700 flex items-center gap-1.5 transition">
+            <i data-lucide="plus-circle" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>จำลองคนสแกนเข้ามาใหม่</span>
+          </button>
+          <button onclick="refreshLobbyData()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 border border-slate-700 flex items-center gap-1.5 transition">
+            <i data-lucide="rotate-cw" class="w-3.5 h-3.5 text-blue-400"></i>
+            <span>รีเฟรช</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- PENDING CARDS CONTAINER -->
+      <div id="pendingContainer" class="space-y-4">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- SECTION 2: APPROVED DIRECTORY (ทำเนียบสมาชิก & สิทธิ์ปัจจุบัน) -->
+    <!-- ============================================================== -->
+    <div class="card-glass rounded-3xl p-5 sm:p-7 border border-slate-800 space-y-5 shadow-xl">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+        <div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+              <i data-lucide="shield-check" class="w-4 h-4"></i>
+            </div>
+            <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+              <span>ทำเนียบสมาชิก & ผังสิทธิ์ที่ได้รับอนุมัติแล้ว (Active Directory)</span>
+            </h2>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">
+            บุคลากรที่ผ่านการอนุมัติสิทธิ์ สามารถเรียกดูนามบัตรทางการ และจัดการสถานะได้ตลอดเวลา
+          </p>
+        </div>
+
+        <div>
+          <span class="text-xs font-semibold px-3 py-1 rounded-xl bg-slate-800 text-slate-300 border border-slate-700">
+            ทีมงานออฟฟิศ 5 เสาหลัก ครบถ้วน
+          </span>
+        </div>
+      </div>
+
+      <!-- APPROVED TABLE -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-slate-900/90 text-slate-400 border-b border-slate-800">
+              <th class="py-3 px-3.5 font-bold rounded-l-xl">ชื่อ - นามสกุล</th>
+              <th class="py-3 px-3.5 font-bold">ตำแหน่งที่ได้รับอนุมัติ</th>
+              <th class="py-3 px-3.5 font-bold">พื้นที่ดูแล</th>
+              <th class="py-3 px-3.5 font-bold">สิทธิ์สำคัญที่ได้รับ (Granted Badges)</th>
+              <th class="py-3 px-3.5 font-bold text-right rounded-r-xl">การจัดการ</th>
+            </tr>
+          </thead>
+          <tbody id="approvedTableBody" class="divide-y divide-slate-800/60 text-slate-200">
+            <!-- Rendered dynamically via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="max-w-7xl w-full mx-auto text-center text-xs text-slate-500 pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <div>
+      © 2026 Siwasup Co-Broker OS • Admin Lobby & Approval System • Confirmed by Jeab (Gool) & Bua
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="https://assets.siwasup.com/gool_executive_dashboard.html" class="hover:text-amber-400 transition">หน้าแดชบอร์ดหลัก</a>
+      <span>•</span>
+      <a href="https://assets.siwasup.com/agent_onboarding_qr.html" class="hover:text-amber-400 transition">ป้าย QR หน้างาน</a>
+      <span>•</span>
+      <a href="https://assets.siwasup.com/agent_registration.html" class="hover:text-amber-400 transition">หน้าจอมือถือผู้สมัคร</a>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // Initial State (Synced with localStorage / mock)
+    const DEFAULT_DATA = {
+      pending: [
+        {
+          id: "app_20261101_001",
+          name: "คุณนภชกร (เอิร์ธ)",
+          nickname: "เอิร์ธ",
+          phone: "0891234567",
+          line_id: "earth_agent",
+          zone: "โซนท่าข้าม-พระราม 2",
+          affiliation: "agent",
+          affiliation_label: "🤝 Co-Broker พันธมิตรภายนอก",
+          submitted_at: "เมื่อสักครู่"
+        },
+        {
+          id: "app_20261101_002",
+          name: "น้องมิว (Myo)",
+          nickname: "มิว",
+          phone: "0869876543",
+          line_id: "myo_yd",
+          zone: "สำนักงานใหญ่",
+          affiliation: "office",
+          affiliation_label: "🏢 พนักงาน/ทีมงานออฟฟิศ",
+          submitted_at: "5 นาทีที่แล้ว"
+        }
+      ],
+      approved: [
+        {
+          id: "app_office_001",
+          name: "คุณวารินทร์ กูลจีรัง (เจี๊ยบ)",
+          nickname: "เจี๊ยบ (กูล)",
+          phone: "0819999999",
+          zone: "สำนักงานใหญ่",
+          role: "👑 CEO & Co-Broker Lead",
+          title: "Executive Managing Partner",
+          badges: ["💰 เคาะราคาบ้าน", "👑 สิทธิ์บริหาร", "💬 ดูแชทลีด", "🔑 กุญแจสำรอง", "🛡️ Standard Admin"],
+          is_leader: true
+        },
+        {
+          id: "app_office_002",
+          name: "คุณบัว",
+          nickname: "บัว",
+          phone: "0818888888",
+          zone: "สำนักงานใหญ่",
+          role: "👑 Executive Partner",
+          title: "Executive Managing Partner",
+          badges: ["💰 เคาะราคาบ้าน", "👑 สิทธิ์บริหาร", "💬 ดูแชทลีด", "🔑 กุญแจสำรอง", "🛡️ Standard Admin"],
+          is_leader: true
+        },
+        {
+          id: "app_office_003",
+          name: "พี่ลิลลี่ (ท่าข้าม 12)",
+          nickname: "ลิลลี่",
+          phone: "0816666666",
+          zone: "โซนท่าข้าม-พระราม 2",
+          role: "🔑 Head of Viewing & Keys",
+          title: "Head of Viewing & Keybox Custodian",
+          badges: ["🔑 คุมกุญแจ OTP 100%", "🛡️ Standard Admin", "🚫 ล็อกแก้ราคา"],
+          is_keybox: true
+        },
+        {
+          id: "app_office_004",
+          name: "คุณต้น (NASSTY)",
+          nickname: "ต้น",
+          phone: "0815555555",
+          zone: "สำนักงานใหญ่",
+          role: "💻 Tech Architect & Senior Advisor",
+          title: "Senior Technology Architect",
+          badges: ["⚙️ Technical Admin", "💰 เคาะราคา", "🛡️ Standard Admin"],
+          is_tech: true
+        },
+        {
+          id: "app_office_005",
+          name: "เจ้าหน้าที่ธุรการ/ซัพพอร์ต",
+          nickname: "ซัพพอร์ต",
+          phone: "0814444444",
+          zone: "สำนักงานใหญ่",
+          role: "🏢 Support & Coordinator",
+          title: "Office Property Coordinator",
+          badges: ["🛡️ Standard Admin", "🏷️ ช่วยคัดสต๊อก", "🚫 ล็อกแก้ราคา"],
+          is_support: true
+        }
+      ]
+    };
+
+    // Load from LocalStorage or use Default
+    let lobbyData = JSON.parse(localStorage.getItem('siwasup_lobby_data')) || DEFAULT_DATA;
+
+    function saveLobbyData() {
+      localStorage.setItem('siwasup_lobby_data', JSON.stringify(lobbyData));
+      // Notify other tabs via BroadcastChannel or StorageEvent
+      try {
+        const bc = new BroadcastChannel('siwasup_lobby_channel');
+        bc.postMessage({ type: 'LOBBY_UPDATED', data: lobbyData });
+      } catch (e) {}
+    }
+
+    // Role Presets Configuration
+    const ROLE_PRESETS = {
+      gool: {
+        role: "👑 คุณเจี๊ยบ(กูล) / CEO",
+        title: "Executive Managing Partner",
+        badges: ["💰 เคาะราคาบ้าน", "👑 สิทธิ์บริหาร", "💬 ดูแชทลีด", "🔑 กุญแจสำรอง", "🛡️ Standard Admin"],
+        permissions: { standardAdmin: true, editPrice: true, keyboxAdmin: true, leadInspector: true, executiveAuthority: true, catalogCurator: true, systemAdmin: false }
+      },
+      bua: {
+        role: "👑 คุณบัว / Executive Partner",
+        title: "Executive Managing Partner",
+        badges: ["💰 เคาะราคาบ้าน", "👑 สิทธิ์บริหาร", "💬 ดูแชทลีด", "🔑 กุญแจสำรอง", "🛡️ Standard Admin"],
+        permissions: { standardAdmin: true, editPrice: true, keyboxAdmin: true, leadInspector: true, executiveAuthority: true, catalogCurator: true, systemAdmin: false }
+      },
+      lily: {
+        role: "🔑 พี่ลิลลี่ / Head of Viewing",
+        title: "Head of Viewing & Keybox Custodian",
+        badges: ["🔑 คุมกุญแจ OTP 100%", "🛡️ Standard Admin", "🚫 ล็อกแก้ราคา"],
+        permissions: { standardAdmin: true, editPrice: false, keyboxAdmin: true, leadInspector: false, executiveAuthority: false, catalogCurator: false, systemAdmin: false }
+      },
+      ton: {
+        role: "💻 คุณต้น / Tech Architect",
+        title: "Senior Technology Architect",
+        badges: ["⚙️ Technical Admin", "💰 เคาะราคา", "🛡️ Standard Admin"],
+        permissions: { standardAdmin: true, editPrice: true, keyboxAdmin: true, leadInspector: true, executiveAuthority: true, catalogCurator: true, systemAdmin: true }
+      },
+      support: {
+        role: "🏢 เจ้าหน้าที่ซัพพอร์ตออฟฟิศ",
+        title: "Office Property Coordinator",
+        badges: ["🛡️ Standard Admin", "🏷️ ช่วยคัดสต๊อก", "🚫 ล็อกแก้ราคา"],
+        permissions: { standardAdmin: true, editPrice: false, keyboxAdmin: false, leadInspector: false, executiveAuthority: false, catalogCurator: true, systemAdmin: false }
+      },
+      agent: {
+        role: "🤝 Co-Broker พันธมิตรทางการ",
+        title: "Certified Co-Broker Partner",
+        badges: ["📜 บัตรดิจิทัลทางการ", "🔒 ล็อกค่านายหน้า 60 วัน", "📅 จองเปิดบ้าน", "🚫 ล็อกแอดมิน"],
+        permissions: { standardAdmin: false, editPrice: false, keyboxAdmin: false, leadInspector: false, executiveAuthority: false, catalogCurator: false, systemAdmin: false }
+      }
+    };
+
+    function renderLobby() {
+      // 1. Update KPI
+      document.getElementById('kpiPendingCount').innerText = lobbyData.pending.length;
+      document.getElementById('kpiApprovedCount').innerText = lobbyData.approved.length;
+      document.getElementById('badgePendingLive').innerText = `${lobbyData.pending.length} รายการ`;
+
+      // 2. Render Pending List
+      const pendingContainer = document.getElementById('pendingContainer');
+      if (lobbyData.pending.length === 0) {
+        pendingContainer.innerHTML = `
+          <div class="text-center py-10 bg-slate-900/40 rounded-2xl border border-slate-800 text-slate-400 space-y-2">
+            <i data-lucide="coffee" class="w-8 h-8 mx-auto text-amber-400/60"></i>
+            <div class="text-sm font-semibold text-slate-300">ห้องรับรองว่าง • ยังไม่มีใครรอในคิว</div>
+            <p class="text-xs text-slate-500">เมื่อมีคนสแกน QR Code รายชื่อจะปรากฏขึ้นที่นี่โดยอัตโนมัติ</p>
+          </div>
+        `;
+      } else {
+        pendingContainer.innerHTML = lobbyData.pending.map((item, idx) => `
+          <div class="card-glass rounded-2xl p-4 sm:p-5 border border-amber-500/30 space-y-4 hover:border-amber-500/60 transition shadow-lg">
+            
+            <!-- Applicant Header -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center font-bold text-amber-400 text-sm shrink-0">
+                  ${item.nickname ? item.nickname.substring(0, 2) : 'รอ'}
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-bold text-white text-sm sm:text-base">${item.name}</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">
+                      🟡 รอจัดสรรสิทธิ์
+                    </span>
+                  </div>
+                  <div class="text-xs text-slate-400 flex flex-wrap items-center gap-2 mt-0.5">
+                    <span>โทร: <strong class="text-slate-300">${item.phone}</strong></span>
+                    <span>•</span>
+                    <span>โซน: <strong class="text-slate-300">${item.zone}</strong></span>
+                    <span>•</span>
+                    <span class="text-amber-400">${item.affiliation_label || 'ขอสมัครทั่วไป'}</span>
+                    <span>•</span>
+                    <span class="text-slate-500">${item.submitted_at}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Reject Button -->
+              <div>
+                <button onclick="rejectApplicant('${item.id}')" class="px-2.5 py-1 rounded-lg bg-red-500/10 hover:bg-red-500/25 text-red-400 text-xs font-semibold border border-red-500/30 transition flex items-center gap-1">
+                  <i data-lucide="user-x" class="w-3.5 h-3.5"></i>
+                  <span>ปฏิเสธ</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Role Assignment Controls -->
+            <div class="space-y-2">
+              <label class="text-[11px] font-bold text-amber-400 flex items-center gap-1.5">
+                <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                <span>เลือกบทบาทเพื่อแต่งตั้ง & มอบสิทธิ์ (1-Click Role Assignment):</span>
+              </label>
+
+              <div class="grid grid-cols-2 sm:grid-cols-6 gap-2 text-xs">
+                <button onclick="approveWithPreset('${item.id}', 'gool')" class="p-2 rounded-xl bg-slate-800 hover:bg-amber-500/20 hover:border-amber-500/60 border border-slate-700 text-left transition space-y-0.5">
+                  <div class="font-bold text-amber-400">👑 เจี๊ยบ(กูล)</div>
+                  <div class="text-[9px] text-slate-400">CEO / เคาะราคา</div>
+                </button>
+                <button onclick="approveWithPreset('${item.id}', 'bua')" class="p-2 rounded-xl bg-slate-800 hover:bg-amber-500/20 hover:border-amber-500/60 border border-slate-700 text-left transition space-y-0.5">
+                  <div class="font-bold text-amber-400">👑 คุณบัว</div>
+                  <div class="text-[9px] text-slate-400">แทนเจี๊ยบ 100%</div>
+                </button>
+                <button onclick="approveWithPreset('${item.id}', 'lily')" class="p-2 rounded-xl bg-slate-800 hover:bg-emerald-500/20 hover:border-emerald-500/60 border border-slate-700 text-left transition space-y-0.5">
+                  <div class="font-bold text-emerald-400">🔑 พี่ลิลลี่</div>
+                  <div class="text-[9px] text-slate-400">คุมกุญแจ OTP 100%</div>
+                </button>
+                <button onclick="approveWithPreset('${item.id}', 'ton')" class="p-2 rounded-xl bg-slate-800 hover:bg-rose-500/20 hover:border-rose-500/60 border border-slate-700 text-left transition space-y-0.5">
+                  <div class="font-bold text-rose-400">💻 คุณต้น</div>
+                  <div class="text-[9px] text-slate-400">Tech Lead / สิทธิ์เต็ม</div>
+                </button>
+                <button onclick="approveWithPreset('${item.id}', 'support')" class="p-2 rounded-xl bg-slate-800 hover:bg-blue-500/20 hover:border-blue-500/60 border border-slate-700 text-left transition space-y-0.5">
+                  <div class="font-bold text-blue-400">🏢 ซัพพอร์ต</div>
+                  <div class="text-[9px] text-slate-400">Standard Admin</div>
+                </button>
+                <button onclick="approveWithPreset('${item.id}', 'agent')" class="p-2 rounded-xl bg-slate-800 hover:bg-emerald-500/20 hover:border-emerald-500/60 border border-slate-700 text-left transition space-y-0.5">
+                  <div class="font-bold text-emerald-300">🤝 Co-Broker</div>
+                  <div class="text-[9px] text-slate-400">พันธมิตรรับรอง</div>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        `).join('');
+      }
+
+      // 3. Render Approved Table
+      const approvedBody = document.getElementById('approvedTableBody');
+      approvedBody.innerHTML = lobbyData.approved.map(item => `
+        <tr class="hover:bg-slate-900/50 transition">
+          <td class="py-3 px-3.5">
+            <div class="font-bold text-white">${item.name}</div>
+            <div class="text-[10px] text-slate-400">ชื่อเล่น: ${item.nickname} • ${item.phone}</div>
+          </td>
+          <td class="py-3 px-3.5">
+            <div class="font-bold text-amber-300">${item.role}</div>
+            <div class="text-[10px] text-slate-400">${item.title || 'Senior Consultant'}</div>
+          </td>
+          <td class="py-3 px-3.5">
+            <span class="text-slate-300 font-medium">${item.zone}</span>
+          </td>
+          <td class="py-3 px-3.5">
+            <div class="flex flex-wrap gap-1">
+              ${(item.badges || []).map(b => `
+                <span class="text-[9px] px-1.5 py-0.5 rounded font-semibold ${
+                  b.includes('เคาะราคา') ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' :
+                  b.includes('กุญแจ') ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' :
+                  b.includes('Technical') ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' :
+                  b.includes('ล็อก') ? 'bg-red-500/10 text-red-300' :
+                  'bg-slate-800 text-slate-300'
+                }">
+                  ${b}
+                </span>
+              `).join('')}
+            </div>
+          </td>
+          <td class="py-3 px-3.5 text-right">
+            <a href="https://assets.siwasup.com/agent_profile.html?name=${encodeURIComponent(item.name)}&phone=${encodeURIComponent(item.phone)}&zone=${encodeURIComponent(item.zone)}&title=${encodeURIComponent(item.title || '')}&mode=client" 
+               target="_blank"
+               class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 inline-flex items-center gap-1 transition">
+              <i data-lucide="credit-card" class="w-3 h-3 text-amber-400"></i>
+              <span>ดูบัตร</span>
+            </a>
+          </td>
+        </tr>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    // Approve applicant with role
+    function approveWithPreset(applicantId, presetKey) {
+      const idx = lobbyData.pending.findIndex(a => a.id === applicantId);
+      if (idx === -1) return;
+
+      const applicant = lobbyData.pending[idx];
+      const preset = ROLE_PRESETS[presetKey];
+
+      const approvedMember = {
+        id: applicant.id,
+        name: applicant.name,
+        nickname: applicant.nickname,
+        phone: applicant.phone,
+        line_id: applicant.line_id,
+        zone: applicant.zone,
+        role: preset.role,
+        title: preset.title,
+        badges: preset.badges,
+        permissions: preset.permissions,
+        approved_at: new Date().toISOString()
+      };
+
+      // Remove from pending, add to approved
+      lobbyData.pending.splice(idx, 1);
+      lobbyData.approved.unshift(approvedMember);
+      saveLobbyData();
+      renderLobby();
+
+      // Show success notification
+      alert(`✅ อนุมัติสิทธิ์สำเร็จ!\nแต่งตั้ง ${applicant.name} เป็น ${preset.role} เรียบร้อยแล้ว`);
+    }
+
+    // Reject applicant
+    function rejectApplicant(applicantId) {
+      if (!confirm("คุณต้องการปฏิเสธและดีดรายชื่อนี้ออกจาก Lobby ใช่หรือไม่?")) return;
+      lobbyData.pending = lobbyData.pending.filter(a => a.id !== applicantId);
+      saveLobbyData();
+      renderLobby();
+    }
+
+    // Add a simulated applicant for testing/demo
+    function addSimulatedApplicant() {
+      const randomId = Math.floor(100 + Math.random() * 900);
+      const testNames = [
+        { name: "คุณสราวุธ (เอเจนต์ใหม่)", nickname: "วุธ", zone: "โซนบางนา-ศรีนครินทร์" },
+        { name: "คุณพรทิพย์ (ทีมนายหน้า)", nickname: "ทิพย์", zone: "โซนท่าข้าม-พระราม 2" },
+        { name: "น้องบอย (เจ้าหน้าที่ออฟฟิศ)", nickname: "บอย", zone: "สำนักงานใหญ่" }
+      ];
+      const selected = testNames[Math.floor(Math.random() * testNames.length)];
+
+      const newApplicant = {
+        id: `app_sim_${Date.now()}`,
+        name: selected.name,
+        nickname: selected.nickname,
+        phone: `089-${randomId}-4567`,
+        line_id: `agent_${randomId}`,
+        zone: selected.zone,
+        affiliation: "agent",
+        affiliation_label: "🤝 สแกน QR เข้ามาใหม่",
+        submitted_at: "เมื่อสักครู่"
+      };
+
+      lobbyData.pending.unshift(newApplicant);
+      saveLobbyData();
+      renderLobby();
+    }
+
+    function refreshLobbyData() {
+      lobbyData = JSON.parse(localStorage.getItem('siwasup_lobby_data')) || DEFAULT_DATA;
+      renderLobby();
+    }
+
+    // Listen to changes from applicant tab
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'siwasup_lobby_data') {
+        lobbyData = JSON.parse(e.newValue);
+        renderLobby();
+      }
+    });
+
+    try {
+      const bc = new BroadcastChannel('siwasup_lobby_channel');
+      bc.onmessage = (msg) => {
+        if (msg.data && msg.data.type === 'NEW_APPLICANT') {
+          lobbyData = JSON.parse(localStorage.getItem('siwasup_lobby_data')) || lobbyData;
+          renderLobby();
+        }
+      };
+    } catch(e) {}
+
+    // Initial render
+    renderLobby();
+  </script>
+</body>
+</html>
