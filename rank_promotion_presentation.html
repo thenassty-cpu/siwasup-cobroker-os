@@ -10,11 +10,13 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <style>
-    body {
+    html, body {
+      height: 100vh;
+      max-height: 100vh;
+      overflow: hidden;
       font-family: 'Prompt', sans-serif;
       background-color: #0c0a09;
       color: #fafaf9;
-      overflow-x: hidden;
     }
     .font-cinzel {
       font-family: 'Cinzel', serif;
@@ -28,7 +30,7 @@
       border: 1px solid rgba(212, 175, 55, 0.4);
     }
     .gold-glow {
-      box-shadow: 0 0 50px -10px rgba(212, 175, 55, 0.45), 0 0 100px -20px rgba(184, 134, 11, 0.3);
+      box-shadow: 0 0 35px -8px rgba(212, 175, 55, 0.4), 0 0 70px -15px rgba(184, 134, 11, 0.25);
     }
     .gold-halo {
       background: radial-gradient(circle at center, rgba(245, 215, 127, 0.35) 0%, rgba(212, 175, 55, 0.15) 45%, rgba(12, 10, 9, 0) 70%);
@@ -46,11 +48,11 @@
       to { transform: rotate(360deg); }
     }
     .float-emblem {
-      animation: floatBadge 4s ease-in-out infinite alternate;
+      animation: floatBadge 3.5s ease-in-out infinite alternate;
     }
     @keyframes floatBadge {
-      0% { transform: translateY(0px) scale(1); filter: drop-shadow(0 15px 25px rgba(212, 175, 55, 0.4)); }
-      100% { transform: translateY(-12px) scale(1.02); filter: drop-shadow(0 28px 45px rgba(212, 175, 55, 0.7)); }
+      0% { transform: translateY(0px) scale(1); filter: drop-shadow(0 10px 18px rgba(212, 175, 55, 0.45)); }
+      100% { transform: translateY(-8px) scale(1.03); filter: drop-shadow(0 20px 30px rgba(212, 175, 55, 0.75)); }
     }
     .shimmer-sweep {
       position: relative;
@@ -66,302 +68,263 @@
       background: linear-gradient(
         60deg,
         transparent 35%,
-        rgba(255, 255, 255, 0.35) 50%,
+        rgba(255, 255, 255, 0.4) 50%,
         transparent 65%
       );
       transform: rotate(25deg);
-      animation: shimmerAnim 5s infinite;
+      animation: shimmerAnim 4s infinite;
     }
     @keyframes shimmerAnim {
       0% { transform: translateX(-100%) rotate(25deg); }
       30%, 100% { transform: translateX(100%) rotate(25deg); }
     }
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: #1c1917; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #78716c; border-radius: 9999px; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-black">
+<body class="h-screen max-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-black">
 
   <!-- Background Ambient Glow & Rotating Light Rays -->
   <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
     <div id="stage-rays-bg" class="absolute -top-[50%] -left-[50%] w-[200%] h-[200%] stage-rays opacity-70"></div>
-    <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] gold-halo rounded-full blur-2xl"></div>
-    <div class="absolute -top-32 -right-32 w-96 h-96 bg-[#8B0000]/25 rounded-full blur-3xl"></div>
-    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-[#C2A460]/20 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] gold-halo rounded-full blur-2xl"></div>
+    <div class="absolute -top-32 -right-32 w-80 h-80 bg-[#8B0000]/25 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-32 -left-32 w-80 h-80 bg-[#C2A460]/20 rounded-full blur-3xl"></div>
   </div>
 
-  <!-- Top Navigation & Stage Controls -->
-  <header class="relative z-20 px-4 sm:px-8 py-4 bg-stone-950/80 backdrop-blur-md border-b border-stone-800 flex items-center justify-between gap-4">
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E5C985] to-[#8A6A1F] p-0.5 shadow-lg shadow-amber-900/30">
-        <div class="w-full h-full bg-stone-950 rounded-[10px] flex items-center justify-center text-amber-300 font-bold text-lg">
+  <!-- 1. Top Navigation Bar (Compact Height ~48px) -->
+  <header class="relative z-20 px-3 sm:px-6 py-2 bg-stone-950/85 backdrop-blur-md border-b border-stone-800/80 flex items-center justify-between gap-3 shrink-0">
+    <div class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#E5C985] to-[#8A6A1F] p-0.5 shadow-md shadow-amber-900/30">
+        <div class="w-full h-full bg-stone-950 rounded-[6px] flex items-center justify-center text-amber-300 font-bold text-sm">
           ♛
         </div>
       </div>
       <div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs tracking-wider uppercase font-bold text-[#E5C985]">Siwasup Co-Broker OS</span>
-          <span class="px-2 py-0.2 rounded-full text-[10px] font-bold bg-[#8B0000] text-[#E5C985] border border-amber-500/30">Season 1 Launch</span>
+        <div class="flex items-center gap-1.5 leading-none">
+          <span class="text-[10px] tracking-wider uppercase font-bold text-[#E5C985]">Siwasup Co-Broker OS</span>
+          <span class="px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-[#8B0000] text-[#E5C985]">Season 1</span>
         </div>
-        <h1 class="text-base sm:text-lg font-extrabold text-white tracking-tight">
-          หอเกียรติยศ & พิธีเลื่อนระดับยศตัวแทน (Rank Promotion Ceremony)
+        <h1 class="text-xs sm:text-sm font-extrabold text-white tracking-tight mt-0.5">
+          พิธีเลื่อนระดับเกียรติยศตัวแทน (Rank Promotion Ceremony)
         </h1>
       </div>
     </div>
 
-    <!-- Quick Controller Bar -->
-    <div class="flex items-center gap-2">
-      <!-- Agent Selector -->
-      <div class="relative hidden md:block">
-        <select id="agent-select" onchange="selectAgent(this.value)" class="bg-stone-900 text-amber-200 text-xs font-semibold px-3 py-2 rounded-xl border border-stone-700 outline-none focus:border-amber-400 cursor-pointer">
-          <option value="TON">TON - ต้น (คุณต้น NASSTY)</option>
-          <option value="S90">S90 - แบงค์ (คุณแบงค์)</option>
-          <option value="S02">S02 - เป้ (คุณกรกฎ)</option>
-          <option value="S03">S03 - กอล์ฟ (คุณพศวัฒพงศ์)</option>
-          <option value="S05">S05 - เจื้อย (คุณจุฑารัชร์)</option>
-          <option value="S10">S10 - ลินดา (คุณศิวาภรณ์)</option>
-          <option value="S12">S12 - มล (คุณสุมน)</option>
-          <option value="S126">S126 - แอนนี่ (คุณแอนนี่)</option>
-        </select>
-      </div>
+    <!-- Controls -->
+    <div class="flex items-center gap-1.5 text-xs">
+      <!-- Agent Dropdown -->
+      <select id="agent-select" onchange="selectAgent(this.value)" class="bg-stone-900 text-amber-200 text-[11px] font-semibold px-2.5 py-1 rounded-lg border border-stone-700 outline-none focus:border-amber-400 cursor-pointer">
+        <option value="TON">TON - ต้น [NASSTY]</option>
+        <option value="S90">S90 - แบงค์ (ธนภัทร)</option>
+        <option value="S02">S02 - เป้ (กรกฎ)</option>
+        <option value="S03">S03 - กอล์ฟ</option>
+        <option value="S05">S05 - เจื้อย</option>
+        <option value="S10">S10 - ลินดา</option>
+        <option value="S12">S12 - มล</option>
+        <option value="S126">S126 - แอนนี่</option>
+      </select>
 
       <!-- Sound Toggle -->
-      <button onclick="toggleSound()" id="sound-btn" class="px-3 py-2 rounded-xl bg-stone-900 hover:bg-stone-800 text-amber-300 text-xs font-semibold border border-stone-700 transition flex items-center gap-1.5" title="เปิด/ปิดเสียงเอฟเฟกต์">
-        <i data-lucide="volume-2" class="w-4 h-4"></i>
-        <span class="hidden sm:inline">เปิดเสียง</span>
+      <button onclick="toggleSound()" id="sound-btn" class="px-2 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-700 text-[11px] flex items-center gap-1" title="เปิด/ปิดเสียง">
+        <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+        <span class="hidden sm:inline">เสียง</span>
       </button>
 
-      <!-- Fullscreen Button -->
-      <button onclick="toggleFullScreen()" class="px-3 py-2 rounded-xl bg-stone-900 hover:bg-stone-800 text-amber-300 text-xs font-semibold border border-stone-700 transition flex items-center gap-1.5" title="เปิดเต็มจอพรีเซนต์ (F)">
-        <i data-lucide="maximize" class="w-4 h-4"></i>
-        <span class="hidden sm:inline">เต็มจอ Meet</span>
+      <!-- Fullscreen Toggle -->
+      <button onclick="toggleFullScreen()" class="px-2 py-1 rounded-lg bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-700 text-[11px] flex items-center gap-1" title="เต็มจอ (F)">
+        <i data-lucide="maximize" class="w-3.5 h-3.5"></i>
+        <span class="hidden sm:inline">เต็มจอ</span>
       </button>
 
-      <a href="catalog.html" class="px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-bold border border-amber-500/40 transition flex items-center gap-1">
-        <span>← กลับคลังทรัพย์</span>
+      <a href="catalog.html" class="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold border border-amber-500/40 text-[11px] flex items-center gap-1">
+        <span>← คลังบ้าน</span>
       </a>
     </div>
   </header>
 
-  <!-- Main Presentation Stage -->
-  <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-4 py-6 max-w-6xl mx-auto w-full">
-
-    <!-- Ceremony Stage Card -->
-    <div id="ceremony-card" class="relative w-full bg-gradient-to-b from-stone-900/90 via-stone-950/95 to-black rounded-3xl gold-border gold-glow p-6 sm:p-10 text-center overflow-hidden transition-all duration-700">
+  <!-- 2. Main Stage Card (Strictly Zero-Scroll, Auto-Fits Viewport) -->
+  <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-3 py-1 sm:py-2 overflow-hidden min-h-0">
+    <div id="ceremony-card" class="relative w-full max-w-4xl bg-gradient-to-b from-stone-900/95 via-stone-950/95 to-black rounded-2xl gold-border gold-glow p-3.5 sm:p-5 text-center overflow-hidden flex flex-col justify-between">
       
-      <!-- Top Promotion Status Banner -->
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-400/40 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-widest shadow-inner mb-6">
-        <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
-        <span id="ceremony-badge-tag">OFFICIAL RANK UPGRADE</span>
-        <span class="text-stone-500">•</span>
-        <span id="ceremony-season-tag" class="text-amber-200">SEASON 1</span>
-      </div>
-
-      <!-- Agent Greeting & Announcement -->
-      <div class="space-y-2 mb-8">
-        <div class="text-stone-400 text-xs sm:text-sm font-medium tracking-wide">
-          ขอแสดงความยินดีกับเกียรติยศใหม่ของ
+      <!-- Top Tag & Member Name (Compact) -->
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-500/10 border border-amber-400/40 text-amber-300 text-[10px] sm:text-xs font-bold uppercase tracking-wider">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
+          <span>OFFICIAL RANK UPGRADE</span>
+          <span class="text-stone-500">•</span>
+          <span class="text-amber-200">SEASON 1</span>
         </div>
-        <h2 id="agent-display-name" class="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight flex items-center justify-center gap-3">
-          <span>คุณต้น (NASSTY)</span>
-          <span id="agent-code-pill" class="text-xs sm:text-sm px-2.5 py-1 rounded-full bg-stone-800 text-amber-300 font-mono border border-amber-400/30">#TON</span>
-        </h2>
-        <p id="agent-congrats-quote" class="text-xs sm:text-sm text-stone-300 italic max-w-xl mx-auto pt-1 text-amber-200/90">
-          “สายตาเฉียบคม บินสูง มองกว้าง ผู้นำฝูงแห่งศิวาทรัพย์”
-        </p>
+
+        <div class="flex items-center justify-center gap-2 pt-0.5">
+          <span class="text-stone-400 text-xs sm:text-sm font-medium">เกียรติยศใหม่ของ:</span>
+          <h2 id="agent-display-name" class="text-lg sm:text-2xl font-black text-white tracking-tight flex items-center gap-1.5">
+            <span>คุณต้น (NASSTY)</span>
+            <span id="agent-code-pill" class="text-[10px] px-2 py-0.2 rounded-full bg-stone-800 text-amber-300 font-mono border border-amber-400/30">#TON</span>
+          </h2>
+        </div>
       </div>
 
-      <!-- 🌟 CENTERPIECE: 3D MASTER GOLD EMBLEM SHOWCASE 🌟 -->
-      <div class="relative my-4 flex flex-col items-center justify-center">
-        <!-- Glow Backlight Behind Emblem -->
-        <div id="emblem-halo-light" class="absolute w-64 h-64 sm:w-80 sm:h-80 rounded-full bg-gradient-to-r from-amber-400/40 to-yellow-600/30 blur-3xl pointer-events-none transition-all duration-1000"></div>
+      <!-- 🌟 CENTERPIECE: 3D MASTER GOLD EMBLEM (Scales gracefully) 🌟 -->
+      <div class="relative my-2 sm:my-3 flex flex-col items-center justify-center">
+        <!-- Glow Light Behind Badge -->
+        <div class="absolute w-44 h-44 sm:w-56 sm:h-56 rounded-full bg-gradient-to-r from-amber-400/35 to-yellow-600/25 blur-2xl pointer-events-none"></div>
 
-        <!-- The 3D Floating Gold Emblem Image -->
-        <div class="relative w-48 h-48 sm:w-64 sm:h-64 lg:w-72 lg:h-72 float-emblem cursor-pointer group" onclick="celebrateRankPromotion()">
-          <img id="emblem-img" src="assets/characters/badge_eagle.png" alt="Gold Badge Emblem" class="w-full h-full object-contain filter drop-shadow-[0_20px_35px_rgba(212,175,55,0.6)] transition-transform duration-500 group-hover:scale-105">
+        <!-- The Floating 3D Gold Badge -->
+        <div class="relative w-28 h-28 sm:w-36 sm:h-36 lg:w-40 lg:h-40 float-emblem cursor-pointer group" onclick="celebrateRankPromotion()" title="คลิกเพื่อฉลอง">
+          <img id="emblem-img" src="assets/characters/badge_eagle.png" alt="Gold Badge Emblem" class="w-full h-full object-contain filter drop-shadow-[0_12px_22px_rgba(212,175,55,0.6)] transition-transform duration-500 group-hover:scale-105">
           <div class="absolute inset-0 rounded-full shimmer-sweep opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
         </div>
 
-        <!-- Tier & Archetype Name -->
-        <div class="mt-4 space-y-1">
-          <div class="flex items-center justify-center gap-2">
-            <span id="tier-icon-big" class="text-2xl sm:text-3xl">🦅</span>
-            <h3 id="tier-name-big" class="text-2xl sm:text-4xl font-extrabold font-cinzel gold-gradient-text tracking-wider uppercase">
+        <!-- Tier & Archetype Title -->
+        <div class="mt-1.5 space-y-0.5">
+          <div class="flex items-center justify-center gap-1.5">
+            <span id="tier-icon-big" class="text-lg sm:text-xl">🦅</span>
+            <h3 id="tier-name-big" class="text-lg sm:text-2xl font-extrabold font-cinzel gold-gradient-text tracking-wide uppercase leading-tight">
               Eagle (พญาอินทรี)
             </h3>
           </div>
-          <div id="tier-role-tag" class="text-xs sm:text-sm font-bold text-amber-400 tracking-wide">
+          <div id="tier-role-tag" class="text-[10.5px] sm:text-xs font-bold text-amber-400 tracking-wider">
             ★ SUPER STAR • DIAMOND MASTER TIER
           </div>
+          <p id="agent-congrats-quote" class="text-[10px] sm:text-xs text-amber-200/80 italic max-w-lg mx-auto pt-0.5 truncate">
+            “สายตาเฉียบคม บินสูง มองกว้าง ผู้นำฝูงแห่งศิวาทรัพย์”
+          </p>
         </div>
       </div>
 
-      <!-- Point Transition Progress Meter -->
-      <div class="max-w-md mx-auto my-6 bg-stone-950/80 p-4 rounded-2xl border border-stone-800 text-left space-y-2">
-        <div class="flex items-center justify-between text-xs">
+      <!-- Point Meter & Progress Bar (Thin & Compact) -->
+      <div class="max-w-md mx-auto w-full bg-stone-950/80 px-3.5 py-2 rounded-xl border border-stone-800 text-left space-y-1 mb-2">
+        <div class="flex items-center justify-between text-[11px]">
           <span class="text-stone-400">สถานะคะแนนสะสมจริง:</span>
           <span class="font-bold text-amber-300 font-mono"><span id="points-current">1,020</span> / 1,000 แต้ม</span>
         </div>
-        <div class="w-full h-3 bg-stone-800 rounded-full overflow-hidden p-0.5 border border-stone-700">
-          <div id="points-bar" class="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-300 transition-all duration-1000 w-full shadow-sm"></div>
+        <div class="w-full h-2 bg-stone-800 rounded-full overflow-hidden p-0.5 border border-stone-700">
+          <div id="points-bar" class="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-300 w-full shadow-xs"></div>
         </div>
-        <div class="flex items-center justify-between text-[11px] text-stone-400">
+        <div class="flex items-center justify-between text-[10px] text-stone-400">
           <span>ยศเดิม: <strong id="tier-prev-label" class="text-stone-300">Gold Agent</strong></span>
-          <span class="text-emerald-400 font-bold flex items-center gap-1">
-            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+          <span class="text-emerald-400 font-bold flex items-center gap-0.5">
+            <i data-lucide="check-circle" class="w-3 h-3"></i>
             <span>ผ่านเกณฑ์เลื่อนยศอัตโนมัติ (+100%)</span>
           </span>
         </div>
       </div>
 
-      <!-- Newly Unlocked Privileges (Perks) Grid -->
-      <div class="max-w-2xl mx-auto my-6 grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
-        <div class="bg-stone-900/90 p-3.5 rounded-xl border border-stone-800 space-y-1 hover:border-amber-500/40 transition">
-          <div class="flex items-center gap-2 text-amber-400 font-bold text-xs">
-            <i data-lucide="crown" class="w-4 h-4 text-amber-400"></i>
+      <!-- Privileges Strip (3 compact pills side by side) -->
+      <div class="max-w-xl mx-auto w-full grid grid-cols-3 gap-2 text-left mb-2.5">
+        <div class="bg-stone-900/80 px-2.5 py-1.5 rounded-lg border border-stone-800 text-[10px] leading-tight">
+          <div class="text-amber-400 font-bold flex items-center gap-1">
+            <i data-lucide="crown" class="w-3 h-3"></i>
             <span>First Right ล็อกทรัพย์</span>
           </div>
-          <p class="text-[11px] text-stone-300 leading-relaxed">
-            สิทธิ์เห็น Hot Deals และล็อกคิวเสนอลูกค้าก่อนใคร 24 ชม.
-          </p>
+          <span class="text-stone-400 text-[9px]">จองดีลก่อนใคร 24 ชม.</span>
         </div>
 
-        <div class="bg-stone-900/90 p-3.5 rounded-xl border border-stone-800 space-y-1 hover:border-amber-500/40 transition">
-          <div class="flex items-center gap-2 text-amber-400 font-bold text-xs">
-            <i data-lucide="percent" class="w-4 h-4 text-amber-400"></i>
-            <span>ค่าคอมมิชชั่น 3-5%</span>
+        <div class="bg-stone-900/80 px-2.5 py-1.5 rounded-lg border border-stone-800 text-[10px] leading-tight">
+          <div class="text-amber-400 font-bold flex items-center gap-1">
+            <i data-lucide="percent" class="w-3 h-3"></i>
+            <span>คอมมิชชั่น 3-5%</span>
           </div>
-          <p class="text-[11px] text-stone-300 leading-relaxed">
-            รับผลตอบแทนสูงสุดเต็มอัตรา พร้อม Overriding Bonus ประจำรอบ
-          </p>
+          <span class="text-stone-400 text-[9px]">รับเต็มอัตรา + Overriding</span>
         </div>
 
-        <div class="bg-stone-900/90 p-3.5 rounded-xl border border-stone-800 space-y-1 hover:border-amber-500/40 transition">
-          <div class="flex items-center gap-2 text-amber-400 font-bold text-xs">
-            <i data-lucide="shield-check" class="w-4 h-4 text-amber-400"></i>
+        <div class="bg-stone-900/80 px-2.5 py-1.5 rounded-lg border border-stone-800 text-[10px] leading-tight">
+          <div class="text-amber-400 font-bold flex items-center gap-1">
+            <i data-lucide="shield-check" class="w-3 h-3"></i>
             <span>ตราเกียรติยศ 3D</span>
           </div>
-          <p class="text-[11px] text-stone-300 leading-relaxed">
-            ประทับตรา Master Crest บนโปรไฟล์ และนามบัตรดิจิทัลทางการ
-          </p>
+          <span class="text-stone-400 text-[9px]">ประทับตรา Master Crest</span>
         </div>
       </div>
 
-      <!-- Big Ceremony Trigger Action Button -->
-      <div class="pt-4 flex flex-wrap items-center justify-center gap-3">
-        <button onclick="celebrateRankPromotion()" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#F5D77F] via-[#D4AF37] to-[#AA7C11] hover:brightness-110 text-stone-950 font-extrabold text-sm sm:text-base shadow-xl shadow-amber-900/40 flex items-center gap-2.5 active:scale-95 transition-all cursor-pointer">
-          <i data-lucide="sparkles" class="w-5 h-5"></i>
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-center gap-2">
+        <button onclick="celebrateRankPromotion()" class="px-5 py-2 rounded-xl bg-gradient-to-r from-[#F5D77F] via-[#D4AF37] to-[#AA7C11] hover:brightness-110 text-stone-950 font-extrabold text-xs shadow-lg shadow-amber-900/30 flex items-center gap-1.5 active:scale-95 transition-all cursor-pointer">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
           <span>ฉายพิธีเลื่อนขั้น (Sound & Gold Confetti)</span>
         </button>
 
-        <button onclick="openTurnaroundModal()" class="px-5 py-3.5 rounded-2xl bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-700 font-bold text-xs sm:text-sm flex items-center gap-2 transition active:scale-95 cursor-pointer">
-          <i data-lucide="rotate-cw" class="w-4 h-4"></i>
-          <span>ดูโมเดล 3D รอบตัว 4 มุม</span>
+        <button onclick="openTurnaroundModal()" class="px-3.5 py-2 rounded-xl bg-stone-900 hover:bg-stone-800 text-amber-300 border border-stone-700 font-bold text-xs flex items-center gap-1 transition active:scale-95 cursor-pointer">
+          <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i>
+          <span>โมเดล 3D รอบตัว</span>
         </button>
       </div>
 
     </div>
+  </main>
 
-    <!-- Quick Switcher Tabs for 6 Sovereign Ranks / Archetypes -->
-    <div class="mt-8 w-full max-w-4xl space-y-3 text-center">
-      <div class="text-xs font-bold text-stone-400 uppercase tracking-wider flex items-center justify-center gap-2">
-        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-        <span>เลือกพรีเซนต์ระดับยศ & ตราเหรียญทองคำทั้ง 6 สาย</span>
-        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+  <!-- 3. Bottom 6-Rank Switcher Bar (With Safe Clearance for Google Meet Overlay: pb-12 sm:pb-14) -->
+  <section class="relative z-20 px-3 pt-2 pb-12 sm:pb-14 bg-stone-950/90 border-t border-stone-800/80 shrink-0">
+    <div class="max-w-2xl mx-auto space-y-1.5 text-center">
+      <div class="text-[10px] font-bold text-stone-400 uppercase tracking-wider flex items-center justify-center gap-1.5">
+        <span class="w-1 h-1 rounded-full bg-amber-400"></span>
+        <span>เลือกระดับยศเพื่อพรีเซนต์ (คลิกสลับตรา 3D ทันที)</span>
+        <span class="w-1 h-1 rounded-full bg-amber-400"></span>
       </div>
 
-      <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
+      <div class="grid grid-cols-6 gap-1.5">
         <!-- 1. Bear -->
-        <button onclick="setRank('bear')" id="tab-bear" class="rank-tab p-2.5 rounded-2xl bg-stone-900/80 hover:bg-stone-800 border border-stone-800 text-stone-300 text-xs font-bold transition flex flex-col items-center gap-1.5 cursor-pointer">
-          <img src="assets/characters/badge_bear.png" class="w-10 h-10 object-contain drop-shadow" alt="Bear">
-          <div class="leading-tight">
-            <div>หมีจำศีล</div>
-            <div class="text-[9.5px] text-stone-500 font-normal">Trainee</div>
-          </div>
+        <button onclick="setRank('bear')" id="tab-bear" class="rank-tab p-1 rounded-xl bg-stone-900/80 hover:bg-stone-800 border border-stone-800 text-stone-300 text-[10px] font-bold transition flex flex-col items-center gap-0.5 cursor-pointer">
+          <img src="assets/characters/badge_bear.png" class="w-7 h-7 sm:w-8 sm:h-8 object-contain drop-shadow" alt="Bear">
+          <div class="leading-none">หมีจำศีล</div>
+          <div class="text-[8.5px] text-stone-500 font-normal">Trainee</div>
         </button>
 
         <!-- 2. Wolf -->
-        <button onclick="setRank('wolf')" id="tab-wolf" class="rank-tab p-2.5 rounded-2xl bg-stone-900/80 hover:bg-stone-800 border border-stone-800 text-stone-300 text-xs font-bold transition flex flex-col items-center gap-1.5 cursor-pointer">
-          <img src="assets/characters/badge_wolf.png" class="w-10 h-10 object-contain drop-shadow" alt="Wolf">
-          <div class="leading-tight">
-            <div>หมาป่าพิทักษ์</div>
-            <div class="text-[9.5px] text-stone-500 font-normal">Active (100)</div>
-          </div>
+        <button onclick="setRank('wolf')" id="tab-wolf" class="rank-tab p-1 rounded-xl bg-stone-900/80 hover:bg-stone-800 border border-stone-800 text-stone-300 text-[10px] font-bold transition flex flex-col items-center gap-0.5 cursor-pointer">
+          <img src="assets/characters/badge_wolf.png" class="w-7 h-7 sm:w-8 sm:h-8 object-contain drop-shadow" alt="Wolf">
+          <div class="leading-none">หมาป่า</div>
+          <div class="text-[8.5px] text-stone-500 font-normal">Active (100)</div>
         </button>
 
         <!-- 3. Lion -->
-        <button onclick="setRank('lion')" id="tab-lion" class="rank-tab p-2.5 rounded-2xl bg-stone-900/80 hover:bg-stone-800 border border-stone-800 text-stone-300 text-xs font-bold transition flex flex-col items-center gap-1.5 cursor-pointer">
-          <img src="assets/characters/badge_lion.png" class="w-10 h-10 object-contain drop-shadow" alt="Lion">
-          <div class="leading-tight">
-            <div>สิงห์สุขุม</div>
-            <div class="text-[9.5px] text-stone-500 font-normal">Silver (300)</div>
-          </div>
+        <button onclick="setRank('lion')" id="tab-lion" class="rank-tab p-1 rounded-xl bg-stone-900/80 hover:bg-stone-800 border border-stone-800 text-stone-300 text-[10px] font-bold transition flex flex-col items-center gap-0.5 cursor-pointer">
+          <img src="assets/characters/badge_lion.png" class="w-7 h-7 sm:w-8 sm:h-8 object-contain drop-shadow" alt="Lion">
+          <div class="leading-none">สิงห์สุขุม</div>
+          <div class="text-[8.5px] text-stone-500 font-normal">Silver (300)</div>
         </button>
 
         <!-- 4. Falcon -->
-        <button onclick="setRank('falcon')" id="tab-falcon" class="rank-tab p-2.5 rounded-2xl bg-stone-900/80 hover:bg-stone-800 border border-stone-800 text-stone-300 text-xs font-bold transition flex flex-col items-center gap-1.5 cursor-pointer">
-          <img src="assets/characters/badge_falcon.png" class="w-10 h-10 object-contain drop-shadow" alt="Falcon">
-          <div class="leading-tight">
-            <div>เหยี่ยวเวหา</div>
-            <div class="text-[9.5px] text-stone-500 font-normal">Gold (600)</div>
-          </div>
+        <button onclick="setRank('falcon')" id="tab-falcon" class="rank-tab p-1 rounded-xl bg-stone-900/80 hover:bg-stone-800 border border-stone-800 text-stone-300 text-[10px] font-bold transition flex flex-col items-center gap-0.5 cursor-pointer">
+          <img src="assets/characters/badge_falcon.png" class="w-7 h-7 sm:w-8 sm:h-8 object-contain drop-shadow" alt="Falcon">
+          <div class="leading-none">เหยี่ยว</div>
+          <div class="text-[8.5px] text-stone-500 font-normal">Gold (600)</div>
         </button>
 
         <!-- 5. Eagle -->
-        <button onclick="setRank('eagle')" id="tab-eagle" class="rank-tab p-2.5 rounded-2xl bg-amber-500/20 border-2 border-amber-400 text-amber-200 text-xs font-bold transition flex flex-col items-center gap-1.5 cursor-pointer shadow-lg shadow-amber-950/40">
-          <img src="assets/characters/badge_eagle.png" class="w-10 h-10 object-contain drop-shadow" alt="Eagle">
-          <div class="leading-tight">
-            <div>พญาอินทรี</div>
-            <div class="text-[9.5px] text-amber-400 font-normal">Diamond (1,000)</div>
-          </div>
+        <button onclick="setRank('eagle')" id="tab-eagle" class="rank-tab p-1 rounded-xl bg-amber-500/20 border-2 border-amber-400 text-amber-200 text-[10px] font-bold transition flex flex-col items-center gap-0.5 cursor-pointer shadow-md shadow-amber-950/40">
+          <img src="assets/characters/badge_eagle.png" class="w-7 h-7 sm:w-8 sm:h-8 object-contain drop-shadow" alt="Eagle">
+          <div class="leading-none">พญาอินทรี</div>
+          <div class="text-[8.5px] text-amber-400 font-normal">Diamond</div>
         </button>
 
         <!-- 6. Gryphon -->
-        <button onclick="setRank('gryphon')" id="tab-gryphon" class="rank-tab p-2.5 rounded-2xl bg-stone-900/80 hover:bg-stone-800 border border-stone-800 text-stone-300 text-xs font-bold transition flex flex-col items-center gap-1.5 cursor-pointer">
-          <img src="assets/characters/badge_gryphon.png" class="w-10 h-10 object-contain drop-shadow" alt="Gryphon">
-          <div class="leading-tight">
-            <div>กริฟฟอน</div>
-            <div class="text-[9.5px] text-amber-400 font-normal">Mythic Top 3</div>
-          </div>
+        <button onclick="setRank('gryphon')" id="tab-gryphon" class="rank-tab p-1 rounded-xl bg-stone-900/80 hover:bg-stone-800 border border-stone-800 text-stone-300 text-[10px] font-bold transition flex flex-col items-center gap-0.5 cursor-pointer">
+          <img src="assets/characters/badge_gryphon.png" class="w-7 h-7 sm:w-8 sm:h-8 object-contain drop-shadow" alt="Gryphon">
+          <div class="leading-none">กริฟฟอน</div>
+          <div class="text-[8.5px] text-amber-400 font-normal">Mythic Top 3</div>
         </button>
       </div>
     </div>
-
-  </main>
+  </section>
 
   <!-- 3D Turnaround Sheet Modal (4 มุมมองรอบตัว) -->
   <div id="turnaround-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 hidden" onclick="if(event.target === this) closeTurnaroundModal()">
-    <div class="relative max-w-4xl w-full bg-stone-950 rounded-3xl border border-stone-800 p-5 shadow-2xl space-y-4">
-      <div class="flex items-center justify-between pb-3 border-b border-stone-800">
+    <div class="relative max-w-3xl w-full bg-stone-950 rounded-2xl border border-stone-800 p-4 shadow-2xl space-y-3">
+      <div class="flex items-center justify-between pb-2 border-b border-stone-800">
         <div class="flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full bg-amber-400"></span>
-          <h3 id="modal-turnaround-title" class="font-bold text-white text-base">โมเดล 3D รอบตัว 4 ทิศ (Turnaround 3D)</h3>
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+          <h3 id="modal-turnaround-title" class="font-bold text-white text-sm">โมเดล 3D รอบตัว 4 ทิศ (Turnaround 3D)</h3>
         </div>
-        <button onclick="closeTurnaroundModal()" class="w-8 h-8 rounded-full bg-stone-800 text-stone-300 hover:text-white flex items-center justify-center">✕</button>
+        <button onclick="closeTurnaroundModal()" class="w-7 h-7 rounded-full bg-stone-800 text-stone-300 hover:text-white flex items-center justify-center text-xs">✕</button>
       </div>
-      <div class="bg-black/60 rounded-2xl p-2 border border-stone-800/80 flex items-center justify-center">
-        <img id="modal-turnaround-img" src="assets/characters/turnaround_eagle.png" alt="3D Turnaround Sheet" class="w-full max-h-[70vh] object-contain rounded-xl">
+      <div class="bg-black/60 rounded-xl p-2 border border-stone-800/80 flex items-center justify-center">
+        <img id="modal-turnaround-img" src="assets/characters/turnaround_eagle.png" alt="3D Turnaround Sheet" class="w-full max-h-[60vh] object-contain rounded-lg">
       </div>
-      <div class="text-center text-xs text-stone-400">
+      <div class="text-center text-[11px] text-stone-400">
         มุมมองรอบตัว 0° / 45° / 90° / 180° มาตรฐาน Sovereign Mascot ศิวาทรัพย์
       </div>
     </div>
   </div>
-
-  <!-- Bottom Brand Footer -->
-  <footer class="relative z-10 py-4 px-6 text-center text-xs text-stone-500 border-t border-stone-900 bg-stone-950/60 backdrop-blur-xs flex flex-wrap items-center justify-between gap-2 max-w-7xl mx-auto w-full">
-    <div>
-      © 2026 Siwasup Asset Co., Ltd. • Sovereign Rank Promotion Engine
-    </div>
-    <div class="flex items-center gap-4 text-stone-400">
-      <span>กด Spacebar หรือคลิกที่เหรียญเพื่อฉลอง</span>
-      <span>•</span>
-      <a href="welcome_landing.html" class="hover:text-amber-300 underline">หน้าต้อนรับสมาชิก</a>
-      <span>•</span>
-      <a href="catalog.html" class="hover:text-amber-300 underline">แคตาล็อกบ้าน</a>
-    </div>
-  </footer>
 
   <!-- Script: Promotion Engine, Sound Synthesizer & Rank Data -->
   <script>
@@ -378,8 +341,7 @@
         turnaroundImg: 'assets/characters/turnaround_bear.png',
         points: 40,
         reqPoints: 100,
-        prevTier: 'ผู้สมัครใหม่',
-        haloColor: 'from-slate-500/30 to-stone-700/20'
+        prevTier: 'ผู้สมัครใหม่'
       },
       wolf: {
         id: 'wolf',
@@ -391,8 +353,7 @@
         turnaroundImg: 'assets/characters/turnaround_wolf.png',
         points: 150,
         reqPoints: 300,
-        prevTier: 'Trainee',
-        haloColor: 'from-blue-500/30 to-indigo-700/20'
+        prevTier: 'Trainee'
       },
       lion: {
         id: 'lion',
@@ -404,8 +365,7 @@
         turnaroundImg: 'assets/characters/turnaround_lion.png',
         points: 380,
         reqPoints: 600,
-        prevTier: 'Active Agent',
-        haloColor: 'from-amber-600/30 to-purple-800/20'
+        prevTier: 'Active Agent'
       },
       falcon: {
         id: 'falcon',
@@ -417,8 +377,7 @@
         turnaroundImg: 'assets/characters/turnaround_falcon.png',
         points: 650,
         reqPoints: 1000,
-        prevTier: 'Silver Agent',
-        haloColor: 'from-amber-400/35 to-yellow-600/25'
+        prevTier: 'Silver Agent'
       },
       eagle: {
         id: 'eagle',
@@ -430,8 +389,7 @@
         turnaroundImg: 'assets/characters/turnaround_eagle.png',
         points: 1020,
         reqPoints: 1000,
-        prevTier: 'Gold Agent',
-        haloColor: 'from-amber-300/40 to-yellow-500/30'
+        prevTier: 'Gold Agent'
       },
       gryphon: {
         id: 'gryphon',
@@ -443,15 +401,14 @@
         turnaroundImg: 'assets/characters/turnaround_gryphon.png',
         points: 2450,
         reqPoints: 2000,
-        prevTier: 'Diamond Master',
-        haloColor: 'from-amber-400/50 via-yellow-200/40 to-amber-700/30'
+        prevTier: 'Diamond Master'
       }
     };
 
     let currentRankKey = 'eagle';
     let isSoundEnabled = true;
 
-    // Web Audio Synthesizer for Cinematic Fanfare
+    // Web Audio Synthesizer
     let audioCtx = null;
     function playCelebrationChime() {
       if (!isSoundEnabled) return;
@@ -461,7 +418,6 @@
         if (audioCtx.state === 'suspended') audioCtx.resume();
 
         const now = audioCtx.currentTime;
-        // Chime Chord notes: C5, E5, G5, B5, C6 (Maj7 Fanfare)
         const notes = [523.25, 659.25, 783.99, 987.77, 1046.50, 1318.51];
         notes.forEach((freq, idx) => {
           const osc = audioCtx.createOscillator();
@@ -475,12 +431,10 @@
 
           osc.connect(gain);
           gain.connect(audioCtx.destination);
-
           osc.start(now + idx * 0.08);
           osc.stop(now + idx * 0.08 + 2.0);
         });
 
-        // Deep Bass Impact Thud
         const bassOsc = audioCtx.createOscillator();
         const bassGain = audioCtx.createGain();
         bassOsc.type = 'sine';
@@ -494,7 +448,7 @@
         bassOsc.stop(now + 0.8);
 
       } catch (e) {
-        console.warn('Audio synthesis not permitted or supported yet:', e);
+        console.warn('Audio synthesis warning:', e);
       }
     }
 
@@ -503,8 +457,8 @@
       const btn = document.getElementById('sound-btn');
       if (btn) {
         btn.innerHTML = isSoundEnabled
-          ? '<i data-lucide="volume-2" class="w-4 h-4"></i><span class="hidden sm:inline">เปิดเสียง</span>'
-          : '<i data-lucide="volume-x" class="w-4 h-4 text-stone-500"></i><span class="hidden sm:inline">ปิดเสียง</span>';
+          ? '<i data-lucide="volume-2" class="w-3.5 h-3.5"></i><span class="hidden sm:inline">เสียง</span>'
+          : '<i data-lucide="volume-x" class="w-3.5 h-3.5 text-stone-500"></i><span class="hidden sm:inline">ปิด</span>';
         if (window.lucide) lucide.createIcons();
       }
     }
@@ -514,16 +468,14 @@
       if (!rank) return;
       currentRankKey = key;
 
-      // Update Highlight Tabs
       document.querySelectorAll('.rank-tab').forEach(el => {
-        el.className = "rank-tab p-2.5 rounded-2xl bg-stone-900/80 hover:bg-stone-800 border border-stone-800 text-stone-300 text-xs font-bold transition flex flex-col items-center gap-1.5 cursor-pointer";
+        el.className = "rank-tab p-1 rounded-xl bg-stone-900/80 hover:bg-stone-800 border border-stone-800 text-stone-300 text-[10px] font-bold transition flex flex-col items-center gap-0.5 cursor-pointer";
       });
       const activeTab = document.getElementById(`tab-${key}`);
       if (activeTab) {
-        activeTab.className = "rank-tab p-2.5 rounded-2xl bg-amber-500/20 border-2 border-amber-400 text-amber-200 text-xs font-bold transition flex flex-col items-center gap-1.5 cursor-pointer shadow-lg shadow-amber-950/40 scale-105";
+        activeTab.className = "rank-tab p-1 rounded-xl bg-amber-500/20 border-2 border-amber-400 text-amber-200 text-[10px] font-bold transition flex flex-col items-center gap-0.5 cursor-pointer shadow-md shadow-amber-950/40 scale-105";
       }
 
-      // Update Centerpiece Display
       const img = document.getElementById('emblem-img');
       const title = document.getElementById('tier-name-big');
       const icon = document.getElementById('tier-icon-big');
@@ -540,80 +492,56 @@
       if (curPts) curPts.textContent = rank.points.toLocaleString();
       if (prevTier) prevTier.textContent = rank.prevTier;
 
-      // Update Modal Turnaround Image
       const mImg = document.getElementById('modal-turnaround-img');
       const mTitle = document.getElementById('modal-turnaround-title');
       if (mImg) mImg.src = rank.turnaroundImg;
       if (mTitle) mTitle.textContent = `โมเดล 3D รอบตัว 4 ทิศ: ${rank.name}`;
 
-      // Trigger Celebration
       celebrateRankPromotion();
     }
 
     function selectAgent(agentCode) {
       const nameEl = document.getElementById('agent-display-name');
-      const codePill = document.getElementById('agent-code-pill');
-
       const AGENT_NAMES = {
         'TON': 'คุณต้น (NASSTY)',
         'S90': 'คุณแบงค์ (ธนภัทร)',
         'S02': 'คุณเป้ (กรกฎ)',
-        'S03': 'คุณกอล์ฟ (พศวัฒพงศ์)',
-        'S05': 'คุณเจื้อย (จุฑารัชร์)',
-        'S10': 'คุณลินดา (ศิวาภรณ์)',
-        'S12': 'คุณมล (สุมน)',
-        'S126': 'คุณแอนนี่ (แอนนี่)'
+        'S03': 'คุณกอล์ฟ',
+        'S05': 'คุณเจื้อย',
+        'S10': 'คุณลินดา',
+        'S12': 'คุณมล',
+        'S126': 'คุณแอนนี่'
       };
 
-      if (nameEl) nameEl.innerHTML = `<span>${AGENT_NAMES[agentCode] || agentCode}</span> <span id="agent-code-pill" class="text-xs sm:text-sm px-2.5 py-1 rounded-full bg-stone-800 text-amber-300 font-mono border border-amber-400/30">#${agentCode}</span>`;
+      if (nameEl) nameEl.innerHTML = `<span>${AGENT_NAMES[agentCode] || agentCode}</span> <span id="agent-code-pill" class="text-[10px] px-2 py-0.2 rounded-full bg-stone-800 text-amber-300 font-mono border border-amber-400/30">#${agentCode}</span>`;
       celebrateRankPromotion();
     }
 
     function celebrateRankPromotion() {
-      // 1. Play Sound
       playCelebrationChime();
 
-      // 2. Animate Emblem Bounce
       const emblem = document.getElementById('emblem-img');
       if (emblem) {
         emblem.classList.remove('float-emblem');
-        emblem.style.transform = 'scale(0.85)';
+        emblem.style.transform = 'scale(0.88)';
         setTimeout(() => {
-          emblem.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
-          emblem.style.transform = 'scale(1.15)';
+          emblem.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+          emblem.style.transform = 'scale(1.12)';
           setTimeout(() => {
             emblem.style.transform = 'scale(1)';
             emblem.classList.add('float-emblem');
-          }, 600);
-        }, 50);
+          }, 500);
+        }, 40);
       }
 
-      // 3. Golden Confetti Fireworks
       if (window.confetti) {
-        // Gold / Amber Palette
         const goldColors = ['#FFE27D', '#FFD700', '#DAA520', '#B8860B', '#FFFDF0'];
         confetti({
-          particleCount: 80,
-          spread: 70,
-          origin: { y: 0.6 },
+          particleCount: 70,
+          spread: 65,
+          origin: { y: 0.55 },
           colors: goldColors
         });
-        setTimeout(() => {
-          confetti({
-            particleCount: 50,
-            angle: 60,
-            spread: 55,
-            origin: { x: 0 },
-            colors: goldColors
-          });
-          confetti({
-            particleCount: 50,
-            angle: 120,
-            spread: 55,
-            origin: { x: 1 },
-            colors: goldColors
-          });
-        }, 200);
       }
     }
 
@@ -635,7 +563,6 @@
       }
     }
 
-    // Keyboard Shortcuts
     document.addEventListener('keydown', (e) => {
       if (e.code === 'Space') {
         e.preventDefault();
@@ -647,9 +574,8 @@
       }
     });
 
-    // Auto-fire celebration on load
     window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(celebrateRankPromotion, 600);
+      setTimeout(celebrateRankPromotion, 500);
     });
   </script>
 </body>
