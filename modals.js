@@ -116,52 +116,70 @@
               <div id="agent-autocomplete-dropdown" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50 max-h-48 overflow-y-auto no-scrollbar py-1"></div>
             </div>
 
+                        <!-- Native System Share Button (1-Click Share to All Apps) -->
+            <button type="button" onclick="shareViaSystemNative()" class="w-full bg-gradient-to-r from-amber-600 to-[#8C734B] hover:from-amber-700 hover:to-[#735d3b] text-white font-bold py-2 px-3 rounded-xl shadow-xs text-xs flex items-center justify-center gap-2 active:scale-95 transition-all mb-1">
+              <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+              <span>📲 แชร์ด่วนผ่านแอปมือถือ (LINE, FB, IG, แชต)</span>
+            </button>
+
             <!-- Channel Links Header -->
             <div class="font-bold text-gray-700 text-[11px] flex justify-between items-center px-0.5 pt-0.5">
-              <span>กดคัดลอกลิงก์เฉพาะช่องทาง:</span>
-              <span class="text-[9px] text-gray-400">เลือกลิงก์ที่ต้องการ</span>
+              <span>เลือกช่องทางโปรโมท:</span>
+              <span class="text-[9px] text-gray-400">กดแชร์ตรงหรือก๊อปแคปชั่น</span>
             </div>
 
-            <!-- Channel 1: Facebook -->
-            <div class="flex items-center justify-between p-2 rounded-lg border border-blue-200 bg-blue-50/60 hover:bg-blue-50 transition-all">
-              <div class="flex items-center gap-2 min-w-0">
-                <span class="w-6 h-6 shrink-0 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-2xs">f</span>
-                <div class="truncate">
-                  <div class="font-bold text-blue-950 text-xs">Facebook (Marketplace / โพสต์)</div>
-                  <div class="text-[10px] text-blue-700 truncate">ดักจับ Lead จากโพสต์ & แคปชั่น FB</div>
-                </div>
-              </div>
-              <button onclick="copyChannelLink('facebook')" class="shrink-0 ml-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs active:scale-95 transition-all">
-                คัดลอกลิงก์
-              </button>
-            </div>
-
-            <!-- Channel 2: TikTok / Reels -->
-            <div class="flex items-center justify-between p-2 rounded-lg border border-gray-300 bg-gray-50 hover:bg-gray-100/70 transition-all">
-              <div class="flex items-center gap-2 min-w-0">
-                <span class="w-6 h-6 shrink-0 rounded-full bg-gray-900 text-white flex items-center justify-center font-bold text-xs shadow-2xs">♪</span>
-                <div class="truncate">
-                  <div class="font-bold text-gray-950 text-xs">TikTok / Reels / Shorts</div>
-                  <div class="text-[10px] text-gray-600 truncate">สำหรับแปะ Bio หรือใต้คอมเมนต์คลิป</div>
-                </div>
-              </div>
-              <button onclick="copyChannelLink('tiktok')" class="shrink-0 ml-2 bg-gray-900 hover:bg-black text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs active:scale-95 transition-all">
-                คัดลอกลิงก์
-              </button>
-            </div>
-
-            <!-- Channel 3: LINE -->
+            <!-- Channel 1: LINE -->
             <div class="flex items-center justify-between p-2 rounded-lg border border-emerald-200 bg-emerald-50/60 hover:bg-emerald-50 transition-all">
               <div class="flex items-center gap-2 min-w-0">
                 <span class="w-6 h-6 shrink-0 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs shadow-2xs">L</span>
                 <div class="truncate">
                   <div class="font-bold text-emerald-950 text-xs">LINE (แชตส่วนตัว / ส่งกลุ่ม)</div>
-                  <div class="text-[10px] text-emerald-700 truncate">ส่งต่อให้คนรู้จัก หรือกลุ่มนักลงทุน</div>
+                  <div class="text-[10px] text-emerald-700 truncate">เปิดส่งเข้า LINE ทันที หรือก๊อปแคปชั่น</div>
                 </div>
               </div>
-              <button onclick="copyChannelLink('line')" class="shrink-0 ml-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs active:scale-95 transition-all">
-                คัดลอกลิงก์
-              </button>
+              <div class="flex items-center gap-1.5 shrink-0 ml-2">
+                <button onclick="shareDirectToLine()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1 px-2.5 rounded-lg text-[11px] shadow-xs active:scale-95 transition-all flex items-center gap-1">
+                  <span>ส่ง LINE</span>
+                </button>
+                <button onclick="copyLineCaption()" title="คัดลอกข้อความพร้อมส่ง" class="bg-white hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-semibold py-1 px-2 rounded-lg text-[10px] shadow-2xs active:scale-95 transition-all">
+                  ก๊อปแคปชั่น
+                </button>
+              </div>
+            </div>
+
+            <!-- Channel 2: Facebook -->
+            <div class="flex items-center justify-between p-2 rounded-lg border border-blue-200 bg-blue-50/60 hover:bg-blue-50 transition-all">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-6 h-6 shrink-0 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-2xs">f</span>
+                <div class="truncate">
+                  <div class="font-bold text-blue-950 text-xs">Facebook (Marketplace / โพสต์)</div>
+                  <div class="text-[10px] text-blue-700 truncate">เปิดแชร์หน้าเว็บ หรือก๊อปโพสต์ขาย</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0 ml-2">
+                <button onclick="shareDirectToFacebook()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2.5 rounded-lg text-[11px] shadow-xs active:scale-95 transition-all flex items-center gap-1">
+                  <span>แชร์ FB</span>
+                </button>
+                <button onclick="copyFacebookPost()" title="คัดลอกโพสต์ขายพร้อมลง Marketplace" class="bg-white hover:bg-blue-100 text-blue-800 border border-blue-300 font-semibold py-1 px-2 rounded-lg text-[10px] shadow-2xs active:scale-95 transition-all">
+                  ก๊อปโพสต์ขาย
+                </button>
+              </div>
+            </div>
+
+            <!-- Channel 3: TikTok / Reels -->
+            <div class="flex items-center justify-between p-2 rounded-lg border border-gray-300 bg-gray-50 hover:bg-gray-100/70 transition-all">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-6 h-6 shrink-0 rounded-full bg-gray-900 text-white flex items-center justify-center font-bold text-xs shadow-2xs">♪</span>
+                <div class="truncate">
+                  <div class="font-bold text-gray-950 text-xs">TikTok / Reels / Shorts</div>
+                  <div class="text-[10px] text-gray-600 truncate">แคปชั่นสั้นกระชับ สำหรับแปะ Bio / คอมเมนต์</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0 ml-2">
+                <button onclick="copyTikTokBioCaption()" class="bg-gray-900 hover:bg-black text-white font-semibold py-1 px-2.5 rounded-lg text-[11px] shadow-xs active:scale-95 transition-all">
+                  ก๊อปแคปชั่น & Bio
+                </button>
+              </div>
             </div>
 
             <!-- Channel 4: General Web / Forum -->
@@ -173,9 +191,11 @@
                   <div class="text-[10px] text-gray-500 truncate">ลิงก์กลางสำหรับโพสต์ลงเว็บไซต์ทั่วไป</div>
                 </div>
               </div>
-              <button onclick="copyChannelLink('web')" class="shrink-0 ml-2 bg-gray-800 hover:bg-gray-900 text-white font-medium py-1 px-2.5 rounded text-[11px] shadow-xs active:scale-95 transition-all">
-                คัดลอกลิงก์
-              </button>
+              <div class="flex items-center gap-1.5 shrink-0 ml-2">
+                <button onclick="copyChannelLink('web')" class="bg-gray-800 hover:bg-gray-900 text-white font-medium py-1 px-2.5 rounded-lg text-[11px] shadow-xs active:scale-95 transition-all">
+                  คัดลอกลิงก์
+                </button>
+              </div>
             </div>
 
             <!-- Channel 5: QR Code Generator Action Row -->
@@ -184,6 +204,14 @@
                 <span class="icon-circle w-6 h-6 shrink-0 bg-amber-700 text-white"><i data-lucide="qr-code" class="w-3.5 h-3.5 stroke-[1.5]"></i></span>
                 <div class="truncate">
                   <div class="font-bold text-amber-950 text-xs">QR Code ป้ายหน้าบ้าน / นามบัตร</div>
+                  <div class="text-[10px] text-amber-700 truncate">สแกนป้ายแล้วล็อกค่าคอม 60 วัน</div>
+                </div>
+              </div>
+              <button onclick="toggleQrView()" class="shrink-0 ml-2 bg-neutral-900 hover:bg-neutral-800 text-white font-medium py-1 px-3 rounded-lg text-[11px] shadow-xs flex items-center gap-1 active:scale-95 transition-all">
+                <i data-lucide="scan-line" class="w-3 h-3"></i>
+                <span id="qr-toggle-text">เปิดดู QR</span>
+              </button>
+            </div>
                   <div class="text-[10px] text-amber-700 truncate">สแกนป้ายแล้วล็อกค่าคอม 60 วัน</div>
                 </div>
               </div>

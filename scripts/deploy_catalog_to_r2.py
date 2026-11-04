@@ -30,6 +30,13 @@ with open(SW_JS, 'rb') as f:
 status_sw = put_object_r2("sw.js", sw_bytes, "application/javascript; charset=utf-8")
 print(f"[OK] Uploaded sw.js! Status: {status_sw}")
 
+MODALS_JS = os.path.join(WEB_DIR, "modals.js")
+print("[*] Uploading modals.js to Cloudflare R2...")
+with open(MODALS_JS, 'rb') as f:
+    modals_bytes = f.read()
+status_modals = put_object_r2("modals.js", modals_bytes, "application/javascript; charset=utf-8")
+print(f"[OK] Uploaded modals.js! Status: {status_modals}")
+
 print("[*] Uploading catalog_index.json to Cloudflare R2...")
 with open(CATALOG_JSON, 'rb') as f:
     json_bytes = f.read()
