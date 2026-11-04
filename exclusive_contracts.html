@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>สัญญาปิดของฉัน (Exclusive Contract Hub) | Siwasup Co-Broker OS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans Thai', sans-serif;
+      background-color: #0d0f12;
+      color: #e2e8f0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .luxury-gold {
+      background: linear-gradient(135deg, #DFBA73 0%, #C5A059 50%, #9E7D3B 100%);
+    }
+    .text-gold {
+      color: #D4BA7A;
+    }
+    .glass-card {
+      background: rgba(22, 27, 34, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 186, 122, 0.15);
+    }
+    .glass-input {
+      background: rgba(13, 17, 23, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #f1f5f9;
+    }
+    .glass-input:focus {
+      border-color: #C5A059;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.2);
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="min-h-screen pb-24">
+
+  <!-- Top App Navigation -->
+  <header class="sticky top-0 z-40 bg-[#0d0f12]/90 backdrop-blur-md border-b border-[#2d3748] px-4 py-3">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="catalog.html" class="w-8 h-8 rounded-full bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        </a>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-[#D4BA7A] border border-amber-500/30 font-bold">
+              Exclusive Partner
+            </span>
+            <h1 class="text-sm sm:text-base font-extrabold text-white">สัญญาปิดของฉัน (Contract Hub)</h1>
+          </div>
+          <p class="text-[11px] text-slate-400">ระบบจัดการสัญญาแต่งตั้งตัวแทนขาย & Zero-Typing OCR</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="catalog.html" class="text-xs text-slate-400 hover:text-white font-medium hidden sm:inline">
+          กลับสู่แคตตาล็อก
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-3 sm:px-4 mt-4 space-y-4">
+
+    <!-- Agent Profile & Stats Strip -->
+    <div class="glass-card rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-600 to-amber-800 text-white font-black text-lg flex items-center justify-center shadow-lg border border-amber-400/30">
+          <span id="agent-avatar-text">AG</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span id="agent-name-display" class="font-bold text-white text-sm sm:text-base">คุณต้น (Ton)</span>
+            <span id="agent-ref-badge" class="font-mono text-xs text-[#D4BA7A] bg-amber-950/60 border border-amber-600/40 px-2 py-0.5 rounded">TON</span>
+          </div>
+          <div class="text-xs text-slate-400 mt-0.5">Senior Advisor • Young Design & Co-Broker Hub</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-2 text-center border-t sm:border-t-0 sm:border-l border-slate-700/60 pt-2 sm:pt-0 sm:pl-4">
+        <div>
+          <div id="stat-active-count" class="text-lg font-black text-white">0</div>
+          <div class="text-[10px] text-slate-400">สัญญา Active</div>
+        </div>
+        <div>
+          <div id="stat-expiring-count" class="text-lg font-black text-amber-400">0</div>
+          <div class="text-[10px] text-slate-400">ใกล้หมดอายุ</div>
+        </div>
+        <div>
+          <div id="stat-total-value" class="text-lg font-black text-emerald-400">0M</div>
+          <div class="text-[10px] text-slate-400">มูลค่าทรัพย์รวม</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode Selector Tabs -->
+    <div class="flex rounded-xl bg-slate-900/90 p-1 border border-slate-800">
+      <button onclick="switchTab('list')" id="tab-btn-list" class="flex-1 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-sm">
+        <i data-lucide="files" class="w-3.5 h-3.5"></i>
+        <span>รายการสัญญาของฉัน (<span id="tab-count-span">0</span>)</span>
+      </button>
+      <button onclick="switchTab('create')" id="tab-btn-create" class="flex-1 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition flex items-center justify-center gap-2">
+        <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+        <span>⚡ สัญญาใหม่ (Zero-Typing OCR)</span>
+      </button>
+    </div>
+
+    <!-- VIEW 1: MY CONTRACTS LIST -->
+    <section id="view-contracts-list" class="space-y-3">
+      <div id="contracts-empty-state" class="glass-card rounded-2xl p-8 text-center space-y-3">
+        <div class="w-12 h-12 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
+          <i data-lucide="file-plus" class="w-6 h-6"></i>
+        </div>
+        <div class="space-y-1">
+          <h3 class="font-bold text-white text-sm">ยังไม่มีสัญญาปิดในพอร์ตของคุณ</h3>
+          <p class="text-xs text-slate-400 max-w-sm mx-auto">
+            สร้างสัญญาแต่งตั้งตัวแทนขายฉบับแรกได้ง่ายๆ ภายใน 30 วินาที เพียงถ่ายรูปบัตรประชาชนและโฉนดที่ดินหน้างาน ระบบจะอ่านกรอกข้อมูลให้อัตโนมัติ
+          </p>
+        </div>
+        <button onclick="switchTab('create')" class="luxury-gold text-gray-950 font-bold px-4 py-2 rounded-xl text-xs shadow-md active:scale-95 transition">
+          + สร้างสัญญาปิดแรกของคุณ
+        </button>
+      </div>
+
+      <div id="contracts-container" class="space-y-3 hidden">
+        <!-- Injected via renderContractsList() -->
+      </div>
+    </section>
+
+    <!-- VIEW 2: ZERO-TYPING OCR CONTRACT CREATOR -->
+    <section id="view-create-contract" class="space-y-4 hidden">
+
+      <!-- Step 1: Camera & Image Upload Strip -->
+      <div class="glass-card rounded-2xl p-4 space-y-3 border border-amber-500/20">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-[#D4BA7A] text-xs font-black flex items-center justify-center">1</span>
+            <h2 class="text-xs sm:text-sm font-bold text-white">ถ่ายรูปหลักฐานหน้างาน (AI Zero-Typing)</h2>
+          </div>
+          <span class="text-[10px] text-amber-300 font-medium">⚡ Gemini Vision อ่าน 2 วินาทีเสร็จ</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <!-- Card 1: Thai ID Card -->
+          <div class="border border-dashed border-slate-700 hover:border-amber-500/50 rounded-xl p-3 bg-slate-900/40 text-center space-y-2 transition">
+            <div class="flex items-center justify-between text-xs text-slate-300 font-semibold">
+              <span class="flex items-center gap-1.5"><i data-lucide="id-card" class="w-3.5 h-3.5 text-amber-400"></i> บัตรประจำตัวประชาชน</span>
+              <span id="badge-id-status" class="text-[10px] text-slate-500">รอถ่ายรูป</span>
+            </div>
+            <div class="relative w-full h-28 bg-slate-950/60 rounded-lg flex items-center justify-center overflow-hidden border border-slate-800">
+              <img id="preview-id-img" class="w-full h-full object-contain hidden">
+              <div id="placeholder-id" class="text-center space-y-1">
+                <i data-lucide="camera" class="w-6 h-6 text-slate-500 mx-auto"></i>
+                <div class="text-[10px] text-slate-400">กดเพื่อเปิดกล้อง หรือเลือกรูปบัตร ปชช.</div>
+              </div>
+              <input type="file" id="input-id-file" accept="image/*" capture="environment" onchange="handleFileUpload(event, 'id_card')" class="absolute inset-0 opacity-0 cursor-pointer">
+            </div>
+            <button type="button" onclick="document.getElementById('input-id-file').click()" class="w-full py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition flex items-center justify-center gap-1">
+              <i data-lucide="upload" class="w-3 h-3"></i>
+              <span>เลือกภาพ / ถ่ายรูปบัตร</span>
+            </button>
+          </div>
+
+          <!-- Card 2: Title Deed -->
+          <div class="border border-dashed border-slate-700 hover:border-amber-500/50 rounded-xl p-3 bg-slate-900/40 text-center space-y-2 transition">
+            <div class="flex items-center justify-between text-xs text-slate-300 font-semibold">
+              <span class="flex items-center gap-1.5"><i data-lucide="map" class="w-3.5 h-3.5 text-emerald-400"></i> โฉนดที่ดิน (น.ส. 4 จ.)</span>
+              <span id="badge-deed-status" class="text-[10px] text-slate-500">รอถ่ายรูป</span>
+            </div>
+            <div class="relative w-full h-28 bg-slate-950/60 rounded-lg flex items-center justify-center overflow-hidden border border-slate-800">
+              <img id="preview-deed-img" class="w-full h-full object-contain hidden">
+              <div id="placeholder-deed" class="text-center space-y-1">
+                <i data-lucide="camera" class="w-6 h-6 text-slate-500 mx-auto"></i>
+                <div class="text-[10px] text-slate-400">กดเพื่อเปิดกล้อง หรือเลือกรูปโฉนด</div>
+              </div>
+              <input type="file" id="input-deed-file" accept="image/*" capture="environment" onchange="handleFileUpload(event, 'title_deed')" class="absolute inset-0 opacity-0 cursor-pointer">
+            </div>
+            <button type="button" onclick="document.getElementById('input-deed-file').click()" class="w-full py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition flex items-center justify-center gap-1">
+              <i data-lucide="upload" class="w-3 h-3"></i>
+              <span>เลือกภาพ / ถ่ายรูปโฉนด</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="ocr-scanning-spinner" class="hidden p-3 rounded-xl bg-amber-950/40 border border-amber-600/30 flex items-center gap-3">
+          <div class="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
+          <span class="text-xs text-amber-300 font-semibold">AI กำลังอ่านและกรอกเอกสารให้คุณโดยอัตโนมัติ...</span>
+        </div>
+      </div>
+
+      <!-- Step 2: Auto-Filled Contract Form -->
+      <form id="contract-form" onsubmit="saveContract(event)" class="glass-card rounded-2xl p-4 sm:p-5 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-700/60 pb-2.5">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-black flex items-center justify-center">2</span>
+            <h3 class="font-bold text-sm text-white">ข้อมูลในสัญญาแต่งตั้งตัวแทนขาย (Auto-Filled)</h3>
+          </div>
+          <span class="text-[11px] text-emerald-400 flex items-center gap-1 font-semibold">
+            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> ตรวจสอบ & ปรับแก้ได้
+          </span>
+        </div>
+
+        <!-- Section A: Owner Details -->
+        <div class="space-y-2">
+          <div class="text-xs font-bold text-[#D4BA7A] flex items-center gap-1.5">
+            <i data-lucide="user" class="w-3.5 h-3.5"></i>
+            <span>ฝ่ายผู้จะขาย / ผู้ให้สัญญา (เจ้าของกรรมสิทธิ์)</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="block text-slate-400 mb-1">ชื่อ-นามสกุล (ผู้ถือกรรมสิทธิ์):</label>
+              <input type="text" id="owner_name" required placeholder="นาย/นาง/นางสาว..." class="glass-input w-full p-2.5 rounded-xl font-semibold">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">เลขประจำตัวประชาชน (13 หลัก):</label>
+              <input type="text" id="owner_id_card" required maxlength="13" placeholder="1100000000000" class="glass-input w-full p-2.5 rounded-xl font-mono">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-slate-400 mb-1">ที่อยู่ตามบัตรประชาชน:</label>
+              <input type="text" id="owner_address" required placeholder="บ้านเลขที่ หมู่ ซอย ถนน แขวง/ตำบล เขต/อำเภอ จังหวัด" class="glass-input w-full p-2.5 rounded-xl">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">เบอร์โทรศัพท์ติดต่อเจ้าของ:</label>
+              <input type="tel" id="owner_phone" required placeholder="08xxxxxxxx" class="glass-input w-full p-2.5 rounded-xl font-mono">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">LINE ID เจ้าของ (ถ้ามี):</label>
+              <input type="text" id="owner_line_id" placeholder="ID LINE" class="glass-input w-full p-2.5 rounded-xl">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section B: Property & Title Deed Details -->
+        <div class="space-y-2 pt-2 border-t border-slate-800">
+          <div class="text-xs font-bold text-[#D4BA7A] flex items-center gap-1.5">
+            <i data-lucide="home" class="w-3.5 h-3.5"></i>
+            <span>รายละเอียดทรัพย์สิน & โฉนดที่ดิน</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+            <div>
+              <label class="block text-slate-400 mb-1">โฉนดที่ดินเลขที่:</label>
+              <input type="text" id="deed_no" required placeholder="เช่น 54231" class="glass-input w-full p-2.5 rounded-xl font-semibold">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">เลขที่ดิน:</label>
+              <input type="text" id="land_no" placeholder="เช่น 12" class="glass-input w-full p-2.5 rounded-xl">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">หน้าสำรวจ:</label>
+              <input type="text" id="survey_no" placeholder="เช่น 456" class="glass-input w-full p-2.5 rounded-xl">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">ระวาง:</label>
+              <input type="text" id="rawang_no" placeholder="เช่น 5136 I" class="glass-input w-full p-2.5 rounded-xl">
+            </div>
+
+            <div class="col-span-2">
+              <label class="block text-slate-400 mb-1">ตำบล/แขวง & อำเภอ/เขต:</label>
+              <input type="text" id="deed_location" required placeholder="เช่น ตลิ่งชัน • กรุงเทพมหานคร" class="glass-input w-full p-2.5 rounded-xl">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">เนื้อที่ดินรวม:</label>
+              <input type="text" id="land_size" required placeholder="เช่น 50 ตร.ว." class="glass-input w-full p-2.5 rounded-xl font-semibold">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">ประเภทสิ่งปลูกสร้าง:</label>
+              <select id="property_type" class="glass-input w-full p-2.5 rounded-xl font-semibold">
+                <option value="บ้านเดี่ยว">บ้านเดี่ยว</option>
+                <option value="ทาวน์โฮม">ทาวน์โฮม</option>
+                <option value="คอนโด">คอนโดมิเนียม</option>
+                <option value="อาคารพาณิชย์">อาคารพาณิชย์</option>
+                <option value="ที่ดินเปล่า">ที่ดินเปล่า</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section C: Commercial Terms & Commission -->
+        <div class="space-y-2 pt-2 border-t border-slate-800">
+          <div class="text-xs font-bold text-[#D4BA7A] flex items-center gap-1.5">
+            <i data-lucide="badge-dollar-sign" class="w-3.5 h-3.5"></i>
+            <span>เงื่อนไขการเสนอขาย & ค่านายหน้า</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            <div>
+              <label class="block text-slate-400 mb-1">ราคาตั้งขายสุทธิ (บาท):</label>
+              <input type="text" id="selling_price" required placeholder="เช่น 4,500,000" class="glass-input w-full p-2.5 rounded-xl font-bold text-amber-400 text-sm">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">อัตราค่านายหน้าปิด (%):</label>
+              <select id="commission_rate" class="glass-input w-full p-2.5 rounded-xl font-bold text-emerald-400">
+                <option value="3">3.0% (มาตรฐาน Co-Broker)</option>
+                <option value="4">4.0% (ทรัพย์พิเศษ/รีโนเวท)</option>
+                <option value="5">5.0% (Exclusive Premium)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">ระยะเวลาสัญญาแบบปิด:</label>
+              <select id="contract_duration" class="glass-input w-full p-2.5 rounded-xl font-semibold">
+                <option value="90">3 เดือน (90 วัน)</option>
+                <option value="180">6 เดือน (180 วัน - แนะนำ)</option>
+                <option value="365">1 ปี (365 วัน)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="pt-3 border-t border-slate-800 flex flex-col sm:flex-row items-center gap-2.5 justify-end">
+          <button type="button" onclick="switchTab('list')" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition">
+            ยกเลิก
+          </button>
+          <button type="submit" class="w-full sm:w-auto luxury-gold hover:opacity-95 text-gray-950 font-black px-6 py-2.5 rounded-xl text-xs shadow-lg active:scale-95 transition flex items-center justify-center gap-2">
+            <i data-lucide="check" class="w-4 h-4"></i>
+            <span>ยืนยันบันทึกสัญญาปิด</span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-6 inset-x-0 mx-auto max-w-sm px-4 py-2.5 rounded-2xl bg-neutral-900/95 text-white text-xs text-center border border-amber-500/30 shadow-2xl transition-all duration-300 opacity-0 pointer-events-none z-50">
+    ข้อความแจ้งเตือน
+  </div>
+
+  <script>
+    const BACKEND_URL = "https://siwasup-cobroker-os.onrender.com";
+    const CURRENT_AGENT_REF = localStorage.getItem('siwasup_my_agent_ref') || 'TON';
+    let myContracts = [];
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none');
+      }, 3500);
+    }
+
+    function switchTab(tab) {
+      const btnList = document.getElementById('tab-btn-list');
+      const btnCreate = document.getElementById('tab-btn-create');
+      const viewList = document.getElementById('view-contracts-list');
+      const viewCreate = document.getElementById('view-create-contract');
+
+      if (tab === 'list') {
+        btnList.className = "flex-1 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-sm";
+        btnCreate.className = "flex-1 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition flex items-center justify-center gap-2";
+        viewList.classList.remove('hidden');
+        viewCreate.classList.add('hidden');
+        loadMyContracts();
+      } else {
+        btnCreate.className = "flex-1 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-sm";
+        btnList.className = "flex-1 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition flex items-center justify-center gap-2";
+        viewCreate.classList.remove('hidden');
+        viewList.classList.add('hidden');
+      }
+      if (window.lucide) { lucide.createIcons(); }
+    }
+
+    // --- ZERO-TYPING OCR FILE HANDLER ---
+    async function handleFileUpload(event, docType) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const previewImg = document.getElementById(docType === 'id_card' ? 'preview-id-img' : 'preview-deed-img');
+      const placeholder = document.getElementById(docType === 'id_card' ? 'placeholder-id' : 'placeholder-deed');
+      const statusBadge = document.getElementById(docType === 'id_card' ? 'badge-id-status' : 'badge-deed-status');
+      const spinner = document.getElementById('ocr-scanning-spinner');
+
+      // Local Preview
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const base64Data = e.target.result;
+        previewImg.src = base64Data;
+        previewImg.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+        statusBadge.textContent = "กำลังประมวลผล...";
+        statusBadge.className = "text-[10px] text-amber-400 font-bold animate-pulse";
+        spinner.classList.remove('hidden');
+
+        try {
+          const resp = await fetch(`${BACKEND_URL}/api/ocr/contract`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: jsonPayload(docType, base64Data, file.type)
+          });
+          const result = await resp.json();
+          spinner.classList.add('hidden');
+
+          if (result && result.status === 'success' && result.data) {
+            statusBadge.textContent = "✓ อ่านข้อมูลสำเร็จ";
+            statusBadge.className = "text-[10px] text-emerald-400 font-bold";
+            applyOcrDataToForm(docType, result.data);
+            showToast(`✨ อ่านข้อมูล ${docType === 'id_card' ? 'บัตร ปชช.' : 'โฉนด'} สำเร็จ กรอกข้อมูลลงสัญญาเรียบร้อย!`);
+          } else {
+            statusBadge.textContent = "อ่านไม่ชัด";
+            statusBadge.className = "text-[10px] text-rose-400 font-bold";
+            showToast("ไม่สามารถสกัดข้อมูลได้ชัดเจน กรุณาถ่ายภาพใหม่");
+          }
+        } catch (err) {
+          spinner.classList.add('hidden');
+          statusBadge.textContent = "ผิดพลาด";
+          statusBadge.className = "text-[10px] text-rose-400 font-bold";
+          console.error("OCR API error:", err);
+          showToast("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ OCR กรุณาลองใหม่");
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function jsonPayload(docType, base64Data, mimeType) {
+      return JSON.stringify({
+        doc_type: docType,
+        image_base64: base64Data,
+        mime_type: mimeType || 'image/jpeg'
+      });
+    }
+
+    function applyOcrDataToForm(docType, data) {
+      if (docType === 'id_card') {
+        if (data.full_name_th) document.getElementById('owner_name').value = data.full_name_th;
+        if (data.id_number) document.getElementById('owner_id_card').value = data.id_number;
+        if (data.full_address) document.getElementById('owner_address').value = data.full_address;
+      } else if (docType === 'title_deed') {
+        if (data.deed_number) document.getElementById('deed_no').value = data.deed_number;
+        if (data.land_number) document.getElementById('land_no').value = data.land_number;
+        if (data.survey_page) document.getElementById('survey_no').value = data.survey_page;
+        if (data.rawang) document.getElementById('rawang_no').value = data.rawang;
+        if (data.area_total_sqw) document.getElementById('land_size').value = `${data.area_total_sqw} ตร.ว.`;
+        else if (data.area_sqw) document.getElementById('land_size').value = `${data.area_sqw} ตร.ว.`;
+        
+        let locParts = [];
+        if (data.subdistrict) locParts.push(data.subdistrict);
+        if (data.district) locParts.push(data.district);
+        if (data.province) locParts.push(data.province);
+        if (locParts.length > 0) document.getElementById('deed_location').value = locParts.join(' • ');
+
+        if (data.owner_name && !document.getElementById('owner_name').value) {
+          document.getElementById('owner_name').value = data.owner_name;
+        }
+      }
+    }
+
+    async function saveContract(event) {
+      event.preventDefault();
+
+      const newContract = {
+        id: `SW-CNT-${Date.now().toString().slice(-6)}`,
+        agent_ref: CURRENT_AGENT_REF,
+        owner_name: document.getElementById('owner_name').value.trim(),
+        owner_id_card: document.getElementById('owner_id_card').value.trim(),
+        owner_address: document.getElementById('owner_address').value.trim(),
+        owner_phone: document.getElementById('owner_phone').value.trim(),
+        owner_line_id: document.getElementById('owner_line_id').value.trim(),
+        deed_no: document.getElementById('deed_no').value.trim(),
+        land_no: document.getElementById('land_no').value.trim(),
+        survey_no: document.getElementById('survey_no').value.trim(),
+        rawang_no: document.getElementById('rawang_no').value.trim(),
+        deed_location: document.getElementById('deed_location').value.trim(),
+        land_size: document.getElementById('land_size').value.trim(),
+        property_type: document.getElementById('property_type').value,
+        selling_price: document.getElementById('selling_price').value.trim(),
+        commission_rate: document.getElementById('commission_rate').value,
+        contract_days: document.getElementById('contract_duration').value,
+        status: "active",
+        created_at: new Date().toISOString()
+      };
+
+      // Save locally first
+      let localList = JSON.parse(localStorage.getItem('siwasup_my_contracts') || '[]');
+      localList.unshift(newContract);
+      localStorage.setItem('siwasup_my_contracts', JSON.stringify(localList));
+
+      // Sync to cloud backend
+      try {
+        fetch(`${BACKEND_URL}/api/contracts/save`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newContract)
+        }).catch(() => {});
+      } catch (e) {}
+
+      showToast("🎉 บันทึกสัญญาปิดเรียบร้อยแล้ว!");
+      switchTab('list');
+    }
+
+    function calculateDaysLeft(createdStr, durationDays) {
+      const created = new Date(createdStr).getTime();
+      const durationMs = parseInt(durationDays || 90, 10) * 86400000;
+      const expireTime = created + durationMs;
+      const now = Date.now();
+      const diffDays = Math.ceil((expireTime - now) / 86400000);
+      return diffDays;
+    }
+
+    function renderContractsList() {
+      const container = document.getElementById('contracts-container');
+      const emptyState = document.getElementById('contracts-empty-state');
+      const countSpan = document.getElementById('tab-count-span');
+      const statActive = document.getElementById('stat-active-count');
+      const statExpiring = document.getElementById('stat-expiring-count');
+      const statTotalVal = document.getElementById('stat-total-value');
+
+      let contracts = JSON.parse(localStorage.getItem('siwasup_my_contracts') || '[]');
+      countSpan.textContent = contracts.length;
+      statActive.textContent = contracts.length;
+
+      let expiringCount = 0;
+      let totalValue = 0;
+
+      if (contracts.length === 0) {
+        emptyState.classList.remove('hidden');
+        container.classList.add('hidden');
+        statExpiring.textContent = "0";
+        statTotalVal.textContent = "0M";
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      container.classList.remove('hidden');
+
+      container.innerHTML = contracts.map(c => {
+        const daysLeft = calculateDaysLeft(c.created_at, c.contract_days);
+        if (daysLeft <= 30) expiringCount++;
+
+        const priceNum = parseInt(String(c.selling_price || '0').replace(/\D/g, ''), 10) || 0;
+        totalValue += priceNum;
+
+        let badgeClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
+        let statusText = `เหลือ ${daysLeft} วัน (ปลอดภัย)`;
+        if (daysLeft <= 15) {
+          badgeClass = "bg-rose-500/10 text-rose-400 border-rose-500/30 font-bold animate-pulse";
+          statusText = `🚨 ด่วน! เหลือ ${daysLeft} วัน (ต้องรีบต่อสัญญา)`;
+        } else if (daysLeft <= 30) {
+          badgeClass = "bg-amber-500/10 text-amber-400 border-amber-500/30 font-semibold";
+          statusText = `⚠️ เหลือ ${daysLeft} วัน (เตือนต่อสัญญา)`;
+        }
+
+        return `
+          <div class="glass-card rounded-2xl p-4 space-y-3 border border-slate-800 hover:border-amber-500/40 transition">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs px-2 py-0.5 rounded-full border ${badgeClass}">
+                    ${statusText}
+                  </span>
+                  <span class="text-[11px] font-mono text-slate-400">#${c.id}</span>
+                </div>
+                <h4 class="font-bold text-white text-sm sm:text-base mt-1">
+                  ${c.property_type} โฉนดเลขที่ ${c.deed_no} (${c.land_size})
+                </h4>
+                <div class="text-xs text-slate-400">📍 ทำเล: ${c.deed_location}</div>
+              </div>
+              <div class="text-right shrink-0">
+                <div class="text-base sm:text-lg font-black text-amber-400">฿ ${c.selling_price}</div>
+                <div class="text-[10px] text-emerald-400 font-bold">คอมมิชชั่น ${c.commission_rate}%</div>
+              </div>
+            </div>
+
+            <!-- Owner & Terms Bar -->
+            <div class="bg-slate-900/60 rounded-xl p-2.5 text-xs flex flex-wrap items-center justify-between gap-2 border border-slate-800">
+              <div class="flex items-center gap-2">
+                <i data-lucide="user-check" class="w-3.5 h-3.5 text-amber-400"></i>
+                <span class="text-slate-300 font-medium">เจ้าของ: <strong class="text-white">${c.owner_name}</strong> (${c.owner_phone})</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-slate-400">ระยะสัญญา:</span>
+                <span class="text-white font-semibold">${c.contract_days} วัน</span>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-2 pt-1">
+              <button onclick="generateContractPDF('${c.id}')" class="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 border border-slate-700">
+                <i data-lucide="printer" class="w-3.5 h-3.5 text-amber-400"></i>
+                <span>พิมพ์สัญญา PDF</span>
+              </button>
+              <button onclick="extendContract('${c.id}')" class="py-2 px-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-[#D4BA7A] border border-amber-500/30 text-xs font-bold transition flex items-center justify-center gap-1">
+                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                <span>ต่อสัญญา +90 วัน</span>
+              </button>
+              <a href="tel:${c.owner_phone}" class="py-2 px-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold transition flex items-center justify-center gap-1">
+                <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      statExpiring.textContent = expiringCount;
+      statTotalVal.textContent = (totalValue / 1000000).toFixed(1) + "M";
+      if (window.lucide) { lucide.createIcons(); }
+    }
+
+    function extendContract(cid) {
+      let contracts = JSON.parse(localStorage.getItem('siwasup_my_contracts') || '[]');
+      const c = contracts.find(x => x.id === cid);
+      if (c) {
+        c.contract_days = parseInt(c.contract_days || 90, 10) + 90;
+        localStorage.setItem('siwasup_my_contracts', JSON.stringify(contracts));
+        renderContractsList();
+        showToast("✓ ต่ออายุสัญญาเพิ่มอีก 90 วันเรียบร้อยแล้ว!");
+      }
+    }
+
+    async function loadMyContracts() {
+      renderContractsList();
+      try {
+        const resp = await fetch(`${BACKEND_URL}/api/contracts/list?agent_ref=${CURRENT_AGENT_REF}`);
+        if (resp.ok) {
+          const res = await resp.json();
+          if (res && res.contracts && res.contracts.length > 0) {
+            localStorage.setItem('siwasup_my_contracts', JSON.stringify(res.contracts));
+            renderContractsList();
+          }
+        }
+      } catch (e) {}
+    }
+
+    function generateContractPDF(cid) {
+      let contracts = JSON.parse(localStorage.getItem('siwasup_my_contracts') || '[]');
+      const c = contracts.find(x => x.id === cid);
+      if (!c) return;
+
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>สัญญาแต่งตั้งตัวแทนจำหน่ายแต่ผู้เดียว - ${c.id}</title>
+          <style>
+            body { font-family: 'Tahoma', sans-serif; font-size: 13px; line-height: 1.6; padding: 40px; color: #111; }
+            .header { text-align: center; border-bottom: 2px solid #111; padding-bottom: 12px; margin-bottom: 20px; }
+            .title { font-size: 18px; font-weight: bold; margin-bottom: 4px; }
+            .subtitle { font-size: 12px; color: #555; }
+            .section { margin-bottom: 16px; }
+            .section-title { font-weight: bold; font-size: 14px; margin-bottom: 6px; text-decoration: underline; }
+            .row { margin-bottom: 6px; }
+            .sign-grid { display: flex; justify-content: space-between; margin-top: 50px; text-align: center; }
+            .sign-box { width: 45%; }
+            .sign-line { border-bottom: 1px dotted #333; height: 40px; margin-bottom: 8px; }
+            @media print { body { padding: 20px; } }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div class="title">สัญญาแต่งตั้งตัวแทนเพื่อการขายอสังหาริมทรัพย์แบบปิด (Exclusive Agreement)</div>
+            <div class="subtitle">ศิวาทรัพย์ แอสเซท โค-โบรกเกอร์ (Siwasup Asset Co-Broker OS) • เลขที่สัญญา: ${c.id}</div>
+          </div>
+
+          <div class="section">
+            <div class="row">ทำที่ บริษัท ศิวาทรัพย์ แอสเซท จำกัด วันที่ ${new Date().toLocaleDateString('th-TH')}</div>
+            <div class="row"><strong>ฝ่ายผู้ให้สัญญา (เจ้าของกรรมสิทธิ์):</strong> ${c.owner_name} บัตรประชาชนเลขที่ ${c.owner_id_card}</div>
+            <div class="row">ที่อยู่: ${c.owner_address} เบอร์โทรศัพท์: ${c.owner_phone}</div>
+            <div class="row"><strong>ฝ่ายตัวแทนจำหน่ายแต่เพียงผู้เดียว:</strong> ศิวาทรัพย์ แอสเซท (รหัสตัวแทนผู้ดูแล: ${c.agent_ref})</div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">ข้อ 1. ทรัพย์สินที่แต่งตั้งให้ขาย</div>
+            <div class="row">ประเภท: <strong>${c.property_type}</strong> โฉนดที่ดินเลขที่: <strong>${c.deed_no}</strong> เลขที่ดิน: <strong>${c.land_no}</strong> หน้าสำรวจ: <strong>${c.survey_no}</strong> ระวาง: <strong>${c.rawang_no}</strong></div>
+            <div class="row">ทำเลที่ตั้ง: ${c.deed_location} | เนื้อที่ดิน: <strong>${c.land_size}</strong></div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">ข้อ 2. ราคาและเงื่อนไขค่าตอบแทน</div>
+            <div class="row">ราคาเสนอขายสุทธิ: <strong>${c.selling_price} บาท</strong></div>
+            <div class="row">อัตราค่านายหน้าเมื่อปิดการขายได้สำเร็จ: <strong>ร้อยละ ${c.commission_rate} (${c.commission_rate}%)</strong> ของราคาที่ตกลงซื้อขายได้จริง</div>
+            <div class="row">ระยะเวลาสัญญาแต่งตั้งแบบปิด: <strong>${c.contract_days} วัน</strong> นับตั้งแต่วันทำสัญญานี้เป็นต้นไป</div>
+          </div>
+
+          <div class="sign-grid">
+            <div class="sign-box">
+              <div class="sign-line"></div>
+              <div>ลงชื่อ .............................................................. ผู้ให้สัญญา (เจ้าของ)</div>
+              <div>(${c.owner_name})</div>
+            </div>
+            <div class="sign-box">
+              <div class="sign-line"></div>
+              <div>ลงชื่อ .............................................................. ตัวแทนจำหน่าย</div>
+              <div>(ศิวาทรัพย์ แอสเซท / ${c.agent_ref})</div>
+            </div>
+          </div>
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.focus();
+      setTimeout(() => { printWindow.print(); }, 500);
+    }
+
+    // Init on load
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('agent-ref-badge').textContent = CURRENT_AGENT_REF;
+      document.getElementById('agent-avatar-text').textContent = CURRENT_AGENT_REF.slice(0, 2).toUpperCase();
+      loadMyContracts();
+      if (window.lucide) { lucide.createIcons(); }
+    });
+  </script>
+</body>
+</html>

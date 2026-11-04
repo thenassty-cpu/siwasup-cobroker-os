@@ -1014,6 +1014,9 @@
 
       updateConsignBadge();
       renderProperties();
+      if (typeof checkAndOpenTargetProperty === 'function') {
+        checkAndOpenTargetProperty();
+      }
     }
 
     // 🛡️ White-Label Sanitizer for Client Mode (ซ่อนชื่อธนาคาร/NPA ในโหมดลูกค้า 100%)
@@ -1703,10 +1706,18 @@
 
     // Homerun-style Property Detail Modal (Digital Luxury 75-15-5-5 & 3-Tier Layout)
     function openPropertyDetailModal(id) {
+      if (!id) return;
       const list = (window.allProperties && window.allProperties.length > 0)
         ? window.allProperties
         : (window.SIWASUP_PROPERTIES || allProperties || []);
-      const p = list.find(item => String(item.id) === String(id));
+      const idClean = String(id).trim().toLowerCase();
+      const p = list.find(item => {
+        if (!item) return false;
+        const itemId = String(item.id || '').trim().toLowerCase();
+        const itemCode = String(item.code || '').trim().toLowerCase();
+        const itemPropId = String(item.property_id || '').trim().toLowerCase();
+        return itemId === idClean || itemCode === idClean || itemPropId === idClean;
+      });
       if (!p) {
         showToast("ไม่พบข้อมูลทรัพย์ #" + id);
         return;
@@ -2353,7 +2364,7 @@
         }
 
         return `
-          <div class="bg-white rounded-[22px] border ${isSelected ? 'border-[#C2A460] ring-2 ring-[#C2A460]' : 'border-slate-200/80'} shadow-xs hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col justify-between group relative">
+          <div id="property-card-${p.id}" data-prop-id="${p.id}" class="bg-white rounded-[22px] border ${isSelected ? 'border-[#C2A460] ring-2 ring-[#C2A460]' : 'border-slate-200/80'} shadow-xs hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col justify-between group relative">
             
             <!-- Image Area (Homerun 4:3 Ratio) -->
             <div class="relative aspect-[4/3] bg-slate-100 overflow-hidden cursor-pointer" onclick="openPropertyDetailModal('${p.id}')">
@@ -5133,6 +5144,61 @@
       clearBundleSelection();
     }
 
+    // 🎯 Instant Deep-Link Navigator (รองรับ ?id=, ?property=, ?code=, ?prop= และ #prop-...)
+    function checkAndOpenTargetProperty(maxRetries = 25) {
+      const params = new URLSearchParams(window.location.search);
+      let targetId = params.get('id') || params.get('property') || params.get('code') || params.get('prop');
+      
+      // Fallback to URL Hash (#prop-B13559 or #B13559)
+      if (!targetId && window.location.hash) {
+        const cleanHash = window.location.hash.replace(/^#prop-/, '').replace(/^#/, '').trim();
+        if (cleanHash && cleanHash.length > 2 && !cleanHash.startsWith('/')) {
+          targetId = cleanHash;
+        }
+      }
+
+      if (!targetId) return;
+      targetId = targetId.trim();
+
+      let attempts = 0;
+      const pollTimer = setInterval(() => {
+        attempts++;
+        const list = (window.allProperties && window.allProperties.length > 0)
+          ? window.allProperties
+          : (window.SIWASUP_PROPERTIES || allProperties || []);
+
+        const targetClean = targetId.toLowerCase();
+        const found = list.find(item => {
+          if (!item) return false;
+          const itemId = String(item.id || '').trim().toLowerCase();
+          const itemCode = String(item.code || '').trim().toLowerCase();
+          const itemPropId = String(item.property_id || '').trim().toLowerCase();
+          return itemId === targetClean || itemCode === targetClean || itemPropId === targetClean;
+        });
+
+        if (found) {
+          clearInterval(pollTimer);
+          openPropertyDetailModal(found.id || found.code);
+          const displayTitle = typeof getDisplayTitle === 'function' ? getDisplayTitle(found) : (found.title || found.id);
+          if (typeof showToast === 'function') {
+            showToast(`📍 กำลังเปิดสเปกเต็ม: ${displayTitle}`);
+          }
+          // เลื่อนหน้าจอไปยังการ์ดทรัพย์นั้นเบื้องหลัง
+          setTimeout(() => {
+            const cardEl = document.getElementById(`property-card-${found.id}`) || document.querySelector(`[data-prop-id="${found.id}"]`);
+            if (cardEl) {
+              cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              cardEl.classList.add('ring-4', 'ring-[#8C734B]', 'transition-all');
+              setTimeout(() => cardEl.classList.remove('ring-4', 'ring-[#8C734B]'), 3000);
+            }
+          }, 350);
+        } else if (attempts >= maxRetries) {
+          clearInterval(pollTimer);
+          console.warn("Target property not found:", targetId);
+        }
+      }, 120);
+    }
+
     // --- INIT & URL QUERY PARSER ---
     function checkUrlParameters() {
       const params = new URLSearchParams(window.location.search);
@@ -5194,14 +5260,8 @@
         setMode('free_agent'); // ค่าเริ่มต้นสำหรับตัวแทนทั่วไป (User Mode) ล็อกแถบสลับโหมดอัตโนมัติ
       }
 
-      // Check single property focus from Vinyl Sign QR (?id=1069562&ref=AG-บัวรา&src=qr_sign)
-      if (params.has('id')) {
-        const propId = params.get('id');
-        setTimeout(() => {
-          openPropertyDetailModal(propId);
-          showToast(`📍 กำลังเปิดข้อมูลทรัพย์ #${propId} จากการสแกนป้าย`);
-        }, 300);
-      }
+      // Check single property focus (?id=... / ?property=... / ?code=... / ?prop=... / #prop-...)
+      checkAndOpenTargetProperty();
 
       // Check auto check-in from Meeting QR (?action=checkin&date=YYYY-MM-DD)
       if (params.get('action') === 'checkin') {
@@ -5550,7 +5610,7 @@
 
       const bubbles = items.slice(0, 10).map(p => {
         const pid = String(p.id || p.code || '');
-        const detailUrl = `${getBaseUrl()}?property=${pid}&ref=${encodeURIComponent(savedRef)}&src=flex_carousel`;
+        const detailUrl = `${getBaseUrl()}?id=${encodeURIComponent(pid)}&property=${encodeURIComponent(pid)}&ref=${encodeURIComponent(savedRef)}&src=flex_carousel#prop-${encodeURIComponent(pid)}`;
         const img = p.main_image || "https://assets.siwasup.com/fallback_property.jpg";
         return {
           type: "bubble",
