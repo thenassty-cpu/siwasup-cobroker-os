@@ -297,19 +297,63 @@
           </div>
         </div>
 
-        <!-- Territory Zone -->
-        <div class="space-y-1">
-          <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-600"></i>
-            <span>โซนพื้นที่ที่ท่านเชี่ยวชาญ / ปฏิบัติงาน *</span>
+        <!-- Territory Zone (Expanded + Custom Input) -->
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-slate-700 flex items-center justify-between">
+            <span class="flex items-center gap-1.5">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-600"></i>
+              <span>โซนพื้นที่ที่ท่านเชี่ยวชาญ / ปฏิบัติงาน *</span>
+            </span>
+            <span class="text-[10px] font-medium text-amber-700">เลือกจากรายการ หรือพิมพ์ระบุเองได้</span>
           </label>
-          <select id="regZone" class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500 transition">
-            <option value="โซนท่าข้าม-พระราม 2">โซนท่าข้าม - พระราม 2 (Hub ใหญ่ศิวาทรัพย์)</option>
-            <option value="โซนบางนา-ศรีนครินทร์">โซนบางนา - ศรีนครินทร์ - สุขุมวิท</option>
-            <option value="โซนราชพฤกษ์-นนทบุรี">โซนราชพฤกษ์ - ปิ่นเกล้า - นนทบุรี</option>
-            <option value="โซนปทุมวัน-สยาม">โซนในเมือง ปทุมวัน - สีลม - สาทร</option>
-            <option value="สำนักงานใหญ่">สำนักงานใหญ่ / ทุกโซนพื้นที่</option>
+          <select id="regZone" onchange="handleZoneSelectChange(this.value)" class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-amber-500 transition">
+            <optgroup label="🏢 ส่วนกลาง / สำนักงานใหญ่">
+              <option value="โซนท่าข้าม-พระราม 2">โซนท่าข้าม - พระราม 2 (Hub ใหญ่ศิวาทรัพย์)</option>
+              <option value="สำนักงานใหญ่">สำนักงานใหญ่ / ดูแลทุกโซนพื้นที่</option>
+            </optgroup>
+            <optgroup label="🌉 โซนฝั่งธนบุรี & กรุงเทพฯ ตะวันตก">
+              <option value="โซนพระราม 2-บางขุนเทียน">โซนพระราม 2 - ท่าข้าม - บางขุนเทียน - แสมดำ</option>
+              <option value="โซนสุขสวัสดิ์-ประชาอุทิศ">โซนสุขสวัสดิ์ - ประชาอุทิศ - ทุ่งครุ - ราษฎร์บูรณะ</option>
+              <option value="โซนธนบุรี-ดาวคะนอง-ท่าพระ">โซนธนบุรี - ดาวคะนอง - ท่าพระ - เจริญนคร</option>
+              <option value="โซนเพชรเกษม-บางแค-หนองแขม">โซนเพชรเกษม - บางแค - หนองแขม - พุทธมณฑล</option>
+              <option value="โซนปิ่นเกล้า-ตลิ่งชัน-จรัญฯ">โซนปิ่นเกล้า - ตลิ่งชัน - จรัญสนิทวงศ์ - บางพลัด</option>
+              <option value="โซนกัลปพฤกษ์-ราชพฤกษ์-บางหว้า">โซนกัลปพฤกษ์ - ราชพฤกษ์ - บางหว้า - ตลาดพลู</option>
+            </optgroup>
+            <optgroup label="🏙️ โซนกรุงเทพฯ ตอนเหนือ & ตะวันออก">
+              <option value="โซนรามอินทรา-วัชรพล-สายไหม">โซนรามอินทรา - วัชรพล - สายไหม - สุขาภิบาล 5</option>
+              <option value="โซนวิภาวดี-ดอนเมือง-แจ้งวัฒนะ">โซนวิภาวดี - ดอนเมือง - หลักสี่ - แจ้งวัฒนะ</option>
+              <option value="โซนลาดพร้าว-เกษตรนวมินทร์">โซนลาดพร้าว - เกษตรนวมินทร์ - โชคชัย 4 - วังหิน</option>
+              <option value="โซนรัชดา-พระราม 9-ห้วยขวาง">โซนรัชดา - พระราม 9 - ห้วยขวาง - สุทธิสาร</option>
+              <option value="โซนรามคำแหง-บางกะปิ-เสรีไทย">โซนรามคำแหง - บางกะปิ - เสรีไทย - สะพานสูง</option>
+              <option value="โซนมีนบุรี-หทัยราษฎร์-คลองสามวา">โซนมีนบุรี - หทัยราษฎร์ - นิมิตใหม่ - คลองสามวา</option>
+              <option value="โซนลาดกระบัง-สุวินทวงศ์-ร่มเกล้า">โซนลาดกระบัง - สุวินทวงศ์ - ร่มเกล้า - ประเวศ</option>
+              <option value="โซนบางนา-ศรีนครินทร์-อุดมสุข">โซนบางนา - ศรีนครินทร์ - อุดมสุข - อ่อนนุช</option>
+            </optgroup>
+            <optgroup label="🏢 โซนใจกลางเมือง (CBD)">
+              <option value="โซนสุขุมวิท-ทองหล่อ-เอกมัย">โซนสุขุมวิท - ทองหล่อ - เอกมัย - พระโขนง</option>
+              <option value="โซนสีลม-สาทร-พระราม 3">โซนสีลม - สาทร - พระราม 3 - เจริญกรุง</option>
+              <option value="โซนปทุมวัน-สยาม-พญาไท-อารีย์">โซนปทุมวัน - สยาม - พญาไท - อารีย์ - ดินแดง</option>
+            </optgroup>
+            <optgroup label="🏡 โซนปริมณฑล & จังหวัดใกล้เคียง">
+              <option value="โซนนนทบุรี-บางใหญ่-บางบัวทอง">โซนนนทบุรี - บางใหญ่ - บางบัวทอง - เวสต์เกต</option>
+              <option value="โซนนนทบุรี-เมืองนนท์-ปากเกร็ด">โซนนนทบุรี - เมืองนนท์ - แคราย - ปากเกร็ด - ติวานนท์</option>
+              <option value="โซนปทุมธานี-ลำลูกกา-รังสิต">โซนปทุมธานี - ลำลูกกา - รังสิต - ธัญบุรี - คลองหลวง</option>
+              <option value="โซนสมุทรปราการ-เทพารักษ์-บางพลี">โซนสมุทรปราการ - เทพารักษ์ - แพรกษา - บางพลี - สำโรง</option>
+              <option value="โซนสมุทรสาคร-มหาชัย-กระทุ่มแบน">โซนสมุทรสาคร - มหาชัย - กระทุ่มแบน - พันท้ายนรสิงห์</option>
+              <option value="โซนนครปฐม-ศาลายา-สามพราน">โซนนครปฐม - ศาลายา - สามพราน - นครชัยศรี</option>
+              <option value="โซนชลบุรี-พัทยา-ศรีราชา">โซนชลบุรี - พัทยา - ศรีราชา - บางแสน</option>
+            </optgroup>
+            <optgroup label="✏️ ระบุพื้นที่อื่นๆ ด้วยตนเอง">
+              <option value="__custom__">✏️ อื่นๆ (พิมพ์ระบุโซน / อำเภอ / จังหวัดด้วยตนเอง...)</option>
+            </optgroup>
           </select>
+
+          <!-- Custom Zone Input Box -->
+          <div id="regZoneCustomWrapper" class="pt-0.5">
+            <div class="relative">
+              <input type="text" id="regZoneCustom" placeholder="✏️ พิมพ์ระบุโซน/พื้นที่ย่อยเพิ่มเติมได้ (เช่น ประชาอุทิศ 90, บางปู, อยุธยา...)" class="w-full bg-amber-50/40 border border-slate-300 rounded-xl px-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-amber-500 transition">
+            </div>
+          </div>
         </div>
 
         <!-- Line ID -->
@@ -685,6 +729,19 @@
       }
     }
 
+    function handleZoneSelectChange(val) {
+      const customInput = document.getElementById('regZoneCustom');
+      if (!customInput) return;
+      if (val === '__custom__') {
+        customInput.placeholder = "✏️ กรุณาพิมพ์ระบุโซน / อำเภอ / จังหวัดที่ท่านดูแล *";
+        customInput.className = "w-full bg-amber-50 border-2 border-amber-500 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 placeholder-amber-700/70 focus:bg-white focus:outline-none transition";
+        customInput.focus();
+      } else {
+        customInput.placeholder = "✏️ พิมพ์ระบุโซน/พื้นที่ย่อยเพิ่มเติมได้ (เช่น ประชาอุทิศ 90, บางปู, อยุธยา...)";
+        customInput.className = "w-full bg-amber-50/40 border border-slate-300 rounded-xl px-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-amber-500 transition";
+      }
+    }
+
     function submitToLobby() {
       if (!getSession()) {
         alert('กรุณาเชื่อมบัญชี LINE ก่อนส่งข้อมูลครับ');
@@ -695,7 +752,19 @@
       const nickname = document.getElementById('regNickname').value.trim();
       const phone = document.getElementById('regPhone').value.trim();
       const lineId = document.getElementById('regLineId').value.trim();
-      const zone = document.getElementById('regZone').value;
+      const rawZone = document.getElementById('regZone').value;
+      const customZone = (document.getElementById('regZoneCustom') ? document.getElementById('regZoneCustom').value.trim() : '');
+      if (rawZone === '__custom__' && !customZone) {
+        alert("⚠️ กรุณาพิมพ์ระบุโซนพื้นที่ที่ท่านดูแลในช่องระบุพื้นที่ด้วยครับ");
+        document.getElementById('regZoneCustom').focus();
+        return;
+      }
+      let zone = rawZone;
+      if (rawZone === '__custom__') {
+        zone = customZone.startsWith('โซน') ? customZone : `โซน${customZone}`;
+      } else if (customZone) {
+        zone = `${rawZone} (${customZone})`;
+      }
       const affiliation = document.querySelector('input[name="affiliation"]:checked').value;
 
       if (!name || name.length < 3) {

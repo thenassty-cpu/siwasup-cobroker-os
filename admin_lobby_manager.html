@@ -1703,6 +1703,8 @@
       document.getElementById('editMemberSub').innerText = `${member.phone} • ${member.zone}`;
       document.getElementById('editMemberRoleInput').value = member.role || '';
       document.getElementById('editMemberTitleInput').value = member.title || '';
+      const zoneInp = document.getElementById('editMemberZoneInput');
+      if (zoneInp) zoneInp.value = member.zone || '';
 
       const p = member.permissions || {};
       const chkContract = document.getElementById('chk_contractAgent');
@@ -1742,6 +1744,8 @@
 
       const newRole = document.getElementById('editMemberRoleInput').value.trim() || member.role;
       const newTitle = document.getElementById('editMemberTitleInput').value.trim() || member.title;
+      const newZoneEl = document.getElementById('editMemberZoneInput');
+      const newZone = (newZoneEl && newZoneEl.value.trim()) ? newZoneEl.value.trim() : member.zone;
 
       const isContractChecked = document.getElementById('chk_contractAgent') ? document.getElementById('chk_contractAgent').checked : false;
       const newPerms = {
@@ -1773,6 +1777,7 @@
 
       member.role = newRole;
       member.title = newTitle;
+      member.zone = newZone;
       member.permissions = newPerms;
       member.badges = newBadges;
 
@@ -2010,6 +2015,8 @@
       document.getElementById('editMemberSub').innerText = `${member.phone} • ${member.zone}`;
       document.getElementById('editMemberRoleInput').value = member.role || '';
       document.getElementById('editMemberTitleInput').value = member.title || '';
+      const zoneInp = document.getElementById('editMemberZoneInput');
+      if (zoneInp) zoneInp.value = member.zone || '';
 
       const p = member.permissions || {};
       const chkContract = document.getElementById('chk_contractAgent');
@@ -2049,6 +2056,8 @@
 
       const newRole = document.getElementById('editMemberRoleInput').value.trim() || member.role;
       const newTitle = document.getElementById('editMemberTitleInput').value.trim() || member.title;
+      const newZoneEl = document.getElementById('editMemberZoneInput');
+      const newZone = (newZoneEl && newZoneEl.value.trim()) ? newZoneEl.value.trim() : member.zone;
 
       const isContractChecked = document.getElementById('chk_contractAgent') ? document.getElementById('chk_contractAgent').checked : false;
       const newPerms = {
@@ -2080,6 +2089,7 @@
 
       member.role = newRole;
       member.title = newTitle;
+      member.zone = newZone;
       member.permissions = newPerms;
       member.badges = newBadges;
 
@@ -2209,12 +2219,43 @@
           <input type="text" id="editMemberRoleInput" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-amber-500">
         </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div class="space-y-1">
             <label class="text-xs font-bold text-slate-700">ตำแหน่งทางการ (Official Title):</label>
             <input type="text" id="editMemberTitleInput" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-amber-500">
           </div>
-          
+          <div class="space-y-1">
+            <label class="text-xs font-bold text-slate-700">โซนพื้นที่ดูแล (เลือกหรือพิมพ์ระบุเอง):</label>
+            <input type="text" id="editMemberZoneInput" list="siwasupZoneSuggestions" placeholder="เลือกหรือพิมพ์ระบุโซน..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-amber-500">
+            <datalist id="siwasupZoneSuggestions">
+              <option value="โซนท่าข้าม-พระราม 2"></option>
+              <option value="สำนักงานใหญ่"></option>
+              <option value="โซนพระราม 2-บางขุนเทียน"></option>
+              <option value="โซนสุขสวัสดิ์-ประชาอุทิศ"></option>
+              <option value="โซนธนบุรี-ดาวคะนอง-ท่าพระ"></option>
+              <option value="โซนเพชรเกษม-บางแค-หนองแขม"></option>
+              <option value="โซนปิ่นเกล้า-ตลิ่งชัน-จรัญฯ"></option>
+              <option value="โซนกัลปพฤกษ์-ราชพฤกษ์-บางหว้า"></option>
+              <option value="โซนรามอินทรา-วัชรพล-สายไหม"></option>
+              <option value="โซนวิภาวดี-ดอนเมือง-แจ้งวัฒนะ"></option>
+              <option value="โซนลาดพร้าว-เกษตรนวมินทร์"></option>
+              <option value="โซนรัชดา-พระราม 9-ห้วยขวาง"></option>
+              <option value="โซนรามคำแหง-บางกะปิ-เสรีไทย"></option>
+              <option value="โซนมีนบุรี-หทัยราษฎร์-คลองสามวา"></option>
+              <option value="โซนลาดกระบัง-สุวินทวงศ์-ร่มเกล้า"></option>
+              <option value="โซนบางนา-ศรีนครินทร์-อุดมสุข"></option>
+              <option value="โซนสุขุมวิท-ทองหล่อ-เอกมัย"></option>
+              <option value="โซนสีลม-สาทร-พระราม 3"></option>
+              <option value="โซนปทุมวัน-สยาม-พญาไท-อารีย์"></option>
+              <option value="โซนนนทบุรี-บางใหญ่-บางบัวทอง"></option>
+              <option value="โซนนนทบุรี-เมืองนนท์-ปากเกร็ด"></option>
+              <option value="โซนปทุมธานี-ลำลูกกา-รังสิต"></option>
+              <option value="โซนสมุทรปราการ-เทพารักษ์-บางพลี"></option>
+              <option value="โซนสมุทรสาคร-มหาชัย-กระทุ่มแบน"></option>
+              <option value="โซนนครปฐม-ศาลายา-สามพราน"></option>
+              <option value="โซนชลบุรี-พัทยา-ศรีราชา"></option>
+            </datalist>
+          </div>
         </div>
 
         <div class="space-y-2 pt-1 border-t border-slate-100">
