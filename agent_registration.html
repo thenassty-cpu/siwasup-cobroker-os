@@ -302,11 +302,12 @@
           <label class="text-xs font-bold text-slate-700 flex items-center justify-between">
             <span class="flex items-center gap-1.5">
               <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-600"></i>
-              <span>โซนพื้นที่ที่ท่านเชี่ยวชาญ / ปฏิบัติงาน *</span>
+              <span>โซนพื้นที่ที่ท่านเชี่ยวชาญ / ปฏิบัติงาน (ไม่บังคับ)</span>
             </span>
-            <span class="text-[10px] font-medium text-amber-700">เลือกจากรายการ หรือพิมพ์ระบุเองได้</span>
+            <span class="text-[10px] font-medium text-amber-700">เลือกโซนที่สะดวก หรือเว้นไว้ดูแลทุกพื้นที่</span>
           </label>
           <select id="regZone" onchange="handleZoneSelectChange(this.value)" class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-amber-500 transition">
+            <option value="ทุกพื้นที่ / ทั่วประเทศ (ไม่จำกัดโซน)" selected>🌐 ทุกพื้นที่ / ทั่วประเทศ (ไม่จำกัดโซน)</option>
             <optgroup label="🏢 ส่วนกลาง / สำนักงานใหญ่">
               <option value="โซนท่าข้าม-พระราม 2">โซนท่าข้าม - พระราม 2 (Hub ใหญ่ศิวาทรัพย์)</option>
               <option value="สำนักงานใหญ่">สำนักงานใหญ่ / ดูแลทุกโซนพื้นที่</option>
@@ -754,14 +755,9 @@
       const lineId = document.getElementById('regLineId').value.trim();
       const rawZone = document.getElementById('regZone').value;
       const customZone = (document.getElementById('regZoneCustom') ? document.getElementById('regZoneCustom').value.trim() : '');
-      if (rawZone === '__custom__' && !customZone) {
-        alert("⚠️ กรุณาพิมพ์ระบุโซนพื้นที่ที่ท่านดูแลในช่องระบุพื้นที่ด้วยครับ");
-        document.getElementById('regZoneCustom').focus();
-        return;
-      }
-      let zone = rawZone;
+      let zone = rawZone || 'ทุกพื้นที่ / ทั่วประเทศ';
       if (rawZone === '__custom__') {
-        zone = customZone.startsWith('โซน') ? customZone : `โซน${customZone}`;
+        zone = customZone ? (customZone.startsWith('โซน') ? customZone : `โซน${customZone}`) : 'ทุกพื้นที่ / ทั่วประเทศ';
       } else if (customZone) {
         zone = `${rawZone} (${customZone})`;
       }
