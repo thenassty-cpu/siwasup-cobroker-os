@@ -576,6 +576,34 @@
       </div>
     </div>
 
+    <!-- 🎯 Single Property Focus Landing Banner (ปรากฏเมื่อคลิกมาจาก LINE / Deep-link เฉพาะหลัง) -->
+    <div id="single-property-focus-banner" class="hidden mx-3 sm:mx-6 mt-3 bg-[#faf8f5] text-neutral-800 p-3.5 sm:p-4 rounded-2xl shadow-xs text-xs border border-siwasup-gold/70 border-l-4 border-siwasup-gold animate-in fade-in duration-300">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-siwasup-gold/15 text-amber-800 flex items-center justify-center shrink-0">
+            <i data-lucide="home" class="w-5 h-5 text-[#8C734B]"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 font-bold text-sm text-neutral-900">
+              <span id="single-focus-title">กำลังเปิดดูสเปกเต็มของทรัพย์นี้</span>
+            </div>
+            <p id="single-focus-subtitle" class="text-xs text-neutral-500 mt-0.5">
+              คุณกำลังดูหน้าทรัพย์เฉพาะหลังที่เลือกมาจาก LINE สามารถดูรูปจริง สเปก และทำเลได้ครบถ้วน
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+          <button type="button" onclick="openPropertyDetailModal(window.activeSinglePropertyFocus)" class="px-3 py-1.5 rounded-xl bg-siwasup-gold text-neutral-950 font-bold hover:opacity-90 transition active:scale-95 shadow-2xs text-xs flex items-center gap-1.5">
+            <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+            <span>เปิดสเปกเต็ม</span>
+          </button>
+          <button type="button" onclick="clearSinglePropertyFocus()" class="px-3 py-1.5 rounded-xl bg-white border border-neutral-300 hover:bg-neutral-100 text-neutral-700 font-semibold transition active:scale-95 text-xs">
+            ดูทรัพย์ทั้งหมด (995 หลัง) &rarr;
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Trainee Agent Onboarding Challenge Banner (Compact Single Bar <= 50px) -->
     <div id="trainee-challenge-banner" class="hidden mx-3 sm:mx-6 mt-3 bg-white text-gray-800 px-4 py-2.5 rounded-xl shadow-xs text-xs border border-gray-200 border-l-4 border-siwasup-gold">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -1923,12 +1951,17 @@
       }
 
       modal.classList.remove('hidden');
+      modal.style.display = 'flex';
+      document.body.classList.add('modal-open');
       if (window.lucide) lucide.createIcons();
     }
 
     function closePropertyDetailModal() {
       const modal = document.getElementById('property-detail-modal');
-      if (modal) modal.classList.add('hidden');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = '';
+      }
       if (typeof unlockBodyScroll === 'function') {
         unlockBodyScroll();
       }
@@ -5145,7 +5178,7 @@
     }
 
     // 🎯 Instant Deep-Link Navigator (รองรับ ?id=, ?property=, ?code=, ?prop= และ #prop-...)
-    function checkAndOpenTargetProperty(maxRetries = 25) {
+    function checkAndOpenTargetProperty(maxRetries = 40) {
       const params = new URLSearchParams(window.location.search);
       let targetId = params.get('id') || params.get('property') || params.get('code') || params.get('prop');
       
@@ -5178,8 +5211,25 @@
 
         if (found) {
           clearInterval(pollTimer);
-          openPropertyDetailModal(found.id || found.code);
+          window.activeSinglePropertyFocus = found.id || found.code;
+          
+          // ล็อกหน้าเว็บให้แสดงเฉพาะทรัพย์หลังนี้ ไม่ให้แสดงทรัพย์อื่น 995 หลังปนเปื้อน
+          activeBundleFilter = [String(found.id || ''), String(found.code || ''), String(found.property_id || '')].filter(Boolean);
+          
+          const banner = document.getElementById('single-property-focus-banner');
+          const titleEl = document.getElementById('single-focus-title');
+          const subEl = document.getElementById('single-focus-subtitle');
           const displayTitle = typeof getDisplayTitle === 'function' ? getDisplayTitle(found) : (found.title || found.id);
+          
+          if (banner) {
+            if (titleEl) titleEl.textContent = `กำลังดูข้อมูลทรัพย์: ${displayTitle}`;
+            if (subEl) subEl.textContent = `รหัส #${found.id} • ${found.category || 'อสังหาฯ'} • ${found.location || ''} • ฿${formatPriceClean(found.price)}`;
+            banner.classList.remove('hidden');
+          }
+
+          renderProperties();
+          openPropertyDetailModal(found.id || found.code);
+          
           if (typeof showToast === 'function') {
             showToast(`📍 กำลังเปิดสเปกเต็ม: ${displayTitle}`);
           }
@@ -5199,122 +5249,17 @@
       }, 120);
     }
 
-    // --- INIT & URL QUERY PARSER ---
-    function checkUrlParameters() {
-      const params = new URLSearchParams(window.location.search);
-      
-      // Store ref & agent into memory & auto-switch to Client View
-      const incomingRef = params.get('agent') || params.get('ref');
-      if (incomingRef) {
-        localStorage.setItem('siwasup_referred_by', incomingRef);
-        // เมื่อเปิดผ่านลิงก์ที่มีรหัสตัวแทน ให้ปรับเป็นโหมดลูกค้า VIP ทันที
-        if (typeof setMode === 'function') {
-          setMode('client');
-        }
-      }
-      if (params.has('src')) {
-        localStorage.setItem('siwasup_referred_source', params.get('src'));
-      }
-
-      // Check VIP Bundle Parameter (?bundle=id1,id2&for=ชื่อลูกค้า)
-      if (params.has('bundle')) {
-        const rawBundle = params.get('bundle');
-        activeBundleFilter = rawBundle.split(',').map(s => s.trim()).filter(Boolean);
-        activeClientName = params.get('for') || 'คุณลูกค้า';
-
-        const vipBanner = document.getElementById('vip-bundle-banner');
-        const vipTitle = document.getElementById('vip-client-title');
-        const vipAgentInfo = document.getElementById('vip-agent-info');
-
-        if (vipBanner && vipTitle) {
-          vipTitle.textContent = `รายการทรัพย์คัดสรรเฉพาะสำหรับ ${activeClientName}`;
-          if (vipAgentInfo) {
-            const agentRef = params.get('ref') || 'ศิวาทรัพย์ แอสเซท';
-            vipAgentInfo.textContent = `ผู้ดูแลและให้คำปรึกษา: ${agentRef}`;
-          }
-          vipBanner.classList.remove('hidden');
-        }
-      }
-
-      // Check view mode & referrals
-      const view = params.get('view') || params.get('mode');
-      if (params.has('join_ref')) {
-        const inviter = params.get('join_ref');
-        setMode('trainee');
-        setTimeout(() => {
-          showToast(`🤝 คุณกำลังลงทะเบียนเป็นตัวแทนภายใต้การแนะนำของ [${inviter}] - ส่งทรัพย์ 3 หลังเพื่อปลดล็อก!`);
-        }, 800);
-      } else if (view === 'client' || ((params.has('ref') || params.has('agent')) && !view) || params.has('bundle')) {
-        setMode('client');
-      } else if (isAdminSession()) {
-        if (view === 'employee') {
-          setMode('employee');
-        } else if (view === 'free_agent') {
-          setMode('free_agent');
-        } else if (view === 'trainee') {
-          setMode('trainee');
-        } else {
-          setMode('owner'); // โหมด Admin เริ่มต้นที่หน้าเจ้าของเมื่อเข้าด้วยสิทธิ์ Admin (?admin=1 / ?view=owner)
-        }
-      } else {
-        setMode('free_agent'); // ค่าเริ่มต้นสำหรับตัวแทนทั่วไป (User Mode) ล็อกแถบสลับโหมดอัตโนมัติ
-      }
-
-      // Check single property focus (?id=... / ?property=... / ?code=... / ?prop=... / #prop-...)
-      checkAndOpenTargetProperty();
-
-      // Check auto check-in from Meeting QR (?action=checkin&date=YYYY-MM-DD)
-      if (params.get('action') === 'checkin') {
-        const checkinDate = params.get('date');
-        setTimeout(() => {
-          openMeetingCheckinModal(checkinDate);
-          showToast(`🎟️ สแกน QR เข้าประชุมเรียบร้อย กรุณายืนยันรหัสตัวแทนเพื่อรับ +10 แต้มกิจกรรม`);
-        }, 500);
-      }
-
-      // 🔗 Real Identity & Score Sync from Registration / LINE Login
-      if (params.get('my_agent') && window.SiwasupAgents && typeof window.SiwasupAgents.syncMember === 'function') {
-        const doCheckin = params.get('checkin') === '1';
-        const syncRes = window.SiwasupAgents.syncMember({
-          code: params.get('my_agent'),
-          name: params.get('my_name') || params.get('my_agent'),
-          nickname: params.get('my_nick') || params.get('my_agent'),
-          phone: params.get('my_phone') || ''
-        }, doCheckin);
-        if (syncRes && syncRes.agent) {
-          updateProfileButtons(syncRes.agent.code);
-          setTimeout(() => {
-            openMyProfileModal(syncRes.agent.code);
-            if (syncRes.awardedToday && typeof showToast === 'function') {
-              showToast(`🎉 สแกนเข้าระบบสำเร็จ! บันทึกคะแนน +10 แต้มตามจริงให้ [${syncRes.agent.code} - ${syncRes.agent.nickname}] เรียบร้อย!`);
-            }
-          }, 400);
-        }
-      } else {
-        // Auto-detect active LINE Login session if present
-        const sessTok = localStorage.getItem('siwasup_session');
-        if (sessTok && window.SiwasupAgents && typeof window.SiwasupAgents.syncMember === 'function') {
-          fetch('https://siwasup-cobroker-os.onrender.com/api/auth/me', {
-            headers: { 'Authorization': 'Bearer ' + sessTok },
-            cache: 'no-store'
-          }).then(r => r.ok ? r.json() : null).then(me => {
-            if (me && me.status === 'approved' && me.member) {
-              const doCheckin = params.get('checkin') === '1';
-              const syncRes = window.SiwasupAgents.syncMember(me.member, doCheckin);
-              if (syncRes && syncRes.agent) {
-                updateProfileButtons(syncRes.agent.code);
-                if (doCheckin) {
-                  openMyProfileModal(syncRes.agent.code);
-                  if (syncRes.awardedToday && typeof showToast === 'function') {
-                    showToast(`🎉 ยินดีต้อนรับคุณ${syncRes.agent.nickname}! บันทึกคะแนนสแกนเข้าระบบ +10 แต้มตามจริงเรียบร้อย!`);
-                  }
-                }
-              }
-            }
-          }).catch(() => {});
-        }
+    function clearSinglePropertyFocus() {
+      window.activeSinglePropertyFocus = null;
+      activeBundleFilter = null;
+      const b = document.getElementById('single-property-focus-banner');
+      if (b) b.classList.add('hidden');
+      renderProperties();
+      if (typeof showToast === 'function') {
+        showToast('ปลดล็อกแสดงทรัพย์ทั้งหมดในคลังเรียบร้อย');
       }
     }
+
 
     // 🔒 BULLETPROOF MODAL BODY SCROLL LOCK ENGINE (Prevents background scroll & swipe bleed)
     let modalSavedScrollY = 0;

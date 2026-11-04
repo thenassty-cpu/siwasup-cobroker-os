@@ -16,6 +16,20 @@ status_html = put_object_r2("catalog.html", html_bytes, "text/html; charset=utf-
 print(f"[OK] Uploaded catalog.html! Status: {status_html}")
 print("URL: https://assets.siwasup.com/catalog.html")
 
+INDEX_HTML = os.path.join(WEB_DIR, "index.html")
+print("[*] Uploading index.html to Cloudflare R2...")
+with open(INDEX_HTML, 'rb') as f:
+    idx_bytes = f.read()
+status_idx = put_object_r2("index.html", idx_bytes, "text/html; charset=utf-8")
+print(f"[OK] Uploaded index.html! Status: {status_idx}")
+
+SW_JS = os.path.join(WEB_DIR, "sw.js")
+print("[*] Uploading sw.js to Cloudflare R2...")
+with open(SW_JS, 'rb') as f:
+    sw_bytes = f.read()
+status_sw = put_object_r2("sw.js", sw_bytes, "application/javascript; charset=utf-8")
+print(f"[OK] Uploaded sw.js! Status: {status_sw}")
+
 print("[*] Uploading catalog_index.json to Cloudflare R2...")
 with open(CATALOG_JSON, 'rb') as f:
     json_bytes = f.read()
