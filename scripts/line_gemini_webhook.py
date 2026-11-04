@@ -255,6 +255,26 @@ def parse_price(text):
 def search_properties(query, user_id=None):
     q_low = query.lower().strip()
 
+    # Detect requested quantity (e.g. "ขอ 5", "ขอไป 5", "ขอ 5 หลัง", "มี 4 ที่มั้ย")
+    target_count = 3  # default fallback
+    m_count = re.search(r'(?:ขอไป|ขอ|เอา|ดู|สัก|ส่งมา|มี)\s*(\d{1,2})\s*(?:หลัง|ที่|แปลง|รายการ|ห้อง|แห่ง)?(?!\s*(?:ล้าน|บาท))', query)
+    if m_count:
+        try:
+            req_c = int(m_count.group(1))
+            if 1 <= req_c <= 10:
+                target_count = req_c
+        except Exception:
+            pass
+    else:
+        m_count2 = re.search(r'(\d{1,2})\s*(?:หลัง|ที่|แปลง|รายการ|ห้อง|แห่ง)(?!\s*(?:ล้าน|บาท))', query)
+        if m_count2:
+            try:
+                req_c = int(m_count2.group(1))
+                if 1 <= req_c <= 10:
+                    target_count = req_c
+            except Exception:
+                pass
+
     # 1. Exact Property Code Search in Siwasup Portfolio (e.g., 1090965) AND NPA Catalog
     for sp in SIWASUP_PROPS:
         sid = str(sp.get("id") or "").strip()
@@ -370,7 +390,7 @@ def search_properties(query, user_id=None):
     ctx["updated_at"] = time.time()
 
     # Determine if this turn is asking to search or view properties
-    has_trigger = any(w in q_low for w in SEARCH_ACTION_KEYWORDS)
+    has_trigger = any(w in q_low for w in SEARCH_ACTION_KEYWORDS) or bool(m_count) or bool(m_count2) or any(w in q_low for w in ['ขอไป', 'ขอเพิ่ม', 'เอาอีก', 'ส่งมาอีก'])
     has_type = bool(new_types)
     has_loc = bool(new_locs)
     has_price = bool(parse_price(query)) or ctx["unlimited"]
@@ -413,21 +433,27 @@ def search_properties(query, user_id=None):
                 continue
         results.append(p)
 
-    # Automatic geographic expansion if 0 results found in tight western/Siriraj area
-    if not results and eff_locs and any(w in str(eff_locs) for w in ['Bangkok Noi', 'Taling Chan']):
-        west_expand = ['Taling Chan', 'Bangkok Noi', 'Bang Phlat', 'Thawi Watthana', 'Phasi Charoen', 'Bang Khae', 'Thon Buri']
+    # Automatic geographic expansion if results < target_count in western/Bangkok area
+    if len(results) < target_count and eff_locs and any(w in str(eff_locs) for w in ['Bangkok Noi', 'Taling Chan', 'Bang Phlat', 'Thon Buri', 'Bang Khae']):
+        west_expand = ['Taling Chan', 'Bangkok Noi', 'Bang Phlat', 'Thawi Watthana', 'Phasi Charoen', 'Bang Khae', 'Thon Buri', 'Nonthaburi']
+        existing_cat_codes = {p.get('c') for p in results}
         for p in CATALOG:
+            if len(results) >= target_count * 2:
+                break
+            if p.get('c') in existing_cat_codes:
+                continue
             if eff_types and p.get('t') not in eff_types:
                 continue
             pr = p.get('pr', 0)
             if eff_max_p and pr > eff_max_p:
                 continue
             if not eff_max_p and not eff_unlimited:
-                if pr < 1000000 or pr > 15000000:
+                if pr < 800000 or pr > 15000000:
                     continue
             d = p.get('d', '')
             if any(loc.lower() in d.lower() for loc in west_expand):
                 results.append(p)
+                existing_cat_codes.add(p.get('c'))
 
     # Prioritize web catalog properties (SIWASUP_PROPS = 995 items with real photos on catalog.html) first!
     web_results = []
@@ -480,7 +506,7 @@ def search_properties(query, user_id=None):
     results = web_results + [r for r in results if r.get('c') not in seen_codes]
 
     out_list = []
-    for p in results[:3]:
+    for p in results[:target_count]:
         out_list.append({
             "code": p.get('c'),
             "bank": p.get('b'),
@@ -535,9 +561,9 @@ def ask_gemini(user_id, user_text, is_continuous=False, retries=2):
 
     if matched_props:
         prompt_parts.append(
-            f"\n[ข้อมูลทรัพย์จริงในระบบที่ดึงมาให้ตอบ ({search_mode})]:\n"
+            f"\n[ข้อมูลทรัพย์จริงที่ระบบดึงมาให้ตอบ ({search_mode}) ทั้งหมด {len(matched_props)} หลัง]:\n"
             + json.dumps(matched_props, ensure_ascii=False, indent=2)
-            + "\nคำสั่ง: ให้ตอบแนะนำข้อมูลทรัพย์จริงชุดนี้แก่ผู้ใช้ทันที โดยระบุรหัสทรัพย์ ธนาคาร ประเภท ทำเล และราคา ให้ชัดเจนทุกแปลง พร้อมแนะนำให้คลิกดูรูปและรายละเอียดเพิ่มเติมที่ https://assets.siwasup.com/catalog.html หรือแจ้งรหัสเพื่อจองคิวเปิดบ้านได้เลย"
+            + f"\nคำสั่งสำคัญ: ผู้ใช้ขอดูทรัพย์ ให้ตอบแนะนำข้อมูลทรัพย์จริงครบทั้ง {len(matched_props)} หลัง อย่าตัดทิ้งหรือสรุปย่อ ระบุรหัสทรัพย์ ราคา และทำเลให้ครบถ้วนทุกแปลง และแนะนำให้คลิกดูรูปรายละเอียด https://assets.siwasup.com/catalog.html หรือจองเปิดบ้านได้"
         )
     elif search_mode == "TOO_VAGUE_NEEDS_MORE_INFO":
         ctx_types = USER_SEARCH_CONTEXT.get(user_id, {}).get("types", [])
