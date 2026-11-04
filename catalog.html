@@ -2135,9 +2135,14 @@
           }
         }
 
-        // VIP Bundle Filter if active
+        // VIP Bundle Filter if active (Robust ID + Code Matching & Case-Insensitive)
         if (activeBundleFilter && activeBundleFilter.length > 0) {
-          if (!activeBundleFilter.includes(p.id)) return false;
+          const match = activeBundleFilter.some(bid => {
+            const cleanBid = String(bid).trim().toLowerCase();
+            return cleanBid === String(p.id || '').trim().toLowerCase() || 
+                   (p.code && cleanBid === String(p.code || '').trim().toLowerCase());
+          });
+          if (!match) return false;
         }
 
         // Bank NPA Filter (เฉพาะโหมดที่ไม่ใช่ลูกค้า)
@@ -5093,8 +5098,9 @@
     function copyBundleMessage() {
       const msg = getBundleMessageText();
       navigator.clipboard.writeText(msg).then(() => {
-        showToast("✅ คัดลอกข้อความแคปชั่นพร้อมส่ง LINE แล้ว!");
+        showToast("✅ คัดลอกข้อความแคปชั่นพร้อมส่ง LINE แล้ว (รีเซ็ตถาดมัดรวมแล้ว)");
         closeBundleModal();
+        clearBundleSelection();
       }).catch(() => {
         showToast("คัดลอกไม่สำเร็จ กรุณาลองอีกครั้ง");
       });
@@ -5121,8 +5127,9 @@
         window.open(socialShareUrl, '_blank');
       }
 
-      showToast('🚀 คัดลอกแคปชั่นเต็มแล้ว และเปิดแชร์ LINE เรียบร้อย!');
+      showToast('🚀 คัดลอกแคปชั่นเต็มแล้ว และเปิดแชร์ LINE เรียบร้อย! (รีเซ็ตถาดมัดรวมแล้ว)');
       closeBundleModal();
+      clearBundleSelection();
     }
 
     // --- INIT & URL QUERY PARSER ---

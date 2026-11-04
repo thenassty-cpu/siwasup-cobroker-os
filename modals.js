@@ -94,13 +94,13 @@
                 </label>
                 <div class="flex items-center gap-1">
                   <span id="agent-tier-badge" class="text-[9.5px] text-amber-800 font-bold bg-amber-50 px-1.5 py-0.2 rounded border border-amber-200">
-                    🥇 S22 - เจ็ม
+                    🌱 S90 - นัญ
                   </span>
                   <span class="text-[9px] text-emerald-600 font-medium">จำค่า 60 วัน</span>
                 </div>
               </div>
               <div class="relative">
-                <input type="text" id="agent-ref-input" value="S22" 
+                <input type="text" id="agent-ref-input" value="S90" 
                        placeholder="พิมพ์รหัส S02-S126 หรือชื่อเล่น..."
                        oninput="handleAgentAutocomplete(this.value)"
                        onfocus="handleAgentAutocomplete(this.value)"
@@ -832,9 +832,14 @@
             <span class="icon-circle w-5 h-5"><i data-lucide="package" class="w-3 h-3 stroke-[1.5]"></i></span>
             <span>มัดรวมส่งลูกค้า (VIP Micro-Catalog)</span>
           </h3>
-          <button 
-            type="button" 
-            onclick="closeBundleModal()" 
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="clearBundleSelection(); closeBundleModal();" class="text-xs text-rose-600 hover:text-rose-700 hover:bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-200 transition-all font-medium flex items-center gap-1">
+              <i data-lucide="trash-2" class="w-3 h-3"></i>
+              <span>ล้างทั้งหมด</span>
+            </button>
+            <button 
+              type="button" 
+              onclick="closeBundleModal()" 
             aria-label="ปิดหน้าต่าง"
             class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
           >
@@ -996,7 +1001,7 @@
               </span>
             </div>
             <div class="relative">
-              <input type="text" id="vinyl-agent-search" value="S22" 
+              <input type="text" id="vinyl-agent-search" value="S90" 
                      placeholder="พิมพ์รหัส S02-S126 หรือชื่อเล่น..."
                      oninput="handleVinylAgentAutocomplete(this.value)"
                      onfocus="handleVinylAgentAutocomplete(this.value)"
@@ -1584,22 +1589,22 @@
           <div class="bg-gradient-to-br from-amber-50/80 via-white to-red-50/40 p-3.5 rounded-2xl border border-amber-200/80 relative shadow-2xs space-y-3">
             <div class="flex items-center gap-3">
               <div class="relative shrink-0">
-                <img id="profile-3d-badge-img" src="assets/characters/badge_eagle.png" alt="Badge" class="w-16 h-16 object-contain drop-shadow-md">
+                <img id="profile-3d-badge-img" src="assets/characters/badge_bear.png" alt="Badge" class="w-16 h-16 object-contain drop-shadow-md">
                 <div id="profile-avatar-circle" class=" -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-slate-900 text-amber-300 font-mono font-black text-[10px] border border-amber-400 shadow-xs">
-                  S22
+                  S90
                 </div>
               </div>
               <div class="min-w-0 flex-1">
                 <div class="flex items-center gap-1.5 flex-wrap">
-                  <span id="profile-nickname" class="font-black text-base text-gray-900">เจ็ม</span>
-                  <span id="profile-code" class="text-xs font-mono font-bold bg-neutral-900 text-white px-2 py-0.5 rounded-md shadow-2xs">S22</span>
-                  <span id="profile-tier-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">Gold</span>
+                  <span id="profile-nickname" class="font-black text-base text-gray-900">นัญ</span>
+                  <span id="profile-code" class="text-xs font-mono font-bold bg-neutral-900 text-white px-2 py-0.5 rounded-md shadow-2xs">S90</span>
+                  <span id="profile-tier-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-800 border border-slate-300">🌱 Trainee</span>
                 </div>
-                <div id="profile-fullname" class="text-xs text-gray-600 truncate mt-0.5">นางสาวกัญญา คำทรศิริวัฒน์</div>
+                <div id="profile-fullname" class="text-xs text-gray-600 truncate mt-0.5">นางสาว อนัญญา สาททอง</div>
                 <div class="flex items-center gap-2 text-[10px] text-gray-500 mt-1">
-                  <span>📅 เริ่มงาน: <strong id="profile-start-date" class="text-gray-700">8/3/2566</strong></span>
+                  <span>📅 เริ่มงาน: <strong id="profile-start-date" class="text-gray-700">29.05.2568</strong></span>
                   <span>•</span>
-                  <span>💬 LINE: <strong id="profile-line" class="text-gray-700">ggemmie</strong></span>
+                  <span>💬 LINE: <strong id="profile-line" class="text-gray-700">Run4536</strong></span>
                 </div>
               </div>
             </div>
@@ -1612,7 +1617,7 @@
                 <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
                 <span>สายตัวละคร (Archetype Stages):</span>
               </span>
-              <span id="profile-active-tier-name" class="text-emerald-400 font-mono font-bold">🦅 พญาอินทรี</span>
+              <span id="profile-active-tier-name" class="text-emerald-400 font-mono font-bold">🐻 หมีตื่นตัว</span>
             </div>
 
             <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5 pt-1">
@@ -1633,7 +1638,7 @@
               </button>
               <button type="button" onclick="previewProfileArchetypeStage('falcon')" id="evo-stage-falcon" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
                 <img src="assets/characters/badge_falcon.png" alt="Falcon" class="w-8 h-8 object-contain drop-shadow" />
-                <span class="text-[9px] font-bold text-[#E5C985] mt-0.5">เหยี่ยว S22</span>
+                <span class="text-[9px] font-bold text-[#E5C985] mt-0.5">เหยี่ยวเวหา</span>
                 <span class="text-[8px] text-stone-300">Specialist</span>
               </button>
               <button type="button" onclick="previewProfileArchetypeStage('eagle')" id="evo-stage-eagle" class="evo-stage-node flex flex-col items-center p-1.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-amber-400/60 transition cursor-pointer relative">
@@ -1665,11 +1670,11 @@
                 <span class="font-bold text-emerald-400 flex items-center gap-1">
                   <span>🎪 หลอดความขยัน (Activity)</span>
                 </span>
-                <span id="profile-act-checkpoint-label" class="font-mono font-bold text-emerald-300">75 / 100 แต้ม</span>
+                <span id="profile-act-checkpoint-label" class="font-mono font-bold text-emerald-300">0 / 100 แต้ม</span>
               </div>
               <div class="relative w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
                 <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-400/70 z-10" title="เช็กพอยท์ 50 แต้ม: หมีตื่นตัว"></div>
-                <div id="profile-act-evo-bar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: 75%;"></div>
+                <div id="profile-act-evo-bar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
               </div>
               <div class="flex justify-between text-[8.5px] text-slate-400 font-medium px-0.5">
                 <span>0 เริ่มต้น</span>
@@ -1687,11 +1692,11 @@
                 <span class="font-bold text-amber-400 flex items-center gap-1">
                   <span>💰 หลอดผลงานปิดดีล (Performance)</span>
                 </span>
-                <span id="profile-perf-checkpoint-label" class="font-mono font-bold text-amber-300">210 / 300 แต้ม</span>
+                <span id="profile-perf-checkpoint-label" class="font-mono font-bold text-amber-300">0 / 300 แต้ม</span>
               </div>
               <div class="relative w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
                 <div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-400/70 z-10" title="เช็กพอยท์ 150 แต้ม: นักเจรจาเปิดดีล"></div>
-                <div id="profile-perf-evo-bar" class="bg-gradient-to-r from-amber-500 via-yellow-400 to-orange-400 h-full rounded-full transition-all duration-500" style="width: 70%;"></div>
+                <div id="profile-perf-evo-bar" class="bg-gradient-to-r from-amber-500 via-yellow-400 to-orange-400 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
               </div>
               <div class="flex justify-between text-[8.5px] text-slate-400 font-medium px-0.5">
                 <span>0 เริ่มต้น</span>
@@ -1703,25 +1708,13 @@
               </div>
             </div>
 
-            <!-- ⚡ Live Activity & Evolution Simulator -->
-            <div class="pt-2 border-t border-slate-800 space-y-1.5">
-              <div class="flex items-center justify-between text-[9.5px] text-slate-300">
-                <span class="font-bold text-amber-300">⚡ ทดลองจำลองทำภารกิจ (ดูหลอดขยับ & เลื่อนขั้นทันที):</span>
-                <button type="button" onclick="resetProfileSimulatorPoints()" class="px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[8.5px] border border-slate-600 cursor-pointer transition">🔄 รีเซ็ตแต้ม</button>
-              </div>
-              <div class="grid grid-cols-4 gap-1">
-                <button type="button" onclick="simulateProfileQuest('smart_share_click')" class="py-1 px-1 rounded-lg bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-600/50 text-emerald-200 font-bold text-[9px] cursor-pointer active:scale-95 transition text-center">
-                  📲 แชร์ทรัพย์<br><span class="text-emerald-400">+5 ขยัน</span>
-                </button>
-                <button type="button" onclick="simulateProfileQuest('vinyl_field_proof')" class="py-1 px-1 rounded-lg bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-600/50 text-emerald-200 font-bold text-[9px] cursor-pointer active:scale-95 transition text-center">
-                  🪧 ติดป้าย GPS<br><span class="text-emerald-400">+15 ขยัน</span>
-                </button>
-                <button type="button" onclick="simulateProfileQuest('customer_viewing')" class="py-1 px-1 rounded-lg bg-amber-950/90 hover:bg-amber-900 border border-amber-600/50 text-amber-200 font-bold text-[9px] cursor-pointer active:scale-95 transition text-center">
-                  🏡 พาชมบ้าน<br><span class="text-amber-400">+50 ผลงาน</span>
-                </button>
-                <button type="button" onclick="simulateProfileQuest('booking_confirmed')" class="py-1 px-1 rounded-lg bg-amber-950/90 hover:bg-amber-900 border border-amber-600/50 text-amber-200 font-bold text-[9px] cursor-pointer active:scale-95 transition text-center">
-                  📝 ปิดใบจอง<br><span class="text-amber-400">+100 ผลงาน</span>
-                </button>
+            <!-- 🛡️ Automated Real-Action Scoring Notice -->
+            <div class="pt-2 border-t border-slate-800">
+              <div class="p-2 rounded-lg bg-slate-900/90 border border-slate-700/80 text-[9.5px] text-slate-300 leading-relaxed flex items-start gap-2">
+                <span class="text-amber-400 shrink-0 mt-0.5">🛡️</span>
+                <div>
+                  <strong class="text-amber-300">ระบบคำนวณแต้มอัตโนมัติ (Verified Action Only):</strong> คะแนนจะเพิ่มขึ้นตามกิจกรรมจริงในระบบเท่านั้น เช่น สแกนเข้าประชุม (+10), แชร์ลิงก์บ้านให้ลูกค้า (+5), ส่งภาพติดป้าย GPS (+15), พาชมบ้าน (+50) และปิดใบจอง (+100)
+                </div>
               </div>
             </div>
           </div>
@@ -1732,7 +1725,7 @@
               <div class="text-[10px] text-emerald-700 font-bold flex items-center justify-center gap-1">
                 <span>🎪 คะแนนกิจกรรม</span>
               </div>
-              <div id="profile-act-pts" class="text-xl font-black text-emerald-800 font-mono">75</div>
+              <div id="profile-act-pts" class="text-xl font-black text-emerald-800 font-mono">0</div>
               <div class="text-[9px] text-emerald-600">ประชุม / ป้าย GPS / แชร์</div>
             </div>
 
@@ -1740,7 +1733,7 @@
               <div class="text-[10px] text-blue-700 font-bold flex items-center justify-center gap-1">
                 <span>💰 คะแนนผลงาน</span>
               </div>
-              <div id="profile-perf-pts" class="text-xl font-black text-blue-800 font-mono">210</div>
+              <div id="profile-perf-pts" class="text-xl font-black text-blue-800 font-mono">0</div>
               <div class="text-[9px] text-blue-600">ฝากทรัพย์ / จอง / ปิดโอน</div>
             </div>
           </div>
@@ -1754,7 +1747,7 @@
                 <div class="font-bold text-xs">จัดอันดับใน Leaderboard</div>
               </div>
             </div>
-            <div id="profile-total-pts" class="text-2xl font-black font-mono text-amber-300">285</div>
+            <div id="profile-total-pts" class="text-2xl font-black font-mono text-amber-300">0</div>
           </div>
 
           <!-- Quick Action Buttons -->
