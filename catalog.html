@@ -30,7 +30,7 @@
   <!-- PDF & QR Libraries for Vinyl Sign Generator -->
   <script src="https://unpkg.com/pdf-lib@1.17.9/dist/pdf-lib.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-  <script src="siwasup_all_properties.js?v=20261031-npa980"></script>
+  <script src="siwasup_all_properties.js?v=20261104-1300"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -457,13 +457,16 @@
                     <label class="block text-[9px] font-semibold text-neutral-400 uppercase tracking-wider">โซนทำเล</label>
                     <select id="filter-location" onchange="applyAllFilters()" class="w-full bg-transparent text-xs font-bold text-neutral-900 focus:outline-none cursor-pointer truncate">
                       <option value="all">ทุกทำเล</option>
-                      <option value="บางใหญ่">บางใหญ่/นนทบุรี</option>
-                      <option value="ลำลูกกา">ลำลูกกา/ปทุมธานี</option>
-                      <option value="พระราม 9">รัชดา/พระราม 9</option>
-                      <option value="บางนา">บางนา/สมุทรปราการ</option>
-                      <option value="วิภาวดี">วิภาวดี/รัชโยธิน</option>
-                      <option value="ลาดกระบัง">ลาดกระบัง/สุวินทวงศ์</option>
-                      <option value="บางขุนเทียน">พระราม 2/บางขุนเทียน</option>
+                      <option value="พระราม 2">พระราม 2 / ท่าข้าม / บางขุนเทียน</option>
+                      <option value="ท่าพระ">ฝั่งธน / ท่าพระ / บางแค / เพชรเกษม</option>
+                      <option value="รามอินทรา">รามอินทรา / สายไหม / บางเขน / มีนบุรี</option>
+                      <option value="ลาดพร้าว">ลาดพร้าว / บางกะปิ / นวมินทร์ / รามคำแหง</option>
+                      <option value="พระราม 9">รัชดา / พระราม 9 / ห้วยขวาง</option>
+                      <option value="วิภาวดี">วิภาวดี / จตุจักร / ดอนเมือง / แจ้งวัฒนะ</option>
+                      <option value="บางนา">บางนา / ศรีนครินทร์ / สมุทรปราการ</option>
+                      <option value="ลาดกระบัง">ลาดกระบัง / อ่อนนุช / สุวรรณภูมิ</option>
+                      <option value="บางใหญ่">บางใหญ่ / บางบัวทอง / นนทบุรี</option>
+                      <option value="รังสิต">รังสิต / ลำลูกกา / คลองหลวง / ปทุมธานี</option>
                     </select>
                   </div>
 
@@ -899,7 +902,7 @@
   <script src="siwasup_agents.js?v=20261104-conf"></script>
   <script src="modals.js?v=20261104-realscan"></script>
   <script src="vinyl_generator.js?v=20261019-2350"></script>
-  <script src="siwasup_all_properties.js?v=20261031-npa980"></script>
+  <script src="siwasup_all_properties.js?v=20261104-1300"></script>
   <script>
     let currentMode = 'free_agent';
     let currentCategory = 'all';
@@ -2146,7 +2149,7 @@
 
         // Location Filter
         if (loc !== 'all') {
-          const haystack = ((p.title || '') + ' ' + (p.description || '') + ' ' + (p.location || '')).toLowerCase();
+          const haystack = ((p.title || '') + ' ' + (p.description || '') + ' ' + (p.location || '') + ' ' + (p.search_keywords || '')).toLowerCase();
           if (!haystack.includes(loc.toLowerCase())) return false;
         }
 
@@ -2159,11 +2162,16 @@
           if (budget === 'above5m' && priceNum < 5000000) return false;
         }
 
-        // Search Query (ใช้ชื่อที่ซ่อนแบงก์แล้วในโหมดลูกค้า)
+        // Search Query (รองรับทั้งรหัสทรัพย์, ชื่อโครงการ, โซนทำเลไทย/อังกฤษ และประโยคค้นหาธรรมชาติ)
         if (query) {
           const searchableBank = currentMode === 'client' ? '' : (p.bank_source || '');
-          const text = (getDisplayTitle(p) + ' ' + getDisplayDesc(p) + ' ' + (p.price || '') + ' ' + (p.category || '') + ' ' + searchableBank + ' ' + (p.id || '')).toLowerCase();
-          if (!text.includes(query)) return false;
+          const text = (getDisplayTitle(p) + ' ' + getDisplayDesc(p) + ' ' + (p.location || '') + ' ' + (p.search_keywords || '') + ' ' + (p.price || '') + ' ' + (p.category || '') + ' ' + searchableBank + ' ' + (p.id || '') + ' ' + (p.code || '')).toLowerCase();
+          let cleanQ = query.replace(/^#/, '').replace(/(?:หาบ้าน|ขอบ้าน|อยากได้บ้าน|ดูบ้าน|บ้านโซน|บ้านแถว|บ้านย่าน|หาคอนโด|คอนโดโซน|โซน|แถว|ย่าน|ทางแถบ|รหัสทรัพย์|รหัส)/g, ' ').trim();
+          if (!cleanQ) cleanQ = query.replace(/^#/, '').trim();
+          // Also split 'บ้านสายไหม' -> 'บ้าน สายไหม' if starts with บ้าน followed by non-type
+          cleanQ = cleanQ.replace(/^บ้าน(?!เดี่ยว|แฝด|กลางเมือง|พฤกษา|สวน|แพ้ว)/, 'บ้าน ');
+          const tokens = cleanQ.split(/\s+/).filter(Boolean);
+          if (tokens.length > 0 && !tokens.every(tok => text.includes(tok))) return false;
         }
 
         return true;

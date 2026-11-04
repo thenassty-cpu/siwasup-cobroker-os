@@ -429,13 +429,55 @@ def search_properties(query, user_id=None):
             if any(loc.lower() in d.lower() for loc in west_expand):
                 results.append(p)
 
-    # Sorting
+    # Prioritize web catalog properties (SIWASUP_PROPS = 995 items with real photos on catalog.html) first!
+    web_results = []
+    cat_type_map = {"SDH": ["บ้านเดี่ยว", "บ้านแฝด"], "TH": ["ทาวน์โฮม", "ทาวน์เฮ้าส์"], "CD": ["คอนโด", "ห้องชุด"], "LAND": ["ที่ดิน"], "COMM": ["อาคารพาณิชย์", "ตึกแถว", "โฮมออฟฟิศ"]}
+    allowed_cats = []
+    for t_code in eff_types:
+        allowed_cats.extend(cat_type_map.get(t_code, []))
+
+    for sp in SIWASUP_PROPS:
+        if sp.get("status") in ("sold_archive", "transferred") or sp.get("is_image_soldout"):
+            continue
+        sp_cat = sp.get("category") or ""
+        if allowed_cats and not any(ac in sp_cat for ac in allowed_cats):
+            continue
+        pr_str = re.sub(r'[^0-9]', '', str(sp.get("price") or "0"))
+        pr = int(pr_str) if pr_str.isdigit() else 0
+        if eff_max_p and pr > eff_max_p:
+            continue
+        if not eff_max_p and not eff_unlimited:
+            if pr < 800000 or pr > 15000000:
+                continue
+        haystack = ((sp.get("title") or "") + " " + (sp.get("description") or "") + " " + (sp.get("location") or "") + " " + (sp.get("search_keywords") or "")).lower()
+        if eff_locs:
+            if not any(loc.lower() in haystack for loc in eff_locs):
+                continue
+        web_results.append({
+            "c": str(sp.get("id")),
+            "b": sp.get("bank_source") or "Siwasup",
+            "tn": sp.get("category") or "บ้านเดี่ยว",
+            "d": (sp.get("location") or sp.get("title") or "กรุงเทพฯ").split("•")[0].strip(),
+            "p": (sp.get("location") or "กรุงเทพมหานคร").split("•")[-1].strip(),
+            "pr": pr,
+            "sqw": (sp.get("size") or "-").replace(" ตร.ว.", ""),
+            "sqm": (sp.get("usable_area") or "-").replace(" ตร.ม.", ""),
+            "_web": True
+        })
+
+    # Sorting (Web catalog properties with photos always come first!)
     if eff_unlimited:
+        web_results.sort(key=lambda x: x.get('pr', 0), reverse=True)
         results.sort(key=lambda x: x.get('pr', 0), reverse=True)
     elif eff_max_p:
+        web_results.sort(key=lambda x: abs((x.get('pr') or 0) - eff_max_p))
         results.sort(key=lambda x: abs((x.get('pr') or 0) - eff_max_p))
     else:
+        web_results.sort(key=lambda x: abs((x.get('pr') or 0) - 4000000))
         results.sort(key=lambda x: abs((x.get('pr') or 0) - 4000000))
+
+    seen_codes = {x.get('c') for x in web_results}
+    results = web_results + [r for r in results if r.get('c') not in seen_codes]
 
     out_list = []
     for p in results[:3]:
@@ -704,8 +746,8 @@ def ensure_super_tech_seat(store, uid, name="", picture=""):
     if not seat:
         seat = {
             "id": "app_office_004",
-            "name": "คุณต้น (NASSTY)",
-            "nickname": "ต้น",
+            "name": "[NASSTY]",
+            "nickname": "NASSTY",
             "phone": "0815555555",
             "line_id": "nassty_ton",
             "zone": "สำนักงานใหญ่",
@@ -731,6 +773,12 @@ def ensure_super_tech_seat(store, uid, name="", picture=""):
         store.setdefault("approved", []).insert(0, seat)
         changed = True
     else:
+        if seat.get("name") != "[NASSTY]":
+            seat["name"] = "[NASSTY]"
+            changed = True
+        if seat.get("nickname") != "NASSTY":
+            seat["nickname"] = "NASSTY"
+            changed = True
         if seat.get("lineUserId") != uid:
             seat["lineUserId"] = uid
             changed = True
@@ -840,10 +888,30 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
         parsed_url = urllib.parse.urlparse(self.path)
         path = parsed_url.path
         query = urllib.parse.parse_qs(parsed_url.query)
+        if path == "/api/presence/heartbeat":
+            s = self._session()
+            if s and s.get("sub"):
+                sub = s["sub"]
+                store = load_lobby_data()
+                mem = next((a for a in store.get("approved", []) if a.get("lineUserId") == sub or a.get("id") == "app_office_004"), None)
+                if mem:
+                    mem["last_active_at"] = int(time.time())
+                    save_lobby_data(store)
+            self._send_json(200, {"ok": True, "now": int(time.time())})
+            return
+
         if path == "/api/lobby/list":
-            if not self._require("admin"):
+            acting = self._require("admin")
+            if not acting:
                 return
-            self._send_json(200, sanitize_store_for_admin(load_lobby_data()))
+            store = load_lobby_data()
+            # Mark acting member as online
+            acting_id = acting.get("id")
+            for a in store.get("approved", []):
+                if a.get("id") == acting_id:
+                    a["last_active_at"] = int(time.time())
+                    break
+            self._send_json(200, sanitize_store_for_admin(store))
             return
 
         if path == "/api/lobby/status":
@@ -861,6 +929,8 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             line_info = {"userId": sub, "name": s.get("name", ""), "picture": s.get("picture", "")}
             mem = next((a for a in store.get("approved", []) if a.get("lineUserId") == sub), None)
             if mem:
+                mem["last_active_at"] = int(time.time())
+                save_lobby_data(store)
                 self._send_json(200, {"status": "approved", "member": sanitize_member(mem), "isAdmin": is_admin_member(mem), "line": line_info})
                 return
             pend = next((a for a in store.get("pending", []) if a.get("lineUserId") == sub), None)
