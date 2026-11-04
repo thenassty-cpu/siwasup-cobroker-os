@@ -1,0 +1,25 @@
+name: Nong Siwa Keep-Alive Heartbeat
+
+on:
+  schedule:
+    # Run every 14 minutes during Thai working hours (07:00 - 21:00 ICT = 00:00 - 14:00 UTC)
+    - cron: '*/14 0-14 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Poke Nong Siwa (Keep Awake & Health Check)
+        run: |
+          echo "Poking Nong Siwa at $(date)..."
+          RESPONSE=$(curl -s -w "\n%{http_code}" https://siwasup-cobroker-os.onrender.com/health)
+          HTTP_BODY=$(echo "$RESPONSE" | sed '$d')
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          echo "HTTP Response Code: $HTTP_CODE"
+          echo "Server Response: $HTTP_BODY"
+          if [ "$HTTP_CODE" -ne 200 ]; then
+            echo "Warning: Health check failed with code $HTTP_CODE"
+            exit 1
+          fi
+          echo "Nong Siwa is wide awake and healthy!"
