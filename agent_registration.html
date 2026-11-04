@@ -64,83 +64,136 @@
   <!-- MAIN CONTAINER -->
   <main class="max-w-xl w-full mx-auto my-auto py-4 sm:py-6 space-y-4">
 
-    <!-- AUTH MODE SELECTOR TABS -->
-    <div class="flex justify-center">
-      <div class="bg-white p-1 rounded-2xl border border-slate-200 flex gap-1 shadow-xs max-w-sm w-full">
-        <button id="btnTabRegister" type="button" onclick="switchAuthMode('register')" class="flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 bg-amber-600 text-white shadow-xs">
-          <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
-          <span>1. ลงทะเบียนใหม่</span>
+    <!-- ============================================================== -->
+    <!-- 4-STEP VISUAL PROGRESS STEPPER (แทนที่ระบบ Tab เดิมทั้งหมด) -->
+    <!-- ============================================================== -->
+    <div id="regStepperBar" class="card-light rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-sm">
+      <div class="relative flex items-start justify-between">
+        <!-- Connecting Track Line -->
+        <div class="absolute top-5 left-8 right-8 h-1.5 bg-slate-200 rounded-full overflow-hidden z-0">
+          <div id="stepperProgressFill" class="h-full bg-gradient-to-r from-emerald-500 via-amber-500 to-amber-400 transition-all duration-500" style="width: 0%;"></div>
+        </div>
+
+        <!-- Step 1 Node -->
+        <button type="button" onclick="tryClickStep(1)" class="relative z-10 flex flex-col items-center gap-1.5 w-1/4 group focus:outline-none">
+          <div id="stepCircle1" class="w-10 h-10 rounded-full flex items-center justify-center font-black text-sm transition-all duration-300 bg-amber-500 text-slate-950 ring-4 ring-amber-400/30 shadow-md">
+            1
+          </div>
+          <div class="text-center">
+            <div id="stepLabel1" class="text-[10px] sm:text-xs font-black text-slate-900 leading-tight">Step 1</div>
+            <div class="text-[9px] sm:text-[10px] text-slate-500 leading-tight">เชื่อม LINE</div>
+          </div>
         </button>
-        <button id="btnTabLogin" type="button" onclick="switchAuthMode('login')" class="flex-1 py-2 px-3 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5">
-          <i data-lucide="log-in" class="w-3.5 h-3.5"></i>
-          <span>2. เข้าสู่ระบบ (Login)</span>
+
+        <!-- Step 2 Node -->
+        <button type="button" onclick="tryClickStep(2)" class="relative z-10 flex flex-col items-center gap-1.5 w-1/4 group focus:outline-none">
+          <div id="stepCircle2" class="w-10 h-10 rounded-full flex items-center justify-center font-black text-sm transition-all duration-300 bg-slate-200 text-slate-500 border-2 border-white">
+            2
+          </div>
+          <div class="text-center">
+            <div id="stepLabel2" class="text-[10px] sm:text-xs font-bold text-slate-400 leading-tight">Step 2</div>
+            <div class="text-[9px] sm:text-[10px] text-slate-400 leading-tight">ข้อมูลส่วนตัว</div>
+          </div>
+        </button>
+
+        <!-- Step 3 Node -->
+        <button type="button" onclick="tryClickStep(3)" class="relative z-10 flex flex-col items-center gap-1.5 w-1/4 group focus:outline-none">
+          <div id="stepCircle3" class="w-10 h-10 rounded-full flex items-center justify-center font-black text-sm transition-all duration-300 bg-slate-200 text-slate-500 border-2 border-white">
+            3
+          </div>
+          <div class="text-center">
+            <div id="stepLabel3" class="text-[10px] sm:text-xs font-bold text-slate-400 leading-tight">Step 3</div>
+            <div class="text-[9px] sm:text-[10px] text-slate-400 leading-tight">เลือกโซนงาน</div>
+          </div>
+        </button>
+
+        <!-- Step 4 Node -->
+        <button type="button" onclick="tryClickStep(4)" class="relative z-10 flex flex-col items-center gap-1.5 w-1/4 group focus:outline-none">
+          <div id="stepCircle4" class="w-10 h-10 rounded-full flex items-center justify-center font-black text-sm transition-all duration-300 bg-slate-200 text-slate-500 border-2 border-white">
+            4
+          </div>
+          <div class="text-center">
+            <div id="stepLabel4" class="text-[10px] sm:text-xs font-bold text-slate-400 leading-tight">Step 4</div>
+            <div class="text-[9px] sm:text-[10px] text-slate-400 leading-tight">รับ +10 แต้ม</div>
+          </div>
         </button>
       </div>
     </div>
 
     <!-- ============================================================== -->
-    <!-- STATE 1: REGISTRATION FORM (ผู้สมัครกรอกข้อมูลพื้นฐาน - ธีมสว่าง) -->
+    <!-- WIZARD STEPS CONTAINER (แสดงทีละการ์ด ไม่ต้องเลื่อนยาว ไม่มี Tab) -->
     <!-- ============================================================== -->
     <div id="viewRegisterForm" class="space-y-4">
 
-      <!-- LINE connect banner -->
-      <div id="regLineBanner" class="card-light rounded-2xl p-4 border-2 border-emerald-300 bg-emerald-50/50 flex items-center justify-between gap-3">
-        <div id="regLineBannerText" class="text-xs text-emerald-900 leading-relaxed">
-          <strong>ขั้นที่ 1:</strong> เชื่อมบัญชี LINE ของท่านก่อนสมัคร เพื่อยืนยันตัวตน (ไม่ต้องตั้งรหัสผ่าน)
-        </div>
-        <button id="regLineBannerBtn" type="button" onclick="startLineLogin('register')" class="shrink-0 px-3.5 py-2 rounded-xl bg-[#06C755] hover:brightness-95 text-white font-black text-xs shadow-sm">เชื่อม LINE</button>
-      </div>
-<!-- Welcome Banner -->
-      <div class="card-light rounded-3xl p-5 border border-amber-200 text-center space-y-2 relative overflow-hidden">
-        <div class="w-12 h-12 mx-auto rounded-2xl bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center mb-1 shadow-sm">
-          <i data-lucide="user-plus" class="w-6 h-6"></i>
-        </div>
-        <h2 class="text-lg font-black text-slate-900">ลงทะเบียนร่วมงาน & เข้าสู่ห้องรับรอง (Lobby)</h2>
-        <p class="text-xs text-slate-600 leading-relaxed">
-          กรอกข้อมูล 1 นาทีเพื่อเข้าสู่ <strong>ห้องรับรองดิจิทัล (Lobby)</strong><br>
-          ฝ่ายบริหารจะทำการจัดสรรสิทธิ์วิชาชีพ และปลดล็อกบัตรดิจิทัลให้ท่านทันที
-        </p>
-      </div>
-
-      <!-- Registration Form -->
-      <div class="card-light rounded-3xl p-5 sm:p-6 space-y-4">
-
-        <!-- 1. Affiliation Selection -->
-        <div class="space-y-1.5">
-          <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-            <i data-lucide="briefcase" class="w-3.5 h-3.5 text-amber-600"></i>
-            <span>ความเกี่ยวข้องกับศิวาทรัพย์ *</span>
-          </label>
-          <div class="grid grid-cols-2 gap-2">
-            <label class="flex items-center gap-2.5 p-3 rounded-2xl bg-amber-50/60 border border-amber-300 cursor-pointer hover:bg-amber-50 transition">
-              <input type="radio" name="affiliation" value="agent" checked class="text-amber-600 focus:ring-0">
-              <div>
-                <div class="text-xs font-bold text-slate-900">🤝 Co-Broker อิสระ</div>
-                <div class="text-[9px] text-slate-500">พันธมิตรตัวแทนนอก</div>
-              </div>
-            </label>
-            <label class="flex items-center gap-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-slate-100 transition">
-              <input type="radio" name="affiliation" value="office" class="text-amber-600 focus:ring-0">
-              <div>
-                <div class="text-xs font-bold text-slate-900">🏢 ทีมงานออฟฟิศ</div>
-                <div class="text-[9px] text-slate-500">บุคลากรประจำออฟฟิศ</div>
-              </div>
-            </label>
+      <!-- ==================== STEP 1 CARD: ADD FRIEND & LINE CONNECT ==================== -->
+      <div id="wizardStep1" class="card-light rounded-3xl p-6 border-2 border-amber-300 space-y-5 shadow-md">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-black text-[10px]">STEP 1 OF 4</span>
+            <h2 class="text-lg font-black text-slate-900 mt-1">แอดเพื่อน & เชื่อมบัญชี LINE</h2>
+          </div>
+          <div class="w-11 h-11 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center shrink-0">
+            <i data-lucide="message-circle" class="w-6 h-6"></i>
           </div>
         </div>
 
-        <!-- 1.5 Photo Upload & Avatar Picker -->
+        <div class="space-y-3">
+          <!-- Sub-action A: Add Friend LINE OA -->
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-3">
+            <div class="text-xs text-slate-700 leading-relaxed">
+              <strong class="text-slate-900 block">1. แอดเพื่อน LINE OA ศิวาทรัพย์ (@813nyyia)</strong>
+              <span>เพื่อรับแจ้งเตือนคิวเปิดบ้านและลีดลูกค้าอัตโนมัติ</span>
+            </div>
+            <a href="https://line.me/R/ti/p/@813nyyia" target="_blank" class="shrink-0 px-3.5 py-2.5 rounded-xl bg-white hover:bg-emerald-50 text-emerald-700 border border-emerald-400 font-black text-xs shadow-2xs transition">
+              ➕ แอดเพื่อน
+            </a>
+          </div>
+
+          <!-- Sub-action B: Connect LINE Login -->
+          <div id="regLineBanner" class="p-4 rounded-2xl bg-emerald-50/70 border-2 border-emerald-300 space-y-3">
+            <div id="regLineBannerText" class="text-xs text-emerald-950 leading-relaxed">
+              <strong class="block text-sm">2. กดเชื่อมบัญชี LINE ของท่าน (ไม่ต้องตั้งรหัสผ่าน)</strong>
+              <span>หากท่านเป็นสมาชิกที่ได้รับอนุมัติแล้ว ระบบจะพาท่านเข้าสู่หน้าต้อนรับทันที</span>
+            </div>
+            <button id="regLineBannerBtn" type="button" onclick="startLineLogin('register')" class="w-full py-3.5 px-4 rounded-2xl bg-[#06C755] hover:brightness-95 text-white font-black text-sm shadow-md flex items-center justify-center gap-2 transition active:scale-[0.99] cursor-pointer">
+              <i data-lucide="log-in" class="w-4 h-4"></i>
+              <span>เชื่อมบัญชี LINE & ดำเนินการต่อ</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Next Button (Enabled once LINE is connected) -->
+        <div class="pt-1 flex justify-end">
+          <button id="btnStep1Next" type="button" onclick="goToRegStep(2)" class="w-full py-3.5 px-6 rounded-2xl gold-gradient hover:brightness-105 text-slate-950 font-black text-sm shadow-lg flex items-center justify-center gap-2 transition cursor-pointer">
+            <span>ถัดไป: กรอกข้อมูลส่วนตัว (Next)</span>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ==================== STEP 2 CARD: PERSONAL DETAILS ==================== -->
+      <div id="wizardStep2" class="card-light rounded-3xl p-6 border-2 border-amber-300 space-y-4 shadow-md hidden">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-black text-[10px]">STEP 2 OF 4</span>
+            <h2 class="text-lg font-black text-slate-900 mt-1">ข้อมูลส่วนตัว & เบอร์ติดต่อ</h2>
+          </div>
+          <div class="w-11 h-11 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center shrink-0">
+            <i data-lucide="user" class="w-6 h-6"></i>
+          </div>
+        </div>
+
+        <!-- Photo Upload & Avatar Picker -->
         <div class="space-y-2 p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
           <label class="text-xs font-bold text-slate-800 flex items-center justify-between">
             <span class="flex items-center gap-1.5">
               <i data-lucide="camera" class="w-3.5 h-3.5 text-amber-600"></i>
-              <span>รูปถ่ายโปรไฟล์ทางการ (Profile Picture) *</span>
+              <span>รูปโปรไฟล์นามบัตรดิจิทัล</span>
             </span>
-            <span class="text-[10px] text-slate-500">แตะเพื่อเปลี่ยนรูป</span>
+            <span class="text-[10px] text-slate-500">ดึงจาก LINE อัตโนมัติ หรือแตะเปลี่ยน</span>
           </label>
 
           <div class="flex items-center gap-3.5">
-            <!-- Current Photo Preview & Click to Upload -->
             <label for="regPhotoFile" class="relative cursor-pointer shrink-0 group block" title="แตะเพื่อเลือกรูปจากมือถือ">
               <img id="regPhotoPreview" 
                    src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&auto=format&fit=crop&q=80" 
@@ -153,45 +206,35 @@
             <input type="file" id="regPhotoFile" accept="image/*" class="hidden" onchange="handleRegPhotoUpload(event)">
 
             <div class="space-y-1.5 flex-1 min-w-0">
-              <button type="button" onclick="document.getElementById('regPhotoFile').click()" class="w-full py-1.5 px-3 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition active:scale-98">
+              <button type="button" onclick="document.getElementById('regPhotoFile').click()" class="w-full py-1.5 px-3 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition">
                 <i data-lucide="image" class="w-3.5 h-3.5 text-amber-600"></i>
-                <span>📁 แตะเลือกรูปจากมือถือ (ถ่าย/อัลบั้ม)</span>
+                <span>📁 เปลี่ยนรูปจากมือถือ</span>
               </button>
-
-              <!-- Quick Presets -->
               <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5">
                 <span class="text-[9px] text-slate-500 shrink-0">หรือเลือก:</span>
-                <button type="button" onclick="selectPresetAvatar('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&auto=format&fit=crop&q=80')" class="w-6 h-6 rounded-full overflow-hidden border border-slate-300 hover:border-amber-500 shrink-0" title="หญิง สูท">
-                  <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80" class="w-full h-full object-cover">
-                </button>
-                <button type="button" onclick="selectPresetAvatar('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80')" class="w-6 h-6 rounded-full overflow-hidden border border-slate-300 hover:border-amber-500 shrink-0" title="ชาย สูท">
-                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" class="w-full h-full object-cover">
-                </button>
-                <button type="button" onclick="selectPresetAvatar('https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&auto=format&fit=crop&q=80')" class="w-6 h-6 rounded-full overflow-hidden border border-slate-300 hover:border-amber-500 shrink-0" title="หญิง แคชชวล">
-                  <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&auto=format&fit=crop&q=80" class="w-full h-full object-cover">
-                </button>
-                <button type="button" onclick="selectPresetAvatar('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80')" class="w-6 h-6 rounded-full overflow-hidden border border-slate-300 hover:border-amber-500 shrink-0" title="ชาย แคชชวล">
-                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80" class="w-full h-full object-cover">
-                </button>
+                <button type="button" onclick="selectPresetAvatar('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&auto=format&fit=crop&q=80')" class="w-6 h-6 rounded-full overflow-hidden border border-slate-300 hover:border-amber-500 shrink-0"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80" class="w-full h-full object-cover"></button>
+                <button type="button" onclick="selectPresetAvatar('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80')" class="w-6 h-6 rounded-full overflow-hidden border border-slate-300 hover:border-amber-500 shrink-0"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" class="w-full h-full object-cover"></button>
+                <button type="button" onclick="selectPresetAvatar('https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&auto=format&fit=crop&q=80')" class="w-6 h-6 rounded-full overflow-hidden border border-slate-300 hover:border-amber-500 shrink-0"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&auto=format&fit=crop&q=80" class="w-full h-full object-cover"></button>
+                <button type="button" onclick="selectPresetAvatar('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&auto=format&fit=crop&q=80')" class="w-6 h-6 rounded-full overflow-hidden border border-slate-300 hover:border-amber-500 shrink-0"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80" class="w-full h-full object-cover"></button>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 2. Full Name -->
+        <!-- Full Name -->
         <div class="space-y-1">
           <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
             <i data-lucide="user" class="w-3.5 h-3.5 text-amber-600"></i>
-            <span>ชื่อ - นามสกุลจริง (สำหรับแสดงบนนามบัตรทางการ) *</span>
+            <span>ชื่อ - นามสกุลจริง (สำหรับออกนามบัตรดิจิทัล) *</span>
           </label>
-          <input type="text" id="regName" placeholder="เช่น คุณวารินทร์ กูลจีรัง, คุณนภชกร" class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 transition">
+          <input type="text" id="regName" placeholder="ระบุชื่อ - นามสกุลจริงของท่าน" class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 transition">
         </div>
 
-        <!-- 3. Nickname & Phone -->
+        <!-- Nickname & Phone -->
         <div class="grid grid-cols-2 gap-3">
           <div class="space-y-1">
             <label class="text-xs font-bold text-slate-700">ชื่อเล่น *</label>
-            <input type="text" id="regNickname" placeholder="เช่น เจี๊ยบ, บัว, ต้น, เอิร์ธ" class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 transition">
+            <input type="text" id="regNickname" placeholder="ระบุชื่อเล่นของท่าน" class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 transition">
           </div>
           <div class="space-y-1">
             <label class="text-xs font-bold text-slate-700">เบอร์โทรศัพท์มือถือ *</label>
@@ -199,16 +242,62 @@
           </div>
         </div>
 
-        <!-- 4. Line ID -->
-        <div class="space-y-1">
-          <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-            <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-600"></i>
-            <span>LINE ID (สำหรับรับคิวเปิดบ้านและประสานงาน)</span>
-          </label>
-          <input type="text" id="regLineId" placeholder="เช่น line_id หรือ เบอร์โทร" class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 transition">
+        <!-- Step 2 Navigation -->
+        <div class="pt-2 flex items-center gap-2.5">
+          <button type="button" onclick="goToRegStep(1)" class="px-4 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition cursor-pointer">
+            ← ย้อนกลับ
+          </button>
+          <button type="button" onclick="validateAndGoStep3()" class="flex-1 py-3.5 px-6 rounded-2xl gold-gradient hover:brightness-105 text-slate-950 font-black text-sm shadow-lg flex items-center justify-center gap-2 transition cursor-pointer">
+            <span>ถัดไป: เลือกโซนพื้นที่ (Next)</span>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ==================== STEP 3 CARD: TERRITORY & SUBMIT ==================== -->
+      <div id="wizardStep3" class="card-light rounded-3xl p-6 border-2 border-amber-300 space-y-4 shadow-md hidden">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-black text-[10px]">STEP 3 OF 4</span>
+            <h2 class="text-lg font-black text-slate-900 mt-1">เลือกโซนพื้นที่ & ส่งใบสมัคร</h2>
+          </div>
+          <div class="w-11 h-11 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center shrink-0">
+            <i data-lucide="map-pin" class="w-6 h-6"></i>
+          </div>
         </div>
 
-        <!-- 5. Territory Zone -->
+        <!-- Affiliation Selection -->
+        <div class="space-y-1.5">
+          <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+            <i data-lucide="briefcase" class="w-3.5 h-3.5 text-amber-600"></i>
+            <span>รูปแบบการร่วมงาน *</span>
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <label class="flex items-center gap-2 p-2.5 rounded-2xl bg-[#786ea1]/15 border border-[#786ea1] cursor-pointer hover:bg-[#786ea1]/25 transition">
+              <input type="radio" name="affiliation" value="free_agent" checked class="text-[#786ea1] focus:ring-0">
+              <div>
+                <div class="text-xs font-bold text-[#4a4269]">🤝 Free Agent</div>
+                <div class="text-[9px] text-[#5e5485]">ตัวแทนอิสระ / พันธมิตร</div>
+              </div>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-2xl bg-[#ffa8b6]/20 border border-[#ffa8b6] cursor-pointer hover:bg-[#ffa8b6]/30 transition">
+              <input type="radio" name="affiliation" value="contract_agent" class="text-[#d46a7e] focus:ring-0">
+              <div>
+                <div class="text-xs font-bold text-[#9e3b4f]">📑 Contract Agent</div>
+                <div class="text-[9px] text-[#b84a60]">ตัวแทนสัญญาสังกัด</div>
+              </div>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-2xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-slate-100 transition">
+              <input type="radio" name="affiliation" value="office" class="text-amber-600 focus:ring-0">
+              <div>
+                <div class="text-xs font-bold text-slate-900">🏢 ทีมงานออฟฟิศ</div>
+                <div class="text-[9px] text-slate-500">เจ้าหน้าที่ประจำ</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Territory Zone -->
         <div class="space-y-1">
           <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
             <i data-lucide="map-pin" class="w-3.5 h-3.5 text-rose-600"></i>
@@ -223,38 +312,31 @@
           </select>
         </div>
 
-        <!-- Submit to Lobby Button -->
-        <div class="pt-2">
-          <button onclick="submitToLobby()" class="w-full gold-gradient hover:brightness-105 text-slate-950 font-black py-3 rounded-2xl shadow-lg shadow-amber-500/20 text-sm flex items-center justify-center gap-2 transition active:scale-[0.99]">
+        <!-- Line ID -->
+        <div class="space-y-1">
+          <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+            <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-600"></i>
+            <span>LINE ID สำหรับติดต่อประสานงาน (ถ้ามี)</span>
+          </label>
+          <input type="text" id="regLineId" placeholder="เช่น line_id หรือ เบอร์โทร" class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 transition">
+        </div>
+
+        <!-- Step 3 Navigation / Submit -->
+        <div class="pt-2 flex items-center gap-2.5">
+          <button type="button" onclick="goToRegStep(2)" class="px-4 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition cursor-pointer">
+            ← ย้อนกลับ
+          </button>
+          <button type="button" onclick="submitToLobby()" class="flex-1 gold-gradient hover:brightness-105 text-slate-950 font-black py-3.5 px-6 rounded-2xl shadow-lg shadow-amber-500/20 text-sm flex items-center justify-center gap-2 transition active:scale-[0.99] cursor-pointer">
             <i data-lucide="send" class="w-4 h-4"></i>
-            <span>ยืนยันข้อมูล & เข้าสู่ห้องรับรอง (Enter Lobby)</span>
+            <span>ส่งข้อมูล & เข้าสู่ Step 4 (รับ +10 แต้ม)</span>
           </button>
         </div>
-
       </div>
 
     </div>
 
-        <!-- ============================================================== -->
-    <!-- STATE 1.5: LINE LOGIN -->
-    <!-- ============================================================== -->
-    <div id="viewLoginForm" class="space-y-4 hidden">
-      <div class="card-light rounded-3xl p-6 border border-emerald-200 text-center space-y-4">
-        <div class="w-12 h-12 mx-auto rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center shadow-sm">
-          <i data-lucide="message-circle" class="w-6 h-6"></i>
-        </div>
-        <h2 class="text-lg font-black text-slate-900">เข้าสู่ระบบด้วย LINE</h2>
-        <p class="text-xs text-slate-600 leading-relaxed">
-          กดครั้งเดียว ไม่ต้องจำรหัสผ่าน ระบบจะรู้สิทธิ์ของท่านจากบัญชี LINE ที่ได้รับอนุมัติ<br>
-          สมาชิกใหม่จะถูกส่งเข้า Lobby เพื่อรอผู้บริหารอนุมัติ
-        </p>
-        <button type="button" onclick="startLineLogin('register')" class="w-full bg-[#06C755] hover:brightness-95 text-white font-black py-3 rounded-2xl shadow-md text-sm flex items-center justify-center gap-2 transition active:scale-[0.99]">
-          <i data-lucide="log-in" class="w-4 h-4"></i>
-          <span>เข้าสู่ระบบด้วย LINE</span>
-        </button>
-        <p class="text-[11px] text-slate-500">ยังไม่เป็นสมาชิก? <a href="#" onclick="switchAuthMode('register'); return false;" class="text-amber-700 font-bold hover:underline">ลงทะเบียนใหม่</a></p>
-      </div>
-    </div>
+    <!-- Hidden legacy container for compatibility -->
+    <div id="viewLoginForm" class="hidden"></div>
 
     <!-- ============================================================== -->
     <!-- STATE 1.8: LOGGED IN MEMBER PORTAL (แผงควบคุมประจำตัว) -->
@@ -292,6 +374,27 @@
           <span class="text-[10px] text-slate-400 font-bold">สิทธิ์และหน้าที่ที่ได้รับมอบหมาย:</span>
           <div id="portalBadgesList" class="flex flex-wrap gap-1">
             <!-- Dynamic -->
+          </div>
+        </div>
+
+        <!-- 🏆 LIVE SEASON 1 SCORECARD & VERIFIED CHECK-IN BANNER -->
+        <div id="portalScorecardBox" class="p-3.5 rounded-2xl bg-slate-900 text-white border border-amber-400/50 space-y-2 shadow-sm">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded-md bg-amber-400 text-slate-950 font-mono font-black text-xs" id="portalAgentCode">TON</span>
+              <span class="text-xs font-bold text-amber-300" id="portalAnimalBadge">🐻 หมีตื่นตัว (Season 1)</span>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] text-slate-400 block">คะแนนสะสมตามจริง</span>
+              <span class="text-lg font-black font-mono text-emerald-400" id="portalTotalPoints">10 แต้ม</span>
+            </div>
+          </div>
+          <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-slate-700">
+            <div id="portalActBar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: 10%;"></div>
+          </div>
+          <div class="flex items-center justify-between text-[10px] text-emerald-300 font-medium" id="portalCheckinStatus">
+            <span>✅ บันทึกคะแนนสแกนเข้าสู่ระบบวันนี้ +10 แต้มตามจริงเรียบร้อย!</span>
+            <span class="font-mono text-slate-400" id="portalActProgress">10 / 100</span>
           </div>
         </div>
 
@@ -339,8 +442,8 @@
           </h2>
 
           <p id="statusDesc" class="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
-            ข้อมูลของท่านส่งถึง <strong>คุณเจี๊ยบ(กูล) & คุณบัว</strong> เรียบร้อยแล้ว<br>
-            ระบบกำลังรอฝ่ายบริหารจัดสรรสิทธิ์วิชาชีพ หน้าจอนี้จะปลดล็อกอัตโนมัติทันที
+            ข้อมูลของท่านส่งถึง <strong>ผู้ดูแลระบบ (Admin ศิวาทรัพย์)</strong> เรียบร้อยแล้ว<br>
+            กรุณารอสักครู่ เมื่อ Admin กดอนุมัติแล้ว หน้าจอนี้จะปลดล็อกอัตโนมัติทันที
           </p>
         </div>
 
@@ -370,14 +473,19 @@
             🎉 ยินดีด้วยครับ! ท่านได้รับการแต่งตั้งเป็น: <span id="grantedRoleName" class="underline text-emerald-950 font-black text-sm"></span>
           </div>
 
-          <a id="btnGoCard" href="#" target="_blank" class="w-full gold-gradient hover:brightness-105 text-slate-950 font-black py-3 rounded-2xl shadow-lg text-sm flex items-center justify-center gap-2 transition">
-            <i data-lucide="credit-card" class="w-4 h-4"></i>
+          <a id="btnGoWelcome" href="https://assets.siwasup.com/welcome_landing.html?checkin=1" class="w-full gold-gradient hover:brightness-105 text-slate-950 font-black py-3.5 rounded-2xl shadow-lg text-sm flex items-center justify-center gap-2 transition">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>เข้าสู่หน้าต้อนรับศิวาทรัพย์ (รับ +10 แต้มแรกเข้าเรียบร้อย!)</span>
+          </a>
+
+          <a id="btnGoCard" href="#" target="_blank" class="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-bold py-2.5 rounded-2xl border border-emerald-300 text-xs flex items-center justify-center gap-2 shadow-2xs transition">
+            <i data-lucide="credit-card" class="w-4 h-4 text-emerald-600"></i>
             <span>เปิดดูนามบัตรดิจิทัลทางการของท่าน</span>
           </a>
 
-          <a href="https://assets.siwasup.com/siwasup_keybox_interactive_roleplay.html" target="_blank" class="w-full bg-white hover:bg-slate-50 text-slate-800 font-bold py-2.5 rounded-2xl border border-slate-300 text-xs flex items-center justify-center gap-2 shadow-sm transition">
-            <i data-lucide="key" class="w-4 h-4 text-emerald-600"></i>
-            <span>เข้าสู่ระบบกล่องกุญแจ OTP & แผนที่ทรัพย์</span>
+          <a id="btnGoCatalog" href="https://assets.siwasup.com/catalog.html?checkin=1" class="w-full bg-white hover:bg-slate-50 text-slate-800 font-bold py-2.5 rounded-2xl border border-slate-300 text-xs flex items-center justify-center gap-2 shadow-sm transition">
+            <i data-lucide="home" class="w-4 h-4 text-amber-600"></i>
+            <span>ข้ามไปหน้าคลังทรัพย์พร้อมขายทันที</span>
           </a>
         </div>
 
@@ -434,10 +542,101 @@
   </footer>
 
   <!-- SCRIPT -->
+  <script src="siwasup_agents.js?v=20261104-realscan"></script>
   <script>
     lucide.createIcons();
 
     let currentApplicant = null;
+    let currentRegStep = 1;
+
+    function updateStepperUI(step, isCompletedAll = false) {
+      currentRegStep = step;
+      const fill = document.getElementById('stepperProgressFill');
+      if (fill) {
+        const pct = step === 1 ? 0 : step === 2 ? 33 : step === 3 ? 66 : 100;
+        fill.style.width = pct + '%';
+      }
+
+      for (let i = 1; i <= 4; i++) {
+        const circle = document.getElementById('stepCircle' + i);
+        const label = document.getElementById('stepLabel' + i);
+        if (!circle || !label) continue;
+
+        if (i < step || (i === 4 && isCompletedAll)) {
+          // Completed step: Emerald checkmark
+          circle.className = "w-10 h-10 rounded-full flex items-center justify-center font-black text-sm transition-all duration-300 bg-emerald-500 text-white ring-4 ring-emerald-400/25 shadow-sm";
+          circle.innerHTML = "✓";
+          label.className = "text-[10px] sm:text-xs font-black text-emerald-700 leading-tight";
+        } else if (i === step) {
+          // Current active step: Glowing amber/blue focus
+          circle.className = "w-10 h-10 rounded-full flex items-center justify-center font-black text-sm transition-all duration-300 bg-amber-500 text-slate-950 ring-4 ring-amber-400/40 shadow-md scale-110";
+          circle.innerHTML = String(i);
+          label.className = "text-[10px] sm:text-xs font-black text-amber-700 leading-tight";
+        } else {
+          // Future step: Muted grey
+          circle.className = "w-10 h-10 rounded-full flex items-center justify-center font-black text-sm transition-all duration-300 bg-slate-200 text-slate-500 border-2 border-white";
+          circle.innerHTML = String(i);
+          label.className = "text-[10px] sm:text-xs font-bold text-slate-400 leading-tight";
+        }
+      }
+    }
+
+    function goToRegStep(step) {
+      if (step >= 2 && !getSession()) {
+        alert('กรุณากดปุ่มสีเขียว "เชื่อมบัญชี LINE" ใน Step 1 ก่อนไปขั้นตอนถัดไปครับ');
+        return;
+      }
+      document.getElementById('viewRegisterForm').classList.remove('hidden');
+      document.getElementById('viewLobbyWaiting').classList.add('hidden');
+      document.getElementById('viewLoggedInPortal').classList.add('hidden');
+
+      ['wizardStep1', 'wizardStep2', 'wizardStep3'].forEach((id, idx) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (idx + 1 === step) el.classList.remove('hidden');
+        else el.classList.add('hidden');
+      });
+
+      updateStepperUI(step, false);
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function tryClickStep(step) {
+      if (loggedInMember) {
+        updateStepperUI(4, true);
+        return;
+      }
+      if (step <= 3) {
+        if (step === 3) {
+          validateAndGoStep3();
+        } else {
+          goToRegStep(step);
+        }
+      }
+    }
+
+    function validateAndGoStep3() {
+      if (!getSession()) {
+        alert('กรุณาเชื่อมบัญชี LINE ใน Step 1 ก่อนครับ');
+        goToRegStep(1);
+        return;
+      }
+      const name = document.getElementById('regName').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      if (!name || name.length < 3) {
+        alert('⚠️ กรุณาระบุชื่อ-นามสกุลจริงใน Step 2 ก่อนไปขั้นตอนถัดไปครับ');
+        document.getElementById('regName').focus();
+        return;
+      }
+      const cleanPhone = phone.replace(/\D/g, '');
+      if (!/^(06|08|09)\d{8}$/.test(cleanPhone)) {
+        alert('⚠️ กรุณาระบุเบอร์โทรศัพท์มือถือ 10 หลักให้ถูกต้องก่อนไปขั้นตอนถัดไปครับ');
+        document.getElementById('regPhone').focus();
+        return;
+      }
+      saveDraft();
+      goToRegStep(3);
+    }
     let pollInterval = null;
     let selectedAvatarUrl = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&auto=format&fit=crop&q=80";
 
@@ -523,7 +722,7 @@
         line_id: lineId || "ไม่ระบุ",
         zone: zone,
         affiliation: affiliation,
-        affiliation_label: affiliation === 'office' ? "🏢 พนักงาน/ทีมงานออฟฟิศ" : "🤝 Co-Broker พันธมิตรภายนอก",
+        affiliation_label: affiliation === 'office' ? "🏢 พนักงาน/ทีมงานออฟฟิศ" : (affiliation === 'contract_agent' ? "📑 สมัคร Contract Agent (ตัวแทนสัญญา)" : "🤝 สมัคร Free Agent (ตัวแทนอิสระ)"),
         avatar: selectedAvatarUrl,
         status: "pending",
         submitted_at: "เมื่อสักครู่"
@@ -553,7 +752,8 @@
         bc.postMessage({ type: 'NEW_APPLICANT', applicant: currentApplicant });
       } catch(e) {}
 
-      // 2. Switch UI to Lobby Waiting Room
+      // 2. Switch UI to Step 4: Lobby Waiting Room
+      updateStepperUI(4, false);
       document.getElementById('viewRegisterForm').classList.add('hidden');
       document.getElementById('viewLobbyWaiting').classList.remove('hidden');
 
@@ -583,6 +783,7 @@
 
 
     function handleApplicantApproved(approvedData) {
+      updateStepperUI(4, true);
       const card = document.getElementById('lobbyStatusCard');
       card.className = "card-light rounded-3xl p-6 border-2 border-emerald-500 pulse-glow-green text-center space-y-4 shadow-xl relative overflow-hidden transition-all duration-500";
 
@@ -596,7 +797,7 @@
       badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>อนุมัติสิทธิ์เรียบร้อยแล้ว (Active)</span>`;
 
       document.getElementById('statusTitle').innerText = "ปลดล็อกสิทธิ์ & เข้าสู่ระบบสำเร็จ!";
-      document.getElementById('statusDesc').innerText = "ฝ่ายบริหารได้ตรวจสอบและแต่งตั้งบทบาทวิชาชีพให้ท่านเรียบร้อยแล้ว";
+      document.getElementById('statusDesc').innerText = "ผู้ดูแลระบบ (Admin) ได้ตรวจสอบและอนุมัติสิทธิ์ให้ท่านเรียบร้อยแล้ว";
 
       document.getElementById('grantedRoleName').innerText = approvedData.role;
       document.getElementById('unlockedActions').classList.remove('hidden');
@@ -606,6 +807,17 @@
       const safeAvParam = rawAv.startsWith('http') ? `&avatar=${encodeURIComponent(rawAv)}` : '';
       const cardUrl = `https://assets.siwasup.com/agent_profile.html?id=${encodeURIComponent(approvedData.id || '')}&name=${encodeURIComponent(approvedData.name)}&phone=${encodeURIComponent(approvedData.phone)}&zone=${encodeURIComponent(approvedData.zone)}&title=${encodeURIComponent(approvedData.title || '')}&mode=client${safeAvParam}`;
       document.getElementById('btnGoCard').href = cardUrl;
+
+      if (window.SiwasupAgents && typeof window.SiwasupAgents.syncMember === 'function') {
+        const sr = window.SiwasupAgents.syncMember(approvedData, true);
+        if (sr && sr.agent) {
+          const q = `?my_agent=${encodeURIComponent(sr.agent.code)}&my_name=${encodeURIComponent(approvedData.name || '')}&my_nick=${encodeURIComponent(approvedData.nickname || '')}&checkin=1`;
+          const wBtn = document.getElementById('btnGoWelcome');
+          const cBtn = document.getElementById('btnGoCatalog');
+          if (wBtn) wBtn.href = `https://assets.siwasup.com/welcome_landing.html${q}#announcements`;
+          if (cBtn) cBtn.href = `https://assets.siwasup.com/catalog.html${q}`;
+        }
+      }
 
       lucide.createIcons();
     }
@@ -671,10 +883,10 @@
       const btn = document.getElementById('regLineBannerBtn');
       if (!txt || !btn) return;
       if (me && me.line) {
-        txt.innerHTML = '<strong>✅ เชื่อม LINE แล้ว:</strong> ' + (me.line.name || 'บัญชี LINE') + ' &mdash; กรอกข้อมูลด้านล่างแล้วส่งเข้า Lobby ได้เลย';
+        txt.innerHTML = '<strong class="text-emerald-800 text-sm">✅ เชื่อมบัญชี LINE สำเร็จ: ' + (me.line.name || 'บัญชี LINE') + '</strong><span class="block text-emerald-700 mt-0.5">กดปุ่มถัดไปเพื่อกรอกชื่อและเบอร์โทรใน Step 2 ได้เลยครับ</span>';
         btn.classList.add('hidden');
       } else {
-        txt.innerHTML = '<strong>ขั้นที่ 1:</strong> เชื่อมบัญชี LINE ของท่านก่อนสมัคร เพื่อยืนยันตัวตน (ไม่ต้องตั้งรหัสผ่าน)';
+        txt.innerHTML = '<strong class="block text-sm">2. กดเชื่อมบัญชี LINE ของท่าน (ไม่ต้องตั้งรหัสผ่าน)</strong><span>หากท่านเป็นสมาชิกที่ได้รับอนุมัติแล้ว ระบบจะพาท่านเข้าสู่ Step 4 ทันที</span>';
         btn.classList.remove('hidden');
       }
     }
@@ -699,12 +911,12 @@
         return;
       }
       if (me.status === 'approved') {
-        switchAuthMode('login');
+        updateStepperUI(4, true);
         renderLoggedInPortal(me.member);
       } else if (me.status === 'pending') {
+        updateStepperUI(4, false);
         currentApplicant = me.applicant;
         document.getElementById('viewRegisterForm').classList.add('hidden');
-        document.getElementById('viewLoginForm').classList.add('hidden');
         document.getElementById('viewLobbyWaiting').classList.remove('hidden');
         document.getElementById('displayAppCode').innerText = me.applicant.id || 'SW-APP';
         document.getElementById('displayName').innerText = me.applicant.name || '';
@@ -724,7 +936,11 @@
           const prevImg = document.getElementById('regPhotoPreview');
           if (prevImg) prevImg.src = me.line.picture;
         }
-        if (mode === 'login') switchAuthMode('register');
+        if (me.line) {
+          goToRegStep(2);
+        } else {
+          goToRegStep(1);
+        }
       }
     }
 
@@ -775,15 +991,17 @@
       document.getElementById('portalPhone').innerText = member.phone;
       document.getElementById('portalZone').innerText = member.zone;
 
-      let tierHtml = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-slate-100 text-slate-700 border border-slate-300">🤝 CO-BROKER</span>`;
+      let tierHtml = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black text-white border shadow-2xs" style="background-color: #786ea1; border-color: #5e5485;">🤝 FREE AGENT</span>`;
       if (perms.systemAdmin || roleLower.includes('tech') || roleLower.includes('ต้น')) {
         tierHtml = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800 border border-rose-300">💻 SUPER TECH</span>`;
-      } else if (perms.executiveAuthority || roleLower.includes('ceo') || roleLower.includes('partner') || roleLower.includes('กูล') || roleLower.includes('บัว')) {
+      } else if (perms.executiveAuthority || roleLower.includes('ceo') || (roleLower.includes('partner') && !roleLower.includes('free agent')) || roleLower.includes('กูล') || roleLower.includes('บัว')) {
         tierHtml = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-amber-100 to-red-100 text-amber-900 border border-amber-400">👑 SUPREME EXEC</span>`;
       } else if (perms.keyboxAdmin || roleLower.includes('viewing') || roleLower.includes('กุญแจ') || roleLower.includes('ลิลลี่')) {
         tierHtml = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-400">🔑 KEYBOX MASTER</span>`;
       } else if (perms.standardAdmin) {
         tierHtml = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-800 border border-blue-300">🏢 OFFICE ADMIN</span>`;
+      } else if (perms.contractAgent || member.role_code === 'CONTRACT_AGENT' || roleLower.includes('contract') || roleLower.includes('สัญญา') || (member.badges || []).some(b => b.includes('สัญญา'))) {
+        tierHtml = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black text-white border shadow-2xs" style="background-color: #ffa8b6; border-color: #e58e9c;">📑 CONTRACT AGENT</span>`;
       }
       document.getElementById('portalTierBadge').innerHTML = tierHtml;
 
@@ -794,9 +1012,31 @@
         </span>
       `).join('');
 
+      // 🏆 Sync with SiwasupAgents Engine & Award Real +10 Check-in Points Today
+      let syncedCode = member.id === 'app_office_004' ? 'TON' : (member.id || 'S90');
+      if (window.SiwasupAgents && typeof window.SiwasupAgents.syncMember === 'function') {
+        const syncRes = window.SiwasupAgents.syncMember(member, true);
+        if (syncRes && syncRes.agent) {
+          const ag = syncRes.agent;
+          syncedCode = ag.code;
+          const arch = window.SiwasupAgents.getArchetype ? window.SiwasupAgents.getArchetype(ag) : { icon: '🐻', shortName: 'หมีตื่นตัว' };
+          const codeEl = document.getElementById('portalAgentCode');
+          const animEl = document.getElementById('portalAnimalBadge');
+          const ptsEl = document.getElementById('portalTotalPoints');
+          const barEl = document.getElementById('portalActBar');
+          const progEl = document.getElementById('portalActProgress');
+          if (codeEl) codeEl.textContent = ag.code;
+          if (animEl) animEl.textContent = `${arch.icon || '🐻'} ${arch.shortName || 'หมีตื่นตัว'} (${ag.tierName || 'Season 1'})`;
+          if (ptsEl) ptsEl.textContent = `${ag.totalPoints || 0} แต้ม`;
+          if (barEl) barEl.style.width = `${Math.min(100, ag.activityPoints || 0)}%`;
+          if (progEl) progEl.textContent = `${ag.activityPoints || 0} / 100 แต้ม`;
+        }
+      }
+
       const rawAv = member.avatar || '';
       const safeAv = rawAv.startsWith('http') ? `&avatar=${encodeURIComponent(rawAv)}` : '';
-      const cardUrl = `https://assets.siwasup.com/agent_profile.html?id=${encodeURIComponent(member.id || '')}&name=${encodeURIComponent(member.name)}&phone=${encodeURIComponent(member.phone)}&zone=${encodeURIComponent(member.zone)}&title=${encodeURIComponent(member.title || '')}&mode=client${safeAv}`;
+      const cardUrl = `https://assets.siwasup.com/agent_profile.html?id=${encodeURIComponent(syncedCode)}&name=${encodeURIComponent(member.name)}&phone=${encodeURIComponent(member.phone)}&zone=${encodeURIComponent(member.zone)}&title=${encodeURIComponent(member.title || '')}&mode=client${safeAv}`;
+      const catParams = `?my_agent=${encodeURIComponent(syncedCode)}&my_name=${encodeURIComponent(member.name || '')}&my_nick=${encodeURIComponent(member.nickname || '')}&checkin=1${isAdminUser ? '&admin=1' : ''}`;
 
       let actions = [];
       actions.push(`
@@ -809,13 +1049,22 @@
         </a>
       `);
 
-      actions.push(`
-        <a href="https://assets.siwasup.com/catalog.html" target="_blank" class="p-3 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 font-bold flex items-center justify-between transition shadow-2xs">
+      actions.unshift(`
+        <a href="https://assets.siwasup.com/welcome_landing.html${catParams}#announcements" class="sm:col-span-2 p-3.5 rounded-2xl gold-gradient hover:brightness-105 text-slate-950 font-black flex items-center justify-between transition shadow-md">
           <div class="flex items-center gap-2">
-            <i data-lucide="home" class="w-4 h-4 text-blue-600"></i>
-            <span>แคตตาล็อกบ้าน 59,000+ หลัง</span>
+            <i data-lucide="sparkles" class="w-4 h-4 text-slate-950"></i>
+            <span>เข้าสู่หน้าต้อนรับ Season 1 & กระดานคะแนน (${syncedCode})</span>
           </div>
-          <span class="text-[10px] text-slate-400">ค้นหาทรัพย์</span>
+          <span class="text-[10px] bg-slate-950 text-amber-300 px-2 py-0.5 rounded-full font-bold">หน้าต้อนรับ →</span>
+        </a>
+      `);
+      actions.push(`
+        <a href="https://assets.siwasup.com/catalog.html${catParams}" class="p-3 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-950 font-bold flex items-center justify-between transition shadow-2xs">
+          <div class="flex items-center gap-2">
+            <i data-lucide="award" class="w-4 h-4 text-emerald-600"></i>
+            <span>คลังทรัพย์ & กระเป๋าคะแนน (${syncedCode})</span>
+          </div>
+          <span class="text-[10px] bg-emerald-500 text-white px-1.5 py-0.5 rounded font-bold">+10 แต้ม</span>
         </a>
       `);
 
@@ -885,7 +1134,7 @@
       loggedInMember = null;
       try { localStorage.removeItem(SESSION_KEY); } catch(e) {}
       renderLineBanner(null);
-      switchAuthMode('login');
+      goToRegStep(1);
     }
 
     window.addEventListener('DOMContentLoaded', async () => {

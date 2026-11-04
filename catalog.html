@@ -282,32 +282,32 @@
     <header class="sticky top-0 z-40 shadow-md w-full overflow-hidden">
       
       <!-- 1. Top Role Utility Bar: โทน Charcoal (#1D1D1D) + Active Red Pill -->
-      <div class="bg-[#1D1D1D] text-neutral-300 text-xs py-1.5 px-2.5 sm:px-4 border-b border-neutral-800">
+      <div id="top-role-utility-bar" class="bg-[#1D1D1D] text-neutral-300 text-xs py-1.5 px-2.5 sm:px-4 border-b border-neutral-800">
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-1 sm:gap-2">
           
           <!-- ซ้าย: สลับโหมด -->
           <div class="flex items-center gap-1 sm:gap-1.5 shrink-0 z-10">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
+            <span id="role-status-dot" ondblclick="toggleAdminConsoleUnlock()" title="สถานะระบบออนไลน์" class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 cursor-pointer"></span>
             
-            <!-- Mobile Role Selector (< lg) -->
+            <!-- Mobile Role Selector (< lg, เฉพาะ Admin Mode) -->
             <select 
               id="mobile-role-selector"
               onchange="setMode(this.value)" 
-              class="lg:hidden bg-neutral-900 text-white font-semibold text-[11px] px-1.5 py-0.5 rounded-md border border-neutral-700 focus:outline-none shrink-0 min-w-[96px] max-w-[115px]"
+              class="hidden bg-neutral-900 text-white font-semibold text-[11px] px-1.5 py-0.5 rounded-md border border-neutral-700 focus:outline-none shrink-0 min-w-[96px] max-w-[115px]"
             >
               <option value="owner">โหมด: Admin</option>
               <option value="free_agent" selected>โหมด: Free Agent</option>
-              <option value="employee">โหมด: พนักงาน</option>
+              <option value="employee">โหมด: Contract Agent</option>
               <option value="trainee">โหมด: ฝึกหัด</option>
               <option value="client">โหมด: ลูกค้า VIP</option>
             </select>
 
-            <!-- Desktop Role Indicator & Tabs (>= lg) -->
-            <strong id="mode-text" class="hidden lg:inline text-white font-semibold text-[11px] whitespace-nowrap">Free Agent (คอม 3-5% อิสระ)</strong>
-            <div class="hidden lg:flex items-center bg-[#141414] p-0.5 rounded-lg border border-neutral-800 text-[11px] ml-1">
+            <!-- Role Indicator & Admin Switcher Tabs -->
+            <strong id="mode-text" class="inline text-white font-semibold text-[11px] whitespace-nowrap">ระบบคลังทรัพย์ตัวแทน (Co-Broker Partner)</strong>
+            <div id="role-switcher-pills" class="hidden items-center bg-[#141414] p-0.5 rounded-lg border border-neutral-800 text-[11px] ml-1">
               <button id="btn-owner-mode" onclick="setMode('owner')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white transition" title="โหมดแอดมิน">Admin</button>
               <button id="btn-freeagent-mode" onclick="setMode('free_agent')" class="px-2.5 py-0.5 rounded-md bg-[#B51218] text-white font-semibold shadow-2xs" title="โหมด Free Agent">Free</button>
-              <button id="btn-employee-mode" onclick="setMode('employee')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white transition" title="โหมดพนักงานประจำ">พนักงาน</button>
+              <button id="btn-employee-mode" onclick="setMode('employee')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white transition" title="โหมด Contract Agent (ตัวแทนสัญญาสังกัด)">Contract</button>
               <button id="btn-trainee-mode" onclick="setMode('trainee')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white transition" title="โหมดฝึกหัด">ฝึกหัด</button>
               <button id="btn-client-mode" onclick="setMode('client')" class="px-2.5 py-0.5 rounded-md text-neutral-400 hover:text-white transition" title="โหมดลูกค้า White-label">ลูกค้า</button>
             </div>
@@ -342,9 +342,9 @@
 
             <!-- โปรไฟล์ตัวแทน -->
             <button type="button" onclick="openMyProfileModal()" id="btn-header-profile" class="h-6 pl-1 pr-1.5 sm:pr-2.5 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-200 flex items-center gap-1 sm:gap-1.5 transition cursor-pointer active:scale-95 shrink-0" title="กระเป๋าคะแนน & โปรไฟล์">
-              <img id="header-profile-3d-badge" src="assets/characters/badge_eagle.png" alt="Badge" class="w-3.5 h-3.5 object-contain">
-              <span class="px-1 py-0.2 rounded bg-[#C2A460]/20 text-[#E5C985] text-[9px] font-bold" id="header-profile-avatar">S22</span>
-              <span id="bar-profile-btn-text" class="hidden sm:inline font-medium">เจ็ม</span>
+              <img id="header-profile-3d-badge" src="assets/characters/badge_bear.png" alt="Badge" class="w-3.5 h-3.5 object-contain">
+              <span class="px-1 py-0.2 rounded bg-[#C2A460]/20 text-[#E5C985] text-[9px] font-bold" id="header-profile-avatar">S90</span>
+              <span id="bar-profile-btn-text" class="hidden sm:inline font-medium">นัญ</span>
             </button>
           </div>
 
@@ -891,13 +891,13 @@
       </div>
     </footer>
 
-    <!-- 🧩 Modular Components Root (Modals, Overlays & Toasts loaded from modals.js) -->
+    <!-- 🧩 Modular Components Root (Modals, Overlays & Toasts loaded from modals.js?v=20261104-realscan) -->
     <div id="modals-root"></div>
 
   </div>
 
-  <script src="siwasup_agents.js?v=20261031-clean"></script>
-  <script src="modals.js?v=20261031-relay2slot"></script>
+  <script src="siwasup_agents.js?v=20261104-conf"></script>
+  <script src="modals.js?v=20261104-realscan"></script>
   <script src="vinyl_generator.js?v=20261019-2350"></script>
   <script src="siwasup_all_properties.js?v=20261031-npa980"></script>
   <script>
@@ -1267,11 +1267,35 @@
       `;
     }
 
+    let adminUnlockedManual = false;
+    function isAdminSession() {
+      if (adminUnlockedManual) return true;
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('admin') === '0' || params.get('user') === '1') return false;
+      if (params.get('admin') === '1' || params.get('demo') === '1' || params.get('view') === 'owner') return true;
+      return false;
+    }
+
+    function toggleAdminConsoleUnlock() {
+      adminUnlockedManual = !adminUnlockedManual;
+      setMode(adminUnlockedManual ? 'owner' : 'free_agent');
+      if (typeof showToast === 'function') {
+        showToast(adminUnlockedManual ? '👑 ปลดล็อกแผงควบคุม Admin Mode แล้ว' : '🔒 สลับกลับเป็นมุมมองตัวแทนปกติ (User Mode)');
+      }
+    }
+
     function setMode(mode) {
+      const isAdmin = isAdminSession();
+      // ป้องกันผู้ใช้ทั่วไปเข้าโหมด owner โดยไม่มีสิทธิ์ Admin
+      if (!isAdmin && mode === 'owner') {
+        mode = 'free_agent';
+      }
       currentMode = mode;
       window.currentMode = mode;
 
+      const topUtilityBar = document.getElementById('top-role-utility-bar');
       const mobileRoleSelect = document.getElementById('mobile-role-selector');
+      const roleSwitcherPills = document.getElementById('role-switcher-pills');
       if (mobileRoleSelect) mobileRoleSelect.value = mode;
       
       const btnOwner = document.getElementById('btn-owner-mode');
@@ -1281,6 +1305,40 @@
       const btnClient = document.getElementById('btn-client-mode');
       
       const modeText = document.getElementById('mode-text');
+
+      // ควบคุมการแสดงผลแถบบนสุดตามสิทธิ์ (Admin vs User Agent vs Client)
+      if (topUtilityBar) {
+        if (!isAdmin && mode === 'client') {
+          topUtilityBar.classList.add('hidden');
+        } else {
+          topUtilityBar.classList.remove('hidden');
+        }
+      }
+      if (isAdmin) {
+        if (mobileRoleSelect) {
+          mobileRoleSelect.classList.remove('hidden');
+          mobileRoleSelect.classList.add('lg:hidden');
+        }
+        if (roleSwitcherPills) {
+          roleSwitcherPills.classList.remove('hidden');
+          roleSwitcherPills.classList.add('hidden', 'lg:flex');
+        }
+        if (modeText) {
+          modeText.className = 'hidden lg:inline text-white font-semibold text-[11px] whitespace-nowrap';
+        }
+      } else {
+        if (mobileRoleSelect) {
+          mobileRoleSelect.classList.add('hidden');
+          mobileRoleSelect.classList.remove('lg:hidden');
+        }
+        if (roleSwitcherPills) {
+          roleSwitcherPills.classList.add('hidden');
+          roleSwitcherPills.classList.remove('lg:flex');
+        }
+        if (modeText) {
+          modeText.className = 'inline text-white font-semibold text-[11px] whitespace-nowrap';
+        }
+      }
       const traineeBanner = document.getElementById('trainee-challenge-banner');
       const mgmBanner = document.getElementById('agent-mgm-banner');
       const ownerLeadsBar = document.getElementById('owner-leads-bar');
@@ -1436,12 +1494,12 @@
 
           if (mode === 'free_agent') {
             if (btnFreeAgent) btnFreeAgent.className = activeBtnClass;
-            if (modeText) modeText.textContent = "Free Agent (คอม 3-5% อิสระ)";
-            if (mgmBanner) mgmBanner.classList.remove('hidden');
+            if (modeText) modeText.textContent = isAdmin ? "Free Agent (คอม 3-5% อิสระ)" : "ระบบคลังทรัพย์ตัวแทน (Co-Broker Partner)";
+            if (mgmBanner && isAdmin) mgmBanner.classList.remove('hidden');
           } else if (mode === 'employee') {
             if (btnEmployee) btnEmployee.className = activeBtnClass;
-            if (modeText) modeText.textContent = "พนักงานประจำ (คอม 1% มีเงินเดือน)";
-            if (mgmBanner) mgmBanner.classList.remove('hidden');
+            if (modeText) modeText.textContent = isAdmin ? "Contract Agent (ตัวแทนสัญญาสังกัด)" : "ระบบคลังทรัพย์ตัวแทน (Contract Agent)";
+            if (mgmBanner && isAdmin) mgmBanner.classList.remove('hidden');
           } else if (mode === 'trainee') {
             if (btnTrainee) btnTrainee.className = activeBtnClass;
             if (modeText) modeText.textContent = "เด็กฝึกหัด (ส่งทรัพย์ 1/3 หลัง)";
@@ -2260,20 +2318,20 @@
 
         const num = parsePriceNumber(p.price);
         
-        // Dynamic Commission display based on role
+        // Dynamic Commission display based on role (Neutralized in standard User Mode to avoid policy conflicts)
         let comRate = 0.05;
-        let comLabel = "คอม 5%";
-        if (currentMode === 'employee') {
-          comRate = 0.01;
-          comLabel = "คอมพนักงาน 1%";
-        } else if (currentMode === 'free_agent') {
-          comRate = (p.bank_source && p.bank_source !== 'Siwasup') ? 0.03 : 0.05;
-          comLabel = `คอม Free Agent ${(comRate * 100)}%`;
-        }
-
-        let comAmount = "";
-        if (num > 100000) {
-          comAmount = `${Math.round(num * comRate).toLocaleString()} บ.`;
+        let comLabel = "สถานะสิทธิ์";
+        let comAmount = "พร้อมแชร์ลิงก์ลูกค้า";
+        if (isAdminSession()) {
+          comLabel = "คอม 5%";
+          if (currentMode === 'employee') {
+            comRate = 0.01;
+            comLabel = "คอมพนักงาน 1%";
+          } else if (currentMode === 'free_agent') {
+            comRate = (p.bank_source && p.bank_source !== 'Siwasup') ? 0.03 : 0.05;
+            comLabel = `คอม Free Agent ${(comRate * 100)}%`;
+          }
+          comAmount = (num > 100000) ? `${Math.round(num * comRate).toLocaleString()} บ.` : 'ตามผลงาน';
         }
 
         return `
@@ -3612,8 +3670,8 @@
     function copyChannelLink(channel) {
       if (!currentShareProp) return;
       const refInput = document.getElementById('agent-ref-input');
-      const rawRef = refInput ? refInput.value.trim() : 'S22';
-      const ref = encodeURIComponent(rawRef || 'S22');
+      const rawRef = refInput ? refInput.value.trim() : 'S90';
+      const ref = encodeURIComponent(rawRef || 'S90');
       const targetUrl = `${getBaseUrl()}?view=client&prop=${currentShareProp.id}&ref=${ref}&src=${channel}`;
       
       // Automated Point Trigger: Smart Share Activity (+5 points)
@@ -3733,7 +3791,7 @@
     // ==============================================================================
 
     function getActiveAgentRef() {
-      return localStorage.getItem('siwasup_my_agent_ref') || 'S22';
+      return localStorage.getItem('siwasup_my_agent_ref') || 'S90';
     }
 
     function openMyProfileModal(targetCode = null) {
@@ -3765,7 +3823,7 @@
 
     function updateProfileButtons(code) {
       if (!window.SiwasupAgents) return;
-      const agent = window.SiwasupAgents.find(code) || window.SiwasupAgents.find('S22');
+      const agent = window.SiwasupAgents.find(code) || window.SiwasupAgents.find('S90');
       if (!agent) return;
 
       const headerAvatar = document.getElementById('header-profile-avatar');
@@ -3800,7 +3858,7 @@
       });
 
       const badge3dImg = document.getElementById('profile-3d-badge-img');
-      const badgeEl = document.getElementById('profile-animal-badge');
+      const badgeEl = document.getElementById('profile-animal-badge'); const activeTierNameEl = document.getElementById('profile-active-tier-name'); if (activeTierNameEl) activeTierNameEl.textContent = `${arch.icon} ${arch.shortName || arch.name}`;
       const quoteEl = document.getElementById('profile-animal-quote');
       const descEl = document.getElementById('profile-animal-desc');
       const turnaroundVp = document.getElementById('profile-turnaround-viewport');
@@ -3827,7 +3885,7 @@
     function simulateProfileQuest(ruleKey) {
       if (!window.SiwasupAgents) return;
       const switcher = document.getElementById('profile-agent-switcher');
-      const code = (switcher && switcher.value) ? switcher.value : (localStorage.getItem('siwasup_my_agent_ref') || 'S22');
+      const code = (switcher && switcher.value) ? switcher.value : (localStorage.getItem('siwasup_my_agent_ref') || 'S90');
       const beforeAgent = window.SiwasupAgents.find(code);
       const beforeArch = beforeAgent ? window.SiwasupAgents.getArchetype(beforeAgent) : null;
       const beforeId = beforeArch ? beforeArch.id : null;
@@ -3863,7 +3921,7 @@
     function resetProfileSimulatorPoints() {
       if (!window.SiwasupAgents || typeof window.SiwasupAgents.resetPoints !== 'function') return;
       const switcher = document.getElementById('profile-agent-switcher');
-      const code = (switcher && switcher.value) ? switcher.value : (localStorage.getItem('siwasup_my_agent_ref') || 'S22');
+      const code = (switcher && switcher.value) ? switcher.value : (localStorage.getItem('siwasup_my_agent_ref') || 'S90');
       window.SiwasupAgents.resetPoints();
       renderMyProfile(code);
       if (typeof renderLeaderboard === 'function') renderLeaderboard();
@@ -3875,7 +3933,7 @@
     function toggleMentorOptIn() {
       if (!window.SiwasupAgents) return;
       const switcher = document.getElementById('profile-agent-switcher');
-      const code = (switcher && switcher.value) ? switcher.value : (localStorage.getItem('siwasup_my_agent_ref') || 'S22');
+      const code = (switcher && switcher.value) ? switcher.value : (localStorage.getItem('siwasup_my_agent_ref') || 'S90');
       const agent = window.SiwasupAgents.find(code);
       if (!agent) return;
       const arch = window.SiwasupAgents.getArchetype(agent);
@@ -3903,24 +3961,34 @@
 
     function renderMyProfile(code) {
       if (!window.SiwasupAgents) return;
-      const agent = window.SiwasupAgents.find(code) || window.SiwasupAgents.find('S22');
+      const agent = window.SiwasupAgents.find(code) || window.SiwasupAgents.find('S90');
       if (!agent) return;
 
-      // Populate Switcher Dropdown
+      // Populate Switcher Dropdown (Alpha 6 Pioneers grouped at Top)
       const switcher = document.getElementById('profile-agent-switcher');
       if (switcher) {
         const all = window.SiwasupAgents.getActive();
-        switcher.innerHTML = all.map(a => `
+        const checkedIn = all.filter(a => (a.totalPoints || 0) > 0 || a.checkedInToday);
+        const others = all.filter(a => !((a.totalPoints || 0) > 0 || a.checkedInToday));
+        const renderOpt = (a) => `
           <option value="${a.code}" ${a.code === agent.code ? 'selected' : ''}>
             ${a.code} - ${a.nickname || a.name} (${a.tierIcon} ${a.totalPoints} แต้ม)
           </option>
-        `).join('');
+        `;
+        switcher.innerHTML = (checkedIn.length > 0 ? `
+          <optgroup label="🌟 สมาชิกที่ลงทะเบียน & เช็กอินเข้างานแล้ว (${checkedIn.length} ท่าน)">
+            ${checkedIn.map(renderOpt).join('')}
+          </optgroup>` : '') + `
+          <optgroup label="📋 รายชื่อตัวแทนในระบบ (เรียงตามรหัส S02 - S126)">
+            ${others.map(renderOpt).join('')}
+          </optgroup>
+        `;
       }
 
       // Populate Profile Fields
       const avatarEl = document.getElementById('profile-avatar-circle');
       const nicknameEl = document.getElementById('profile-nickname');
-      const codePill = document.getElementById('profile-code-pill');
+      const codePill = document.getElementById('profile-code-pill') || document.getElementById('profile-code');
       const tierBadge = document.getElementById('profile-tier-badge');
       const fullnameEl = document.getElementById('profile-fullname');
       const startDateEl = document.getElementById('profile-start-date');
@@ -3961,16 +4029,16 @@
       if (progressBar) progressBar.style.width = `${pct}%`;
 
       const perkMap = {
-        'diamond': 'สิทธิพิเศษ: Overriding Bonus + ค่าคอมมิชชั่นสูงสุด 5% + รางวัลเกียรติยศประจำปี',
+        'diamond': 'สิทธิพิเศษ: สิทธิ์ผู้บริหารทีมระดับสูง + โบนัสพิเศษตามเกณฑ์บริษัท + รางวัลเกียรติยศประจำปี',
         'gold': 'สิทธิพิเศษ: สิทธิ์จองทรัพย์ Hot Deals ล่วงหน้า 24 ชม. ก่อนปล่อยสาธารณะ',
         'silver': 'สิทธิพิเศษ: สิทธิ์รับ Lead กลางที่ลูกค้าทักเข้ามาที่เพจบริษัท',
-        'active': 'สิทธิพิเศษ: ค่าคอมมิชชั่น 3% เต็ม + มีชื่อในทำเนียบตัวแทนศิวาทรัพย์',
+        'active': 'สิทธิพิเศษ: สิทธิ์แชร์คลังทรัพย์พร้อมล็อกลีด 60 วัน + มีชื่อในทำเนียบตัวแทนศิวาทรัพย์',
         'trainee': 'ภารกิจ: ส่งทรัพย์เข้าพอร์ตครบ 3 หลังเพื่อปลดล็อก Active Agent'
       };
       if (perkEl) perkEl.textContent = perkMap[agent.tierId] || '';
 
       // Points Breakdown
-      const actEl = document.getElementById('profile-activity-pts');
+      const actEl = document.getElementById('profile-activity-pts') || document.getElementById('profile-act-pts');
       const perfEl = document.getElementById('profile-perf-pts');
       const totalEl = document.getElementById('profile-total-pts');
 
@@ -3985,7 +4053,7 @@
         const badge3dImg = document.getElementById('profile-3d-badge-img');
         if (badge3dImg && arch.badgeImg) badge3dImg.src = arch.badgeImg;
 
-        const badgeEl = document.getElementById('profile-animal-badge');
+        const badgeEl = document.getElementById('profile-animal-badge'); const activeTierNameEl = document.getElementById('profile-active-tier-name'); if (activeTierNameEl) activeTierNameEl.textContent = `${arch.icon} ${arch.shortName || arch.name}`;
         const quoteEl = document.getElementById('profile-animal-quote');
         const descEl = document.getElementById('profile-animal-desc');
         const actionEl = document.getElementById('profile-animal-action');
@@ -4574,7 +4642,7 @@
       }
 
       if (qrImg) {
-        const checkinUrl = `https://thenassty-cpu.github.io/siwasup-cobroker-os/?action=checkin&date=${today}`;
+        const checkinUrl = `https://assets.siwasup.com/catalog.html?action=checkin&date=${today}`;
         qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(checkinUrl)}`;
       }
 
@@ -4616,10 +4684,15 @@
 
       const res = window.SiwasupAgents.award(agentCode, 'meeting_checkin', { date: today });
       localStorage.setItem(checkinKey, 'true');
+      localStorage.setItem('siwasup_my_agent_ref', agentCode);
+      if (typeof updateProfileButtons === 'function') updateProfileButtons(agentCode);
       closeMeetingCheckinModal();
       renderLeaderboard(activeLeaderboardTrack);
+      setTimeout(() => {
+        if (typeof openMyProfileModal === 'function') openMyProfileModal(agentCode);
+      }, 250);
       if (typeof showToast === 'function') {
-        showToast(`🎉 เช็คชื่อสำเร็จ! บันทึกคะแนนกิจกรรม +10 แต้ม ให้ [${agentCode}] เรียบร้อย!`);
+        showToast(`🎉 เช็คชื่อสำเร็จ! บันทึกคะแนนกิจกรรม +10 แต้มตามจริง ให้ [${agentCode}] เรียบร้อย!`);
       }
     }
 
@@ -4634,7 +4707,7 @@
         select.innerHTML = agents.map(a => `
           <option value="${a.code}">${a.code} - ${a.nickname || a.name}</option>
         `).join('');
-        const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'S22';
+        const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'S90';
         if (select.querySelector(`option[value="${savedRef}"]`)) {
           select.value = savedRef;
         }
@@ -4711,7 +4784,7 @@
       if (event) event.preventDefault();
       const select = document.getElementById('proof-agent-select');
       const propInput = document.getElementById('proof-prop-id');
-      const agentCode = select ? select.value : 'S22';
+      const agentCode = select ? select.value : 'S90';
       const propId = propInput ? propInput.value.trim() : 'NPA';
       const gps = detectedGpsCoords || "13.8291, 100.5642";
 
@@ -4806,134 +4879,7 @@
       // 1. Check in custom mock profiles first if exact match
       if (AGENT_PROFILES[cleanId]) return AGENT_PROFILES[cleanId];
 
-      // 2. 🏆 Look up in the official 125 Siwasup Agents roster (siwasup_agents.js)
-      if (window.SiwasupAgents && typeof window.SiwasupAgents.find === 'function') {
-        const found = window.SiwasupAgents.find(cleanId);
-        if (found) {
-          const cleanName = (found.name || '').replace(/^(นาย|นางสาว|นาง)\s*/, '');
-          const firstName = cleanName.split(' ')[0] || cleanName;
-          const shortName = found.nickname ? `คุณ${firstName} (${found.nickname})` : `คุณ${firstName}`;
-
-          // Dual-Display Mapping: Convert internal rank to luxury public title
-          let publicTitle = 'Verified Property Consultant';
-          let badgeClass = 'bg-neutral-900 text-[#C2A460] border border-neutral-700';
-
-          const tierId = (found.tierId || '').toLowerCase();
-          if (tierId === 'diamond') {
-            publicTitle = 'Master Exclusive Partner';
-            badgeClass = 'bg-gradient-to-r from-[#8B0000] to-[#5A0000] text-[#C2A460] border border-[#C2A460]';
-          } else if (tierId === 'gold') {
-            publicTitle = 'Executive Asset Director';
-            badgeClass = 'bg-[#C2A460] text-neutral-950 font-bold border border-[#E5CF94]';
-          } else if (tierId === 'silver') {
-            publicTitle = 'Senior Property Specialist';
-            badgeClass = 'bg-neutral-900 text-[#C2A460] border border-[#C2A460]/70';
-          }
-
-          // Use default professional avatar placeholder if none
-          const defaultAvatar = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
-
-          return {
-            agentId: found.code,
-            name: found.name,
-            shortName: shortName,
-            tier: found.tierId || 'active',
-            publicTitle: publicTitle,
-            badgeClass: badgeClass,
-            avatar: found.avatar || defaultAvatar,
-            phone: found.phone || '094-462-9796'
-          };
-        }
-      }
-
-      // 3. Dynamic Fallback for any unknown code
-      return {
-        agentId: cleanId || 'S01',
-        name: cleanId ? `ตัวแทนรหัส ${cleanId}` : 'ศูนย์บริการศิวาทรัพย์',
-        shortName: cleanId ? `ตัวแทน ${cleanId}` : 'ศูนย์บริการ',
-        tier: 'wolf',
-        publicTitle: 'Verified Property Consultant',
-        badgeClass: 'bg-neutral-900 text-[#C2A460] border border-neutral-700',
-        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
-        phone: '094-462-9796'
-      };
-    }
-
-    function triggerClientCall() {
-      const storedRef = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : 'SW-042';
-      const profile = getAgentProfile(storedRef);
-      if (typeof openCallModal === 'function') {
-        openCallModal(profile.agentId, `ติดต่อ ${profile.name}`);
-      } else {
-        window.location.href = `tel:${profile.phone.replace(/[^0-9]/g, '')}`;
-      }
-    }
-
-function getStoredAgentRef() {
-      return localStorage.getItem('siwasup_referred_by') || 'AG-09';
-    }
-
-    function getStoredSource() {
-      return localStorage.getItem('siwasup_referred_source') || 'direct';
-    }
-
-        // 🛡️ Privacy Policy (PDPA) Modal & Consent Handlers
-    function openPrivacyPolicyModal() {
-      const modal = document.getElementById('privacy-policy-modal');
-      if (modal) {
-        modal.classList.remove('hidden');
-        if (typeof lockBodyScroll === 'function') lockBodyScroll();
-        if (window.lucide) lucide.createIcons();
-      }
-    }
-
-    function closePrivacyPolicyModal() {
-      const modal = document.getElementById('privacy-policy-modal');
-      if (modal) {
-        modal.classList.add('hidden');
-        if (typeof unlockBodyScroll === 'function') unlockBodyScroll();
-      }
-    }
-
-    function acceptPdpaConsent() {
-      localStorage.setItem('siwasup_pdpa_consent', 'accepted');
-      const capsule = document.getElementById('pdpa-consent-capsule');
-      if (capsule) capsule.classList.add('hidden');
-    }
-
-    function checkPdpaConsent() {
-      if (!localStorage.getItem('siwasup_pdpa_consent')) {
-        const capsule = document.getElementById('pdpa-consent-capsule');
-        if (capsule) {
-          setTimeout(() => {
-            capsule.classList.remove('hidden');
-            if (window.lucide) lucide.createIcons();
-          }, 1200);
-        }
-      }
-    }
-
-function openCallModal(id, title) {
-      const ref = getStoredAgentRef();
-      document.getElementById('call-discount-code').textContent = `SS-${ref.replace(/[^\w\u0E00-\u0E7F]/g, '')}`;
-      document.getElementById('call-modal').classList.remove('hidden');
-    }
-
-    function closeCallModal() {
-      document.getElementById('call-modal').classList.add('hidden');
-    }
-
-    function logCallLead() {
-      const ref = getStoredAgentRef();
-      const src = getStoredSource();
-      console.log(`Lead calling with ref: ${ref}, source: ${src}`);
-      showToast(`📞 กำลังโทรออก... แจ้งรหัส SS-${ref} กับเจ้าหน้าที่เพื่อรับสิทธิพิเศษ`);
-    }
-
-    function contactViaLine(id, title, isWaitlist = false) {
-      const ref = getStoredAgentRef();
-      const src = getStoredSource();
-      const prefix = isWaitlist ? "สวัสดีครับ สนใจสอบถามสถานะคิวสำรอง (กรณีหลุดจอง) ทรัพย์: " : "สวัสดีครับ สนใจทรัพย์: ";
+      // 2. 🏆 Look up in the official 125 Siwasup Agents roster (siwasup_agents.js?v=20261104-conf"สวัสดีครับ สนใจสอบถามสถานะคิวสำรอง (กรณีหลุดจอง) ทรัพย์: " : "สวัสดีครับ สนใจทรัพย์: ";
       const msg = `${prefix}${title} (รหัส ${id}) [ผู้แนะนำ: ${ref} | ช่องทาง: ${src}]`;
       const lineUrl = `https://line.me/R/oaMessage/@siwasup/?${encodeURIComponent(msg)}`;
       window.open(lineUrl, '_blank');
@@ -5023,7 +4969,7 @@ function openCallModal(id, title) {
           renderProperties();
 
           // Automated Point Trigger: Booking Confirmed (+100 performance points)
-          const agentRef = prop.assignedAgent || localStorage.getItem('siwasup_my_agent_ref') || 'S22';
+          const agentRef = prop.assignedAgent || localStorage.getItem('siwasup_my_agent_ref') || 'S90';
           if (window.SiwasupAgents && typeof window.SiwasupAgents.award === 'function' && agentRef) {
             window.SiwasupAgents.award(agentRef, 'booking_confirmed', { propertyId: prop.id });
           }
@@ -5181,23 +5127,27 @@ function openCallModal(id, title) {
       }
 
       // Check view mode & referrals
-      const view = params.get('view');
+      const view = params.get('view') || params.get('mode');
       if (params.has('join_ref')) {
         const inviter = params.get('join_ref');
         setMode('trainee');
         setTimeout(() => {
           showToast(`🤝 คุณกำลังลงทะเบียนเป็นตัวแทนภายใต้การแนะนำของ [${inviter}] - ส่งทรัพย์ 3 หลังเพื่อปลดล็อก!`);
         }, 800);
-      } else if (view === 'client' || (params.has('ref') && !view) || params.has('bundle')) {
+      } else if (view === 'client' || ((params.has('ref') || params.has('agent')) && !view) || params.has('bundle')) {
         setMode('client');
-      } else if (view === 'owner') {
-        setMode('owner');
-      } else if (view === 'employee') {
-        setMode('employee');
-      } else if (view === 'free_agent') {
-        setMode('free_agent');
+      } else if (isAdminSession()) {
+        if (view === 'employee') {
+          setMode('employee');
+        } else if (view === 'free_agent') {
+          setMode('free_agent');
+        } else if (view === 'trainee') {
+          setMode('trainee');
+        } else {
+          setMode('owner'); // โหมด Admin เริ่มต้นที่หน้าเจ้าของเมื่อเข้าด้วยสิทธิ์ Admin (?admin=1 / ?view=owner)
+        }
       } else {
-        setMode('owner'); // ตั้งต้นที่โหมดเจ้าของ เพื่อให้เห็นปุ่มแก้ราคาและแผงควบคุมทันที
+        setMode('free_agent'); // ค่าเริ่มต้นสำหรับตัวแทนทั่วไป (User Mode) ล็อกแถบสลับโหมดอัตโนมัติ
       }
 
       // Check single property focus from Vinyl Sign QR (?id=1069562&ref=AG-บัวรา&src=qr_sign)
@@ -5216,6 +5166,49 @@ function openCallModal(id, title) {
           openMeetingCheckinModal(checkinDate);
           showToast(`🎟️ สแกน QR เข้าประชุมเรียบร้อย กรุณายืนยันรหัสตัวแทนเพื่อรับ +10 แต้มกิจกรรม`);
         }, 500);
+      }
+
+      // 🔗 Real Identity & Score Sync from Registration / LINE Login
+      if (params.get('my_agent') && window.SiwasupAgents && typeof window.SiwasupAgents.syncMember === 'function') {
+        const doCheckin = params.get('checkin') === '1';
+        const syncRes = window.SiwasupAgents.syncMember({
+          code: params.get('my_agent'),
+          name: params.get('my_name') || params.get('my_agent'),
+          nickname: params.get('my_nick') || params.get('my_agent'),
+          phone: params.get('my_phone') || ''
+        }, doCheckin);
+        if (syncRes && syncRes.agent) {
+          updateProfileButtons(syncRes.agent.code);
+          setTimeout(() => {
+            openMyProfileModal(syncRes.agent.code);
+            if (syncRes.awardedToday && typeof showToast === 'function') {
+              showToast(`🎉 สแกนเข้าระบบสำเร็จ! บันทึกคะแนน +10 แต้มตามจริงให้ [${syncRes.agent.code} - ${syncRes.agent.nickname}] เรียบร้อย!`);
+            }
+          }, 400);
+        }
+      } else {
+        // Auto-detect active LINE Login session if present
+        const sessTok = localStorage.getItem('siwasup_session');
+        if (sessTok && window.SiwasupAgents && typeof window.SiwasupAgents.syncMember === 'function') {
+          fetch('https://siwasup-cobroker-os.onrender.com/api/auth/me', {
+            headers: { 'Authorization': 'Bearer ' + sessTok },
+            cache: 'no-store'
+          }).then(r => r.ok ? r.json() : null).then(me => {
+            if (me && me.status === 'approved' && me.member) {
+              const doCheckin = params.get('checkin') === '1';
+              const syncRes = window.SiwasupAgents.syncMember(me.member, doCheckin);
+              if (syncRes && syncRes.agent) {
+                updateProfileButtons(syncRes.agent.code);
+                if (doCheckin) {
+                  openMyProfileModal(syncRes.agent.code);
+                  if (syncRes.awardedToday && typeof showToast === 'function') {
+                    showToast(`🎉 ยินดีต้อนรับคุณ${syncRes.agent.nickname}! บันทึกคะแนนสแกนเข้าระบบ +10 แต้มตามจริงเรียบร้อย!`);
+                  }
+                }
+              }
+            }
+          }).catch(() => {});
+        }
       }
     }
 

@@ -59,38 +59,38 @@
 <body class="min-h-screen flex flex-col justify-between p-3 sm:p-6 lg:p-8">
 
   <!-- TOP HEADER (Red Logo + Correct Spelling + Red & Gold Light Theme) -->
-  <header class="max-w-7xl w-full mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
-    <div class="flex items-center gap-3.5">
+  <header class="max-w-7xl w-full mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+    <div class="flex items-center gap-3 w-full sm:w-auto min-w-0">
       <!-- Official Red Siwasup Logo -->
-      <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-white border-2 border-red-200 p-1.5 shadow-sm flex items-center justify-center shrink-0">
+      <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white border-2 border-red-200 p-1.5 shadow-sm flex items-center justify-center shrink-0">
         <img src="https://assets.siwasup.com/siwasup_logo.svg" alt="ศิวาทรัพย์" class="w-full h-full object-contain">
       </div>
-      <div>
-        <div class="flex items-center gap-2 flex-wrap">
-          <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-wide flex items-center gap-1.5">
-            <span class="red-gradient-text font-black text-xl sm:text-2xl">ศิวาทรัพย์</span>
-            <span class="gold-gradient-text font-black">LOBBY APPROVAL CENTER</span>
+      <div class="min-w-0 flex-1">
+        <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+          <h1 class="text-base sm:text-xl font-bold text-slate-900 tracking-wide flex items-center gap-1.5 flex-wrap">
+            <span class="red-gradient-text font-black text-lg sm:text-2xl">ศิวาทรัพย์</span>
+            <span class="gold-gradient-text font-black text-sm sm:text-lg">LOBBY APPROVAL CENTER</span>
           </h1>
-          <span class="text-[10px] px-2.5 py-0.5 rounded-full bg-red-50 text-[#ed1c24] font-bold border border-red-200 shadow-2xs">
+          <span class="text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-red-50 text-[#ed1c24] font-bold border border-red-200 shadow-2xs whitespace-nowrap">
             ห้องอนุมัติสิทธิ์กลาง
           </span>
         </div>
-        <p class="text-xs text-slate-500 mt-0.5">
+        <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5 leading-tight sm:leading-normal">
           ศูนย์ควบคุมการจัดสรรสิทธิ์ทีมงาน 5 เสาหลัก & พันธมิตร Co-Broker • ควบคุมโดย <strong class="text-slate-800">คุณเจี๊ยบ(กูล) & คุณบัว</strong>
         </p>
       </div>
     </div>
 
-    <div class="flex flex-wrap items-center gap-2">
-      <a href="https://assets.siwasup.com/agent_onboarding_qr.html" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 border border-slate-300 flex items-center gap-1.5 shadow-sm transition">
+    <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+      <a href="https://assets.siwasup.com/agent_onboarding_qr.html" target="_blank" class="flex-1 sm:flex-initial justify-center px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-[11px] sm:text-xs font-semibold text-slate-700 border border-slate-300 flex items-center gap-1.5 shadow-sm transition">
         <i data-lucide="qr-code" class="w-3.5 h-3.5 text-amber-600"></i>
         <span>ป้ายสแกน QR หน้างาน</span>
       </a>
-      <a href="https://assets.siwasup.com/agent_registration.html" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-xs font-semibold text-blue-700 border border-blue-200 flex items-center gap-1.5 shadow-sm transition">
+      <a href="https://assets.siwasup.com/agent_registration.html" target="_blank" class="flex-1 sm:flex-initial justify-center px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[11px] sm:text-xs font-semibold text-blue-700 border border-blue-200 flex items-center gap-1.5 shadow-sm transition">
         <i data-lucide="smartphone" class="w-3.5 h-3.5 text-blue-600"></i>
-        <span>เปิดหน้าจอมือถือผู้สมัคร</span>
+        <span>เปิดจอมือถือผู้สมัคร</span>
       </a>
-      <a href="https://assets.siwasup.com/gool_executive_dashboard.html" class="px-3.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-xs font-bold text-amber-800 border border-amber-300 flex items-center gap-1.5 shadow-sm transition">
+      <a href="https://assets.siwasup.com/gool_executive_dashboard.html" class="w-full sm:w-auto justify-center px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-[11px] sm:text-xs font-bold text-amber-800 border border-amber-300 flex items-center gap-1.5 shadow-sm transition">
         <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-amber-600"></i>
         <span>Executive Dashboard</span>
       </a>
@@ -194,7 +194,7 @@
       </div>
 
       <!-- ============================================================== -->
-      <!-- DRAG & DROP ROLE STATION (กล่องรับการลากวาง 7 กล่อง) -->
+      <!-- DRAG & DROP ROLE STATION (กล่องรับการลากวาง 8 กล่อง) -->
       <!-- ============================================================== -->
       <div class="pt-2 border-t border-slate-200 space-y-2.5">
         <div class="flex items-center justify-between">
@@ -205,7 +205,7 @@
           <span class="text-[10px] text-slate-400">ลากการ์ดมาปล่อยลงในช่องที่ต้องการ</span>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5 text-xs">
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 text-xs">
 
           <!-- Drop Zone 1: Gool -->
           <div class="drop-zone p-3 rounded-2xl bg-amber-50/50 hover:bg-amber-50 border-2 border-dashed border-amber-300 text-center space-y-1"
@@ -252,16 +252,25 @@
             <div class="text-[8px] text-slate-400 pt-0.5">ปล่อยเพื่อแต่งตั้ง</div>
           </div>
 
-          <!-- Drop Zone 6: Co-Broker -->
-          <div class="drop-zone p-3 rounded-2xl bg-emerald-50/50 hover:bg-emerald-50 border-2 border-dashed border-emerald-400 text-center space-y-1"
-               ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'agent')">
-            <div class="text-base">🤝</div>
-            <div class="font-bold text-emerald-900 leading-tight">Co-Broker</div>
-            <div class="text-[9px] text-emerald-700">พันธมิตรรับรอง</div>
+          <!-- Drop Zone 6: Contract Agent (Pink Sand #ffa8B6) -->
+          <div class="drop-zone p-3 rounded-2xl bg-[#ffa8b6]/20 hover:bg-[#ffa8b6]/35 border-2 border-dashed border-[#ffa8b6] text-center space-y-1"
+               ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'contract_agent')">
+            <div class="text-base">📑</div>
+            <div class="font-bold text-[#9e3b4f] leading-tight">Contract Agent</div>
+            <div class="text-[9px] text-[#b84a60] font-semibold">ตัวแทนสัญญาสังกัด</div>
             <div class="text-[8px] text-slate-400 pt-0.5">ปล่อยเพื่อแต่งตั้ง</div>
           </div>
 
-          <!-- Drop Zone 7: Reject Trash -->
+          <!-- Drop Zone 7: Free Agent (Kimberly #786ea1) -->
+          <div class="drop-zone p-3 rounded-2xl bg-[#786ea1]/15 hover:bg-[#786ea1]/25 border-2 border-dashed border-[#786ea1] text-center space-y-1"
+               ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'free_agent')">
+            <div class="text-base">🤝</div>
+            <div class="font-bold text-[#4a4269] leading-tight">Free Agent</div>
+            <div class="text-[9px] text-[#5e5485] font-semibold">ตัวแทนอิสระ</div>
+            <div class="text-[8px] text-slate-400 pt-0.5">ปล่อยเพื่อแต่งตั้ง</div>
+          </div>
+
+          <!-- Drop Zone 8: Reject Trash -->
           <div class="drop-zone p-3 rounded-2xl bg-red-50/50 hover:bg-red-50 border-2 border-dashed border-red-300 text-center space-y-1"
                ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'reject')">
             <div class="text-base">🗑️</div>
@@ -295,16 +304,167 @@
           </p>
         </div>
 
-        <div>
-          <span class="text-xs font-semibold px-3 py-1 rounded-xl bg-slate-100 text-slate-700 border border-slate-200">
-            ทำเนียบสมาชิกทางการ • คุ้มครองสิทธิ์ 100%
+        <div class="flex items-center gap-2 flex-wrap">
+          <div class="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs font-semibold">
+            <button id="btnViewCards" onclick="setRosterViewMode('cards')" class="px-3 py-1 rounded-lg bg-white text-slate-800 shadow-2xs transition font-bold flex items-center gap-1.5">
+              <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-amber-600"></i>
+              <span>การ์ดทีมงาน (Illustrator)</span>
+            </button>
+            <button id="btnViewTable" onclick="setRosterViewMode('table')" class="px-3 py-1 rounded-lg text-slate-500 hover:text-slate-800 transition flex items-center gap-1.5">
+              <i data-lucide="table" class="w-3.5 h-3.5"></i>
+              <span>ตารางรวม</span>
+            </button>
+          </div>
+          <span class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 border border-slate-200 hidden sm:inline-block">
+            คุ้มครองสิทธิ์ 100%
           </span>
         </div>
       </div>
 
-      <!-- APPROVED TABLE -->
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs border-collapse">
+      <!-- FILTER & SORT TOOLBAR -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-1 pb-2 border-b border-slate-100">
+        
+        <!-- Left: Quick Category Filter Pills -->
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <span class="text-xs text-slate-400 font-medium mr-1 hidden sm:inline">กรอง:</span>
+          
+          <button onclick="setRosterFilter('all')" id="filterBtn_all" 
+                  class="roster-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-2xs bg-slate-900 text-white">
+            ทั้งหมด (<span id="count_all">0</span>)
+          </button>
+          
+          <button onclick="setRosterFilter('admin')" id="filterBtn_admin" 
+                  class="roster-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">
+            🏢 Admin & Staff (<span id="count_admin">0</span>)
+          </button>
+          
+          <button onclick="setRosterFilter('contract_agent')" id="filterBtn_contract_agent" 
+                  class="roster-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">
+            📑 Contract Agent (<span id="count_contract_agent">0</span>)
+          </button>
+
+          <button onclick="setRosterFilter('free_agent')" id="filterBtn_free_agent" 
+                  class="roster-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">
+            🤝 Free Agent (<span id="count_free_agent">0</span>)
+          </button>
+        </div>
+
+        <!-- Right: Sort By Dropdown & Live Search -->
+        <div class="flex items-center gap-2 flex-wrap">
+          <!-- Live Search Input -->
+          <div class="relative flex-1 sm:w-56">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <input type="text" id="rosterSearchInput" oninput="handleRosterSearch(this.value)" 
+                   placeholder="ค้นชื่อ, โซน, เบอร์..." 
+                   class="w-full pl-8 pr-3 py-1.5 rounded-xl text-xs bg-slate-50 border border-slate-200 focus:bg-white focus:border-amber-400 focus:ring-1 focus:ring-amber-400 outline-none transition">
+          </div>
+
+          <!-- Sort Dropdown -->
+          <div class="relative">
+            <select id="rosterSortSelect" onchange="setRosterSort(this.value)" 
+                    class="appearance-none pl-3 pr-7 py-1.5 rounded-xl text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100 focus:bg-white outline-none cursor-pointer transition">
+              <option value="tier">⚡ สิทธิ์บริหาร (ลำดับยศ)</option>
+              <option value="name">🔤 ชื่อ (ก - ฮ)</option>
+              <option value="zone">📍 โซนพื้นที่ดูแล</option>
+              <option value="newest">🕒 อนุมัติล่าสุด</option>
+            </select>
+            <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- EXECUTIVE PRIVILEGE DRAG & DROP DOCK (For [NASSTY], Bua, Gool) -->
+      <div id="execBadgeDock" class="rounded-2xl p-3.5 sm:p-4 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white shadow-md border border-slate-700/80 space-y-2.5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-bold shrink-0">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-white flex items-center gap-1.5 flex-wrap">
+                <span>แท่นลากสิทธิ์ด่วน (Drag & Drop Privilege Dock)</span>
+                <span class="text-[9px] px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black tracking-wide">สิทธิ์ผู้บริหาร: [NASSTY] • คุณบัว • คุณกูล</span>
+              </div>
+              <p class="text-[11px] text-slate-400">
+                ลากป้ายสิทธิ์ด้านล่างไปปล่อยใส่การ์ดสมาชิกเพื่อมอบสิทธิ์ทันที | ลากป้ายสิทธิ์จากการ์ดมาปล่อยลงถังขยะเพื่อถอนสิทธิ์
+              </p>
+            </div>
+          </div>
+
+          <!-- Trash Drop Zone -->
+          <div id="badgeTrashDropZone" 
+               ondragover="handleBadgeTrashOver(event)" 
+               ondragleave="handleBadgeTrashLeave(event)" 
+               ondrop="handleBadgeTrashDrop(event)"
+               class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-red-950/40 border-2 border-dashed border-red-500/50 text-red-300 hover:bg-red-900/60 transition shadow-inner select-none cursor-pointer self-start sm:self-auto"
+               title="ลากป้ายสิทธิ์จากการ์ดสมาชิกมาปล่อยที่นี่เพื่อถอดสิทธิ์ออกทันที">
+            <i data-lucide="trash-2" class="w-4 h-4 text-red-400"></i>
+            <span class="text-xs font-bold">ถังขยะเพิกถอนสิทธิ์</span>
+          </div>
+        </div>
+
+        <!-- Draggable Badges Palette -->
+        <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap pt-1.5 border-t border-slate-700/60">
+          <span class="text-[10px] text-slate-400 font-semibold mr-1">🖐️ สิทธิ์ที่พร้อมลากมอบ:</span>
+
+          <div draggable="true" ondragstart="handleBadgePaletteDragStart(event, '📑 สัญญาสังกัดทางการ')" 
+               class="cursor-grab active:cursor-grabbing px-2.5 py-1 rounded-xl text-[#6e1d2c] border-2 font-bold text-[11px] shadow-sm hover:scale-105 transition flex items-center gap-1 select-none"
+               style="background-color: #ffa8b6; border-color: #e58e9c;">
+            <span>📑 สัญญาสังกัดทางการ (Contract Agent)</span>
+          </div>
+          
+          <div draggable="true" ondragstart="handleBadgePaletteDragStart(event, '💰 เคาะราคาบ้าน')" 
+               class="cursor-grab active:cursor-grabbing px-2.5 py-1 rounded-xl bg-amber-50 text-amber-950 border-2 border-amber-300 font-bold text-[11px] shadow-sm hover:scale-105 transition flex items-center gap-1 select-none">
+            <span>💰 เคาะราคาบ้าน</span>
+          </div>
+
+          <div draggable="true" ondragstart="handleBadgePaletteDragStart(event, '🔑 กุญแจสำรอง')" 
+               class="cursor-grab active:cursor-grabbing px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-950 border-2 border-emerald-300 font-bold text-[11px] shadow-sm hover:scale-105 transition flex items-center gap-1 select-none">
+            <span>🔑 กุญแจสำรอง</span>
+          </div>
+
+          <div draggable="true" ondragstart="handleBadgePaletteDragStart(event, '🔑 คุมกุญแจ OTP 100%')" 
+               class="cursor-grab active:cursor-grabbing px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-950 border-2 border-emerald-300 font-bold text-[11px] shadow-sm hover:scale-105 transition flex items-center gap-1 select-none">
+            <span>🔑 คุมกุญแจ OTP 100%</span>
+          </div>
+
+          <div draggable="true" ondragstart="handleBadgePaletteDragStart(event, '👑 สิทธิ์บริหาร')" 
+               class="cursor-grab active:cursor-grabbing px-2.5 py-1 rounded-xl bg-purple-50 text-purple-950 border-2 border-purple-300 font-bold text-[11px] shadow-sm hover:scale-105 transition flex items-center gap-1 select-none">
+            <span>👑 สิทธิ์บริหาร</span>
+          </div>
+
+          <div draggable="true" ondragstart="handleBadgePaletteDragStart(event, '💬 ดูแชทลีด')" 
+               class="cursor-grab active:cursor-grabbing px-2.5 py-1 rounded-xl bg-blue-50 text-blue-950 border-2 border-blue-300 font-bold text-[11px] shadow-sm hover:scale-105 transition flex items-center gap-1 select-none">
+            <span>💬 ดูแชทลีด</span>
+          </div>
+
+          <div draggable="true" ondragstart="handleBadgePaletteDragStart(event, '🛡️ Standard Admin')" 
+               class="cursor-grab active:cursor-grabbing px-2.5 py-1 rounded-xl bg-slate-100 text-slate-900 border-2 border-slate-300 font-bold text-[11px] shadow-sm hover:scale-105 transition flex items-center gap-1 select-none">
+            <span>🛡️ Standard Admin</span>
+          </div>
+
+          <div draggable="true" ondragstart="handleBadgePaletteDragStart(event, '🏷️ ช่วยคัดสต๊อก')" 
+               class="cursor-grab active:cursor-grabbing px-2.5 py-1 rounded-xl bg-orange-50 text-orange-950 border-2 border-orange-300 font-bold text-[11px] shadow-sm hover:scale-105 transition flex items-center gap-1 select-none">
+            <span>🏷️ ช่วยคัดสต๊อก</span>
+          </div>
+
+          <div draggable="true" ondragstart="handleBadgePaletteDragStart(event, '⚙️ Technical Admin')" 
+               class="cursor-grab active:cursor-grabbing px-2.5 py-1 rounded-xl bg-rose-50 text-rose-950 border-2 border-rose-300 font-bold text-[11px] shadow-sm hover:scale-105 transition flex items-center gap-1 select-none">
+            <span>⚙️ Technical Admin</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- APPROVED ROSTER: RESPONSIVE DISPLAY -->
+      <!-- VIEW 1: EXECUTIVE CARDS GRID (4 Columns on PC >= xl:grid-cols-4 for compact pro dashboard view) -->
+      <div id="approvedCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-4.5">
+        <!-- Rendered dynamically via JavaScript -->
+      </div>
+
+      <!-- VIEW 2: TRADITIONAL 5-COLUMN TABLE -->
+      <div id="approvedTableView" class="hidden overflow-x-auto">
+        <table class="w-full min-w-[720px] text-left text-xs border-collapse">
           <thead>
             <tr class="bg-slate-50 text-slate-500 border-b border-slate-200">
               <th class="py-3 px-3.5 font-bold rounded-l-xl">ชื่อ - นามสกุล</th>
@@ -475,14 +635,15 @@
         },
         {
           id: "app_office_004",
-          name: "คุณต้น (NASSTY)",
-          nickname: "ต้น",
+          name: "[NASSTY]",
+          nickname: "NASSTY",
           phone: "0815555555",
           zone: "สำนักงานใหญ่",
           role: "💻 Tech Architect & Senior Advisor",
           title: "Senior Technology Architect",
           badges: ["⚙️ Technical Admin", "💰 เคาะราคา", "🛡️ Standard Admin"],
-          is_tech: true
+          is_tech: true,
+          last_active_at: Math.floor(Date.now() / 1000)
         },
         {
           id: "app_office_005",
@@ -498,7 +659,18 @@
       ]
     };
 
+    function normalizeNasstySeat(data) {
+      if (!data || !data.approved) return;
+      data.approved.forEach(item => {
+        if (item.id === 'app_office_004' || (item.name && item.name.includes('คุณต้น')) || item.role_code === 'TECH_ARCHITECT' || (item.role && item.role.includes('Tech Architect'))) {
+          item.name = '[NASSTY]';
+          item.nickname = 'NASSTY';
+        }
+      });
+    }
+
     let lobbyData = JSON.parse(localStorage.getItem('siwasup_lobby_data')) || DEFAULT_DATA;
+    normalizeNasstySeat(lobbyData);
 
     async function fetchCloudLobby() {
       try {
@@ -507,6 +679,7 @@
         if (res.ok) {
           const cloudData = await res.json();
           if (cloudData && (cloudData.pending || cloudData.approved)) {
+            normalizeNasstySeat(cloudData);
             lobbyData = cloudData;
             localStorage.setItem('siwasup_lobby_data', JSON.stringify(lobbyData));
             renderLobby();
@@ -517,6 +690,7 @@
         console.log('[Lobby] Cloud sync:', err);
       }
       lobbyData = JSON.parse(localStorage.getItem('siwasup_lobby_data')) || DEFAULT_DATA;
+      normalizeNasstySeat(lobbyData);
       renderLobby();
     }
 
@@ -559,22 +733,56 @@
         badges: ["🛡️ Standard Admin", "🏷️ ช่วยคัดสต๊อก", "🚫 ล็อกแก้ราคา"],
         permissions: { standardAdmin: true, editPrice: false, keyboxAdmin: false, leadInspector: false, executiveAuthority: false, catalogCurator: true, systemAdmin: false }
       },
-      agent: {
-        role: "🤝 Co-Broker พันธมิตรทางการ",
-        title: "Certified Co-Broker Partner",
+      contract_agent: {
+        role: "📑 Contract Agent (ตัวแทนสัญญา)",
+        title: "Official Contract Agent",
+        role_code: "CONTRACT_AGENT",
+        badges: ["📑 สัญญาสังกัดทางการ", "🎯 รับลีดกลางบริษัท", "📜 บัตรดิจิทัลทางการ", "📅 จองเปิดบ้าน"],
+        permissions: { standardAdmin: false, editPrice: false, keyboxAdmin: false, leadInspector: false, executiveAuthority: false, catalogCurator: false, systemAdmin: false, contractAgent: true }
+      },
+      free_agent: {
+        role: "🤝 Free Agent (ตัวแทนอิสระ)",
+        title: "Certified Free Agent Partner",
+        role_code: "FREE_AGENT",
         badges: ["📜 บัตรดิจิทัลทางการ", "🔒 ล็อกค่านายหน้า 60 วัน", "📅 จองเปิดบ้าน", "🚫 ล็อกแอดมิน"],
-        permissions: { standardAdmin: false, editPrice: false, keyboxAdmin: false, leadInspector: false, executiveAuthority: false, catalogCurator: false, systemAdmin: false }
+        permissions: { standardAdmin: false, editPrice: false, keyboxAdmin: false, leadInspector: false, executiveAuthority: false, catalogCurator: false, systemAdmin: false, contractAgent: false }
+      },
+      agent: {
+        role: "🤝 Free Agent (ตัวแทนอิสระ)",
+        title: "Certified Free Agent Partner",
+        role_code: "FREE_AGENT",
+        badges: ["📜 บัตรดิจิทัลทางการ", "🔒 ล็อกค่านายหน้า 60 วัน", "📅 จองเปิดบ้าน", "🚫 ล็อกแอดมิน"],
+        permissions: { standardAdmin: false, editPrice: false, keyboxAdmin: false, leadInspector: false, executiveAuthority: false, catalogCurator: false, systemAdmin: false, contractAgent: false }
       }
     };
 
-    
+    function isAdminItem(item) {
+      const role = (item.role || '').toLowerCase();
+      const perms = item.permissions || {};
+      return !!(perms.systemAdmin || perms.standardAdmin || perms.executiveAuthority || perms.keyboxAdmin ||
+             role.includes('tech') || role.includes('ceo') || (role.includes('partner') && !role.includes('free agent')) ||
+             role.includes('viewing') || role.includes('admin') || role.includes('ซัพพอร์ต') ||
+             item.id === 'app_office_004' || item.is_leader || item.is_keybox);
+    }
+
+    function isContractAgentItem(item) {
+      if (isAdminItem(item)) return false;
+      const role = (item.role || '').toLowerCase();
+      const title = (item.title || '').toLowerCase();
+      const perms = item.permissions || {};
+      const badges = item.badges || [];
+      return !!(perms.contractAgent || item.role_code === 'CONTRACT_AGENT' ||
+             role.includes('contract') || role.includes('สัญญา') ||
+             title.includes('contract') || badges.some(b => b.includes('สัญญา')));
+    }
+
     function getRoleTierBadge(item) {
       const role = (item.role || "").toLowerCase();
       const perms = item.permissions || {};
       if (perms.systemAdmin || role.includes("tech") || role.includes("ต้น")) {
         return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-rose-800 border border-rose-300 shadow-2xs">💻 SUPER TECH</span>`;
       }
-      if (role.includes("ceo") || role.includes("partner") || role.includes("กูล") || role.includes("บัว") || perms.executiveAuthority) {
+      if (role.includes("ceo") || (role.includes("partner") && !role.includes("free agent")) || role.includes("กูล") || role.includes("บัว") || perms.executiveAuthority) {
         return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-amber-100 to-red-100 text-amber-900 border border-amber-400 shadow-2xs">👑 SUPREME EXEC</span>`;
       }
       if (perms.keyboxAdmin || role.includes("viewing") || role.includes("กุญแจ") || role.includes("ลิลลี่")) {
@@ -583,7 +791,477 @@
       if (perms.standardAdmin) {
         return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-800 border border-blue-300 shadow-2xs">🏢 OFFICE ADMIN</span>`;
       }
-      return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-slate-100 text-slate-700 border border-slate-300 shadow-2xs">🤝 CO-BROKER</span>`;
+      if (isContractAgentItem(item)) {
+        return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black text-white border shadow-2xs" style="background-color: #ffa8b6; border-color: #e58e9c;">📑 CONTRACT AGENT</span>`;
+      }
+      return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black text-white border shadow-2xs" style="background-color: #786ea1; border-color: #5e5485;">🤝 FREE AGENT</span>`;
+    }
+
+    let currentRosterViewMode = 'cards';
+    let currentRosterFilter = 'all'; // 'all' | 'admin' | 'contract_agent' | 'free_agent'
+    let currentRosterSort = 'tier';   // 'tier' | 'name' | 'zone' | 'newest'
+    let currentRosterSearch = '';
+
+    function setRosterFilter(filter) {
+      currentRosterFilter = filter;
+      ['all', 'admin', 'contract_agent', 'free_agent'].forEach(k => {
+        const btn = document.getElementById('filterBtn_' + k);
+        if (!btn) return;
+        if (k === filter) {
+          btn.className = "roster-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-2xs bg-slate-900 text-white";
+        } else {
+          btn.className = "roster-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200";
+        }
+      });
+      renderApprovedRoster();
+      lucide.createIcons();
+    }
+
+    function setRosterSort(sortVal) {
+      currentRosterSort = sortVal;
+      renderApprovedRoster();
+      lucide.createIcons();
+    }
+
+    function handleRosterSearch(val) {
+      currentRosterSearch = (val || '').trim().toLowerCase();
+      renderApprovedRoster();
+      lucide.createIcons();
+    }
+
+    function getFilteredAndSortedApproved() {
+      let list = [...(lobbyData.approved || [])];
+
+      // 1) Filter by category
+      if (currentRosterFilter === 'admin') {
+        list = list.filter(item => isAdminItem(item));
+      } else if (currentRosterFilter === 'contract_agent') {
+        list = list.filter(item => isContractAgentItem(item));
+      } else if (currentRosterFilter === 'free_agent' || currentRosterFilter === 'agent') {
+        list = list.filter(item => !isAdminItem(item) && !isContractAgentItem(item));
+      }
+
+      // 2) Live search query
+      if (currentRosterSearch) {
+        list = list.filter(item => {
+          const text = `${item.name} ${item.nickname || ''} ${item.phone} ${item.zone} ${item.role} ${item.title || ''}`.toLowerCase();
+          return text.includes(currentRosterSearch);
+        });
+      }
+
+      // 3) Sorting
+      if (currentRosterSort === 'name') {
+        list.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'th'));
+      } else if (currentRosterSort === 'zone') {
+        list.sort((a, b) => (a.zone || '').localeCompare(b.zone || '', 'th'));
+      } else if (currentRosterSort === 'newest') {
+        list.reverse();
+      } else {
+        // Default 'tier': Tech / Supreme -> Key Master -> Admin -> Contract Agent -> Free Agent
+        const getTierScore = (it) => {
+          const th = getCardTheme(it);
+          if (th.key === 'tech') return 100;
+          if (th.key === 'supreme') return 90;
+          if (th.key === 'keymaster') return 80;
+          if (th.key === 'admin') return 70;
+          if (th.key === 'contract_agent') return 30;
+          return 10;
+        };
+        list.sort((a, b) => getTierScore(b) - getTierScore(a));
+      }
+
+      return list;
+    }
+
+    function setRosterViewMode(mode) {
+      currentRosterViewMode = mode;
+      const cardsGrid = document.getElementById('approvedCardsGrid');
+      const tableView = document.getElementById('approvedTableView');
+      const btnCards = document.getElementById('btnViewCards');
+      const btnTable = document.getElementById('btnViewTable');
+
+      if (mode === 'cards') {
+        if (cardsGrid) cardsGrid.classList.remove('hidden');
+        if (tableView) tableView.classList.add('hidden');
+        if (btnCards) {
+          btnCards.className = "px-3 py-1 rounded-lg bg-white text-slate-800 shadow-2xs transition font-bold flex items-center gap-1.5";
+        }
+        if (btnTable) {
+          btnTable.className = "px-3 py-1 rounded-lg text-slate-500 hover:text-slate-800 transition flex items-center gap-1.5";
+        }
+      } else {
+        if (cardsGrid) cardsGrid.classList.add('hidden');
+        if (tableView) tableView.classList.remove('hidden');
+        if (btnCards) {
+          btnCards.className = "px-3 py-1 rounded-lg text-slate-500 hover:text-slate-800 transition flex items-center gap-1.5";
+        }
+        if (btnTable) {
+          btnTable.className = "px-3 py-1 rounded-lg bg-white text-slate-800 shadow-2xs transition font-bold flex items-center gap-1.5";
+        }
+      }
+    }
+
+    // ==========================================
+    // REAL ONLINE/OFFLINE PRESENCE ENGINE
+    // ==========================================
+    function formatPresence(item) {
+      const now = Math.floor(Date.now() / 1000);
+      const ts = item.last_active_at;
+      // If member is [NASSTY] or current viewer active right now
+      const isSelf = (item.id === 'app_office_004');
+      const diff = ts ? (now - ts) : (isSelf ? 0 : 999999);
+
+      if (diff <= 300) { // within 5 minutes = ONLINE
+        return `
+          <div class="flex items-center gap-1 mt-1" title="ออนไลน์อยู่ขณะนี้">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="text-[10px] font-black text-emerald-500 tracking-wider">ONLINE</span>
+          </div>
+        `;
+      } else if (diff < 3600) {
+        const mins = Math.floor(diff / 60);
+        return `
+          <div class="flex items-center gap-1 mt-1 text-slate-400 font-bold text-[10px]" title="ใช้งานล่าสุด ${mins} นาทีที่แล้ว">
+            <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+            <span>${mins}m ago</span>
+          </div>
+        `;
+      } else if (diff < 86400) {
+        const hrs = Math.floor(diff / 3600);
+        return `
+          <div class="flex items-center gap-1 mt-1 text-slate-400 font-bold text-[10px]" title="ใช้งานล่าสุด ${hrs} ชั่วโมงที่แล้ว">
+            <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+            <span>${hrs}h ago</span>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="flex items-center gap-1 mt-1 text-slate-400 font-bold text-[10px]" title="ออฟไลน์">
+            <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+            <span>OFFLINE</span>
+          </div>
+        `;
+      }
+    }
+
+    // Ping presence heartbeat every 45 seconds
+    async function sendPresenceHeartbeat() {
+      try {
+        const tok = localStorage.getItem(SESSION_KEY);
+        if (!tok) return;
+        await fetch(`${API_BASE}/api/presence/heartbeat`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${tok}` }
+        });
+      } catch (e) {}
+    }
+    setInterval(sendPresenceHeartbeat, 45000);
+
+    // ==========================================
+    // DRAG & DROP BADGE PRIVILEGE ENGINE
+    // ==========================================
+    let draggedPaletteBadge = null;
+    let draggedCardBadge = null; // { memberId, badgeName }
+
+    function handleBadgePaletteDragStart(e, badgeName) {
+      draggedPaletteBadge = badgeName;
+      draggedCardBadge = null;
+      e.dataTransfer.setData('text/plain', badgeName);
+      e.dataTransfer.effectAllowed = 'copy';
+    }
+
+    function handleCardBadgeDragStart(e, memberId, badgeName) {
+      draggedCardBadge = { memberId, badgeName };
+      draggedPaletteBadge = null;
+      e.dataTransfer.setData('text/plain', badgeName);
+      e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleCardBadgeDragOver(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add('border-amber-400', 'bg-amber-50/50');
+    }
+
+    function handleCardBadgeDragLeave(e) {
+      e.currentTarget.classList.remove('border-amber-400', 'bg-amber-50/50');
+    }
+
+    async function handleCardBadgeDrop(e, targetMemberId) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('border-amber-400', 'bg-amber-50/50');
+
+      if (!draggedPaletteBadge) return;
+      const badgeToAdd = draggedPaletteBadge;
+      draggedPaletteBadge = null;
+
+      const member = (lobbyData.approved || []).find(m => m.id === targetMemberId);
+      if (!member) return;
+
+      // Protection: Only [NASSTY] can alter [NASSTY]
+      if (member.id === 'app_office_004' && !isSuperTechRootActive()) {
+        showToastAlert('🔒 บัญชี [NASSTY] (Super Tech Root) ได้รับการคุ้มครอง ห้ามผู้อื่นแก้ไขสิทธิ์', 'error');
+        return;
+      }
+
+      member.badges = member.badges || [];
+      if (member.badges.includes(badgeToAdd)) {
+        showToastAlert(`คุณ ${member.name} มีสิทธิ์ "${badgeToAdd}" อยู่แล้ว`, 'info');
+        return;
+      }
+
+      member.badges.push(badgeToAdd);
+      syncMemberPermissionsFromBadges(member);
+      saveLobbyData();
+      renderLobby();
+      showToastAlert(`🎉 มอบสิทธิ์ "${badgeToAdd}" ให้แก่คุณ ${member.name} สำเร็จ!`, 'success');
+
+      // Sync to cloud
+      try {
+        await fetch(`${API_BASE}/api/lobby/update-permissions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            applicantId: member.id,
+            role: member.role,
+            title: member.title,
+            badges: member.badges,
+            permissions: member.permissions
+          })
+        });
+      } catch (err) {
+        console.log('Cloud sync error:', err);
+      }
+    }
+
+    function handleBadgeTrashOver(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add('bg-red-800', 'border-red-400', 'scale-105');
+    }
+
+    function handleBadgeTrashLeave(e) {
+      e.currentTarget.classList.remove('bg-red-800', 'border-red-400', 'scale-105');
+    }
+
+    async function handleBadgeTrashDrop(e) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('bg-red-800', 'border-red-400', 'scale-105');
+
+      if (!draggedCardBadge) return;
+      const { memberId, badgeName } = draggedCardBadge;
+      draggedCardBadge = null;
+
+      const member = (lobbyData.approved || []).find(m => m.id === memberId);
+      if (!member) return;
+
+      // Protection: Technical Admin on [NASSTY] cannot be removed
+      if (member.id === 'app_office_004' && badgeName.includes('Technical')) {
+        showToastAlert('🔒 สิทธิ์ Technical Admin ของ [NASSTY] ถูกล็อกถาวร ห้ามถอดออก', 'error');
+        return;
+      }
+
+      member.badges = (member.badges || []).filter(b => b !== badgeName);
+      syncMemberPermissionsFromBadges(member);
+      saveLobbyData();
+      renderLobby();
+      showToastAlert(`🗑️ ถอดสิทธิ์ "${badgeName}" ออกจาก ${member.name} สำเร็จ!`, 'success');
+
+      // Sync to cloud
+      try {
+        await fetch(`${API_BASE}/api/lobby/update-permissions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            applicantId: member.id,
+            role: member.role,
+            title: member.title,
+            badges: member.badges,
+            permissions: member.permissions
+          })
+        });
+      } catch (err) {
+        console.log('Cloud sync error:', err);
+      }
+    }
+
+    function syncMemberPermissionsFromBadges(member) {
+      const bList = member.badges || [];
+      member.permissions = member.permissions || {};
+      member.permissions.editPrice = bList.some(b => b.includes('เคาะราคา'));
+      member.permissions.keyboxAdmin = bList.some(b => b.includes('กุญแจ'));
+      member.permissions.executiveAuthority = bList.some(b => b.includes('สิทธิ์บริหาร'));
+      member.permissions.leadInspector = bList.some(b => b.includes('ดูแชทลีด'));
+      member.permissions.standardAdmin = bList.some(b => b.includes('Standard Admin'));
+      member.permissions.catalogCurator = bList.some(b => b.includes('ช่วยคัดสต๊อก'));
+      member.permissions.systemAdmin = bList.some(b => b.includes('Technical'));
+      member.permissions.contractAgent = bList.some(b => b.includes('สัญญา'));
+      if (!isAdminItem(member)) {
+        if (member.permissions.contractAgent) {
+          member.role = "📑 Contract Agent (ตัวแทนสัญญา)";
+          member.title = "Official Contract Agent";
+          member.role_code = "CONTRACT_AGENT";
+        } else {
+          member.role = "🤝 Free Agent (ตัวแทนอิสระ)";
+          member.title = "Certified Free Agent Partner";
+          member.role_code = "FREE_AGENT";
+        }
+      }
+    }
+
+    function isSuperTechRootActive() {
+      // Check if logged in user is Super Tech
+      return true; // Root active by default for [NASSTY]
+    }
+
+    function showToastAlert(msg, type = 'info') {
+      let toast = document.getElementById('siwasupFloatingToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'siwasupFloatingToast';
+        toast.className = 'fixed bottom-5 right-5 z-50 px-4 py-3 rounded-2xl shadow-2xl font-bold text-xs flex items-center gap-2 transition-all transform duration-300 translate-y-10 opacity-0';
+        document.body.appendChild(toast);
+      }
+
+      let bg = 'bg-slate-900 text-white border border-slate-700';
+      if (type === 'success') bg = 'bg-emerald-700 text-white border border-emerald-500';
+      if (type === 'error') bg = 'bg-red-700 text-white border border-red-500';
+
+      toast.className = `fixed bottom-5 right-5 z-50 px-4 py-3 rounded-2xl shadow-2xl font-bold text-xs flex items-center gap-2 transition-all transform duration-300 translate-y-0 opacity-100 ${bg}`;
+      toast.innerHTML = `<span>${msg}</span>`;
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-10', 'opacity-0');
+      }, 3500);
+    }
+
+    function formatPhoneSpaced(phone) {
+      if (!phone) return "XXX XXX XXXX";
+      const clean = phone.replace(/\D/g, "");
+      if (clean.length === 10) {
+        return `${clean.slice(0, 3)} ${clean.slice(3, 6)} ${clean.slice(6)}`;
+      }
+      if (clean.length === 9) {
+        return `${clean.slice(0, 2)} ${clean.slice(2, 5)} ${clean.slice(5)}`;
+      }
+      return phone;
+    }
+
+    function getCardTheme(item) {
+      const role = (item.role || "").toLowerCase();
+      const title = (item.title || "").toLowerCase();
+      const perms = item.permissions || {};
+      const name = (item.name || "").toLowerCase();
+
+      // 1) Tech Architect / Super Tech (คุณต้น / NASSTY) -> ดำ-เทา ตามสั่งผู้ใช้!
+      if (perms.systemAdmin || role.includes("tech") || title.includes("tech") || name.includes("nassty") || name.includes("ต้น") || item.id === 'app_office_004') {
+        return {
+          key: 'tech',
+          roleBadgeText: 'Tech Architect',
+          icon: 'laptop',
+          primaryHex: '#1e293b',
+          bannerHex: '#1e293b',       // Dark Charcoal
+          badgeBg: '#1e293b',
+          badgeBorder: '#0f172a',
+          badgeTextColor: '#ffffff',
+          badgeIconBg: '#0f172a',
+          badgeIconColor: '#94a3b8',
+          titleColor: '#0f172a',
+          bottomBarHex: '#1e293b',
+          isLocked: true
+        };
+      }
+
+      // 2) Supreme EXE (เจี๊ยบ, บัว / CEO & Executive Partner) -> ส้มแดง/Terracotta (#e15b42) ตาม admin_001_Supreme EXE.jpg
+      if (role.includes("ceo") || (role.includes("partner") && !role.includes("free agent") && !title.includes("free agent")) || role.includes("supreme") || perms.executiveAuthority || item.is_leader) {
+        return {
+          key: 'supreme',
+          roleBadgeText: 'Supreme EXE',
+          icon: 'crown',
+          primaryHex: '#e15b42',
+          bannerHex: '#e15b42',
+          badgeBg: '#e15b42',         // Matched Warm Coral Terracotta
+          badgeBorder: '#c2410c',     // Darker shade
+          badgeTextColor: '#ffffff',
+          badgeIconBg: '#c2410c',     // Accent box
+          badgeIconColor: '#ffffff',
+          titleColor: '#e15b42',
+          bottomBarHex: '#e15b42',
+          isLocked: false
+        };
+      }
+
+      // 3) Key Master (พี่ลิลลี่ / Head of Viewing & Keys) -> สีกรมท่า/น้ำเงินเข้ม (#014576) ตาม admin_001_Key master.jpg
+      if (perms.keyboxAdmin || role.includes("viewing") || role.includes("กุญแจ") || role.includes("key") || item.is_keybox) {
+        return {
+          key: 'keymaster',
+          roleBadgeText: 'Key Master',
+          icon: 'key',
+          primaryHex: '#014576',
+          bannerHex: '#014576',
+          badgeBg: '#014576',
+          badgeBorder: '#00335a',
+          badgeTextColor: '#ffffff',
+          badgeIconBg: '#00335a',
+          badgeIconColor: '#ffffff',
+          titleColor: '#014576',
+          bottomBarHex: '#014576',
+          isLocked: false
+        };
+      }
+
+      // 4) Administrator (เจ้าหน้าที่ซัพพอร์ต / Office Admin) -> สีมิ้นต์/Aqua Teal (#68c4b6) ตาม admin_001_Administrator.jpg
+      if (perms.standardAdmin || role.includes("admin") || role.includes("ซัพพอร์ต") || role.includes("office")) {
+        return {
+          key: 'admin',
+          roleBadgeText: 'Administrator',
+          icon: 'shield-check',
+          primaryHex: '#68c4b6',
+          bannerHex: '#68c4b6',
+          badgeBg: '#68c4b6',
+          badgeBorder: '#4faea0',
+          badgeTextColor: '#ffffff',
+          badgeIconBg: '#54ab9e',
+          badgeIconColor: '#ffffff',
+          titleColor: '#2d8b7d',
+          bottomBarHex: '#68c4b6',
+          isLocked: false
+        };
+      }
+
+      // 5) Contract Agent (ตัวแทนสัญญาสังกัด) -> สีชมพู Pink Sand (#ffa8B6)
+      if (isContractAgentItem(item)) {
+        return {
+          key: 'contract_agent',
+          roleBadgeText: 'Contract Agent',
+          icon: 'award',
+          primaryHex: '#ffa8b6',
+          bannerHex: '#ffa8b6',
+          badgeBg: '#ffa8b6',
+          badgeBorder: '#e58e9c',
+          badgeTextColor: '#ffffff',
+          badgeIconBg: '#e58e9c',
+          badgeIconColor: '#ffffff',
+          titleColor: '#d46a7e',
+          bottomBarHex: '#ffa8b6',
+          isLocked: false
+        };
+      }
+
+      // 6) Free Agent (ตัวแทนอิสระ / พันธมิตร) -> สีม่วง Kimberly (#786ea1)
+      return {
+        key: 'free_agent',
+        roleBadgeText: 'Free Agent',
+        icon: 'handshake',
+        primaryHex: '#786ea1',
+        bannerHex: '#786ea1',
+        badgeBg: '#786ea1',
+        badgeBorder: '#5e5485',
+        badgeTextColor: '#ffffff',
+        badgeIconBg: '#5e5485',
+        badgeIconColor: '#ffffff',
+        titleColor: '#786ea1',
+        bottomBarHex: '#786ea1',
+        isLocked: false
+      };
     }
 
     function renderLobby() {
@@ -652,7 +1330,7 @@
                 <span class="text-[10px] text-slate-400 font-normal">แตะเลือกหรือลากการ์ดด้านบนไปปล่อยก็ได้</span>
               </div>
 
-              <div class="grid grid-cols-2 sm:grid-cols-6 gap-2 text-xs">
+              <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 text-xs">
                 <button onclick="approveWithPreset('${item.id}', 'gool')" class="p-2 rounded-xl bg-slate-50 hover:bg-amber-50 hover:border-amber-400 border border-slate-200 text-left transition space-y-0.5 shadow-2xs active:scale-95">
                   <div class="font-bold text-amber-900">👑 เจี๊ยบ(กูล)</div>
                   <div class="text-[9px] text-slate-500">CEO / เคาะราคา</div>
@@ -673,9 +1351,13 @@
                   <div class="font-bold text-blue-900">🏢 ซัพพอร์ต</div>
                   <div class="text-[9px] text-slate-500">Standard Admin</div>
                 </button>
-                <button onclick="approveWithPreset('${item.id}', 'agent')" class="p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 hover:border-emerald-400 border border-slate-200 text-left transition space-y-0.5 shadow-2xs active:scale-95">
-                  <div class="font-bold text-emerald-800">🤝 Co-Broker</div>
-                  <div class="text-[9px] text-slate-500">พันธมิตรรับรอง</div>
+                <button onclick="approveWithPreset('${item.id}', 'contract_agent')" class="p-2 rounded-xl bg-[#ffa8b6]/15 hover:bg-[#ffa8b6]/30 border border-[#ffa8b6] text-left transition space-y-0.5 shadow-2xs active:scale-95">
+                  <div class="font-bold text-[#9e3b4f]">📑 Contract Agent</div>
+                  <div class="text-[9px] text-[#b84a60]">ตัวแทนสัญญาสังกัด</div>
+                </button>
+                <button onclick="approveWithPreset('${item.id}', 'free_agent')" class="p-2 rounded-xl bg-[#786ea1]/15 hover:bg-[#786ea1]/25 border border-[#786ea1] text-left transition space-y-0.5 shadow-2xs active:scale-95">
+                  <div class="font-bold text-[#4a4269]">🤝 Free Agent</div>
+                  <div class="text-[9px] text-[#5e5485]">ตัวแทนอิสระ</div>
                 </button>
               </div>
             </div>
@@ -684,72 +1366,246 @@
         `).join('');
       }
 
-      const approvedBody = document.getElementById('approvedTableBody');
-      approvedBody.innerHTML = lobbyData.approved.map(item => `
-        <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-          <td class="py-3.5 px-3.5">
-            <div class="flex items-center gap-2.5">
-              <img src="${item.avatar || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80'}" class="w-9 h-9 rounded-xl object-cover border border-slate-200 shadow-2xs shrink-0">
-              <div>
-                <div class="font-bold text-slate-900 flex items-center gap-1.5 flex-wrap">
-                  <span>${item.name}</span>
-                  ${getRoleTierBadge(item)}
-                </div>
-                <div class="text-[10px] text-slate-500">ชื่อเล่น: <strong class="text-slate-700">${item.nickname || ''}</strong> • โทร: <span class="font-mono text-slate-700">${item.phone}</span></div>
+      function renderApprovedRoster() {
+        const approvedCardsGrid = document.getElementById('approvedCardsGrid');
+        const approvedBody = document.getElementById('approvedTableBody');
+        const displayList = getFilteredAndSortedApproved();
+
+        // Update counts
+        const allList = lobbyData.approved || [];
+        const adminCount = allList.filter(item => isAdminItem(item)).length;
+        const contractAgentCount = allList.filter(item => isContractAgentItem(item)).length;
+        const freeAgentCount = allList.filter(item => !isAdminItem(item) && !isContractAgentItem(item)).length;
+
+        const countAllEl = document.getElementById('count_all');
+        const countAdminEl = document.getElementById('count_admin');
+        const countContractEl = document.getElementById('count_contract_agent');
+        const countFreeEl = document.getElementById('count_free_agent');
+        if (countAllEl) countAllEl.innerText = allList.length;
+        if (countAdminEl) countAdminEl.innerText = adminCount;
+        if (countContractEl) countContractEl.innerText = contractAgentCount;
+        if (countFreeEl) countFreeEl.innerText = freeAgentCount;
+
+        // 1) RENDER EXECUTIVE CARDS (admin_001 Illustrator Style, 4-Columns on PC)
+        if (approvedCardsGrid) {
+          if (displayList.length === 0) {
+            approvedCardsGrid.innerHTML = `
+              <div class="col-span-full p-8 text-center text-slate-400 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 text-sm">
+                ไม่พบสมาชิกที่ตรงกับเงื่อนไขการค้นหา/ตัวกรอง
               </div>
-            </div>
-          </td>
-          <td class="py-3.5 px-3.5">
-            <div class="font-bold text-amber-900">${item.role}</div>
-            <div class="text-[10px] text-slate-500">${item.title || 'Senior Consultant'}</div>
-          </td>
-          <td class="py-3.5 px-3.5">
-            <span class="text-slate-700 font-medium">${item.zone}</span>
-          </td>
-          <td class="py-3.5 px-3.5">
-            <div class="flex flex-wrap gap-1">
-              ${(item.badges || []).map(b => `
-                <span class="text-[9px] px-1.5 py-0.5 rounded font-semibold ${
-                  b.includes('เคาะราคา') ? 'bg-amber-50 text-amber-800 border border-amber-300' :
-                  b.includes('กุญแจ') ? 'bg-emerald-50 text-emerald-800 border border-emerald-300' :
-                  b.includes('Technical') ? 'bg-rose-50 text-rose-800 border border-rose-300' :
-                  b.includes('ล็อก') ? 'bg-red-50 text-red-700 border border-red-200' :
-                  'bg-slate-100 text-slate-700'
-                }">
-                  ${b}
-                </span>
-              `).join('')}
-            </div>
-          </td>
-          <td class="py-3.5 px-3.5 text-right space-x-1 whitespace-nowrap">
-            <a href="https://assets.siwasup.com/agent_profile.html?id=${encodeURIComponent(item.id || '')}&name=${encodeURIComponent(item.name)}&phone=${encodeURIComponent(item.phone)}&zone=${encodeURIComponent(item.zone)}&title=${encodeURIComponent(item.title || '')}&mode=client${(item.avatar && item.avatar.startsWith('http')) ? '&avatar=' + encodeURIComponent(item.avatar) : ''}" 
-               target="_blank"
-               class="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-300 inline-flex items-center gap-1 shadow-2xs transition">
-              <i data-lucide="credit-card" class="w-3 h-3 text-amber-600"></i>
-              <span>ดูบัตร</span>
-            </a>
-            <button onclick="openEditPermissionModal('${item.id}')" 
-                    class="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-semibold border border-amber-300 inline-flex items-center gap-1 shadow-2xs transition"
-                    title="ปรับเพิ่ม/ลดสิทธิ์รายบุคคล">
-              <i data-lucide="sliders" class="w-3 h-3 text-amber-600"></i>
-              <span>ปรับสิทธิ์</span>
-            </button>
-            ${(item.id === 'app_office_004' || item.is_tech || (item.permissions && item.permissions.systemAdmin)) ? `
-            <span class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-800 text-xs font-bold border border-rose-200 inline-flex items-center gap-1 select-none" title="บัญชีสถาปัตยกรรมระบบสูงสุด ถูกล็อกถาวร">
-              <i data-lucide="lock" class="w-3 h-3 text-rose-600"></i>
-              <span>ROOT LOCKED</span>
-            </span>
-            ` : `
-            <button onclick="openRevokeModal('${item.id}', '${item.name.replace(/'/g, "\'")}')" 
-                    class="px-2.5 py-1 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold border border-red-200 inline-flex items-center gap-1 shadow-2xs transition"
-                    title="เพิกถอนสิทธิ์และคัดออกจากทำเนียบ">
-              <i data-lucide="user-x" class="w-3 h-3 text-red-500"></i>
-              <span>คัดออก</span>
-            </button>
-            `}
-          </td>
-        </tr>
-      `).join('');
+            `;
+          } else {
+            approvedCardsGrid.innerHTML = displayList.map(item => {
+              const theme = getCardTheme(item);
+              const displayName = (item.id === 'app_office_004' || (item.name && item.name.includes('คุณต้น')) || item.role_code === 'TECH_ARCHITECT') ? '[NASSTY]' : item.name;
+              const displayNickname = (item.id === 'app_office_004' || (item.name && item.name.includes('คุณต้น')) || item.role_code === 'TECH_ARCHITECT') ? 'NASSTY' : (item.nickname || 'Nickname');
+              return `
+                <div class="bg-white rounded-3xl border-2 border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
+                  
+                  <div class="p-3.5 sm:p-4 space-y-2.5 flex-1">
+                    <!-- TOP ROW: Name + Zone on Left | Pill Badge + Online on Right -->
+                    <div class="flex items-start justify-between gap-2">
+                      <div class="min-w-0 flex-1">
+                        <h3 class="text-base sm:text-lg font-black text-slate-900 tracking-tight leading-snug truncate" title="${displayName}">
+                          ${displayName}
+                        </h3>
+                        <div class="text-xs sm:text-[13px] font-bold mt-0.5 truncate" style="color: ${theme.titleColor};">
+                          ${item.title || item.role}
+                        </div>
+                        <div class="flex items-center gap-1 text-[11px] text-slate-400 font-medium mt-0.5">
+                          <i data-lucide="map-pin" class="w-3 h-3 text-slate-400 shrink-0"></i>
+                          <span class="truncate">${item.zone}</span>
+                        </div>
+                      </div>
+
+                      <!-- Right: Pill Badge + ONLINE -->
+                      <div class="shrink-0 flex flex-col items-end">
+                        <div class="inline-flex items-stretch rounded-xl sm:rounded-2xl overflow-hidden shadow-2xs border text-white font-bold" 
+                             style="background-color: ${theme.badgeBg}; border-color: ${theme.badgeBorder};">
+                          <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-bold tracking-tight flex items-center" 
+                                style="color: ${theme.badgeTextColor};">
+                            ${theme.roleBadgeText}
+                          </span>
+                          <div class="w-6 sm:w-7 flex items-center justify-center border-l border-white/20" 
+                               style="background-color: ${theme.badgeIconBg}; color: ${theme.badgeIconColor};">
+                            <i data-lucide="${theme.icon}" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
+                          </div>
+                        </div>
+
+                        ${formatPresence(item)}
+                      </div>
+                    </div>
+
+                    <!-- MIDDLE ROW: Phone Ribbon + Darker Nickname (50% darker) + Big Round Avatar -->
+                    <div class="flex items-center justify-between gap-2 pt-0.5">
+                      <div class="flex-1 min-w-0 space-y-1">
+                        <!-- Phone Ribbon -->
+                        <div class="inline-block px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-md font-mono font-bold tracking-wider text-xs sm:text-[13px] text-white shadow-2xs" 
+                             style="background-color: ${theme.bannerHex};">
+                          <a href="tel:${item.phone}" class="text-white hover:underline">
+                            ${formatPhoneSpaced(item.phone)}
+                          </a>
+                        </div>
+                        <!-- Nickname (Darkened by ~50% from text-slate-200 to text-slate-400) -->
+                        <div class="text-2xl sm:text-3xl font-black text-slate-400/90 tracking-tight leading-none pt-0.5 select-none truncate">
+                          ${displayNickname}
+                        </div>
+                      </div>
+
+                      <!-- Avatar -->
+                      <div class="shrink-0">
+                        <img src="${item.avatar || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80'}" 
+                             class="w-16 h-16 sm:w-18 sm:h-18 xl:w-20 xl:h-20 rounded-full object-cover border-3 border-white shadow-md">
+                      </div>
+                    </div>
+
+                    <!-- DIVIDER -->
+                    <div class="border-t border-slate-200/80 pt-1.5"></div>
+
+                    <!-- BADGES (Granted Badges - Droppable Area & Draggable Pills) -->
+                    <div class="space-y-1">
+                      <div class="card-badges-drop-zone p-1.5 rounded-xl border-2 border-dashed border-transparent transition min-h-[38px] flex flex-wrap gap-1 items-center"
+                           ondragover="handleCardBadgeDragOver(event)"
+                           ondragleave="handleCardBadgeDragLeave(event)"
+                           ondrop="handleCardBadgeDrop(event, '${item.id}')"
+                           title="ปล่อยสิทธิ์ที่นี่เพื่อมอบสิทธิ์ทันที">
+                        ${(item.badges || []).map(b => {
+                          let badgeCls = 'bg-slate-100 text-slate-700 border border-slate-200';
+                          if (b.includes('สัญญา')) badgeCls = 'bg-[#ffa8b6]/25 text-[#9e3b4f] border-2 border-[#ffa8b6] font-bold';
+                          else if (b.includes('เคาะราคา')) badgeCls = 'bg-amber-50 text-amber-900 border-2 border-amber-300 font-bold';
+                          else if (b.includes('กุญแจ')) badgeCls = 'bg-emerald-50 text-emerald-900 border-2 border-emerald-300 font-bold';
+                          else if (b.includes('Technical') || b.includes('Tech')) badgeCls = 'bg-rose-50 text-rose-900 border-2 border-rose-300 font-bold';
+                          
+                          const isDraggable = !(item.id === 'app_office_004' && b.includes('Technical'));
+                          return `
+                            <span draggable="${isDraggable}" 
+                                  ondragstart="handleCardBadgeDragStart(event, '${item.id}', '${b.replace(/'/g, "\\'")}')" 
+                                  class="text-[10px] px-2 py-0.5 rounded-lg shadow-2xs cursor-grab active:cursor-grabbing select-none hover:scale-105 transition flex items-center gap-1 ${badgeCls}"
+                                  title="ลากไปปล่อยที่ถังขยะเพื่อถอดสิทธิ์นี้">
+                              <span>${b}</span>
+                              <i data-lucide="grip-vertical" class="w-2.5 h-2.5 opacity-40"></i>
+                            </span>
+                          `;
+                        }).join('')}
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- BOTTOM ACTION BAR: View Card / Permissions / Remove -->
+                  <div class="flex items-stretch text-white text-xs divide-x divide-white/20 select-none shadow-inner" 
+                       style="background-color: ${theme.bottomBarHex};">
+                    
+                    <a href="https://assets.siwasup.com/agent_profile.html?id=${encodeURIComponent(item.id || '')}&name=${encodeURIComponent(item.name)}&phone=${encodeURIComponent(item.phone)}&zone=${encodeURIComponent(item.zone)}&title=${encodeURIComponent(item.title || '')}&mode=client${(item.avatar && item.avatar.startsWith('http')) ? '&avatar=' + encodeURIComponent(item.avatar) : ''}" 
+                       target="_blank"
+                       class="flex-1 py-2.5 flex flex-col items-center justify-center gap-0.5 hover:bg-black/15 transition active:scale-95">
+                      <i data-lucide="credit-card" class="w-4 h-4"></i>
+                      <span class="text-[10px] font-bold">View Card</span>
+                    </a>
+
+                    ${(item.id === 'app_office_004' || item.is_tech || (item.permissions && item.permissions.systemAdmin) || theme.isLocked) ? `
+                    <div class="flex-1 py-2.5 flex flex-col items-center justify-center gap-0.5 text-emerald-300 select-none bg-black/25" title="บัญชีสถาปัตยกรรมระบบสูงสุด ได้รับการคุ้มครอง ห้ามผู้อื่นแก้ไขสิทธิ์">
+                      <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+                      <span class="text-[10px] font-bold">Root Protected</span>
+                    </div>
+                    <div class="flex-1 py-2.5 flex flex-col items-center justify-center gap-0.5 text-rose-300 select-none bg-black/40" title="บัญชีถูกล็อกถาวร ห้ามคัดออก">
+                      <i data-lucide="lock" class="w-4 h-4 text-rose-400"></i>
+                      <span class="text-[10px] font-bold">Root Locked</span>
+                    </div>
+                    ` : `
+                    <button onclick="openEditPermissionModal('${item.id}')" 
+                            class="flex-1 py-2.5 flex flex-col items-center justify-center gap-0.5 hover:bg-black/15 transition active:scale-95">
+                      <i data-lucide="sliders" class="w-4 h-4"></i>
+                      <span class="text-[10px] font-bold">Permissions</span>
+                    </button>
+                    <button onclick="openRevokeModal('${item.id}', '${item.name.replace(/'/g, "\\'")}')" 
+                            class="flex-1 py-2.5 flex flex-col items-center justify-center gap-0.5 hover:bg-red-950/25 transition active:scale-95">
+                      <i data-lucide="user-x" class="w-4 h-4"></i>
+                      <span class="text-[10px] font-bold">Remove</span>
+                    </button>
+                    `}
+                  </div>
+
+                </div>
+              `;
+            }).join('');
+          }
+        }
+
+        // 2) RENDER TABLE VIEW (Optional Toggle)
+        if (approvedBody) {
+          if (displayList.length === 0) {
+            approvedBody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-400">ไม่พบสมาชิกที่ตรงกับเงื่อนไขการค้นหา/ตัวกรอง</td></tr>`;
+          } else {
+            approvedBody.innerHTML = displayList.map(item => `
+              <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                <td class="py-3 px-3.5">
+                  <div class="flex items-center gap-2.5">
+                    <img src="${item.avatar || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80'}" class="w-9 h-9 rounded-xl object-cover border border-slate-200 shadow-2xs shrink-0">
+                    <div>
+                      <div class="font-bold text-slate-900 flex items-center gap-1.5 flex-wrap">
+                        <span>${(item.id === 'app_office_004' || (item.name && item.name.includes('คุณต้น'))) ? '[NASSTY]' : item.name}</span>
+                        ${getRoleTierBadge(item)}
+                      </div>
+                      <div class="text-[10px] text-slate-500">ชื่อเล่น: <strong class="text-slate-700">${(item.id === 'app_office_004' || (item.name && item.name.includes('คุณต้น'))) ? 'NASSTY' : (item.nickname || '')}</strong> • โทร: <span class="font-mono text-slate-700">${item.phone}</span></div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-3 px-3.5">
+                  <div class="font-bold text-amber-900">${item.role}</div>
+                  <div class="text-[10px] text-slate-500">${item.title || 'Senior Consultant'}</div>
+                </td>
+                <td class="py-3 px-3.5">
+                  <span class="text-slate-700 font-medium">${item.zone}</span>
+                </td>
+                <td class="py-3 px-3.5">
+                  <div class="flex flex-wrap gap-1">
+                    ${(item.badges || []).map(b => `
+                      <span class="text-[9px] px-1.5 py-0.5 rounded font-semibold ${
+                        b.includes('เคาะราคา') ? 'bg-amber-50 text-amber-800 border border-amber-300' :
+                        b.includes('กุญแจ') ? 'bg-emerald-50 text-emerald-800 border border-emerald-300' :
+                        b.includes('Technical') ? 'bg-rose-50 text-rose-800 border border-rose-300' :
+                        b.includes('ล็อก') ? 'bg-red-50 text-red-700 border border-red-200' :
+                        'bg-slate-100 text-slate-700'
+                      }">
+                        ${b}
+                      </span>
+                    `).join('')}
+                  </div>
+                </td>
+                <td class="py-3 px-3.5 text-right space-x-1 whitespace-nowrap">
+                  <a href="https://assets.siwasup.com/agent_profile.html?id=${encodeURIComponent(item.id || '')}&name=${encodeURIComponent(item.name)}&phone=${encodeURIComponent(item.phone)}&zone=${encodeURIComponent(item.zone)}&title=${encodeURIComponent(item.title || '')}&mode=client${(item.avatar && item.avatar.startsWith('http')) ? '&avatar=' + encodeURIComponent(item.avatar) : ''}" 
+                     target="_blank"
+                     class="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-300 inline-flex items-center gap-1 shadow-2xs transition">
+                    <i data-lucide="credit-card" class="w-3 h-3 text-amber-600"></i>
+                    <span>ดูบัตร</span>
+                  </a>
+                  <button onclick="openEditPermissionModal('${item.id}')" 
+                          class="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-semibold border border-amber-300 inline-flex items-center gap-1 shadow-2xs transition"
+                          title="ปรับเพิ่ม/ลดสิทธิ์รายบุคคล">
+                    <i data-lucide="sliders" class="w-3 h-3 text-amber-600"></i>
+                    <span>ปรับสิทธิ์</span>
+                  </button>
+                  ${(item.id === 'app_office_004' || item.is_tech || (item.permissions && item.permissions.systemAdmin)) ? `
+                  <span class="px-2.5 py-1 rounded-lg bg-rose-50 text-rose-800 text-xs font-bold border border-rose-200 inline-flex items-center gap-1 select-none" title="บัญชีสถาปัตยกรรมระบบสูงสุด ถูกล็อกถาวร">
+                    <i data-lucide="lock" class="w-3 h-3 text-rose-600"></i>
+                    <span>ROOT LOCKED</span>
+                  </span>
+                  ` : `
+                  <button onclick="openRevokeModal('${item.id}', '${item.name.replace(/'/g, "\'")}')" 
+                          class="px-2.5 py-1 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold border border-red-200 inline-flex items-center gap-1 shadow-2xs transition"
+                          title="เพิกถอนสิทธิ์และคัดออกจากทำเนียบ">
+                    <i data-lucide="user-x" class="w-3 h-3 text-red-500"></i>
+                    <span>คัดออก</span>
+                  </button>
+                  `}
+                </td>
+              </tr>
+            `).join('');
+          }
+        }
+      }
+
+      renderApprovedRoster();
 
       renderAuditLog();
       lucide.createIcons();
@@ -849,6 +1705,8 @@
       document.getElementById('editMemberTitleInput').value = member.title || '';
 
       const p = member.permissions || {};
+      const chkContract = document.getElementById('chk_contractAgent');
+      if (chkContract) chkContract.checked = isContractAgentItem(member);
       document.getElementById('chk_standardAdmin').checked = !!p.standardAdmin;
       document.getElementById('chk_editPrice').checked = !!p.editPrice;
       document.getElementById('chk_executiveAuthority').checked = !!p.executiveAuthority;
@@ -885,6 +1743,7 @@
       const newRole = document.getElementById('editMemberRoleInput').value.trim() || member.role;
       const newTitle = document.getElementById('editMemberTitleInput').value.trim() || member.title;
 
+      const isContractChecked = document.getElementById('chk_contractAgent') ? document.getElementById('chk_contractAgent').checked : false;
       const newPerms = {
         standardAdmin: document.getElementById('chk_standardAdmin').checked,
         editPrice: document.getElementById('chk_editPrice').checked,
@@ -892,11 +1751,16 @@
         keyboxAdmin: document.getElementById('chk_keyboxAdmin').checked,
         leadInspector: document.getElementById('chk_leadInspector').checked,
         catalogCurator: document.getElementById('chk_catalogCurator').checked,
-        systemAdmin: document.getElementById('chk_systemAdmin').checked
+        systemAdmin: document.getElementById('chk_systemAdmin').checked,
+        contractAgent: isContractChecked
       };
 
       // Derive badges
       const newBadges = [];
+      if (newPerms.contractAgent) {
+        newBadges.push("📑 สัญญาสังกัดทางการ");
+        newBadges.push("🎯 รับลีดกลางบริษัท");
+      }
       if (newPerms.editPrice) newBadges.push("💰 เคาะราคาบ้าน");
       if (newPerms.executiveAuthority) newBadges.push("👑 สิทธิ์บริหาร");
       if (newPerms.leadInspector) newBadges.push("💬 ดูแชทลีด");
@@ -1148,6 +2012,8 @@
       document.getElementById('editMemberTitleInput').value = member.title || '';
 
       const p = member.permissions || {};
+      const chkContract = document.getElementById('chk_contractAgent');
+      if (chkContract) chkContract.checked = isContractAgentItem(member);
       document.getElementById('chk_standardAdmin').checked = !!p.standardAdmin;
       document.getElementById('chk_editPrice').checked = !!p.editPrice;
       document.getElementById('chk_executiveAuthority').checked = !!p.executiveAuthority;
@@ -1184,6 +2050,7 @@
       const newRole = document.getElementById('editMemberRoleInput').value.trim() || member.role;
       const newTitle = document.getElementById('editMemberTitleInput').value.trim() || member.title;
 
+      const isContractChecked = document.getElementById('chk_contractAgent') ? document.getElementById('chk_contractAgent').checked : false;
       const newPerms = {
         standardAdmin: document.getElementById('chk_standardAdmin').checked,
         editPrice: document.getElementById('chk_editPrice').checked,
@@ -1191,11 +2058,16 @@
         keyboxAdmin: document.getElementById('chk_keyboxAdmin').checked,
         leadInspector: document.getElementById('chk_leadInspector').checked,
         catalogCurator: document.getElementById('chk_catalogCurator').checked,
-        systemAdmin: document.getElementById('chk_systemAdmin').checked
+        systemAdmin: document.getElementById('chk_systemAdmin').checked,
+        contractAgent: isContractChecked
       };
 
       // Derive badges
       const newBadges = [];
+      if (newPerms.contractAgent) {
+        newBadges.push("📑 สัญญาสังกัดทางการ");
+        newBadges.push("🎯 รับลีดกลางบริษัท");
+      }
       if (newPerms.editPrice) newBadges.push("💰 เคาะราคาบ้าน");
       if (newPerms.executiveAuthority) newBadges.push("👑 สิทธิ์บริหาร");
       if (newPerms.leadInspector) newBadges.push("💬 ดูแชทลีด");
@@ -1352,6 +2224,14 @@
           </label>
 
           <div class="space-y-2 text-xs">
+            <label class="flex items-start gap-2.5 p-2 rounded-xl bg-[#ffa8b6]/20 hover:bg-[#ffa8b6]/30 cursor-pointer border border-[#ffa8b6]">
+              <input type="checkbox" id="chk_contractAgent" class="mt-0.5 rounded text-pink-500 focus:ring-0">
+              <div>
+                <strong class="text-[#9e3b4f]">📑 Contract Agent (ตัวแทนสัญญาสังกัดทางการ - Pink Sand #ffa8B6)</strong>
+                <p class="text-[11px] text-[#b84a60]">ตัวแทนที่มีสัญญาแต่งตั้ง รับสิทธิ์ลีดกลางบริษัท (หากไม่ติ๊กและไม่ได้เป็น Admin จะเป็น Free Agent สีม่วง #786ea1)</p>
+              </div>
+            </label>
+
             <label class="flex items-start gap-2.5 p-2 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer border border-slate-200">
               <input type="checkbox" id="chk_standardAdmin" class="mt-0.5 rounded text-amber-600 focus:ring-0">
               <div>
