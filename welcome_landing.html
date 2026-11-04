@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
@@ -71,9 +71,9 @@
       <!-- DESKTOP NAV LINKS -->
       <div class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
         <a href="#welcome" class="hover:text-[#D4BA7A] transition-colors">หน้าแรก</a>
-        <a href="#announcements" class="hover:text-[#D4BA7A] transition-colors">ประกาศ & Top Sales</a>
+        <a href="#announcements" class="hover:text-[#D4BA7A] transition-colors">ลงทะเบียน & ต้อนรับตัวแทน</a>
+        <a href="#activities" class="hover:text-[#D4BA7A] transition-colors">เครื่องมือตัวแทน (OS)</a>
         <a href="#articles" class="hover:text-[#D4BA7A] transition-colors">สาระอสังหาฯ & ข่าว</a>
-        <a href="#activities" class="hover:text-[#D4BA7A] transition-colors">ภาพกิจกรรม</a>
       </div>
 
       <!-- ACTION BUTTONS -->
@@ -169,133 +169,155 @@
     </div>
   </header>
 
-  <!-- 8. ANNOUNCEMENT & TOP SALES (ประกาศประชุม & เกียรติยศตัวแทน) -->
-  <section id="announcements" class="py-16 sm:py-20 bg-[#0e131d] border-b border-[#C2A460]/15">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+  <!-- 2. SEASON 1 ONBOARDING & LIVE VERIFIED CHECK-IN (แทนที่ Top Sales จำลองด้วยระบบต้อนรับจริง 100%) -->
+  <!-- =====================================================================
+       SECTION 2: SEASON 1 WELCOME PASS & REAL-TIME CHECK-IN BOARD (CONFERENCE READY)
+       ===================================================================== -->
+  <section id="announcements" class="py-16 sm:py-24 bg-[#0d111a] border-y border-white/5 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 pb-6">
         <div>
-          <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#D4BA7A] bg-[#C2A460]/10 border border-[#C2A460]/30 px-3 py-1 rounded-full mb-2">
-            <i data-lucide="megaphone" class="w-3.5 h-3.5 text-[#D4BA7A]"></i>
-            <span>ข้อ 8: ANNOUNCEMENT & RECOGNITION</span>
+          <div class="inline-flex items-center gap-1.5 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-2">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>OFFICIAL LAUNCH • SEASON 1 (เริ่มต้นกระดานใหม่ 100%)</span>
           </div>
-          <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">ประกาศบริษัท & เกียรติยศยอดขาย (Top Sales)</h2>
-          <p class="text-xs sm:text-sm text-slate-400 mt-1">อัปเดตกำหนดการประชุมประจำงวด และร่วมแสดงความยินดีกับตัวแทนดีเด่น</p>
+          <h2 class="text-2xl sm:text-3xl font-black text-white">
+            ยินดีต้อนรับสู่ <span class="gold-gradient-text">Siwasup Co-Broker OS</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+            ระบบบริหารงานขายร่วมและสะสมคะแนนตามผลงานจริง (กดทำรายการบนหน้าจอมือถือของท่านได้ทันที ไม่ต้องสแกน QR ซ้ำ)
+          </p>
         </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs bg-[#1a1410] text-[#D4BA7A] border border-[#C2A460]/30 px-3 py-1.5 rounded-lg">
-            รอบประจำงวด: ไตรมาสล่าสุด
-          </span>
+
+        <div class="flex items-center gap-2 self-start md:self-auto flex-wrap">
+          <button type="button" onclick="copyLineConferenceInvite()" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-xs text-emerald-300 font-bold transition cursor-pointer">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+            <span id="copyInviteBtnText">คัดลอกลิงก์เชิญส่งเข้ากลุ่ม LINE (สำหรับ Admin)</span>
+          </button>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        <!-- Meeting Announcement Card (Deep Bronze Tone) -->
-        <div class="bronze-card p-6 rounded-3xl shadow-lg flex flex-col justify-between">
-          <div>
-            <div class="w-12 h-12 rounded-2xl bg-[#C2A460]/20 text-[#D4BA7A] flex items-center justify-center mb-4">
-              <i data-lucide="calendar" class="w-6 h-6"></i>
-            </div>
-            <span class="text-xs font-semibold text-[#D4BA7A] uppercase tracking-wider block mb-1">การประชุมใหญ่ประจำงวด</span>
-            <h3 class="text-lg font-bold text-white leading-snug">
-              การประชุมสามัญตัวแทนและสัมมนาทิศทางตลาด NPA ปี 2570
-            </h3>
-            <p class="text-xs text-slate-400 mt-2.5 leading-relaxed">
-              ขอเชิญพี่น้องตัวแทน (อินทรี, กรีฟอน และสมาชิกทุกท่าน) เข้าร่วมประชุมออนไลน์เพื่อรับฟังกลยุทธ์การตลาดและเปิดตัวระบบ Siwasup Co-Broker OS แพลตฟอร์มใหม่
-            </p>
-            <div class="mt-4 space-y-2 text-xs text-slate-300">
-              <div class="flex items-center gap-2">
-                <i data-lucide="clock" class="w-3.5 h-3.5 text-[#D4BA7A]"></i>
-                <span>วันเสาร์ปลายเดือน เวลา 13:00 - 16:00 น.</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <i data-lucide="video" class="w-3.5 h-3.5 text-[#D4BA7A]"></i>
-                <span>ถ่ายทอดสดผ่าน LINE LIVE & Zoom Meeting</span>
-              </div>
-            </div>
-          </div>
+      <!-- 2-Column Interactive Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
 
-          <div class="mt-6 pt-4 border-t border-[#C2A460]/20">
-            <a href="agent_registration.html" class="inline-flex items-center gap-1.5 text-xs text-[#E6CA85] hover:text-[#D4BA7A] font-semibold">
-              <span>ลงทะเบียนเข้าร่วมประชุม</span>
-              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Top Sales Ranking 1 (Gold Crest Highlight) -->
-        <div class="bg-gradient-to-br from-[#2a1d12]/90 to-[#121824]/90 p-6 rounded-3xl border-2 border-[#C2A460]/50 shadow-xl relative overflow-hidden flex flex-col justify-between">
-          <div class="absolute -right-6 -top-6 w-28 h-28 bg-[#C2A460]/20 rounded-full blur-2xl pointer-events-none"></div>
-          
-          <div>
-            <div class="flex items-center justify-between mb-4">
-              <span class="gold-gradient-btn font-black text-xs px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-                <span>🥇 TOP SALES อันดับ 1</span>
+        <!-- Left (5 cols): Personal Welcome Pass / Self-Screen Onboarding -->
+        <div class="lg:col-span-5 rounded-3xl p-6 sm:p-7 card-glass border-2 border-amber-500/40 flex flex-col justify-between relative overflow-hidden bg-gradient-to-b from-amber-500/10 via-[#111622] to-[#111622]">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[11px] font-bold flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>ทำรายการบนหน้าจอนี้ได้เลย</span>
               </span>
-              <span class="text-xs text-[#D4BA7A] font-mono">ยอดปิดโอนสูงสุด</span>
+              <span class="text-xs font-mono text-amber-300 font-bold">+10 แต้มแรกเข้า</span>
             </div>
 
-            <div class="flex items-center gap-4 my-3">
-              <div class="w-16 h-16 rounded-2xl bg-[#C2A460]/20 border-2 border-[#C2A460] overflow-hidden flex items-center justify-center text-3xl font-bold text-[#E6CA85] shadow-inner">
-                👑
+            <!-- Dynamic Box: Shown when user has registered/checked in -->
+            <div id="myWelcomePassBox" class="hidden p-5 rounded-2xl bg-emerald-950/50 border-2 border-emerald-400/60 space-y-3 text-left shadow-lg">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-md bg-amber-400 text-slate-950 font-mono font-black text-xs" id="passAgentCode">S--</span>
+                <span class="text-xs font-bold text-emerald-300">✅ เช็กอินสำเร็จ (+10 แต้ม)</span>
               </div>
               <div>
-                <h4 class="text-base font-bold text-white">คุณเป้ (กรกฎ)</h4>
-                <p class="text-xs text-[#D4BA7A] font-medium">รหัสตัวแทน: S02 (Diamond Master)</p>
-                <p class="text-[11px] text-slate-400 mt-0.5">โซนหลัก: รามอินทรา - วัชรพล</p>
+                <div class="text-lg font-black text-white" id="passAgentName">ยินดีต้อนรับสมาชิก</div>
+                <div class="text-xs text-slate-300 mt-0.5">คะแนนสะสมปัจจุบันของคุณ: <strong class="text-amber-300 font-mono text-sm" id="passAgentPoints">10 แต้ม</strong> (🐻 หมีตื่นตัว)</div>
               </div>
+              <a id="passGoCatalogBtn" href="catalog.html" class="w-full py-3 px-4 rounded-xl gold-gradient text-slate-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg hover:brightness-105 transition">
+                <i data-lucide="building-2" class="w-4 h-4"></i>
+                <span>เข้าสู่คลังทรัพย์พร้อมขาย & แชร์ลิงก์ลูกค้า →</span>
+              </a>
             </div>
 
-            <p class="text-xs text-slate-300 mt-2 bg-[#0b0f17]/70 p-3 rounded-xl border border-[#C2A460]/25">
-              🏆 ผลงานยอดเยี่ยม: ปิดดีลบ้านเดี่ยวและทาวน์โฮม NPA รวม 4 หลังในงวดเดียว พร้อมรางวัลตั๋วเครื่องบินท่องเที่ยวประจำปี
-            </p>
+            <!-- Step-by-Step Onboarding Box (For Conference / Mobile Users) -->
+            <div id="stepOnboardingBox" class="space-y-3">
+              <h3 class="text-lg font-black text-white leading-snug">
+                ลำดับการเริ่มต้นใช้งาน (กดจากมือถือได้ทันที)
+              </h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                สำหรับตัวแทนที่เข้าประชุมออนไลน์ (Conference) สามารถกดปุ่มตามลำดับด้านล่างบนหน้าจอมือถือของท่านได้เลยครับ:
+              </p>
+
+              <!-- Step 1: Add Friend LINE OA -->
+              <a href="https://line.me/R/ti/p/@813nyyia" target="_blank" class="w-full p-3.5 rounded-2xl bg-[#06C755]/15 hover:bg-[#06C755]/25 border border-[#06C755]/50 flex items-center justify-between transition group">
+                <div class="flex items-center gap-3">
+                  <span class="w-7 h-7 rounded-xl bg-[#06C755] text-white font-black text-xs flex items-center justify-center shrink-0">1</span>
+                  <div class="text-left">
+                    <div class="text-xs sm:text-sm font-black text-white group-hover:text-emerald-300 transition">แอดเพื่อน LINE OA ศิวาทรัพย์</div>
+                    <div class="text-[11px] text-slate-400">รับแจ้งเตือนคิวเปิดบ้านและลีดลูกค้า (@813nyyia)</div>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 rounded-lg bg-[#06C755] text-white text-[11px] font-bold shrink-0">แอดเพื่อน →</span>
+              </a>
+
+              <!-- Step 2: Register & Connect LINE -->
+              <a href="agent_registration.html" class="w-full p-3.5 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/60 flex items-center justify-between transition group">
+                <div class="flex items-center gap-3">
+                  <span class="w-7 h-7 rounded-xl bg-amber-400 text-slate-950 font-black text-xs flex items-center justify-center shrink-0">2</span>
+                  <div class="text-left">
+                    <div class="text-xs sm:text-sm font-black text-amber-300 group-hover:text-white transition">ลงทะเบียน & เชื่อม LINE ยืนยันตัวตน</div>
+                    <div class="text-[11px] text-slate-300">เมื่ออนุมัติแล้ว ระบบพากลับมาหน้านี้พร้อมรับ +10 แต้มทันที</div>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 rounded-lg gold-gradient text-slate-950 text-[11px] font-black shrink-0">สมัครเลย →</span>
+              </a>
+            </div>
+
+            <!-- Self Check-in Selector (สำหรับสมาชิกที่มีชื่อในระบบแล้ว กดรับแต้มบนจอตัวเองได้เลย) -->
+            <div class="pt-3 border-t border-white/10 space-y-2">
+              <label class="text-[11px] text-slate-400 block font-semibold">
+                หรือหากท่านมีรหัสตัวแทนแล้ว กดเช็กอินรับ +10 แต้มบนหน้าจอนี้ได้ทันที:
+              </label>
+              <div class="flex gap-2">
+                <select id="landingSelfCheckinSelect" class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400">
+                  <option value="">-- เลือกชื่อของท่านเพื่อเช็กอิน (+10 แต้ม) --</option>
+                </select>
+                <button type="button" onclick="triggerSelfScreenCheckin()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shrink-0 transition cursor-pointer">
+                  กดเช็กอิน
+                </button>
+              </div>
+            </div>
           </div>
 
-          <div class="mt-6 pt-4 border-t border-[#C2A460]/20 flex items-center justify-between text-xs text-slate-400">
-            <span>เกียรติยศศิวาทรัพย์</span>
-            <span class="text-[#D4BA7A] font-bold">ยอดเยี่ยมระดับเพชร ✨</span>
+          <div class="pt-4 mt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400">
+            <span>สถานะระบบ: <strong class="text-emerald-400">พร้อมใช้งานจริง 100%</strong></span>
+            <a href="catalog.html" class="text-amber-300 hover:underline font-bold">เข้าหน้าคลังทรัพย์ →</a>
           </div>
         </div>
 
-        <!-- Top Sales Runner Ups (อันดับ 2 & 3) -->
-        <div class="bronze-card p-6 rounded-3xl shadow-md flex flex-col justify-between">
-          <div>
-            <span class="text-xs font-semibold text-[#D4BA7A]/90 uppercase tracking-wider block mb-3">ทำเนียบยอดขายดีเด่น (Hall of Fame)</span>
-            
-            <div class="space-y-3.5">
-              <!-- อันดับ 2 -->
-              <div class="flex items-center gap-3 p-2.5 rounded-xl bg-[#0b0f17]/60 border border-[#C2A460]/20">
-                <span class="text-2xl">🥈</span>
-                <div class="flex-1">
-                  <div class="flex items-center justify-between">
-                    <span class="text-sm font-bold text-white">คุณกอล์ฟ (พศวัฒพงศ์)</span>
-                    <span class="text-[11px] text-[#D4BA7A] font-semibold">อันดับ 2</span>
-                  </div>
-                  <span class="text-[11px] text-slate-400">รหัส: S03 | โซนพระราม 2 - บางแค</span>
-                </div>
-              </div>
-
-              <!-- อันดับ 3 -->
-              <div class="flex items-center gap-3 p-2.5 rounded-xl bg-[#0b0f17]/60 border border-[#C2A460]/20">
-                <span class="text-2xl">🥉</span>
-                <div class="flex-1">
-                  <div class="flex items-center justify-between">
-                    <span class="text-sm font-bold text-white">คุณสมชาย ชัยชนะ</span>
-                    <span class="text-[11px] text-[#D4BA7A] font-semibold">อันดับ 3</span>
-                  </div>
-                  <span class="text-[11px] text-slate-400">รหัส: S15 | โซนบางนา - ศรีนครินทร์</span>
-                </div>
-              </div>
+        <!-- Right (7 cols): Live Checked-In Agents Board (แสดงเฉพาะคนที่ลงทะเบียน/เช็กอินจริง ไม่ล็อก 6 ชื่อล่วงหน้า!) -->
+        <div class="lg:col-span-7 rounded-3xl p-6 sm:p-8 card-glass border border-white/10 flex flex-col justify-between space-y-6">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <span class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                <i data-lucide="users" class="w-4 h-4"></i>
+                <span>กระดานต้อนรับผู้เข้าร่วม Season 1 วันนี้ (Real-Time)</span>
+              </span>
+              <span id="checkedInCountBadge" class="text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-mono">
+                เช็กอินแล้ว 0 ท่าน
+              </span>
             </div>
-
-            <p class="text-xs text-slate-400 mt-4 leading-relaxed">
-              ขอขอบคุณทุกความทุ่มเทของตัวแทนศิวาทรัพย์ทุกท่าน ที่ร่วมส่งมอบความสุขและบ้านที่มีคุณภาพให้แก่ลูกค้าเสมอมา
+            <h3 class="text-xl sm:text-2xl font-black text-white">
+              ทำเนียบตัวแทนที่ลงทะเบียนและเช็กอินเข้าสู่ระบบจริง
+            </h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              เริ่มต้น Season 1 ที่ <strong>0 แต้ม</strong> เท่ากันทุกคน — รายชื่อด้านล่างจะปรากฏขึ้นตามจริงเฉพาะผู้ที่ลงทะเบียนและกดเช็กอินเข้างานวันนี้แล้วเท่านั้น (ไม่ว่าจะมีผู้เข้าร่วมกี่ท่าน ระบบจะแสดงผลตามจริงทั้งหมด)
             </p>
           </div>
 
-          <div class="mt-4 pt-3 border-t border-[#C2A460]/20 text-right">
-            <span class="text-[11px] text-slate-500">ระบบตัดรอบคะแนนวันที่ 25 ของทุกเดือน</span>
+          <!-- Dynamic Grid of Checked-In Agents -->
+          <div id="liveCheckedInGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 my-auto">
+            <!-- Populated dynamically by JS -->
+          </div>
+
+          <!-- Bottom Summary & Action -->
+          <div class="p-4 rounded-2xl bg-slate-900/90 border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="text-xs text-slate-300">
+              💡 <strong>กติกา Season 1:</strong> เช็กอินเข้างานรับทันที <span class="text-emerald-400 font-bold">+10 แต้ม</span> • แชร์ลิงก์ทรัพย์ <span class="text-amber-300 font-bold">+5 แต้ม</span> • ติดป้ายไวนิล GPS <span class="text-amber-300 font-bold">+15 แต้ม</span>
+            </div>
+            <a href="catalog.html" class="w-full sm:w-auto text-center px-5 py-2.5 rounded-xl gold-gradient text-slate-950 font-black text-xs shrink-0 shadow-md hover:brightness-105 transition">
+              เปิดคลังทรัพย์พร้อมขาย →
+            </a>
           </div>
         </div>
 
@@ -312,7 +334,7 @@
         <div>
           <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#D4BA7A] bg-[#C2A460]/10 border border-[#C2A460]/30 px-3 py-1 rounded-full mb-2">
             <i data-lucide="flame" class="w-3.5 h-3.5 text-[#D4BA7A]"></i>
-            <span>ข้อ 10: KNOWLEDGE & [HOT NEWS]</span>
+            <span>SIWASUP MARKET INSIGHTS & NEWS</span>
           </div>
           <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">สาระน่ารู้เรื่องบ้าน & ข่าวสารอสังหาฯ ด่วน</h2>
           <p class="text-xs sm:text-sm text-slate-400 mt-1">บทความวิเคราะห์เจาะลึก เคล็ดลับสินเชื่อบ้าน และข่าวสารบ้านราคาพิเศษ</p>
@@ -420,63 +442,101 @@
     </div>
   </section>
 
-  <!-- 11. COMPANY ACTIVITIES & SOCIAL PROOF (ภาพกิจกรรมบริษัท) -->
+  <!-- 4. SIWASUP CO-BROKER OS CORE TOOLS (4 เครื่องมือมาตรฐานวิชาชีพสำหรับตัวแทน) -->
   <section id="activities" class="py-16 sm:py-20 bg-[#0e131d] border-b border-[#C2A460]/15">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
         <div>
           <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#D4BA7A] bg-[#C2A460]/10 border border-[#C2A460]/30 px-3 py-1 rounded-full mb-2">
-            <i data-lucide="camera" class="w-3.5 h-3.5 text-[#D4BA7A]"></i>
-            <span>ข้อ 11: COMPANY ACTIVITIES & CSR</span>
+            <i data-lucide="layers" class="w-3.5 h-3.5 text-[#D4BA7A]"></i>
+            <span>SIWASUP CO-BROKER OS • 4 CORE PILLARS</span>
           </div>
-          <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">ภาพกิจกรรม & ความประทับใจ</h2>
-          <p class="text-xs sm:text-sm text-slate-400 mt-1">บันทึกช่วงเวลาแห่งความสุข การส่งมอบบ้าน และกิจกรรมแบ่งปันสู่สังคมของศิวาทรัพย์</p>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">4 เครื่องมือมาตรฐานวิชาชีพที่ตัวแทนได้รับทันที</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">ยกระดับการทำงานของตัวแทนศิวาทรัพย์ด้วยระบบดิจิทัลที่ปกป้องสิทธิ์และบันทึกผลงานอัตโนมัติ</p>
         </div>
 
         <div class="flex items-center gap-2">
-          <span class="text-xs text-slate-400">อัปเดตกิจกรรมล่าสุดสม่ำเสมอ</span>
+          <a href="agent_quick_guide.html" class="text-xs text-[#E6CA85] hover:underline font-semibold flex items-center gap-1">
+            <span>เปิดคู่มือการใช้งานฉบับพกพา</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
         </div>
       </div>
 
-      <!-- GALLERY MOSAIC GRID -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         
-        <!-- Activity 1: Handover -->
-        <div class="group relative aspect-square rounded-2xl overflow-hidden bg-slate-800 border border-[#C2A460]/25 shadow-md">
-          <img src="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?auto=format&fit=crop&w=600&q=80" alt="ส่งมอบบ้าน" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent flex flex-col justify-end p-3.5">
-            <span class="text-[10px] text-[#D4BA7A] font-semibold">ส่งมอบบ้านสำเร็จ</span>
-            <span class="text-xs font-bold text-white leading-tight">ยินดีกับครอบครัวคุณวิชัย รับมอบบ้านมัณฑนา</span>
+        <!-- Tool 1: Digital Card -->
+        <a href="agent_registration.html" class="bronze-card p-6 rounded-3xl flex flex-col justify-between transition group">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-[#C2A460]/20 text-[#D4BA7A] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <i data-lucide="credit-card" class="w-6 h-6"></i>
+            </div>
+            <span class="text-[11px] text-[#D4BA7A] font-semibold">1. VERIFIED IDENTITY</span>
+            <h3 class="text-base font-bold text-white mt-1">นามบัตรดิจิทัลทางการ</h3>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              ออกนามบัตรดิจิทัลรับรองโดยศิวาทรัพย์ แอสเซท พร้อมลิงก์พอร์ตทรัพย์ส่วนตัวและปุ่มติดต่อ LINE ทันที
+            </p>
           </div>
-        </div>
+          <div class="mt-5 pt-3 border-t border-[#C2A460]/20 text-xs font-bold text-[#E6CA85] flex items-center justify-between">
+            <span>สมัคร / เปิดนามบัตร</span>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </div>
+        </a>
 
-        <!-- Activity 2: CSR / Merit -->
-        <div class="group relative aspect-square rounded-2xl overflow-hidden bg-slate-800 border border-[#C2A460]/25 shadow-md">
-          <img src="https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&w=600&q=80" alt="ทำบุญบริษัท" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent flex flex-col justify-end p-3.5">
-            <span class="text-[10px] text-[#E6CA85] font-semibold">CSR & บุญบริษัท</span>
-            <span class="text-xs font-bold text-white leading-tight">ทำบุญประจำปีและมอบทุนการศึกษาเด็กเยาวชน</span>
+        <!-- Tool 2: Smart Share & 60-Day Lead Lock -->
+        <a href="catalog.html" class="bronze-card p-6 rounded-3xl flex flex-col justify-between transition group">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <i data-lucide="shield-check" class="w-6 h-6"></i>
+            </div>
+            <span class="text-[11px] text-emerald-400 font-semibold">2. 60-DAY LEAD LOCK</span>
+            <h3 class="text-base font-bold text-white mt-1">แชร์ทรัพย์ & ล็อกสิทธิ์ลูกค้า</h3>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              ส่งลิงก์บ้านให้ลูกค้าพร้อมฝังรหัสตัวแทนอัตโนมัติ ล็อกสิทธิ์คุ้มครองคอมมิชชั่นนาน 60 วัน (+5 แต้มต่อการแชร์)
+            </p>
           </div>
-        </div>
+          <div class="mt-5 pt-3 border-t border-[#C2A460]/20 text-xs font-bold text-emerald-400 flex items-center justify-between">
+            <span>เลือกทรัพย์เพื่อแชร์</span>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </div>
+        </a>
 
-        <!-- Activity 3: Training -->
-        <div class="group relative aspect-square rounded-2xl overflow-hidden bg-slate-800 border border-[#C2A460]/25 shadow-md">
-          <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80" alt="สัมมนาตัวแทน" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent flex flex-col justify-end p-3.5">
-            <span class="text-[10px] text-[#D4BA7A] font-semibold">พัฒนาศักยภาพ</span>
-            <span class="text-xs font-bold text-white leading-tight">เวิร์กชอปเทคนิคเจรจาต่อรองและกฎหมายที่ดิน</span>
+        <!-- Tool 3: Auto Vinyl & GPS Proof -->
+        <a href="catalog.html" class="bronze-card p-6 rounded-3xl flex flex-col justify-between transition group">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <i data-lucide="map-pin" class="w-6 h-6"></i>
+            </div>
+            <span class="text-[11px] text-amber-400 font-semibold">3. SMART VINYL & GPS</span>
+            <h3 class="text-base font-bold text-white mt-1">สร้างแบบป้ายไวนิล & พิกัด GPS</h3>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              ระบบดึงเบอร์โทรตัวแทนลงแบบป้ายไวนิลอัตโนมัติ พร้อมส่งภาพติดป้ายหน้างานยืนยันพิกัด GPS (+15 แต้ม)
+            </p>
           </div>
-        </div>
+          <div class="mt-5 pt-3 border-t border-[#C2A460]/20 text-xs font-bold text-amber-300 flex items-center justify-between">
+            <span>ใช้งานในหน้าคลังทรัพย์</span>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </div>
+        </a>
 
-        <!-- Activity 4: Team Dinner -->
-        <div class="group relative aspect-square rounded-2xl overflow-hidden bg-slate-800 border border-[#C2A460]/25 shadow-md">
-          <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=600&q=80" alt="ฉลองความสำเร็จ" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent flex flex-col justify-end p-3.5">
-            <span class="text-[10px] text-[#E6CA85] font-semibold">ฉลองความสำเร็จ</span>
-            <span class="text-xs font-bold text-white leading-tight">งานเลี้ยงขอบคุณพันธมิตรและมอบรางวัลประจำปี</span>
+        <!-- Tool 4: Keybox OTP Protocol -->
+        <a href="siwasup_keybox_interactive_roleplay.html" class="bronze-card p-6 rounded-3xl flex flex-col justify-between transition group">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-blue-500/15 text-blue-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <i data-lucide="key" class="w-6 h-6"></i>
+            </div>
+            <span class="text-[11px] text-blue-400 font-semibold">4. KEYBOX OTP PROTOCOL</span>
+            <h3 class="text-base font-bold text-white mt-1">จองคิวเปิดบ้าน & รหัสกุญแจ OTP</h3>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              นัดหมายพาชมบ้านล่วงหน้า รับรหัสเปิดกล่องกุญแจดิจิทัลหน้างาน และบันทึกผลงานพาชมบ้านจริง (+50 แต้ม)
+            </p>
           </div>
-        </div>
+          <div class="mt-5 pt-3 border-t border-[#C2A460]/20 text-xs font-bold text-blue-300 flex items-center justify-between">
+            <span>เปิดระบบเบิกกุญแจ</span>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </div>
+        </a>
 
       </div>
 
@@ -531,9 +591,211 @@
     </div>
   </footer>
 
+  <script src="siwasup_agents.js?v=20261104-conf"></script>
   <script>
-    // Initialize Lucide icons
     lucide.createIcons();
+
+    function copyLineConferenceInvite() {
+      const msg = [
+        "🌟 ยินดีต้อนรับพี่น้องตัวแทนสู่การเปิดตัว Siwasup Co-Broker OS (Season 1) ครับ!",
+        "",
+        "กรุณากดทำรายการตามลำดับ 1-2 บนจอมือถือของท่านเพื่อรับรหัสและคะแนนแรกเข้า (+10 แต้ม) ได้เลยครับ:",
+        "",
+        "1️⃣ กดแอดเพื่อน LINE OA ศิวาทรัพย์:",
+        "👉 https://line.me/R/ti/p/@813nyyia",
+        "",
+        "2️⃣ กดลงทะเบียน & เชื่อม LINE เข้าสู่ห้องรับรอง (Lobby):",
+        "👉 https://assets.siwasup.com/agent_registration.html",
+        "",
+        "(เมื่อ Admin กดอนุมัติแล้ว หน้าจอมือถือของท่านจะพาเข้าสู่หน้าต้อนรับและคลังทรัพย์พร้อมรับ +10 แต้มทันทีครับ 🎉)"
+      ].join("\n");
+      navigator.clipboard.writeText(msg).then(() => {
+        const el = document.getElementById('copyInviteBtnText');
+        if (el) {
+          el.textContent = "✅ คัดลอกข้อความเชิญเรียบร้อย! นำไปวางในกลุ่ม LINE ได้เลย";
+          setTimeout(() => { el.textContent = "คัดลอกลิงก์เชิญส่งเข้ากลุ่ม LINE (สำหรับ Admin)"; }, 4000);
+        }
+      });
+    }
+
+    function populateSelfCheckinDropdown() {
+      const sel = document.getElementById('landingSelfCheckinSelect');
+      if (!sel || !window.SiwasupAgents) return;
+      const all = window.SiwasupAgents.getActive();
+      const currentVal = sel.value || localStorage.getItem('siwasup_my_agent_ref') || '';
+      sel.innerHTML = '<option value="">-- เลือกชื่อของท่านเพื่อเช็กอิน (+10 แต้ม) --</option>' +
+        all.map(a => `<option value="${a.code}" ${a.code === currentVal ? 'selected' : ''}>${a.code} - ${a.nickname || a.name} (${a.totalPoints || 0} แต้ม)</option>`).join('');
+    }
+
+    function triggerSelfScreenCheckin() {
+      const sel = document.getElementById('landingSelfCheckinSelect');
+      if (!sel || !sel.value) {
+        alert('กรุณาเลือกชื่อรหัสตัวแทนของท่านก่อนกดเช็กอินครับ (หรือกดปุ่มที่ 2 เพื่อลงทะเบียนใหม่)');
+        return;
+      }
+      const code = sel.value;
+      const found = window.SiwasupAgents.find(code);
+      if (found && window.SiwasupAgents.syncMember) {
+        window.SiwasupAgents.syncMember({
+          code: found.code,
+          name: found.name,
+          nickname: found.nickname,
+          phone: found.phone
+        }, true);
+        showMyWelcomePass(found.code);
+        renderLiveCheckedInBoard();
+        populateSelfCheckinDropdown();
+      }
+    }
+
+    function showMyWelcomePass(code) {
+      if (!window.SiwasupAgents || !code) return;
+      const ag = window.SiwasupAgents.find(code);
+      if (!ag) return;
+      const passBox = document.getElementById('myWelcomePassBox');
+      const codeEl = document.getElementById('passAgentCode');
+      const nameEl = document.getElementById('passAgentName');
+      const ptsEl = document.getElementById('passAgentPoints');
+      const catBtn = document.getElementById('passGoCatalogBtn');
+      if (passBox) passBox.classList.remove('hidden');
+      if (codeEl) codeEl.textContent = ag.code;
+      if (nameEl) nameEl.textContent = `🎉 ยินดีต้อนรับ คุณ${ag.nickname || ag.name} (${ag.code})`;
+      if (ptsEl) ptsEl.textContent = `${ag.totalPoints || 0} แต้ม`;
+      if (catBtn) catBtn.href = `catalog.html?my_agent=${encodeURIComponent(ag.code)}&checkin=1`;
+    }
+
+    function renderLiveCheckedInBoard() {
+      const grid = document.getElementById('liveCheckedInGrid');
+      const countBadge = document.getElementById('checkedInCountBadge');
+      if (!grid || !window.SiwasupAgents) return;
+
+      const all = window.SiwasupAgents.getActive();
+      const checkedInList = all.filter(a => (a.totalPoints || 0) > 0 || a.checkedInToday);
+
+      if (countBadge) {
+        countBadge.textContent = `เช็กอินเข้างานแล้ว ${checkedInList.length} ท่าน`;
+      }
+
+      if (checkedInList.length === 0) {
+        grid.innerHTML = `
+          <div class="sm:col-span-2 p-8 rounded-2xl bg-slate-900/60 border border-dashed border-slate-700 text-center space-y-2">
+            <div class="text-2xl">🌱</div>
+            <div class="text-sm font-bold text-white">กระดาน Season 1 พร้อมต้อนรับสมาชิกท่านแรก!</div>
+            <p class="text-xs text-slate-400 max-w-md mx-auto">
+              ขณะนี้คะแนนทุกคนรีเซ็ตเป็น 0 แต้มเท่ากันทั้งหมด เมื่อตัวแทนลงทะเบียนผ่านลิงก์ในกลุ่ม LINE หรือกดเช็กอิน รายชื่อและคะแนนจริง (+10 แต้ม) จะปรากฏขึ้นที่นี่ทันทีครับ
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = checkedInList.map(a => {
+        const pts = a.totalPoints || 0;
+        const avatarHtml = a.avatar
+          ? `<img src="${a.avatar}" alt="${a.nickname || a.name}" class="w-11 h-11 rounded-xl object-cover border border-emerald-400 shrink-0">`
+          : `<div class="w-11 h-11 rounded-xl bg-emerald-500 text-slate-950 font-mono font-black text-xs flex items-center justify-center shrink-0">${a.code}</div>`;
+        return `
+          <a href="catalog.html?my_agent=${encodeURIComponent(a.code)}&checkin=1" class="p-4 rounded-2xl border bg-emerald-950/30 border-emerald-500/50 hover:border-amber-400 transition flex items-center justify-between group">
+            <div class="flex items-center gap-3 min-w-0">
+              ${avatarHtml}
+              <div class="min-w-0">
+                <div class="text-sm font-black text-white group-hover:text-amber-300 transition truncate">
+                  คุณ${a.nickname || a.name} <span class="text-[11px] font-mono text-amber-300/90">[${a.code}]</span>
+                </div>
+                <div class="text-[11px] text-emerald-400 font-bold truncate">
+                  ✅ อนุมัติเข้าสู่ระบบสำเร็จ (+10 แต้ม)
+                </div>
+              </div>
+            </div>
+            <div class="text-right shrink-0 ml-2">
+              <span class="text-sm font-mono font-black text-emerald-400">${pts} แต้ม</span>
+              <span class="block text-[10px] text-slate-400">เข้าคลังทรัพย์ →</span>
+            </div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const params = new URLSearchParams(window.location.search);
+      const myAgent = params.get('my_agent');
+      const myName = params.get('my_name');
+      const myNick = params.get('my_nick');
+      const isCheckin = params.get('checkin') === '1';
+
+      if (myAgent && window.SiwasupAgents && window.SiwasupAgents.syncMember) {
+        const sr = window.SiwasupAgents.syncMember({
+          code: myAgent,
+          name: myName || myAgent,
+          nickname: myNick || myName || myAgent
+        }, isCheckin);
+        if (sr && sr.agent) {
+          showMyWelcomePass(sr.agent.code);
+        }
+      } else {
+        // Check if logged in via LINE session
+        const sess = localStorage.getItem('siwasup_session');
+        if (sess && window.SiwasupAgents && window.SiwasupAgents.syncMember) {
+          try {
+            const r = await fetch('https://siwasup-cobroker-os.onrender.com/api/auth/me', {
+              headers: { 'Authorization': 'Bearer ' + sess },
+              cache: 'no-store'
+            });
+            if (r.ok) {
+              const me = await r.json();
+              if (me && me.status === 'approved' && me.member) {
+                const sr = window.SiwasupAgents.syncMember(me.member, true);
+                if (sr && sr.agent) showMyWelcomePass(sr.agent.code);
+              }
+            }
+          } catch (e) {}
+        } else {
+          const savedRef = localStorage.getItem('siwasup_my_agent_ref');
+          if (savedRef && window.SiwasupAgents) {
+            const ag = window.SiwasupAgents.find(savedRef);
+            if (ag && (ag.totalPoints > 0 || ag.checkedInToday)) {
+              showMyWelcomePass(ag.code);
+            }
+          }
+        }
+      }
+
+      // Sync all approved members from Lobby Manager (localStorage + Cloud API) so everyone approved during Meet appears automatically!
+      async function syncApprovedLobbyMembersToBoard() {
+        if (!window.SiwasupAgents || typeof window.SiwasupAgents.syncMember !== 'function') return;
+        try {
+          const localLobby = JSON.parse(localStorage.getItem('siwasup_lobby_data') || 'null');
+          if (localLobby && Array.isArray(localLobby.approved)) {
+            localLobby.approved.forEach(m => {
+              if (m && m.id !== 'app_office_004') window.SiwasupAgents.syncMember(m, true);
+            });
+          }
+        } catch (e) {}
+        const sess = localStorage.getItem('siwasup_session');
+        if (sess) {
+          try {
+            const res = await fetch('https://siwasup-cobroker-os.onrender.com/api/lobby/list', {
+              headers: { 'Authorization': 'Bearer ' + sess },
+              cache: 'no-store'
+            });
+            if (res.ok) {
+              const cloudLobby = await res.json();
+              if (cloudLobby && Array.isArray(cloudLobby.approved)) {
+                localStorage.setItem('siwasup_lobby_data', JSON.stringify(cloudLobby));
+                cloudLobby.approved.forEach(m => {
+                  if (m && m.id !== 'app_office_004') window.SiwasupAgents.syncMember(m, true);
+                });
+              }
+            }
+          } catch (e) {}
+        }
+        populateSelfCheckinDropdown();
+        renderLiveCheckedInBoard();
+      }
+
+      await syncApprovedLobbyMembersToBoard();
+      setInterval(syncApprovedLobbyMembersToBoard, 5000);
+    });
   </script>
 </body>
 </html>
