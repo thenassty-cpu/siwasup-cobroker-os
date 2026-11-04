@@ -5097,9 +5097,26 @@
 
     function sendBundleToLine() {
       const msg = getBundleMessageText();
-      const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(msg)}`;
-      window.open(lineUrl, '_blank');
-      showToast("🚀 เปิดแอป LINE เพื่อส่งข้อความมัดรวมเรียบร้อย");
+      const clientName = (document.getElementById('bundle-client-name').value || 'คุณลูกค้า').trim();
+      const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'TON';
+      const items = allProperties.filter(p => selectedBundleIds.has(p.id));
+      const bundleIds = Array.from(selectedBundleIds).join(',');
+      const bundleUrl = getBaseUrl() + '?bundle=' + bundleIds + '&for=' + encodeURIComponent(clientName) + '&ref=' + encodeURIComponent(savedRef) + '&src=bundle_line';
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(msg).catch(() => {});
+      }
+
+      const directLineUrl = 'https://line.me/R/msg/text/?' + encodeURIComponent(msg);
+      if (directLineUrl.length < 1800) {
+        window.open(directLineUrl, '_blank');
+      } else {
+        const shareText = 'คัดสรรทรัพย์พิเศษ ' + items.length + ' หลัง สำหรับ ' + clientName + ' (ศิวาทรัพย์ Co-Broker)';
+        const socialShareUrl = 'https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(bundleUrl) + '&text=' + encodeURIComponent(shareText);
+        window.open(socialShareUrl, '_blank');
+      }
+
+      showToast('🚀 คัดลอกแคปชั่นเต็มแล้ว และเปิดแชร์ LINE เรียบร้อย!');
       closeBundleModal();
     }
 
