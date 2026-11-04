@@ -4655,14 +4655,20 @@
       }
 
       if (select && window.SiwasupAgents) {
-        const agents = window.SiwasupAgents.getActive();
-        select.innerHTML = agents.map(a => `
-          <option value="${a.code}">${a.code} - ${a.nickname || a.name} (${a.name})</option>
-        `).join('');
-        const savedRef = localStorage.getItem('siwasup_my_agent_ref');
-        if (savedRef && select.querySelector(`option[value="${savedRef}"]`)) {
-          select.value = savedRef;
+        const populateMeetingSelect = () => {
+          const agents = window.SiwasupAgents.getActive();
+          select.innerHTML = agents.map(a => `
+            <option value="${a.code}">${a.code} - ${a.nickname || a.name} (${a.name})</option>
+          `).join('');
+          const savedRef = localStorage.getItem('siwasup_my_agent_ref');
+          if (savedRef && select.querySelector(`option[value="${savedRef}"]`)) {
+            select.value = savedRef;
+          }
+        };
+        if (typeof window.SiwasupAgents.syncLobbyApproved === 'function') {
+          window.SiwasupAgents.syncLobbyApproved(() => populateMeetingSelect());
         }
+        populateMeetingSelect();
       }
       if (modal) {
         modal.classList.remove('hidden');

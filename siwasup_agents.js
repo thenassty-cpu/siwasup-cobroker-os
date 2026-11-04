@@ -50,12 +50,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 180,
-    "performancePoints": 480,
-    "totalPoints": 660,
-    "tierId": "gold",
-    "tierName": "Gold Agent",
-    "tierIcon": "🥇"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S03",
@@ -66,12 +66,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 61,
-    "performancePoints": 193,
-    "totalPoints": 254,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S04",
@@ -82,12 +82,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 68,
-    "performancePoints": 224,
-    "totalPoints": 292,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S05",
@@ -98,12 +98,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 75,
-    "performancePoints": 255,
-    "totalPoints": 330,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S06",
@@ -114,12 +114,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 82,
-    "performancePoints": 286,
-    "totalPoints": 368,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S07",
@@ -130,12 +130,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 89,
-    "performancePoints": 317,
-    "totalPoints": 406,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S08",
@@ -150,7 +150,7 @@
     "performancePoints": 0,
     "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -162,12 +162,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 103,
-    "performancePoints": 379,
-    "totalPoints": 482,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S10",
@@ -178,12 +178,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 120,
-    "performancePoints": 550,
-    "totalPoints": 670,
-    "tierId": "gold",
-    "tierName": "Gold Agent",
-    "tierIcon": "🥇"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S11",
@@ -198,7 +198,7 @@
     "performancePoints": 0,
     "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -210,12 +210,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 59,
-    "performancePoints": 122,
-    "totalPoints": 181,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S13",
@@ -226,12 +226,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 66,
-    "performancePoints": 153,
-    "totalPoints": 219,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S14",
@@ -242,12 +242,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 73,
-    "performancePoints": 184,
-    "totalPoints": 257,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S15",
@@ -258,12 +258,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 80,
-    "performancePoints": 215,
-    "totalPoints": 295,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S16",
@@ -274,12 +274,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 87,
-    "performancePoints": 246,
-    "totalPoints": 333,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S17",
@@ -290,12 +290,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 94,
-    "performancePoints": 277,
-    "totalPoints": 371,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S18",
@@ -306,12 +306,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 101,
-    "performancePoints": 308,
-    "totalPoints": 409,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S19",
@@ -322,12 +322,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 43,
-    "performancePoints": 339,
-    "totalPoints": 382,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S20",
@@ -338,12 +338,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 50,
-    "performancePoints": 370,
-    "totalPoints": 420,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S21",
@@ -354,12 +354,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 57,
-    "performancePoints": 401,
-    "totalPoints": 458,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S22",
@@ -370,12 +370,12 @@
     "phone": "",
     "lineId": "ggemmie",
     "email": "kumtronsiriwat@hotmail.com",
-    "activityPoints": 145,
-    "performancePoints": 620,
-    "totalPoints": 765,
-    "tierId": "gold",
-    "tierName": "Gold Agent",
-    "tierIcon": "🥇"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S23",
@@ -386,12 +386,12 @@
     "phone": "",
     "lineId": "phromthepwiniya",
     "email": "destinyofsb@gmail.com",
-    "activityPoints": 71,
-    "performancePoints": 113,
-    "totalPoints": 184,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S24",
@@ -402,12 +402,12 @@
     "phone": "",
     "lineId": "A@nakra",
     "email": "E-Pikulnew1234@gmail.com",
-    "activityPoints": 78,
-    "performancePoints": 144,
-    "totalPoints": 222,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S25",
@@ -418,12 +418,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 85,
-    "performancePoints": 175,
-    "totalPoints": 260,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S26",
@@ -434,12 +434,12 @@
     "phone": "",
     "lineId": "lookmai_lookmai",
     "email": "kanokporndowlerk@gmail.com",
-    "activityPoints": 110,
-    "performancePoints": 390,
-    "totalPoints": 500,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S27",
@@ -450,12 +450,12 @@
     "phone": "",
     "lineId": "Jessdiamond",
     "email": "jessriofficial@gmail.com",
-    "activityPoints": 110,
-    "performancePoints": 390,
-    "totalPoints": 500,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S28",
@@ -466,12 +466,12 @@
     "phone": "",
     "lineId": "Psychomayz",
     "email": "mayzbox@hotmail.com",
-    "activityPoints": 41,
-    "performancePoints": 268,
-    "totalPoints": 309,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S29",
@@ -482,12 +482,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 48,
-    "performancePoints": 299,
-    "totalPoints": 347,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S30",
@@ -498,12 +498,12 @@
     "phone": "",
     "lineId": "kupong_kijpo",
     "email": "kupongkijpo@gmail.com",
-    "activityPoints": 55,
-    "performancePoints": 330,
-    "totalPoints": 385,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S31",
@@ -514,12 +514,12 @@
     "phone": "",
     "lineId": "nun.mimoza",
     "email": "bs.mimoza@gmail.com",
-    "activityPoints": 62,
-    "performancePoints": 361,
-    "totalPoints": 423,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S32",
@@ -530,12 +530,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 69,
-    "performancePoints": 392,
-    "totalPoints": 461,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S33",
@@ -546,12 +546,12 @@
     "phone": "",
     "lineId": "21tawan22",
     "email": "Laksami2105@gmail.com",
-    "activityPoints": 76,
-    "performancePoints": 423,
-    "totalPoints": 499,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S34",
@@ -562,12 +562,12 @@
     "phone": "",
     "lineId": "keano_p",
     "email": "ponggigsy@gmail.com",
-    "activityPoints": 83,
-    "performancePoints": 104,
-    "totalPoints": 187,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S35",
@@ -578,12 +578,12 @@
     "phone": "0996362592",
     "lineId": "",
     "email": "earlchansale03@gmail.com",
-    "activityPoints": 90,
-    "performancePoints": 135,
-    "totalPoints": 225,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S36",
@@ -594,12 +594,12 @@
     "phone": "",
     "lineId": "Parit11.",
     "email": "akaphat.mal@spumail.net",
-    "activityPoints": 97,
-    "performancePoints": 166,
-    "totalPoints": 263,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S37",
@@ -610,12 +610,12 @@
     "phone": "",
     "lineId": "meawsusa",
     "email": "Ssawinee.rod@gmail.com",
-    "activityPoints": 104,
-    "performancePoints": 197,
-    "totalPoints": 301,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S38",
@@ -626,12 +626,12 @@
     "phone": "",
     "lineId": "kaye567",
     "email": "thebigkaye@hotmail.com",
-    "activityPoints": 46,
-    "performancePoints": 228,
-    "totalPoints": 274,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S39",
@@ -642,12 +642,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 53,
-    "performancePoints": 259,
-    "totalPoints": 312,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S40",
@@ -658,12 +658,12 @@
     "phone": "",
     "lineId": "augleeme",
     "email": "lisa.morise56@gmail.com",
-    "activityPoints": 60,
-    "performancePoints": 290,
-    "totalPoints": 350,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S41",
@@ -674,12 +674,12 @@
     "phone": "0825651156",
     "lineId": "",
     "email": "pintong.so9@gmail.com",
-    "activityPoints": 67,
-    "performancePoints": 321,
-    "totalPoints": 388,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S42",
@@ -690,12 +690,12 @@
     "phone": "0628291536",
     "lineId": "",
     "email": "tchalopatump@gmail.com",
-    "activityPoints": 74,
-    "performancePoints": 352,
-    "totalPoints": 426,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S43",
@@ -706,12 +706,12 @@
     "phone": "",
     "lineId": "Chaya9639",
     "email": "chayanan.kl@gmail.com",
-    "activityPoints": 81,
-    "performancePoints": 383,
-    "totalPoints": 464,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S44",
@@ -722,12 +722,12 @@
     "phone": "",
     "lineId": "",
     "email": "doy_ssmm@outlook.com ,anusornnasiri1220@gmail.com",
-    "activityPoints": 88,
-    "performancePoints": 414,
-    "totalPoints": 502,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S45",
@@ -738,12 +738,12 @@
     "phone": "",
     "lineId": "_PATUM",
     "email": "Winita.tm@gmail.com",
-    "activityPoints": 95,
-    "performancePoints": 445,
-    "totalPoints": 540,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S46",
@@ -754,12 +754,12 @@
     "phone": "0804261648",
     "lineId": "080-4261648",
     "email": "ammeena.naja@gmail.com",
-    "activityPoints": 102,
-    "performancePoints": 126,
-    "totalPoints": 228,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S47",
@@ -770,12 +770,12 @@
     "phone": "",
     "lineId": "sarapat1599",
     "email": "ptmodernpat98@gmail.com , theicon53pat@gmail.com",
-    "activityPoints": 44,
-    "performancePoints": 157,
-    "totalPoints": 201,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S48",
@@ -786,12 +786,12 @@
     "phone": "",
     "lineId": "jaoh1234",
     "email": "pateera240218@gmail.com",
-    "activityPoints": 51,
-    "performancePoints": 188,
-    "totalPoints": 239,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S49",
@@ -802,12 +802,12 @@
     "phone": "",
     "lineId": "th.paiiz",
     "email": "thoopkrajae2405@gmail.com",
-    "activityPoints": 58,
-    "performancePoints": 219,
-    "totalPoints": 277,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S50",
@@ -818,12 +818,12 @@
     "phone": "0818198358",
     "lineId": "081-8198358",
     "email": "annie.narinyn@icloud.com",
-    "activityPoints": 50,
-    "performancePoints": 240,
-    "totalPoints": 290,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S51",
@@ -834,12 +834,12 @@
     "phone": "",
     "lineId": "nutthapat_k.",
     "email": "Nutthapat2609@gmail.com",
-    "activityPoints": 55,
-    "performancePoints": 257,
-    "totalPoints": 312,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S52",
@@ -850,12 +850,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 60,
-    "performancePoints": 54,
-    "totalPoints": 114,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S53",
@@ -866,12 +866,12 @@
     "phone": "",
     "lineId": "Nuy_na_ja",
     "email": "buysales99@hotmail.com",
-    "activityPoints": 65,
-    "performancePoints": 71,
-    "totalPoints": 136,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S54",
@@ -882,12 +882,12 @@
     "phone": "",
     "lineId": "",
     "email": "thippa212@gmail.com",
-    "activityPoints": 25,
-    "performancePoints": 88,
-    "totalPoints": 113,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S55",
@@ -898,12 +898,12 @@
     "phone": "",
     "lineId": "",
     "email": "vallaya.ntessre@gmail.com",
-    "activityPoints": 30,
-    "performancePoints": 105,
-    "totalPoints": 135,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S56",
@@ -914,12 +914,12 @@
     "phone": "",
     "lineId": "",
     "email": "sirathadragen@gmail.com",
-    "activityPoints": 35,
-    "performancePoints": 122,
-    "totalPoints": 157,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S57",
@@ -930,12 +930,12 @@
     "phone": "",
     "lineId": "night2551",
     "email": "night1234night1234night1234@gmail.com",
-    "activityPoints": 40,
-    "performancePoints": 139,
-    "totalPoints": 179,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S58",
@@ -946,12 +946,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 45,
-    "performancePoints": 156,
-    "totalPoints": 201,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S59",
@@ -962,12 +962,12 @@
     "phone": "",
     "lineId": "kcn-ti-mg",
     "email": "kcn.ti.mg@gmail.com",
-    "activityPoints": 50,
-    "performancePoints": 173,
-    "totalPoints": 223,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S60",
@@ -978,12 +978,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 55,
-    "performancePoints": 190,
-    "totalPoints": 245,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S61",
@@ -998,7 +998,7 @@
     "performancePoints": 0,
     "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1010,12 +1010,12 @@
     "phone": "0622261966",
     "lineId": "062-2261966",
     "email": "Panadapat2512@gmial.com",
-    "activityPoints": 65,
-    "performancePoints": 224,
-    "totalPoints": 289,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S63",
@@ -1026,12 +1026,12 @@
     "phone": "",
     "lineId": "som-mt",
     "email": "som-peeka@hotmail.com",
-    "activityPoints": 25,
-    "performancePoints": 241,
-    "totalPoints": 266,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S64",
@@ -1042,12 +1042,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 30,
-    "performancePoints": 258,
-    "totalPoints": 288,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S65",
@@ -1058,11 +1058,11 @@
     "phone": "",
     "lineId": "vigromyon",
     "email": "Vigromyon@gmail.com",
-    "activityPoints": 35,
-    "performancePoints": 55,
-    "totalPoints": 90,
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1074,12 +1074,12 @@
     "phone": "",
     "lineId": "holysmash",
     "email": "Hol;ycatjohnjohn@gmail.com",
-    "activityPoints": 40,
-    "performancePoints": 72,
-    "totalPoints": 112,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S67",
@@ -1090,12 +1090,12 @@
     "phone": "",
     "lineId": "VIDSAYA",
     "email": "vidsava@gmail.com",
-    "activityPoints": 45,
-    "performancePoints": 89,
-    "totalPoints": 134,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S68",
@@ -1106,12 +1106,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 50,
-    "performancePoints": 106,
-    "totalPoints": 156,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S69",
@@ -1122,12 +1122,12 @@
     "phone": "",
     "lineId": "nokn-789",
     "email": "",
-    "activityPoints": 55,
-    "performancePoints": 123,
-    "totalPoints": 178,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S70",
@@ -1138,12 +1138,12 @@
     "phone": "",
     "lineId": "Typhoone76",
     "email": "Typhoone74",
-    "activityPoints": 60,
-    "performancePoints": 140,
-    "totalPoints": 200,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S71",
@@ -1154,12 +1154,12 @@
     "phone": "",
     "lineId": "lindalegacy",
     "email": "porlamali@hotmail.com",
-    "activityPoints": 120,
-    "performancePoints": 550,
-    "totalPoints": 670,
-    "tierId": "gold",
-    "tierName": "Gold Agent",
-    "tierIcon": "🥇"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S72",
@@ -1170,12 +1170,12 @@
     "phone": "",
     "lineId": "aeh6396",
     "email": "cst.puthi@gmail.com",
-    "activityPoints": 25,
-    "performancePoints": 174,
-    "totalPoints": 199,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S73",
@@ -1186,12 +1186,12 @@
     "phone": "",
     "lineId": "",
     "email": "narudeeweerawong15@gmail.com",
-    "activityPoints": 30,
-    "performancePoints": 191,
-    "totalPoints": 221,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S74",
@@ -1202,12 +1202,12 @@
     "phone": "0812052244",
     "lineId": "081-2052244",
     "email": "Wichuta 251423@gmail.com",
-    "activityPoints": 35,
-    "performancePoints": 208,
-    "totalPoints": 243,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S75",
@@ -1218,12 +1218,12 @@
     "phone": "",
     "lineId": "Ong_Ying 999",
     "email": "",
-    "activityPoints": 40,
-    "performancePoints": 225,
-    "totalPoints": 265,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S76",
@@ -1234,12 +1234,12 @@
     "phone": "",
     "lineId": "sunshinehome2878",
     "email": "",
-    "activityPoints": 45,
-    "performancePoints": 242,
-    "totalPoints": 287,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S77",
@@ -1250,12 +1250,12 @@
     "phone": "",
     "lineId": "ajnoom",
     "email": "ajnoom@gmail.com",
-    "activityPoints": 50,
-    "performancePoints": 259,
-    "totalPoints": 309,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S78",
@@ -1266,12 +1266,12 @@
     "phone": "",
     "lineId": "Icela2009",
     "email": "",
-    "activityPoints": 55,
-    "performancePoints": 56,
-    "totalPoints": 111,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S79",
@@ -1282,12 +1282,12 @@
     "phone": "",
     "lineId": "Sakura-na",
     "email": "Sakuna_nt@yahoo.com",
-    "activityPoints": 60,
-    "performancePoints": 73,
-    "totalPoints": 133,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S80",
@@ -1298,12 +1298,12 @@
     "phone": "",
     "lineId": "Miguzilla",
     "email": "dadyblue@yahoo.com",
-    "activityPoints": 65,
-    "performancePoints": 90,
-    "totalPoints": 155,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S81",
@@ -1314,12 +1314,12 @@
     "phone": "",
     "lineId": "LASISTAA",
     "email": "iamjhuu@gmail.com",
-    "activityPoints": 25,
-    "performancePoints": 107,
-    "totalPoints": 132,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S82",
@@ -1330,12 +1330,12 @@
     "phone": "",
     "lineId": "linebyline",
     "email": "Linchy50@gmail.com",
-    "activityPoints": 30,
-    "performancePoints": 124,
-    "totalPoints": 154,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S83",
@@ -1346,12 +1346,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 35,
-    "performancePoints": 141,
-    "totalPoints": 176,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S84",
@@ -1362,12 +1362,12 @@
     "phone": "",
     "lineId": "rainyseason17",
     "email": "",
-    "activityPoints": 40,
-    "performancePoints": 158,
-    "totalPoints": 198,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S85",
@@ -1378,12 +1378,12 @@
     "phone": "",
     "lineId": "kochpuntouch",
     "email": "",
-    "activityPoints": 45,
-    "performancePoints": 175,
-    "totalPoints": 220,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S86",
@@ -1394,12 +1394,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 50,
-    "performancePoints": 192,
-    "totalPoints": 242,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S87",
@@ -1410,12 +1410,12 @@
     "phone": "0843538785",
     "lineId": "084-3538785",
     "email": "lisa.mimew@gmail.com",
-    "activityPoints": 55,
-    "performancePoints": 209,
-    "totalPoints": 264,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S88",
@@ -1426,12 +1426,12 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 60,
-    "performancePoints": 226,
-    "totalPoints": 286,
-    "tierId": "active",
-    "tierName": "Active Agent",
-    "tierIcon": "🥉"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S89",
@@ -1442,12 +1442,12 @@
     "phone": "0850605454",
     "lineId": "085-0605454",
     "email": "natparin958@gmail.com",
-    "activityPoints": 65,
-    "performancePoints": 243,
-    "totalPoints": 308,
-    "tierId": "silver",
-    "tierName": "Silver Agent",
-    "tierIcon": "🥈"
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
+    "tierId": "trainee",
+    "tierName": "Trainee",
+    "tierIcon": "🌱"
   },
   {
     "code": "S90",
@@ -1458,13 +1458,11 @@
     "phone": "093-0615356",
     "lineId": "Run4536",
     "email": "anunya_98@hotmail.com",
-    "isAlpha": true,
-    "group": "Siwasup Alpha Agent",
-    "activityPoints": 10,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 10,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1476,11 +1474,11 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 13,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 13,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1492,11 +1490,11 @@
     "phone": "",
     "lineId": "Pao99j",
     "email": "Pao99@hotmail.com",
-    "activityPoints": 16,
-    "performancePoints": 50,
-    "totalPoints": 66,
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1508,11 +1506,11 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 19,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 19,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1524,13 +1522,11 @@
     "phone": "087-0999297",
     "lineId": "liew2557",
     "email": "",
-    "isAlpha": true,
-    "group": "Siwasup Alpha Agent",
-    "activityPoints": 22,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 22,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1542,11 +1538,11 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 25,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 25,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1558,11 +1554,11 @@
     "phone": "08985168814",
     "lineId": "089-85168814",
     "email": "watinee_1904@gmail.com",
-    "activityPoints": 28,
-    "performancePoints": 50,
-    "totalPoints": 78,
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1574,11 +1570,11 @@
     "phone": "",
     "lineId": "gogizaa",
     "email": "peekowit7846@gmail.com",
-    "activityPoints": 31,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 31,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1590,13 +1586,11 @@
     "phone": "096-6458994",
     "lineId": "",
     "email": "RATCHOLCHAN@GMAIL.COM",
-    "isAlpha": true,
-    "group": "Siwasup Alpha Agent",
-    "activityPoints": 34,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 34,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1608,11 +1602,11 @@
     "phone": "",
     "lineId": "noonaty25",
     "email": "chanita.4649@hotmail.com",
-    "activityPoints": 37,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 37,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1624,11 +1618,11 @@
     "phone": "0996246456",
     "lineId": "099-6246456",
     "email": "chanyaphaat/interpaper@gmail.com",
-    "activityPoints": 10,
-    "performancePoints": 50,
-    "totalPoints": 60,
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1640,11 +1634,11 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 13,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 13,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1656,11 +1650,11 @@
     "phone": "0814867571",
     "lineId": "081-4867571",
     "email": "manatchanok288@gmail.com",
-    "activityPoints": 16,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 16,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1672,11 +1666,11 @@
     "phone": "",
     "lineId": "patchysp",
     "email": "patchyap@gmail.com",
-    "activityPoints": 19,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 19,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1688,11 +1682,11 @@
     "phone": "",
     "lineId": "kwanjai.songjangyai@gmail.com",
     "email": "k.songjangyai@gmail.com",
-    "activityPoints": 22,
-    "performancePoints": 50,
-    "totalPoints": 72,
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1704,11 +1698,11 @@
     "phone": "",
     "lineId": "auh_audy2468",
     "email": "PattamaSupitsara2557@gmail.com",
-    "activityPoints": 25,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 25,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1724,7 +1718,7 @@
     "performancePoints": 0,
     "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1740,7 +1734,7 @@
     "performancePoints": 0,
     "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1752,11 +1746,11 @@
     "phone": "",
     "lineId": "Jeng245",
     "email": "asapropertyd@gmail.com",
-    "activityPoints": 34,
-    "performancePoints": 50,
-    "totalPoints": 84,
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1768,11 +1762,11 @@
     "phone": "",
     "lineId": "Laluay",
     "email": "Laluay@gmail.com",
-    "activityPoints": 37,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 37,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1784,11 +1778,11 @@
     "phone": "",
     "lineId": "2402dyna",
     "email": "thanyaluckfon@gmail.com",
-    "activityPoints": 10,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 10,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1800,11 +1794,11 @@
     "phone": "",
     "lineId": "",
     "email": "",
-    "activityPoints": 13,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 13,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1816,11 +1810,11 @@
     "phone": "",
     "lineId": "baikhaw2008",
     "email": "diisoprophylaminoethyl@gmail.com",
-    "activityPoints": 16,
-    "performancePoints": 50,
-    "totalPoints": 66,
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1832,13 +1826,11 @@
     "phone": "095-7823593",
     "lineId": "",
     "email": "",
-    "isAlpha": true,
-    "group": "Siwasup Alpha Agent",
-    "activityPoints": 19,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 19,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1850,11 +1842,11 @@
     "phone": "",
     "lineId": "minmo1008",
     "email": "Minneimone1008@gmail.com",
-    "activityPoints": 22,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 22,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1866,11 +1858,11 @@
     "phone": "0817199269",
     "lineId": "081-7199269",
     "email": "propatson.29.08.2510@gmail.com",
-    "activityPoints": 25,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 25,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1882,11 +1874,11 @@
     "phone": "0891732845",
     "lineId": "089-1732845",
     "email": "",
-    "activityPoints": 28,
-    "performancePoints": 50,
-    "totalPoints": 78,
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1898,13 +1890,11 @@
     "phone": "086-9925627",
     "lineId": "086-9925627",
     "email": "",
-    "isAlpha": true,
-    "group": "Siwasup Alpha Agent",
-    "activityPoints": 31,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 31,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1916,11 +1906,11 @@
     "phone": "0622959263",
     "lineId": "062-2959263",
     "email": "",
-    "activityPoints": 34,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 34,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1932,11 +1922,11 @@
     "phone": "0994149224",
     "lineId": "099-4149224",
     "email": "",
-    "activityPoints": 37,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 37,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1948,13 +1938,11 @@
     "phone": "061-4428555",
     "lineId": "Jaidee0902",
     "email": "spestae474@gmail.com",
-    "isAlpha": true,
-    "group": "Siwasup Alpha Agent",
-    "activityPoints": 10,
-    "performancePoints": 50,
-    "totalPoints": 60,
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1966,11 +1954,11 @@
     "phone": "0863938835",
     "lineId": "086-3938835",
     "email": "June_sherchenho@hotmail.com",
-    "activityPoints": 13,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 13,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1982,11 +1970,11 @@
     "phone": "0654929795",
     "lineId": "065-4929795",
     "email": "Chiraporn.Toi@gmail.com",
-    "activityPoints": 16,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 16,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -1998,11 +1986,11 @@
     "phone": "",
     "lineId": "",
     "email": "Chindamart1988@gmail.com",
-    "activityPoints": 19,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 19,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -2014,11 +2002,11 @@
     "phone": "",
     "lineId": "Belle_chatsem",
     "email": "bellechatsem@gmail.com",
-    "activityPoints": 22,
-    "performancePoints": 50,
-    "totalPoints": 72,
+    "activityPoints": 0,
+    "performancePoints": 0,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -2030,11 +2018,11 @@
     "phone": "0994162668",
     "lineId": "",
     "email": "airjitima@gmail.com",
-    "activityPoints": 25,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 25,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   },
   {
@@ -2046,34 +2034,180 @@
     "phone": "",
     "lineId": "annie5884",
     "email": "annetohome@gmail.com",
-    "activityPoints": 28,
+    "activityPoints": 0,
     "performancePoints": 0,
-    "totalPoints": 28,
+    "totalPoints": 0,
     "tierId": "trainee",
-    "tierName": "Trainee Agent",
+    "tierName": "Trainee",
     "tierIcon": "🌱"
   }
 ];
 
   // 4. IN-MEMORY STATE & LOCALSTORAGE SYNC
   let currentAgents = [];
-  const STORAGE_KEY_AGENTS = 'siwasup_agents_cache_v1';
-  const STORAGE_KEY_TXS = 'siwasup_point_transactions_v1';
+  const STORAGE_KEY_AGENTS = 'siwasup_agents_season1_clean_v3';
+  const STORAGE_KEY_TXS = 'siwasup_point_txs_season1_clean_v3';
+  const STORAGE_KEY_CUSTOM_MEMBERS = 'siwasup_custom_members_v1';
+
+  function getCustomMembers() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY_CUSTOM_MEMBERS) || '[]');
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveCustomMember(memberObj) {
+    const list = getCustomMembers().filter(m => m.code !== memberObj.code);
+    list.unshift(memberObj);
+    try {
+      localStorage.setItem(STORAGE_KEY_CUSTOM_MEMBERS, JSON.stringify(list));
+    } catch (e) {}
+  }
 
   function initAgents() {
     try {
-      const cached = localStorage.getItem(STORAGE_KEY_AGENTS);
-      if (cached) {
-        currentAgents = JSON.parse(cached);
-      } else {
-        currentAgents = JSON.parse(JSON.stringify(SIWASUP_AGENTS_SEED));
-        saveAgentsToCache();
+      // ล้างกระดานข้อมูลจำลองเก่าทั้งหมดอัตโนมัติ (Clean Slate Migration)
+      localStorage.removeItem('siwasup_agents_cache_v1');
+      localStorage.removeItem('siwasup_point_transactions_v1');
+      if (localStorage.getItem('siwasup_my_agent_ref') === 'S22') {
+        localStorage.setItem('siwasup_my_agent_ref', 'S90');
       }
-    } catch (e) {
-      console.warn("Storage init warning:", e);
-      currentAgents = JSON.parse(JSON.stringify(SIWASUP_AGENTS_SEED));
-    }
+    } catch (e) {}
+
+    // โหลดฐานข้อมูลเริ่มต้นที่ 0 แต้ม + สมาชิกที่สแกนเข้าระบบจริง แล้วคำนวณเฉพาะธุรกรรมจริงที่เกิดขึ้นใน Season 1
+    const baseSeed = JSON.parse(JSON.stringify(SIWASUP_AGENTS_SEED));
+    const customList = getCustomMembers();
+    customList.forEach(cm => {
+      if (!baseSeed.some(a => a.code.toUpperCase() === cm.code.toUpperCase())) {
+        baseSeed.unshift({
+          ...cm,
+          activityPoints: 0,
+          performancePoints: 0,
+          totalPoints: 0,
+          tierId: 'trainee',
+          tierName: 'Trainee',
+          tierIcon: '🌱'
+        });
+      }
+    });
+    currentAgents = baseSeed;
     applyTransactionsToAgents();
+    saveAgentsToCache();
+    syncLobbyApproved();
+  }
+
+  function syncMember(memberData, autoAwardCheckin = false, updateMyRef = true) {
+    if (!memberData) return null;
+    const digits = (v) => String(v || '').replace(/\D/g, '');
+    const mPhone = digits(memberData.phone);
+    const mNick = String(memberData.nickname || '').trim().toLowerCase();
+    const mName = String(memberData.name || '').trim().toLowerCase();
+    const mId = String(memberData.code || memberData.id || '').trim();
+
+    // 1. ค้นหาว่าตรงกับตัวแทนเดิมในระบบ (S02 - S126) หรือไม่ (เทียบจากรหัส, เบอร์โทร, ชื่อเล่น หรือชื่อจริง)
+    let found = currentAgents.find(a =>
+      (mId && a.code.toLowerCase() === mId.toLowerCase()) ||
+      (mPhone && mPhone.length >= 9 && digits(a.phone) === mPhone) ||
+      (mNick && a.nickname && a.nickname.trim().toLowerCase() === mNick) ||
+      (mName && a.name && a.name.trim().toLowerCase() === mName)
+    );
+
+    if (!found) {
+      let newCode = 'TON';
+      if (!(mId === 'app_office_004' || mName.includes('ต้น') || mNick === 'ต้น' || mName.includes('nassty'))) {
+        if (mId && /^S\d+$/i.test(mId)) {
+          newCode = mId.toUpperCase();
+        } else {
+          const maxNum = currentAgents.reduce((mx, a) => {
+            const n = parseInt(String(a.code || '').replace(/\D/g, ''), 10);
+            return (!isNaN(n) && n < 900 && n > mx) ? n : mx;
+          }, 126);
+          newCode = 'S' + (maxNum + 1);
+        }
+      }
+
+      found = currentAgents.find(a => a.code.toUpperCase() === newCode.toUpperCase());
+      if (!found) {
+        const newAgent = {
+          code: newCode,
+          name: memberData.name || 'สมาชิกศิวาทรัพย์',
+          nickname: memberData.nickname || (newCode === 'TON' ? 'ต้น' : memberData.name),
+          status: 'active',
+          startDate: 'Season 1 (2569)',
+          phone: memberData.phone || '',
+          lineId: memberData.line_id || '',
+          email: '',
+          avatar: memberData.avatar || '',
+          isAlpha: true,
+          checkedInToday: true,
+          group: 'Season 1 Active',
+          activityPoints: 0,
+          performancePoints: 0,
+          totalPoints: 0,
+          tierId: 'trainee',
+          tierName: 'Trainee',
+          tierIcon: '🌱'
+        };
+        saveCustomMember(newAgent);
+        currentAgents.unshift(newAgent);
+        applyTransactionsToAgents();
+        saveAgentsToCache();
+        found = currentAgents.find(a => a.code === newCode);
+      }
+    } else {
+      if (memberData.avatar) found.avatar = memberData.avatar;
+      if (memberData.phone && !found.phone) found.phone = memberData.phone;
+      if (memberData.line_id && !found.lineId) found.lineId = memberData.line_id;
+      found.isAlpha = true;
+      found.checkedInToday = true;
+    }
+
+    if (found) {
+      if (updateMyRef) {
+        try {
+          localStorage.setItem('siwasup_my_agent_ref', found.code);
+        } catch (e) {}
+      }
+
+      let awardedToday = false;
+      if (autoAwardCheckin) {
+        const today = new Date().toISOString().split('T')[0];
+        const checkinKey = `siwasup_checked_in_${found.code}_${today}`;
+        if (!localStorage.getItem(checkinKey)) {
+          awardPoints(found.code, 'meeting_checkin', { date: today, source: 'verified_onboarding' });
+          try { localStorage.setItem(checkinKey, 'true'); } catch (e) {}
+          awardedToday = true;
+        }
+      }
+      saveAgentsToCache();
+      return { agent: found, awardedToday: awardedToday };
+    }
+    return null;
+  }
+
+  function syncLobbyApproved(onComplete) {
+    try {
+      const rawLobby = localStorage.getItem('siwasup_lobby_data');
+      if (rawLobby) {
+        const parsed = JSON.parse(rawLobby);
+        if (parsed && Array.isArray(parsed.approved)) {
+          parsed.approved.forEach(m => syncMember(m, false, false));
+        }
+      }
+    } catch (e) {}
+
+    if (typeof fetch === 'function') {
+      fetch('https://siwasup-cobroker-os.onrender.com/api/lobby/list', { cache: 'no-store' })
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          if (data && Array.isArray(data.approved)) {
+            data.approved.forEach(m => syncMember(m, false, false));
+            if (typeof onComplete === 'function') onComplete(getActiveAgents());
+          }
+        })
+        .catch(() => {});
+    }
   }
 
   function saveAgentsToCache() {
@@ -2136,7 +2270,14 @@
   }
 
   function getActiveAgents() {
-    return currentAgents.filter(a => a.status === 'active');
+    const active = currentAgents.filter(a => a.status === 'active');
+    return [...active].sort((a, b) => {
+      const pDiff = (b.totalPoints || 0) - (a.totalPoints || 0);
+      if (pDiff !== 0) return pDiff;
+      const cDiff = (b.checkedInToday ? 1 : 0) - (a.checkedInToday ? 1 : 0);
+      if (cDiff !== 0) return cDiff;
+      return (parseInt(String(a.code).replace(/\D/g, ''), 10) || 999) - (parseInt(String(b.code).replace(/\D/g, ''), 10) || 999);
+    });
   }
 
   function findAgent(codeOrQuery) {
@@ -2212,9 +2353,15 @@
   function getLeaderboard(sortBy = 'total', limit = 20) {
     const list = [...getActiveAgents()];
     list.sort((a, b) => {
-      if (sortBy === 'activity') return (b.activityPoints || 0) - (a.activityPoints || 0);
-      if (sortBy === 'performance') return (b.performancePoints || 0) - (a.performancePoints || 0);
-      return (b.totalPoints || 0) - (a.totalPoints || 0);
+      let diff = 0;
+      if (sortBy === 'activity') diff = (b.activityPoints || 0) - (a.activityPoints || 0);
+      else if (sortBy === 'performance') diff = (b.performancePoints || 0) - (a.performancePoints || 0);
+      else diff = (b.totalPoints || 0) - (a.totalPoints || 0);
+      if (diff !== 0) return diff;
+      // กรณีแต้มเท่ากัน (เริ่มต้น Season 1 ที่ 0 แต้ม) ให้แสดงกลุ่ม Alpha Squad 6 ท่านขึ้นก่อนเสมอ
+      const alphaDiff = (b.isAlpha ? 1 : 0) - (a.isAlpha ? 1 : 0);
+      if (alphaDiff !== 0) return alphaDiff;
+      return (parseInt(a.code.replace(/\D/g, '')) || 999) - (parseInt(b.code.replace(/\D/g, '')) || 999);
     });
     return list.slice(0, limit);
   }
@@ -2389,6 +2536,8 @@
     find: findAgent,
     search: searchAgents,
     award: awardPoints,
+    syncMember: syncMember,
+    syncLobbyApproved: syncLobbyApproved,
     resetPoints: resetAllPointsToSeed,
     getLeaderboard: getLeaderboard,
     syncFromSheets: syncAgentsFromGoogleSheet,
