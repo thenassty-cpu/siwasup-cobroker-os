@@ -176,12 +176,26 @@ def get_line_profile(user_id):
 
 
 def load_chat_logs():
+    store = None
     if os.path.exists(CHAT_LOG_PATH):
         try:
             with open(CHAT_LOG_PATH, "r", encoding="utf-8") as f:
-                return json.load(f)
+                store = json.load(f)
         except Exception:
             pass
+    # If local file missing or empty, attempt restoring from R2 backup
+    if not store or not store.get("conversations"):
+        try:
+            req = urllib.request.Request("https://assets.siwasup.com/data/line_chat_logs.json?t=" + str(int(time.time())), headers={"User-Agent": "SiwasupSync/1.0"})
+            with urllib.request.urlopen(req, timeout=5) as r:
+                if r.status == 200:
+                    store = json.loads(r.read().decode("utf-8"))
+        except Exception:
+            pass
+
+    if store and isinstance(store.get("conversations"), list):
+        return store
+
     return {
         "bot_name": "Siwasupagent (@813nyyia)",
         "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -209,7 +223,14 @@ def append_chat_log(entry):
         except Exception as e:
             print(f"[Log Save Error]: {e}")
 
-    # PDPA Privacy Shield: Chat logs are strictly stored server-side and NEVER uploaded to public CDN/R2.
+        # Persistent Cloud Backup: Sync to Cloudflare R2 asynchronously so logs survive Render restarts
+        if put_object_r2:
+            def sync_r2():
+                try:
+                    put_object_r2("data/line_chat_logs.json", data_bytes, "application/json; charset=utf-8")
+                except Exception as ex:
+                    print(f"[R2 Sync Log Warn]: {ex}")
+            threading.Thread(target=sync_r2, daemon=True).start()
 
 
 WORKFLOW_KEYWORDS = [

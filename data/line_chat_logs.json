@@ -1,13 +1,26 @@
 {
   "bot_name": "Siwasupagent (@813nyyia)",
-  "updated_at": "2026-10-31 14:21:52",
-  "total_logged": 37,
-  "historical_summary": {
-    "2026-10-29_replies_sent": 18,
-    "followers_count": 2,
-    "note": "ข้อความ 18 รายการแรกเมื่อวันที่ 29 ต.ค. 2569 รันผ่านโหมด Terminal ก่อนเปิดระบบบันทึกไฟล์ ตั้งแต่วันที่ 31 ต.ค. 2569 เป็นต้นไป ทุกข้อความจะถูกบันทึกแสดงผลที่นี่แบบ Real-Time 100%"
+  "export_time": "2026-11-04 10:54:21",
+  "total_exported": 38,
+  "filter_criteria": {
+    "days": "all",
+    "category": "all",
+    "pii_masked": false
   },
   "conversations": [
+    {
+      "id": "LOG_1793789610480",
+      "timestamp": "2026-11-04 10:53:30",
+      "user_name": "User (on_123)",
+      "user_pic": "",
+      "user_id_tail": "on_123",
+      "event_type": "message",
+      "user_text": "ทดสอบตัวดูด log วันที่ 4 พ.ย.",
+      "ai_reply": "รับทราบการทดสอบระบบตัวดูด Log ประจำวันที่ 4 พ.ย. เรียบร้อยครับ น้องศิวาพร้อมให้บริการและบันทึกข้อมูลตามระบบครับผม!",
+      "matched_codes": [],
+      "search_mode": "NOT_PROPERTY_SEARCH",
+      "latency_ms": 1381
+    },
     {
       "id": "LOG_1793431312468",
       "timestamp": "2026-10-31 14:21:52",
