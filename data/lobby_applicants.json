@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-05 00:35:00",
+  "updated_at": "2026-11-05 00:57:31",
   "pending": [],
   "approved": [
     {
@@ -90,7 +90,9 @@
       },
       "approved_at": "2026-11-04 15:02:00",
       "approved_by": "[NASSTY]",
-      "avatar": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&auto=format&fit=crop&q=80"
+      "avatar": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&auto=format&fit=crop&q=80",
+      "last_active_at": 1793815049,
+      "line_display_name": "ป๊อปปี้"
     },
     {
       "id": "app_agent_001",
@@ -394,10 +396,14 @@
       "approved_at": "2026-11-01 16:30:00",
       "approved_by": "System Architect",
       "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&auto=format&fit=crop&q=80",
-      "is_keybox": true
+      "is_keybox": true,
+      "last_active_at": 1793815051,
+      "line_display_name": "น้องลิลลี่"
     }
   ],
   "audit_log": [
+    "[2026-11-05 00:57:31] 🛡️✨ [ZERO-DAY AUTO-HEAL] กู้คืนรูปโปรไฟล์ LINE อัตโนมัติ: ลิลลี่ (วรวลัญช์ ว่องสุวรรณวาร) -> ผูก LINE และเชื่อมรูปภาพสำเร็จ 100%",
+    "[2026-11-05 00:57:29] 🛡️✨ [ZERO-DAY AUTO-HEAL] กู้คืนรูปโปรไฟล์ LINE อัตโนมัติ: ป๊อปปี้ (ณัฐสุดา พรพริ้ง) -> ผูก LINE และเชื่อมรูปภาพสำเร็จ 100%",
     "[2026-11-05 00:35:00] 🛡️ Smart Restoration: กู้คืนสมาชิกและผู้บริหารครบ 13 ท่าน จากหลักฐาน Session 15:42 น. พร้อมเปิดระบบ Anti-Overwrite ป้องกันข้อมูลสูญหาย 100%",
     "[2026-11-04 15:42:57] 📸 ตรวจรับรองระบบทำเนียบตัวแทน (Confirmed Live Session Status: 10 Active Cards)",
     "[2026-11-02 02:54:30] 🧹 Reset ทำเนียบสมาชิก: ล้างรายชื่อรอให้ทีมงานสมัครผ่าน LINE ด้วยตนเอง (คงเหลือเฉพาะ Super Tech)",
