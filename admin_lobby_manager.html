@@ -672,25 +672,76 @@
     let lobbyData = JSON.parse(localStorage.getItem('siwasup_lobby_data')) || DEFAULT_DATA;
     normalizeNasstySeat(lobbyData);
 
+    function mergeLobbyStores(local, cloud) {
+      if (!cloud) return local || DEFAULT_DATA;
+      if (!local) return cloud;
+
+      const map = new Map();
+      // First populate with local
+      (local.approved || []).forEach(m => { if (m && (m.id || m.phone)) map.set(m.id || m.phone, m); });
+      // Then merge cloud, but don't drop members present only in local
+      (cloud.approved || []).forEach(m => {
+        if (!m) return;
+        const k = m.id || m.phone;
+        if (!map.has(k)) {
+          map.set(k, m);
+        } else {
+          // Merge properties, prioritizing valid non-empty fields
+          const existing = map.get(k);
+          map.set(k, Object.assign({}, existing, m));
+        }
+      });
+
+      const pMap = new Map();
+      (local.pending || []).forEach(p => { if (p && (p.id || p.phone)) pMap.set(p.id || p.phone, p); });
+      (cloud.pending || []).forEach(p => { if (p && (p.id || p.phone)) pMap.set(p.id || p.phone, p); });
+
+      return {
+        updated_at: cloud.updated_at || local.updated_at || new Date().toISOString(),
+        pending: Array.from(pMap.values()),
+        approved: Array.from(map.values()),
+        audit_log: (cloud.audit_log && cloud.audit_log.length > (local.audit_log || []).length) ? cloud.audit_log : (local.audit_log || [])
+      };
+    }
+
     async function fetchCloudLobby() {
+      let localStore = null;
+      try {
+        localStore = JSON.parse(localStorage.getItem('siwasup_lobby_data'));
+      } catch (e) {}
+
+      // Dual-path fetch: Try Render API first, then Cloudflare R2 backup
+      let fetchedCloudData = null;
       try {
         const res = await fetch(`${API_BASE}/api/lobby/list`, { cache: 'no-store' });
         if (res.status === 401 || res.status === 403) { showAdminGate(res.status); return; }
         if (res.ok) {
-          const cloudData = await res.json();
-          if (cloudData && (cloudData.pending || cloudData.approved)) {
-            normalizeNasstySeat(cloudData);
-            lobbyData = cloudData;
-            localStorage.setItem('siwasup_lobby_data', JSON.stringify(lobbyData));
-            renderLobby();
-            return;
-          }
+          fetchedCloudData = await res.json();
         }
       } catch (err) {
-        console.log('[Lobby] Cloud sync:', err);
+        console.log('[Lobby] Render API offline or sleepy:', err);
       }
-      lobbyData = JSON.parse(localStorage.getItem('siwasup_lobby_data')) || DEFAULT_DATA;
+
+      // If Render gave 0 or 1 item or failed, fetch latest R2 static replica
+      if (!fetchedCloudData || !fetchedCloudData.approved || fetchedCloudData.approved.length <= 1) {
+        try {
+          const r2Res = await fetch(`https://assets.siwasup.com/data/lobby_applicants.json?t=${Date.now()}`, { cache: 'no-store' });
+          if (r2Res.ok) {
+            const r2Data = await r2Res.json();
+            if (r2Data && Array.isArray(r2Data.approved) && r2Data.approved.length > 1) {
+              fetchedCloudData = r2Data;
+              console.log('[Lobby] Successfully loaded R2 static replica with', r2Data.approved.length, 'members');
+            }
+          }
+        } catch (r2Err) {
+          console.log('[Lobby] R2 fallback note:', r2Err);
+        }
+      }
+
+      // Smart Merge: NEVER overwrite a larger local roster with an empty/1-person cloud
+      lobbyData = mergeLobbyStores(localStore, fetchedCloudData);
       normalizeNasstySeat(lobbyData);
+      localStorage.setItem('siwasup_lobby_data', JSON.stringify(lobbyData));
       renderLobby();
     }
 

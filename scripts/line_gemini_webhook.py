@@ -958,7 +958,11 @@ def save_lobby_data(store):
         except Exception as e:
             print(f"[Error] Failed to save lobby local: {e}")
         if put_object_r2 and os.environ.get("PORT"):
-            threading.Thread(target=lambda: put_object_r2(_R2_LOBBY_VAULT_KEY, data_bytes, "application/json"), daemon=True).start()
+            try:
+                put_object_r2(_R2_LOBBY_VAULT_KEY, data_bytes, "application/json")
+                put_object_r2("data/lobby_applicants.json", data_bytes, "application/json; charset=utf-8")
+            except Exception as e:
+                print(f"[R2 Vault Sync Error]: {e}")
 
 
 # ==============================================================================
@@ -2025,6 +2029,12 @@ def handle_render_shutdown(signum, frame):
                 c_bytes = json.dumps(c_store, ensure_ascii=False, indent=2).encode("utf-8")
                 put_object_r2(_R2_CONTRACTS_VAULT_KEY, c_bytes, "application/json")
                 print("[+] Exclusive contracts vault flushed to Cloudflare R2 before sleep!")
+            with LOBBY_LOCK:
+                l_store = load_lobby_data()
+                l_bytes = json.dumps(l_store, ensure_ascii=False, indent=2).encode("utf-8")
+                put_object_r2(_R2_LOBBY_VAULT_KEY, l_bytes, "application/json")
+                put_object_r2("data/lobby_applicants.json", l_bytes, "application/json; charset=utf-8")
+                print("[+] Lobby applicants vault flushed to Cloudflare R2 before sleep!")
     except Exception as e:
         print(f"[-] Error during pre-sleep flush: {e}")
     sys.exit(0)
