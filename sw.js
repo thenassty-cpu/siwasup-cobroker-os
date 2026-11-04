@@ -2,7 +2,7 @@
 // Version: 2.0.0 (Cache Bust: v2 - Full 75-15-5-5 Theme, Falcon & Gryphon Characters & Vector Emblems)
 // Strategy: Network-First (เพื่อให้อัปเดตโค้ดบน GitHub Pages/Web แล้วผู้ใช้ได้เวอร์ชันใหม่ทันที ไม่ติดแคชเก่า)
 
-const CACHE_NAME = 'siwasup-os-v20261104-1300';
+const CACHE_NAME = 'siwasup-os-v20261104-1312';
 
 const ASSETS_TO_CACHE = [
   './',

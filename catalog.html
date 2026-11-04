@@ -907,7 +907,7 @@
     let currentMode = 'free_agent';
     let currentCategory = 'all';
     let currentBank = 'all';
-    let allProperties = [];
+    let allProperties = (typeof ALL_PROPERTIES_DATA !== 'undefined' && Array.isArray(ALL_PROPERTIES_DATA)) ? ALL_PROPERTIES_DATA : [];
     let pendingBookingId = null;
 
     // In-memory consignments (Leads from /consign)
@@ -5299,10 +5299,31 @@
     }
     window.addEventListener('scroll', handleBackToTopScroll, { passive: true });
 
-    // Auto-run
-    checkUrlParameters();
-      checkPdpaConsent();
+
+    // 🛡️ PDPA Consent Functions
+    function checkPdpaConsent() {
+      try {
+        const consented = localStorage.getItem('siwasup_pdpa_consented');
+        const cap = document.getElementById('pdpa-consent-capsule');
+        if (cap) {
+          if (consented === '1') cap.classList.add('hidden');
+          else cap.classList.remove('hidden');
+        }
+      } catch (e) {}
+    }
+
+    function acceptPdpaConsent() {
+      try {
+        localStorage.setItem('siwasup_pdpa_consented', '1');
+        const cap = document.getElementById('pdpa-consent-capsule');
+        if (cap) cap.classList.add('hidden');
+      } catch (e) {}
+    }
+
+    // Auto-run (Load properties FIRST so allProperties is populated before checkUrlParameters / setMode!)
     loadProperties();
+    checkUrlParameters();
+    if (typeof checkPdpaConsent === 'function') checkPdpaConsent();
     initModalScrollLockObserver();
     if (typeof updateProfileButtons === 'function' && typeof getActiveAgentRef === 'function') {
       updateProfileButtons(getActiveAgentRef());
