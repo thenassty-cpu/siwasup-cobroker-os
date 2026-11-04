@@ -1409,6 +1409,21 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
         parsed_url = urllib.parse.urlparse(self.path)
         path = parsed_url.path
         query = urllib.parse.parse_qs(parsed_url.query)
+
+        # Health & Keep-Alive Heartbeat Endpoint (Wake up Nong Siwa)
+        if path in ("/health", "/api/health", "/ping"):
+            store = load_lobby_data()
+            approved_count = len(store.get("approved", []))
+            self._send_json(200, {
+                "status": "healthy",
+                "service": "Siwasup Co-Broker Webhook v2",
+                "server_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "approved_members": approved_count,
+                "r2_sync": bool(put_object_r2),
+                "anti_downgrade": "ACTIVE",
+                "message": "Nong Siwa is wide awake and ready to serve!"
+            })
+            return
         if path == "/api/contracts/list":
             agent_ref = query.get("agent_ref", [""])[0]
             store = load_contracts_data()
