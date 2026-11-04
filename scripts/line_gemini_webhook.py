@@ -592,7 +592,7 @@ def ask_gemini(user_id, user_text, is_continuous=False, retries=2):
                             # Save to user memory
                             history.append({"user": user_text, "bot": reply})
                             USER_CHAT_HISTORY[user_id] = history[-8:]
-                            return reply, [p.get('code') for p in matched_props], search_mode
+                            return reply, [p.get('code') for p in matched_props], search_mode, matched_props
         except Exception as e:
             print(f"[Gemini Error Attempt {attempt+1}]: {e}")
             time.sleep(1)
@@ -600,24 +600,184 @@ def ask_gemini(user_id, user_text, is_continuous=False, retries=2):
     return (
         "รับทราบครับ! สามารถตรวจสอบรูปจริงและรายละเอียดแปลงทั้งหมดได้ที่ Web Catalog https://assets.siwasup.com/catalog.html ได้เลยครับ",
         [p.get('code') for p in matched_props],
-        search_mode
+        search_mode,
+        matched_props
     )
 
 
-def reply_line(reply_token, reply_text):
+
+def find_property_by_id_or_code(pid):
+    pid_clean = str(pid).strip().lower()
+    for p in SIWASUP_PROPS:
+        if str(p.get("id", "")).strip().lower() == pid_clean or str(p.get("code", "")).strip().lower() == pid_clean:
+            return p
+    for p in CATALOG:
+        if str(p.get("c", "")).strip().lower() == pid_clean:
+            return {
+                "id": p.get("c"),
+                "code": p.get("c"),
+                "title": f"ทรัพย์ NPA {p.get('b', '')}: {p.get('tn', 'บ้าน')} โซน {p.get('d', '')}",
+                "category": p.get("tn", "บ้าน"),
+                "bank_source": p.get("b", "NPA"),
+                "price": f"{p.get('pr', 0):,} บาท" if isinstance(p.get('pr'), (int, float)) else str(p.get('pr', '')),
+                "location": f"{p.get('d', '')} • {p.get('p', 'กทม.')}",
+                "size": f"{p.get('sqw', '')} ตร.ว." if p.get('sqw') else "",
+                "usable_area": f"{p.get('sqm', '')} ตร.ม." if p.get('sqm') else "",
+                "main_image": p.get("img") or "https://assets.siwasup.com/fallback_property.jpg"
+            }
+    return None
+
+
+def build_property_flex_bubble(prop, client_name="คุณลูกค้า", agent_ref="TON"):
+    pid = str(prop.get("id") or prop.get("code") or "")
+    title = str(prop.get("title") or "ทรัพย์คัดสรรพิเศษ ศิวาทรัพย์")
+    price = str(prop.get("price") or "กรุณาสอบถาม")
+    category = str(prop.get("category") or "อสังหาริมทรัพย์")
+    location = str(prop.get("location") or "กรุงเทพมหานครและปริมณฑล")
+    size_str = str(prop.get("size") or prop.get("usable_area") or "")
+    
+    img_url = prop.get("main_image") or "https://assets.siwasup.com/fallback_property.jpg"
+    if not img_url.startswith("http"):
+        img_url = "https://assets.siwasup.com/fallback_property.jpg"
+
+    detail_url = f"https://assets.siwasup.com/catalog.html?property={pid}&ref={agent_ref}&src=flex_carousel"
+
+    bubble = {
+        "type": "bubble",
+        "size": "kilo",
+        "hero": {
+            "type": "image",
+            "url": img_url,
+            "size": "full",
+            "aspectRatio": "20:13",
+            "aspectMode": "cover",
+            "action": {
+                "type": "uri",
+                "uri": detail_url
+            }
+        },
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "paddingAll": "14px",
+            "contents": [
+                {
+                    "type": "box",
+                    "layout": "baseline",
+                    "spacing": "xs",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": f"รหัส {pid}",
+                            "size": "xxs",
+                            "color": "#8C734B",
+                            "weight": "bold",
+                            "flex": 0
+                        },
+                        {
+                            "type": "text",
+                            "text": category,
+                            "size": "xxs",
+                            "color": "#666666",
+                            "align": "end"
+                        }
+                    ]
+                },
+                {
+                    "type": "text",
+                    "text": title,
+                    "weight": "bold",
+                    "size": "sm",
+                    "wrap": True,
+                    "maxLines": 2,
+                    "color": "#1D1D1D"
+                },
+                {
+                    "type": "text",
+                    "text": price,
+                    "weight": "bold",
+                    "size": "md",
+                    "color": "#8B0000"
+                },
+                {
+                    "type": "box",
+                    "layout": "vertical",
+                    "spacing": "xs",
+                    "margin": "xs",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": f"📍 {location}",
+                            "size": "xxs",
+                            "color": "#777777",
+                            "maxLines": 1,
+                            "wrap": True
+                        }
+                    ] + ([{
+                        "type": "text",
+                        "text": f"📐 ขนาด: {size_str}",
+                        "size": "xxs",
+                        "color": "#777777"
+                    }] if size_str else [])
+                }
+            ]
+        },
+        "footer": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "xs",
+            "paddingAll": "12px",
+            "paddingTop": "0px",
+            "contents": [
+                {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#1D1D1D",
+                    "height": "sm",
+                    "action": {
+                        "type": "uri",
+                        "label": "ดูรูปจริง & สเปกเต็ม",
+                        "uri": detail_url
+                    }
+                }
+            ]
+        }
+    }
+    return bubble
+
+
+def build_property_flex_carousel(props, client_name="คุณลูกค้า", agent_ref="TON"):
+    bubbles = [build_property_flex_bubble(p, client_name, agent_ref) for p in props[:10] if p]
+    if not bubbles:
+        return None
+    return {
+        "type": "flex",
+        "altText": f"🏠 คัดสรรทรัพย์พิเศษ {len(bubbles)} หลัง สำหรับ {client_name} (ศิวาทรัพย์ Co-Broker)",
+        "contents": {
+            "type": "carousel",
+            "contents": bubbles
+        }
+    }
+
+def reply_line(reply_token, reply_text, flex_message=None):
     url = "https://api.line.me/v2/bot/message/reply"
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {LINE_ACCESS_TOKEN}"
     }
+    messages = [
+        {
+            "type": "text",
+            "text": reply_text
+        }
+    ]
+    if flex_message and isinstance(flex_message, dict) and flex_message.get("type") == "flex":
+        messages.append(flex_message)
+
     payload = {
         "replyToken": reply_token,
-        "messages": [
-            {
-                "type": "text",
-                "text": reply_text
-            }
-        ]
+        "messages": messages[:5]
     }
     req = urllib.request.Request(
         url,
@@ -888,6 +1048,25 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
         parsed_url = urllib.parse.urlparse(self.path)
         path = parsed_url.path
         query = urllib.parse.parse_qs(parsed_url.query)
+        if path == "/api/bundle/flex":
+            bundle_raw = query.get("bundle", [""])[0]
+            client_name = query.get("for", ["คุณลูกค้า"])[0]
+            agent_ref = query.get("ref", ["TON"])[0]
+            
+            bids = [b.strip() for b in bundle_raw.split(",") if b.strip()]
+            props = []
+            for bid in bids:
+                found = find_property_by_id_or_code(bid)
+                if found:
+                    props.append(found)
+            
+            flex = build_property_flex_carousel(props, client_name=client_name, agent_ref=agent_ref)
+            if flex:
+                self._send_json(200, {"status": "success", "count": len(props), "flex": flex})
+            else:
+                self._send_json(404, {"error": "No properties found for given bundle IDs", "bundle": bids})
+            return
+
         if path == "/api/presence/heartbeat":
             s = self._session()
             if s and s.get("sub"):
@@ -1488,16 +1667,25 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                         "https://assets.siwasup.com/agent_registration.html\n\n"
                                         "เมื่อลงทะเบียนเสร็จ ท่านจะได้นามบัตรเฉพาะตัวพร้อมลิงก์และ QR Code ส่งต่อให้ลูกค้าดูได้ทันทีครับ ✨"
                                     )
-                                    matched_codes, search_mode = [], "ONBOARDING_REGISTRATION"
+                                    matched_codes, search_mode, matched_props, flex_carousel = [], "ONBOARDING_REGISTRATION", [], None
                                 else:
-                                    ai_reply, matched_codes, search_mode = ask_gemini(uid, text, is_continuous=continuous)
+                                    ai_reply, matched_codes, search_mode, matched_props = ask_gemini(uid, text, is_continuous=continuous)
+                                    flex_carousel = None
+                                    if matched_props:
+                                        full_props = []
+                                        for mp in matched_props:
+                                            found = find_property_by_id_or_code(mp.get("code"))
+                                            if found:
+                                                full_props.append(found)
+                                        if full_props:
+                                            flex_carousel = build_property_flex_carousel(full_props, client_name=prof.get("displayName", "คุณลูกค้า"))
                             else:
                                 ai_reply = "น้องศิวาได้รับไฟล์/สติกเกอร์เรียบร้อยครับ หากต้องการค้นหาทรัพย์ พิมพ์รหัสทรัพย์หรือทำเล เช่น '1090965' หรือ 'บ้านเดี่ยว นนทบุรี งบ 4 ล้าน' ได้เลยครับ!"
-                                matched_codes, search_mode = [], "NON_TEXT"
+                                matched_codes, search_mode, matched_props, flex_carousel = [], "NON_TEXT", [], None
 
                             latency_ms = int((time.time() - t0) * 1000)
                             if token:
-                                reply_line(token, ai_reply)
+                                reply_line(token, ai_reply, flex_message=flex_carousel)
 
                             append_chat_log({
                                 "id": f"LOG_{int(time.time()*1000)}",

@@ -824,12 +824,13 @@
       </div>
     </div>
 
-    <!-- 📦 Instant Bundle Modal (มัดรวมส่งลูกค้า) -->
+    <!-- 📦 Instant Bundle Modal (มัดรวมส่งลูกค้า VIP Micro-Catalog & Flex Carousel) -->
     <div id="bundle-modal" class="hidden modal-backdrop">
-      <div class="modal-card space-y-4">
-        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
-          <h3 class="font-bold text-base text-gray-800 flex items-center gap-1.5">
-            <span class="icon-circle w-5 h-5"><i data-lucide="package" class="w-3 h-3 stroke-[1.5]"></i></span>
+      <div class="modal-card space-y-3.5 max-w-lg">
+        <!-- Sticky Header with Pinned Close Button ("คาไว้" ตลอดเวลา ไม่เลื่อนตามสกอร์) -->
+        <div class="sticky top-0 z-30 -mx-5 -mt-5 px-5 pt-4 pb-3 bg-white/95 backdrop-blur-md border-b border-neutral-200/80 flex items-center justify-between shrink-0 shadow-xs rounded-t-[1.5rem]">
+          <h3 class="font-bold text-sm sm:text-base text-gray-800 flex items-center gap-1.5">
+            <span class="icon-circle w-5 h-5 bg-[#C2A460] text-gray-950"><i data-lucide="package" class="w-3 h-3 stroke-[2]"></i></span>
             <span>มัดรวมส่งลูกค้า (VIP Micro-Catalog)</span>
           </h3>
           <div class="flex items-center gap-2">
@@ -840,14 +841,15 @@
             <button 
               type="button" 
               onclick="closeBundleModal()" 
-            aria-label="ปิดหน้าต่าง"
-            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
-          >
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
+              aria-label="ปิดหน้าต่าง"
+              class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
+            >
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
         </div>
 
         <div>
@@ -861,35 +863,68 @@
         </div>
 
         <!-- Selected Properties List Preview -->
-        <div class="space-y-1.5">
-          <div class="text-xs font-bold text-gray-800 flex items-center gap-1.5">
-            <span class="icon-circle w-4 h-4"><i data-lucide="home" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>รายการทรัพย์ที่คัดสรร (<span id="bundle-modal-count">0</span> หลัง):</span>
-          </div>
-          <div id="bundle-selected-list" class="max-h-40 overflow-y-auto space-y-1.5 pr-1"></div>
-        </div>
-
-        <!-- Generated Text Preview for LINE -->
-        <div class="space-y-1.5">
-          <div class="text-xs font-bold text-gray-800 flex justify-between items-center">
+        <div class="space-y-1">
+          <div class="text-xs font-bold text-gray-800 flex items-center justify-between">
             <span class="flex items-center gap-1.5">
-              <span class="icon-circle w-4 h-4"><i data-lucide="message-square" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-              <span>ข้อความแคปชั่นพร้อมส่งใน LINE:</span>
+              <span class="icon-circle w-4 h-4"><i data-lucide="home" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+              <span>รายการทรัพย์ที่คัดสรร (<span id="bundle-modal-count">0</span> หลัง):</span>
             </span>
-            <span class="text-[10px] text-gray-500 font-normal">จัดหน้าสวยงามพร้อมลิงก์</span>
+            <span class="text-[10px] text-gray-400 font-normal">กด ✕ เพื่อเอาออกได้</span>
           </div>
-          <div class="bg-gray-100 border border-gray-300 rounded-lg p-2.5 text-[11px] text-gray-700 whitespace-pre-wrap font-sans leading-relaxed select-all" id="bundle-text-preview"></div>
+          <div id="bundle-selected-list" class="max-h-32 overflow-y-auto space-y-1.5 pr-1"></div>
         </div>
 
-        <div class="grid grid-cols-2 gap-2 pt-1">
-          <button onclick="copyBundleMessage()" class="bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-2.5 px-3 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-            <span class="icon-circle w-4 h-4"><i data-lucide="copy" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>คัดลอกข้อความ</span>
+        <!-- Preview Format Toggle (Flex Carousel Cards vs Text Caption) -->
+        <div class="space-y-2 pt-1 border-t border-gray-100">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5 bg-gray-100 p-0.5 rounded-xl border border-gray-200">
+              <button type="button" id="bundle-tab-cards" onclick="switchBundleTab('cards')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#1D1D1D] text-white transition-all shadow-xs flex items-center gap-1">
+                <span>🎴 การ์ดรูปสไลด์ (Flex)</span>
+              </button>
+              <button type="button" id="bundle-tab-text" onclick="switchBundleTab('text')" class="px-2.5 py-1 rounded-lg text-xs font-semibold text-gray-600 hover:text-gray-900 transition-all flex items-center gap-1">
+                <span>📝 แคปชั่นข้อความ</span>
+              </button>
+            </div>
+            <span class="text-[10px] text-emerald-800 bg-emerald-50 font-bold px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>LINE Ready</span>
+            </span>
+          </div>
+
+          <!-- Tab 1: Live Interactive Card Carousel Preview -->
+          <div id="bundle-cards-view" class="space-y-1.5">
+            <div class="text-[10.5px] text-gray-500 flex items-center justify-between">
+              <span>ตัวอย่าง Card Carousel ใน LINE (ปัดซ้าย-ขวาได้):</span>
+              <span class="text-[10px] text-gray-400">เลื่อนดูการ์ด &rarr;</span>
+            </div>
+            <div id="bundle-cards-carousel" class="flex gap-2.5 overflow-x-auto pb-2 pt-1 no-scrollbar">
+              <!-- Dynamically injected via renderBundleCardsPreview() -->
+            </div>
+          </div>
+
+          <!-- Tab 2: Generated Text Preview for LINE -->
+          <div id="bundle-text-view" class="space-y-1.5 hidden">
+            <div class="bg-gray-100 border border-gray-300 rounded-lg p-2.5 text-[11px] text-gray-700 whitespace-pre-wrap font-sans leading-relaxed select-all max-h-36 overflow-y-auto" id="bundle-text-preview"></div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="space-y-2 pt-1">
+          <button type="button" onclick="sendBundleAsFlexCarousel()" class="w-full bg-[#06C755] hover:bg-[#05a844] text-white font-extrabold py-3 px-4 rounded-xl text-xs shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer">
+            <span class="text-sm">🎴</span>
+            <span>แชร์เป็นการ์ดรูปสไลด์ใน LINE (Flex Carousel)</span>
           </button>
-          <button onclick="sendBundleToLine()" class="bg-white hover:bg-neutral-50 border border-neutral-200 hover:border-emerald-500 text-neutral-800 hover:text-emerald-700 font-bold py-2.5 px-3 rounded-xl text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-            <span class="w-4 h-4 rounded-full bg-[#06C755] text-white flex items-center justify-center text-[9px] font-black shrink-0">L</span>
-            <span>ส่งเข้าแอป LINE</span>
-          </button>
+          
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" onclick="copyBundleMessage()" class="bg-neutral-900 hover:bg-neutral-800 text-white font-bold py-2.5 px-3 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer">
+              <span class="icon-circle w-4 h-4"><i data-lucide="copy" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+              <span>คัดลอกแคปชั่น</span>
+            </button>
+            <button type="button" onclick="sendBundleToLine()" class="bg-white hover:bg-gray-50 border border-gray-300 text-gray-800 font-bold py-2.5 px-3 rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer">
+              <span class="w-4 h-4 rounded-full bg-[#06C755] text-white flex items-center justify-center text-[9px] font-black shrink-0">L</span>
+              <span>ส่ง LINE (ลิงก์เว็บ)</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

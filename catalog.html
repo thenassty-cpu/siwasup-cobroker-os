@@ -5020,6 +5020,7 @@
       }
       document.getElementById('bundle-modal-count').textContent = selectedBundleIds.size;
       renderBundleSelectedList();
+      renderBundleCardsPreview();
       updateBundlePreview();
       document.getElementById('bundle-modal').classList.remove('hidden');
       if (window.lucide) { lucide.createIcons(); }
@@ -5472,6 +5473,191 @@
     }
 
     if (window.lucide) { lucide.createIcons(); }
+  
+    function switchBundleTab(tab) {
+      const btnCards = document.getElementById('bundle-tab-cards');
+      const btnText = document.getElementById('bundle-tab-text');
+      const viewCards = document.getElementById('bundle-cards-view');
+      const viewText = document.getElementById('bundle-text-view');
+
+      if (!btnCards || !btnText || !viewCards || !viewText) return;
+
+      if (tab === 'cards') {
+        btnCards.className = "px-2.5 py-1 rounded-lg text-xs font-bold bg-[#1D1D1D] text-white transition-all shadow-xs flex items-center gap-1";
+        btnText.className = "px-2.5 py-1 rounded-lg text-xs font-semibold text-gray-600 hover:text-gray-900 transition-all flex items-center gap-1";
+        viewCards.classList.remove('hidden');
+        viewText.classList.add('hidden');
+        renderBundleCardsPreview();
+      } else {
+        btnText.className = "px-2.5 py-1 rounded-lg text-xs font-bold bg-[#1D1D1D] text-white transition-all shadow-xs flex items-center gap-1";
+        btnCards.className = "px-2.5 py-1 rounded-lg text-xs font-semibold text-gray-600 hover:text-gray-900 transition-all flex items-center gap-1";
+        viewText.classList.remove('hidden');
+        viewCards.classList.add('hidden');
+        updateBundlePreview();
+      }
+      if (window.lucide) { lucide.createIcons(); }
+    }
+
+    function renderBundleCardsPreview() {
+      const carouselEl = document.getElementById('bundle-cards-carousel');
+      if (!carouselEl) return;
+
+      const items = allProperties.filter(p => selectedBundleIds.has(String(p.id)) || selectedBundleIds.has(p.id));
+      if (items.length === 0) {
+        carouselEl.innerHTML = '<div class="text-xs text-gray-400 py-4 text-center w-full">ยังไม่ได้เลือกทรัพย์</div>';
+        return;
+      }
+
+      carouselEl.innerHTML = items.map(p => {
+        const img = p.main_image || "https://assets.siwasup.com/fallback_property.jpg";
+        const cat = p.category || "บ้านเดี่ยว";
+        const loc = p.location || "กรุงเทพฯ และปริมณฑล";
+        return `
+          <div class="w-44 sm:w-48 shrink-0 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-xs hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <div class="relative w-full h-24 bg-gray-100 overflow-hidden">
+                <img src="${img}" class="w-full h-full object-cover" onerror="this.src='https://assets.siwasup.com/fallback_property.jpg'">
+                <span class="absolute top-1.5 left-1.5 bg-black/70 text-white font-mono text-[9px] px-1.5 py-0.5 rounded backdrop-blur-xs font-bold">
+                  รหัส ${p.id || p.code}
+                </span>
+                <span class="absolute top-1.5 right-1.5 bg-amber-500/90 text-white text-[9px] px-1.5 py-0.5 rounded font-bold">
+                  ${cat}
+                </span>
+              </div>
+              <div class="p-2 space-y-1">
+                <div class="font-bold text-[11px] text-gray-900 line-clamp-2 leading-tight">${p.title}</div>
+                <div class="font-extrabold text-xs text-[#8B0000]">${p.price}</div>
+                <div class="text-[9.5px] text-gray-500 truncate flex items-center gap-0.5">
+                  <span>📍</span>
+                  <span class="truncate">${loc}</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-2 pt-0">
+              <div class="w-full bg-[#1D1D1D] text-white text-[10px] font-bold py-1.5 rounded-lg text-center shadow-xs">
+                ดูรูปจริง & สเปกเต็ม
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function getBundleFlexPayload() {
+      const clientName = (document.getElementById('bundle-client-name').value || 'คุณลูกค้า').trim();
+      const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'TON';
+      const items = allProperties.filter(p => selectedBundleIds.has(String(p.id)) || selectedBundleIds.has(p.id));
+
+      const bubbles = items.slice(0, 10).map(p => {
+        const pid = String(p.id || p.code || '');
+        const detailUrl = `${getBaseUrl()}?property=${pid}&ref=${encodeURIComponent(savedRef)}&src=flex_carousel`;
+        const img = p.main_image || "https://assets.siwasup.com/fallback_property.jpg";
+        return {
+          type: "bubble",
+          size: "kilo",
+          hero: {
+            type: "image",
+            url: img.startsWith("http") ? img : "https://assets.siwasup.com/fallback_property.jpg",
+            size: "full",
+            aspectRatio: "20:13",
+            aspectMode: "cover",
+            action: { type: "uri", uri: detailUrl }
+          },
+          body: {
+            type: "box",
+            layout: "vertical",
+            spacing: "sm",
+            paddingAll: "14px",
+            contents: [
+              {
+                type: "box",
+                layout: "baseline",
+                spacing: "xs",
+                contents: [
+                  { type: "text", text: `รหัส ${pid}`, size: "xxs", color: "#8C734B", weight: "bold", flex: 0 },
+                  { type: "text", text: p.category || "อสังหาริมทรัพย์", size: "xxs", color: "#666666", align: "end" }
+                ]
+              },
+              { type: "text", text: p.title || "ทรัพย์คัดสรรพิเศษ", weight: "bold", size: "sm", wrap: true, maxLines: 2, color: "#1D1D1D" },
+              { type: "text", text: p.price || "", weight: "bold", size: "md", color: "#8B0000" },
+              {
+                type: "box",
+                layout: "vertical",
+                spacing: "xs",
+                margin: "xs",
+                contents: [
+                  { type: "text", text: `📍 ${p.location || 'กรุงเทพมหานคร'}`, size: "xxs", color: "#777777", maxLines: 1, wrap: true }
+                ]
+              }
+            ]
+          },
+          footer: {
+            type: "box",
+            layout: "vertical",
+            spacing: "xs",
+            paddingAll: "12px",
+            paddingTop: "0px",
+            contents: [
+              {
+                type: "button",
+                style: "primary",
+                color: "#1D1D1D",
+                height: "sm",
+                action: { type: "uri", label: "ดูรูปจริง & สเปกเต็ม", uri: detailUrl }
+              }
+            ]
+          }
+        };
+      });
+
+      return {
+        type: "flex",
+        altText: `🏠 คัดสรรทรัพย์พิเศษ ${bubbles.length} หลัง สำหรับ ${clientName} (ศิวาทรัพย์ Co-Broker)`,
+        contents: {
+          type: "carousel",
+          contents: bubbles
+        }
+      };
+    }
+
+    function sendBundleAsFlexCarousel() {
+      const clientName = (document.getElementById('bundle-client-name').value || 'คุณลูกค้า').trim();
+      const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'TON';
+      const items = allProperties.filter(p => selectedBundleIds.has(String(p.id)) || selectedBundleIds.has(p.id));
+      const bundleIds = Array.from(selectedBundleIds).join(',');
+      const bundleUrl = `${getBaseUrl()}?bundle=${bundleIds}&for=${encodeURIComponent(clientName)}&ref=${encodeURIComponent(savedRef)}&src=bundle_flex`;
+
+      // 1. If inside LINE LIFF and shareTargetPicker is supported
+      if (window.liff && typeof liff.isApiAvailable === 'function' && liff.isApiAvailable('shareTargetPicker')) {
+        const payload = getBundleFlexPayload();
+        liff.shareTargetPicker([payload]).then((res) => {
+          if (res) {
+            showToast('🎉 ส่งการ์ดรูปสไลด์ (Flex Carousel) เข้าแชท LINE สำเร็จแล้ว!');
+            closeBundleModal();
+            clearBundleSelection();
+          }
+        }).catch((err) => {
+          console.log("LIFF Picker Error, fallback to direct share:", err);
+          fallbackShareFlex(bundleUrl, items.length, clientName);
+        });
+      } else {
+        fallbackShareFlex(bundleUrl, items.length, clientName);
+      }
+    }
+
+    function fallbackShareFlex(bundleUrl, count, clientName) {
+      const msg = getBundleMessageText();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(msg).catch(() => {});
+      }
+      const shareText = `คัดสรรทรัพย์พิเศษ ${count} หลัง สำหรับ ${clientName} (ศิวาทรัพย์ Co-Broker)`;
+      const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(bundleUrl)}&text=${encodeURIComponent(shareText)}`;
+      window.open(lineUrl, '_blank');
+      showToast('🚀 เปิดแชร์การ์ดเข้า LINE เรียบร้อย! (รีเซ็ตถาดมัดรวมแล้ว)');
+      closeBundleModal();
+      clearBundleSelection();
+    }
+
   </script>
   <!-- 🚀 Floating Back to Top Button (Digital Luxury Frosted Glass) -->
   <button id="btn-back-to-top"
