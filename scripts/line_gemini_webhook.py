@@ -287,19 +287,20 @@ def auto_heal_member_line_profile(user_id, prof=None, text_content=""):
     if not matched_member and display_name:
         name_lower = display_name.lower().replace(' ', '')
         keywords_map = [
-            ('app_office_001', ['jeab', 'varin', 'กูล', 'เจี๊ยบ', 'sw001']),
-            ('app_office_002', ['บัว', 'ภมรมาศ', 'bua']),
-            ('app_office_003', ['ลิลลี่', 'วรวลัญช์', 'lily', 'ท่าข้าม']),
-            ('app_admin_001',  ['ออย', 'สุภาพร', 'oil']),
-            ('app_admin_002',  ['ป๊อปปี้', 'ณัฐสุดา', 'poppy']),
-            ('app_office_004', ['nassty', 'ton', 'คุณต้น', 'ต้น']),
-            ('app_agent_001',  ['จูน', 'เขมิกา', 'june']),
-            ('app_agent_002',  ['เจง', 'สุภาวดี', 'jeng']),
-            ('app_agent_003',  ['กัญ', 'อนัญญา', 'kan']),
-            ('app_agent_004',  ['สิทธิชัย', 'โก้', 'ไห้']),
-            ('app_agent_005',  ['หลิว', 'พัชญ์ณิภา', 'liew']),
-            ('app_agent_006',  ['จี๊ด', 'แป้ง', 'นภมกร']),
-            ('app_agent_007',  ['ใจดี', 'jaidee']),
+            # Strict Distinctive Tokens: Prevent loose substring collisions (e.g., 'ใบบัว', 'ต้นไม้', 'baby oil')
+            ('app_office_001', ['varinthorn', 'กูลจีรัง', 'sw001 jeab', 'jeab v@r']),
+            ('app_office_002', ['ตันฑเศรษฐี', 'ภมรมาศ', 'pamornmas']),
+            ('app_office_003', ['ว่องสุวรรณวาร', 'วรวลัญช์', 'vorawalun']),
+            ('app_admin_001',  ['สุภาพร by ศิวาทรัพย์', 'สุภาพร']),
+            ('app_admin_002',  ['ณัฐสุดา พรพริ้ง', 'ณัฐสุดา', 'พรพริ้ง']),
+            ('app_office_004', ['nassty', 'thenassty']),
+            ('app_agent_001',  ['เขมิกา ศิวาทรัพย์', 'เขมิกา']),
+            ('app_agent_002',  ['ประกายเกียรติกุล', 'สุภาวดี']),
+            ('app_agent_003',  ['อนัญญา(กัญ)', 'อนัญญา สาททอง']),
+            ('app_agent_004',  ['สิทธิชัย มฤคพานิช', 'มฤคพานิช', 'มกุลพานิช']),
+            ('app_agent_005',  ['พัชญ์ณิภา เอื้อปัญญากุล', 'พัชญ์ณิภา', 'เอื้อประโยชน์กิจ']),
+            ('app_agent_006',  ['นภมกร วรพัทธ์กุล', 'นภมกร', 'วรพัทธ์ภูดิท']),
+            ('app_agent_007',  ['jaidee asset', 'jaidee0902', 'สุหทัย ปานทอง']),
         ]
         for mem_id, kws in keywords_map:
             if any(k.lower() in name_lower for k in kws):
