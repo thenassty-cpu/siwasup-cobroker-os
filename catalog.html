@@ -3662,6 +3662,41 @@
     // --- SMART SHARE CENTER FUNCTIONS ---
     let currentShareProp = null;
 
+    // Helper for robust clipboard copy on mobile / Safari / iOS / In-app Webviews
+    function copyTextToClipboard(text, successMsg) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+          if (successMsg) showToast(successMsg);
+        }).catch(() => {
+          fallbackCopyText(text, successMsg);
+        });
+      } else {
+        fallbackCopyText(text, successMsg);
+      }
+    }
+
+    function fallbackCopyText(text, successMsg) {
+      try {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        textArea.style.top = "0";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        if (successful) {
+          if (successMsg) showToast(successMsg);
+        } else {
+          prompt("กดค้างเพื่อคัดลอกข้อความ:", text);
+        }
+      } catch (err) {
+        prompt("กดค้างเพื่อคัดลอกข้อความ:", text);
+      }
+    }
+
     function openSmartShare(id, title) {
       currentShareProp = { id, title };
       const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'AG-บัวรา';
@@ -3673,10 +3708,14 @@
         propInfo.innerHTML = `
           <div class="font-bold text-gray-900 flex items-center gap-1.5 truncate">
             <span class="icon-circle w-4 h-4 shrink-0"><i data-lucide="home" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span class="truncate">${title}</span>
+            <span class="truncate" id="share-modal-title-span"></span>
           </div>
-          <div class="text-[10px] text-gray-600">รหัสทรัพย์: <span class="font-mono text-amber-800 font-bold">${id}</span></div>
+          <div class="text-[10px] text-gray-600">รหัสทรัพย์: <span class="font-mono text-amber-800 font-bold" id="share-modal-id-span"></span></div>
         `;
+        const titleSpan = document.getElementById('share-modal-title-span');
+        const idSpan = document.getElementById('share-modal-id-span');
+        if (titleSpan) titleSpan.textContent = title || '';
+        if (idSpan) idSpan.textContent = id || '';
       }
 
       // Reset desktop QR panel state on fresh open
@@ -3716,7 +3755,8 @@
       const ref = encodeURIComponent(rawRef || 'AG-บัวรา');
       localStorage.setItem('siwasup_my_agent_ref', rawRef || 'AG-บัวรา');
       
-      const qrUrl = `${getBaseUrl()}?view=client&prop=${currentShareProp.id}&ref=${ref}&src=qr_sign`;
+      const safePropId = encodeURIComponent(currentShareProp.id);
+      const qrUrl = `${getBaseUrl()}?view=client&prop=${safePropId}&ref=${ref}&src=qr_sign`;
       const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrUrl)}`;
 
       const desktopImg = document.getElementById('qr-image-desktop');
@@ -3745,7 +3785,8 @@
       const refInput = document.getElementById('agent-ref-input');
       const rawRef = refInput ? refInput.value.trim() : 'S90';
       const ref = encodeURIComponent(rawRef || 'S90');
-      const targetUrl = `${getBaseUrl()}?view=client&property=${p.id}&ref=${ref}&src=line`;
+      const safePropId = encodeURIComponent(p.id);
+      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=line`;
 
       const title = (typeof getDisplayTitle === 'function' ? getDisplayTitle(p) : (p.title || `ทรัพย์ NPA รหัส #${p.id}`));
       const price = p.price || '';
@@ -3759,7 +3800,14 @@
       }
 
       const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(text)}`;
-      window.open(lineUrl, '_blank');
+      
+      // If inside mobile browser / in-app webview, window.location.href avoids popup blocker
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.location.href = lineUrl;
+      } else {
+        window.open(lineUrl, '_blank');
+      }
       showToast('🚀 กำลังเปิด LINE เพื่อส่งต่อ...');
     }
 
@@ -3769,7 +3817,8 @@
       const refInput = document.getElementById('agent-ref-input');
       const rawRef = refInput ? refInput.value.trim() : 'S90';
       const ref = encodeURIComponent(rawRef || 'S90');
-      const targetUrl = `${getBaseUrl()}?view=client&property=${p.id}&ref=${ref}&src=line`;
+      const safePropId = encodeURIComponent(p.id);
+      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=line`;
 
       const title = (typeof getDisplayTitle === 'function' ? getDisplayTitle(p) : (p.title || `ทรัพย์ NPA รหัส #${p.id}`));
       const price = p.price || '';
@@ -3778,12 +3827,8 @@
 
       const text = `🏡 ${title}\n💰 ราคา: ${price}\n📍 ทำเล: ${loc} ${size ? `• ${size}` : ''}\n\n✨ ทรัพย์คัดพิเศษ ยื่นกู้ได้เต็ม ดูแลเอกสารฟรี\n👉 ดูรูปจริง & รายละเอียด: ${targetUrl}`;
 
-      navigator.clipboard.writeText(text).then(() => {
-        showToast('📋 คัดลอกแคปชั่น LINE พร้อมส่งเรียบร้อย!');
-        closeShareModal();
-      }).catch(() => {
-        copyChannelLink('line');
-      });
+      copyTextToClipboard(text, '📋 คัดลอกแคปชั่น LINE พร้อมส่งเรียบร้อย!');
+      closeShareModal();
     }
 
     function shareDirectToFacebook() {
@@ -3792,14 +3837,20 @@
       const refInput = document.getElementById('agent-ref-input');
       const rawRef = refInput ? refInput.value.trim() : 'S90';
       const ref = encodeURIComponent(rawRef || 'S90');
-      const targetUrl = `${getBaseUrl()}?view=client&property=${p.id}&ref=${ref}&src=facebook`;
+      const safePropId = encodeURIComponent(p.id);
+      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=facebook`;
 
       if (window.SiwasupAgents && typeof window.SiwasupAgents.award === 'function' && rawRef) {
         window.SiwasupAgents.award(rawRef, 'smart_share_click', { channel: 'facebook', propId: p.id });
       }
 
       const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(targetUrl)}`;
-      window.open(fbUrl, '_blank', 'width=600,height=550');
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.location.href = fbUrl;
+      } else {
+        window.open(fbUrl, '_blank', 'width=600,height=550');
+      }
       showToast('🚀 เปิดหน้าต่างแชร์ Facebook เรียบร้อย');
     }
 
@@ -3809,7 +3860,8 @@
       const refInput = document.getElementById('agent-ref-input');
       const rawRef = refInput ? refInput.value.trim() : 'S90';
       const ref = encodeURIComponent(rawRef || 'S90');
-      const targetUrl = `${getBaseUrl()}?view=client&property=${p.id}&ref=${ref}&src=facebook`;
+      const safePropId = encodeURIComponent(p.id);
+      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=facebook`;
 
       const title = (typeof getDisplayTitle === 'function' ? getDisplayTitle(p) : (p.title || `ทรัพย์ NPA #${p.id}`));
       const price = p.price || '';
@@ -3828,12 +3880,8 @@
         `👉 ${targetUrl}\n\n` +
         `#บ้านมือสอง #ทรัพย์NPA #ขายบ้าน #ศิวาทรัพย์ #สินเชื่อบ้าน`;
 
-      navigator.clipboard.writeText(postText).then(() => {
-        showToast('📋 คัดลอกโพสต์ขาย Facebook Marketplace สำเร็จ!');
-        closeShareModal();
-      }).catch(() => {
-        copyChannelLink('facebook');
-      });
+      copyTextToClipboard(postText, '📋 คัดลอกโพสต์ขาย Facebook Marketplace สำเร็จ!');
+      closeShareModal();
     }
 
     function copyTikTokBioCaption() {
@@ -3842,7 +3890,8 @@
       const refInput = document.getElementById('agent-ref-input');
       const rawRef = refInput ? refInput.value.trim() : 'S90';
       const ref = encodeURIComponent(rawRef || 'S90');
-      const targetUrl = `${getBaseUrl()}?view=client&property=${p.id}&ref=${ref}&src=tiktok`;
+      const safePropId = encodeURIComponent(p.id);
+      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=tiktok`;
 
       const title = (typeof getDisplayTitle === 'function' ? getDisplayTitle(p) : (p.title || `ทรัพย์ NPA #${p.id}`));
       const price = p.price || '';
@@ -3850,12 +3899,8 @@
 
       const caption = `🏡 ${title} ราคาดีมาก ${price} (${loc}) กู้ได้เต็ม 100% 📍 พิกัด & ดูรูปจริงกดลิงก์หน้าโปรไฟล์: ${targetUrl}`;
 
-      navigator.clipboard.writeText(caption).then(() => {
-        showToast('📋 คัดลอกแคปชั่นสำหรับ TikTok / Reels สำเร็จ!');
-        closeShareModal();
-      }).catch(() => {
-        copyChannelLink('tiktok');
-      });
+      copyTextToClipboard(caption, '📋 คัดลอกแคปชั่นสำหรับ TikTok / Reels สำเร็จ!');
+      closeShareModal();
     }
 
     function shareViaSystemNative() {
@@ -3864,7 +3909,8 @@
       const refInput = document.getElementById('agent-ref-input');
       const rawRef = refInput ? refInput.value.trim() : 'S90';
       const ref = encodeURIComponent(rawRef || 'S90');
-      const targetUrl = `${getBaseUrl()}?view=client&property=${p.id}&ref=${ref}&src=native_share`;
+      const safePropId = encodeURIComponent(p.id);
+      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=native_share`;
 
       const title = (typeof getDisplayTitle === 'function' ? getDisplayTitle(p) : (p.title || `ทรัพย์ NPA #${p.id}`));
       const price = p.price || '';
@@ -3881,10 +3927,15 @@
           showToast('🎉 แชร์ผ่านมือถือสำเร็จ!');
           closeShareModal();
         }).catch(err => {
-          console.log('Share dismissed or cancelled');
+          if (err && err.name === 'AbortError') {
+            // User canceled / dismissed share dialog - do not show error
+            return;
+          }
+          console.warn('Native share error, fallback to LINE:', err);
+          shareDirectToLine();
         });
       } else {
-        // Fallback to LINE or direct copy
+        // Fallback to LINE
         shareDirectToLine();
       }
     }
@@ -3894,24 +3945,21 @@
       const refInput = document.getElementById('agent-ref-input');
       const rawRef = refInput ? refInput.value.trim() : 'S90';
       const ref = encodeURIComponent(rawRef || 'S90');
-      const targetUrl = `${getBaseUrl()}?view=client&prop=${currentShareProp.id}&ref=${ref}&src=${channel}`;
+      const safePropId = encodeURIComponent(currentShareProp.id);
+      const targetUrl = `${getBaseUrl()}?view=client&prop=${safePropId}&ref=${ref}&src=${channel}`;
       
       // Automated Point Trigger: Smart Share Activity (+5 points)
       if (window.SiwasupAgents && typeof window.SiwasupAgents.award === 'function' && rawRef) {
         window.SiwasupAgents.award(rawRef, 'smart_share_click', { channel: channel, propId: currentShareProp.id });
       }
 
-      navigator.clipboard.writeText(targetUrl).then(() => {
-        const channelThai = channel === 'facebook' ? 'Facebook' 
-                          : channel === 'tiktok' ? 'TikTok' 
-                          : channel === 'line' ? 'LINE' 
-                          : channel === 'qr_sign' ? 'QR Code' 
-                          : 'ทั่วไป';
-        showToast(`✅ คัดลอกลิงก์สำหรับ ${channelThai} แล้ว (ล็อกสิทธิ์ ${rawRef} • +5 แต้มกิจกรรม)`);
-        closeShareModal();
-      }).catch(() => {
-        showToast(`ลิงก์พร้อมใช้: ${targetUrl}`);
-      });
+      const channelThai = channel === 'facebook' ? 'Facebook' 
+                        : channel === 'tiktok' ? 'TikTok' 
+                        : channel === 'line' ? 'LINE' 
+                        : channel === 'qr_sign' ? 'QR Code' 
+                        : 'ทั่วไป';
+      copyTextToClipboard(targetUrl, `✅ คัดลอกลิงก์สำหรับ ${channelThai} แล้ว (ล็อกสิทธิ์ ${rawRef} • +5 แต้มกิจกรรม)`);
+      closeShareModal();
     }
 
     function toggleQrView() {
