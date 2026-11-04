@@ -289,7 +289,7 @@ def auto_heal_member_line_profile(user_id, prof=None, text_content=""):
         keywords_map = [
             # Strict Distinctive Tokens: Prevent loose substring collisions (e.g., 'ใบบัว', 'ต้นไม้', 'baby oil')
             ('app_office_001', ['varinthorn', 'กูลจีรัง', 'sw001 jeab', 'jeab v@r']),
-            ('app_office_002', ['ตันฑเศรษฐี', 'ภมรมาศ', 'pamornmas']),
+            ('app_office_002', ['ตันฑุลทุกุล', 'ภมรมาศ', 'pamornmas']),
             ('app_office_003', ['ว่องสุวรรณวาร', 'วรวลัญช์', 'vorawalun']),
             ('app_admin_001',  ['สุภาพร by ศิวาทรัพย์', 'สุภาพร']),
             ('app_admin_002',  ['ณัฐสุดา พรพริ้ง', 'ณัฐสุดา', 'พรพริ้ง']),
