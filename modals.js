@@ -1135,7 +1135,7 @@
     <div 
       id="property-detail-modal" 
       onclick="if(event.target === this) closePropertyDetailModal()" 
-      class="fixed inset-0 z-50 bg-slate-950/45 backdrop-blur-sm flex items-center justify-center px-3 pt-10 pb-6 sm:p-6 hidden modal-backdrop"
+      class="fixed inset-0 z-[9999] bg-slate-950/45 backdrop-blur-sm flex items-center justify-center px-3 pt-10 pb-6 sm:p-6 hidden modal-backdrop"
     >
       <!-- Modal Container: ล็อกความสูงไม่เกิน 82dvh (มือถือ) / 88dvh (คอม) และใช้ flex-col เพื่อแยกส่วนเลื่อน -->
       <div class="relative w-full max-w-lg max-h-[82dvh] sm:max-h-[88dvh] bg-white rounded-3xl shadow-2xl border border-neutral-200/80 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
@@ -1351,7 +1351,7 @@
     </div>
 
     <!-- 🏆 Agent Directory & Leaderboard Modal (125 Agents: S02-S126) -->
-    <div id="agent-leaderboard-modal" onclick="if(event.target === this) closeAgentLeaderboardModal()" class="hidden modal-backdrop fixed inset-0 z-50 bg-neutral-950/60 backdrop-blur-xs flex items-center justify-center px-3 pt-6 pb-6 sm:p-6">
+    <div id="agent-leaderboard-modal" onclick="if(event.target === this) closeAgentLeaderboardModal()" class="hidden modal-backdrop fixed inset-0 z-[9999] bg-neutral-950/60 backdrop-blur-xs flex items-center justify-center px-3 pt-6 pb-6 sm:p-6">
       <div class="relative w-full max-w-2xl max-h-[84dvh] sm:max-h-[88dvh] bg-white rounded-3xl shadow-2xl border border-neutral-200/80 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         
         <!-- 1. Fixed Header (คลีน ขาว-ดำ-ทอง พร้อมปุ่มปิดคาไว้ขนาดใหญ่ w-9 h-9) -->
@@ -1608,7 +1608,7 @@
     <div 
       id="modal-my-profile" 
       onclick="if(event.target === this) closeMyProfileModal()" 
-      class="hidden modal-backdrop fixed inset-0 z-50 bg-neutral-950/60 backdrop-blur-xs flex items-center justify-center px-3 pt-6 pb-6 sm:p-6"
+      class="hidden modal-backdrop fixed inset-0 z-[9999] bg-neutral-950/60 backdrop-blur-xs flex items-center justify-center px-3 pt-6 pb-6 sm:p-6"
     >
       <div class="modal-card relative w-full max-w-md max-h-[84dvh] sm:max-h-[88dvh] bg-white rounded-3xl shadow-2xl border border-neutral-200/80 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200 !p-0">
         
@@ -1839,7 +1839,7 @@
     <div 
       id="npa-key-dispatch-modal" 
       onclick="if(event.target === this) closeNpaKeyModal()"
-      class="fixed inset-0 z-[100] bg-neutral-950/65 backdrop-blur-xs flex items-center justify-center px-3 pt-10 pb-6 sm:p-6 hidden modal-backdrop"
+      class="fixed inset-0 z-[9999] bg-neutral-950/65 backdrop-blur-xs flex items-center justify-center px-3 pt-10 pb-6 sm:p-6 hidden modal-backdrop"
     >
       <!-- Modal Container: ล็อกความสูง max-h-[82dvh] sm:max-h-[88dvh] ไม่มุดขอบบน Chrome -->
       <div class="relative w-full max-w-lg max-h-[82dvh] sm:max-h-[88dvh] bg-white rounded-3xl shadow-2xl border border-neutral-200/80 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
@@ -2189,7 +2189,7 @@
     </div>
 
     <!-- 📅 Admin Appointments & Showing Queue Modal (สำหรับบัว, กูล, พี่ลิลลี่) -->
-    <div id="admin-appointments-modal" onclick="if(event.target === this) closeAdminCaseAppointments()" class="hidden modal-backdrop fixed inset-0 z-[110] bg-neutral-950/65 backdrop-blur-xs flex items-center justify-center px-3 pt-6 pb-6 sm:p-6">
+    <div id="admin-appointments-modal" onclick="if(event.target === this) closeAdminCaseAppointments()" class="hidden modal-backdrop fixed inset-0 z-[9999] bg-neutral-950/65 backdrop-blur-xs flex items-center justify-center px-3 pt-6 pb-6 sm:p-6">
       <div class="relative w-full max-w-lg max-h-[85dvh] bg-white rounded-3xl shadow-2xl border border-neutral-200/90 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         
         <!-- Header -->
