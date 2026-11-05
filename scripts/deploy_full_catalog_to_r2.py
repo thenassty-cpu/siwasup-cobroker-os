@@ -15,6 +15,8 @@ files_to_upload = [
     ("siwasup_all_properties.json", "application/json; charset=utf-8"),
     (os.path.join("data", "catalog_index.json"), "application/json; charset=utf-8"),
     (os.path.join("assets", "documents", "siwasup_sales_contract.html"), "text/html; charset=utf-8"),
+    ("offline_log_exporter.html", "text/html; charset=utf-8"),
+    (os.path.join("data", "line_chat_logs.json"), "application/json; charset=utf-8"),
 ]
 
 for item, ctype in files_to_upload:
