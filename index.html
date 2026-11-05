@@ -272,6 +272,9 @@
       }
     }
   </style>
+  <!-- Leaflet Map CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body class="bg-[#fafbfc] min-h-screen text-gray-800 pb-0 overflow-x-hidden w-full max-w-full">
 
@@ -2359,11 +2362,11 @@
 
           <div class="flex items-center justify-between sm:justify-end gap-2.5 shrink-0">
             <div class="p-0.5 rounded-xl bg-neutral-100 border border-neutral-200/70 flex items-center text-xs shrink-0">
-              <button class="px-2.5 py-1 rounded-lg bg-white text-neutral-900 font-semibold shadow-2xs flex items-center gap-1 whitespace-nowrap">
+              <button type="button" onclick="switchViewMode('grid')" class="px-2.5 py-1 rounded-lg ${currentViewMode === 'grid' ? 'bg-white text-neutral-900 font-semibold shadow-2xs' : 'text-neutral-500 hover:text-neutral-800 font-medium'} flex items-center gap-1 whitespace-nowrap transition-colors">
                 <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
                 <span>ตาราง</span>
               </button>
-              <button onclick="showToast('โหมดแผนที่จะเปิดเร็วๆ นี้')" class="px-2.5 py-1 rounded-lg text-neutral-500 hover:text-neutral-800 font-medium flex items-center gap-1 transition-colors whitespace-nowrap">
+              <button type="button" onclick="switchViewMode('map')" class="px-2.5 py-1 rounded-lg ${currentViewMode === 'map' ? 'bg-white text-[#ED1C24] font-bold shadow-2xs' : 'text-neutral-500 hover:text-neutral-800 font-medium'} flex items-center gap-1 transition-colors whitespace-nowrap">
                 <i data-lucide="map" class="w-3.5 h-3.5"></i>
                 <span>แผนที่</span>
               </button>
@@ -2692,7 +2695,29 @@
         `;
       }
 
-      container.innerHTML = ownerHeaderHtml + subHeaderHtml + `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">${cardsHtml}</div>` + paginationHtml;
+      if (currentViewMode === 'map') {
+        container.innerHTML = ownerHeaderHtml + subHeaderHtml + `
+          <div class="space-y-3 animate-fadeIn">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-3 py-2 bg-white rounded-xl border border-neutral-200 shadow-2xs text-xs">
+              <div class="flex items-center gap-4 flex-wrap">
+                <span class="inline-flex items-center gap-1.5 font-semibold text-neutral-700">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#ED1C24] shadow-2xs"></span> พิกัดดาวเทียมตรงเป๊ะ (GPS)
+                </span>
+                <span class="inline-flex items-center gap-1.5 font-semibold text-neutral-700">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#F59E0B] shadow-2xs"></span> พิกัดโซน/อำเภอ (โดยประมาณ)
+                </span>
+              </div>
+              <span id="map-badge-counter" class="text-neutral-500 font-medium text-[11px]">
+                กำลังโหลดหมุดแปลงที่ดิน...
+              </span>
+            </div>
+            <div id="siwasup-map-container" class="w-full h-[620px] rounded-2xl border border-neutral-200/90 shadow-sm relative overflow-hidden z-0"></div>
+          </div>
+        `;
+        initOrUpdateLeafletMap(filtered);
+      } else {
+        container.innerHTML = ownerHeaderHtml + subHeaderHtml + `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">${cardsHtml}</div>` + paginationHtml;
+      }
 
       if (window.lucide) { lucide.createIcons(); }
     }
@@ -5962,6 +5987,183 @@
       ยอมรับ
     </button>
   </div>
+
+
+  <script>
+    // ==========================================
+    // SIWASUP DYNAMIC MAP VIEW ENGINE (LEAFLET)
+    // ==========================================
+    let currentViewMode = 'grid'; // 'grid' | 'map'
+    let siwasupLeafletMap = null;
+    let siwasupMapMarkers = [];
+
+    const DISTRICT_CENTROIDS = {
+      'บางขุนเทียน': [13.5855, 100.4358], 'ท่าข้าม': [13.6340, 100.4480],
+      'บางบอน': [13.6558, 100.3846], 'ทุ่งครุ': [13.6385, 100.5042],
+      'จอมทอง': [13.6844, 100.4727], 'ภาษีเจริญ': [13.7147, 100.4372],
+      'บางแค': [13.7050, 100.4074], 'หนองแขม': [13.7042, 100.3475],
+      'ทวีวัฒนา': [13.7878, 100.3540], 'ตลิ่งชัน': [13.7769, 100.4567],
+      'บางกอกน้อย': [13.7583, 100.4708], 'บางกอกใหญ่': [13.7228, 100.4747],
+      'ธนบุรี': [13.7250, 100.4889], 'คลองสาน': [13.7300, 100.5050],
+      'บางพลัด': [13.7917, 100.5050], 'บางกรวย': [13.8055, 100.4755],
+      'บางบัวทอง': [13.9167, 100.4167], 'บางใหญ่': [13.8444, 100.3958],
+      'นนทบุรี': [13.8621, 100.5134], 'เมืองนนทบุรี': [13.8621, 100.5134],
+      'ปากเกร็ด': [13.9110, 100.4988], 'ไทรน้อย': [13.9786, 100.3125],
+      'คลองหลวง': [14.0647, 100.6458], 'ธัญบุรี': [14.0189, 100.7336],
+      'รังสิต': [13.9850, 100.6175], 'ลำลูกกา': [13.9317, 100.7497],
+      'ปทุมธานี': [14.0208, 100.5250], 'เมืองปทุมธานี': [14.0208, 100.5250],
+      'บางพลี': [13.6047, 100.7064], 'สมุทรปราการ': [13.5991, 100.5968],
+      'เมืองสมุทรปราการ': [13.5991, 100.5968], 'พระประแดง': [13.6583, 100.5333],
+      'พระสมุทรเจดีย์': [13.5986, 100.5847], 'บางบ่อ': [13.5844, 100.8403],
+      'บางเสาธง': [13.5980, 100.8030], 'คลองสามวา': [13.8647, 100.7222],
+      'มีนบุรี': [13.8139, 100.7417], 'ลาดกระบัง': [13.7222, 100.7833],
+      'สะพานสูง': [13.7694, 100.6861], 'ประเวศ': [13.6997, 100.6947],
+      'สวนหลวง': [13.7275, 100.6433], 'บางนา': [13.6736, 100.6067],
+      'พระโขนง': [13.7022, 100.6017], 'คลองเตย': [13.7150, 100.5850],
+      'วัฒนา': [13.7422, 100.5850], 'ห้วยขวาง': [13.7781, 100.5750],
+      'วังทองหลาง': [13.7886, 100.6075], 'ลาดพร้าว': [13.8036, 100.6067],
+      'จตุจักร': [13.8286, 100.5600], 'บางซื่อ': [13.8200, 100.5300],
+      'ดอนเมือง': [13.9125, 100.5986], 'หลักสี่': [13.8875, 100.5786],
+      'สายไหม': [13.9189, 100.6458], 'คันนายาว': [13.8247, 100.6789],
+      'บึงกุ่ม': [13.8050, 100.6717], 'บางกะปิ': [13.7658, 100.6475],
+      'ดินแดง': [13.7697, 100.5533], 'พญาไท': [13.7800, 100.5422],
+      'ราชเทวี': [13.7589, 100.5344], 'ปทุมวัน': [13.7444, 100.5306],
+      'สาทร': [13.7214, 100.5286], 'บางรัก': [13.7308, 100.5242],
+      'ยานนาวา': [13.7000, 100.5333], 'กระทุ่มแบน': [13.6558, 100.2975],
+      'สมุทรสาคร': [13.5475, 100.2744], 'เมืองสมุทรสาคร': [13.5475, 100.2744],
+      'นครปฐม': [13.8197, 100.0608], 'ชลบุรี': [13.3611, 100.9847],
+      'ศรีราชา': [13.1736, 100.9317], 'พัทยา': [12.9275, 100.8775],
+      'บางละมุง': [12.9275, 100.8775], 'ระยอง': [12.6814, 101.2817]
+    };
+
+    function switchViewMode(mode) {
+      currentViewMode = mode;
+      renderPropertyCards();
+    }
+
+    function getPropertyCoords(p) {
+      // 1. Exact GPS (PAMCO or explicit GPS)
+      const lat = parseFloat(p.lat || p.latitude);
+      const lng = parseFloat(p.lng || p.longitude);
+      if (!isNaN(lat) && !isNaN(lng) && lat > 5 && lat < 21 && lng > 97 && lng < 106) {
+        return { lat: lat, lng: lng, isExact: true };
+      }
+
+      // 2. Zone/District approximate centroid
+      const textToMatch = (p.location || '' + ' ' + (p.title || '') + ' ' + (p.description || '') + ' ' + (p.d || ''));
+      for (const [district, coords] of Object.entries(DISTRICT_CENTROIDS)) {
+        if (textToMatch.includes(district)) {
+          // Add deterministic small jitter so pins in same district spread naturally
+          let hash = 0;
+          const strId = String(p.id || '');
+          for (let i = 0; i < strId.length; i++) hash = ((hash << 5) - hash) + strId.charCodeAt(i);
+          const jitterLat = ((hash % 100) / 10000) * 1.5;
+          const jitterLng = (((hash >> 3) % 100) / 10000) * 1.5;
+          return { lat: coords[0] + jitterLat, lng: coords[1] + jitterLng, isExact: false, district: district };
+        }
+      }
+
+      // Fallback: Bangkok general center with wider scatter
+      let fallbackHash = 0;
+      const fId = String(p.id || '0');
+      for (let i = 0; i < fId.length; i++) fallbackHash = ((fallbackHash << 5) - fallbackHash) + fId.charCodeAt(i);
+      const fJitterLat = ((fallbackHash % 200) / 3000) - 0.03;
+      const fJitterLng = (((fallbackHash >> 2) % 200) / 3000) - 0.03;
+      return { lat: 13.7563 + fJitterLat, lng: 100.5018 + fJitterLng, isExact: false, district: 'กรุงเทพฯ/ปริมณฑล' };
+    }
+
+    function initOrUpdateLeafletMap(props) {
+      setTimeout(() => {
+        const mapDiv = document.getElementById('siwasup-map-container');
+        if (!mapDiv) return;
+
+        if (siwasupLeafletMap) {
+          siwasupLeafletMap.remove();
+          siwasupLeafletMap = null;
+        }
+
+        // Initialize Map centered on Bangkok
+        siwasupLeafletMap = L.map('siwasup-map-container', {
+          zoomControl: true,
+          attributionControl: false
+        }).setView([13.7563, 100.5018], 11);
+
+        // OpenStreetMap Carto tiles (Clean Architectural Style)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+          maxZoom: 19
+        }).addTo(siwasupLeafletMap);
+
+        const bounds = [];
+        let exactCount = 0;
+        let approxCount = 0;
+
+        // Render up to 250 visible pins for smooth performance
+        const displayProps = props.slice(0, 250);
+
+        displayProps.forEach(p => {
+          const coords = getPropertyCoords(p);
+          if (!coords) return;
+          bounds.push([coords.lat, coords.lng]);
+
+          if (coords.isExact) exactCount++;
+          else approxCount++;
+
+          const markerColor = coords.isExact ? '#ED1C24' : '#F59E0B'; // Red for GPS, Amber for Approx
+          const pinHtml = `
+            <div style="background-color: ${markerColor}; width: 26px; height: 26px; border-radius: 50%; border: 2.5px solid #FFFFFF; box-shadow: 0 4px 10px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; color: #FFF; font-weight: bold; font-size: 11px;">
+              ${coords.isExact ? '📍' : '⭕'}
+            </div>
+          `;
+          const customIcon = L.divIcon({
+            html: pinHtml,
+            className: 'custom-siwasup-pin',
+            iconSize: [26, 26],
+            iconAnchor: [13, 13],
+            popupAnchor: [0, -14]
+          });
+
+          const pTitle = (p.title || p.name || 'ทรัพย์พร้อมอยู่').replace(/'/g, '');
+          const pPrice = p.price ? (typeof p.price === 'number' ? p.price.toLocaleString() + ' บาท' : p.price) : 'ติดต่อสอบถาม';
+          const pImg = p.main_image || p.thumbnail || 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400';
+          const badgeText = coords.isExact ? '📍 พิกัดตรงเป๊ะ' : `⭕ โซน${coords.district || 'โดยประมาณ'}`;
+
+          const popupContent = `
+            <div style="font-family: 'Prompt', sans-serif; width: 220px; padding: 4px;">
+              <img src="${pImg}" style="width: 100%; height: 110px; object-fit: cover; border-radius: 12px; margin-bottom: 8px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                <span style="font-size: 10px; padding: 2px 6px; border-radius: 6px; background-color: ${coords.isExact ? '#FEF2F2' : '#FFFBEB'}; color: ${coords.isExact ? '#DC2626' : '#D97706'}; font-weight: bold;">
+                  ${badgeText}
+                </span>
+                <span style="font-size: 11px; font-weight: 700; color: #0F172A;">${p.category || 'บ้าน'}</span>
+              </div>
+              <h4 style="font-size: 12px; font-weight: bold; color: #1E293B; margin: 0 0 4px 0; line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                ${pTitle}
+              </h4>
+              <div style="font-size: 14px; font-weight: 800; color: #ED1C24; margin-bottom: 8px;">
+                ${pPrice}
+              </div>
+              <button onclick="openPropertyDetailModal('${p.id}')" style="width: 100%; background: #0F172A; color: white; border: none; border-radius: 8px; padding: 6px 0; font-size: 11px; font-weight: bold; cursor: pointer;">
+                ดูรายละเอียดบ้าน ➔
+              </button>
+            </div>
+          `;
+
+          const m = L.marker([coords.lat, coords.lng], { icon: customIcon }).addTo(siwasupLeafletMap);
+          m.bindPopup(popupContent);
+        });
+
+        if (bounds.length > 0) {
+          siwasupLeafletMap.fitBounds(bounds, { padding: [35, 35], maxZoom: 14 });
+        }
+
+        // Update Counter pill
+        const counterEl = document.getElementById('map-badge-counter');
+        if (counterEl) {
+          counterEl.innerText = `แสดง ${bounds.length} หลังบนแผนที่ (${exactCount} GPS ตรง, ${approxCount} โซนย่าน)`;
+        }
+      }, 100);
+    }
+  </script>
 
 </body>
 </html>
