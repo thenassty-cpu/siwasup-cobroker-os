@@ -161,7 +161,7 @@
                 <i data-lucide="camera" class="w-6 h-6 text-slate-500 mx-auto"></i>
                 <div class="text-[10px] text-slate-400">กดเพื่อเปิดกล้อง หรือเลือกรูปบัตร ปชช.</div>
               </div>
-              <input type="file" id="input-id-file" accept="image/*" capture="environment" onchange="handleFileUpload(event, 'id_card')" class="absolute inset-0 opacity-0 cursor-pointer">
+              <input type="file" id="input-id-file" accept="image/*" onchange="handleFileUpload(event, 'id_card')" class="absolute inset-0 opacity-0 cursor-pointer">
             </div>
             <button type="button" onclick="document.getElementById('input-id-file').click()" class="w-full py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition flex items-center justify-center gap-1">
               <i data-lucide="upload" class="w-3 h-3"></i>
@@ -181,7 +181,7 @@
                 <i data-lucide="camera" class="w-6 h-6 text-slate-500 mx-auto"></i>
                 <div class="text-[10px] text-slate-400">กดเพื่อเปิดกล้อง หรือเลือกรูปโฉนด</div>
               </div>
-              <input type="file" id="input-deed-file" accept="image/*" capture="environment" onchange="handleFileUpload(event, 'title_deed')" class="absolute inset-0 opacity-0 cursor-pointer">
+              <input type="file" id="input-deed-file" accept="image/*" onchange="handleFileUpload(event, 'title_deed')" class="absolute inset-0 opacity-0 cursor-pointer">
             </div>
             <button type="button" onclick="document.getElementById('input-deed-file').click()" class="w-full py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition flex items-center justify-center gap-1">
               <i data-lucide="upload" class="w-3 h-3"></i>
@@ -369,6 +369,39 @@
       if (window.lucide) { lucide.createIcons(); }
     }
 
+    // Fast in-browser canvas compression for mobile camera photos
+    function compressImageFile(file, maxWidth = 1600, maxHeight = 1600, quality = 0.82) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        const objectUrl = URL.createObjectURL(file);
+        img.onload = () => {
+          URL.revokeObjectURL(objectUrl);
+          let { width, height } = img;
+          if (width > maxWidth || height > maxHeight) {
+            if (width / height > maxWidth / maxHeight) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            } else {
+              width = Math.round((width * maxHeight) / height);
+              height = maxHeight;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+          resolve(compressedBase64);
+        };
+        img.onerror = (err) => {
+          URL.revokeObjectURL(objectUrl);
+          reject(err);
+        };
+        img.src = objectUrl;
+      });
+    }
+
     // --- ZERO-TYPING OCR FILE HANDLER ---
     async function handleFileUpload(event, docType) {
       const file = event.target.files[0];
@@ -379,45 +412,63 @@
       const statusBadge = document.getElementById(docType === 'id_card' ? 'badge-id-status' : 'badge-deed-status');
       const spinner = document.getElementById('ocr-scanning-spinner');
 
-      // Local Preview
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const base64Data = e.target.result;
+      statusBadge.textContent = "กำลังบีบอัดรูป & สแกน...";
+      statusBadge.className = "text-[10px] text-amber-400 font-bold animate-pulse";
+      spinner.classList.remove('hidden');
+
+      try {
+        // 1. Client-side fast compression (Reduces 10MB phone photo -> 300KB for instant upload & no timeout)
+        let base64Data;
+        try {
+          base64Data = await compressImageFile(file, 1600, 1600, 0.82);
+        } catch (compErr) {
+          console.warn("Canvas compression fallback to raw file", compErr);
+          base64Data = await new Promise((res, rej) => {
+            const r = new FileReader();
+            r.onload = () => res(r.target.result);
+            r.onerror = rej;
+            r.readAsDataURL(file);
+          });
+        }
+
+        // 2. Show Preview immediately
         previewImg.src = base64Data;
         previewImg.classList.remove('hidden');
         placeholder.classList.add('hidden');
-        statusBadge.textContent = "กำลังประมวลผล...";
-        statusBadge.className = "text-[10px] text-amber-400 font-bold animate-pulse";
-        spinner.classList.remove('hidden');
 
-        try {
-          const resp = await fetch(`${BACKEND_URL}/api/ocr/contract`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: jsonPayload(docType, base64Data, file.type)
-          });
-          const result = await resp.json();
-          spinner.classList.add('hidden');
+        statusBadge.textContent = "กำลังอ่านข้อมูล AI...";
 
-          if (result && result.status === 'success' && result.data) {
-            statusBadge.textContent = "✓ อ่านข้อมูลสำเร็จ";
-            statusBadge.className = "text-[10px] text-emerald-400 font-bold";
-            applyOcrDataToForm(docType, result.data);
-            showToast(`✨ อ่านข้อมูล ${docType === 'id_card' ? 'บัตร ปชช.' : 'โฉนด'} สำเร็จ กรอกข้อมูลลงสัญญาเรียบร้อย!`);
-          } else {
-            statusBadge.textContent = "อ่านไม่ชัด";
-            statusBadge.className = "text-[10px] text-rose-400 font-bold";
-            showToast("ไม่สามารถสกัดข้อมูลได้ชัดเจน กรุณาถ่ายภาพใหม่");
-          }
-        } catch (err) {
-          spinner.classList.add('hidden');
-          statusBadge.textContent = "ผิดพลาด";
-          statusBadge.className = "text-[10px] text-rose-400 font-bold";
-          console.error("OCR API error:", err);
-          showToast("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ OCR กรุณาลองใหม่");
+        // 3. Send lightweight compressed base64 to OCR backend
+        const resp = await fetch(`${BACKEND_URL}/api/ocr/contract`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: jsonPayload(docType, base64Data, 'image/jpeg')
+        });
+
+        if (!resp.ok) {
+          throw new Error(`Server returned HTTP ${resp.status}`);
         }
-      };
-      reader.readAsDataURL(file);
+
+        const result = await resp.json();
+        spinner.classList.add('hidden');
+
+        if (result && result.status === 'success' && result.data) {
+          statusBadge.textContent = "✓ อ่านข้อมูลสำเร็จ";
+          statusBadge.className = "text-[10px] text-emerald-400 font-bold";
+          applyOcrDataToForm(docType, result.data);
+          showToast(`✨ อ่านข้อมูล ${docType === 'id_card' ? 'บัตร ปชช.' : 'โฉนด'} สำเร็จ กรอกข้อมูลลงสัญญาเรียบร้อย!`);
+        } else {
+          statusBadge.textContent = "อ่านไม่ชัด";
+          statusBadge.className = "text-[10px] text-rose-400 font-bold";
+          showToast("ไม่สามารถสกัดข้อมูลได้ชัดเจน กรุณาถ่ายภาพใหม่");
+        }
+      } catch (err) {
+        spinner.classList.add('hidden');
+        statusBadge.textContent = "ผิดพลาด";
+        statusBadge.className = "text-[10px] text-rose-400 font-bold";
+        console.error("OCR API error:", err);
+        showToast("เกิดข้อผิดพลาดในการเชื่อมต่อ OCR: " + (err.message || "กรุณาลองใหม่"));
+      }
     }
 
     function jsonPayload(docType, base64Data, mimeType) {

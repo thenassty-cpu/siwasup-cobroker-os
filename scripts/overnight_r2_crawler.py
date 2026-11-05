@@ -90,12 +90,255 @@ def log_msg(msg, log_fp=None):
         except Exception:
             pass
 
+# ==============================================================================
+# PAMCO PULL — ดูดพอร์ต 1,312 แปลง (ตัดรหัส D ออก) พร้อม status + GPS
+# Backend: https://property-api-prod.pamco.co.th
+# Media:   https://media.pamco.co.th/
+# ==============================================================================
+
+PAMCO_API_BASE  = "https://property-api-prod.pamco.co.th"
+PAMCO_MEDIA_BASE = "https://media.pamco.co.th"
+PAMCO_PAGE_SIZE  = 10    # server คืน 10 items ต่อหน้าเสมอ (ignore pageSize param)
+PAMCO_EXCLUDE_D_PREFIX = True   # ตัดทรัพย์รหัส D (idMarket starts with D) ออกตามคำสั่งกูล
+PAMCO_STALE_DAYS       = 14    # ทรัพย์ที่ไม่เจอบน server นานกว่านี้ → auto-hide
+
+PAMCO_HDRS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/124.0.0.0 Safari/537.36',
+    'Accept': 'application/json, */*',
+    'Origin': 'https://property.pamco.co.th',
+    'Referer': 'https://property.pamco.co.th/assets/results',
+}
+
+def _pamco_fetch_page(page: int) -> tuple[list, int]:
+    """
+    ดึงข้อมูล PAMCO หน้าเดียว
+    คืน (items_list, total_count)
+    """
+    url = f"{PAMCO_API_BASE}/property-new/display?page={page}&pageSize={PAMCO_PAGE_SIZE}"
+    req = urllib.request.Request(url, headers=PAMCO_HDRS)
+    with urllib.request.urlopen(req, context=ctx, timeout=30) as r:
+        raw = r.read().decode('utf-8', errors='ignore')
+    d = json.loads(raw)
+    if isinstance(d, list):
+        return d, len(d)
+    items = d.get('list', [])
+    total = d.get('total', len(items))
+    return items, total
+
+
+def _pamco_to_record(item: dict) -> dict:
+    """
+    Normalize PAMCO item → canonical property_master record
+    Fields ตรงกับ format ของ homerun pool เพื่อ merge ได้
+    """
+    market_id = item.get('idMarket', '')    # รหัสทรัพย์ เช่น B13703
+    thumb_paths = item.get('thumbnail', [])
+    thumb_url = (
+        f"{PAMCO_MEDIA_BASE}/{thumb_paths[0]}" if thumb_paths else ""
+    )
+
+    price_raw = ""
+    lowprice = item.get('lowprice', [])
+    if lowprice and isinstance(lowprice[0], dict):
+        price_raw = lowprice[0].get('lowprice', '') or ''
+
+    try:
+        price_num = int(str(price_raw).replace(',', ''))
+    except (ValueError, TypeError):
+        price_num = 0
+
+    detail_code = str(item.get('idDetail', ''))
+    return {
+        "id":           f"PAMCO-{market_id}",
+        "code":         market_id,
+        "source":       "PAMCO",
+        "bank_pool":    "PAMCO",
+        "title":        item.get('npaProductTitle', ''),
+        "category":     item.get('detail', {}).get('detail', '') if isinstance(item.get('detail'), dict) else '',
+        "detail_code":  detail_code,          # "4" = rหัส D → ต้องกรอง
+        "price":        price_num,
+        "province":     item.get('provinceNameTh', ''),
+        "district":     item.get('districtNameTh', ''),
+        "sub_district": item.get('subDistrictNameTh', ''),
+        "latitude":     item.get('npaProductLatitude', ''),
+        "longitude":    item.get('npaProductLongitude', ''),
+        "area_sqw":     item.get('npaProductArea', ''),
+        "usable_sqm":   item.get('useableArea', ''),
+        "landid":       item.get('landid', ''),
+        "houseid":      item.get('houseid', ''),
+        "street":       item.get('street', ''),
+        "soi":          item.get('soi', ''),
+        "hgroup":       item.get('hgroup', ''),
+        "telAO":        item.get('telAO') or '',
+        "slug":         item.get('slug', ''),
+        "thumbnail":    thumb_url,
+        "media_base":   PAMCO_MEDIA_BASE,
+        "thumbnail_path": thumb_paths[0] if thumb_paths else '',
+        "status":       "available" if item.get('checker') else "unavailable",
+        "last_seen":    datetime.now().isoformat(),
+    }
+
+
+def run_pamco_pull(data_dir: str, log_file: str | None = None) -> dict:
+    """
+    ดูด PAMCO พอร์ตทั้งหมด → คืน dict keyed by record["id"]
+    กรอง detail_code D (idDetail=4) ออกอัตโนมัติ
+    """
+    log_msg("[PAMCO] Starting pull from property-api-prod.pamco.co.th ...", log_file)
+
+    all_records: dict[str, dict] = {}
+    page = 1
+    total_known = 9999  # อัปเดตหลังหน้าแรก
+
+    while True:
+        for attempt in range(3):
+            try:
+                items, total_count = _pamco_fetch_page(page)
+                if page == 1:
+                    total_known = total_count
+                    log_msg(f"[PAMCO] Total on server: {total_known}", log_file)
+                break
+            except Exception as e:
+                log_msg(f"[PAMCO] Page {page} attempt {attempt+1} error: {e}", log_file)
+                time.sleep(2.0)
+        else:
+            log_msg(f"[PAMCO] Giving up on page {page} after 3 retries", log_file)
+            break
+
+        if not items:
+            break
+
+        kept = skipped = 0
+        for item in items:
+            rec = _pamco_to_record(item)
+            # กรองรหัส D (ทรัพย์สิน ไม่ใช่ที่ดิน/บ้าน) ออกตามคำสั่งกูล
+            if PAMCO_EXCLUDE_D_PREFIX and rec["code"].upper().startswith("D"):
+                skipped += 1
+                continue
+            all_records[rec["id"]] = rec
+            kept += 1
+
+        log_msg(
+            f"[PAMCO] Page {page}: {kept} kept, {skipped} skipped (D-code) "
+            f"| running total: {len(all_records)}/{total_known}",
+            log_file
+        )
+
+        # ถ้าได้ครบแล้วหรือไม่มีหน้าต่อไป
+        fetched_so_far = (page - 1) * PAMCO_PAGE_SIZE + len(items)
+        if fetched_so_far >= total_known or len(items) < PAMCO_PAGE_SIZE:
+            break
+
+        page += 1
+        time.sleep(0.5)   # gentle pause
+
+    log_msg(f"[PAMCO] Pull complete: {len(all_records)} properties (D-code excluded)", log_file)
+
+    # ------------------------------------------------------------------
+    # STALE GUARD
+    # เปรียบ fresh pull กับ master file เดิม:
+    #   - ทรัพย์ที่เจอใหม่ / เจออยู่ → status=available, last_seen=now
+    #   - ทรัพย์ที่หายไปจาก server:
+    #       * ถ้า hidden_since < STALE_DAYS → รักษาไว้ status=missing
+    #       * ถ้า hidden_since >= STALE_DAYS → status=hidden (ซ่อนจากเว็บ)
+    # ------------------------------------------------------------------
+    out_path = os.path.join(data_dir, "pamco_property_master.json")
+
+    prev_records: dict = {}
+    if os.path.exists(out_path):
+        try:
+            with open(out_path, encoding='utf-8') as _f:
+                prev_records = json.load(_f)
+        except Exception:
+            pass
+
+    now_iso   = datetime.now().isoformat()
+    now_dt    = datetime.now()
+    stale_new = stale_hidden = stale_restored = 0
+
+    # ทรัพย์ที่เคยมีแต่ไม่เจอในรอบนี้
+    for pid, prev_rec in prev_records.items():
+        if pid in all_records:
+            # เจออยู่ → รีเซ็ต hidden_since ถ้ามี
+            if prev_rec.get("status") in ("missing", "hidden"):
+                all_records[pid]["status"] = "available"
+                all_records[pid].pop("hidden_since", None)
+                stale_restored += 1
+            continue
+
+        # ไม่เจอในรอบนี้ — ตรวจ hidden_since
+        hidden_since_str = prev_rec.get("hidden_since")
+        if hidden_since_str:
+            try:
+                hidden_since_dt = datetime.fromisoformat(hidden_since_str)
+                days_missing = (now_dt - hidden_since_dt).days
+            except ValueError:
+                days_missing = 0
+        else:
+            # เพิ่งหายครั้งแรก
+            hidden_since_str = now_iso
+            days_missing     = 0
+
+        if days_missing >= PAMCO_STALE_DAYS:
+            prev_rec["status"]       = "hidden"
+            prev_rec["hidden_since"] = hidden_since_str
+            stale_hidden += 1
+        else:
+            prev_rec["status"]       = "missing"
+            prev_rec["hidden_since"] = hidden_since_str
+            stale_new += 1
+
+        # คงไว้ใน master (status=missing/hidden) ไม่ลบออก
+        all_records[pid] = prev_rec
+
+    log_msg(
+        f"[PAMCO] Stale Guard: "
+        f"{stale_new} newly missing | "
+        f"{stale_hidden} auto-hidden (>{PAMCO_STALE_DAYS}d) | "
+        f"{stale_restored} restored",
+        log_file
+    )
+
+    # สรุปยอด ก่อน save
+    visible   = sum(1 for r in all_records.values() if r.get("status") != "hidden")
+    hidden_ct = sum(1 for r in all_records.values() if r.get("status") == "hidden")
+    missing_ct = sum(1 for r in all_records.values() if r.get("status") == "missing")
+    log_msg(
+        f"[PAMCO] Master total: {len(all_records)} "
+        f"({visible} visible | {missing_ct} missing | {hidden_ct} hidden)",
+        log_file
+    )
+
+    # บันทึกลงไฟล์
+    with open(out_path, 'w', encoding='utf-8') as f:
+        json.dump(all_records, f, ensure_ascii=False, indent=2)
+    log_msg(f"[PAMCO] Saved → {out_path}", log_file)
+
+    # อัปโหลด R2 สำหรับ webhook ดึงใช้
+    if put_object_r2:
+        try:
+            data_bytes = json.dumps(all_records, ensure_ascii=False).encode('utf-8')
+            put_object_r2("data/pamco_property_master.json", data_bytes, "application/json; charset=utf-8")
+            log_msg("[PAMCO] Synced to Cloudflare R2: data/pamco_property_master.json", log_file)
+        except Exception as e:
+            log_msg(f"[PAMCO] R2 sync error: {e}", log_file)
+
+    return all_records
+
+
 def run_overnight_crawler():
     data_dir = r"C:\Users\ITss-Advice\Documents\GitHub\siwasup-cobroker-os\data"
     all_props_file = os.path.join(data_dir, "homerun_all_properties_10k.json")
     state_file = os.path.join(data_dir, "r2_images_sync_state.json")
     manifest_file = os.path.join(data_dir, "r2_assets_manifest.json")
     log_file = os.path.join(data_dir, "overnight_crawler.log")
+
+    # ---- STEP 0: PAMCO pull (runs first, always) ----
+    try:
+        log_msg("=== STEP 0: PAMCO Property Pull ===", log_file)
+        run_pamco_pull(data_dir, log_file)
+    except Exception as e:
+        log_msg(f"[PAMCO] Pull failed (non-fatal): {e}", log_file)
     
     if not os.path.exists(all_props_file):
         print("[-] Error: homerun_all_properties_10k.json not found!")
@@ -269,4 +512,16 @@ def run_overnight_crawler():
     log_msg(f"=========================================================", log_file)
 
 if __name__ == "__main__":
-    run_overnight_crawler()
+    import argparse
+    parser = argparse.ArgumentParser(description="Siwasup Overnight NPA Crawler")
+    parser.add_argument("--pamco-only", action="store_true",
+                        help="Run only the PAMCO pull step and exit")
+    args = parser.parse_args()
+
+    data_dir = r"C:\Users\ITss-Advice\Documents\GitHub\siwasup-cobroker-os\data"
+    log_file = os.path.join(data_dir, "overnight_crawler.log")
+
+    if args.pamco_only:
+        run_pamco_pull(data_dir, log_file)
+    else:
+        run_overnight_crawler()

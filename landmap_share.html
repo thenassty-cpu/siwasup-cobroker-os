@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LandMaps Link Share & Zoning AI • Siwasup Co-Broker OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="thai_landmap_geo.js"></script>
+
+  <style>
+    body {
+      font-family: 'Prompt', 'Plus Jakarta Sans', sans-serif;
+      background-color: #0b1120;
+      color: #f8fafc;
+      min-height: 100vh;
+    }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="pb-16 selection:bg-emerald-500 selection:text-white">
+
+  <!-- Top App Header -->
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-40 backdrop-blur-md">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+          <i data-lucide="map-pin" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-black text-base sm:text-lg tracking-tight text-white flex items-center gap-1.5">
+              LandMaps Link Share
+            </h1>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+              Dol DeepLink ⚡
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 flex items-center gap-1">
+            สวัสดีคุณ <strong class="text-slate-200">NASSTY/Ton</strong> 👋 • Siwasup OS
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hidden sm:inline-flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+          เชื่อมต่อ LandsMaps กรมที่ดิน 100%
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-4xl mx-auto px-4 mt-5 space-y-5">
+
+    <!-- Superpower Banner: Zero-Typing OCR -->
+    <div class="glass-card rounded-2xl p-4 border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-slate-900 to-slate-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xl">
+      <div class="flex items-start gap-3">
+        <div class="p-2.5 rounded-xl bg-amber-500/20 text-amber-400 shrink-0 mt-0.5">
+          <i data-lucide="scan-line" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-sm sm:text-base text-amber-300 flex items-center gap-2">
+            ⚡ สแกนรูปโฉนดด่วน (Zero-Typing OCR)
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 font-mono">Gemini Vision</span>
+          </h3>
+          <p class="text-xs text-slate-300 mt-0.5">
+            ถ่ายรูปหรือเลือกภาพหน้าโฉนด ระบบจะอ่าน <strong>จังหวัด, อำเภอ, เลขที่โฉนด และขนาดเนื้อที่</strong> กรอกให้อัตโนมัติใน 0.5 วินาที!
+          </p>
+        </div>
+      </div>
+      <div class="relative shrink-0">
+        <button type="button" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition active:scale-95">
+          <i data-lucide="camera" class="w-4 h-4"></i>
+          <span>ถ่ายรูป / เลือกภาพโฉนด</span>
+        </button>
+        <input type="file" id="deed-ocr-file" accept="image/*" onchange="handleDeedOcrUpload(event)" class="absolute inset-0 opacity-0 cursor-pointer">
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="flex border-b border-slate-800 text-sm font-semibold">
+      <button onclick="switchTab('tab-single')" id="btn-tab-single" class="py-3 px-5 border-b-2 border-emerald-400 text-emerald-400 flex items-center gap-2 transition">
+        <i data-lucide="link" class="w-4 h-4"></i>
+        <span>ข้อมูลโฉนด (สร้างลิงก์)</span>
+      </button>
+      <button onclick="switchTab('tab-zoning')" id="btn-tab-zoning" class="py-3 px-5 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2 transition">
+        <i data-lucide="palette" class="w-4 h-4"></i>
+        <span>เช็กพื้นที่สี & ตั้งโรงงาน</span>
+      </button>
+      <button onclick="switchTab('tab-favorites')" id="btn-tab-favorites" class="py-3 px-5 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2 transition">
+        <i data-lucide="star" class="w-4 h-4"></i>
+        <span>รายการโปรด (<span id="fav-count-badge">0</span>)</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: ข้อมูลโฉนด (Single Deed Link Generator) -->
+    <div id="tab-single" class="space-y-5">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
+
+        <!-- Form Card (Left Column) -->
+        <div class="md:col-span-6 glass-card rounded-2xl p-5 space-y-4 border border-slate-800">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+            <h3 class="font-bold text-slate-200 text-sm flex items-center gap-2">
+              <i data-lucide="file-text" class="w-4 h-4 text-emerald-400"></i>
+              ระบุข้อมูลแปลงที่ดิน
+            </h3>
+            <button type="button" onclick="saveDefaultProvince()" class="text-[11px] text-emerald-400 hover:underline">
+              + บันทึกเป็นค่าเริ่มต้น
+            </button>
+          </div>
+
+          <!-- Province Dropdown -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-semibold text-slate-300">จังหวัด (Province)</label>
+            <select id="sel-province" onchange="onProvinceChange()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition">
+              <option value="">กำลังโหลดรายชื่อจังหวัด...</option>
+            </select>
+          </div>
+
+          <!-- Amphur Dropdown -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-semibold text-slate-300">อำเภอ/เขต (Amphur)</label>
+            <select id="sel-amphur" onchange="updateGeneratedLink()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition">
+              <option value="">กรุณาเลือกจังหวัดก่อน</option>
+            </select>
+          </div>
+
+          <!-- Deed Number Input -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-semibold text-slate-300">เลขที่โฉนด</label>
+              <span id="ocr-status-pill" class="text-[10px] text-slate-500">พิมพ์เลขแล้ว Enter ได้ทันที</span>
+            </div>
+            <input type="text" id="input-deed" oninput="updateGeneratedLink()" onkeydown="if(event.key==='Enter') openLandsMapsUrl()" placeholder="เช่น 52696" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition">
+          </div>
+
+          <!-- Extra Optional Info (Land Area) -->
+          <div class="pt-2 border-t border-slate-800/80 space-y-2">
+            <label class="block text-xs font-semibold text-slate-400">เนื้อที่ (ถ้ามี - สแกนจากโฉนด)</label>
+            <div class="grid grid-cols-3 gap-2 text-xs">
+              <div>
+                <input type="number" id="input-rai" placeholder="ไร่" class="w-full bg-slate-900/60 border border-slate-800 rounded-lg p-2 text-center text-white">
+              </div>
+              <div>
+                <input type="number" id="input-ngan" placeholder="งาน" class="w-full bg-slate-900/60 border border-slate-800 rounded-lg p-2 text-center text-white">
+              </div>
+              <div>
+                <input type="number" id="input-sqw" placeholder="ตร.ว." class="w-full bg-slate-900/60 border border-slate-800 rounded-lg p-2 text-center text-white">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result Card (Right Column) -->
+        <div class="md:col-span-6 glass-card rounded-2xl p-5 space-y-4 border border-emerald-500/20 bg-emerald-950/10">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+            <h3 class="font-bold text-emerald-400 text-sm flex items-center gap-2">
+              <i data-lucide="share-2" class="w-4 h-4"></i>
+              ลิงก์ที่สร้าง (LandsMaps DeepLink)
+            </h3>
+            <span id="token-badge" class="text-[10px] font-mono text-slate-400 px-2 py-0.5 rounded bg-slate-800">
+              Token: รอข้อมูล
+            </span>
+          </div>
+
+          <!-- Generated URL Display Box -->
+          <div class="relative">
+            <input type="text" id="output-url" readonly value="" placeholder="https://landsmaps.dol.go.th?qrcodeToken=..." class="w-full bg-slate-900 border border-emerald-500/40 rounded-xl px-3 py-2.5 text-xs font-mono text-emerald-300 select-all focus:outline-none">
+          </div>
+
+          <!-- QR Code Preview Box -->
+          <div class="flex flex-col items-center justify-center p-4 rounded-xl bg-white/5 border border-slate-800 space-y-2">
+            <div id="qrcode-container" class="bg-white p-2.5 rounded-xl shadow-lg inline-block"></div>
+            <p class="text-[11px] text-slate-400 text-center flex items-center gap-1 pt-1">
+              <span>สแกนเพื่อเปิดดูรูปแปลงและราคาประเมินบน LandsMaps</span>
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="space-y-2">
+            <button type="button" onclick="openLandsMapsUrl()" class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition active:scale-95">
+              <i data-lucide="external-link" class="w-4 h-4"></i>
+              <span>เปิดดูรูปแปลง (LandsMaps กรมที่ดิน)</span>
+            </button>
+
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" onclick="copyLandsMapsUrl()" class="py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs flex items-center justify-center gap-1.5 border border-slate-700 transition">
+                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                <span>คัดลอกลิงก์</span>
+              </button>
+              <button type="button" onclick="shareToLine()" class="py-2.5 rounded-xl bg-green-600 hover:bg-green-500 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition">
+                <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                <span>แชร์เข้าแชท LINE</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Save to Favorites -->
+          <div class="pt-3 border-t border-slate-800/80 space-y-2">
+            <div class="flex items-center gap-2">
+              <input type="text" id="fav-label" placeholder="ตั้งชื่อแปลง (ถ้ามี) เช่น ที่ดินหัวหิน 100 วา" class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500">
+              <button type="button" onclick="saveToFavorites()" class="px-3 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-[#D4BA7A] border border-amber-500/30 font-bold text-xs flex items-center gap-1 shrink-0 transition">
+                <i data-lucide="star" class="w-3.5 h-3.5"></i>
+                <span>บันทึก</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 2: เช็กพื้นที่สี & ตั้งโรงงานได้ไหม (Zoning AI) -->
+    <div id="tab-zoning" class="space-y-5 hidden">
+      <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+          <div>
+            <h3 class="font-bold text-white text-base flex items-center gap-2">
+              <i data-lucide="factory" class="w-5 h-5 text-purple-400"></i>
+              คู่มือตรวจสอบผังสี & การจัดตั้งโรงงานอุตสาหกรรม
+            </h3>
+            <p class="text-xs text-slate-400">เช็กข้อกำหนดกฎหมายผังเมืองสำหรับการพัฒนาที่ดินและตั้งโรงงาน</p>
+          </div>
+          <span class="text-xs px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/30">
+            พ.ร.บ. ผังเมือง & โรงงาน
+          </span>
+        </div>
+
+        <!-- Color Selector Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2">
+          <button type="button" onclick="selectZoningColor('purple')" class="p-3 rounded-xl bg-purple-950/40 border-2 border-purple-500 hover:bg-purple-900/50 text-left transition space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="w-3.5 h-3.5 rounded-full bg-purple-500"></span>
+              <span class="text-[10px] font-bold text-purple-300">อ.1 - อ.3</span>
+            </div>
+            <div class="font-bold text-xs text-white">สีม่วง (อุตสาหกรรม)</div>
+            <div class="text-[10px] text-purple-400 font-bold">✓ ตั้งโรงงานได้ 100%</div>
+          </button>
+
+          <button type="button" onclick="selectZoningColor('light-purple')" class="p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-violet-400 text-left transition space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="w-3.5 h-3.5 rounded-full bg-violet-400"></span>
+              <span class="text-[10px] font-bold text-slate-400">อ.4</span>
+            </div>
+            <div class="font-bold text-xs text-white">ม่วงอ่อน (เม็ดเงิน)</div>
+            <div class="text-[10px] text-violet-300">คลังสินค้า/โลจิสติกส์</div>
+          </button>
+
+          <button type="button" onclick="selectZoningColor('orange')" class="p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-orange-500 text-left transition space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="w-3.5 h-3.5 rounded-full bg-orange-500"></span>
+              <span class="text-[10px] font-bold text-slate-400">ย.5 - ย.7</span>
+            </div>
+            <div class="font-bold text-xs text-white">สีส้ม (ที่อยู่อาศัยกลาง)</div>
+            <div class="text-[10px] text-rose-400 font-bold">✕ ห้ามโรงงาน</div>
+          </button>
+
+          <button type="button" onclick="selectZoningColor('yellow')" class="p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-amber-400 text-left transition space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="w-3.5 h-3.5 rounded-full bg-amber-400"></span>
+              <span class="text-[10px] font-bold text-slate-400">ย.1 - ย.4</span>
+            </div>
+            <div class="font-bold text-xs text-white">สีเหลือง (ที่อยู่อาศัยน้อย)</div>
+            <div class="text-[10px] text-rose-400 font-bold">✕ ห้ามโรงงานจำพวก 2-3</div>
+          </button>
+
+          <button type="button" onclick="selectZoningColor('green')" class="p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-emerald-500 text-left transition space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="w-3.5 h-3.5 rounded-full bg-emerald-500"></span>
+              <span class="text-[10px] font-bold text-slate-400">ก.1 - ก.5</span>
+            </div>
+            <div class="font-bold text-xs text-white">สีเขียว (เกษตรกรรม)</div>
+            <div class="text-[10px] text-emerald-400">✓ เฉพาะแปรรูปเกษตร</div>
+          </button>
+
+          <button type="button" onclick="selectZoningColor('red')" class="p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-rose-500 text-left transition space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="w-3.5 h-3.5 rounded-full bg-rose-500"></span>
+              <span class="text-[10px] font-bold text-slate-400">พ.1 - พ.5</span>
+            </div>
+            <div class="font-bold text-xs text-white">สีแดง (พาณิชยกรรม)</div>
+            <div class="text-[10px] text-rose-400">เน้นศูนย์การค้า/ตึกแถว</div>
+          </button>
+
+          <button type="button" onclick="selectZoningColor('brown')" class="p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-amber-700 text-left transition space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="w-3.5 h-3.5 rounded-full bg-amber-800"></span>
+              <span class="text-[10px] font-bold text-slate-400">ย.8 - ย.10</span>
+            </div>
+            <div class="font-bold text-xs text-white">สีน้ำตาล (หนาแน่นมาก)</div>
+            <div class="text-[10px] text-slate-400">คอนโดสูง/อาคารใหญ่</div>
+          </button>
+
+          <button type="button" onclick="selectZoningColor('green-stripe')" class="p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-teal-400 text-left transition space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="w-3.5 h-3.5 rounded-full bg-teal-600"></span>
+              <span class="text-[10px] font-bold text-slate-400">ก.1</span>
+            </div>
+            <div class="font-bold text-xs text-white">เขียวลาย (อนุรักษ์เกษตร)</div>
+            <div class="text-[10px] text-rose-400 font-bold">✕ เข้มงวดสูงสุด</div>
+          </button>
+        </div>
+
+        <!-- Detail Box of Selected Zone -->
+        <div id="zoning-detail-box" class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: รายการโปรด (Saved Deeds List) -->
+    <div id="tab-favorites" class="space-y-4 hidden">
+      <div class="glass-card rounded-2xl p-5 border border-slate-800 space-y-4">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+          <div>
+            <h3 class="font-bold text-white text-base flex items-center gap-2">
+              <i data-lucide="bookmark" class="w-5 h-5 text-amber-400"></i>
+              รายการโฉนดที่บันทึกไว้
+            </h3>
+            <p class="text-xs text-slate-400">คลิกเพื่อเปิดดูรูปแปลงบน LandsMaps หรือแชร์ส่งให้ลูกค้า</p>
+          </div>
+          <button type="button" onclick="clearAllFavorites()" class="text-xs text-rose-400 hover:underline">
+            ล้างทั้งหมด
+          </button>
+        </div>
+
+        <div id="fav-list-container" class="space-y-2.5">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900/95 border border-emerald-500/40 text-white text-xs px-4 py-3 rounded-xl shadow-2xl transition-all duration-300 opacity-0 pointer-events-none translate-y-3 flex items-center gap-2">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toast-text">ข้อความแจ้งเตือน</span>
+  </div>
+
+  <script>
+    // Base configuration
+    const BACKEND_URL = "https://siwasup-cobroker-os.onrender.com";
+    let qrInstance = null;
+
+    // Fast Base64 encoder for UTF-8
+    function toBase64(str) {
+      return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+        return String.fromCharCode('0x' + p1);
+      }));
+    }
+
+    // Initialize geo data dropdowns
+    function initGeoDropdowns() {
+      const geo = window.THAI_LANDMAP_GEO;
+      const selP = document.getElementById('sel-province');
+      if (!geo || !geo.provinces) {
+        selP.innerHTML = '<option value="">ไม่พบข้อมูลภูมิศาสตร์</option>';
+        return;
+      }
+
+      selP.innerHTML = '<option value="">-- เลือกจังหวัด --</option>' +
+        geo.provinces.map(p => `<option value="${p.code}">${p.name} (${p.code})</option>`).join('');
+
+      // Check saved default province
+      const savedP = localStorage.getItem('siwasup_default_province') || '10'; // Default Bangkok
+      selP.value = savedP;
+      onProvinceChange();
+    }
+
+    function onProvinceChange() {
+      const pCode = document.getElementById('sel-province').value;
+      const selA = document.getElementById('sel-amphur');
+      const geo = window.THAI_LANDMAP_GEO;
+
+      if (!pCode || !geo.districts[pCode]) {
+        selA.innerHTML = '<option value="">-- เลือกอำเภอ/เขต --</option>';
+        updateGeneratedLink();
+        return;
+      }
+
+      const districts = geo.districts[pCode];
+      selA.innerHTML = '<option value="">-- เลือกอำเภอ/เขต --</option>' +
+        districts.map(d => `<option value="${d.code}">${d.code}-${d.name}</option>`).join('');
+
+      // Auto select first district if exists
+      if (districts.length > 0) {
+        selA.value = districts[0].code;
+      }
+      updateGeneratedLink();
+    }
+
+    // Generate LandsMaps DeepLink
+    function updateGeneratedLink() {
+      const pCode = document.getElementById('sel-province').value;
+      const aCode = document.getElementById('sel-amphur').value;
+      const deedNo = document.getElementById('input-deed').value.trim();
+
+      const outUrl = document.getElementById('output-url');
+      const tokenBadge = document.getElementById('token-badge');
+
+      if (!pCode || !aCode || !deedNo) {
+        outUrl.value = "";
+        tokenBadge.textContent = "รอข้อมูลครบ";
+        clearQr();
+        return;
+      }
+
+      // Formula discovered from RealGPT / LandsMaps QR:
+      // Token string = province_code,amphur_code,deed_no (e.g. "81,01,52696")
+      const rawToken = `${pCode},${aCode},${deedNo}`;
+      const b64Token = toBase64(rawToken);
+      const encodedToken = encodeURIComponent(b64Token);
+      const fullUrl = `https://landsmaps.dol.go.th?qrcodeToken=${encodedToken}`;
+
+      outUrl.value = fullUrl;
+      tokenBadge.textContent = `Token: ${rawToken}`;
+
+      renderQr(fullUrl);
+    }
+
+    function renderQr(text) {
+      const container = document.getElementById('qrcode-container');
+      container.innerHTML = "";
+      qrInstance = new QRCode(container, {
+        text: text,
+        width: 140,
+        height: 140,
+        colorDark: "#020617",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    }
+
+    function clearQr() {
+      const container = document.getElementById('qrcode-container');
+      container.innerHTML = `<div class="w-[140px] h-[140px] border border-dashed border-slate-700 rounded-lg flex items-center justify-center text-slate-500 text-xs text-center p-2">กรอกเลขโฉนดเพื่อสร้าง QR Code</div>`;
+    }
+
+    function openLandsMapsUrl() {
+      const url = document.getElementById('output-url').value;
+      if (!url) {
+        showToast("⚠️ กรุณาระบุจังหวัด อำเภอ และเลขที่โฉนดให้ครบถ้วน");
+        return;
+      }
+      window.open(url, '_blank');
+    }
+
+    function copyLandsMapsUrl() {
+      const url = document.getElementById('output-url').value;
+      if (!url) return;
+      navigator.clipboard.writeText(url).then(() => {
+        showToast("✓ คัดลอกลิงก์ LandsMaps เรียบร้อยแล้ว!");
+      });
+    }
+
+    function shareToLine() {
+      const url = document.getElementById('output-url').value;
+      if (!url) return;
+      const pSelect = document.getElementById('sel-province');
+      const aSelect = document.getElementById('sel-amphur');
+      const deedNo = document.getElementById('input-deed').value;
+      const pName = pSelect.options[pSelect.selectedIndex]?.text || '';
+      const aName = aSelect.options[aSelect.selectedIndex]?.text || '';
+
+      const rai = document.getElementById('input-rai').value;
+      const ngan = document.getElementById('input-ngan').value;
+      const sqw = document.getElementById('input-sqw').value;
+      let areaText = "";
+      if (rai || ngan || sqw) {
+        areaText = `\n📐 เนื้อที่: ${rai || 0} ไร่ ${ngan || 0} งาน ${sqw || 0} ตร.ว.`;
+      }
+
+      const msg = `📍 ข้อมูลแปลงที่ดิน (กรมที่ดิน LandsMaps)\n• เลขที่โฉนด: ${deedNo}\n• ทำเล: ${aName} จ.${pName}${areaText}\n\n👉 ดูรูปแปลงและราคาประเมินทันที:\n${url}`;
+      
+      const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(msg)}`;
+      window.open(lineUrl, '_blank');
+    }
+
+    function saveDefaultProvince() {
+      const pCode = document.getElementById('sel-province').value;
+      if (pCode) {
+        localStorage.setItem('siwasup_default_province', pCode);
+        showToast("✓ บันทึกจังหวัดเริ่มต้นเรียบร้อยแล้ว!");
+      }
+    }
+
+    // --- ZERO-TYPING OCR AUTO-FILL ---
+    async function handleDeedOcrUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const pill = document.getElementById('ocr-status-pill');
+      pill.textContent = "⚡ AI กำลังอ่านหน้าโฉนด...";
+      pill.className = "text-[10px] text-amber-400 font-bold animate-pulse";
+
+      try {
+        // Compress image using canvas before upload
+        const base64Data = await compressImageFile(file, 1600, 1600, 0.82);
+
+        const resp = await fetch(`${BACKEND_URL}/api/ocr/contract`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            doc_type: 'title_deed',
+            image_base64: base64Data,
+            mime_type: 'image/jpeg'
+          })
+        });
+
+        const result = await resp.json();
+        if (result && result.status === 'success' && result.data) {
+          const d = result.data;
+          pill.textContent = "✓ สกัดข้อมูลสำเร็จ!";
+          pill.className = "text-[10px] text-emerald-400 font-bold";
+
+          // 1. Fill deed number
+          if (d.deed_number) {
+            document.getElementById('input-deed').value = d.deed_number.replace(/\D/g, '');
+          }
+
+          // 2. Match Province
+          if (d.province) {
+            const selP = document.getElementById('sel-province');
+            for (let i = 0; i < selP.options.length; i++) {
+              if (selP.options[i].text.includes(d.province.replace('จังหวัด', '').trim())) {
+                selP.selectedIndex = i;
+                onProvinceChange();
+                break;
+              }
+            }
+          }
+
+          // 3. Match Amphur
+          if (d.district) {
+            const selA = document.getElementById('sel-amphur');
+            const cleanD = d.district.replace(/(อำเภอ|เขต)/g, '').trim();
+            for (let i = 0; i < selA.options.length; i++) {
+              if (selA.options[i].text.includes(cleanD)) {
+                selA.selectedIndex = i;
+                break;
+              }
+            }
+          }
+
+          // 4. Fill Area
+          if (d.area_rai) document.getElementById('input-rai').value = d.area_rai;
+          if (d.area_ngan) document.getElementById('input-ngan').value = d.area_ngan;
+          if (d.area_sqw) document.getElementById('input-sqw').value = d.area_sqw;
+
+          updateGeneratedLink();
+          showToast(`✨ อ่านโฉนดเลขที่ ${d.deed_number || ''} สำเร็จ สร้างลิงก์เรียบร้อย!`);
+        } else {
+          pill.textContent = "อ่านไม่ชัด กรุณาลองใหม่";
+          pill.className = "text-[10px] text-rose-400";
+        }
+      } catch (err) {
+        console.error("OCR Error:", err);
+        pill.textContent = "ผิดพลาด";
+        pill.className = "text-[10px] text-rose-400";
+        showToast("ไม่สามารถประมวลผล OCR ได้ กรุณาลองใหม่");
+      }
+    }
+
+    function compressImageFile(file, maxWidth, maxHeight, quality) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        const objectUrl = URL.createObjectURL(file);
+        img.onload = () => {
+          URL.revokeObjectURL(objectUrl);
+          let { width, height } = img;
+          if (width > maxWidth || height > maxHeight) {
+            if (width / height > maxWidth / maxHeight) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            } else {
+              width = Math.round((width * maxHeight) / height);
+              height = maxHeight;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = reject;
+        img.src = objectUrl;
+      });
+    }
+
+    // --- FAVORITES MANAGEMENT ---
+    function saveToFavorites() {
+      const url = document.getElementById('output-url').value;
+      if (!url) {
+        showToast("⚠️ ไม่มีข้อมูลโฉนดให้บันทึก");
+        return;
+      }
+      const label = document.getElementById('fav-label').value.trim() || `โฉนด #${document.getElementById('input-deed').value}`;
+      const pText = document.getElementById('sel-province').options[document.getElementById('sel-province').selectedIndex]?.text || '';
+      const aText = document.getElementById('sel-amphur').options[document.getElementById('sel-amphur').selectedIndex]?.text || '';
+      const deedNo = document.getElementById('input-deed').value;
+
+      const favItem = {
+        id: Date.now(),
+        label: label,
+        province: pText,
+        amphur: aText,
+        deed_no: deedNo,
+        url: url,
+        saved_at: new Date().toLocaleDateString('th-TH')
+      };
+
+      const list = JSON.parse(localStorage.getItem('siwasup_landmap_favs') || '[]');
+      list.unshift(favItem);
+      localStorage.setItem('siwasup_landmap_favs', JSON.stringify(list));
+      document.getElementById('fav-label').value = "";
+      renderFavorites();
+      showToast("⭐ บันทึกแปลงที่ดินลงรายการโปรดเรียบร้อยแล้ว!");
+    }
+
+    function renderFavorites() {
+      const list = JSON.parse(localStorage.getItem('siwasup_landmap_favs') || '[]');
+      const container = document.getElementById('fav-list-container');
+      document.getElementById('fav-count-badge').textContent = list.length;
+
+      if (list.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-slate-500 text-xs">ยังไม่มีรายการโฉนดที่บันทึกไว้</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(item => `
+        <div class="glass-card p-3 rounded-xl border border-slate-800 flex items-center justify-between gap-3 hover:border-slate-700 transition">
+          <div>
+            <h4 class="font-bold text-white text-xs">${item.label}</h4>
+            <div class="text-[11px] text-slate-400">เลขที่โฉนด: <strong>${item.deed_no}</strong> • ${item.amphur} (${item.province})</div>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <a href="${item.url}" target="_blank" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-xs font-bold transition flex items-center gap-1">
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+              <span>ดูแปลง</span>
+            </a>
+            <button onclick="deleteFavorite(${item.id})" class="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 transition">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function deleteFavorite(id) {
+      let list = JSON.parse(localStorage.getItem('siwasup_landmap_favs') || '[]');
+      list = list.filter(x => x.id !== id);
+      localStorage.setItem('siwasup_landmap_favs', JSON.stringify(list));
+      renderFavorites();
+    }
+
+    function clearAllFavorites() {
+      if (confirm("ต้องการล้างรายการโฉนดที่บันทึกไว้ทั้งหมดหรือไม่?")) {
+        localStorage.removeItem('siwasup_landmap_favs');
+        renderFavorites();
+      }
+    }
+
+    // --- ZONING DETAIL MATRIX ---
+    const ZONING_DATA = {
+      purple: {
+        title: "🟣 ผังสีม่วง (ที่ดินประเภทอุตสาหกรรม - รหัส อ.1 ถึง อ.3)",
+        factory_ok: true,
+        summary: "จัดตั้งโรงงานอุตสาหกรรมได้ 100% ครอบคลุมโรงงานจำพวกที่ 1, 2 และ 3",
+        allowed: ["โรงงานอุตสาหกรรมทุกขนาด", "คลังสินค้าและศูนย์กระจายสินค้า", "โรงงานแปรรูปโลหะ พลาสติก เคมีภัณฑ์ (ตามเกณฑ์ EIA)"],
+        prohibited: ["โครงการจัดสรรบ้านเดี่ยวจัดสรรขนาดใหญ่", "โรงพยาบาลหรือสถานศึกษาขนาดใหญ่ในเขตมลพิษ"],
+        tip: "💡 ทำเลทองสำหรับนักลงทุนสายโรงงานและโลจิสติกส์ ราคาที่ดินมักมี Premium สูงสำหรับการขอใบอนุญาต รง.4"
+      },
+      "light-purple": {
+        title: "🟪 ผังสีม่วงอ่อน (ที่ดินประเภทคลังสินค้าและเม็ดเงิน - รหัส อ.4)",
+        factory_ok: true,
+        summary: "เน้นคลังสินค้า ศูนย์กระจายสินค้า และโรงงานสะอาด",
+        allowed: ["คลังสินค้า (Warehouse) & Logistics Hub", "โรงงานประกอบชิ้นส่วนที่ไม่ปล่อยมลพิษ", "โรงงานอิเล็กทรอนิกส์"],
+        prohibited: ["โรงงานอุตสาหกรรมหนัก หรือโรงงานเคมีภัณฑ์ที่มีมลพิษรุนแรง"],
+        tip: "💡 เหมาะอย่างยิ่งสำหรับทำคลัง Fulfillment ขนส่ง Shopee/Lazada หรือศูนย์กระจายสินค้าใกล้เมือง"
+      },
+      orange: {
+        title: "🟠 ผังสีส้ม (ที่ดินประเภทที่อยู่อาศัยหนาแน่นปานกลาง - รหัส ย.5 ถึง ย.7)",
+        factory_ok: false,
+        summary: "ห้ามจัดตั้งโรงงานอุตสาหกรรมจำพวก 2 และ 3 เด็ดขาด",
+        allowed: ["บ้านเดี่ยว ทาวน์โฮม บ้านแฝด", "คอนโดมิเนียมสูงไม่เกิน 8 ชั้น (Low-rise) และ High-rise บางทำเล", "อาคารพาณิชย์และสำนักงาน"],
+        prohibited: ["โรงงานอุตสาหกรรมทุกประเภท (ยกเว้นอุตสาหกรรมในครัวเรือนจำพวก 1 ขนาดเล็กมากที่ไม่มีมลพิษ)"],
+        tip: "💡 เหมาะสำหรับทำโครงการอสังหาฯ แนวราบ-แนวดิ่งเพื่อขาย ไม่เหมาะกับสายทำโรงงาน"
+      },
+      yellow: {
+        title: "🟡 ผังสีเหลือง (ที่ดินประเภทที่อยู่อาศัยหนาแน่นน้อย - รหัส ย.1 ถึง ย.4)",
+        factory_ok: false,
+        summary: "ห้ามสร้างโรงงานอุตสาหกรรมจำพวก 2 และ 3 โดยเด็ดขาด",
+        allowed: ["บ้านเดี่ยว บ้านแฝด", "เกษตรกรรม", "สาธารณูปโภคพื้นฐาน"],
+        prohibited: ["โรงงานอุตสาหกรรม", "คลังสินค้าขนาดใหญ่เกินกำหนด", "สถานบริการและอาคารมลพิษ"],
+        tip: "💡 มักเป็นโซนชานเมืองที่เน้นความสงบ เหมาะสร้างบ้านอยู่อาศัยคุณภาพสูง"
+      },
+      green: {
+        title: "🟢 ผังสีเขียว (ที่ดินประเภทชนบทและเกษตรกรรม - รหัส ก.1 ถึง ก.5)",
+        factory_ok: "partial",
+        summary: "ตั้งได้เฉพาะ 'โรงงานแปรรูปผลผลิตทางการเกษตร' เท่านั้น",
+        allowed: ["เกษตรกรรม แปลงเกษตร ฟาร์ม", "โรงงานแปรรูปผลิตผลการเกษตร (เช่น โรงสี โรงอบผลไม้ โรงสกัดน้ำมันปาล์ม)", "โกดังเก็บพืชผล"],
+        prohibited: ["โรงงานเคมีภัณฑ์ โรงงานฟอกย้อม โรงหล่อโลหะ", "อาคารพาณิชย์ขนาดใหญ่พิเศษ"],
+        tip: "💡 ถ้าลูกค้าจะทำโรงงาน ต้องเช็กว่าใช้วัตถุดิบเกษตรในท้องถิ่นหรือไม่ หากเป็นโรงงานทั่วไปจะขอ รง.4 ไม่ผ่าน"
+      },
+      red: {
+        title: "🔴 ผังสีแดง (ที่ดินประเภทพาณิชยกรรม - รหัส พ.1 ถึง พ.5)",
+        factory_ok: false,
+        summary: "เน้นการค้า ศูนย์กลางธุรกิจ ห้ามโรงงานสร้างมลพิษ",
+        allowed: ["ศูนย์การค้า โรงแรม ตึกสำนักงาน", "คอนโดมิเนียมใจกลางเมือง", "ตลาดสดและศูนย์แสดงสินค้า"],
+        prohibited: ["โรงงานอุตสาหกรรมจำพวก 2 และ 3"],
+        tip: "💡 ที่ดินมูลค่าสูงสุดในเมือง เน้นสร้างผลตอบแทนเชิงพาณิชย์และค่าเช่า"
+      },
+      brown: {
+        title: "🟤 ผังสีน้ำตาล (ที่ดินประเภทที่อยู่อาศัยหนาแน่นมาก - รหัส ย.8 ถึง ย.10)",
+        factory_ok: false,
+        summary: "เขตเมืองชั้นใน ห้ามโรงงานเด็ดขาด",
+        allowed: ["คอนโดมิเนียม High-rise สูงพิเศษ", "อพาร์ตเมนต์ สำนักงาน"],
+        prohibited: ["โรงงานอุตสาหกรรมทุกประเภท"],
+        tip: "💡 อยู่ตามแนวรถไฟฟ้าสายหลัก ที่ดินราคาสูง เน้นพัฒนาแนวสูง"
+      },
+      "green-stripe": {
+        title: "🟩 ผังสีเขียวลาย (ที่ดินประเภทอนุรักษ์ชนบทและเกษตรกรรม)",
+        factory_ok: false,
+        summary: "เข้มงวดสูงสุด ห้ามสิ่งปลูกสร้างขนาดใหญ่และโรงงานทุกชนิด",
+        allowed: ["การทำเกษตรกรรมดั้งเดิม ที่อยู่อาศัยของเกษตรกร"],
+        prohibited: ["โรงงานทุกประเภท", "การจัดสรรที่ดินขนาดใหญ่", "อาคารสูงเกินกำหนด"],
+        tip: "💡 มักเป็นพื้นที่รับน้ำ (แก้มลิง) หรือพื้นที่อนุรักษ์ธรรมชาติ ไม่ควรลงทุนทำโรงงานหรือจัดสรร"
+      }
+    };
+
+    function selectZoningColor(key) {
+      const z = ZONING_DATA[key];
+      if (!z) return;
+
+      const box = document.getElementById('zoning-detail-box');
+      let statusBadge = `<span class="px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xs">✕ ห้ามตั้งโรงงานอุตสาหกรรม</span>`;
+      if (z.factory_ok === true) {
+        statusBadge = `<span class="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xs">✓ อนุญาตตั้งโรงงานได้ 100% (ขอ รง.4 ได้)</span>`;
+      } else if (z.factory_ok === 'partial') {
+        statusBadge = `<span class="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xs">⚠️ ได้เฉพาะโรงงานแปรรูปเกษตร</span>`;
+      }
+
+      box.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-800">
+          <h4 class="font-bold text-sm text-white">${z.title}</h4>
+          <div>${statusBadge}</div>
+        </div>
+        <p class="text-xs text-slate-300 font-medium">${z.summary}</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+          <div class="p-2.5 rounded-lg bg-emerald-950/20 border border-emerald-500/20 space-y-1">
+            <span class="font-bold text-emerald-400">✓ สิ่งที่สร้างได้:</span>
+            <ul class="list-disc list-inside text-slate-300 text-[11px] space-y-0.5">
+              ${z.allowed.map(x => `<li>${x}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="p-2.5 rounded-lg bg-rose-950/20 border border-rose-500/20 space-y-1">
+            <span class="font-bold text-rose-400">✕ สิ่งที่ห้ามสร้าง:</span>
+            <ul class="list-disc list-inside text-slate-300 text-[11px] space-y-0.5">
+              ${z.prohibited.map(x => `<li>${x}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+        <div class="p-2 rounded-lg bg-slate-800/60 text-xs text-amber-300/90 font-medium">${z.tip}</div>
+      `;
+    }
+
+    // --- TAB SWITCHING ---
+    function switchTab(tabId) {
+      ['tab-single', 'tab-zoning', 'tab-favorites'].forEach(t => {
+        document.getElementById(t).classList.add('hidden');
+      });
+      document.getElementById(tabId).classList.remove('hidden');
+
+      ['btn-tab-single', 'btn-tab-zoning', 'btn-tab-favorites'].forEach(b => {
+        document.getElementById(b).className = "py-3 px-5 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2 transition";
+      });
+
+      if (tabId === 'tab-single') {
+        document.getElementById('btn-tab-single').className = "py-3 px-5 border-b-2 border-emerald-400 text-emerald-400 flex items-center gap-2 transition font-bold";
+      } else if (tabId === 'tab-zoning') {
+        document.getElementById('btn-tab-zoning').className = "py-3 px-5 border-b-2 border-purple-400 text-purple-400 flex items-center gap-2 transition font-bold";
+        selectZoningColor('purple');
+      } else if (tabId === 'tab-favorites') {
+        document.getElementById('btn-tab-favorites').className = "py-3 px-5 border-b-2 border-amber-400 text-amber-400 flex items-center gap-2 transition font-bold";
+        renderFavorites();
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-text').textContent = msg;
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-3');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-3');
+      }, 3500);
+    }
+
+    // Init on DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      initGeoDropdowns();
+      clearQr();
+      renderFavorites();
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

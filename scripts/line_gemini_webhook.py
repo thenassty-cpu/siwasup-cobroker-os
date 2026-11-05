@@ -48,6 +48,54 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY") or _cfg.get("gemini_api", {}).
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite")
 ADMIN_EXPORT_SECRET = os.environ.get("ADMIN_EXPORT_SECRET", "SiwasupAdmin2026_SecureKey_99")
 
+# ---------------------------------------------------------------------------
+# LandsMaps GEO lookup: province code + amphur code  (ใช้สร้าง deeplink token)
+# Parse ตรงจากไฟล์ thai_landmap_geo.js ที่มีอยู่แล้วในโปรเจกต์
+# ---------------------------------------------------------------------------
+_GEO_LOOKUP_PROV: dict[str, str] = {}   # ชื่อจังหวัด → code เช่น "กระบี่" → "81"
+_GEO_LOOKUP_AMP:  dict[str, str] = {}   # "จังหวัด:อำเภอ" → code เช่น "กระบี่:เมืองกระบี่" → "01"
+
+def _load_geo_lookup():
+    """
+    thai_landmap_geo.js structure:
+      { "provinces": [{code, name}, ...],
+        "districts": { "<prov_code>": [{code, name}, ...], ... } }
+    """
+    geo_js = os.path.join(BASE_DIR, "thai_landmap_geo.js")
+    if not os.path.exists(geo_js):
+        return
+    try:
+        raw = open(geo_js, encoding="utf-8").read()
+        raw = re.sub(r'^window\.THAI_LANDMAP_GEO\s*=\s*', '', raw.strip())
+        raw = re.sub(r';?\s*$', '', raw)
+        geo = json.loads(raw)
+
+        # province code ← ชื่อจังหวัด
+        pcode_by_name: dict[str, str] = {}
+        for prov in geo.get("provinces", []):
+            pname = prov.get("name", "")
+            pcode = str(prov.get("code", ""))
+            if pname and pcode:
+                _GEO_LOOKUP_PROV[pname] = pcode
+                pcode_by_name[pname] = pcode
+
+        # amphur code ← "จังหวัด:อำเภอ"
+        # districts keyed by province_code (string int like "10", "81")
+        districts: dict = geo.get("districts", {})
+        for pname, pcode in pcode_by_name.items():
+            amp_list = districts.get(pcode) or districts.get(int(pcode), [])
+            for amp in amp_list:
+                aname = amp.get("name", "")
+                acode = amp.get("code", "")
+                if aname and acode:
+                    _GEO_LOOKUP_AMP[f"{pname}:{aname}"] = acode
+
+        print(f"[GEO] Loaded {len(_GEO_LOOKUP_PROV)} provinces, {len(_GEO_LOOKUP_AMP)} amphurs")
+    except Exception as e:
+        print(f"[GEO] Load error: {e}")
+
+_load_geo_lookup()
+
 # Session & Multi-Turn Memory Tracking
 USER_LAST_SEEN = {}
 USER_PROFILE_CACHE = {}
@@ -851,6 +899,442 @@ def find_property_by_id_or_code(pid):
                 "main_image": p.get("img") or "https://assets.siwasup.com/fallback_property.jpg"
             }
     return None
+
+
+# ==============================================================================
+# DEED OCR — รับรูปโฉนดจาก LINE → Gemini Vision → Flex Card + LandsMaps link
+# ==============================================================================
+
+def download_line_image(message_id: str) -> bytes | None:
+    """ดึงไบนารีรูปภาพจาก LINE Content API"""
+    url = f"https://api-data.line.me/v2/bot/message/{message_id}/content"
+    req = urllib.request.Request(
+        url,
+        headers={"Authorization": f"Bearer {LINE_ACCESS_TOKEN}"},
+        method="GET"
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            return resp.read()
+    except Exception as e:
+        print(f"[LINE Image DL Error]: {e}")
+        return None
+
+
+def _build_deeplink_token(province: str, amphur: str, deed_no: str) -> str | None:
+    """Base64(ProvinceCode,AmphurCode,DeedNo) ตาม LandsMaps spec"""
+    pcode = _GEO_LOOKUP_PROV.get(province, "")
+    acode = _GEO_LOOKUP_AMP.get(f"{province}:{amphur}", "")
+    if not pcode or not acode or not deed_no:
+        return None
+    raw = f"{pcode},{acode},{deed_no}"
+    return base64.b64encode(raw.encode("utf-8")).decode("utf-8")
+
+
+DEED_OCR_PROMPT = """คุณเป็นระบบ OCR อ่านหน้าโฉนดที่ดินของไทย (น.ส.4 / โฉนดที่ดิน / น.ส.3ก)
+ให้ค้นหาและคืนค่าต่อไปนี้ ในรูปแบบ JSON เท่านั้น ไม่มีข้อความนำ ไม่มี markdown:
+{
+  "province": "ชื่อจังหวัดภาษาไทย เช่น กรุงเทพมหานคร",
+  "amphur": "ชื่ออำเภอ/เขต ภาษาไทย เช่น เมืองกระบี่",
+  "deed_no": "เลขที่โฉนด ตัวเลขล้วน เช่น 52696",
+  "land_area_sqw": "เนื้อที่เป็นตารางวา เช่น 32.5 (ตัวเลขล้วน)",
+  "parcel_no": "เลขที่ดิน ถ้ามี",
+  "confidence": "high|medium|low"
+}
+ถ้าอ่านค่าไหนไม่ได้ให้ใส่ "" สำหรับ string หรือ null สำหรับตัวเลข
+ห้ามเดาหรือแต่งข้อมูล"""
+
+
+def ocr_deed_with_gemini(image_bytes: bytes) -> dict:
+    """
+    ส่งรูปไปยัง Gemini Vision API แล้วรับ JSON ข้อมูลโฉนด
+    คืน dict พร้อม key: province, amphur, deed_no, land_area_sqw, parcel_no, confidence
+    """
+    if not GEMINI_API_KEY:
+        return {}
+
+    img_b64 = base64.b64encode(image_bytes).decode("utf-8")
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
+    payload = {
+        "contents": [{
+            "parts": [
+                {"text": DEED_OCR_PROMPT},
+                {
+                    "inline_data": {
+                        "mime_type": "image/jpeg",
+                        "data": img_b64
+                    }
+                }
+            ]
+        }],
+        "generationConfig": {
+            "temperature": 0.0,
+            "maxOutputTokens": 256
+        }
+    }
+    try:
+        req = urllib.request.Request(
+            url,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            raw_text = (
+                data.get("candidates", [{}])[0]
+                .get("content", {})
+                .get("parts", [{}])[0]
+                .get("text", "")
+                .strip()
+            )
+            # strip markdown fences ถ้า Gemini ใส่มา
+            raw_text = re.sub(r"^```(?:json)?\s*", "", raw_text)
+            raw_text = re.sub(r"\s*```$", "", raw_text)
+            return json.loads(raw_text)
+    except Exception as e:
+        print(f"[Deed OCR Error]: {e}")
+        return {}
+
+
+ZONING_EMOJI = {
+    "ย.1": "🟡 ที่อยู่อาศัยหนาแน่นน้อย",
+    "ย.2": "🟡 ที่อยู่อาศัยหนาแน่นปานกลาง",
+    "ย.3": "🟡 ที่อยู่อาศัยหนาแน่นมาก",
+    "ย.4": "🟡 ที่อยู่อาศัยหนาแน่นมากพิเศษ",
+    "พ.1": "🟠 พาณิชยกรรม",
+    "พ.2": "🟠 พาณิชยกรรม",
+    "พ.3": "🟠 พาณิชยกรรมหนาแน่น",
+    "อ.1": "🔵 อุตสาหกรรม รง.4 ✅",
+    "อ.2": "🔵 อุตสาหกรรม รง.4 ✅",
+    "อ.3": "🔴 อุตสาหกรรมรวม",
+    "ก.1": "🟢 เกษตรกรรม",
+    "ก.2": "🟢 ชนบทและเกษตรกรรม",
+    "ก.3": "🟢 อนุรักษ์ชนบท/เกษตรกรรม",
+}
+
+
+def build_deed_flex_card(ocr: dict, deeplink_url: str, qr_token: str) -> dict:
+    """สร้าง LINE Flex Message Bubble สำหรับผลวิเคราะห์โฉนด"""
+    province   = ocr.get("province", "") or "—"
+    amphur     = ocr.get("amphur", "")   or "—"
+    deed_no    = ocr.get("deed_no", "")  or "—"
+    area_sqw   = ocr.get("land_area_sqw", "") or "—"
+    confidence = ocr.get("confidence", "low")
+    parcel_no  = ocr.get("parcel_no", "")
+
+    conf_color = {"high": "#10B981", "medium": "#F59E0B", "low": "#EF4444"}.get(confidence, "#6B7280")
+    conf_label = {"high": "✅ อ่านชัด", "medium": "⚠️ ตรวจสอบด้วย", "low": "❌ ภาพไม่ชัด"}.get(confidence, "?")
+
+    area_rai   = ""
+    try:
+        sqw = float(str(area_sqw).replace(",", ""))
+        rai  = int(sqw // 400)
+        ngan = int((sqw % 400) // 100)
+        rem  = round(sqw % 100, 1)
+        area_rai = f"{rai} ไร่ {ngan} งาน {rem} วา"
+    except Exception:
+        pass
+
+    contents = [
+        {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+                {"type": "text", "text": "📍 จังหวัด", "size": "xs", "color": "#94A3B8", "flex": 3},
+                {"type": "text", "text": province, "size": "xs", "color": "#F8FAFC", "weight": "bold", "flex": 5, "align": "end"}
+            ]
+        },
+        {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+                {"type": "text", "text": "🏘️ อำเภอ/เขต", "size": "xs", "color": "#94A3B8", "flex": 3},
+                {"type": "text", "text": amphur, "size": "xs", "color": "#F8FAFC", "weight": "bold", "flex": 5, "align": "end"}
+            ]
+        },
+        {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+                {"type": "text", "text": "📄 เลขโฉนด", "size": "xs", "color": "#94A3B8", "flex": 3},
+                {"type": "text", "text": deed_no, "size": "xs", "color": "#34D399", "weight": "bold", "flex": 5, "align": "end"}
+            ]
+        },
+        {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+                {"type": "text", "text": "📐 เนื้อที่", "size": "xs", "color": "#94A3B8", "flex": 3},
+                {
+                    "type": "text",
+                    "text": f"{area_sqw} ตร.ว.{(' ≈ ' + area_rai) if area_rai else ''}",
+                    "size": "xs",
+                    "color": "#F8FAFC",
+                    "flex": 5,
+                    "align": "end",
+                    "wrap": True
+                }
+            ]
+        },
+        {
+            "type": "separator",
+            "margin": "sm",
+            "color": "#1E293B"
+        },
+        {
+            "type": "box",
+            "layout": "horizontal",
+            "margin": "sm",
+            "contents": [
+                {"type": "text", "text": "ความแม่นยำ OCR", "size": "xxs", "color": "#64748B", "flex": 4},
+                {"type": "text", "text": conf_label, "size": "xxs", "color": conf_color, "weight": "bold", "flex": 4, "align": "end"}
+            ]
+        },
+    ]
+
+    if parcel_no:
+        contents.insert(3, {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+                {"type": "text", "text": "🔢 เลขที่ดิน", "size": "xs", "color": "#94A3B8", "flex": 3},
+                {"type": "text", "text": parcel_no, "size": "xs", "color": "#F8FAFC", "flex": 5, "align": "end"}
+            ]
+        })
+
+    footer_buttons = []
+    if deeplink_url:
+        footer_buttons.append({
+            "type": "button",
+            "style": "primary",
+            "color": "#059669",
+            "height": "sm",
+            "action": {
+                "type": "uri",
+                "label": "🗺️ เปิดแผนที่โฉนด LandsMaps",
+                "uri": deeplink_url
+            }
+        })
+
+    share_text = f"โฉนดที่ดิน {province} อ.{amphur} เลขที่ {deed_no}\n📐 เนื้อที่ {area_sqw} ตร.ว.\n🗺️ ดูแผนที่: {deeplink_url or 'N/A'}"
+    footer_buttons.append({
+        "type": "button",
+        "style": "secondary",
+        "height": "sm",
+        "action": {
+            "type": "uri",
+            "label": "📋 เช็กรายละเอียดเพิ่ม",
+            "uri": f"https://assets.siwasup.com/landmap_share.html"
+        }
+    })
+
+    return {
+        "type": "flex",
+        "altText": f"📄 โฉนดที่ดิน {province} อ.{amphur} เลขที่ {deed_no} | {area_sqw} ตร.ว.",
+        "contents": {
+            "type": "bubble",
+            "size": "kilo",
+            "header": {
+                "type": "box",
+                "layout": "vertical",
+                "paddingAll": "14px",
+                "backgroundColor": "#0F172A",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "📑 ผลวิเคราะห์โฉนดที่ดิน",
+                        "size": "sm",
+                        "weight": "bold",
+                        "color": "#34D399"
+                    },
+                    {
+                        "type": "text",
+                        "text": "LandsMaps • กรมที่ดิน • ศิวาทรัพย์ AI",
+                        "size": "xxs",
+                        "color": "#64748B",
+                        "margin": "xs"
+                    }
+                ]
+            },
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "sm",
+                "paddingAll": "14px",
+                "backgroundColor": "#1E293B",
+                "contents": contents
+            },
+            "footer": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "xs",
+                "paddingAll": "12px",
+                "paddingTop": "0px",
+                "backgroundColor": "#1E293B",
+                "contents": footer_buttons
+            }
+        }
+    }
+
+
+
+def parse_deed_text_query(text: str) -> dict | None:
+    """
+    ตรวจจับและสกัดข้อมูลโฉนดจากข้อความพิมพ์ของผู้ใช้ (ท่าที่ 2: พิมพ์ข้อความ)
+    คืนค่า dict: {'deed_no': ..., 'province': ..., 'amphur': ...} หรือ None ถ้าไม่ใช่การค้นหาโฉนด
+    """
+    if not text:
+        return None
+    text_clean = text.strip()
+
+    # คำหลักที่บ่งบอกว่าต้องการเช็คหรือค้นหาโฉนด
+    has_deed_kw = any(k in text_clean for k in ['โฉนด', 'แปลงที่ดิน', 'รูปแปลง', 'เช็คที่ดิน', 'เลขที่ดิน'])
+
+    # ค้นหาตัวเลข 3-8 หลัก
+    num_match = re.search(r'(?:โฉนด(?:\s*เลขที่)?\s*)?(\b\d{3,8}\b)', text_clean)
+    deed_no = num_match.group(1) if num_match else ''
+
+    if not has_deed_kw and not (deed_no and len(deed_no) >= 4 and any(p in text_clean for p in _GEO_LOOKUP_PROV)):
+        return None
+
+    # สกัดจังหวัด
+    matched_prov = ''
+    for p in sorted(_GEO_LOOKUP_PROV.keys(), key=len, reverse=True):
+        if p in text_clean:
+            matched_prov = p
+            break
+
+    # สกัดอำเภอ
+    matched_amp = ''
+    if matched_prov:
+        for k in _GEO_LOOKUP_AMP.keys():
+            if k.startswith(f"{matched_prov}:"):
+                amp_name = k.split(":", 1)[1]
+                amp_clean = amp_name.replace("อำเภอ", "").replace("เขต", "").replace("อ.", "").strip()
+                if amp_clean in text_clean or (amp_clean.startswith("เมือง") and ("เมือง" in text_clean or "อ.เมือง" in text_clean)):
+                    matched_amp = amp_name
+                    break
+    else:
+        # กรณีไม่ได้พิมพ์ชื่อจังหวัดตรงๆ ลองหาจากชื่ออำเภอ
+        for k in _GEO_LOOKUP_AMP.keys():
+            prov_name, amp_name = k.split(":", 1)
+            amp_clean = amp_name.replace("อำเภอ", "").replace("เขต", "").replace("อ.", "").strip()
+            if len(amp_clean) >= 3 and amp_clean in text_clean:
+                matched_prov = prov_name
+                matched_amp = amp_name
+                break
+
+    return {
+        "deed_no": deed_no,
+        "province": matched_prov,
+        "amphur": matched_amp
+    }
+
+
+def handle_deed_image(message_id: str, reply_token: str, user_id: str, user_name: str):
+    """
+    Main pipeline: LINE image → download → Gemini OCR → LandsMaps deeplink → Flex reply
+    รันบน background thread เพื่อไม่ให้ block webhook response
+    """
+    t0 = time.time()
+    # 1. ตอบรับทันทีว่ากำลังอ่าน
+    quick_reply_text = f"⏳ กำลังอ่านโฉนด AI อยู่ครับ คุณ{user_name}... รอแป๊บเดียวนะครับ! 🔍"
+    reply_line(reply_token, quick_reply_text)
+
+    # 2. Download รูปจาก LINE
+    image_bytes = download_line_image(message_id)
+    if not image_bytes:
+        return  # reply token หมดอายุแล้วถ้าถึงจุดนี้ ไม่มีทางส่งซ้ำได้
+
+    # 3. OCR ด้วย Gemini Vision
+    ocr = ocr_deed_with_gemini(image_bytes)
+
+    if not ocr or not ocr.get("deed_no"):
+        # รูปอ่านไม่ออก — push ข้อความแนะนำแทน
+        _push_line_message(
+            user_id,
+            "ขออภัยครับ น้องศิวาอ่านโฉนดจากรูปนี้ไม่ชัดเจนครับ 🙏\n"
+            "ลองถ่ายรูปใหม่ให้:\n"
+            "• ภาพคมชัด ไม่เบลอ\n"
+            "• เห็นเลขโฉนด จังหวัด และอำเภอครบ\n"
+            "• ถ่ายตรง ไม่เอียง\n\n"
+            "หรือกรอกเองที่ 👉 https://assets.siwasup.com/landmap_share.html"
+        )
+        return
+
+    # 4. สร้าง LandsMaps deeplink token
+    province = ocr.get("province", "")
+    amphur   = ocr.get("amphur", "")
+    deed_no  = ocr.get("deed_no", "")
+    qr_token    = _build_deeplink_token(province, amphur, deed_no)
+    deeplink_url = (
+        f"https://landsmaps.dol.go.th/?qrcodeToken={qr_token}"
+        if qr_token else ""
+    )
+
+    # 5. สร้าง Flex Card
+    flex_card = build_deed_flex_card(ocr, deeplink_url, qr_token or "")
+
+    # 6. Push Flex Card (reply token หมดอายุแล้วตอนนี้ ต้องใช้ push API)
+    latency_ms = int((time.time() - t0) * 1000)
+    print(f"[Deed OCR Done] {province} อ.{amphur} โฉนด#{deed_no} | {latency_ms}ms | token={'ok' if qr_token else 'no_geo'}")
+
+    # Push flex ผ่าน push API (reply token หมดอายุหลังจาก quick reply แรก)
+    _push_flex_message_raw(flex_card, user_id)
+    append_chat_log({
+        "id": f"LOG_{int(time.time()*1000)}",
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "user_name": user_name,
+        "user_pic": "",
+        "user_id_tail": "deed_ocr",
+        "event_type": "deed_ocr",
+        "user_text": f"[รูปโฉนด] {province} อ.{amphur} เลขที่ {deed_no}",
+        "ai_reply": f"Flex Card: {province} อ.{amphur} #{deed_no} | {ocr.get('land_area_sqw','')} ตร.ว.",
+        "matched_codes": [],
+        "search_mode": "DEED_OCR",
+        "latency_ms": latency_ms
+    })
+
+
+def _push_line_message(user_id: str, text: str):
+    """Push ข้อความ text ไปยัง user โดยตรง (ไม่ใช้ reply token)"""
+    url = "https://api.line.me/v2/bot/message/push"
+    payload = {
+        "to": user_id,
+        "messages": [{"type": "text", "text": text}]
+    }
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "application/json", "Authorization": f"Bearer {LINE_ACCESS_TOKEN}"},
+        method="POST"
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            print(f"[LINE Push OK]: {resp.status}")
+    except Exception as e:
+        print(f"[LINE Push Error]: {e}")
+
+
+def _push_flex_message_raw(flex_msg: dict, user_id: str):
+    """Push Flex message ไปยัง user_id โดยตรง"""
+    url = "https://api.line.me/v2/bot/message/push"
+    payload = {
+        "to": user_id,
+        "messages": [flex_msg]
+    }
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "application/json", "Authorization": f"Bearer {LINE_ACCESS_TOKEN}"},
+        method="POST"
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            print(f"[LINE Push Flex OK]: {resp.status}")
+    except Exception as e:
+        print(f"[LINE Push Flex Error]: {e}")
 
 
 def build_property_flex_bubble(prop, client_name="คุณลูกค้า", agent_ref="TON"):
@@ -2094,9 +2578,42 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         try:
                             prof = get_line_profile(uid)
                             print(f"[User Message from {prof.get('displayName')}]: {text}")
-                            if mtype == 'text':
+                            if mtype == 'image':
+                                # ---- รูปโฉนด: OCR + LandsMaps Flex Card ----
+                                handle_deed_image(
+                                    message_id=msg.get("id", ""),
+                                    reply_token=token,
+                                    user_id=uid,
+                                    user_name=prof.get("displayName", "คุณเอเจนต์")
+                                )
+                                return
+                            elif mtype == 'text':
                                 text_clean = text.strip().lower()
-                                if any(k in text_clean for k in ['สมัคร', 'ลงทะเบียน', 'login', 'เข้าสู่ระบบ', 'ขอนามบัตร', 'นามบัตร', 'โปรไฟล์', 'profile', 'เอเจนต์', 'เอเจน', 'ตัวแทน', 'ร่วมงาน', 'ขอเข้ากลุ่ม', 'เข้ากลุ่ม', 'นายหน้า', 'co-broker', 'cobroker', 'ขอลิงก์', 'ขอลิงค์', 'วิธีสมัคร', 'อยากเป็นเอเจนต์', 'ลิงก์สมัคร']):
+                                deed_q = parse_deed_text_query(text)
+                                if deed_q:
+                                    deed_no = deed_q.get('deed_no', '')
+                                    prov = deed_q.get('province', '')
+                                    amp = deed_q.get('amphur', '')
+                                    if deed_no and prov and amp:
+                                        qr_tok = _build_deeplink_token(prov, amp, deed_no)
+                                        dlink = f'https://landsmaps.dol.go.th/?qrcodeToken={qr_tok}' if qr_tok else ''
+                                        flex_card = build_deed_flex_card({
+                                            'province': prov,
+                                            'amphur': amp,
+                                            'deed_no': deed_no,
+                                            'land_area_sqw': '',
+                                            'confidence': 'high',
+                                            'notes': 'ค้นหาผ่านข้อความพิมพ์ตรง'
+                                        }, dlink, qr_tok or '')
+                                        ai_reply = f'🗺️ น้องศิวาปักหมุดแปลงที่ดิน โฉนดเลขที่ {deed_no} อ.{amp} จ.{prov} ให้เรียบร้อยครับ! กดเปิดดูบน LandsMaps ได้เลยครับ ✨'
+                                        matched_codes, search_mode, matched_props, flex_carousel = [], 'DEED_TEXT_QUERY', [], flex_card
+                                    elif deed_no:
+                                        ai_reply = f'🗺️ น้องศิวาตรวจพบเลขที่โฉนด #{deed_no} แล้วครับ!\n\nเนื่องจากระบบกรมที่ดิน (LandsMaps) ต้องใช้ชื่อจังหวัดและอำเภอในการปักหมุดรูปแปลง\n\n👉 รบกวนพิมพ์ระบุ จังหวัด และ อำเภอ เพิ่มเติมได้เลยครับ\nตัวอย่างเช่น: โฉนด {deed_no} ชลบุรี อ.เมือง'
+                                        matched_codes, search_mode, matched_props, flex_carousel = [], 'DEED_PROMPT_GEO', [], None
+                                    else:
+                                        ai_reply = '🗺️ หากต้องการค้นหาแปลงที่ดิน กรุณาระบุเลขที่โฉนด พร้อมจังหวัดและอำเภอครับ\nตัวอย่าง: โฉนด 52696 ชลบุรี อ.เมือง'
+                                        matched_codes, search_mode, matched_props, flex_carousel = [], 'DEED_PROMPT_GEO', [], None
+                                elif any(k in text_clean for k in ['สมัคร', 'ลงทะเบียน', 'login', 'เข้าสู่ระบบ', 'ขอนามบัตร', 'นามบัตร', 'โปรไฟล์', 'profile', 'เอเจนต์', 'เอเจน', 'ตัวแทน', 'ร่วมงาน', 'ขอเข้ากลุ่ม', 'เข้ากลุ่ม', 'นายหน้า', 'co-broker', 'cobroker', 'ขอลิงก์', 'ขอลิงค์', 'วิธีสมัคร', 'อยากเป็นเอเจนต์', 'ลิงก์สมัคร']):
                                     ai_reply = (
                                         f"สวัสดีครับคุณ {prof.get('displayName', '')}! สำหรับการลงทะเบียนทีมงานออฟฟิศ หรือรับนามบัตรดิจิทัลทางการของ Siwasup Co-Broker OS:\n\n"
                                         "👉 คลิกที่นี่เพื่อลงทะเบียน/เข้าสู่ระบบได้ทันทีครับ:\n"
