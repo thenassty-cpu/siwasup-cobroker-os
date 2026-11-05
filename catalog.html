@@ -1882,8 +1882,16 @@
         if (agentActionsRow) agentActionsRow.classList.remove('hidden');
         if (adminActionsRow) adminActionsRow.classList.add('hidden');
 
+        const isConsignmentOrSiwasup = (p.bank_source === 'Siwasup' || p.b === 'Siwasup' || p.is_exclusive === true || p.exclusive === true || p.consignment === true);
         const btnVinyl = document.getElementById('detail-btn-vinyl');
-        if (btnVinyl) btnVinyl.onclick = () => { closePropertyDetailModal(); openVinylModal(p.id); };
+        if (btnVinyl) {
+          if (isConsignmentOrSiwasup) {
+            btnVinyl.classList.remove('hidden');
+            btnVinyl.onclick = () => { closePropertyDetailModal(); openVinylModal(p.id); };
+          } else {
+            btnVinyl.classList.add('hidden');
+          }
+        }
 
         const btnShare = document.getElementById('detail-btn-share');
         if (btnShare) btnShare.onclick = () => { openSmartShare(p.id, displayTitle); };
@@ -2378,6 +2386,7 @@
         const displayTitle = getDisplayTitle(p);
         const safeTitleAttr = displayTitle.replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
+        const isConsignmentOrSiwasup = (p.bank_source === 'Siwasup' || p.b === 'Siwasup' || p.is_exclusive === true || p.exclusive === true || p.consignment === true);
         const num = parsePriceNumber(p.price);
         
         // Dynamic Commission display based on role (Neutralized in standard User Mode to avoid policy conflicts)
@@ -2572,10 +2581,12 @@
                           <i data-lucide="folder-down" class="w-3.5 h-3.5 text-neutral-400"></i>
                           <span>โหลดฟอร์มแบงก์</span>
                         </button>
-                        <button type="button" onclick="openVinylModal('${p.id}'); toggleCardActionMenu('${p.id}')" class="w-full px-3.5 py-2 text-left text-xs font-medium text-amber-800 hover:bg-amber-50/60 flex items-center gap-2.5 transition border-t border-neutral-100">
+                        ${isConsignmentOrSiwasup ? `
+                        <button type="button" onclick="openVinylModal('${p.id}'); toggleCardActionMenu('${p.id}')" class="w-full px-3.5 py-2 text-left text-xs font-medium text-amber-800 hover:bg-amber-50/60 flex items-center gap-2.5 transition border-t border-neutral-100" title="เฉพาะทรัพย์ฝากขาย/สัญญาปิด">
                           <i data-lucide="printer" class="w-3.5 h-3.5 text-amber-600"></i>
-                          <span>พิมพ์ป้ายไวนิล (Auto PDF)</span>
+                          <span>พิมพ์ป้ายไวนิล (ทรัพย์ฝากขาย)</span>
                         </button>
+                        ` : ''}
                         <button type="button" onclick="openSmartShare('${p.id}', '${safeTitleAttr}'); toggleCardActionMenu('${p.id}')" class="w-full px-3.5 py-2 text-left text-xs font-medium text-neutral-700 hover:bg-neutral-50 flex items-center gap-2.5 transition border-t border-neutral-100">
                           <i data-lucide="share-2" class="w-3.5 h-3.5 text-neutral-400"></i>
                           <span>แชร์ลิงก์ / QR ทรัพย์</span>
@@ -2618,10 +2629,12 @@
                           <i data-lucide="folder-down" class="w-3.5 h-3.5 text-neutral-400"></i>
                           <span>โหลดฟอร์มแบงก์</span>
                         </button>
-                        <button type="button" onclick="openVinylModal('${p.id}'); toggleCardActionMenu('${p.id}')" class="w-full px-3.5 py-2 text-left text-xs font-medium text-amber-800 hover:bg-amber-50/60 flex items-center gap-2.5 transition border-t border-neutral-100">
+                        ${isConsignmentOrSiwasup ? `
+                        <button type="button" onclick="openVinylModal('${p.id}'); toggleCardActionMenu('${p.id}')" class="w-full px-3.5 py-2 text-left text-xs font-medium text-amber-800 hover:bg-amber-50/60 flex items-center gap-2.5 transition border-t border-neutral-100" title="เฉพาะทรัพย์ฝากขาย/สัญญาปิด">
                           <i data-lucide="printer" class="w-3.5 h-3.5 text-amber-600"></i>
-                          <span>พิมพ์ป้ายไวนิล (Auto PDF)</span>
+                          <span>พิมพ์ป้ายไวนิล (ทรัพย์ฝากขาย)</span>
                         </button>
+                        ` : ''}
                       </div>
                     </div>
                   </div>
