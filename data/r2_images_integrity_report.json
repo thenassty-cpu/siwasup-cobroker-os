@@ -1,67 +1,17 @@
 {
-  "timestamp": "2026-10-31 03:25:04",
-  "total_properties": 980,
-  "total_images_checked": 3146,
-  "healthy_count": 2866,
-  "broken_count": 280,
-  "health_ratio": "91.10%",
+  "timestamp": "2026-11-06 02:19:30",
+  "total_properties": 3161,
+  "total_images_checked": 7314,
+  "healthy_count": 7006,
+  "broken_count": 308,
+  "health_ratio": "95.79%",
   "broken_details": [
-    {
-      "prop_id": "1100927",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/Ikwup_iBRtF-CsnId6Rm_mE8jjQ=/2cd9f7e964aa41169aec86dd70c8ca44",
-      "title": "ที่ดินเปล่า ลาดหวาย บางบ่อ จากปากซอยถนนศุขแม่สอน เข้าไปประมาณ 600 เมตร เหมาะทำโกดัง มีถนนตัดผ่าน",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
-      "prop_id": "1334913",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/BGEy0OH9UkLUHbOSXCWPhOwP6EU=/500x500/bb6d002dafce4306bacd70cd6845ced2",
-      "title": "บ้านวิวสวน บ้านกล้วย-ไทรน้อย ราคาไม่ถึง 3 ล้าน ต่อรองได้อี๊ก! ใกล้สถานีรถไฟฟ้า คลองบางไผ่",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
-      "prop_id": "1331174",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/qqA7V-bm0GWP3Y4dlGxUU6Oe-pk=/7c1fc0b0041a4991b893ca7347c3d154",
-      "title": "มัณฑนา พระราม 2-เทียนทะเล บ้านหลังมุม คุณภาพเริ่ด จาก L&H ให้เนื้อที่มากถึง 129.9 ตร.ว.",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
     {
       "prop_id": "1252172",
       "bank": "Siwasup",
       "type": "main",
       "url": "https://shop-image.readyplanet.com/rzTQBHIv4ZA6qCp1_3WnScs3yF0=/09cec752ff79456f99615c61f852ff72",
       "title": "บ้านเดี่ยวไซส์ใหญ่ ในที่ดินกว่า 5 ไร่ งามวงศ์วาน 26 พร้อมสิ่งปลูกสร้างหลายรายการ ราคาพิเศษ!",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
-      "prop_id": "1334088",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/4v1tZ51j_iM4Iu9MZrTQZySN-9U=/e236775a0c754e16bba3b338ca42f575",
-      "title": "Vายบ้านเดี่ยว หลังใหญ่ แปลงมุม เดอะ ซิตี้ บรมราชชนนี-ทวีวัฒนา 5 ห้องนอน อยู่สบายไม่อึดอัด ในทำเลสะดวก ใกล้ตลาดสดธนบุรี",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
-      "prop_id": "1335800",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/5x22w-0LP2ebPAq_KTALcJc6lLU=/500x500/55ee7d658ed74a038a0d774a3d29c0dc",
-      "title": "บ้านกลางเมือง สวิสทาวน์ เกษตร-นวมินทร์ ใกล้ถ.ประเสริฐมนูกิจ 500 ม. เดินทางง่าย เข้า-ออกได้หลายเส้นทาง",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -77,11 +27,41 @@
       "ok": false
     },
     {
+      "prop_id": "1331174",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/qqA7V-bm0GWP3Y4dlGxUU6Oe-pk=/7c1fc0b0041a4991b893ca7347c3d154",
+      "title": "มัณฑนา พระราม 2-เทียนทะเล บ้านหลังมุม คุณภาพเริ่ด จาก L&H ให้เนื้อที่มากถึง 129.9 ตร.ว.",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
+      "prop_id": "1100927",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/Ikwup_iBRtF-CsnId6Rm_mE8jjQ=/2cd9f7e964aa41169aec86dd70c8ca44",
+      "title": "ที่ดินเปล่า ลาดหวาย บางบ่อ จากปากซอยถนนศุขแม่สอน เข้าไปประมาณ 600 เมตร เหมาะทำโกดัง มีถนนตัดผ่าน",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
       "prop_id": "1335926",
       "bank": "Siwasup",
       "type": "main",
       "url": "https://shop-image.readyplanet.com/W7QPwG88-mUyz05pjq69fDwIoWU=/500x500/7a499ae94650413a966858ecff00f5cb",
       "title": "บ้านเดี่ยว เดอะ คอมพลีท ศรีราชา รายล้อมแหล่งท่องเที่ยวพักผ่อน และแหล่งความสะดวกมากมาย",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
+      "prop_id": "1335800",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/5x22w-0LP2ebPAq_KTALcJc6lLU=/500x500/55ee7d658ed74a038a0d774a3d29c0dc",
+      "title": "บ้านกลางเมือง สวิสทาวน์ เกษตร-นวมินทร์ ใกล้ถ.ประเสริฐมนูกิจ 500 ม. เดินทางง่าย เข้า-ออกได้หลายเส้นทาง",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -97,21 +77,21 @@
       "ok": false
     },
     {
-      "prop_id": "1334741",
+      "prop_id": "1334913",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/gQJ6GNsPRRhxZaZQzs7ZHqbAC7A=/500x500/127de05913854284814264c79b6ef853",
-      "title": "โมทิฟ คอนโด สาทร-วงเวียนใหญ่ ใกล้ตลาดคลองสาน ICON Siam *ราคาต่อรองได้อีกเยอะ!*",
+      "url": "https://shop-image.readyplanet.com/BGEy0OH9UkLUHbOSXCWPhOwP6EU=/500x500/bb6d002dafce4306bacd70cd6845ced2",
+      "title": "บ้านวิวสวน บ้านกล้วย-ไทรน้อย ราคาไม่ถึง 3 ล้าน ต่อรองได้อี๊ก! ใกล้สถานีรถไฟฟ้า คลองบางไผ่",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
     },
     {
-      "prop_id": "1332494",
+      "prop_id": "1334741",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/5BIHmzQFyqxf6rT8QqB7y9quM1A=/1ba73d62225947628a5fd9b5062515b5",
-      "title": "บ้านพฤกษา 3 บางบัวทอง ใกล้สถานีรถไฟฟ้า คลองบางไผ่ บ้านแฝด เนื้อที่เกินเบอร์ ราคาน่ารัก!!!",
+      "url": "https://shop-image.readyplanet.com/gQJ6GNsPRRhxZaZQzs7ZHqbAC7A=/500x500/127de05913854284814264c79b6ef853",
+      "title": "โมทิฟ คอนโด สาทร-วงเวียนใหญ่ ใกล้ตลาดคลองสาน ICON Siam *ราคาต่อรองได้อีกเยอะ!*",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -127,21 +107,31 @@
       "ok": false
     },
     {
-      "prop_id": "1333273",
+      "prop_id": "1334088",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/tCX0eGKjtCC0cFhMRw4ETAuShpA=/28a091c8f4674ce8990f95db988e006c",
-      "title": "อาคาร ริมถนนพิษณุโลก-หล่มสัก แหล่งธุรกิจ-ชุมชน ใกล้ตลาดทรัพย์ไพรวัลย์ ซื้อเปิดกิจการได้หลากหลาย",
+      "url": "https://shop-image.readyplanet.com/4v1tZ51j_iM4Iu9MZrTQZySN-9U=/e236775a0c754e16bba3b338ca42f575",
+      "title": "Vายบ้านเดี่ยว หลังใหญ่ แปลงมุม เดอะ ซิตี้ บรมราชชนนี-ทวีวัฒนา 5 ห้องนอน อยู่สบายไม่อึดอัด ในทำเลสะดวก ใกล้ตลาดสดธนบุรี",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
     },
     {
-      "prop_id": "1332020",
+      "prop_id": "1332494",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/e4vD_INUdKg22yU5K9uu_dvOITI=/b2aeccf38231425aaadbb7520014d0e3",
-      "title": "สิวารมณ์ เนเจอร์ พลัส พระราม 2-ท่าข้าม บ้านเดี่ยว 4 ห้องนอน ใกล้เซ็นทรัล ราคาจัดว่า คุ้ม! ลดทันที 8 แสน!!!",
+      "url": "https://shop-image.readyplanet.com/5BIHmzQFyqxf6rT8QqB7y9quM1A=/1ba73d62225947628a5fd9b5062515b5",
+      "title": "บ้านพฤกษา 3 บางบัวทอง ใกล้สถานีรถไฟฟ้า คลองบางไผ่ บ้านแฝด เนื้อที่เกินเบอร์ ราคาน่ารัก!!!",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
+      "prop_id": "1333273",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/tCX0eGKjtCC0cFhMRw4ETAuShpA=/28a091c8f4674ce8990f95db988e006c",
+      "title": "อาคาร ริมถนนพิษณุโลก-หล่มสัก แหล่งธุรกิจ-ชุมชน ใกล้ตลาดทรัพย์ไพรวัลย์ ซื้อเปิดกิจการได้หลากหลาย",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -167,11 +157,21 @@
       "ok": false
     },
     {
-      "prop_id": "1330100",
+      "prop_id": "1332020",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/vLWaqcna6TkJoHpIAYB-B4npwfM=/a7aa8f1b4586420da9cddbfca0b6592d",
-      "title": "ทฮ. เดอะคอนเนค สวนหลวง-อ่อนนุช ราคาพิเศษ ลดกว่าประเมิน 6 แสน!!! ทำเลฮิต ใกล้รถไฟฟ้า สถานีศรีนุช",
+      "url": "https://shop-image.readyplanet.com/e4vD_INUdKg22yU5K9uu_dvOITI=/b2aeccf38231425aaadbb7520014d0e3",
+      "title": "สิวารมณ์ เนเจอร์ พลัส พระราม 2-ท่าข้าม บ้านเดี่ยว 4 ห้องนอน ใกล้เซ็นทรัล ราคาจัดว่า คุ้ม! ลดทันที 8 แสน!!!",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
+      "prop_id": "1328441",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/8eoeeklRH59ZTQJraeza_txsAlE=/62d1d61ed2764b8ea90c61400dd6bb6a",
+      "title": "Vายอะพาร์ตเมนต์ ทำเลบางกะปิ ใจกลางลาดพร้าว 101 ใกล้วัดบึงฯ แหล่งชุมชน เปิดกิจการต่อได้เลย",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -197,11 +197,11 @@
       "ok": false
     },
     {
-      "prop_id": "1328441",
+      "prop_id": "1330100",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/8eoeeklRH59ZTQJraeza_txsAlE=/62d1d61ed2764b8ea90c61400dd6bb6a",
-      "title": "Vายอะพาร์ตเมนต์ ทำเลบางกะปิ ใจกลางลาดพร้าว 101 ใกล้วัดบึงฯ แหล่งชุมชน เปิดกิจการต่อได้เลย",
+      "url": "https://shop-image.readyplanet.com/vLWaqcna6TkJoHpIAYB-B4npwfM=/a7aa8f1b4586420da9cddbfca0b6592d",
+      "title": "ทฮ. เดอะคอนเนค สวนหลวง-อ่อนนุช ราคาพิเศษ ลดกว่าประเมิน 6 แสน!!! ทำเลฮิต ใกล้รถไฟฟ้า สถานีศรีนุช",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -217,21 +217,21 @@
       "ok": false
     },
     {
-      "prop_id": "1323976",
+      "prop_id": "1320959",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/rqTpXKI6A0tJ-bbR7hFBhVCc62E=/4bef53ae9cb647cc97e057b4317a8f3a",
-      "title": "คอนโด ไอดีโอ โมบิ สาทร ใกล้ BTS กรุงธนบุรี แค่ 80 เมตร 2 ห้องนอน ชั้นสูง วิวเมืองตระการตา",
+      "url": "https://shop-image.readyplanet.com/_61LKZ7huRpZ5Gp_HOkQGRMCGSs=/500x500/64ce9f9d539e4e67a98497b15df51135",
+      "title": "บ้านเดี่ยว ชัยพฤกษ์ ทางด่วน รามอินทรา-จตุโชติ ขับรถ 4 นาที ถึงด่านจตุโชติ ทำเลฮิต ราคาดีย์",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
     },
     {
-      "prop_id": "1324591",
+      "prop_id": "1323976",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/WBJ_ELB3NReNNX-ozs-PvmAIpFo=/75c3bc881c4f4de48efdf325ccfa3caa",
-      "title": "บ้านเดี่ยว พฤกษ์ลดา สุวรรณภูมิ โครงการคุณภาพ จาก L&H ราคาพิเศษ!",
+      "url": "https://shop-image.readyplanet.com/rqTpXKI6A0tJ-bbR7hFBhVCc62E=/4bef53ae9cb647cc97e057b4317a8f3a",
+      "title": "คอนโด ไอดีโอ โมบิ สาทร ใกล้ BTS กรุงธนบุรี แค่ 80 เมตร 2 ห้องนอน ชั้นสูง วิวเมืองตระการตา",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -247,11 +247,21 @@
       "ok": false
     },
     {
-      "prop_id": "1320959",
+      "prop_id": "1324591",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/_61LKZ7huRpZ5Gp_HOkQGRMCGSs=/500x500/64ce9f9d539e4e67a98497b15df51135",
-      "title": "บ้านเดี่ยว ชัยพฤกษ์ ทางด่วน รามอินทรา-จตุโชติ ขับรถ 4 นาที ถึงด่านจตุโชติ ทำเลฮิต ราคาดีย์",
+      "url": "https://shop-image.readyplanet.com/WBJ_ELB3NReNNX-ozs-PvmAIpFo=/75c3bc881c4f4de48efdf325ccfa3caa",
+      "title": "บ้านเดี่ยว พฤกษ์ลดา สุวรรณภูมิ โครงการคุณภาพ จาก L&H ราคาพิเศษ!",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
+      "prop_id": "1317353",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/rKbsEwS7qHWXS7N-w_ToTiktp1s=/500x500/7783c28b3c014c328a7475a021b03096",
+      "title": "บ้านกลางเมือง รามอินทรา หลังริม ได้พื้นที่เพิ่มข้างบ้าน! ใกล้ Fashion Island เข้าเมืองสะดวก ใกล้ทางด่วน 2 สาย",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -277,16 +287,6 @@
       "ok": false
     },
     {
-      "prop_id": "1315507",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/4cGT7_MhI5PN9YmVqkAn3gUINe8=/500x500/3b42559f129843e98c577fd91da2f88a",
-      "title": "*ราคาลดได้อีก* ดีไลท์ พุทธมณฑล-ศาลายา บ้านเดี่ยว ใกล้ม.มหิดล ศาลายา แค่ 10 นาทีถึง เดินทางสะดวก",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
       "prop_id": "1316575",
       "bank": "Siwasup",
       "type": "main",
@@ -297,11 +297,11 @@
       "ok": false
     },
     {
-      "prop_id": "1317353",
+      "prop_id": "1315507",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/rKbsEwS7qHWXS7N-w_ToTiktp1s=/500x500/7783c28b3c014c328a7475a021b03096",
-      "title": "บ้านกลางเมือง รามอินทรา หลังริม ได้พื้นที่เพิ่มข้างบ้าน! ใกล้ Fashion Island เข้าเมืองสะดวก ใกล้ทางด่วน 2 สาย",
+      "url": "https://shop-image.readyplanet.com/4cGT7_MhI5PN9YmVqkAn3gUINe8=/500x500/3b42559f129843e98c577fd91da2f88a",
+      "title": "*ราคาลดได้อีก* ดีไลท์ พุทธมณฑล-ศาลายา บ้านเดี่ยว ใกล้ม.มหิดล ศาลายา แค่ 10 นาทีถึง เดินทางสะดวก",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -317,16 +317,6 @@
       "ok": false
     },
     {
-      "prop_id": "1311295",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/cNxMnnr6vscJzcM8y40EUyo2kes=/500x500/356dad74e70f49878cad3549992a7b5b",
-      "title": "เดอะซิตี้ ราชพฤกษ์-ปิ่นเกล้า บ้านเดี่ยว หน้ากว้างสไตล์ Modern บนถนนบางกรวยไทรน้อย ใกล้ถนนราชพฤกษ์เพียง 400 ม.",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
       "prop_id": "1314483",
       "bank": "Siwasup",
       "type": "main",
@@ -337,11 +327,11 @@
       "ok": false
     },
     {
-      "prop_id": "1308934",
+      "prop_id": "1311295",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/EHgmeTv1MpVzS7jCRKtZVGIWdNg=/500x500/6e956bcea6f344b0a6f153a64b49b94b",
-      "title": "แกรนด์ บางกอก บูเลอวาร์ด ราชพฤกษ์ฯ บ้าน Luxury ราคาเบาลง 5.2 ล้าน!!!",
+      "url": "https://shop-image.readyplanet.com/cNxMnnr6vscJzcM8y40EUyo2kes=/500x500/356dad74e70f49878cad3549992a7b5b",
+      "title": "เดอะซิตี้ ราชพฤกษ์-ปิ่นเกล้า บ้านเดี่ยว หน้ากว้างสไตล์ Modern บนถนนบางกรวยไทรน้อย ใกล้ถนนราชพฤกษ์เพียง 400 ม.",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -357,6 +347,16 @@
       "ok": false
     },
     {
+      "prop_id": "1308092",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/HJl2a1twFUDRGdsgIWQUDrmNR48=/500x500/6b4ee96b15244ede972b90314220a954",
+      "title": "บ้านเดี่ยว เดอะเซนโทร รัตนาธิเบศร์ ใกล้รถไฟฟ้า MRT สถานีบางพลู",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
       "prop_id": "1305059",
       "bank": "Siwasup",
       "type": "main",
@@ -367,21 +367,11 @@
       "ok": false
     },
     {
-      "prop_id": "1299758",
+      "prop_id": "1308934",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/gGoccNSWoDPs-WfoOwLY3qfNhEk=/500x500/76ecdf4b80624205898a66da492f51da",
-      "title": "อาคารสำนักงาน บางซื่อ ริมถนนเตชะวนิช ใกล้ MRT-สถานีรถไฟ บางซื่อ แค่ 500 ม. ใกล้ SCG ไม่ถึง 200 ม. มีที่จอดรถได้หลายคัน",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
-      "prop_id": "1308092",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/HJl2a1twFUDRGdsgIWQUDrmNR48=/500x500/6b4ee96b15244ede972b90314220a954",
-      "title": "บ้านเดี่ยว เดอะเซนโทร รัตนาธิเบศร์ ใกล้รถไฟฟ้า MRT สถานีบางพลู",
+      "url": "https://shop-image.readyplanet.com/EHgmeTv1MpVzS7jCRKtZVGIWdNg=/500x500/6e956bcea6f344b0a6f153a64b49b94b",
+      "title": "แกรนด์ บางกอก บูเลอวาร์ด ราชพฤกษ์ฯ บ้าน Luxury ราคาเบาลง 5.2 ล้าน!!!",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -407,21 +397,11 @@
       "ok": false
     },
     {
-      "prop_id": "1295323",
+      "prop_id": "1299758",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/WvGKERQkTuvpy6QwZpju4b5mO1E=/500x500/8b573ee0ca094d1d842da1ac89eebe99",
-      "title": "บ้านเดี่ยว ทรงคลาสสิก เนื้อที่เยอะ ลัดดารมย์ วัชรพล-รัตนโกสินทร์ โครงการเด่นของ Q Houses ที่เน้นธรรมชาติ ร่มรื่น",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
-      "prop_id": "1090662",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/t1nN0KYNfQPD4GIx_4zLHuN6L1M=/9d8c88e85fbf414d843a3839f0b928df",
-      "title": "คอนโดศุภาลัยปาร์ค รัชโยธิน",
+      "url": "https://shop-image.readyplanet.com/gGoccNSWoDPs-WfoOwLY3qfNhEk=/500x500/76ecdf4b80624205898a66da492f51da",
+      "title": "อาคารสำนักงาน บางซื่อ ริมถนนเตชะวนิช ใกล้ MRT-สถานีรถไฟ บางซื่อ แค่ 500 ม. ใกล้ SCG ไม่ถึง 200 ม. มีที่จอดรถได้หลายคัน",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -437,21 +417,21 @@
       "ok": false
     },
     {
-      "prop_id": "1291916",
+      "prop_id": "1295323",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/5x8VQN1kWAlvyNMKs-DjTs-0vcA=/500x500/66c1adda5858429792e092c2adfcc995",
-      "title": "คิว ซีไซด์ หัวหิน คอนโด Luxury ริมหาด พิเศษ! ราคาต่อรองได้อีก",
+      "url": "https://shop-image.readyplanet.com/WvGKERQkTuvpy6QwZpju4b5mO1E=/500x500/8b573ee0ca094d1d842da1ac89eebe99",
+      "title": "บ้านเดี่ยว ทรงคลาสสิก เนื้อที่เยอะ ลัดดารมย์ วัชรพล-รัตนโกสินทร์ โครงการเด่นของ Q Houses ที่เน้นธรรมชาติ ร่มรื่น",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
     },
     {
-      "prop_id": "1069562",
+      "prop_id": "1291916",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/YzExhm_6-Fhw2ZyNobG0GZYcYdg=/862272d287724d678b5d1d2eb99c90ce",
-      "title": "บ้าน รีโนเวทคุณภาพ ราคาเอื้อมถึง! มบ.เลคการ์เด้นวิลล่า ขุมทอง-ลำต้อยติ่ง",
+      "url": "https://shop-image.readyplanet.com/5x8VQN1kWAlvyNMKs-DjTs-0vcA=/500x500/66c1adda5858429792e092c2adfcc995",
+      "title": "คิว ซีไซด์ หัวหิน คอนโด Luxury ริมหาด พิเศษ! ราคาต่อรองได้อีก",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -477,11 +457,21 @@
       "ok": false
     },
     {
-      "prop_id": "1090965",
+      "prop_id": "1090662",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/1AsaKKeFgSC1jP1h-btiWqCYb-A=/b2d5e166f0194552bd1a6e6f2169fd7a",
-      "title": "ด่วนราคาพิเศษ! ทาวน์โฮม ซิกเนเจอร์ รามอินทรา 109 ใกล้สถานีรถไฟฟ้า บางชัน",
+      "url": "https://shop-image.readyplanet.com/t1nN0KYNfQPD4GIx_4zLHuN6L1M=/9d8c88e85fbf414d843a3839f0b928df",
+      "title": "คอนโดศุภาลัยปาร์ค รัชโยธิน",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
+      "prop_id": "1090832",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/UgK89tANfRXfREaIBhXUs6irLT4=/663933f8647b470a858b707930739101",
+      "title": "คอนโด เซ็นทริค ซีน รัชวิภา ห้องมุม สวยๆ ไม่บล็อกวิว",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -497,11 +487,21 @@
       "ok": false
     },
     {
-      "prop_id": "1090832",
+      "prop_id": "1069562",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/UgK89tANfRXfREaIBhXUs6irLT4=/663933f8647b470a858b707930739101",
-      "title": "คอนโด เซ็นทริค ซีน รัชวิภา ห้องมุม สวยๆ ไม่บล็อกวิว",
+      "url": "https://shop-image.readyplanet.com/YzExhm_6-Fhw2ZyNobG0GZYcYdg=/862272d287724d678b5d1d2eb99c90ce",
+      "title": "บ้าน รีโนเวทคุณภาพ ราคาเอื้อมถึง! มบ.เลคการ์เด้นวิลล่า ขุมทอง-ลำต้อยติ่ง",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
+      "prop_id": "1090965",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/1AsaKKeFgSC1jP1h-btiWqCYb-A=/b2d5e166f0194552bd1a6e6f2169fd7a",
+      "title": "ด่วนราคาพิเศษ! ทาวน์โฮม ซิกเนเจอร์ รามอินทรา 109 ใกล้สถานีรถไฟฟ้า บางชัน",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -527,41 +527,11 @@
       "ok": false
     },
     {
-      "prop_id": "1100905",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/fhFsHMi6030uLvXwObM4jLYyjo4=/0df8cbcd76ce4c81a1cae81289542ad9",
-      "title": "ที่ดิน 2 ไร่ 49 ตรว. ใกล้หาดจอมเทียน",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
       "prop_id": "1100902",
       "bank": "Siwasup",
       "type": "main",
       "url": "https://shop-image.readyplanet.com/fmEz4dRa_kjJElNyzwGxTW4q-fU=/8310d3ba28114faaaae3b7f43c06dcc9",
       "title": "ที่ดิน 1 ไร่ 2 งาน พร้อมบ้าน 1 หลัง ติดคลองมหาสวัสดิ์ ทำเลศักยภาพ ห่างจากถนนราชพฤกษ์ 230 เมตร",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
-      "prop_id": "1106060",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/pyIwW6HvwNCLI1jXlp-rCLDIxxk=/944dec48345941ea98bd919a90bf8427",
-      "title": "บ้านเดี่ยว ไลฟ์ บางกอก บูเลอวาร์ด รังสิต-คลอง 3 หลังมุม ริมด้านใน",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
-      "prop_id": "1100907",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/wZFbac6w41v1Culw3L0gNVKRsrw=/912899656bac496f9a1913ecc1cdf0bf",
-      "title": "บ้านเดี่ยว 1 ชั้น รามอินทรา 39 เดินทางสะดวก ใกล้ถนนใหญ่เพียง 250 ม. ใกล้สถานีรถไฟฟ้า ก.ม.4 พื้นที่ 69 ตร.ว. 5 ห้องนอน มีพื้นที่ทำสวนหน้าบ้าน",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -577,21 +547,41 @@
       "ok": false
     },
     {
-      "prop_id": "1140337",
+      "prop_id": "1106060",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/9oo43DmBB9OryjLsOXoS4fmwXGA=/c5a31238f512405fbea70b9f087d1bb0",
-      "title": "คฤหาสน์ 3 ชั้น บรรยากาศรีสอร์ท ท่ามกลางธรรมชาติ ร่มรื่น ใกล้เมือง ใกล้ม.ธุรกิจบัณฑิตย์ ในหมู่บ้านลัดดาวัลย์ ประชาชื่น",
+      "url": "https://shop-image.readyplanet.com/pyIwW6HvwNCLI1jXlp-rCLDIxxk=/944dec48345941ea98bd919a90bf8427",
+      "title": "บ้านเดี่ยว ไลฟ์ บางกอก บูเลอวาร์ด รังสิต-คลอง 3 หลังมุม ริมด้านใน",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
     },
     {
-      "prop_id": "1140340",
+      "prop_id": "1100905",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/gZtFF65G3skSLyZU9qRqUn08Syw=/8001dd527f474e23b4f8ae1006364538",
-      "title": "บ้านเดี่ยว แลนซีโอ คริป เพชรเกษม 81 แถม Passive Income !!! จุกๆ ขายพร้อมผู้เช่า ราคาไม่แพงเวอร์ ทำกำไรตั้งแต่ตอนซื้อ",
+      "url": "https://shop-image.readyplanet.com/fhFsHMi6030uLvXwObM4jLYyjo4=/0df8cbcd76ce4c81a1cae81289542ad9",
+      "title": "ที่ดิน 2 ไร่ 49 ตรว. ใกล้หาดจอมเทียน",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
+      "prop_id": "1100907",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/wZFbac6w41v1Culw3L0gNVKRsrw=/912899656bac496f9a1913ecc1cdf0bf",
+      "title": "บ้านเดี่ยว 1 ชั้น รามอินทรา 39 เดินทางสะดวก ใกล้ถนนใหญ่เพียง 250 ม. ใกล้สถานีรถไฟฟ้า ก.ม.4 พื้นที่ 69 ตร.ว. 5 ห้องนอน มีพื้นที่ทำสวนหน้าบ้าน",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
+      "prop_id": "1140337",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/9oo43DmBB9OryjLsOXoS4fmwXGA=/c5a31238f512405fbea70b9f087d1bb0",
+      "title": "คฤหาสน์ 3 ชั้น บรรยากาศรีสอร์ท ท่ามกลางธรรมชาติ ร่มรื่น ใกล้เมือง ใกล้ม.ธุรกิจบัณฑิตย์ ในหมู่บ้านลัดดาวัลย์ ประชาชื่น",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -607,11 +597,11 @@
       "ok": false
     },
     {
-      "prop_id": "1140345",
+      "prop_id": "1140348",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/2LTvAHg8NIDo0rf57op4V49cRnQ=/ac6b3b0592d64fec94b83ed39699db01",
-      "title": "ทาวน์โฮม หลังริม พื้นที่เยอะ พฤกษาวิลล์ 16 รังสิตคลอง 2 ใกล้ถนนใหญ่ ใกล้สถานีรถไฟฟ้า",
+      "url": "https://shop-image.readyplanet.com/dBQ3OB_JSMP8ohemWN0VKaeP3ak=/6bd2f200899d4caf9b4160b45fa24a34",
+      "title": "ทาวน์โฮม 4 ชั้น หลังริม ซ.เอกมัย 12 มีลิฟท์ ทำเลศักยภาพ ใกล้สถานีรถไฟฟ้า รีโนเวททั้งหลัง ตกแต่งหรูหรา เฟอร์นิเจอร์บิวท์อินอย่างดี มีดาดฟ้า มีห้องน้ำสวยๆ ทุกชั้น",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -627,11 +617,31 @@
       "ok": false
     },
     {
-      "prop_id": "1165971",
+      "prop_id": "1140345",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/z8m_UkZrtzgdTStbyew6AzhMm1w=/0271ab8fe7b94aa080dbf5ccd0067ca7",
-      "title": "บ้านลดราคา 1 ล้าน! ซื้อ 1 ได้ถึง 3 !!! โฮมออฟฟิศ+สตูดิโอ+ที่ดิน 3 โฉนด 180 ตรว. ใกล้แฟชั่นไอส์แลนด์ ใกล้สถานีรถไฟฟ้า เดิมเป็นโฮมออฟฟิศ มีสตูดิโอ ที่จอดรถอลังการ ซื้อไปเปิดบริษัทต่อโลด",
+      "url": "https://shop-image.readyplanet.com/2LTvAHg8NIDo0rf57op4V49cRnQ=/ac6b3b0592d64fec94b83ed39699db01",
+      "title": "ทาวน์โฮม หลังริม พื้นที่เยอะ พฤกษาวิลล์ 16 รังสิตคลอง 2 ใกล้ถนนใหญ่ ใกล้สถานีรถไฟฟ้า",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
+      "prop_id": "1140340",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/gZtFF65G3skSLyZU9qRqUn08Syw=/8001dd527f474e23b4f8ae1006364538",
+      "title": "บ้านเดี่ยว แลนซีโอ คริป เพชรเกษม 81 แถม Passive Income !!! จุกๆ ขายพร้อมผู้เช่า ราคาไม่แพงเวอร์ ทำกำไรตั้งแต่ตอนซื้อ",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
+      "prop_id": "1162874",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/-R7BLQmoFN8iCjZIbvhX0Dll9WI=/306c1eaaa85044309afa9add1a99cb7f",
+      "title": "ตึกแถว ขายพร้อมผู้เช่าระยะยาว ที่ตลาดคลอง 4 เมืองใหม่ ลำลูกกา ตึกหันหน้าออกถนน จอดรถได้หลายคัน",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -642,6 +652,26 @@
       "type": "main",
       "url": "https://shop-image.readyplanet.com/hJJ0Vjb3GICviHnPjZ1je08t3S8=/bf22a24bee134a30949d75379c9a9aff",
       "title": "บ้านเดี่ยว หลังใหญ่ มบ.กัญญาเฮ้าส์ ซ.แจ้งวัฒนะ-ปากเกร็ด25 เข้าซอยเพียง 40 ม.",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
+      "prop_id": "1165889",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/2YtdRyIeGuHUIfXjrR5UsjvKfow=/56a496f786af4318becf7649c454a647",
+      "title": "ทฮ. วิลเลต ไลท์ ราชพฤกษ์-ปิ่นเกล้า หลังริม เนื้อที่เยอะ​ รีโนเวท ต่อเติมใหม่ ได้ห้องเพิ่มสวยๆ พร้อมอยู่ ฟรีโอน !!!",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
+      "prop_id": "1165971",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/z8m_UkZrtzgdTStbyew6AzhMm1w=/0271ab8fe7b94aa080dbf5ccd0067ca7",
+      "title": "บ้านลดราคา 1 ล้าน! ซื้อ 1 ได้ถึง 3 !!! โฮมออฟฟิศ+สตูดิโอ+ที่ดิน 3 โฉนด 180 ตรว. ใกล้แฟชั่นไอส์แลนด์ ใกล้สถานีรถไฟฟ้า เดิมเป็นโฮมออฟฟิศ มีสตูดิโอ ที่จอดรถอลังการ ซื้อไปเปิดบริษัทต่อโลด",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -667,26 +697,6 @@
       "ok": false
     },
     {
-      "prop_id": "1140348",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/dBQ3OB_JSMP8ohemWN0VKaeP3ak=/6bd2f200899d4caf9b4160b45fa24a34",
-      "title": "ทาวน์โฮม 4 ชั้น หลังริม ซ.เอกมัย 12 มีลิฟท์ ทำเลศักยภาพ ใกล้สถานีรถไฟฟ้า รีโนเวททั้งหลัง ตกแต่งหรูหรา เฟอร์นิเจอร์บิวท์อินอย่างดี มีดาดฟ้า มีห้องน้ำสวยๆ ทุกชั้น",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
-      "prop_id": "1162874",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/-R7BLQmoFN8iCjZIbvhX0Dll9WI=/306c1eaaa85044309afa9add1a99cb7f",
-      "title": "ตึกแถว ขายพร้อมผู้เช่าระยะยาว ที่ตลาดคลอง 4 เมืองใหม่ ลำลูกกา ตึกหันหน้าออกถนน จอดรถได้หลายคัน",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
       "prop_id": "1180954",
       "bank": "Siwasup",
       "type": "main",
@@ -697,31 +707,11 @@
       "ok": false
     },
     {
-      "prop_id": "1182248",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/gwl3dOVHa-3PIbv2a2ulRHKi8Rw=/4e278152ff2149e5af63fc0835a6dcf3",
-      "title": "วีธารา สุขุมวิท 36 คอนโดกลางเมือง ใกล้ BTS ทองหล่อ ขายพร้อมผู้เช่า เน้นทำเลสะดวกสบาย เดินทางง่าย ราคาพิเศษ",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
       "prop_id": "1183445",
       "bank": "Siwasup",
       "type": "main",
       "url": "https://shop-image.readyplanet.com/E0-FRkn2MI6V0inQ9QaUIOls6zU=/ce42783f24044083a60c5f7021dca33d",
       "title": "ทาวน์เฮาส์ กานดา พาร์ค ริมคลอง สมุทรสาคร พันท้ายนรสิงห์ ขาย ราคาไม่แรง ทำเลสะดวก มี 7-11 ในโครงการ มีรถโดยสารวิ่งไปโลตัสพระราม 2",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
-      "prop_id": "1165889",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/2YtdRyIeGuHUIfXjrR5UsjvKfow=/56a496f786af4318becf7649c454a647",
-      "title": "ทฮ. วิลเลต ไลท์ ราชพฤกษ์-ปิ่นเกล้า หลังริม เนื้อที่เยอะ​ รีโนเวท ต่อเติมใหม่ ได้ห้องเพิ่มสวยๆ พร้อมอยู่ ฟรีโอน !!!",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -747,11 +737,11 @@
       "ok": false
     },
     {
-      "prop_id": "1214266",
+      "prop_id": "1182248",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/eIn_NXN2mLTvNy7ftCkbRSRePqI=/55c63170aa27410a9e221ed96816ead5",
-      "title": "อาคาร 3 ชั้น ริมถนนช้างเผือก เมืองเชียงใหม่ ใกล้ราชภัฏเชียงใหม่ รพ.ล้านนา ทำเลศักยภาพมากๆ ขายต่ำกว่าราคาตลาด!!!",
+      "url": "https://shop-image.readyplanet.com/gwl3dOVHa-3PIbv2a2ulRHKi8Rw=/4e278152ff2149e5af63fc0835a6dcf3",
+      "title": "วีธารา สุขุมวิท 36 คอนโดกลางเมือง ใกล้ BTS ทองหล่อ ขายพร้อมผู้เช่า เน้นทำเลสะดวกสบาย เดินทางง่าย ราคาพิเศษ",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -777,6 +767,16 @@
       "ok": false
     },
     {
+      "prop_id": "1214266",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/eIn_NXN2mLTvNy7ftCkbRSRePqI=/55c63170aa27410a9e221ed96816ead5",
+      "title": "อาคาร 3 ชั้น ริมถนนช้างเผือก เมืองเชียงใหม่ ใกล้ราชภัฏเชียงใหม่ รพ.ล้านนา ทำเลศักยภาพมากๆ ขายต่ำกว่าราคาตลาด!!!",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
       "prop_id": "1193362",
       "bank": "Siwasup",
       "type": "main",
@@ -797,21 +797,11 @@
       "ok": false
     },
     {
-      "prop_id": "1221066",
+      "prop_id": "1229180",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/C-0JbtIFMFoocW-XakKZrVKQB54=/09abf9ac28b047628318f72f7e4b370f",
-      "title": "อาคาร 3 ชั้น ริมถนนสุขุมวิท มีที่จอดรถ! เดินไม่กี่ก้าวถึง สถานี BTS บางจาก!!!",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
-      "prop_id": "1226894",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/x6B9mUi9v8h-PW3kMGvMFZgco1k=/0e38396f9abd42cbae6fe8ffbbdff92c",
-      "title": "ถูกดี!!! อาคารสำนักงาน 4 ชั้น 4 คูหา ริมถนนหลัก ใกล้ MRT เตาปูน ราคาพิเศษ!",
+      "url": "https://shop-image.readyplanet.com/fftV5OJIH7SdpQHWj7obJTnAbo4=/3ae1df2bdb8946e8be0f1c34ab2b47ed",
+      "title": "ที่ดินเปล่า 2,550 ตร.ว. ซอยสายไหม 74 ราคาซุปเปอร์โปรฯ!",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -827,31 +817,21 @@
       "ok": false
     },
     {
+      "prop_id": "1221066",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/C-0JbtIFMFoocW-XakKZrVKQB54=/09abf9ac28b047628318f72f7e4b370f",
+      "title": "อาคาร 3 ชั้น ริมถนนสุขุมวิท มีที่จอดรถ! เดินไม่กี่ก้าวถึง สถานี BTS บางจาก!!!",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
       "prop_id": "1230955",
       "bank": "Siwasup",
       "type": "main",
       "url": "https://shop-image.readyplanet.com/GbHX_Z4B9LH83lVSdbU8H0g9nzc=/24c71a8da48f466986ea194370dd49d9",
       "title": "ราคานี้! ได้อาคาร 4 ชั้น 2 คูหา ในทำเลธุรกิจ! หมู่บ้าน ที บิส โฮม ตลาดพลู",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
-      "prop_id": "1229180",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/fftV5OJIH7SdpQHWj7obJTnAbo4=/3ae1df2bdb8946e8be0f1c34ab2b47ed",
-      "title": "ที่ดินเปล่า 2,550 ตร.ว. ซอยสายไหม 74 ราคาซุปเปอร์โปรฯ!",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
-      "prop_id": "1237277",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/JixkCCqalTFt75rLZhlGV-Jygag=/273f67a17296499d8f15b26d9b60ac7b",
-      "title": "ถูกดีย์! อาคาร ริมถนนเพชรเกษม ทำเลทอง ใกล้สถานี MRT โลตัส ตลาด บางแค!!! 3 ชั้น 2 คูหา ราคาพิเศษสุดๆ!",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -867,21 +847,21 @@
       "ok": false
     },
     {
-      "prop_id": "1239881",
+      "prop_id": "1237277",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/xtwY5MSY_yADi2edMqLDaZlfww0=/1977242eb6674289b0da6e86b36b9db9",
-      "title": "โกดัง เพชรเกษม 118 ซอย 8 พุทธมณฑล สาย 4 เนื้อที่จัดเต็ม 2 ไร่ 42 ตารางวา ทำเลสะดวก เข้า-ออกได้ทั้งทางเพชรเกษม และพุทธมณฑล",
+      "url": "https://shop-image.readyplanet.com/JixkCCqalTFt75rLZhlGV-Jygag=/273f67a17296499d8f15b26d9b60ac7b",
+      "title": "ถูกดีย์! อาคาร ริมถนนเพชรเกษม ทำเลทอง ใกล้สถานี MRT โลตัส ตลาด บางแค!!! 3 ชั้น 2 คูหา ราคาพิเศษสุดๆ!",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
     },
     {
-      "prop_id": "1247591",
+      "prop_id": "1226894",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/4HkLi0fj99E2DnOYu2pfccy6ZmY=/81858ed9ccc3450482591b9ae78bb322",
-      "title": "อาคาร 2 ชั้น 166 ตร.ว. ริมถนนประชาธิปก ทำเลศักยภาพ! ย่านฝั่งธน ใกล้ถ.อิสระภาพ มีที่จอดรถได้หลายคัน ขายต่ำกว่าราคาตลาด!",
+      "url": "https://shop-image.readyplanet.com/x6B9mUi9v8h-PW3kMGvMFZgco1k=/0e38396f9abd42cbae6fe8ffbbdff92c",
+      "title": "ถูกดี!!! อาคารสำนักงาน 4 ชั้น 4 คูหา ริมถนนหลัก ใกล้ MRT เตาปูน ราคาพิเศษ!",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -897,41 +877,21 @@
       "ok": false
     },
     {
-      "prop_id": "1261510",
+      "prop_id": "1247591",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/OIa7F6h0F-on-5DLIjxX5J2QxUE=/94bb48a3c0ea42f2b021d50745e3c55b",
-      "title": "ทาวน์โฮม เดินไม่กี่ก้าวถึงถนนใหญ่ลาดพร้าว ปากซอย 128/1 ตรงข้ามลาดพร้าว 101 ทำเลดี ใกล้สถานีรถไฟฟ้า",
+      "url": "https://shop-image.readyplanet.com/4HkLi0fj99E2DnOYu2pfccy6ZmY=/81858ed9ccc3450482591b9ae78bb322",
+      "title": "อาคาร 2 ชั้น 166 ตร.ว. ริมถนนประชาธิปก ทำเลศักยภาพ! ย่านฝั่งธน ใกล้ถ.อิสระภาพ มีที่จอดรถได้หลายคัน ขายต่ำกว่าราคาตลาด!",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
     },
     {
-      "prop_id": "1254199",
+      "prop_id": "1239881",
       "bank": "Siwasup",
       "type": "main",
-      "url": "https://shop-image.readyplanet.com/LVzKQcDsnmgWwqzCm_IRfg4hqmI=/b1d882a0367b4d658bbcea72763c6612",
-      "title": "บ้านเดี่ยว 1 ชั้น มบ.ธนินทร ดอนเมือง ริมถนนวิภาวดี-รังสิต อยู่ง่าย ไม่ต้องเหนื่อยขึ้น-ลง ได้เนื้อที่เน้นๆ หน้าบ้าน ราคาไม่แรง!",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
-      "prop_id": "1254541",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/0TMknT0vAXnakpl99FFgmgIhACM=/9b1aca48111e4d2aa982b78bd4232a81",
-      "title": "บ้านเดี่ยว สินบดีพาร์ค 4 ประชาอุทิศ 72 หลังมุม รีโนเวทอลังการ! เหมือนได้บ้านใหม่ ฟังก์ชันฉ่ำ! คุณภาพแน่น",
-      "status": 0,
-      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
-      "ok": false
-    },
-    {
-      "prop_id": "1254156",
-      "bank": "Siwasup",
-      "type": "main",
-      "url": "https://shop-image.readyplanet.com/3O1mLaSa_gO05Zv5PastU9p5zC8=/8cd7a6c86e704664a9faec12d26e8a93",
-      "title": "ทาวน์เฮาส์ มบ.เมืองประชา ปทุมธานี ราคาเบาๆ เอาไปรีโนเวทงามๆ ก็ยังคุ้ม! ทำเลแหล่งชุมชน ใกล้แยกบางคูวัด",
+      "url": "https://shop-image.readyplanet.com/xtwY5MSY_yADi2edMqLDaZlfww0=/1977242eb6674289b0da6e86b36b9db9",
+      "title": "โกดัง เพชรเกษม 118 ซอย 8 พุทธมณฑล สาย 4 เนื้อที่จัดเต็ม 2 ไร่ 42 ตารางวา ทำเลสะดวก เข้า-ออกได้ทั้งทางเพชรเกษม และพุทธมณฑล",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
@@ -947,6 +907,16 @@
       "ok": false
     },
     {
+      "prop_id": "1254199",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/LVzKQcDsnmgWwqzCm_IRfg4hqmI=/b1d882a0367b4d658bbcea72763c6612",
+      "title": "บ้านเดี่ยว 1 ชั้น มบ.ธนินทร ดอนเมือง ริมถนนวิภาวดี-รังสิต อยู่ง่าย ไม่ต้องเหนื่อยขึ้น-ลง ได้เนื้อที่เน้นๆ หน้าบ้าน ราคาไม่แรง!",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
       "prop_id": "1253183",
       "bank": "Siwasup",
       "type": "main",
@@ -957,11 +927,41 @@
       "ok": false
     },
     {
+      "prop_id": "1254156",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/3O1mLaSa_gO05Zv5PastU9p5zC8=/8cd7a6c86e704664a9faec12d26e8a93",
+      "title": "ทาวน์เฮาส์ มบ.เมืองประชา ปทุมธานี ราคาเบาๆ เอาไปรีโนเวทงามๆ ก็ยังคุ้ม! ทำเลแหล่งชุมชน ใกล้แยกบางคูวัด",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
+      "prop_id": "1254541",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/0TMknT0vAXnakpl99FFgmgIhACM=/9b1aca48111e4d2aa982b78bd4232a81",
+      "title": "บ้านเดี่ยว สินบดีพาร์ค 4 ประชาอุทิศ 72 หลังมุม รีโนเวทอลังการ! เหมือนได้บ้านใหม่ ฟังก์ชันฉ่ำ! คุณภาพแน่น",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
       "prop_id": "1266548",
       "bank": "Siwasup",
       "type": "main",
       "url": "https://shop-image.readyplanet.com/QKPPOaK7uIDXTQC8o8-E3bWMT5g=/4d891fee916348dba716a427eb234489",
       "title": "อาคาร หน้าซ.บ้านสวน-สุขุมวิท 10 เมืองชลบุรี ริมถนนหลัก ติดว.อาชีวศึกษาชลบุรี ทำเลศักยภาพ",
+      "status": 0,
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
+      "ok": false
+    },
+    {
+      "prop_id": "1261510",
+      "bank": "Siwasup",
+      "type": "main",
+      "url": "https://shop-image.readyplanet.com/OIa7F6h0F-on-5DLIjxX5J2QxUE=/94bb48a3c0ea42f2b021d50745e3c55b",
+      "title": "ทาวน์โฮม เดินไม่กี่ก้าวถึงถนนใหญ่ลาดพร้าว ปากซอย 128/1 ตรงข้ามลาดพร้าว 101 ทำเลดี ใกล้สถานีรถไฟฟ้า",
       "status": 0,
       "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:997)>",
       "ok": false
