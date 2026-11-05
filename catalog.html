@@ -30,7 +30,7 @@
   <!-- PDF & QR Libraries for Vinyl Sign Generator -->
   <script src="https://unpkg.com/pdf-lib@1.17.9/dist/pdf-lib.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-  <script src="siwasup_all_properties.js?v=20261104-1300"></script>
+  <script src="siwasup_all_properties.js?v=20261106-0130"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -940,12 +940,12 @@
   <script src="siwasup_agents.js?v=20261104-conf"></script>
   <script src="modals.js?v=20261104-realscan"></script>
   <script src="vinyl_generator.js?v=20261019-2350"></script>
-  <script src="siwasup_all_properties.js?v=20261104-1300"></script>
+  <script src="siwasup_all_properties.js?v=20261106-0130"></script>
   <script>
     let currentMode = 'free_agent';
     let currentCategory = 'all';
     let currentBank = 'all';
-    let allProperties = (typeof ALL_PROPERTIES_DATA !== 'undefined' && Array.isArray(ALL_PROPERTIES_DATA)) ? ALL_PROPERTIES_DATA : [];
+    let allProperties = (typeof ALL_PROPERTIES_DATA !== 'undefined' && Array.isArray(ALL_PROPERTIES_DATA)) ? ALL_PROPERTIES_DATA : ((typeof window !== 'undefined' && (window.SIWASUP_ALL_PROPERTIES || window.SIWASUP_PROPERTIES)) ? (window.SIWASUP_ALL_PROPERTIES || window.SIWASUP_PROPERTIES) : []);
     let pendingBookingId = null;
 
     // In-memory consignments (Leads from /consign)
@@ -967,11 +967,13 @@
     async function loadProperties() {
       if (typeof ALL_PROPERTIES_DATA !== 'undefined' && ALL_PROPERTIES_DATA.length > 0) {
         allProperties = ALL_PROPERTIES_DATA;
+      } else if (window.SIWASUP_ALL_PROPERTIES && window.SIWASUP_ALL_PROPERTIES.length > 0) {
+        allProperties = window.SIWASUP_ALL_PROPERTIES;
       } else if (window.SIWASUP_PROPERTIES && window.SIWASUP_PROPERTIES.length > 0) {
         allProperties = window.SIWASUP_PROPERTIES;
       } else {
         try {
-          const resp = await fetch('siwasup_all_properties.json');
+          const resp = await fetch('siwasup_all_properties.json?v=20261106-0130');
           if (resp.ok) {
             allProperties = await resp.json();
           }
