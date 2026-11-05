@@ -452,6 +452,7 @@
                     <label class="block text-[9px] font-semibold text-neutral-400 uppercase tracking-wider">สถาบัน/เจ้าของ</label>
                     <select id="filter-bank" onchange="syncBankToChips(this.value); applyAllFilters()" class="w-full bg-transparent text-xs font-bold text-neutral-900 focus:outline-none cursor-pointer truncate">
                       <option value="all">ทุกสถาบัน / เจ้าของ</option>
+                      <option value="PAMCO">PAMCO (1,312 หลัง)</option>
                       <option value="Siwasup">ศิวาทรัพย์ รีโนเวท</option>
                       <option value="SAM">SAM</option>
                       <option value="SCB">SCB</option>
@@ -521,6 +522,7 @@
             <span class="text-xs font-bold text-[#DEC084] shrink-0 mr-1 hidden sm:inline">กรองด่วน:</span>
             <div id="bank-quick-chips" class="flex items-center gap-1.5 shrink-0">
               <button type="button" onclick="selectBankChip('all', this)" class="bank-chip active h-6 sm:h-7 px-3 sm:px-3.5 rounded-full text-[11px] font-bold bg-[#1D1D1D] text-white shadow-sm shrink-0 inline-flex items-center">ทั้งหมด</button>
+              <button type="button" onclick="selectBankChip('PAMCO', this)" class="bank-chip h-6 sm:h-7 px-3 sm:px-3.5 rounded-full text-[11px] font-bold bg-white text-[#ED1C24] hover:bg-red-50 border border-red-200 shadow-2xs shrink-0 inline-flex items-center">PAMCO</button>
               <button type="button" onclick="selectBankChip('Siwasup', this)" class="bank-chip h-6 sm:h-7 px-3 sm:px-3.5 rounded-full text-[11px] font-bold bg-white text-[#8C734B] hover:bg-[#FAF7F2] shadow-xs flex items-center gap-1 shrink-0 inline-flex items-center">
                 <span>✦</span>
                 <span>ศิวาทรัพย์ รีโนเวท</span>
@@ -2137,7 +2139,8 @@
       // Luxury Tone: Dark Frosted Glass with 6px subtle accent dot (no rainbow backgrounds)
       let dotColor = "bg-neutral-400";
       let bankLabel = b;
-      if (b === 'SAM') { dotColor = "bg-indigo-400"; bankLabel = "SAM"; }
+      if (b === 'PAMCO') { dotColor = "bg-rose-500"; bankLabel = "PAMCO"; }
+      else if (b === 'SAM') { dotColor = "bg-indigo-400"; bankLabel = "SAM"; }
       else if (b === 'SCB') { dotColor = "bg-purple-400"; bankLabel = "SCB"; }
       else if (b === 'BAM') { dotColor = "bg-amber-400"; bankLabel = "BAM"; }
       else if (b === 'GSB') { dotColor = "bg-pink-400"; bankLabel = "GSB"; }
