@@ -30,7 +30,7 @@
   <!-- PDF & QR Libraries for Vinyl Sign Generator -->
   <script src="https://unpkg.com/pdf-lib@1.17.9/dist/pdf-lib.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-  <script src="siwasup_all_properties.js?v=20261106-0130"></script>
+  <script src="siwasup_all_properties.js?v=20261106-0145"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -505,13 +505,13 @@
                   <div id="filter-bank-wrapper" class="px-3 py-0.5 lg:border-l border-neutral-200/80">
                     <label class="block text-[9px] font-semibold text-neutral-400 uppercase tracking-wider">สถาบัน/เจ้าของ</label>
                     <select id="filter-bank" onchange="syncBankToChips(this.value); applyAllFilters()" class="w-full bg-transparent text-xs font-bold text-neutral-900 focus:outline-none cursor-pointer truncate">
-                      <option value="all">ทุกสถาบัน / เจ้าของ</option>
+                      <option value="all">ทุกสถาบัน / เจ้าของ (3,161 หลัง)</option>
                       <option value="PAMCO">PAMCO (1,312 หลัง)</option>
-                      <option value="Siwasup">ศิวาทรัพย์ รีโนเวท</option>
-                      <option value="SAM">SAM</option>
-                      <option value="SCB">SCB</option>
-                      <option value="GSB">GSB</option>
-                      <option value="TTB">TTB</option>
+                      <option value="SAM">SAM (581 หลัง)</option>
+                      <option value="SCB">SCB (568 หลัง)</option>
+                      <option value="Siwasup">ศิวาทรัพย์ รีโนเวท (280 หลัง)</option>
+                      <option value="TTB">TTB (267 หลัง)</option>
+                      <option value="GSB">GSB (153 หลัง)</option>
                     </select>
                   </div>
 
@@ -994,7 +994,7 @@
   <script src="siwasup_agents.js?v=20261104-conf"></script>
   <script src="modals.js?v=20261104-realscan"></script>
   <script src="vinyl_generator.js?v=20261019-2350"></script>
-  <script src="siwasup_all_properties.js?v=20261106-0130"></script>
+  <script src="siwasup_all_properties.js?v=20261106-0145"></script>
   <script>
     let currentMode = 'free_agent';
     let currentCategory = 'all';
@@ -1027,7 +1027,7 @@
         allProperties = window.SIWASUP_PROPERTIES;
       } else {
         try {
-          const resp = await fetch('siwasup_all_properties.json?v=20261106-0130');
+          const resp = await fetch('siwasup_all_properties.json?v=20261106-0145');
           if (resp.ok) {
             allProperties = await resp.json();
           }
@@ -2470,11 +2470,35 @@
         return `
           <div id="property-card-${p.id}" data-prop-id="${p.id}" class="bg-white rounded-[22px] border ${isSelected ? 'border-[#C2A460] ring-2 ring-[#C2A460]' : 'border-slate-200/80'} shadow-xs hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col justify-between group relative">
             
-            <!-- Image Area (Homerun 4:3 Ratio) -->
-            <div class="relative aspect-[4/3] bg-slate-100 overflow-hidden cursor-pointer" onclick="openPropertyDetailModal('${p.id}')">
-              <img src="${img}" alt="${safeTitleAttr}" 
-                   onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600';"
-                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${isBooked || isTransferred ? 'contrast-105 opacity-85' : ''}">
+            <!-- Image Area (Homerun 4:3 Ratio with Toggle Map/Photo) -->
+            <div class="relative aspect-[4/3] bg-slate-100 overflow-hidden" id="card-media-box-${p.id}">
+              
+              <!-- Layer 1: Image -->
+              <div id="card-img-layer-${p.id}" class="w-full h-full relative cursor-pointer" onclick="openPropertyDetailModal('${p.id}')">
+                <img src="${img}" alt="${safeTitleAttr}" 
+                     onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600';"
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${isBooked || isTransferred ? 'contrast-105 opacity-85' : ''}">
+              </div>
+
+              <!-- Layer 2: Embedded Mini Map (Instant Flip in Card) -->
+              <div id="card-map-layer-${p.id}" class="w-full h-full hidden relative bg-slate-200">
+                <div id="card-mini-map-${p.id}" class="w-full h-full"></div>
+                <button type="button" onclick="event.stopPropagation(); openPropertyMapDirect('${p.id}')" class="absolute bottom-2.5 right-2.5 z-[400] bg-neutral-900/90 hover:bg-neutral-950 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-md flex items-center gap-1 transition active:scale-95 border border-white/20" title="เปิด Google Maps นำทางจริง">
+                  <span>นำทาง Google Maps ↗</span>
+                </button>
+              </div>
+
+              <!-- Floating Media Toggle [รูป | แผนที่] Homerun Capsule Style -->
+              <div class="absolute top-2.5 left-1/2 -translate-x-1/2 flex items-center bg-slate-900/65 backdrop-blur-md rounded-full p-0.5 border border-white/25 z-20 shadow-md" onclick="event.stopPropagation()">
+                <button type="button" id="toggle-btn-img-${p.id}" onclick="toggleCardMedia('${p.id}', 'img')" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-slate-900 bg-white shadow-xs transition-all flex items-center gap-1">
+                  <i data-lucide="image" class="w-3 h-3"></i>
+                  <span>รูป</span>
+                </button>
+                <button type="button" id="toggle-btn-map-${p.id}" onclick="toggleCardMedia('${p.id}', 'map')" class="px-2.5 py-0.5 rounded-full text-[10px] font-medium text-white/90 hover:text-white transition-all flex items-center gap-1">
+                  <i data-lucide="map-pin" class="w-3 h-3"></i>
+                  <span>แผนที่</span>
+                </button>
+              </div>
               
               <!-- Top-Left: Category Badge (Frosted Bokeh Glass Capsule) -->
               <div class="absolute top-3 left-3 capsule-bokeh text-[11px] font-medium px-3 py-1 flex items-center gap-1.5 shadow-sm">
@@ -2533,7 +2557,7 @@
               <div class="space-y-1.5">
                 <!-- Property Code -->
                 <div class="flex items-center justify-between text-[11px]">
-                  ${p.bua_verified && currentMode !== 'client' ? '<span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">✓ บัวคัดแล้ว</span>' : '<span></span>'}
+                  ${p.bua_verified && currentMode !== 'client' ? '<span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">✓ บัวคัดแล้ว</span>' : '<span>แชร์</span>'}
                   <span class="text-neutral-500 font-mono">รหัสทรัพย์: ${p.id}</span>
                 </div>
                 
@@ -6116,7 +6140,11 @@
 
     function switchViewMode(mode) {
       currentViewMode = mode;
-      renderPropertyCards();
+      if (typeof renderProperties === 'function') {
+        renderProperties();
+      } else if (typeof renderPropertyCards === 'function') {
+        renderPropertyCards();
+      }
     }
 
     function getPropertyCoords(p) {
@@ -6307,6 +6335,73 @@
         }
       }, 100);
     }
+  
+    // ==========================================
+    // IN-CARD TOGGLE: PHOTO vs MINI MAP
+    // ==========================================
+    const activeMiniMaps = {};
+
+    function toggleCardMedia(propId, mode) {
+      const imgLayer = document.getElementById(`card-img-layer-${propId}`);
+      const mapLayer = document.getElementById(`card-map-layer-${propId}`);
+      const btnImg = document.getElementById(`toggle-btn-img-${propId}`);
+      const btnMap = document.getElementById(`toggle-btn-map-${propId}`);
+
+      if (!imgLayer || !mapLayer || !btnImg || !btnMap) return;
+
+      if (mode === 'map') {
+        imgLayer.classList.add('hidden');
+        mapLayer.classList.remove('hidden');
+
+        btnMap.className = "px-2.5 py-0.5 rounded-full text-[10px] font-bold text-slate-900 bg-white shadow-xs transition-all flex items-center gap-1";
+        btnImg.className = "px-2.5 py-0.5 rounded-full text-[10px] font-medium text-white/90 hover:text-white transition-all flex items-center gap-1";
+
+        // Initialize Mini Leaflet Map if not already created
+        if (!activeMiniMaps[propId]) {
+          const p = (window.allProperties || []).find(x => String(x.id) === String(propId));
+          if (p && typeof getPropertyCoords === 'function') {
+            const coords = getPropertyCoords(p);
+            const zoomLevel = coords.isExact ? 15 : 13;
+            
+            const miniMap = L.map(`card-mini-map-${propId}`, {
+              zoomControl: false,
+              attributionControl: false
+            }).setView([coords.lat, coords.lng], zoomLevel);
+
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+              maxZoom: 19
+            }).addTo(miniMap);
+
+            const pinColor = coords.isExact ? '#ED1C24' : '#F59E0B';
+            const miniPinIcon = L.divIcon({
+              html: `<div style="background-color: ${pinColor}; width: 24px; height: 24px; border-radius: 50%; border: 2.5px solid #FFFFFF; box-shadow: 0 3px 10px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; color: #FFF; font-size: 11px; font-weight: bold;">${coords.isExact ? '📍' : '⭕'}</div>`,
+              className: 'custom-siwasup-mini-pin',
+              iconSize: [24, 24],
+              iconAnchor: [12, 12]
+            });
+
+            L.marker([coords.lat, coords.lng], { icon: miniPinIcon }).addTo(miniMap);
+            activeMiniMaps[propId] = miniMap;
+          }
+        }
+
+        setTimeout(() => {
+          if (activeMiniMaps[propId]) {
+            activeMiniMaps[propId].invalidateSize();
+          }
+        }, 60);
+
+      } else {
+        mapLayer.classList.add('hidden');
+        imgLayer.classList.remove('hidden');
+
+        btnImg.className = "px-2.5 py-0.5 rounded-full text-[10px] font-bold text-slate-900 bg-white shadow-xs transition-all flex items-center gap-1";
+        btnMap.className = "px-2.5 py-0.5 rounded-full text-[10px] font-medium text-white/90 hover:text-white transition-all flex items-center gap-1";
+      }
+
+      if (window.lucide) { lucide.createIcons(); }
+    }
+    
   </script>
 
 </body>
