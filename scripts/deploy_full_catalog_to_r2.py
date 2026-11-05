@@ -14,7 +14,7 @@ files_to_upload = [
     ("siwasup_all_properties.js", "application/javascript; charset=utf-8"),
     ("siwasup_all_properties.json", "application/json; charset=utf-8"),
     (os.path.join("data", "catalog_index.json"), "application/json; charset=utf-8"),
-    ("catalog_index.json", "application/json; charset=utf-8"),
+    (os.path.join("assets", "documents", "siwasup_sales_contract.html"), "text/html; charset=utf-8"),
 ]
 
 for item, ctype in files_to_upload:
@@ -26,7 +26,8 @@ for item, ctype in files_to_upload:
     print(f"[*] Uploading {item} ({file_size_mb:.2f} MB)...")
     with open(local_path, "rb") as f:
         data = f.read()
-    status = put_object_r2(item.replace("\\", "/"), data, ctype)
-    print(f"    -> Status: {status}")
+    r2_key = item.replace("\\", "/")
+    status = put_object_r2(r2_key, data, ctype)
+    print(f"    -> Status: {status} ({r2_key})")
 
 print("=== ALL FILES DEPLOYED TO CLOUDFLARE R2 SUCCESSFULLY ===")

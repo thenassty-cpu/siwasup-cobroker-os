@@ -30,7 +30,7 @@
   <!-- PDF & QR Libraries for Vinyl Sign Generator -->
   <script src="https://unpkg.com/pdf-lib@1.17.9/dist/pdf-lib.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-  <script src="siwasup_all_properties.js?v=20261106-0200"></script>
+  <script src="siwasup_all_properties.js?v=20261106-0210"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1002,15 +1002,15 @@
       </div>
     </footer>
 
-    <!-- 🧩 Modular Components Root (Modals, Overlays & Toasts loaded from modals.js?v=20261106-0200) -->
+    <!-- 🧩 Modular Components Root (Modals, Overlays & Toasts loaded from modals.js?v=20261106-0210) -->
     <div id="modals-root"></div>
 
   </div>
 
   <script src="siwasup_agents.js?v=20261104-conf"></script>
-  <script src="modals.js?v=20261106-0200"></script>
+  <script src="modals.js?v=20261106-0210"></script>
   <script src="vinyl_generator.js?v=20261019-2350"></script>
-  <script src="siwasup_all_properties.js?v=20261106-0200"></script>
+  <script src="siwasup_all_properties.js?v=20261106-0210"></script>
   <script>
     let currentMode = 'free_agent';
     let currentCategory = 'all';
@@ -1043,7 +1043,7 @@
         allProperties = window.SIWASUP_PROPERTIES;
       } else {
         try {
-          const resp = await fetch('siwasup_all_properties.json?v=20261106-0200');
+          const resp = await fetch('siwasup_all_properties.json?v=20261106-0210');
           if (resp.ok) {
             allProperties = await resp.json();
           }
@@ -1207,7 +1207,37 @@
       const cleanTitle = getDisplayTitle(p);
       const priceNum = parsePriceNumber(p.price);
       const depositNum = parsePriceNumber(calcDeposit(p.price));
-      return `assets/documents/siwasup_sales_contract.html?code=${encodeURIComponent(p.id)}&title=${encodeURIComponent(cleanTitle)}&price=${priceNum}&deposit=${depositNum}&size=${encodeURIComponent(p.size || '43.9 ตร.ว.')}&loc=${encodeURIComponent(p.location || 'กรุงเทพฯ และปริมณฑล')}`;
+      
+      // Auto-resolve Agent Info from current session / profile
+      let agentCode = (typeof getActiveAgentRef === 'function') ? getActiveAgentRef() : (localStorage.getItem('siwasup_agent_ref') || 'AG-09');
+      let agentName = '';
+      let agentPhone = '';
+      if (window.SiwasupAgents && window.SiwasupAgents.find) {
+        const ag = window.SiwasupAgents.find(agentCode) || window.SiwasupAgents.find('S90');
+        if (ag) {
+          agentName = ag.name || '';
+          agentPhone = ag.phone || '';
+        }
+      }
+      if (!agentName) {
+        agentName = (agentCode === 'AG-09' || agentCode === 'S90') ? 'คุณณัฐ ระวังภัย' : `ตัวแทนรหัส ${agentCode}`;
+        agentPhone = '092-456-7890';
+      }
+
+      // Auto-resolve Pinned Customer Info (if stickied)
+      let buyerName = '';
+      let buyerIdCard = '';
+      let buyerPhone = '';
+      try {
+        const stick = JSON.parse(localStorage.getItem('siwasup_pinned_customer') || '{}');
+        if (stick.name) buyerName = stick.name;
+        if (stick.idCard) buyerIdCard = stick.idCard;
+        if (stick.phone) buyerPhone = stick.phone;
+      } catch(e) {}
+
+      const witness1 = localStorage.getItem('siwasup_default_witness') || 'นางสาว บัว ศิวาทรัพย์';
+
+      return `assets/documents/siwasup_sales_contract.html?code=${encodeURIComponent(p.id)}&title=${encodeURIComponent(cleanTitle)}&price=${priceNum}&deposit=${depositNum}&size=${encodeURIComponent(p.size || '-')}&loc=${encodeURIComponent(p.location || 'กรุงเทพฯ และปริมณฑล')}&agent=${encodeURIComponent(agentName)}&agent_code=${encodeURIComponent(agentCode)}&agent_phone=${encodeURIComponent(agentPhone)}&buyer=${encodeURIComponent(buyerName)}&idcard=${encodeURIComponent(buyerIdCard)}&phone=${encodeURIComponent(buyerPhone)}&witness1=${encodeURIComponent(witness1)}`;
     }
 
     function renderPropertyDocumentDownloads(p) {
