@@ -30,7 +30,7 @@
   <!-- PDF & QR Libraries for Vinyl Sign Generator -->
   <script src="https://unpkg.com/pdf-lib@1.17.9/dist/pdf-lib.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-  <script src="siwasup_all_properties.js?v=20261106-0145"></script>
+  <script src="siwasup_all_properties.js?v=20261106-0150"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -994,7 +994,7 @@
   <script src="siwasup_agents.js?v=20261104-conf"></script>
   <script src="modals.js?v=20261104-realscan"></script>
   <script src="vinyl_generator.js?v=20261019-2350"></script>
-  <script src="siwasup_all_properties.js?v=20261106-0145"></script>
+  <script src="siwasup_all_properties.js?v=20261106-0150"></script>
   <script>
     let currentMode = 'free_agent';
     let currentCategory = 'all';
@@ -1027,7 +1027,7 @@
         allProperties = window.SIWASUP_PROPERTIES;
       } else {
         try {
-          const resp = await fetch('siwasup_all_properties.json?v=20261106-0145');
+          const resp = await fetch('siwasup_all_properties.json?v=20261106-0150');
           if (resp.ok) {
             allProperties = await resp.json();
           }
@@ -5709,20 +5709,44 @@
       } catch (e) {}
     }
 
-    // Auto-run (Load properties FIRST so allProperties is populated before checkUrlParameters / setMode!)
-    loadProperties();
-    checkUrlParameters();
-    if (typeof checkPdpaConsent === 'function') checkPdpaConsent();
-    initModalScrollLockObserver();
-    if (typeof updateProfileButtons === 'function' && typeof getActiveAgentRef === 'function') {
-      updateProfileButtons(getActiveAgentRef());
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-      initModalScrollLockObserver();
+        // Robust Auto-run & Guaranteed Instant Render (No White/Skeleton Screen!)
+    async function initCatalogApp() {
+      try {
+        await loadProperties();
+      } catch (err) {
+        console.warn("loadProperties fallback:", err);
+      }
+      
+      if (typeof renderProperties === 'function') {
+        renderProperties();
+      }
+      if (typeof checkAndOpenTargetProperty === 'function') {
+        checkAndOpenTargetProperty();
+      }
+      if (typeof checkPdpaConsent === 'function') {
+        checkPdpaConsent();
+      }
+      if (typeof initModalScrollLockObserver === 'function') {
+        initModalScrollLockObserver();
+      }
       if (typeof updateProfileButtons === 'function' && typeof getActiveAgentRef === 'function') {
         updateProfileButtons(getActiveAgentRef());
       }
-      if (window.lucide) { lucide.createIcons(); }
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+    // Execute immediately and on DOM/Window ready
+    initCatalogApp();
+    document.addEventListener('DOMContentLoaded', () => {
+      initCatalogApp();
+    });
+    window.addEventListener('load', () => {
+      const plist = document.getElementById('property-list');
+      if (!plist || plist.innerHTML.includes('Skeleton') || plist.children.length === 0) {
+        if (typeof renderProperties === 'function') renderProperties();
+      }
     });
         // 📲 PWA In-App Install Prompt Handler
     let deferredPwaPrompt = null;
