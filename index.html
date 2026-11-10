@@ -520,10 +520,12 @@
                   <div id="filter-bank-wrapper" class="px-3 py-0.5 lg:border-l border-neutral-200/80">
                     <label class="block text-[9px] font-semibold text-neutral-400 uppercase tracking-wider">สถาบัน/เจ้าของ</label>
                     <select id="filter-bank" onchange="syncBankToChips(this.value); applyAllFilters()" class="w-full bg-transparent text-xs font-bold text-neutral-900 focus:outline-none cursor-pointer truncate">
-                      <option value="all">ทุกสถาบัน / เจ้าของ (3,161 หลัง)</option>
+                      <option value="all">ทุกสถาบัน / เจ้าของ (4,049 หลัง)</option>
                       <option value="PAMCO">PAMCO (1,312 หลัง)</option>
                       <option value="SAM">SAM (581 หลัง)</option>
                       <option value="SCB">SCB (568 หลัง)</option>
+                      <option value="KTB">KTB กรุงไทย (469 หลัง)</option>
+                      <option value="ALPHA">ALPHA อัลฟ่า (419 หลัง)</option>
                       <option value="Siwasup">ศิวาทรัพย์ รีโนเวท (280 หลัง)</option>
                       <option value="TTB">TTB (267 หลัง)</option>
                       <option value="GSB">GSB (153 หลัง)</option>
@@ -598,6 +600,8 @@
               </button>
               <button type="button" onclick="selectBankChip('SAM', this)" class="bank-chip h-6 sm:h-7 px-3 sm:px-3.5 rounded-full text-[11px] font-bold bg-white text-neutral-800 hover:bg-neutral-100 shadow-xs shrink-0 inline-flex items-center">SAM</button>
               <button type="button" onclick="selectBankChip('SCB', this)" class="bank-chip h-6 sm:h-7 px-3 sm:px-3.5 rounded-full text-[11px] font-bold bg-white text-neutral-800 hover:bg-neutral-100 shadow-xs shrink-0 inline-flex items-center">SCB</button>
+              <button type="button" onclick="selectBankChip('KTB', this)" class="bank-chip h-6 sm:h-7 px-3 sm:px-3.5 rounded-full text-[11px] font-bold bg-white text-neutral-800 hover:bg-neutral-100 shadow-xs shrink-0 inline-flex items-center">KTB</button>
+              <button type="button" onclick="selectBankChip('ALPHA', this)" class="bank-chip h-6 sm:h-7 px-3 sm:px-3.5 rounded-full text-[11px] font-bold bg-white text-neutral-800 hover:bg-neutral-100 shadow-xs shrink-0 inline-flex items-center">ALPHA</button>
               <button type="button" onclick="selectBankChip('GSB', this)" class="bank-chip h-6 sm:h-7 px-3 sm:px-3.5 rounded-full text-[11px] font-bold bg-white text-neutral-800 hover:bg-neutral-100 shadow-xs shrink-0 inline-flex items-center">GSB</button>
               <button type="button" onclick="selectBankChip('TTB', this)" class="bank-chip h-6 sm:h-7 px-3 sm:px-3.5 rounded-full text-[11px] font-bold bg-white text-neutral-800 hover:bg-neutral-100 shadow-xs shrink-0 inline-flex items-center">TTB</button>
             </div>
@@ -2757,6 +2761,8 @@
       else if (b === 'SAM') { dotColor = "bg-indigo-400"; bankLabel = "SAM"; }
       else if (b === 'SCB') { dotColor = "bg-purple-400"; bankLabel = "SCB"; }
       else if (b === 'BAM') { dotColor = "bg-amber-400"; bankLabel = "BAM"; }
+      else if (b === 'KTB') { dotColor = "bg-sky-400"; bankLabel = "KTB"; }
+      else if (b === 'ALPHA') { dotColor = "bg-teal-400"; bankLabel = "ALPHA"; }
       else if (b === 'GSB') { dotColor = "bg-pink-400"; bankLabel = "GSB"; }
       else if (b === 'TTB') { dotColor = "bg-blue-400"; bankLabel = "TTB"; }
 
