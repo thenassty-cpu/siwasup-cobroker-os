@@ -30,7 +30,6 @@
   <!-- PDF & QR Libraries for Vinyl Sign Generator -->
   <script src="https://unpkg.com/pdf-lib@1.17.9/dist/pdf-lib.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-  <script src="siwasup_all_properties.js?v=20261106-0210"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1002,15 +1001,15 @@
       </div>
     </footer>
 
-    <!-- 🧩 Modular Components Root (Modals, Overlays & Toasts loaded from modals.js?v=20261106-0210) -->
+    <!-- 🧩 Modular Components Root (Modals, Overlays & Toasts loaded from modals.js) -->
     <div id="modals-root"></div>
 
   </div>
 
   <script src="siwasup_agents.js?v=20261104-conf"></script>
-  <script src="modals.js?v=20261106-0210"></script>
+  <script src="modals.js?v=20261110-2205"></script>
   <script src="vinyl_generator.js?v=20261019-2350"></script>
-  <script src="siwasup_all_properties.js?v=20261106-0210"></script>
+  <script src="siwasup_all_properties.js?v=20261110-2205"></script>
   <script>
     let currentMode = 'free_agent';
     let currentCategory = 'all';
@@ -1043,7 +1042,7 @@
         allProperties = window.SIWASUP_PROPERTIES;
       } else {
         try {
-          const resp = await fetch('siwasup_all_properties.json?v=20261106-0210');
+          const resp = await fetch('siwasup_all_properties.json?v=20261110-2135');
           if (resp.ok) {
             allProperties = await resp.json();
           }
@@ -1134,6 +1133,10 @@
         .replace(/\bNPA\s*(KBank|KBANK|SCB|SAM|KTB|TTB|GSB|GHB|BBL|PAMCO)?\b/gi, 'ทรัพย์คัดพิเศษ')
         .replace(/ทรัพย์\s*(SCB|KBank|KBANK|SAM|KTB|TTB|GSB|GHB|BBL|PAMCO)\b/gi, 'ทรัพย์สภาพดี')
         .replace(/\(\s*(SAM|SCB|KBank|KBANK|KTB|TTB|GSB|GHB|BBL|PAMCO)\s*\)/gi, '')
+        .replace(/บสส\.?|บริหารสินทรัพย์\s*สุขุมวิท|บริหารสินทรัพย์\s*พรอสเพอริตี้/gi, 'ศิวาทรัพย์')
+        .replace(/ประเภทเอกสารสิทธิ์\s*\/\s*เลขที่\s*[:：]\s*[^\n\r]+\n?/gi, '')
+        .replace(/โฉนดที่ดิน\s*[:：]?\s*[\d,\s-]+/gi, 'โฉนดพร้อมโอน')
+        .replace(/เลขที่\s+\d+[\/\d-]*/gi, '')
         .trim();
     }
 
@@ -1839,6 +1842,505 @@
       renderProperties();
     }
 
+
+    // =========================================================================
+    // 🖼️ PROPERTY DETAIL IMAGE SLIDER, THUMBNAIL STRIP & DEEP SPECS ENGINE
+    // =========================================================================
+    let activeDetailPropertyId = null;
+    let detailCarouselUrls = [];
+    let detailCarouselCurrentIdx = 0;
+    let detailCarouselPendingIdx = null;
+    let detailCarouselRafId = null;
+    let detailCarouselSettleTimer = null;
+
+    function getValidPropertyGallery(p) {
+      const fallbackImg = "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600";
+      if (!p) return [fallbackImg];
+      const raw = [];
+      if (p.main_image && typeof p.main_image === 'string') raw.push(p.main_image);
+      if (Array.isArray(p.gallery)) {
+        p.gallery.forEach(u => {
+          if (u && typeof u === 'string') raw.push(u);
+        });
+      }
+      const junk = ['social-ig', 'social-tiktok', 'social-youtube', 'pinext', 'facebook', 'line-icon'];
+      const seen = new Set();
+      const valid = [];
+      raw.forEach(u => {
+        const clean = u.trim();
+        const low = clean.toLowerCase();
+        if (!low.startsWith('http')) return;
+        if (junk.some(kw => low.includes(kw))) return;
+        // Skip duplicate gallery_0 when thumb is already present
+        if (valid.length > 0 && (low.endsWith('/gallery_0.jpg') || low.endsWith('/gallery_0.png')) && (valid[0].toLowerCase().endsWith('/thumb.jpg') || valid[0].toLowerCase().endsWith('/thumb.png'))) {
+          return;
+        }
+        if (!seen.has(clean)) {
+          seen.add(clean);
+          valid.push(clean);
+        }
+      });
+      return valid.length > 0 ? valid : [fallbackImg];
+    }
+
+    function renderDetailCarousel(p) {
+      detailCarouselUrls = getValidPropertyGallery(p);
+      detailCarouselCurrentIdx = 0;
+      detailCarouselPendingIdx = null;
+
+      const track = document.getElementById('detail-carousel-track');
+      const thumbsRow = document.getElementById('detail-thumbs-row');
+      const controls = document.getElementById('detail-carousel-controls');
+      const counterEl = document.getElementById('detail-photo-counter');
+      const statusEl = document.getElementById('detail-carousel-status');
+
+      if (!track) return;
+
+      const total = detailCarouselUrls.length;
+      const safeTitle = (getDisplayTitle(p) || 'ภาพถ่ายทรัพย์สิน').replace(/"/g, '&quot;');
+
+      track.innerHTML = detailCarouselUrls.map((url, idx) => `
+        <div role="group" aria-roledescription="slide" aria-label="${idx + 1} of ${total}" data-slide-idx="${idx}" onclick="openDetailImageLightbox(${idx})" title="คลิกเพื่อขยายดูภาพใหญ่" class="w-full h-full shrink-0 snap-center relative bg-neutral-100 cursor-zoom-in" style="flex: 0 0 100%; scroll-snap-align: center;">
+          <img ${idx === 0 ? 'id="detail-main-img"' : ''} src="${url}" alt="${safeTitle} - ภาพที่ ${idx + 1}" loading="${idx === 0 ? 'eager' : 'lazy'}" onerror="handleDetailSlideImageError(this, ${idx})" class="w-full h-full object-cover select-none">
+        </div>
+      `).join('');
+
+      track.scrollLeft = 0;
+
+      if (counterEl) {
+        counterEl.textContent = `📷 1 / ${total} ภาพ`;
+      }
+      if (statusEl) {
+        statusEl.textContent = '';
+      }
+
+      if (controls) {
+        if (total > 1) {
+          controls.classList.remove('hidden');
+        } else {
+          controls.classList.add('hidden');
+        }
+      }
+
+      if (thumbsRow) {
+        if (total > 1) {
+          thumbsRow.classList.remove('hidden');
+          thumbsRow.innerHTML = detailCarouselUrls.map((url, idx) => `
+            <button
+              type="button"
+              data-thumb-idx="${idx}"
+              onclick="scrollToDetailSlide(${idx})"
+              aria-label="ดูภาพที่ ${idx + 1} จาก ${total}"
+              aria-current="${idx === 0 ? 'true' : 'false'}"
+              style="touch-action: manipulation; scroll-snap-align: start;"
+              class="relative w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 ${idx === 0 ? 'border-[#8B0000] ring-2 ring-[#C2A460]/50 opacity-100 scale-[1.02]' : 'border-transparent opacity-60 hover:opacity-100'}"
+            >
+              <img src="${url}" alt="รูปย่อที่ ${idx + 1}" loading="lazy" onerror="this.closest('button').style.display='none'" class="w-full h-full object-cover pointer-events-none">
+              <span class="absolute bottom-0.5 right-1 bg-black/60 text-white text-[9px] font-mono px-1 rounded">${idx + 1}</span>
+            </button>
+          `).join('');
+        } else {
+          thumbsRow.classList.add('hidden');
+          thumbsRow.innerHTML = '';
+        }
+      }
+
+      setupDetailCarouselScrollEvents(track);
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function handleDetailSlideImageError(imgEl, idx) {
+      if (!imgEl) return;
+      imgEl.onerror = null;
+      const fallback = "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600";
+      if (detailCarouselUrls.length <= 1 || idx === 0) {
+        imgEl.src = fallback;
+        return;
+      }
+      // Remove broken slide and corresponding thumbnail
+      const slideEl = imgEl.closest('[data-slide-idx]');
+      if (slideEl) slideEl.remove();
+      const thumbBtn = document.querySelector(`#detail-thumbs-row button[data-thumb-idx="${idx}"]`);
+      if (thumbBtn) thumbBtn.remove();
+
+      const track = document.getElementById('detail-carousel-track');
+      if (!track) return;
+      const remainingSlides = Array.from(track.querySelectorAll('[data-slide-idx]'));
+      const newTotal = remainingSlides.length;
+      remainingSlides.forEach((sl, newIdx) => {
+        sl.setAttribute('data-slide-idx', String(newIdx));
+        sl.setAttribute('aria-label', `${newIdx + 1} of ${newTotal}`);
+      });
+      const remainingThumbs = Array.from(document.querySelectorAll('#detail-thumbs-row button[data-thumb-idx]'));
+      remainingThumbs.forEach((btn, newIdx) => {
+        btn.setAttribute('data-thumb-idx', String(newIdx));
+        btn.setAttribute('onclick', `scrollToDetailSlide(${newIdx})`);
+        btn.setAttribute('aria-label', `ดูภาพที่ ${newIdx + 1} จาก ${newTotal}`);
+        const badge = btn.querySelector('span');
+        if (badge) badge.textContent = String(newIdx + 1);
+      });
+      detailCarouselUrls = remainingSlides.map(sl => sl.querySelector('img')?.src || fallback);
+      syncDetailCarouselActive(Math.min(detailCarouselCurrentIdx, newTotal - 1), false);
+    }
+
+    function syncDetailCarouselActive(idx, announce = false) {
+      const track = document.getElementById('detail-carousel-track');
+      const total = track ? track.querySelectorAll('[data-slide-idx]').length : detailCarouselUrls.length;
+      if (total <= 0) return;
+      const safeIdx = Math.max(0, Math.min(idx, total - 1));
+      detailCarouselCurrentIdx = safeIdx;
+
+      const counterEl = document.getElementById('detail-photo-counter');
+      if (counterEl) {
+        counterEl.textContent = `📷 ${safeIdx + 1} / ${total} ภาพ`;
+      }
+
+      const thumbsRow = document.getElementById('detail-thumbs-row');
+      if (thumbsRow) {
+        const btns = thumbsRow.querySelectorAll('button[data-thumb-idx]');
+        btns.forEach((btn, bIdx) => {
+          const isAct = (bIdx === safeIdx);
+          btn.setAttribute('aria-current', isAct ? 'true' : 'false');
+          btn.className = `relative w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900 ${isAct ? 'border-[#8B0000] ring-2 ring-[#C2A460]/50 opacity-100 scale-[1.02]' : 'border-transparent opacity-60 hover:opacity-100'}`;
+          if (isAct) {
+            const btnLeft = btn.offsetLeft;
+            const btnWidth = btn.offsetWidth;
+            const rowWidth = thumbsRow.clientWidth;
+            const targetScroll = btnLeft - (rowWidth / 2) + (btnWidth / 2);
+            thumbsRow.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
+          }
+        });
+      }
+
+      if (announce) {
+        const statusEl = document.getElementById('detail-carousel-status');
+        if (statusEl) {
+          statusEl.textContent = `ภาพที่ ${safeIdx + 1} จาก ${total}`;
+        }
+      }
+    }
+
+    function scrollToDetailSlide(targetIdx) {
+      const track = document.getElementById('detail-carousel-track');
+      if (!track) return;
+      const slides = track.querySelectorAll('[data-slide-idx]');
+      const total = slides.length;
+      if (total <= 1) return;
+
+      const wrappedIdx = ((targetIdx % total) + total) % total;
+      const targetSlide = slides[wrappedIdx];
+      if (!targetSlide) return;
+
+      detailCarouselPendingIdx = wrappedIdx;
+      syncDetailCarouselActive(wrappedIdx, false);
+
+      const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const offset = targetSlide.offsetLeft - track.scrollLeft;
+      track.scrollBy({
+        left: offset,
+        behavior: prefersReducedMotion ? 'auto' : 'smooth'
+      });
+    }
+
+    function openDetailImageLightbox(idx) {
+      if (!detailCarouselUrls || detailCarouselUrls.length === 0) return;
+      const modal = document.getElementById('detail-lightbox-modal');
+      if (!modal) return;
+      const safeIdx = Math.max(0, Math.min(idx || 0, detailCarouselUrls.length - 1));
+      detailCarouselCurrentIdx = safeIdx;
+      updateDetailLightboxView(safeIdx);
+      modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeDetailImageLightbox() {
+      const modal = document.getElementById('detail-lightbox-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function stepDetailLightbox(dir) {
+      if (!detailCarouselUrls || detailCarouselUrls.length === 0) return;
+      const total = detailCarouselUrls.length;
+      const nextIdx = ((detailCarouselCurrentIdx + dir) % total + total) % total;
+      detailCarouselCurrentIdx = nextIdx;
+      updateDetailLightboxView(nextIdx);
+      scrollToDetailSlide(nextIdx);
+    }
+
+    function updateDetailLightboxView(idx) {
+      const total = detailCarouselUrls.length;
+      const imgEl = document.getElementById('detail-lightbox-img');
+      const counterEl = document.getElementById('detail-lightbox-counter');
+      const prevBtn = document.getElementById('detail-lightbox-prev');
+      const nextBtn = document.getElementById('detail-lightbox-next');
+      const thumbsEl = document.getElementById('detail-lightbox-thumbs');
+      if (imgEl) imgEl.src = detailCarouselUrls[idx] || '';
+      if (counterEl) counterEl.textContent = `📷 ${idx + 1} / ${total} ภาพ`;
+      if (prevBtn) prevBtn.style.display = total > 1 ? 'flex' : 'none';
+      if (nextBtn) nextBtn.style.display = total > 1 ? 'flex' : 'none';
+      if (thumbsEl) {
+        if (total > 1) {
+          thumbsEl.innerHTML = detailCarouselUrls.map((u, i) => `
+            <button type="button" onclick="updateDetailLightboxView(${i}); scrollToDetailSlide(${i});" class="w-14 h-10 rounded-lg overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${i === idx ? 'border-[#C2A460] scale-105 opacity-100' : 'border-transparent opacity-50 hover:opacity-90'}">
+              <img src="${u}" alt="ภาพย่อ ${i + 1}" class="w-full h-full object-cover">
+            </button>
+          `).join('');
+        } else {
+          thumbsEl.innerHTML = '';
+        }
+      }
+    }
+
+    function stepDetailCarousel(direction) {
+      const baseIdx = (detailCarouselPendingIdx !== null) ? detailCarouselPendingIdx : detailCarouselCurrentIdx;
+      scrollToDetailSlide(baseIdx + direction);
+    }
+
+    function setupDetailCarouselScrollEvents(track) {
+      if (!track || track._carouselWired) return;
+      track._carouselWired = true;
+
+      const computeNearestIdx = () => {
+        const w = track.clientWidth || 1;
+        return Math.round(track.scrollLeft / w);
+      };
+
+      const onSettle = () => {
+        detailCarouselPendingIdx = null;
+        const settledIdx = computeNearestIdx();
+        syncDetailCarouselActive(settledIdx, true);
+      };
+
+      track.addEventListener('scroll', () => {
+        if (detailCarouselPendingIdx === null) {
+          if (!detailCarouselRafId) {
+            detailCarouselRafId = requestAnimationFrame(() => {
+              detailCarouselRafId = null;
+              const nearest = computeNearestIdx();
+              if (nearest !== detailCarouselCurrentIdx) {
+                syncDetailCarouselActive(nearest, false);
+              }
+            });
+          }
+        }
+        if (!('onscrollend' in window)) {
+          clearTimeout(detailCarouselSettleTimer);
+          detailCarouselSettleTimer = setTimeout(onSettle, 120);
+        }
+      }, { passive: true });
+
+      if ('onscrollend' in window) {
+        track.addEventListener('scrollend', onSettle, { passive: true });
+      }
+    }
+
+    function parseThaiContentSpecsClient(text) {
+      if (!text) return {};
+      const specs = {};
+      const mDeed = text.match(/(?:ประเภทเอกสารสิทธิ์\s*\/\s*เลขที่|โฉนดที่ดิน)\s*[:：]\s*([^\n\r]+)/);
+      if (mDeed) {
+        let v = mDeed[1].trim();
+        if (!v.startsWith('โฉนด')) v = 'โฉนดที่ดิน: ' + v;
+        specs.deed_no = v;
+      }
+      const mLoc = text.match(/ที่ตั้ง\s*[:：]\s*([^\n\r]+)/);
+      if (mLoc) {
+        const addr = mLoc[1].trim();
+        specs.address_full = addr;
+        const mProj = addr.match(/(?:หมู่บ้าน\/โครงการ|โครงการ|หมู่บ้าน)\s+(.+?)(?:\s+เลขที่|\s+ถนน|\s+ซอย|\s+แขวง|\s+ตำบล|$)/);
+        if (mProj) specs.project_name = mProj[1].trim();
+        const mHno = addr.match(/เลขที่\s+([^\s]+)/);
+        if (mHno) specs.house_no = mHno[1].trim();
+        const mRd = addr.match(/ถนน\s+([^\s]+)/);
+        if (mRd && mRd[1].trim() !== '-') specs.street = mRd[1].trim();
+      }
+      const mDim = text.match(/หน้ากว้างติดถนน\s*[:：]\s*([^\n\r]+)/);
+      if (mDim) specs.dimensions = mDim[1].trim();
+      const mFl = text.match(/(?:ทาวน์เฮ้าส์|ทาวน์โฮม|บ้านเดี่ยว|บ้านแฝด|อาคารพาณิชย์|ตึกแถว)\s*(\d+\s*ชั้น)/);
+      if (mFl) specs.floors = mFl[1].trim();
+      const mFee = text.match(/ค่าส่วนกลาง[^\n\r]*?ประมาณ\s*([\d,]+(?:\.\d+)?\s*บาท\s*\/\s*(?:ปี|เดือน|ตร\.ว\.))/);
+      if (mFee) specs.common_fee = mFee[1].trim();
+      return specs;
+    }
+
+    function renderDetailSpecs(p) {
+      if (!p) return;
+
+      // 1. Project Name Pill
+      const projPill = document.getElementById('detail-project-pill');
+      const projNameEl = document.getElementById('detail-project-name');
+      if (projPill && projNameEl) {
+        if (p.project_name && p.project_name !== '-') {
+          projNameEl.textContent = `โครงการ: ${sanitizeForClientMode(p.project_name)}`;
+          projPill.classList.remove('hidden');
+        } else {
+          projPill.classList.add('hidden');
+        }
+      }
+
+      // 2. 4-Box Specs Grid
+      const sizeEl = document.getElementById('detail-size');
+      const usableEl = document.getElementById('detail-usable');
+      const bedEl = document.getElementById('detail-bedrooms');
+      const bathEl = document.getElementById('detail-bathrooms');
+
+      const hasSize = p.size && p.size !== '-' && p.size !== '- ตร.ว.';
+      if (sizeEl) sizeEl.textContent = hasSize ? p.size : 'ตามโฉนด';
+
+      const hasUsable = p.usable_area && p.usable_area !== '-' && p.usable_area !== '- ตร.ม.';
+      if (usableEl) {
+        if (hasUsable) {
+          usableEl.textContent = p.usable_area;
+        } else if (p.floors) {
+          usableEl.textContent = `${p.category || 'อาคาร'} ${p.floors}`;
+        } else if (p.category && p.category.includes('ที่ดิน')) {
+          usableEl.textContent = 'ที่ดินเปล่า';
+        } else {
+          usableEl.textContent = p.category || 'ตามสภาพทรัพย์';
+        }
+      }
+
+      const isLand = p.category && p.category.includes('ที่ดิน');
+      if (bedEl) {
+        if (p.bedrooms && Number(p.bedrooms) > 0) {
+          bedEl.textContent = `${p.bedrooms} ห้องนอน`;
+        } else if (isLand) {
+          bedEl.textContent = '-';
+        } else {
+          bedEl.textContent = 'ตามมาตรฐาน';
+        }
+      }
+      if (bathEl) {
+        if (p.bathrooms && Number(p.bathrooms) > 0) {
+          bathEl.textContent = `${p.bathrooms} ห้องน้ำ`;
+        } else if (isLand) {
+          bathEl.textContent = '-';
+        } else {
+          bathEl.textContent = 'ตามมาตรฐาน';
+        }
+      }
+
+      // 3. Deep Property Specs Box
+      const deepBox = document.getElementById('detail-deep-specs-box');
+      const deepGrid = document.getElementById('detail-deep-specs-grid');
+      // Source bank URL intentionally omitted to prevent direct-to-bank bypass
+
+      if (deepBox && deepGrid) {
+        const rows = [];
+        if (p.project_name && p.project_name !== '-') {
+          rows.push({ label: 'โครงการ/หมู่บ้าน', val: sanitizeForClientMode(p.project_name) });
+        }
+        if (p.house_no && currentMode === 'owner') {
+          rows.push({ label: 'บ้านเลขที่', val: p.house_no });
+        }
+        if (p.street && p.street !== '-') {
+          rows.push({ label: 'ถนน/ซอย', val: p.street });
+        }
+        if (p.deed_no && currentMode === 'owner') {
+          rows.push({ label: 'เอกสารสิทธิ์', val: p.deed_no });
+        }
+        if (p.dimensions && p.dimensions !== '-') {
+          rows.push({ label: 'ขนาดแปลงที่ดิน', val: p.dimensions });
+        }
+        if (p.floors) {
+          rows.push({ label: 'ระดับชั้น', val: p.floors });
+        }
+        if (p.ppsqw && Number(p.ppsqw) > 0) {
+          rows.push({ label: 'ราคาเฉลี่ย/ตร.ว.', val: `~${Number(p.ppsqw).toLocaleString()} บ./ตร.ว.` });
+        }
+        if (p.common_fee) {
+          rows.push({ label: 'ค่าส่วนกลาง', val: `~${p.common_fee}` });
+        }
+        if (p.subdistrict_th && p.district_th) {
+          rows.push({ label: 'แขวง/เขต', val: `${p.subdistrict_th} • ${p.district_th}` });
+        }
+
+        if (rows.length > 0) {
+          deepGrid.innerHTML = rows.map(r => `
+            <div class="flex items-baseline justify-between gap-2 py-1 border-b border-neutral-100/80 last:border-0">
+              <span class="text-neutral-400 text-[11px] shrink-0">${r.label}:</span>
+              <span class="font-semibold text-neutral-800 text-[11px] text-right">${r.val}</span>
+            </div>
+          `).join('');
+          deepBox.classList.remove('hidden');
+        } else {
+          deepBox.classList.add('hidden');
+          deepGrid.innerHTML = '';
+        }
+      }
+    }
+
+    async function fetchLiveHomerunSpecsIfNeeded(p) {
+      if (!p || !p.homerun_id || p._liveSpecsFetched) return;
+      const bank = String(p.bank_source || '').toLowerCase();
+      if (!['sam', 'scb', 'ttb'].includes(bank)) return;
+      p._liveSpecsFetched = true;
+
+      try {
+        const apiUrl = `https://homerun-platform-api-prod-645188686833.asia-southeast1.run.app/api/web/group-buy/${bank}/properties/${p.homerun_id}?include=media`;
+        const resp = await fetch(apiUrl);
+        if (!resp.ok) return;
+        const json = await resp.json();
+        const d = json && json.data;
+        if (!d) return;
+
+        let updatedSpecs = false;
+        let updatedGallery = false;
+
+        if (d.bedCount && Number(d.bedCount) > 0 && !p.bedrooms) {
+          p.bedrooms = Number(d.bedCount);
+          updatedSpecs = true;
+        }
+        if (d.bathCount && Number(d.bathCount) > 0 && !p.bathrooms) {
+          p.bathrooms = Number(d.bathCount);
+          updatedSpecs = true;
+        }
+        if (d.sourceUrl && !p.source_url) {
+          p.source_url = d.sourceUrl.replace('://sam.or.th', '://www.sam.or.th').replace('://npa.sam.or.th', '://www.sam.or.th');
+          updatedSpecs = true;
+        }
+        if (d.content && !p.full_content) {
+          p.full_content = d.content.trim();
+          p.description = p.full_content;
+          const parsed = parseThaiContentSpecsClient(p.full_content);
+          Object.keys(parsed).forEach(k => {
+            if (parsed[k] && !p[k]) p[k] = parsed[k];
+          });
+          updatedSpecs = true;
+        }
+
+        if (Array.isArray(d.gallery) && d.gallery.length > (p.gallery ? p.gallery.length : 0)) {
+          const curGal = Array.isArray(p.gallery) ? [...p.gallery] : (p.main_image ? [p.main_image] : []);
+          d.gallery.forEach((gObj, idx) => {
+            if (idx >= curGal.length && gObj && gObj.url) {
+              const u = gObj.url.replace('://npa.sam.or.th', '://www.sam.or.th');
+              if (!curGal.includes(u)) {
+                curGal.push(u);
+                updatedGallery = true;
+              }
+            }
+          });
+          if (updatedGallery) {
+            p.gallery = curGal;
+            p.gallery_count = curGal.length;
+          }
+        }
+
+        if (activeDetailPropertyId === String(p.id)) {
+          if (updatedSpecs) {
+            renderDetailSpecs(p);
+            const descEl = document.getElementById('detail-desc');
+            if (descEl) descEl.textContent = getDisplayDesc(p);
+          }
+          if (updatedGallery) {
+            renderDetailCarousel(p);
+          }
+        }
+      } catch (err) {
+        // Silent fallback to local enriched data
+      }
+    }
+
     // Homerun-style Property Detail Modal (Digital Luxury 75-15-5-5 & 3-Tier Layout)
     function openPropertyDetailModal(id) {
       if (!id) return;
@@ -1865,15 +2367,18 @@
       const displayDesc = getDisplayDesc(p);
       const safeTitleAttr = (displayTitle || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
+      activeDetailPropertyId = String(p.id);
       document.getElementById('detail-code').textContent = `รหัส: ${p.id}`;
       document.getElementById('detail-category-badge').textContent = p.category || 'อสังหาฯ';
       document.getElementById('detail-bank-badge').innerHTML = getBankBadge(p.bank_source);
-      document.getElementById('detail-main-img').src = p.main_image || "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600";
       document.getElementById('detail-title').textContent = displayTitle;
       document.getElementById('detail-location').textContent = p.location || 'กรุงเทพฯ และปริมณฑล';
-      document.getElementById('detail-size').textContent = p.size || '43.9 ตร.ว.';
-      document.getElementById('detail-usable').textContent = p.usable_area || '110 ตร.ม.';
       document.getElementById('detail-desc').textContent = displayDesc;
+
+      // Render multi-image slider + thumbnail strip & full property specs
+      renderDetailCarousel(p);
+      renderDetailSpecs(p);
+      fetchLiveHomerunSpecsIfNeeded(p);
 
       // Status pill on detail modal image ('ติดจอง' vs 'New' - only show if booked or truly new)
       const statusPill = document.getElementById('detail-status-pill');
@@ -1903,12 +2408,7 @@
       // ซ่อนลิงก์หน้าเว็บเดิมของธนาคารในโหมดลูกค้า เพื่อไม่ให้ลูกค้าเห็นเจ้าของทรัพย์ NPA
       const extLink = document.getElementById('detail-external-link');
       if (extLink) {
-        extLink.href = p.url || '#';
-        if (currentMode === 'client') {
-          extLink.classList.add('hidden');
-        } else {
-          extLink.classList.remove('hidden');
-        }
+        extLink.classList.add('hidden');
       }
 
 
@@ -2084,8 +2584,20 @@
       document.body.style.top = '';
     }
 
-    // Global ESC key listener to close open modals
+    // Global ESC & Arrow key listener for modals
     document.addEventListener('keydown', (e) => {
+      const detailModal = document.getElementById('property-detail-modal');
+      if (detailModal && !detailModal.classList.contains('hidden')) {
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          stepDetailCarousel(-1);
+          return;
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          stepDetailCarousel(1);
+          return;
+        }
+      }
       if (e.key === 'Escape' || e.key === 'Esc') {
         closePropertyDetailModal();
         closeNpaKeyModal();
@@ -2562,7 +3074,7 @@
                 </button>
               </div>
 
-              <!-- Bottom-Left: New Pill Badge & Bank NPA Badge (Bank Badge hidden in Client mode) -->
+              <!-- Bottom-Left: New Pill Badge, Bank NPA Badge & Photo Count Pill -->
               <div class="absolute bottom-3 left-3 flex items-center gap-1.5 z-10">
                 ${isBooked ? `
                   <span class="bg-amber-500 text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1">
@@ -2573,6 +3085,12 @@
                   <span class="bg-[#8B0000] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">New</span>
                 ` : ''}
                 ${bankBadge}
+                ${(Array.isArray(p.gallery) && p.gallery.length > 1) ? `
+                  <span class="bg-neutral-900/75 backdrop-blur-md text-white text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-xs border border-white/20 flex items-center gap-1">
+                    <i data-lucide="images" class="w-3 h-3"></i>
+                    <span>${p.gallery.length} ภาพ</span>
+                  </span>
+                ` : ''}
               </div>
 
               <!-- Bundle Select Button (for agents) -->
@@ -2618,10 +3136,11 @@
                   <span class="hover:underline hover:text-rose-600 transition" onclick="event.stopPropagation(); openPropertyMapDirect('${p.id}')" title="คลิกเปิดแผนที่/นำทาง">${p.location || 'กรุงเทพฯ และปริมณฑล'} 📍</span>
                 </div>
 
-                <!-- Specs (Area & Size) -->
-                <div class="flex items-center gap-4 text-xs text-slate-600 font-medium pt-0.5">
-                  <span class="flex items-center gap-1.5"><i data-lucide="grid" class="w-3.5 h-3.5 text-slate-400"></i> ${p.size || '43.9 ตร.ว.'}</span>
-                  <span class="flex items-center gap-1.5"><i data-lucide="home" class="w-3.5 h-3.5 text-slate-400"></i> ${p.usable_area || '110 ตร.ม.'}</span>
+                <!-- Specs (Area, Usable/Floors, Bed & Bath) -->
+                <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-600 font-medium pt-0.5">
+                  <span class="flex items-center gap-1"><i data-lucide="grid" class="w-3.5 h-3.5 text-slate-400"></i> ${(p.size && p.size !== '-') ? p.size : 'ตามโฉนด'}</span>
+                  <span class="flex items-center gap-1"><i data-lucide="home" class="w-3.5 h-3.5 text-slate-400"></i> ${(p.usable_area && p.usable_area !== '-') ? p.usable_area : (p.floors ? `${p.category || 'อาคาร'} ${p.floors}` : (p.category || 'ตามสภาพ'))}</span>
+                  ${(p.bedrooms && Number(p.bedrooms) > 0) ? `<span class="flex items-center gap-1 text-amber-900 bg-amber-50/80 px-1.5 py-0.2 rounded border border-amber-200/60 text-[11px] font-semibold">🛏️ ${p.bedrooms} นอน${(p.bathrooms && Number(p.bathrooms) > 0) ? ` • 🚿 ${p.bathrooms} น้ำ` : ''}</span>` : ''}
                 </div>
               </div>
 

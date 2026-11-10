@@ -1160,17 +1160,72 @@
             <span id="detail-code" class="text-xs text-neutral-400 font-mono">รหัส: -</span>
           </div>
 
-          <!-- Detail Image Carousel / Hero -->
-          <div class="relative aspect-[16/10] bg-neutral-100 rounded-2xl overflow-hidden shadow-inner">
-            <img id="detail-main-img" src="" alt="" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600';" class="w-full h-full object-cover">
-            <div class="absolute bottom-2.5 left-2.5">
-              <span id="detail-status-pill" class="bg-[#8B0000] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">New</span>
+          <!-- Detail Image Carousel / Hero + Thumbnail Strip -->
+          <section id="detail-carousel-region" aria-roledescription="carousel" aria-label="ภาพถ่ายทรัพย์สิน" class="space-y-2">
+            <div class="relative aspect-[16/10] bg-neutral-100 rounded-2xl overflow-hidden shadow-inner group">
+              
+              <!-- Previous / Next Controls (before track in DOM order per accessibility guide) -->
+              <div id="detail-carousel-controls" class="absolute inset-0 z-20 flex items-center justify-between px-2.5 pointer-events-none hidden">
+                <button 
+                  type="button" 
+                  id="detail-prev-btn"
+                  onclick="stepDetailCarousel(-1)" 
+                  aria-label="ภาพก่อนหน้า"
+                  style="pointer-events: auto; touch-action: manipulation;"
+                  class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-neutral-900/70 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center shadow-md border border-white/25 transition-all active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white cursor-pointer"
+                >
+                  <i data-lucide="chevron-left" class="w-5 h-5 stroke-[2.5]"></i>
+                </button>
+                <button 
+                  type="button" 
+                  id="detail-next-btn"
+                  onclick="stepDetailCarousel(1)" 
+                  aria-label="ภาพถัดไป"
+                  style="pointer-events: auto; touch-action: manipulation;"
+                  class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-neutral-900/70 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center shadow-md border border-white/25 transition-all active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white cursor-pointer"
+                >
+                  <i data-lucide="chevron-right" class="w-5 h-5 stroke-[2.5]"></i>
+                </button>
+              </div>
+
+              <!-- Scroll-Snap Track -->
+              <div 
+                id="detail-carousel-track" 
+                tabindex="0" 
+                role="group" 
+                aria-label="รายการภาพถ่าย" 
+                class="w-full h-full flex overflow-x-auto snap-x snap-mandatory"
+                style="scroll-snap-type: x mandatory; touch-action: manipulation; scrollbar-width: none; -ms-overflow-style: none;"
+              >
+                <div role="group" aria-roledescription="slide" aria-label="1 of 1" class="w-full h-full shrink-0 snap-center relative" style="flex: 0 0 100%; scroll-snap-align: center;">
+                  <img id="detail-main-img" src="" alt="" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600';" class="w-full h-full object-cover">
+                </div>
+              </div>
+
+              <!-- Bottom-Left: Status Pill -->
+              <div class="absolute bottom-2.5 left-2.5 z-20 pointer-events-none">
+                <span id="detail-status-pill" class="bg-[#8B0000] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">New</span>
+              </div>
+
+              <!-- Bottom-Right: Photo Counter Pill -->
+              <div class="absolute bottom-2.5 right-2.5 z-20 pointer-events-none">
+                <span id="detail-photo-counter" class="bg-neutral-900/75 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-full shadow-sm border border-white/20">📷 1 / 1 ภาพ</span>
+              </div>
             </div>
-            
-          </div>
+
+            <!-- Visually hidden polite status region for screen readers -->
+            <p id="detail-carousel-status" class="sr-only" role="status" aria-live="polite"></p>
+
+            <!-- Thumbnail Strip -->
+            <nav id="detail-thumbs-row" aria-label="เลือกรูปภาพทรัพย์สิน" class="flex gap-2 overflow-x-auto py-1 px-0.5 custom-scrollbar" style="scroll-snap-type: x mandatory; touch-action: manipulation;"></nav>
+          </section>
 
           <!-- Title & Location -->
           <div class="space-y-1">
+            <div id="detail-project-pill" class="hidden inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-50 border border-[#C2A460]/40 text-[#8A6A1F] text-[11px] font-bold">
+              <i data-lucide="building-2" class="w-3 h-3"></i>
+              <span id="detail-project-name">-</span>
+            </div>
             <h2 id="detail-title" class="font-bold text-neutral-900 text-base md:text-lg leading-snug"></h2>
             <div class="flex items-center gap-1.5 text-xs text-neutral-500">
               <i data-lucide="map-pin" class="w-3.5 h-3.5 text-neutral-400 shrink-0"></i>
@@ -1178,30 +1233,66 @@
             </div>
           </div>
 
-          <!-- Homerun Specs Grid -->
-          <div class="grid grid-cols-2 gap-2 bg-[#FAF8F5] p-3 rounded-2xl border border-neutral-200/70 text-xs">
+          <!-- Homerun 4-Box Specs Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-[#FAF8F5] p-3 rounded-2xl border border-neutral-200/70 text-xs">
             <div class="flex items-center gap-2">
-              <div class="w-7 h-7 rounded-full bg-white shadow-xs flex items-center justify-center text-neutral-500 border border-neutral-200/50">
+              <div class="w-7 h-7 rounded-full bg-white shadow-xs flex items-center justify-center text-neutral-500 border border-neutral-200/50 shrink-0">
                 <i data-lucide="grid" class="w-3.5 h-3.5"></i>
               </div>
-              <div>
-                <div class="text-[10px] text-neutral-400">เนื้อที่</div>
-                <div id="detail-size" class="font-bold text-neutral-800">43.9 ตร.ว.</div>
+              <div class="min-w-0">
+                <div class="text-[10px] text-neutral-400">เนื้อที่ดิน</div>
+                <div id="detail-size" class="font-bold text-neutral-800 truncate">22.0 ตร.ว.</div>
               </div>
             </div>
             <div class="flex items-center gap-2">
-              <div class="w-7 h-7 rounded-full bg-white shadow-xs flex items-center justify-center text-neutral-500 border border-neutral-200/50">
+              <div class="w-7 h-7 rounded-full bg-white shadow-xs flex items-center justify-center text-neutral-500 border border-neutral-200/50 shrink-0">
                 <i data-lucide="home" class="w-3.5 h-3.5"></i>
               </div>
-              <div>
-                <div class="text-[10px] text-neutral-400">พื้นที่ใช้สอย</div>
-                <div id="detail-usable" class="font-bold text-neutral-800">110 ตร.ม.</div>
+              <div class="min-w-0">
+                <div class="text-[10px] text-neutral-400">พื้นที่/อาคาร</div>
+                <div id="detail-usable" class="font-bold text-neutral-800 truncate">3 ชั้น</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-white shadow-xs flex items-center justify-center text-neutral-500 border border-neutral-200/50 shrink-0">
+                <i data-lucide="bed-double" class="w-3.5 h-3.5"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="text-[10px] text-neutral-400">ห้องนอน</div>
+                <div id="detail-bedrooms" class="font-bold text-neutral-800 truncate">-</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-white shadow-xs flex items-center justify-center text-neutral-500 border border-neutral-200/50 shrink-0">
+                <i data-lucide="bath" class="w-3.5 h-3.5"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="text-[10px] text-neutral-400">ห้องน้ำ</div>
+                <div id="detail-bathrooms" class="font-bold text-neutral-800 truncate">-</div>
               </div>
             </div>
           </div>
 
+          <!-- Deep Property Spec Highlights Box (Project, House No, Deed, Dimensions, Common Fee) -->
+          <div id="detail-deep-specs-box" class="hidden bg-white border border-neutral-200/80 rounded-2xl p-3 space-y-2 shadow-2xs">
+            <div class="flex items-center justify-between border-b border-neutral-100 pb-1.5">
+              <span class="text-[11px] font-bold text-neutral-800 flex items-center gap-1.5">
+                <i data-lucide="clipboard-list" class="w-3.5 h-3.5 text-[#8B0000]"></i>
+                <span>ข้อมูลจำเพาะ & เอกสารสิทธิ์ (Property Specs)</span>
+              </span>
+<span class="text-[10px] font-semibold text-[#8A6A1F] bg-amber-50 px-2 py-0.5 rounded-full border border-[#C2A460]/30">✓ ข้อมูลตรวจสอบแล้ว</span>
+            </div>
+            <div id="detail-deep-specs-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 text-xs"></div>
+          </div>
+
           <!-- Description -->
-          <p id="detail-desc" class="text-xs text-neutral-600 leading-relaxed bg-[#FAF8F5]/50 border border-neutral-200/70 p-3 rounded-2xl"></p>
+          <div class="bg-[#FAF8F5]/60 border border-neutral-200/70 p-3.5 rounded-2xl space-y-1.5">
+            <div class="text-[11px] font-bold text-neutral-700 flex items-center gap-1.5">
+              <i data-lucide="file-text" class="w-3.5 h-3.5 text-neutral-400"></i>
+              <span>รายละเอียดทรัพย์สิน & ทำเลใกล้เคียง</span>
+            </div>
+            <p id="detail-desc" class="text-xs text-neutral-600 leading-relaxed whitespace-pre-line"></p>
+          </div>
 
           <!-- 👤 POINT 2: INLINE AGENT PROFILE CARD (Shown in Client Mode) -->
           <div id="detail-agent-card" class="hidden rounded-2xl bg-[#FAF9F6] border border-[#C2A460]/40 p-3.5 shadow-sm space-y-2.5">
@@ -2320,6 +2411,26 @@
         </div>
 
       </div>
+    </div>
+
+    <!-- 🔍 Fullscreen Image Lightbox Modal -->
+    <div id="detail-lightbox-modal" onclick="if(event.target === this) closeDetailImageLightbox()" class="hidden fixed inset-0 z-[10050] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-2 sm:p-6 select-none">
+      <div class="absolute top-3 left-4 right-4 flex items-center justify-between z-20">
+        <span id="detail-lightbox-counter" class="bg-white/15 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full border border-white/20">📷 1 / 1</span>
+        <button type="button" onclick="closeDetailImageLightbox()" aria-label="ปิดภาพขยาย" class="w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-all cursor-pointer border border-white/20 active:scale-90">
+          <i data-lucide="x" class="w-5 h-5 stroke-[2.5]"></i>
+        </button>
+      </div>
+      <div class="relative w-full max-w-5xl max-h-[82dvh] flex items-center justify-center">
+        <button type="button" id="detail-lightbox-prev" onclick="stepDetailLightbox(-1)" aria-label="ภาพก่อนหน้า" class="absolute left-1 sm:left-3 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white flex items-center justify-center border border-white/25 shadow-lg transition-all active:scale-95 cursor-pointer">
+          <i data-lucide="chevron-left" class="w-6 h-6 stroke-[2.5]"></i>
+        </button>
+        <img id="detail-lightbox-img" src="" alt="ภาพขยาย" class="max-w-full max-h-[80dvh] object-contain rounded-xl shadow-2xl">
+        <button type="button" id="detail-lightbox-next" onclick="stepDetailLightbox(1)" aria-label="ภาพถัดไป" class="absolute right-1 sm:right-3 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white flex items-center justify-center border border-white/25 shadow-lg transition-all active:scale-95 cursor-pointer">
+          <i data-lucide="chevron-right" class="w-6 h-6 stroke-[2.5]"></i>
+        </button>
+      </div>
+      <div id="detail-lightbox-thumbs" class="mt-3 flex gap-2 overflow-x-auto max-w-full px-2 py-1 custom-scrollbar"></div>
     </div>
 
     <!-- Copy Share Toast -->
