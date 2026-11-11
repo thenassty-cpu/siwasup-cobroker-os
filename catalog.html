@@ -4772,6 +4772,44 @@
       return localStorage.getItem('siwasup_my_agent_ref') || 'S90';
     }
 
+    
+    // --- MY FULL CATALOG SHARING (LEVEL 3 PROTECTED CLIENT LINK) ---
+    function copyMyCatalogLink() {
+      const switcher = document.getElementById('profile-agent-switcher');
+      const code = (switcher && switcher.value) ? switcher.value : (localStorage.getItem('siwasup_my_agent_ref') || (typeof getActiveAgentRef === 'function' ? getActiveAgentRef() : 'SW001'));
+      const profile = (typeof getAgentProfile === 'function') ? getAgentProfile(code) : null;
+      const agentName = profile ? (profile.shortName || profile.name) : code;
+
+      // Always prefer corporate production domain assets.siwasup.com for client sharing
+      const base = (typeof window !== 'undefined' && window.location && window.location.hostname && window.location.hostname.includes('siwasup.com'))
+        ? (typeof getBaseUrl === 'function' ? getBaseUrl() : window.location.href.split('?')[0])
+        : 'https://assets.siwasup.com/catalog.html';
+
+      const targetUrl = `${base}?view=client&ref=${encodeURIComponent(code)}&src=agent_share`;
+
+      if (typeof copyTextToClipboard === 'function') {
+        copyTextToClipboard(targetUrl, `✅ คัดลอกลิงก์แคตตาล็อกของ [${agentName} (${code})] แล้ว! นำไปส่งใน LINE หรือแชร์ให้ลูกค้าได้เลยครับ`);
+      } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(targetUrl).then(() => {
+          if (typeof showToast === 'function') showToast(`✅ คัดลอกลิงก์แคตตาล็อกของ [${agentName} (${code})] แล้ว!`);
+        }).catch(() => {
+          prompt('คัดลอกลิงก์แคตตาล็อก:', targetUrl);
+        });
+      } else {
+        prompt('คัดลอกลิงก์แคตตาล็อก:', targetUrl);
+      }
+    }
+
+    function previewMyCatalogClientMode() {
+      const switcher = document.getElementById('profile-agent-switcher');
+      const code = (switcher && switcher.value) ? switcher.value : (localStorage.getItem('siwasup_my_agent_ref') || (typeof getActiveAgentRef === 'function' ? getActiveAgentRef() : 'SW001'));
+      const base = (typeof window !== 'undefined' && window.location && window.location.hostname && window.location.hostname.includes('siwasup.com'))
+        ? (typeof getBaseUrl === 'function' ? getBaseUrl() : window.location.href.split('?')[0])
+        : 'https://assets.siwasup.com/catalog.html';
+      const targetUrl = `${base}?view=client&ref=${encodeURIComponent(code)}&src=agent_preview`;
+      window.open(targetUrl, '_blank');
+    }
+  
     function openMyProfileModal(targetCode = null) {
       const code = targetCode || getActiveAgentRef();
       renderMyProfile(code);
@@ -4977,6 +5015,8 @@
       if (nicknameEl) nicknameEl.textContent = agent.nickname || agent.name;
       if (codePill) codePill.textContent = agent.code;
       if (fullnameEl) fullnameEl.textContent = agent.name;
+      const copyBtnText = document.getElementById('btn-copy-catalog-text');
+      if (copyBtnText) copyBtnText.textContent = `คัดลอกลิงก์แคตตาล็อกของ ${agent.nickname || agent.name} (ส่งลูกค้า)`;
       if (startDateEl) startDateEl.textContent = agent.startDate ? `เริ่มงานเมื่อ: ${agent.startDate}` : 'ตัวแทนศิวาทรัพย์';
       if (phoneEl) phoneEl.textContent = agent.phone || '06-2396-5161';
       if (lineEl) lineEl.textContent = agent.lineId ? agent.lineId : '@siwasup';

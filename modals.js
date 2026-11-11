@@ -1763,6 +1763,18 @@
                 </div>
               </div>
             </div>
+
+            <!-- 🌟 Golden Action Button: Share Full Catalog with Agent Referral -->
+            <div class="pt-2 border-t border-amber-200/60 flex flex-col sm:flex-row gap-2">
+              <button type="button" onclick="copyMyCatalogLink()" class="flex-1 bg-gradient-to-r from-[#C2A460] via-[#E5CF94] to-[#A98B45] text-neutral-950 hover:opacity-95 font-bold text-xs py-2.5 px-3 rounded-xl shadow flex items-center justify-center gap-2 cursor-pointer transition active:scale-95">
+                <i data-lucide="share-2" class="w-4 h-4 text-neutral-950"></i>
+                <span id="btn-copy-catalog-text">คัดลอกลิงก์แคตตาล็อกของฉัน (ส่งลูกค้า)</span>
+              </button>
+              <button type="button" onclick="previewMyCatalogClientMode()" class="px-3 py-2.5 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-[#E5C985] text-xs font-bold flex items-center justify-center gap-1.5 border border-neutral-700 shadow-2xs transition active:scale-95 cursor-pointer" title="เปิดดูหน้าเว็บในมุมมองของลูกค้าที่ได้รับลิงก์นี้">
+                <i data-lucide="external-link" class="w-3.5 h-3.5 text-[#E5C985]"></i>
+                <span>ทดลองเปิดดู</span>
+              </button>
+            </div>
           </div>
 
           <!-- 4 Archetype Stage Visual Selector (Bear -> Wolf -> Lion -> Eagle) -->
