@@ -5803,6 +5803,80 @@
     // --- CLIENT VIEW INTERACTION FUNCTIONS ---
         // 🏆 Dual-Display Mapping: แปลงยศสัตว์หลังบ้านเป็นตำแหน่งหรูสากลหน้าบ้าน (No Animal Names for Clients!)
     const AGENT_PROFILES = {
+      // 👑 คุณเจี๊ยบ / คุณกูล (Supreme EXE / CEO)
+      'SW001': {
+        agentId: 'SW001',
+        name: 'คุณวารินทร์ กูลจีรัง (คุณเจี๊ยบ)',
+        shortName: 'คุณเจี๊ยบ',
+        tier: 'gryphon',
+        publicTitle: 'Executive Managing Partner',
+        badgeClass: 'bg-gradient-to-r from-[#8B0000] to-[#5A0000] text-[#C2A460] border border-[#C2A460]',
+        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+        phone: '094-462-9796'
+      },
+      'SW-001': {
+        agentId: 'SW-001',
+        name: 'คุณวารินทร์ กูลจีรัง (คุณเจี๊ยบ)',
+        shortName: 'คุณเจี๊ยบ',
+        tier: 'gryphon',
+        publicTitle: 'Executive Managing Partner',
+        badgeClass: 'bg-gradient-to-r from-[#8B0000] to-[#5A0000] text-[#C2A460] border border-[#C2A460]',
+        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+        phone: '094-462-9796'
+      },
+      // 👑 คุณบัว (Supreme EXE)
+      'SW-002': {
+        agentId: 'SW-002',
+        name: 'คุณภมรมาศ ตัณฑุลทุกล (คุณบัว)',
+        shortName: 'คุณบัว',
+        tier: 'gryphon',
+        publicTitle: 'Executive Managing Partner',
+        badgeClass: 'bg-gradient-to-r from-[#8B0000] to-[#5A0000] text-[#C2A460] border border-[#C2A460]',
+        avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80',
+        phone: '085-336-5703'
+      },
+      'AG-บัวรา': {
+        agentId: 'AG-บัวรา',
+        name: 'คุณภมรมาศ ตัณฑุลทุกล (คุณบัว)',
+        shortName: 'คุณบัว',
+        tier: 'gryphon',
+        publicTitle: 'Executive Managing Partner',
+        badgeClass: 'bg-gradient-to-r from-[#8B0000] to-[#5A0000] text-[#C2A460] border border-[#C2A460]',
+        avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80',
+        phone: '085-336-5703'
+      },
+      // 🔑 พี่ลิลลี่ (Key Master)
+      'SW-003': {
+        agentId: 'SW-003',
+        name: 'คุณวรวงลักษณ์ ว่องสุวรรณวาร (พี่ลิลลี่)',
+        shortName: 'พี่ลิลลี่',
+        tier: 'eagle',
+        publicTitle: 'Head of Viewing & Keybox Custodian',
+        badgeClass: 'bg-neutral-900 text-[#C2A460] border border-neutral-700',
+        avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80',
+        phone: '092-583-6565'
+      },
+      // 💻 [NASSTY] (Tech Architect)
+      'NASSTY': {
+        agentId: 'NASSTY',
+        name: 'คุณณัฐ ระวังภัย (Ton / NASSTY)',
+        shortName: 'คุณต้น',
+        tier: 'eagle',
+        publicTitle: 'Senior Technology Architect',
+        badgeClass: 'bg-[#C2A460] text-neutral-950 font-bold border border-[#E5CF94]',
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
+        phone: '081-555-5555'
+      },
+      'AG-09': {
+        agentId: 'AG-09',
+        name: 'คุณณัฐ ระวังภัย (Ton / NASSTY)',
+        shortName: 'คุณต้น',
+        tier: 'eagle',
+        publicTitle: 'Executive Asset Director',
+        badgeClass: 'bg-[#C2A460] text-neutral-950 font-bold border border-[#E5CF94]',
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
+        phone: '081-555-5555'
+      },
       'SW-042': {
         agentId: 'SW-042',
         name: 'คุณธนภัทร วงศ์สุวรรณ',
@@ -5823,16 +5897,6 @@
         avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
         phone: '081-988-5522'
       },
-      'SW-001': {
-        agentId: 'SW-001',
-        name: 'คุณอัครวินท์ เกียรติธาดา',
-        shortName: 'คุณอัครวินท์',
-        tier: 'gryphon',
-        publicTitle: 'Master Exclusive Partner',
-        badgeClass: 'bg-gradient-to-r from-[#8B0000] to-[#5A0000] text-[#C2A460] border border-[#C2A460]',
-        avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80',
-        phone: '092-555-8899'
-      },
       'S22': {
         agentId: 'S22',
         name: 'คุณสมชาย พาเจริญ',
@@ -5842,28 +5906,114 @@
         badgeClass: 'bg-neutral-900 text-[#C2A460] border border-[#C2A460]/70',
         avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
         phone: '086-333-2211'
-      },
-      'AG-09': {
-        agentId: 'AG-09',
-        name: 'คุณณัฐ ระวังภัย',
-        shortName: 'คุณณัฐ',
-        tier: 'eagle',
-        publicTitle: 'Executive Asset Director',
-        badgeClass: 'bg-[#C2A460] text-neutral-950 font-bold border border-[#E5CF94]',
-        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
-        phone: '094-462-9796'
       }
     };
 
     function getAgentProfile(refId) {
       const cleanId = (refId || '').trim();
+      const upper = cleanId.toUpperCase();
+      const digitsOnly = cleanId.replace(/\D/g, '');
 
       // 1. Check in custom mock profiles first if exact match
       if (AGENT_PROFILES[cleanId]) return AGENT_PROFILES[cleanId];
+      if (AGENT_PROFILES[upper]) return AGENT_PROFILES[upper];
 
-      // 2. 🏆 Look up in the official 125 Siwasup Agents roster (siwasup_agents.js?v=20261104-conf"สวัสดีครับ สนใจสอบถามสถานะคิวสำรอง (กรณีหลุดจอง) ทรัพย์: " : "สวัสดีครับ สนใจทรัพย์: ";
-      const msg = `${prefix}${title} (รหัส ${id}) [ผู้แนะนำ: ${ref} | ช่องทาง: ${src}]`;
-      const lineUrl = `https://line.me/R/oaMessage/@siwasup/?${encodeURIComponent(msg)}`;
+      // Smart Leadership Aliases
+      if (upper.includes('JEAB') || upper.includes('GOOL') || upper.includes('SW001') || cleanId.includes('เจี๊ยบ') || cleanId.includes('กูล') || digitsOnly === '0944629796') {
+        return AGENT_PROFILES['SW001'];
+      }
+      if (upper.includes('BUA') || cleanId.includes('บัว') || digitsOnly === '0853365703') {
+        return AGENT_PROFILES['SW-002'];
+      }
+      if (upper.includes('LILY') || cleanId.includes('ลิลลี่') || digitsOnly === '0925836565') {
+        return AGENT_PROFILES['SW-003'];
+      }
+      if (upper.includes('NASSTY') || upper.includes('TON') || cleanId.includes('ต้น') || digitsOnly === '0815555555') {
+        return AGENT_PROFILES['NASSTY'];
+      }
+
+      // 2. 🏆 Look up in the official 125 Siwasup Agents roster (siwasup_agents.js)
+      if (window.SiwasupAgents && typeof window.SiwasupAgents.find === 'function') {
+        const found = window.SiwasupAgents.find(cleanId);
+        if (found) {
+          const cleanName = (found.name || '').replace(/^(นาย|นางสาว|นาง)\s*/, '');
+          const firstName = cleanName.split(' ')[0] || cleanName;
+          const shortName = found.nickname ? คุณ () : คุณ;
+
+          // Dual-Display Mapping: Convert internal rank to luxury public title
+          let publicTitle = 'Verified Property Consultant';
+          let badgeClass = 'bg-neutral-900 text-[#C2A460] border border-neutral-700';
+
+          const tierId = (found.tierId || '').toLowerCase();
+          if (tierId === 'diamond') {
+            publicTitle = 'Master Exclusive Partner';
+            badgeClass = 'bg-gradient-to-r from-[#8B0000] to-[#5A0000] text-[#C2A460] border border-[#C2A460]';
+          } else if (tierId === 'gold') {
+            publicTitle = 'Executive Asset Director';
+            badgeClass = 'bg-[#C2A460] text-neutral-950 font-bold border border-[#E5CF94]';
+          } else if (tierId === 'silver') {
+            publicTitle = 'Senior Property Specialist';
+            badgeClass = 'bg-neutral-900 text-[#C2A460] border border-[#C2A460]/70';
+          }
+
+          const defaultAvatar = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
+
+          return {
+            agentId: found.code,
+            name: found.name,
+            shortName: shortName,
+            tier: found.tierId || 'active',
+            publicTitle: publicTitle,
+            badgeClass: badgeClass,
+            avatar: found.avatar || defaultAvatar,
+            phone: found.phone || '094-462-9796'
+          };
+        }
+      }
+
+      // 3. Dynamic Fallback for any other custom ref code
+      return {
+        agentId: cleanId || 'SW001',
+        name: cleanId ? ตัวแทนรหัส  : 'คุณวารินทร์ กูลจีรัง (เจี๊ยบ)',
+        shortName: cleanId ? ตัวแทน  : 'คุณเจี๊ยบ',
+        tier: 'gryphon',
+        publicTitle: 'Verified Property Consultant',
+        badgeClass: 'bg-neutral-900 text-[#C2A460] border border-neutral-700',
+        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+        phone: '094-462-9796'
+      };
+    }
+
+    function getStoredAgentRef() {
+      return localStorage.getItem('siwasup_referred_by') || localStorage.getItem('siwasup_my_agent_ref') || 'SW001';
+    }
+
+    function getStoredSource() {
+      return localStorage.getItem('siwasup_referred_source') || 'direct';
+    }
+
+    function triggerClientCall() {
+      const storedRef = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : 'SW001';
+      const profile = getAgentProfile(storedRef);
+      if (typeof openCallModal === 'function') {
+        openCallModal(profile.agentId, ติดต่อ );
+      } else {
+        const num = (profile.phone || '094-462-9796').replace(/[^0-9]/g, '');
+        window.location.href = 	el:;
+      }
+    }
+
+    function contactViaLine(id, title, isReserve = false) {
+      const ref = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : 'SW001';
+      const src = (typeof getStoredSource === 'function') ? getStoredSource() : 'client_view';
+      let msg = '';
+      if (id === 'general') {
+        msg = สวัสดีครับ สนใจปรึกษาข้อมูลทรัพย์กับตัวแทนผู้ดูแล [ผู้แนะนำ:  | ช่องทาง: ];
+      } else {
+        const prefix = isReserve ? 'สวัสดีครับ สนใจสอบถามสถานะคิวสำรอง (กรณีหลุดจอง) ทรัพย์: ' : 'สวัสดีครับ สนใจทรัพย์: ';
+        msg = ${prefix} (รหัส ) [ผู้แนะนำ:  | ช่องทาง: ];
+      }
+      const lineUrl = https://line.me/R/oaMessage/@siwasup/?;
       window.open(lineUrl, '_blank');
     }
 
@@ -6276,7 +6426,47 @@
     }
 
         // Robust Auto-run & Guaranteed Instant Render (No White/Skeleton Screen!)
+    
+    // --- INIT & URL QUERY PARSER ---
+    function checkUrlParameters() {
+      const params = new URLSearchParams(window.location.search);
+      
+      // Store ref & agent into memory & auto-switch to Client View
+      const incomingRef = params.get('agent') || params.get('ref');
+      if (incomingRef) {
+        localStorage.setItem('siwasup_referred_by', incomingRef);
+        localStorage.setItem('siwasup_my_agent_ref', incomingRef);
+      }
+      if (params.has('src')) {
+        localStorage.setItem('siwasup_referred_source', params.get('src'));
+      }
+
+      // Check view mode & referrals
+      const view = params.get('view') || params.get('mode');
+      if (params.has('join_ref')) {
+        const inviter = params.get('join_ref');
+        if (typeof setMode === 'function') setMode('trainee');
+        setTimeout(() => {
+          if (typeof showToast === 'function') {
+            showToast('🤝 คุณกำลังลงทะเบียนเป็นตัวแทนภายใต้การแนะนำของ [' + inviter + ']');
+          }
+        }, 800);
+      } else if (view === 'client' || ((params.has('ref') || params.has('agent')) && !view) || params.has('bundle')) {
+        if (typeof setMode === 'function') setMode('client');
+      } else if (typeof isAdminSession === 'function' && isAdminSession()) {
+        if (typeof setMode === 'function') {
+          if (view === 'employee') setMode('employee');
+          else if (view === 'free_agent') setMode('free_agent');
+          else if (view === 'trainee') setMode('trainee');
+          else setMode('owner');
+        }
+      } else {
+        if (typeof setMode === 'function') setMode('free_agent');
+      }
+    }
+
     async function initCatalogApp() {
+      if (typeof checkUrlParameters === "function") checkUrlParameters();
       try {
         await loadProperties();
       } catch (err) {

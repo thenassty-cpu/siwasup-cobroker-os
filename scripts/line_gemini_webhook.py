@@ -47,6 +47,7 @@ LINE_ACCESS_TOKEN = os.environ.get("LINE_ACCESS_TOKEN") or _cfg.get("line_oa", {
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY") or _cfg.get("gemini_api", {}).get("api_key", "")
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite")
 ADMIN_EXPORT_SECRET = os.environ.get("ADMIN_EXPORT_SECRET", "SiwasupAdmin2026_SecureKey_99")
+_R2_CHAT_VAULT_KEY = "_vault/chat_logs_" + hmac.new(ADMIN_EXPORT_SECRET.encode("utf-8"), b"siwasup_chat_logs_vault_v2", hashlib.sha256).hexdigest()[:32] + ".json"
 
 # ---------------------------------------------------------------------------
 # LandsMaps GEO lookup: province code + amphur code  (ใช้สร้าง deeplink token)
@@ -160,7 +161,11 @@ LOC_MAP = {
     "สายไหม": ["Sai Mai", "สายไหม", "สุขาภิบาล 5", "วัชรพล"],
     "วัชรพล": ["Sai Mai", "Bang Khen", "วัชรพล"],
     "บางเขน": ["Bang Khen", "บางเขน", "รามอินทรา", "หลักสี่"],
-    "จตุจักร": ["Chatuchak", "จตุจักร", "พหลโยธิน"],
+    "จตุจักร": ["Chatuchak", "จตุจักร", "พหลโยธิน", "รัชโยธิน"],
+    "รัชโยธิน": ["Chatuchak", "จตุจักร", "รัชโยธิน", "พหลโยธิน", "รัชวิภา"],
+    "พหลโยธิน": ["Chatuchak", "จตุจักร", "พหลโยธิน", "รัชโยธิน"],
+    "รัชดา": ["Din Daeng", "Huai Khwang", "Chatuchak", "รัชดา", "รัชดาภิเษก"],
+    "รัชดาภิเษก": ["Din Daeng", "Huai Khwang", "Chatuchak", "รัชดา", "รัชดาภิเษก"],
     "ลาดพร้าว": ["Lat Phrao", "ลาดพร้าว", "โชคชัย 4"],
     "วังทองหลาง": ["Wang Thong Lang", "วังทองหลาง", "ทาวน์อินทาวน์"],
     "ห้วยขวาง": ["Huai Khwang", "ห้วยขวาง", "รัชดา", "พระราม 9"],
@@ -393,15 +398,37 @@ def load_chat_logs():
                 store = json.load(f)
         except Exception:
             pass
-    # If local file missing or empty, attempt restoring from R2 backup
-    if not store or not store.get("conversations"):
-        try:
-            req = urllib.request.Request("https://assets.siwasup.com/data/line_chat_logs.json?t=" + str(int(time.time())), headers={"User-Agent": "SiwasupSync/1.0"})
-            with urllib.request.urlopen(req, timeout=5) as r:
-                if r.status == 200:
-                    store = json.loads(r.read().decode("utf-8"))
-        except Exception:
-            pass
+
+    # Always check R2 backup to ensure we have the most up-to-date conversation logs
+    try:
+        req = urllib.request.Request("https://assets.siwasup.com/" + _R2_CHAT_VAULT_KEY + "?t=" + str(int(time.time())), headers={"User-Agent": "SiwasupSync/1.0"})
+        with urllib.request.urlopen(req, timeout=5) as r:
+            if r.status == 200:
+                r2_store = json.loads(r.read().decode("utf-8"))
+                r2_convs = r2_store.get("conversations", [])
+                if not store or not store.get("conversations"):
+                    store = r2_store
+                elif r2_convs:
+                    local_convs = store.get("conversations", [])
+                    known_ids = {c.get("id") or (c.get("timestamp", "") + "_" + c.get("user_text", "")): c for c in local_convs}
+                    merged = False
+                    for rc in r2_convs:
+                        rk = rc.get("id") or (rc.get("timestamp", "") + "_" + rc.get("user_text", ""))
+                        if rk and rk not in known_ids:
+                            known_ids[rk] = rc
+                            merged = True
+                    if merged or len(r2_convs) > len(local_convs):
+                        all_items = list(known_ids.values())
+                        all_items.sort(key=lambda x: str(x.get("timestamp", "")), reverse=True)
+                        store["conversations"] = all_items
+                        store["total_logged"] = len(all_items)
+                        try:
+                            with open(CHAT_LOG_PATH, "w", encoding="utf-8") as fw:
+                                json.dump(store, fw, ensure_ascii=False, indent=2)
+                        except Exception:
+                            pass
+    except Exception as _e:
+        pass
 
     if store and isinstance(store.get("conversations"), list):
         return store
@@ -413,7 +440,7 @@ def load_chat_logs():
         "historical_summary": {
             "2026-10-29_replies_sent": 18,
             "followers_count": 2,
-            "note": "ข้อความ 18 รายการแรกเมื่อวันที่ 29 ต.ค. 2569 รันผ่านโหมด Terminal ก่อนเปิดระบบบันทึกไฟล์ ตั้งแต่วันที่ 31 ต.ค. 2569 เป็นต้นไป ทุกข้อความจะถูกบันทึกแสดงผลที่นี่แบบ Real-Time 100%"
+            "note": "ข้อความ 18 รายการแรกวันที่ 29 ต.ค. 2569 บันทึกผ่านทาง Terminal ก่อนเปิดระบบบันทึกสด วันที่ 31 ต.ค. 2569 เป็นต้นไป ทุกข้อความจะถูกบันทึกสดเรียลไทม์แบบ Real-Time 100%"
         },
         "conversations": []
     }
@@ -437,7 +464,7 @@ def append_chat_log(entry):
         if put_object_r2:
             def sync_r2():
                 try:
-                    put_object_r2("data/line_chat_logs.json", data_bytes, "application/json; charset=utf-8")
+                    put_object_r2(_R2_CHAT_VAULT_KEY, data_bytes, "application/json; charset=utf-8")
                 except Exception as ex:
                     print(f"[R2 Sync Log Warn]: {ex}")
             threading.Thread(target=sync_r2, daemon=True).start()
@@ -536,15 +563,23 @@ def search_properties(query, user_id=None):
                 "status": "พร้อมเปิดให้เข้าชม"
             }], "EXACT_NPA_CODE"
 
-    # 2. Project / Title Keyword Match in Siwasup Portfolio (e.g. "ซิกเนเจอร์ รามอินทรา 109")
+    # 2. Project / Title Keyword Match in Siwasup Portfolio (Smart Substring & Brand Parsing)
+    known_project_brands = [
+        "ซิกเนเจอร์", "รามอินทรา", "มัณฑนา", "พาทิโอ", "ลุมพินี", "lumpini", "เพลส",
+        "รัชโยธิน", "รัชดา", "ศุภาลัย", "ยูดีไลท์", "ชวนชื่น", "พฤกษา", "เซ็นทริค",
+        "ไอดีโอ", "แอสปาย", "ดีคอนโด", "พลัมคอนโด", "บางแค", "พระราม 9", "สุขุมวิท"
+    ]
+    detected_brand_kws = [k for k in known_project_brands if k.lower() in q_low]
     stop_words = ["เป๊ะนะครับ", "เป็น", "ทวาน์โฮม", "ทาวน์โฮม", "บ้านเดี่ยว", "คอนโด", "ช่วยตรวจสอบให้หน่อย", "อยากนัดเปิดบ้าน", "ใกล้สถานีรถไฟฟ้า"]
-    project_keywords = [w for w in re.split(r'\s+', query) if len(w) >= 3 and w not in stop_words and not w.startswith("ช่วย") and not w.startswith("อยาก")]
-    if any(k in query for k in ["ซิกเนเจอร์", "รามอินทรา 109", "มัณฑนา", "พาทิโอ", "ลุมพินี", "ชวนชื่น", "พฤกษา", "เซ็นทริค"]):
+    raw_split = [w for w in re.split(r'\s+', query) if len(w) >= 3 and w not in stop_words and not w.startswith("ช่วย") and not w.startswith("อยาก")]
+    all_search_kws = list(set(raw_split + detected_brand_kws))
+
+    if detected_brand_kws or any(k in query for k in ["ซิกเนเจอร์", "มัณฑนา", "พาทิโอ", "ลุมพินี", "ชวนชื่น", "พฤกษา", "เซ็นทริค"]):
         matched_siwa = []
         for sp in SIWASUP_PROPS:
-            title_desc = ((sp.get("title") or "") + " " + (sp.get("description") or "")).lower()
-            score = sum(1 for kw in project_keywords if kw.lower() in title_desc)
-            if score >= 2 or ("ซิกเนเจอร์" in q_low and "ซิกเนเจอร์" in title_desc):
+            title_desc = ((sp.get("title") or "") + " " + (sp.get("description") or "") + " " + (sp.get("location") or "")).lower()
+            score = sum(1 for kw in all_search_kws if kw.lower() in title_desc)
+            if score >= 1 and (not detected_brand_kws or any(dk.lower() in title_desc for dk in detected_brand_kws)):
                 matched_siwa.append((score, sp))
         if matched_siwa:
             matched_siwa.sort(key=lambda x: x[0], reverse=True)
@@ -554,11 +589,13 @@ def search_properties(query, user_id=None):
                     "code": str(sp.get("id")),
                     "bank": sp.get("bank_source") or "Siwasup",
                     "title": sp.get("title"),
-                    "type": sp.get("category") or "ทาวน์โฮม",
+                    "type": sp.get("category") or "คอนโด",
                     "location": sp.get("location") or "กรุงเทพฯ",
                     "price": sp.get("price"),
-                    "status": "ขายแล้ว/ตัดสต๊อก" if (sp.get("status") == "sold_archive" or sp.get("is_image_soldout")) else "พร้อมเปิดให้เข้าชม"
+                    "status": "ขายแล้ว/ตัดสต็อก" if (sp.get("status") == "sold_archive" or sp.get("is_image_soldout")) else "พร้อมเปิดให้เข้าชม"
                 })
+            if user_id:
+                USER_SEARCH_CONTEXT.setdefault(user_id, {})["last_matched"] = out
             return out, "PROJECT_NAME_MATCH"
 
     # 3. Check if this is purely a workflow/process/booking question
@@ -574,6 +611,10 @@ def search_properties(query, user_id=None):
         "unlimited": False,
         "updated_at": time.time()
     })
+
+    # If this turn is simply "มีไหม", "มีหรือเปล่า", "มีห้องไหม" and we recently matched a project:
+    if any(q_low == trigger or q_low.startswith(trigger) for trigger in ["มีไหม", "มีมั้ย", "มีหรือเปล่า", "มีมั่งไหม", "ขอดูหน่อย", "ส่งมาดู"]) and ctx.get("last_matched"):
+        return ctx["last_matched"], "MULTI_TURN_PROJECT_FOLLOWUP"
 
     # Clean query for type check (strip viewing verbs)
     q_for_type = re.sub(r'(?:เปิดบ้าน|ชมบ้าน|ดูบ้าน|กุญแจบ้าน|เข้าบ้าน|ล็อกบ้าน|หน้าบ้าน)', '', query)
@@ -2674,7 +2715,7 @@ def handle_render_shutdown(signum, frame):
             with LOG_LOCK:
                 store = load_chat_logs()
                 data_bytes = json.dumps(store, ensure_ascii=False, indent=2).encode("utf-8")
-                put_object_r2("data/line_chat_logs.json", data_bytes, "application/json; charset=utf-8")
+                put_object_r2(_R2_CHAT_VAULT_KEY, data_bytes, "application/json; charset=utf-8")
                 print("[+] Chat logs successfully flushed to Cloudflare R2 before sleep!")
             with CONTRACTS_LOCK:
                 c_store = load_contracts_data()
