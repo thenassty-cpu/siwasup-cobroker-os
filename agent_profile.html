@@ -214,15 +214,15 @@
           <span class="w-6 h-6 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
             <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
           </span>
-          <span class="font-bold text-slate-900 text-xs sm:text-sm">ทดลองสลับ 3 ตัวเลือก (ให้ CEO กูลเลือก)</span>
+          <span class="font-bold text-slate-900 text-xs sm:text-sm">ทดลองสลับ 4 ตัวเลือก (ให้ CEO กูลเลือก)</span>
         </div>
         <span id="currentOptionBadge" class="text-[9.5px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
           แบบที่ 1 (แนะนำ)
         </span>
       </div>
 
-      <!-- Tab Buttons -->
-      <div class="grid grid-cols-3 gap-1 p-1 bg-slate-100 rounded-xl text-[10.5px] sm:text-[11px] font-semibold">
+      <!-- Tab Buttons (4 Options) -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-1 p-1 bg-slate-100 rounded-xl text-[10.5px] sm:text-[11px] font-semibold">
         <button id="tabOpt1" onclick="selectMetricOption('opt1')" class="py-1.5 px-1 rounded-lg bg-white text-slate-900 shadow-xs transition text-center font-bold truncate">
           แบบ 1: สบายใจ/ฟรี
         </button>
@@ -231,6 +231,9 @@
         </button>
         <button id="tabOpt3" onclick="selectMetricOption('opt3')" class="py-1.5 px-1 rounded-lg text-slate-600 hover:text-slate-900 transition text-center font-medium truncate">
           แบบ 3: ปรับคำซอฟต์
+        </button>
+        <button id="tabOpt4" onclick="selectMetricOption('opt4')" class="py-1.5 px-1 rounded-lg text-slate-600 hover:text-slate-900 transition text-center font-medium truncate">
+          แบบ 4: สรุปโฉนด/ที่ดิน 📜
         </button>
       </div>
 
@@ -250,7 +253,7 @@
       <!-- Executive Decision Matrix: Compare All 3 Side-by-Side -->
       <div class="space-y-2 pt-1 border-t border-slate-100">
         <div class="font-bold text-slate-800 text-[11px] flex items-center justify-between">
-          <span>ตารางสรุปเปรียบเทียบ 3 ตัวเลือกมาตรฐานบริการจริง:</span>
+          <span>ตารางสรุปเปรียบเทียบ 4 ตัวเลือกมาตรฐานบริการจริง:</span>
           <span class="text-[9.5px] text-slate-400 font-normal">คลิกเพื่อดูผลบนการ์ด</span>
         </div>
         
@@ -299,6 +302,25 @@
             <div><span class="text-slate-400 block text-[8px]">เครือข่าย Co-Broker</span><strong class="text-slate-900 text-[11px]">ทั่วกรุงเทพฯ</strong></div>
             <div><span class="text-slate-400 block text-[8px]">ปรึกษาซื้อบ้าน</span><strong class="text-slate-900 text-[11px]">ฟรีตลอดชีพ</strong></div>
           </div>
+        </div>
+
+        <!-- Card 4: Title Deed & Land Specs -->
+        <div onclick="selectMetricOption('opt4')" class="p-2.5 sm:p-3 rounded-xl border border-sky-300 bg-sky-50/70 hover:bg-sky-50 cursor-pointer transition space-y-1.5 shadow-2xs">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-sky-950 text-[11px] flex items-center gap-1">
+              <span>📜 แบบที่ 4: สรุปข้อมูลโฉนดและที่ดินแม่นยำ (Title Deed Specs)</span>
+            </span>
+            <span class="text-[9.5px] font-bold px-1.5 py-0.5 rounded bg-sky-600 text-white">เช็กโฉนดจริง</span>
+          </div>
+          <div class="grid grid-cols-4 gap-1 text-center bg-white rounded-lg p-1.5 border border-sky-100 text-[10px]">
+            <div><span class="text-slate-400 block text-[8px]">ตรวจสอบที่ดิน</span><strong class="text-sky-700 text-[11px]">โฉนดตรงปก</strong></div>
+            <div><span class="text-slate-400 block text-[8px]">มิติแปลง</span><strong class="text-sky-700 text-[11px]">กว้าง-ลึกชัด</strong></div>
+            <div><span class="text-slate-400 block text-[8px]">ผังสีเมือง</span><strong class="text-slate-900 text-[11px]">เช็กผังสีครบ</strong></div>
+            <div><span class="text-slate-400 block text-[8px]">สถานะโฉนด</span><strong class="text-emerald-700 text-[11px]">ปลอดภาระ 100%</strong></div>
+          </div>
+          <p class="text-[9.5px] text-sky-800 leading-tight">
+            ✓ สรุปข้อมูลที่ดินและโฉนดแม่นยำ ตรงไปตรงมา ✓ ลูกค้าเช็กมิติแปลงและผังสีได้ทันที ปิดดีลไวขึ้น
+          </p>
         </div>
       </div>
 
@@ -540,6 +562,19 @@
           { label: "เครือข่าย Co-Broker", value: "ทั่วกรุงเทพฯ", isHighlight: false },
           { label: "ปรึกษาซื้อบ้าน", value: "ฟรีตลอดชีพ", isHighlight: false }
         ]
+      },
+      opt4: {
+        id: "opt4",
+        name: "แบบที่ 4: สรุปข้อมูลโฉนดและที่ดินแม่นยำ (Title Deed Specs)",
+        badge: "โฉนดตรงปก 📜",
+        tag: "เช็กโฉนด 100%",
+        desc: "ขจัดความลังเลของผู้ซื้อด้วยข้อมูลที่ดินชัดเจน: <strong>1. โฉนดตรงปก</strong> (เนื้อที่เป๊ะ) + <strong>2. กว้าง-ลึกชัด</strong> (มิติแปลงแม่นยำ) + <strong>3. เช็กผังสีครบ</strong> (การใช้ประโยชน์ที่ดิน) + <strong>4. ปลอดภาระ 100%</strong> (เอกสารพร้อมโอน)",
+        metrics: [
+          { label: "ตรวจสอบที่ดิน", value: "โฉนดตรงปก", isHighlight: true },
+          { label: "มิติแปลงที่ดิน", value: "กว้าง-ลึกชัด", isHighlight: true },
+          { label: "ผังสีเมือง", value: "เช็กผังสีครบ", isHighlight: false },
+          { label: "สถานะโฉนด", value: "ปลอดภาระ 100%", isHighlight: true }
+        ]
       }
     };
 
@@ -657,7 +692,7 @@
       const opt = METRIC_OPTIONS[optKey];
 
       // Update Tabs styling
-      ['opt1', 'opt2', 'opt3'].forEach(k => {
+      ['opt1', 'opt2', 'opt3', 'opt4'].forEach(k => {
         const tab = document.getElementById(`tab${k.charAt(0).toUpperCase() + k.slice(1)}`);
         if (tab) {
           if (k === optKey) {
@@ -707,9 +742,9 @@
       metrics.forEach(m => {
         const valColor = m.isHighlight ? "text-emerald-600" : "text-slate-900";
         html += `
-          <div class="p-1.5 sm:p-2 rounded-2xl bg-slate-50/80 border border-slate-100 flex flex-col justify-center min-w-0">
-            <span class="text-[9px] sm:text-[10px] text-slate-400 font-medium leading-tight truncate px-0.5">${m.label}</span>
-            <span class="text-sm sm:text-base font-extrabold ${valColor} mt-0.5 truncate">${m.value}</span>
+          <div class="p-2 sm:p-2.5 rounded-2xl bg-slate-50/90 border border-slate-200/60 flex flex-col justify-center min-w-0 shadow-2xs">
+            <span class="text-[10px] sm:text-[11px] text-slate-500 font-semibold leading-tight truncate px-0.5">${m.label}</span>
+            <span class="text-base sm:text-lg font-black ${valColor} mt-0.5 tracking-tight truncate">${m.value}</span>
           </div>
         `;
       });

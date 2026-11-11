@@ -40,8 +40,167 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
+<style>
+    /* ==========================================================================
+       THEME ENGINE DEFINITIONS (SYNCED WITH EXECUTIVE QUICK HUB)
+       ========================================================================== */
+    html[data-theme="light-neumorphic"], body[data-theme="light-neumorphic"] {
+      --bg-surface: #EEF2F6;
+      --card-bg: #F4F7FB;
+      --card-border: rgba(255, 255, 255, 0.9);
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --shadow-light: #FFFFFF;
+      --shadow-dark: rgba(166, 180, 200, 0.45);
+      --inset-bg: #EAEFF5;
+      --inset-shadow-dark: rgba(166, 180, 200, 0.45);
+      --accent-primary: #0284C7;
+      --accent-badge-bg: #E0F2FE;
+      --accent-badge-text: #0369A1;
+      --panel-border: #CBD5E1;
+    }
+    html[data-theme="dark-obsidian"], body[data-theme="dark-obsidian"] {
+      --bg-surface: #07090E;
+      --card-bg: #111622;
+      --card-border: rgba(194, 164, 96, 0.25);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --shadow-light: rgba(255, 255, 255, 0.04);
+      --shadow-dark: rgba(0, 0, 0, 0.65);
+      --inset-bg: #090D14;
+      --inset-shadow-dark: rgba(0, 0, 0, 0.8);
+      --accent-primary: #C2A460;
+      --accent-badge-bg: rgba(194, 164, 96, 0.15);
+      --accent-badge-text: #FCD34D;
+      --panel-border: rgba(255, 255, 255, 0.08);
+    }
+    html[data-theme="sage-minimal"], body[data-theme="sage-minimal"] {
+      --bg-surface: #F2F5F0;
+      --card-bg: #F8FAF7;
+      --card-border: rgba(255, 255, 255, 0.95);
+      --text-main: #1C281D;
+      --text-muted: #607262;
+      --shadow-light: #FFFFFF;
+      --shadow-dark: rgba(160, 175, 162, 0.35);
+      --inset-bg: #E7ECE4;
+      --inset-shadow-dark: rgba(160, 175, 162, 0.4);
+      --accent-primary: #2D6A4F;
+      --accent-badge-bg: #D8F3DC;
+      --accent-badge-text: #1B4332;
+      --panel-border: #D1D5DB;
+    }
+    html[data-theme="cyber-clay"], body[data-theme="cyber-clay"] {
+      --bg-surface: #F0F2FA;
+      --card-bg: #F7F8FD;
+      --card-border: rgba(255, 255, 255, 0.95);
+      --text-main: #14162B;
+      --text-muted: #62678A;
+      --shadow-light: #FFFFFF;
+      --shadow-dark: rgba(160, 170, 210, 0.45);
+      --inset-bg: #E8EBF8;
+      --inset-shadow-dark: rgba(160, 170, 210, 0.45);
+      --accent-primary: #6366F1;
+      --accent-badge-bg: #EEF2FF;
+      --accent-badge-text: #4338CA;
+      --panel-border: #DDD6FE;
+    }
+
+    body {
+      background-color: var(--bg-surface) !important;
+      color: var(--text-main) !important;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Light, Sage, Cyber theme overrides for dark Tailwind classes */
+    html[data-theme="light-neumorphic"] .bg-slate-950,
+    html[data-theme="sage-minimal"] .bg-slate-950,
+    html[data-theme="cyber-clay"] .bg-slate-950,
+    html[data-theme="light-neumorphic"] .bg-slate-900,
+    html[data-theme="sage-minimal"] .bg-slate-900,
+    html[data-theme="cyber-clay"] .bg-slate-900,
+    html[data-theme="light-neumorphic"] .bg-\[\#07090e\],
+    html[data-theme="sage-minimal"] .bg-\[\#07090e\],
+    html[data-theme="cyber-clay"] .bg-\[\#07090e\] {
+      background-color: var(--card-bg) !important;
+      border-color: var(--panel-border) !important;
+      color: var(--text-main) !important;
+    }
+
+    html[data-theme="light-neumorphic"] .bg-slate-900\/95,
+    html[data-theme="sage-minimal"] .bg-slate-900\/95,
+    html[data-theme="cyber-clay"] .bg-slate-900\/95,
+    html[data-theme="light-neumorphic"] .bg-slate-900\/90,
+    html[data-theme="sage-minimal"] .bg-slate-900\/90,
+    html[data-theme="cyber-clay"] .bg-slate-900\/90 {
+      background-color: var(--card-bg) !important;
+      border-color: var(--panel-border) !important;
+      color: var(--text-main) !important;
+    }
+
+    html[data-theme="light-neumorphic"] .bg-slate-800,
+    html[data-theme="sage-minimal"] .bg-slate-800,
+    html[data-theme="cyber-clay"] .bg-slate-800,
+    html[data-theme="light-neumorphic"] .bg-slate-800\/50,
+    html[data-theme="sage-minimal"] .bg-slate-800\/50,
+    html[data-theme="cyber-clay"] .bg-slate-800\/50 {
+      background-color: var(--inset-bg) !important;
+      border-color: var(--panel-border) !important;
+      color: var(--text-main) !important;
+    }
+
+    html[data-theme="light-neumorphic"] .text-white,
+    html[data-theme="sage-minimal"] .text-white,
+    html[data-theme="cyber-clay"] .text-white,
+    html[data-theme="light-neumorphic"] .text-slate-100,
+    html[data-theme="sage-minimal"] .text-slate-100,
+    html[data-theme="cyber-clay"] .text-slate-100 {
+      color: var(--text-main) !important;
+    }
+
+    html[data-theme="light-neumorphic"] .text-slate-400,
+    html[data-theme="sage-minimal"] .text-slate-400,
+    html[data-theme="cyber-clay"] .text-slate-400,
+    html[data-theme="light-neumorphic"] .text-slate-300,
+    html[data-theme="sage-minimal"] .text-slate-300,
+    html[data-theme="cyber-clay"] .text-slate-300 {
+      color: var(--text-muted) !important;
+    }
+
+    html[data-theme="light-neumorphic"] .border-slate-800,
+    html[data-theme="sage-minimal"] .border-slate-800,
+    html[data-theme="cyber-clay"] .border-slate-800,
+    html[data-theme="light-neumorphic"] .border-slate-700,
+    html[data-theme="sage-minimal"] .border-slate-700,
+    html[data-theme="cyber-clay"] .border-slate-700 {
+      border-color: var(--panel-border) !important;
+    }
+
+    html[data-theme="light-neumorphic"] input,
+    html[data-theme="sage-minimal"] input,
+    html[data-theme="cyber-clay"] input,
+    html[data-theme="light-neumorphic"] select,
+    html[data-theme="sage-minimal"] select,
+    html[data-theme="cyber-clay"] select {
+      background-color: var(--inset-bg) !important;
+      color: var(--text-main) !important;
+      border-color: var(--panel-border) !important;
+    }
+</style>
 </head>
 <body class="min-h-screen pb-24">
+
+  <!-- Floating 4-Theme Switcher Bar -->
+  <div class="fixed top-3 right-3 z-50 flex items-center gap-1 p-1 rounded-2xl bg-slate-900/90 border border-slate-700 shadow-xl backdrop-blur-md text-xs" id="adminThemeBar">
+    <span class="px-2 py-0.5 text-[10px] font-bold text-slate-400 flex items-center gap-1">
+      <i data-lucide="palette" class="w-3.5 h-3.5 text-amber-500"></i>
+      <span class="hidden sm:inline">ธีม:</span>
+    </span>
+    <button onclick="switchAdminTheme('light-neumorphic')" id="themeBtn-light-neumorphic" class="px-2 py-0.5 text-[10px] font-bold rounded-lg transition cursor-pointer">🤍 คลีน</button>
+    <button onclick="switchAdminTheme('dark-obsidian')" id="themeBtn-dark-obsidian" class="px-2 py-0.5 text-[10px] font-bold rounded-lg transition cursor-pointer">🖤 ดาร์ก</button>
+    <button onclick="switchAdminTheme('sage-minimal')" id="themeBtn-sage-minimal" class="px-2 py-0.5 text-[10px] font-bold rounded-lg transition cursor-pointer">🌿 เซจ</button>
+    <button onclick="switchAdminTheme('cyber-clay')" id="themeBtn-cyber-clay" class="px-2 py-0.5 text-[10px] font-bold rounded-lg transition cursor-pointer">⚡ ไซเบอร์</button>
+  </div>
+
 
   <!-- Top App Navigation -->
   <header class="sticky top-0 z-40 bg-[#0d0f12]/90 backdrop-blur-md border-b border-[#2d3748] px-4 py-3">
@@ -704,7 +863,153 @@
             .sign-line { border-bottom: 1px dotted #333; height: 40px; margin-bottom: 8px; }
             @media print { body { padding: 20px; } }
           </style>
-        </head>
+        <style>
+    /* ==========================================================================
+       THEME ENGINE DEFINITIONS (SYNCED WITH EXECUTIVE QUICK HUB)
+       ========================================================================== */
+    html[data-theme="light-neumorphic"], body[data-theme="light-neumorphic"] {
+      --bg-surface: #EEF2F6;
+      --card-bg: #F4F7FB;
+      --card-border: rgba(255, 255, 255, 0.9);
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --shadow-light: #FFFFFF;
+      --shadow-dark: rgba(166, 180, 200, 0.45);
+      --inset-bg: #EAEFF5;
+      --inset-shadow-dark: rgba(166, 180, 200, 0.45);
+      --accent-primary: #0284C7;
+      --accent-badge-bg: #E0F2FE;
+      --accent-badge-text: #0369A1;
+      --panel-border: #CBD5E1;
+    }
+    html[data-theme="dark-obsidian"], body[data-theme="dark-obsidian"] {
+      --bg-surface: #07090E;
+      --card-bg: #111622;
+      --card-border: rgba(194, 164, 96, 0.25);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --shadow-light: rgba(255, 255, 255, 0.04);
+      --shadow-dark: rgba(0, 0, 0, 0.65);
+      --inset-bg: #090D14;
+      --inset-shadow-dark: rgba(0, 0, 0, 0.8);
+      --accent-primary: #C2A460;
+      --accent-badge-bg: rgba(194, 164, 96, 0.15);
+      --accent-badge-text: #FCD34D;
+      --panel-border: rgba(255, 255, 255, 0.08);
+    }
+    html[data-theme="sage-minimal"], body[data-theme="sage-minimal"] {
+      --bg-surface: #F2F5F0;
+      --card-bg: #F8FAF7;
+      --card-border: rgba(255, 255, 255, 0.95);
+      --text-main: #1C281D;
+      --text-muted: #607262;
+      --shadow-light: #FFFFFF;
+      --shadow-dark: rgba(160, 175, 162, 0.35);
+      --inset-bg: #E7ECE4;
+      --inset-shadow-dark: rgba(160, 175, 162, 0.4);
+      --accent-primary: #2D6A4F;
+      --accent-badge-bg: #D8F3DC;
+      --accent-badge-text: #1B4332;
+      --panel-border: #D1D5DB;
+    }
+    html[data-theme="cyber-clay"], body[data-theme="cyber-clay"] {
+      --bg-surface: #F0F2FA;
+      --card-bg: #F7F8FD;
+      --card-border: rgba(255, 255, 255, 0.95);
+      --text-main: #14162B;
+      --text-muted: #62678A;
+      --shadow-light: #FFFFFF;
+      --shadow-dark: rgba(160, 170, 210, 0.45);
+      --inset-bg: #E8EBF8;
+      --inset-shadow-dark: rgba(160, 170, 210, 0.45);
+      --accent-primary: #6366F1;
+      --accent-badge-bg: #EEF2FF;
+      --accent-badge-text: #4338CA;
+      --panel-border: #DDD6FE;
+    }
+
+    body {
+      background-color: var(--bg-surface) !important;
+      color: var(--text-main) !important;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Light, Sage, Cyber theme overrides for dark Tailwind classes */
+    html[data-theme="light-neumorphic"] .bg-slate-950,
+    html[data-theme="sage-minimal"] .bg-slate-950,
+    html[data-theme="cyber-clay"] .bg-slate-950,
+    html[data-theme="light-neumorphic"] .bg-slate-900,
+    html[data-theme="sage-minimal"] .bg-slate-900,
+    html[data-theme="cyber-clay"] .bg-slate-900,
+    html[data-theme="light-neumorphic"] .bg-\[\#07090e\],
+    html[data-theme="sage-minimal"] .bg-\[\#07090e\],
+    html[data-theme="cyber-clay"] .bg-\[\#07090e\] {
+      background-color: var(--card-bg) !important;
+      border-color: var(--panel-border) !important;
+      color: var(--text-main) !important;
+    }
+
+    html[data-theme="light-neumorphic"] .bg-slate-900\/95,
+    html[data-theme="sage-minimal"] .bg-slate-900\/95,
+    html[data-theme="cyber-clay"] .bg-slate-900\/95,
+    html[data-theme="light-neumorphic"] .bg-slate-900\/90,
+    html[data-theme="sage-minimal"] .bg-slate-900\/90,
+    html[data-theme="cyber-clay"] .bg-slate-900\/90 {
+      background-color: var(--card-bg) !important;
+      border-color: var(--panel-border) !important;
+      color: var(--text-main) !important;
+    }
+
+    html[data-theme="light-neumorphic"] .bg-slate-800,
+    html[data-theme="sage-minimal"] .bg-slate-800,
+    html[data-theme="cyber-clay"] .bg-slate-800,
+    html[data-theme="light-neumorphic"] .bg-slate-800\/50,
+    html[data-theme="sage-minimal"] .bg-slate-800\/50,
+    html[data-theme="cyber-clay"] .bg-slate-800\/50 {
+      background-color: var(--inset-bg) !important;
+      border-color: var(--panel-border) !important;
+      color: var(--text-main) !important;
+    }
+
+    html[data-theme="light-neumorphic"] .text-white,
+    html[data-theme="sage-minimal"] .text-white,
+    html[data-theme="cyber-clay"] .text-white,
+    html[data-theme="light-neumorphic"] .text-slate-100,
+    html[data-theme="sage-minimal"] .text-slate-100,
+    html[data-theme="cyber-clay"] .text-slate-100 {
+      color: var(--text-main) !important;
+    }
+
+    html[data-theme="light-neumorphic"] .text-slate-400,
+    html[data-theme="sage-minimal"] .text-slate-400,
+    html[data-theme="cyber-clay"] .text-slate-400,
+    html[data-theme="light-neumorphic"] .text-slate-300,
+    html[data-theme="sage-minimal"] .text-slate-300,
+    html[data-theme="cyber-clay"] .text-slate-300 {
+      color: var(--text-muted) !important;
+    }
+
+    html[data-theme="light-neumorphic"] .border-slate-800,
+    html[data-theme="sage-minimal"] .border-slate-800,
+    html[data-theme="cyber-clay"] .border-slate-800,
+    html[data-theme="light-neumorphic"] .border-slate-700,
+    html[data-theme="sage-minimal"] .border-slate-700,
+    html[data-theme="cyber-clay"] .border-slate-700 {
+      border-color: var(--panel-border) !important;
+    }
+
+    html[data-theme="light-neumorphic"] input,
+    html[data-theme="sage-minimal"] input,
+    html[data-theme="cyber-clay"] input,
+    html[data-theme="light-neumorphic"] select,
+    html[data-theme="sage-minimal"] select,
+    html[data-theme="cyber-clay"] select {
+      background-color: var(--inset-bg) !important;
+      color: var(--text-main) !important;
+      border-color: var(--panel-border) !important;
+    }
+</style>
+</head>
         <body>
           <div class="header">
             <div class="title">สัญญาแต่งตั้งตัวแทนเพื่อการขายอสังหาริมทรัพย์แบบปิด (Exclusive Agreement)</div>

@@ -99,7 +99,7 @@ HTML_TEMPLATE = '''<!DOCTYPE html>
         <!-- Secret Key -->
         <div class="md:col-span-5 space-y-1">
           <label class="text-[11px] font-medium text-slate-300">Admin Secret Key (กุญแจลับเฉพาะผู้บริหาร)</label>
-          <input type="password" id="secretKey" value="SiwasupAdmin2026_SecureKey_99" 
+          <input type="password" id="secretKey" value="" 
             class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900/90 border border-slate-700 text-white text-xs font-mono focus:border-amber-500 focus:outline-hidden transition" />
         </div>
       </div>

@@ -1013,6 +1013,8 @@
     let currentMode = 'free_agent';
     let currentCategory = 'all';
     let currentBank = 'all';
+    let currentViewMode = 'grid'; // 'grid' | 'map'
+    window.currentViewMode = 'grid';
     let allProperties = (typeof ALL_PROPERTIES_DATA !== 'undefined' && Array.isArray(ALL_PROPERTIES_DATA)) ? ALL_PROPERTIES_DATA : ((typeof window !== 'undefined' && (window.SIWASUP_ALL_PROPERTIES || window.SIWASUP_PROPERTIES)) ? (window.SIWASUP_ALL_PROPERTIES || window.SIWASUP_PROPERTIES) : []);
     let pendingBookingId = null;
 
@@ -2980,11 +2982,11 @@
 
           <div class="flex items-center justify-between sm:justify-end gap-2.5 shrink-0">
             <div class="p-0.5 rounded-xl bg-neutral-100 border border-neutral-200/70 flex items-center text-xs shrink-0">
-              <button type="button" onclick="switchViewMode('grid')" class="px-2.5 py-1 rounded-lg ${currentViewMode === 'grid' ? 'bg-white text-neutral-900 font-semibold shadow-2xs' : 'text-neutral-500 hover:text-neutral-800 font-medium'} flex items-center gap-1 whitespace-nowrap transition-colors">
+              <button type="button" onclick="switchViewMode('grid')" class="px-2.5 py-1 rounded-lg ${(window.currentViewMode || 'grid') === 'grid' ? 'bg-white text-neutral-900 font-semibold shadow-2xs' : 'text-neutral-500 hover:text-neutral-800 font-medium'} flex items-center gap-1 whitespace-nowrap transition-colors">
                 <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
                 <span>ตาราง</span>
               </button>
-              <button type="button" onclick="switchViewMode('map')" class="px-2.5 py-1 rounded-lg ${currentViewMode === 'map' ? 'bg-white text-[#ED1C24] font-bold shadow-2xs' : 'text-neutral-500 hover:text-neutral-800 font-medium'} flex items-center gap-1 transition-colors whitespace-nowrap">
+              <button type="button" onclick="switchViewMode('map')" class="px-2.5 py-1 rounded-lg ${(window.currentViewMode || 'grid') === 'map' ? 'bg-white text-[#ED1C24] font-bold shadow-2xs' : 'text-neutral-500 hover:text-neutral-800 font-medium'} flex items-center gap-1 transition-colors whitespace-nowrap">
                 <i data-lucide="map" class="w-3.5 h-3.5"></i>
                 <span>แผนที่</span>
               </button>
@@ -3344,7 +3346,7 @@
         `;
       }
 
-      if (currentViewMode === 'map') {
+      if ((window.currentViewMode || (typeof currentViewMode !== 'undefined' ? currentViewMode : 'grid')) === 'map') {
         container.innerHTML = ownerHeaderHtml + subHeaderHtml + `
           <div class="space-y-3 animate-fadeIn">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-3 py-2 bg-white rounded-xl border border-neutral-200 shadow-2xs text-xs">
@@ -5994,12 +5996,12 @@
 
     function triggerClientCall() {
       const storedRef = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : 'SW001';
-      const profile = getAgentProfile(storedRef);
+      const profile = (typeof getAgentProfile === 'function') ? getAgentProfile(storedRef) : null;
       if (typeof openCallModal === 'function') {
-        openCallModal(profile.agentId, ติดต่อ );
+        openCallModal(profile ? profile.agentId : storedRef, 'ติดต่อ ' + (profile ? profile.name : storedRef));
       } else {
-        const num = (profile.phone || '094-462-9796').replace(/[^0-9]/g, '');
-        window.location.href = 	el:;
+        const num = (profile && profile.phone ? profile.phone : '094-462-9796').replace(/[^0-9]/g, '');
+        window.location.href = 'tel:' + num;
       }
     }
 
@@ -6008,12 +6010,12 @@
       const src = (typeof getStoredSource === 'function') ? getStoredSource() : 'client_view';
       let msg = '';
       if (id === 'general') {
-        msg = สวัสดีครับ สนใจปรึกษาข้อมูลทรัพย์กับตัวแทนผู้ดูแล [ผู้แนะนำ:  | ช่องทาง: ];
+        msg = `สวัสดีครับ สนใจปรึกษาข้อมูลทรัพย์กับตัวแทนผู้ดูแล [ผู้แนะนำ: ${ref} | ช่องทาง: ${src}]`;
       } else {
         const prefix = isReserve ? 'สวัสดีครับ สนใจสอบถามสถานะคิวสำรอง (กรณีหลุดจอง) ทรัพย์: ' : 'สวัสดีครับ สนใจทรัพย์: ';
-        msg = ${prefix} (รหัส ) [ผู้แนะนำ:  | ช่องทาง: ];
+        msg = `${prefix} ${title || ''} (รหัส ${id || ''}) [ผู้แนะนำ: ${ref} | ช่องทาง: ${src}]`;
       }
-      const lineUrl = https://line.me/R/oaMessage/@siwasup/?;
+      const lineUrl = `https://line.me/R/oaMessage/@siwasup/?${encodeURIComponent(msg)}`;
       window.open(lineUrl, '_blank');
     }
 
@@ -6875,7 +6877,7 @@
     // ==========================================
     // SIWASUP DYNAMIC MAP VIEW ENGINE (LEAFLET)
     // ==========================================
-    let currentViewMode = 'grid'; // 'grid' | 'map'
+    window.currentViewMode = window.currentViewMode || 'grid'; // 'grid' | 'map'
     let siwasupLeafletMap = null;
     let siwasupMapMarkers = [];
 

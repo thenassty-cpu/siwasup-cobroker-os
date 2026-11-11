@@ -1,1038 +1,847 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" data-theme="light-neumorphic">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Siwasup Co-Broker OS - Executive Quick Launch Hub</title>
-    <link rel="icon" type="image/png" href="assets/siwasup_logo.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-base: #07090e;
-            --bg-card: rgba(18, 24, 38, 0.85);
-            --bg-card-hover: rgba(28, 38, 60, 0.95);
-            --border-card: rgba(194, 164, 96, 0.25);
-            --border-hover: rgba(194, 164, 96, 0.8);
-            --gold-primary: #C2A460;
-            --gold-light: #E6CA85;
-            --gold-glow: rgba(194, 164, 96, 0.35);
-            --text-main: #F8FAFC;
-            --text-muted: #94A3B8;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siwasup Co-Broker OS - Executive Quick Launch Hub (2026)</title>
+  <link rel="icon" type="image/png" href="assets/siwasup_logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Prompt', 'Tahoma', sans-serif;
-            background-color: var(--bg-base);
-            background-image: 
-                radial-gradient(circle at 15% 15%, rgba(194, 164, 96, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, rgba(30, 58, 138, 0.12) 0%, transparent 50%);
-            background-attachment: fixed;
-            color: var(--text-main);
-            min-height: 100vh;
-            padding: 32px 16px 60px 16px;
-        }
-
-        .container {
-            max-width: 1180px;
-            margin: 0 auto;
-        }
-
-        /* Top Header */
-        .hub-header {
-            text-align: center;
-            margin-bottom: 36px;
-            padding: 30px 24px;
-            background: linear-gradient(180deg, rgba(24, 32, 50, 0.7) 0%, rgba(11, 15, 25, 0.9) 100%);
-            border: 1px solid var(--border-card);
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 30px var(--gold-glow);
-            backdrop-filter: blur(12px);
-        }
-
-        .crown-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--gold-light);
-            background: rgba(194, 164, 96, 0.15);
-            border: 1px solid var(--gold-primary);
-            padding: 6px 16px;
-            border-radius: 9999px;
-            margin-bottom: 14px;
-        }
-
-        h1 {
-            font-size: 32px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, #FFFFFF 40%, var(--gold-light) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        p.hub-subtitle {
-            font-size: 14.5px;
-            color: var(--text-muted);
-            max-width: 720px;
-            margin: 0 auto 18px auto;
-            line-height: 1.6;
-        }
-
-        .status-pills {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 12px;
-            font-size: 12px;
-        }
-
-        .pill {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 4px 12px;
-            border-radius: 20px;
-            color: #E2E8F0;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .pill.live {
-            border-color: rgba(34, 197, 94, 0.4);
-            background: rgba(34, 197, 94, 0.1);
-            color: #86EFAC;
-        }
-
-        /* Section Headings */
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 36px 0 18px 0;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(194, 164, 96, 0.2);
-        }
-
-        .section-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 20px;
-            font-weight: 600;
-            color: #FFFFFF;
-        }
-
-        .section-badge {
-            font-size: 11px;
-            padding: 3px 10px;
-            border-radius: 6px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            background: rgba(194, 164, 96, 0.15);
-            color: var(--gold-light);
-            border: 1px solid rgba(194, 164, 96, 0.35);
-        }
-
-        /* Grid Cards */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 18px;
-        }
-
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-card);
-            border-radius: 18px;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            backdrop-filter: blur(8px);
-            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            border-color: var(--border-hover);
-            background: var(--bg-card-hover);
-            box-shadow: 0 16px 32px rgba(0,0,0,0.6), 0 0 20px rgba(194, 164, 96, 0.25);
-        }
-
-        .card:hover::before {
-            opacity: 1;
-        }
-
-        .card-top {
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            margin-bottom: 14px;
-        }
-
-        .icon-box {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            background: rgba(194, 164, 96, 0.12);
-            border: 1px solid rgba(194, 164, 96, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-
-        .card-meta {
-            flex: 1;
-        }
-
-        .card-title {
-            font-size: 17px;
-            font-weight: 600;
-            color: #FFFFFF;
-            margin-bottom: 4px;
-            line-height: 1.35;
-        }
-
-        .card-role {
-            font-size: 11.5px;
-            color: var(--gold-light);
-            font-weight: 500;
-        }
-
-        .card-desc {
-            font-size: 13.5px;
-            color: var(--text-muted);
-            line-height: 1.55;
-            margin-bottom: 20px;
-        }
-
-        /* Dual Action Buttons */
-        .card-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding-top: 16px;
-        }
-
-        .btn {
-            font-family: inherit;
-            font-size: 12.5px;
-            font-weight: 600;
-            padding: 10px 14px;
-            border-radius: 10px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: all 0.2s ease;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .btn-live {
-            background: linear-gradient(135deg, #C2A460 0%, #9A7B32 100%);
-            color: #0B0D0F;
-            border: 1px solid var(--gold-primary);
-            box-shadow: 0 4px 12px rgba(194, 164, 96, 0.25);
-        }
-
-        .btn-live:hover {
-            background: linear-gradient(135deg, #E6CA85 0%, #C2A460 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(194, 164, 96, 0.4);
-            color: #000;
-        }
-
-        .btn-local {
-            background: rgba(255, 255, 255, 0.06);
-            color: #E2E8F0;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .btn-local:hover {
-            background: rgba(255, 255, 255, 0.14);
-            border-color: rgba(255, 255, 255, 0.3);
-            color: #FFFFFF;
-            transform: translateY(-1px);
-        }
-
-        .btn-single {
-            grid-column: span 2;
-        }
-
-        /* Copy link pill */
-        .copy-pill {
-            display: block;
-            margin-top: 8px;
-            font-size: 11px;
-            color: #64748B;
-            text-align: right;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-        .copy-pill:hover { color: var(--gold-light); }
-
-        /* Footer */
-        .hub-footer {
-            margin-top: 50px;
-            padding: 24px;
-            background: rgba(15, 20, 30, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            font-size: 12.5px;
-            color: var(--text-muted);
-        }
-
-        .hub-footer strong { color: #E2E8F0; }
-
-        @media (max-width: 640px) {
-            h1 { font-size: 24px; }
-            .grid { grid-template-columns: 1fr; }
-            .card-actions { grid-template-columns: 1fr; }
-            .btn-single { grid-column: span 1; }
-        }
+  <style>
+    /* ==========================================================================
+       THEME ENGINE DEFINITIONS
+       ========================================================================== */
     
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.85); }
-        }
-    </style>
+    /* 1. Light Neumorphic (Default - Reference Style) */
+    html[data-theme="light-neumorphic"] {
+      --bg-surface: #EEF2F6;
+      --card-bg: #F4F7FB;
+      --card-border: rgba(255, 255, 255, 0.9);
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --shadow-light: #FFFFFF;
+      --shadow-dark: rgba(166, 180, 200, 0.45);
+      --inset-bg: #EAEFF5;
+      --inset-shadow-dark: rgba(166, 180, 200, 0.45);
+      --accent-primary: #0284C7;
+      --accent-primary-hover: #0369A1;
+      --accent-badge-bg: #E0F2FE;
+      --accent-badge-text: #0369A1;
+      --btn-text: #334155;
+    }
+
+    /* 2. Dark Obsidian & Gold (Classic Executive) */
+    html[data-theme="dark-obsidian"] {
+      --bg-surface: #07090E;
+      --card-bg: #111622;
+      --card-border: rgba(194, 164, 96, 0.25);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --shadow-light: rgba(255, 255, 255, 0.04);
+      --shadow-dark: rgba(0, 0, 0, 0.65);
+      --inset-bg: #090D14;
+      --inset-shadow-dark: rgba(0, 0, 0, 0.8);
+      --accent-primary: #C2A460;
+      --accent-primary-hover: #E6CA85;
+      --accent-badge-bg: rgba(194, 164, 96, 0.15);
+      --accent-badge-text: #FCD34D;
+      --btn-text: #E2E8F0;
+    }
+
+    /* 3. Sage Minimal (Clean Nordic / Earthy Warm) */
+    html[data-theme="sage-minimal"] {
+      --bg-surface: #F2F5F0;
+      --card-bg: #F8FAF7;
+      --card-border: rgba(255, 255, 255, 0.95);
+      --text-main: #1C281D;
+      --text-muted: #607262;
+      --shadow-light: #FFFFFF;
+      --shadow-dark: rgba(160, 175, 162, 0.35);
+      --inset-bg: #E7ECE4;
+      --inset-shadow-dark: rgba(160, 175, 162, 0.4);
+      --accent-primary: #2D6A4F;
+      --accent-primary-hover: #1B4332;
+      --accent-badge-bg: #D8F3DC;
+      --accent-badge-text: #1B4332;
+      --btn-text: #2D3A2F;
+    }
+
+    /* 4. Cyber Clay / Electric Violet */
+    html[data-theme="cyber-clay"] {
+      --bg-surface: #F0F2FA;
+      --card-bg: #F7F8FD;
+      --card-border: rgba(255, 255, 255, 0.95);
+      --text-main: #14162B;
+      --text-muted: #62678A;
+      --shadow-light: #FFFFFF;
+      --shadow-dark: rgba(160, 170, 210, 0.45);
+      --inset-bg: #E8EBF8;
+      --inset-shadow-dark: rgba(160, 170, 210, 0.45);
+      --accent-primary: #6366F1;
+      --accent-primary-hover: #4F46E5;
+      --accent-badge-bg: #EEF2FF;
+      --accent-badge-text: #4338CA;
+      --btn-text: #313552;
+    }
+
+    /* ==========================================================================
+       GLOBAL RESETS & STYLING
+       ========================================================================== */
+    body {
+      font-family: 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-surface);
+      color: var(--text-main);
+      min-height: 100vh;
+      transition: background-color 0.35s ease, color 0.35s ease;
+    }
+
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* Neumorphic Soft Card */
+    .neu-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      box-shadow: 8px 8px 18px var(--shadow-dark), -8px -8px 18px var(--shadow-light);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .neu-card:hover {
+      box-shadow: 12px 12px 24px var(--shadow-dark), -12px -12px 24px var(--shadow-light);
+      transform: translateY(-2px);
+    }
+
+    /* Inset Well (Inputs / Sunk containers) */
+    .neu-inset {
+      background: var(--inset-bg);
+      border-radius: 18px;
+      box-shadow: inset 3px 3px 6px var(--inset-shadow-dark), inset -3px -3px 6px var(--shadow-light);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: var(--text-main);
+      transition: all 0.25s ease;
+    }
+
+    /* Neumorphic Extruded Button */
+    .neu-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      box-shadow: 4px 4px 9px var(--shadow-dark), -4px -4px 9px var(--shadow-light);
+      transition: all 0.2s ease;
+      color: var(--btn-text);
+    }
+    .neu-btn:hover {
+      box-shadow: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light);
+      transform: translateY(-1px);
+    }
+    .neu-btn:active {
+      box-shadow: inset 2px 2px 5px var(--inset-shadow-dark), inset -2px -2px 5px var(--shadow-light);
+      transform: translateY(1px);
+    }
+
+    /* Vibrant Primary Button */
+    .neu-btn-primary {
+      background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-primary-hover) 100%);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 14px;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+      transition: all 0.2s ease;
+    }
+    .neu-btn-primary:hover {
+      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.7);
+      transform: translateY(-1px);
+    }
+    .neu-btn-primary:active {
+      transform: translateY(1px);
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Dark / Inverted Glossy Button */
+    .neu-btn-dark {
+      background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      box-shadow: 4px 4px 10px rgba(15, 23, 42, 0.25), -2px -2px 6px rgba(255, 255, 255, 0.5);
+      transition: all 0.2s ease;
+    }
+    .neu-btn-dark:hover {
+      transform: translateY(-1px);
+      box-shadow: 6px 6px 14px rgba(15, 23, 42, 0.35);
+    }
+  </style>
 </head>
-<body>
+<body class="p-4 sm:p-8 antialiased selection:bg-sky-500 selection:text-white">
 
-<div class="container">
+  <!-- Main Container -->
+  <div class="max-w-6xl mx-auto space-y-8">
 
-    <!-- Top Header -->
-    <header class="hub-header">
-        <div class="crown-tag">👑 Siwasup Co-Broker OS • Quick-Access Portal</div>
-        <h1>EXECUTIVE LAUNCHPAD & LINK HUB</h1>
-        <p class="hub-subtitle">
-            ศูนย์รวมทางด่วนสำหรับเข้าสู่ระบบทุกโมดูล รองรับการกดเปิดแบบ Live บนคลาวด์ R2 และเปิดแบบ Offline จาก Flash Drive โดยตรง เพื่อให้คุณต้นเปิดโชว์หรือทำงานได้ทันทีทุกที่
-        </p>
-        <div class="status-pills">
-            <span class="pill live">🟢 Cloudflare R2: Online (assets.siwasup.com)</span>
-            <span class="pill live">🤖 น้องศิวา AI: 38 แชทบันทึกสด (@813nyyia)</span>
-            <span class="pill">📁 Flash Drive: Ready (G:\Siwasup_Presentation_2026)</span>
-            <span class="pill">⚡ Master Vault: 15,117+ 801 Assets</span>
-            <span class="pill">🛡️ PDPA Compliant: 100%</span>
+    <!-- Top Navigation & Brand Header -->
+    <header class="neu-card p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+      
+      <!-- Brand Profile -->
+      <div class="flex items-center gap-4 text-center md:text-left">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-sky-500/30 border border-white/60 shrink-0">
+          <i data-lucide="compass" class="w-8 h-8"></i>
         </div>
+        <div>
+          <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-1">
+            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider" style="background: var(--accent-badge-bg); color: var(--accent-badge-text);">
+              Executive OS 2026
+            </span>
+            <span class="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              ระบบสด ออนไลน์ 100%
+            </span>
+            <span class="text-[11px] font-mono text-slate-400 bg-black/5 dark:bg-white/5 px-2 py-0.5 rounded-full">
+              อัปเดตล่าสุด: 7 พ.ย. 2569
+            </span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-black tracking-tight" style="color: var(--text-main);">
+            ศูนย์รวมคำสั่งด่วนผู้บริหาร (Executive Quick Launch Hub)
+          </h1>
+          <p class="text-xs mt-0.5" style="color: var(--text-muted);">
+            สถาปัตยกรรม Siwasup Co-Broker OS • สำหรับคุณต้น (NASSTY), คุณกูล (ครูเจี๊ยบ), คุณบัว และทีมปฏิบัติการ
+          </p>
+        </div>
+      </div>
+
+      <!-- Controls: Theme Switcher & Actions -->
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        
+        <!-- Interactive 4-Theme Quick Switcher Bar -->
+        <div class="neu-inset p-1 sm:p-1.5 flex items-center gap-1 sm:gap-1.5 rounded-2xl">
+          <div class="px-2 py-1 text-xs font-bold flex items-center gap-1.5 text-slate-500">
+            <i data-lucide="palette" class="w-4 h-4 text-sky-500"></i>
+            <span class="hidden sm:inline">สลับธีม:</span>
+          </div>
+          
+          <button onclick="switchTheme('light-neumorphic')" id="themeBtn-light-neumorphic" 
+            class="px-2.5 py-1 text-[11px] font-bold rounded-xl transition duration-200 flex items-center gap-1 cursor-pointer bg-white text-slate-800 shadow-xs border border-white">
+            <span>🤍</span>
+            <span class="hidden md:inline">คลีน</span>
+          </button>
+
+          <button onclick="switchTheme('dark-obsidian')" id="themeBtn-dark-obsidian" 
+            class="px-2.5 py-1 text-[11px] font-bold rounded-xl transition duration-200 flex items-center gap-1 cursor-pointer text-slate-600 hover:text-slate-900">
+            <span>🖤</span>
+            <span class="hidden md:inline">ดาร์ก</span>
+          </button>
+
+          <button onclick="switchTheme('sage-minimal')" id="themeBtn-sage-minimal" 
+            class="px-2.5 py-1 text-[11px] font-bold rounded-xl transition duration-200 flex items-center gap-1 cursor-pointer text-slate-600 hover:text-slate-900">
+            <span>🌿</span>
+            <span class="hidden md:inline">เซจ</span>
+          </button>
+
+          <button onclick="switchTheme('cyber-clay')" id="themeBtn-cyber-clay" 
+            class="px-2.5 py-1 text-[11px] font-bold rounded-xl transition duration-200 flex items-center gap-1 cursor-pointer text-slate-600 hover:text-slate-900">
+            <span>⚡</span>
+            <span class="hidden md:inline">ไซเบอร์</span>
+          </button>
+        </div>
+
+        <a href="https://assets.siwasup.com/catalog.html" target="_blank" class="neu-btn-primary px-4 py-2.5 text-xs font-bold flex items-center gap-2">
+          <i data-lucide="home" class="w-4 h-4"></i>
+          <span>เปิดแคตตาล็อกหลัก (R2)</span>
+        </a>
+
+        <a href="https://line.me/R/ti/p/@813nyyia" target="_blank" class="neu-btn-dark px-4 py-2.5 text-xs font-bold flex items-center gap-2">
+          <i data-lucide="message-square" class="w-4 h-4 text-emerald-400"></i>
+          <span>LINE OA น้องศิวา</span>
+        </a>
+
+      </div>
     </header>
 
-    
-    <!-- ============================================================ -->
-    <!-- 🔴 ACTIVE TEST ZONE (ทดสอบเรื่องนี้: เปิดบนมือถือ 1 คลิก ไม่ต้องก๊อปเข้า LINE) -->
-    <!-- ============================================================ -->
-    <div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.16) 0%, rgba(15, 23, 42, 0.95) 100%); border: 2px solid #EF4444; border-radius: 24px; padding: 22px 20px; margin-bottom: 30px; box-shadow: 0 12px 36px rgba(239, 68, 68, 0.25);">
+    <!-- Search & Category Filters (Neumorphic Tabs) -->
+    <div class="neu-card p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="relative w-full sm:w-80">
+        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+        <input type="text" id="hubSearch" oninput="filterCards()" placeholder="ค้นหาเครื่องมือ, ลิงก์ด่วน, เอกสาร..." 
+          class="neu-inset w-full pl-10 pr-4 py-2 text-xs placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400">
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <button onclick="setCategory('all')" id="tab-all" class="neu-btn px-3 py-1.5 font-bold" style="color: var(--accent-primary);">ทั้งหมด</button>
+        <button onclick="setCategory('strategic')" id="tab-strategic" class="neu-btn px-3 py-1.5 font-medium">ดีล & ยุทธศาสตร์</button>
+        <button onclick="setCategory('ops')" id="tab-ops" class="neu-btn px-3 py-1.5 font-medium">ปฏิบัติการ & บัว</button>
+        <button onclick="setCategory('agents')" id="tab-agents" class="neu-btn px-3 py-1.5 font-medium">ตัวแทน & Alpha</button>
+        <button onclick="setCategory('testing')" id="tab-testing" class="neu-btn px-3 py-1.5 font-medium">ทดสอบ & แชท</button>
+      </div>
+    </div>
+
+    <!-- HERO SECTION: LATEST BREAKTHROUGHS & ACTIVE TEST ZONE -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between px-2">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+          <h2 class="text-sm font-bold uppercase tracking-wider" style="color: var(--text-main);">
+            🚨 Active Test Zone: นวัตกรรมและระบบล่าสุดประจำสัปดาห์
+          </h2>
+        </div>
+        <span class="text-xs" style="color: var(--text-muted);">คลิกเปิดทดสอบได้ทันที</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
         
-        <!-- Header with RED Badge -->
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; border-bottom: 1px solid rgba(239, 68, 68, 0.25); padding-bottom: 12px;">
-            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <span style="display: inline-flex; align-items: center; gap: 6px; background: #EF4444; color: #FFFFFF; font-size: 11.5px; font-weight: 700; padding: 5px 14px; border-radius: 9999px; letter-spacing: 0.5px; box-shadow: 0 2px 10px rgba(239, 68, 68, 0.6);">
-                    <span style="display: inline-block; width: 8px; height: 8px; background: #FFF; border-radius: 50%; animation: pulse 1.5s infinite;"></span>
-                    <span>ทดสอบเรื่องนี้บนมือถือ (ACTIVE MOBILE TEST)</span>
-                </span>
-                <span style="font-size: 15px; font-weight: 700; color: #F8FAFC;">
-                    ศูนย์ทดสอบด่วน: ตู้กุญแจ Keybox • นามบัตร Alpha 6 คน • น้องศิวา AI 24 ชม.
-                </span>
+        <!-- CARD 1: KKP Propify Hub (NEW!) -->
+        <div class="neu-card p-5 relative overflow-hidden flex flex-col justify-between" data-category="strategic">
+          <div class="flex items-start justify-between gap-3 mb-3">
+            <div class="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-500 flex items-center justify-center shrink-0">
+              <i data-lucide="building-2" class="w-6 h-6"></i>
             </div>
-            <span style="font-size: 12px; color: #FCA5A5; font-weight: 500;">
-                ⚡ เปิด 1 คลิกบนมือถือ ไม่ต้องก๊อปลิงก์ลง LINE ให้แชทดันหาย
+            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-600 border border-blue-500/20 uppercase">
+              ✨ ล่าสุด 7 พ.ย.
             </span>
+          </div>
+          <div>
+            <h3 class="text-base font-bold leading-snug" style="color: var(--text-main);">
+              🏛️ KKP Propify Curation & XML Feed
+            </h3>
+            <p class="text-xs mt-1 leading-relaxed" style="color: var(--text-muted);">
+              ระบบคัดกรองทรัพย์ศิวาทรัพย์ ≥ 3 ล้านใน กทม./ปริมณฑล สำหรับส่งให้ IT ธนาคารเกียรตินาคินภัทร พร้อมเครื่องมือตรวจแฟ้มสัญญาของบัว และสิทธิ์พี่ลิลลี่
+            </p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-black/5 dark:border-white/5 flex items-center gap-2">
+            <a href="kkp_curation_hub.html" target="_blank" class="neu-btn-primary flex-1 py-2 text-xs font-bold text-center">
+              เปิดระบบคัดกรอง KKP &rarr;
+            </a>
+          </div>
         </div>
 
-        <!-- Spotlight Card: 🔑 Keybox Interactive Sandbox & Stress Tester -->
-        <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.18) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1.5px solid #F59E0B; border-radius: 18px; padding: 14px 16px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 10px;">
-            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size: 22px;">🔑</span>
-                    <div>
-                        <div style="font-size: 13.5px; font-weight: 700; color: #F8FAFC;">
-                            Siwasup Smart Keybox Live Roleplay &amp; Stress Tester (เปิดเทสต์บนโต๊ะวันเปิดตัว)
-                        </div>
-                        <div style="font-size: 11px; color: #CBD5E1;">
-                            ทดสอบคอขวด 1-6 คน • ลองเป็นพี่ลิลลี่ตรวจสิทธิ์ • ลองเป็น Agent กดรหัส OTP ปลดล็อกตู้จริง
-                        </div>
-                    </div>
-                </div>
-                <a href="https://assets.siwasup.com/siwasup_keybox_interactive_roleplay.html" target="_blank" style="background: linear-gradient(135deg, #F59E0B, #D97706); color: #0F172A; font-size: 12px; font-weight: 800; padding: 8px 18px; border-radius: 12px; text-decoration: none; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4); display: inline-flex; align-items: center; gap: 6px;">
-                    <span>🚀 เปิดทดสอบสด (Live Sandbox)</span>
-                </a>
-                <a href="https://assets.siwasup.com/executive_launch_strategy_horizon1.html" target="_blank" style="background: linear-gradient(135deg, #10B981, #059669); color: #FFFFFF; font-size: 12px; font-weight: 800; padding: 8px 18px; border-radius: 12px; text-decoration: none; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4); display: inline-flex; align-items: center; gap: 6px;">
-                    <span>📋 ยุทธศาสตร์ & บทพูดพรีเซนต์ 3 นาที</span>
-                </a>
-                <a href="https://assets.siwasup.com/agent_registration.html" target="_blank" style="background: linear-gradient(135deg, #3B82F6, #1D4ED8); color: #FFFFFF; font-size: 12px; font-weight: 800; padding: 8px 18px; border-radius: 12px; text-decoration: none; box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4); display: inline-flex; align-items: center; gap: 6px;">
-                    <span>📝 ฟอร์มลงทะเบียนทีมงานออฟฟิศ & นามบัตร</span>
-                </a>
-                <a href="https://assets.siwasup.com/agent_onboarding_qr.html" target="_blank" style="background: linear-gradient(135deg, #10B981, #047857); color: #FFFFFF; font-size: 12px; font-weight: 800; padding: 8px 18px; border-radius: 12px; text-decoration: none; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4); display: inline-flex; align-items: center; gap: 6px;">
-                    <span>📲 ป้ายสแกน QR หน้างาน (Tent Card)</span>
-                </a>
-                <a href="https://assets.siwasup.com/gool_executive_dashboard.html" target="_blank" style="background: linear-gradient(135deg, #F59E0B, #B45309); color: #FFFFFF; font-size: 12px; font-weight: 800; padding: 8px 18px; border-radius: 12px; text-decoration: none; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4); display: inline-flex; align-items: center; gap: 6px;">
-                    <span>👑 แดชบอร์ดกูล & บัว (Single-Page)</span>
-                </a>
+        <!-- CARD 2: Offline Log Exporter (LOCAL ONLY - SECURE) -->
+        <div class="neu-card p-5 relative overflow-hidden flex flex-col justify-between border border-amber-500/30" data-category="testing">
+          <div class="flex items-start justify-between gap-3 mb-3">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-600 flex items-center justify-center shrink-0">
+              <i data-lucide="lock" class="w-6 h-6"></i>
             </div>
-            <!-- ============================================================== -->
-            <!-- 5-PILLAR OFFICE PERMISSION & ACCESS MATRIX (RBAC) -->
-            <!-- ============================================================== -->
-            <div style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 16px; padding: 16px; margin-top: 14px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
-                    <div>
-                        <div style="font-size: 13px; font-weight: 800; color: #FFFFFF; display: flex; align-items: center; gap: 6px;">
-                            <span>🛡️ โครงสร้างสิทธิ์ทีมงานออฟฟิศ 5 เสาหลัก (Role-Based Access Control)</span>
-                        </div>
-                        <div style="font-size: 11px; color: #94A3B8;">ทุกคนมี Standard Admin เป็นฐาน + สิทธิ์เฉพาะทางที่ติ๊กมอบหมายเพิ่มเติม</div>
-                    </div>
-                    <a href="https://assets.siwasup.com/agent_registration.html" target="_blank" style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #F59E0B; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 8px; text-decoration: none;">
-                        จัดการสิทธิ์ทีมงาน &rarr;
-                    </a>
-                </div>
-
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; font-size: 11px;">
-                    
-                    <!-- 1. Gool & Bua -->
-                    <div style="background: #090D16; border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 12px;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                            <span style="font-weight: 800; color: #F59E0B; font-size: 12px;">👑 คุณเจี๊ยบ(กูล) & คุณบัว</span>
-                            <span style="background: rgba(245, 158, 11, 0.2); color: #FCD34D; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px;">บอสใหญ่ / บัวทำแทน</span>
-                        </div>
-                        <div style="color: #CBD5E1; line-height: 1.5; font-size: 10.5px;">
-                            • <strong>Standard Admin:</strong> สิทธิ์องค์กรเต็มรูปแบบ<br>
-                            • <strong style="color: #F59E0B;">💰 สิทธิ์เคาะแก้ราคาบ้าน & ส่วนลดพิเศษ</strong><br>
-                            • <strong>👑 สิทธิ์ผู้บริหาร:</strong> ดูยอด KPI & คอมมิชชัน<br>
-                            • <strong>📊 ตรวจลีด:</strong> เช็กแชทและประวัติลูกค้า<br>
-                            • <strong>🏷️ สิทธิ์คัดทรัพย์เด่น:</strong> คัด NPA ขึ้นหน้าแรก
-                        </div>
-                    </div>
-
-                    <!-- 2. P'Lily -->
-                    <div style="background: #090D16; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 12px;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                            <span style="font-weight: 800; color: #10B981; font-size: 12px;">🔑 พี่ลิลลี่ (ท่าข้าม 12)</span>
-                            <span style="background: rgba(16, 185, 129, 0.2); color: #6EE7B7; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px;">Head of Viewing</span>
-                        </div>
-                        <div style="color: #CBD5E1; line-height: 1.5; font-size: 10.5px;">
-                            • <strong>Standard Admin:</strong> ตรวจดูข้อมูลทรัพย์ทั้งหมด<br>
-                            • <strong style="color: #10B981;">🔑 คุมกุญแจ 100%:</strong> อนุมัติรหัส OTP ใน 3 วินาที<br>
-                            • <strong>📅 เลื่อนนัด:</strong> สลาย OTP เดิม & ออก OTP ใหม่<br>
-                            • <strong>🚫 ยกเลิกฉุกเฉิน:</strong> รับมือฝนตกน้ำท่วม/นิติปิดไฟ<br>
-                            • <em>*ล็อกเมนูเทคนิคและแก้ราคา เพื่อความรวดเร็ว*</em>
-                        </div>
-                    </div>
-
-                    <!-- 3. Office Support -->
-                    <div style="background: #090D16; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 12px;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                            <span style="font-weight: 800; color: #60A5FA; font-size: 12px;">🏢 เจ้าหน้าที่ซัพพอร์ต</span>
-                            <span style="background: rgba(59, 130, 246, 0.2); color: #93C5FD; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px;">Standard Admin</span>
-                        </div>
-                        <div style="color: #CBD5E1; line-height: 1.5; font-size: 10.5px;">
-                            • <strong>Standard Admin:</strong> ดูทรัพย์และช่วยตรวจงานทั่วไป<br>
-                            • <strong style="color: #60A5FA;">🏷️ ช่วยคัดสต๊อก:</strong> จัดหมวดทรัพย์เด่น NPA<br>
-                            • <strong>📇 ดึงนามบัตร:</strong> ช่วยประสานงานเอกสารออฟฟิศ<br>
-                            • <strong>🚫 ล็อกแก้ราคา:</strong> ป้องกันการแก้ราคาผิดพลาด<br>
-                            • <em>*ล็อกเมนูเซิร์ฟเวอร์และกุญแจ OTP*</em>
-                        </div>
-                    </div>
-
-                    <!-- 4. Khun Ton -->
-                    <div style="background: #090D16; border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 12px; padding: 12px;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                            <span style="font-weight: 800; color: #FB7185; font-size: 12px;">💻 คุณต้น (NASSTY)</span>
-                            <span style="background: rgba(244, 63, 94, 0.2); color: #FDA4AF; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px;">Tech Architect</span>
-                        </div>
-                        <div style="color: #CBD5E1; line-height: 1.5; font-size: 10.5px;">
-                            • <strong>Standard Admin:</strong> สิทธิ์องค์กรเต็มรูปแบบ<br>
-                            • <strong style="color: #FB7185;">⚙️ Super Tech Admin:</strong> คุม Render & LINE Bot<br>
-                            • <strong>💰 สิทธิ์แก้ราคา:</strong> คอนฟิกตัวเลขและคอมมิชชัน<br>
-                            • <strong>🏦 ท่อดูด NPA:</strong> คุมคลังทรัพย์ 59,000 หลัง<br>
-                            • <strong>🗑️ Data Cleansing:</strong> ควบคุมความปลอดภัย 90 วัน
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-<div>
-            </div>
-            <!-- Sub Quick Links for the 3 modes -->
-            <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-top: 6px; border-top: 1px solid rgba(245, 158, 11, 0.25); font-size: 11px;">
-                <span style="color: #E6CA85; font-weight: 600;">โหมดในระบบ:</span>
-                <span style="background: rgba(255,255,255,0.06); padding: 3px 8px; border-radius: 6px; color: #E2E8F0;">🏢 1. สวมบทพี่ลิลลี่ (เทสต์คอขวด 1 - 6 คน / Batch Approve)</span>
-                <span style="background: rgba(255,255,255,0.06); padding: 3px 8px; border-radius: 6px; color: #E2E8F0;">📱 2. สวมบท Agent 6 คน (กดปุ่มตู้กุญแจ OTP จริง)</span>
-                <span style="background: rgba(255,255,255,0.06); padding: 3px 8px; border-radius: 6px; color: #E2E8F0;">🖥️ 3. Dual Screen (ฉายสองจอโปรเจกเตอร์)</span>
-            </div>
+            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-slate-800 text-amber-400 border border-amber-500/30 uppercase flex items-center gap-1">
+              <span>🔒 เครื่องผู้บริหาร (Local Only)</span>
+            </span>
+          </div>
+          <div>
+            <h3 class="text-base font-bold leading-snug" style="color: var(--text-main);">
+              🔒 ตัวดูด Chat Log (โหมดออฟไลน์เฉพาะเครื่อง)
+            </h3>
+            <p class="text-xs mt-1 leading-relaxed" style="color: var(--text-muted);">
+              เครื่องมือดูดประวัติแชท LINE OA น้องศิวา <strong>ปิดการเข้าถึงออนไลน์เพื่อความปลอดภัย (PDPA Shield 100%)</strong> ใช้งานเปิดดูข้อมูลได้เฉพาะบนเครื่องผู้บริหารเท่านั้น
+            </p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-black/5 dark:border-white/5 flex items-center gap-2">
+            <a href="offline_log_exporter.html" target="_blank" class="neu-btn flex-1 py-2 text-xs font-bold text-center text-amber-600 flex items-center justify-center gap-2">
+              <i data-lucide="hard-drive" class="w-4 h-4"></i>
+              <span>เปิดใช้งานออฟไลน์ (Local File) &rarr;</span>
+            </a>
+          </div>
         </div>
 
-        <!-- Section 1: 📇 Agent Cards for Alpha Agents -->
-        <div style="margin-bottom: 14px;">
-            <div style="font-size: 12px; font-weight: 600; color: #E2E8F0; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                <span>📇</span>
-                <span>1. นามบัตรตัวแทน Alpha 6 คน (เปิดดู Golden Emblem บนมือถือ):</span>
+        <!-- CARD 3: LandsMaps QR & Geo Share (77 Provinces) -->
+        <div class="neu-card p-5 relative overflow-hidden flex flex-col justify-between" data-category="ops">
+          <div class="flex items-start justify-between gap-3 mb-3">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 flex items-center justify-center shrink-0">
+              <i data-lucide="map" class="w-6 h-6"></i>
             </div>
-            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                <a href="https://assets.siwasup.com/agent_profile.html?code=S98" target="_blank" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #FCA5A5; font-size: 12px; font-weight: 600; padding: 8px 14px; border-radius: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
-                    <span>🦁 S98 คุณแป้ง (วัชรพล-สายไหม)</span>
-                </a>
-                <a href="https://assets.siwasup.com/agent_profile.html?code=S120" target="_blank" style="background: rgba(194, 164, 96, 0.15); border: 1px solid rgba(194, 164, 96, 0.4); color: #E6CA85; font-size: 12px; font-weight: 600; padding: 8px 14px; border-radius: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
-                    <span>🦅 S120 คุณอ้อน (นนทบุรี-บางใหญ่)</span>
-                </a>
-                <a href="https://assets.siwasup.com/agent_profile.html?code=S117" target="_blank" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #FCA5A5; font-size: 12px; font-weight: 600; padding: 8px 14px; border-radius: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
-                    <span>🦁 S117 คุณแอ๊ด (บางนา-สมุทรปราการ)</span>
-                </a>
-                <a href="https://assets.siwasup.com/agent_profile.html?code=S90" target="_blank" style="background: rgba(148, 163, 184, 0.15); border: 1px solid rgba(148, 163, 184, 0.35); color: #CBD5E1; font-size: 12px; font-weight: 600; padding: 8px 14px; border-radius: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
-                    <span>🐺 S90 คุณนัท (ตลิ่งชัน)</span>
-                </a>
-                <a href="https://assets.siwasup.com/agent_profile.html?code=S94" target="_blank" style="background: rgba(148, 163, 184, 0.15); border: 1px solid rgba(148, 163, 184, 0.35); color: #CBD5E1; font-size: 12px; font-weight: 600; padding: 8px 14px; border-radius: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
-                    <span>🐺 S94 คุณหลิว (พุทธมณฑลสาย 2)</span>
-                </a>
-                <a href="https://assets.siwasup.com/agent_profile.html?code=S113" target="_blank" style="background: rgba(148, 163, 184, 0.15); border: 1px solid rgba(148, 163, 184, 0.35); color: #CBD5E1; font-size: 12px; font-weight: 600; padding: 8px 14px; border-radius: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">
-                    <span>🐺 S113 คุณไห้ (ดาวคะนอง-ธนบุรี)</span>
-                </a>
-                <a href="https://assets.siwasup.com/agent_profile.html?code=S98&mode=client" target="_blank" style="background: linear-gradient(135deg, #10B981, #059669); color: #FFFFFF; font-size: 12px; font-weight: 700; padding: 8px 16px; border-radius: 12px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);">
-                    <span>👥 พรีวิวมุมมองลูกค้า (Client View - ฉบับทางการ)</span>
-                </a>
-            </div>
+            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 uppercase">
+              ✓ 77 จังหวัด
+            </span>
+          </div>
+          <div>
+            <h3 class="text-base font-bold leading-snug" style="color: var(--text-main);">
+              🗺️ ถอดรหัสโฉนด & LandsMaps QR Share
+            </h3>
+            <p class="text-xs mt-1 leading-relaxed" style="color: var(--text-muted);">
+              เจนเนอเรต DeepLink และ QR Code สู่ระบบค้นหารูปแปลงที่ดิน กรมที่ดิน ทั่วประเทศ 77 จังหวัด 928 อำเภอ แชร์เข้า LINE ได้ใน 1 วินาที
+            </p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-black/5 dark:border-white/5 flex items-center gap-2">
+            <a href="https://assets.siwasup.com/landmap_share.html" target="_blank" class="neu-btn flex-1 py-2 text-xs font-bold text-center text-emerald-600">
+              เปิดโปรแกรมแชร์โฉนด &rarr;
+            </a>
+            <a href="landmap_share.html" target="_blank" class="neu-btn px-3 py-2 text-xs font-medium" title="เปิดไฟล์เครื่อง">
+              <i data-lucide="hard-drive" class="w-4 h-4"></i>
+            </a>
+          </div>
         </div>
 
-        <!-- Section 2: 📊 3 Metric Options for Gool -->
-        <div style="margin-bottom: 14px;">
-            <div style="font-size: 12px; font-weight: 600; color: #E2E8F0; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                <span>📊</span>
-                <span>2. สลับดูตัวเลข 3 แบบ (สำหรับให้กูลเลือก):</span>
-            </div>
-            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                <a href="https://assets.siwasup.com/agent_profile.html?code=S98&metric=opt1" target="_blank" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #6EE7B7; font-size: 11.5px; font-weight: 600; padding: 7px 13px; border-radius: 10px; text-decoration: none;">
-                    🌟 แบบ 1: สบายใจ/ฟรี/สินเชื่อ (แนะนำ 👍)
-                </a>
-                <a href="https://assets.siwasup.com/agent_profile.html?code=S98&metric=opt2" target="_blank" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: #E2E8F0; font-size: 11.5px; font-weight: 600; padding: 7px 13px; border-radius: 10px; text-decoration: none;">
-                    🏆 แบบ 2: สายโปร/ปิดสำเร็จ/ตอบไว
-                </a>
-                <a href="https://assets.siwasup.com/agent_profile.html?code=S98&metric=opt3" target="_blank" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: #E2E8F0; font-size: 11.5px; font-weight: 600; padding: 7px 13px; border-radius: 10px; text-decoration: none;">
-                    🏡 แบบ 3: ปรับคำซอฟต์ (ตามร่างคุณต้น)
-                </a>
-            </div>
-        </div>
+      </div>
+    </section>
 
-        <!-- Section 3: 💬 LINE Bot น้องศิวา & รายงานประวัติแชทสด -->
-        <div>
-            <div style="font-size: 12px; font-weight: 700; color: #FCD34D; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <span>💬</span>
-                    <span>3. น้องศิวา AI (LINE OA @813nyyia) &amp; รายงานความเคลื่อนไหวล่าสุด:</span>
-                </div>
-                <span style="font-size: 11px; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.5); color: #6EE7B7; padding: 2px 8px; border-radius: 9999px;">
-                    🟢 เซิร์ฟเวอร์ทำงาน 24 ชม. • แคชแชทเปิดเร็ว 0.01 วิ
-                </span>
-            </div>
+    <!-- SECTION 1: SQUAD HUB & EXECUTIVE PRESENTATIONS -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between px-2">
+        <h2 class="text-sm font-bold uppercase tracking-wider flex items-center gap-2" style="color: var(--text-main);">
+          <i data-lucide="users" class="w-4 h-4" style="color: var(--accent-primary);"></i>
+          <span>1. แดชบอร์ดผู้บริหาร & กระดานปฏิบัติการเฉพาะบุคคล (Squad Hubs)</span>
+        </h2>
+        <span class="text-xs" style="color: var(--text-muted);">สำหรับกูล บัว ลิลลี่ และคอนเทนต์</span>
+      </div>
 
-            <!-- Telemetry Mini Card -->
-            <div style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 16px; padding: 14px 16px; margin-bottom: 12px;">
-                <div style="font-size: 12.5px; font-weight: 700; color: #FFFFFF; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                    <span>📊 สรุปประวัติการสนทนาจริงในระบบ (บันทึกรวม 38 ข้อความ):</span>
-                </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 11.5px; color: #CBD5E1; margin-bottom: 12px;">
-                    <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 10px 12px; border-radius: 12px;">
-                        <div style="color: #F59E0B; font-weight: 700;">👨‍💻 คุณต้น [NASSTY]</div>
-                        <div><b>35 ข้อความ</b> • ทดสอบคัดบ้านบางแค, ตรวจวันปฏิทิน เสาร์ 7 พ.ย., สอบถามคลังกุญแจ OTP</div>
-                    </div>
-                    <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 10px 12px; border-radius: 12px;">
-                        <div style="color: #34D399; font-weight: 700;">🐣 พี่เจี๊ยบ (กูล)</div>
-                        <div><b>1 ข้อความ</b> • ทดสอบ <i>"ขอบ้านแถวบางแคคัดมาให้หน่อย"</i> (AI คัดส่ง 3 แปลง SAM, SCB, TTB สำเร็จ)</div>
-                    </div>
-                    <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 10px 12px; border-radius: 12px;">
-                        <div style="color: #93C5FD; font-weight: 700;">🏢 ทีมงานออฟฟิศ (ออย, ตั๊กแตน, ลิลลี่)</div>
-                        <div><b>สถานะ:</b> กด Add Friend แล้ว แต่ยังไม่มีประวัติส่งข้อความแชทเข้ามาในระบบ</div>
-                    </div>
-                    <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 10px 12px; border-radius: 12px;">
-                        <div style="color: #A78BFA; font-weight: 700;">👥 เอเจนท์ภายนอกทั่วไป</div>
-                        <div><b>สถานะ:</b> ยังไม่ได้ปล่อยแคมเปญเปิดตัว / สิทธิ์รอในขั้นตอน Lobby อนุมัติ</div>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                    <a href="https://line.me/R/ti/p/@813nyyia" target="_blank" style="background: linear-gradient(135deg, #06C755, #059669); color: #FFFFFF; font-size: 11.5px; font-weight: 700; padding: 7px 14px; border-radius: 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(6, 199, 85, 0.35);">
-                        <span>📲 ทักคุย LINE OA น้องศิวา (@813nyyia)</span>
-                    </a>
-                    <a href="https://assets.siwasup.com/offline_log_exporter.html" target="_blank" style="background: rgba(245, 158, 11, 0.18); border: 1px solid rgba(245, 158, 11, 0.5); color: #FCD34D; font-size: 11.5px; font-weight: 700; padding: 7px 14px; border-radius: 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                        <span>📋 เปิดตัวดูด Chat Log ออฟไลน์ (แคช 38 แชทเด้งทันที 0.01 วิ)</span>
-                    </a>
-                    <a href="https://assets.siwasup.com/line_chat_monitor.html" target="_blank" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #6EE7B7; font-size: 11.5px; font-weight: 600; padding: 7px 13px; border-radius: 10px; text-decoration: none;">
-                        <span>💬 มอนิเตอร์แชทสด (Live Monitor)</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- SECTION 0: PERSONALIZED SQUAD HUB SYSTEM & TESTER -->
-    <div style="background: linear-gradient(135deg, rgba(194, 164, 96, 0.18) 0%, rgba(30, 58, 138, 0.28) 100%); border: 1.5px solid #C2A460; border-radius: 22px; padding: 24px; margin-bottom: 36px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <div style="width: 52px; height: 52px; border-radius: 16px; background: rgba(194, 164, 96, 0.25); border: 1px solid #C2A460; font-size: 26px; display: flex; align-items: center; justify-content: center;">🏛️</div>
-                <div>
-                    <div style="display: inline-block; font-size: 11px; font-weight: 700; color: #E6CA85; background: rgba(194, 164, 96, 0.2); border: 1px solid rgba(194, 164, 96, 0.4); padding: 2px 8px; border-radius: 6px; margin-bottom: 4px;">NEW • SQUAD WORKSPACE</div>
-                    <h2 style="font-size: 20px; font-weight: 700; color: #FFF; margin: 0;">Personalized Squad Hub System (กระดานสื่อสารภายใน 4 ทีมงาน)</h2>
-                    <p style="font-size: 13px; color: #94A3B8; margin-top: 4px;">กระดานปฏิบัติการประจำตัว 4 บุคลากร: คุณบัว (Ops), คุณกูล (Sales), พี่ลิลลี่ (Legal), น้อง Content (Media) — สื่อสารเฉพาะงานปัจจุบัน</p>
-                </div>
-            </div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <a href="https://assets.siwasup.com/squad_hub_system.html" target="_blank" style="background: linear-gradient(135deg, #C2A460 0%, #E6CA85 100%); color: #07090e; font-weight: 700; font-size: 13px; padding: 12px 20px; border-radius: 12px; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(194, 164, 96, 0.4);">
-                    <span>🌐 เปิด Squad Hub System</span>
-                </a>
-                <a href="https://assets.siwasup.com/siwasup_viewing_flow_tester.html" target="_blank" style="background: rgba(30, 41, 59, 0.85); color: #E2E8F0; border: 1px solid rgba(148, 163, 184, 0.3); font-weight: 600; font-size: 13px; padding: 12px 18px; border-radius: 12px; text-decoration: none; display: flex; align-items: center; gap: 6px;">
-                    <span>🔑 ระบบขอรหัสกุญแจ OTP 7 สเต็ป</span>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- SECTION 1: GOOL COMMAND -->
-    <div class="section-header">
-        <div class="section-title">
-            <span>🦁</span>
-            <span>สำหรับคุณกูล (Sales Commander & 20 Alpha)</span>
-        </div>
-        <span class="section-badge">GOOL • THE LION</span>
-    </div>
-
-    <div class="grid">
-        <!-- Card 1: Gool Executive Deck -->
-        <div class="card">
-            <div>
-                <div class="card-top">
-                    <div class="icon-box">🦁</div>
-                    <div class="card-meta">
-                        <div class="card-title">Gool's Executive Deck</div>
-                        <div class="card-role">พรีเซนเทชันเปิดตัวสำหรับกูล</div>
-                    </div>
-                </div>
-                <div class="card-desc">
-                    ฉายวิสัยทัศน์สิงโต, โครงสร้าง 6 ยศตัวแทน, กลยุทธ์พอร์ตทรัพย์ 15,117 แปลง, ล็อกสิทธิ์ลูกค้า 60 วัน และปุ่มลัดเชื่อมต่อระบบแอดมิน 1 คลิก
-                </div>
-            </div>
-            <div>
-                <div class="card-actions">
-                    <a href="https://assets.siwasup.com/gool_executive_presentation.html" target="_blank" class="btn btn-live">🌐 เปิด Live (R2)</a>
-                    <a href="gool_executive_presentation.html" class="btn btn-local">💾 เปิดในเครื่อง (G:\)</a>
-                </div>
-                <span class="copy-pill" onclick="copyUrl('https://assets.siwasup.com/gool_executive_presentation.html')">คัดลอกลิงก์</span>
-            </div>
-        </div>
-
-        <!-- Card 2: Anti-Hoarding Brief -->
-        <div class="card">
-            <div>
-                <div class="card-top">
-                    <div class="icon-box">🛡️</div>
-                    <div class="card-meta">
-                        <div class="card-title">Anti-Hoarding & Anomaly Console</div>
-                        <div class="card-role">แดชบอร์ดตรวจจับการกั๊กทรัพย์เพื่อฮั้วดีล</div>
-                    </div>
-                </div>
-                <div class="card-desc">
-                    อธิบายหลักการ Kakomikomi, 3 สัญญาณเตือนผิดปกติ, กลไกปลดล็อกทรัพย์อัตโนมัติ (TTL 72 ชม.), ระบบคะแนน Trust Score และหน้าต่างสั่งการของกูล
-                </div>
-            </div>
-            <div>
-                <div class="card-actions">
-                    <a href="https://assets.siwasup.com/gool_anti_hoarding_brief.html" target="_blank" class="btn btn-live">🌐 เปิด Live (R2)</a>
-                    <a href="gool_anti_hoarding_brief.html" class="btn btn-local">💾 เปิดในเครื่อง (G:\)</a>
-                </div>
-                <span class="copy-pill" onclick="copyUrl('https://assets.siwasup.com/gool_anti_hoarding_brief.html')">คัดลอกลิงก์</span>
-            </div>
-        </div>
-
-        <!-- Card 3: 2-Track Scoring Engine -->
-        <div class="card">
-            <div>
-                <div class="card-top">
-                    <div class="icon-box">⚖️</div>
-                    <div class="card-meta">
-                        <div class="card-title">2-Track Scoring Engine (เกณฑ์คะแนน)</div>
-                        <div class="card-role">โครงสร้างเกณฑ์คะแนนตัวแทนขายฉบับสมบูรณ์</div>
-                    </div>
-                </div>
-                <div class="card-desc">
-                    แยก 2 ถังอิสระ: ถังผลงานขายจริง (ปรับยศ/สิทธิ์รับ Lead) vs ถังกิจกรรม (Voucher) พร้อมกฎเหล็ก 3 ชม. ส่งคลิปรีวิวบ้านเพื่อป้องกันการดองกุญแจ
-                </div>
-            </div>
-            <div>
-                <div class="card-actions">
-                    <a href="https://assets.siwasup.com/scoring_summary_light.html" target="_blank" class="btn btn-live">🌐 เปิด Live (R2)</a>
-                    <a href="scoring_summary_light.html" class="btn btn-local">💾 เปิดในเครื่อง (G:\)</a>
-                </div>
-                <span class="copy-pill" onclick="copyUrl('https://assets.siwasup.com/scoring_summary_light.html')">คัดลอกลิงก์</span>
-            </div>
-        </div>
-
-                <!-- Card: Agent Digital Profile Card -->
-        <div class="card">
-            <div>
-                <div class="card-top">
-                    <div class="icon-box">👤</div>
-                    <div class="card-meta">
-                        <div class="card-title">Agent Profile Card (นามบัตรดิจิทัล)</div>
-                        <div class="card-role">นามบัตรตัวแทนสไตล์เรียบง่าย & ยืนยันรูป LINE</div>
-                    </div>
-                </div>
-                <div class="card-desc">
-                    การ์ดโปรไฟล์ตัวแทนดีไซน์เรียบง่าย (Clean Minimal) ดึงรูปจาก LINE อัตโนมัติ พร้อมระบบ Smart Preview ให้กดยืนยันหรือเปลี่ยนรูป และปุ่มแชร์ 1 คลิก
-                </div>
-            </div>
-            <div>
-                <div class="card-actions">
-                    <a href="https://assets.siwasup.com/agent_profile.html" target="_blank" class="btn btn-live">🌐 เปิด Live (R2)</a>
-                    <a href="agent_profile.html" class="btn btn-local">💾 เปิดในเครื่อง (G:\)</a>
-                </div>
-                <span class="copy-pill" onclick="copyUrl('https://assets.siwasup.com/agent_profile.html')">คัดลอกลิงก์</span>
-            </div>
-        </div>
-
-        <!-- Card 4: Agent Quick Guide -->
-        <div class="card">
-            <div>
-                <div class="card-top">
-                    <div class="icon-box">⚡</div>
-                    <div class="card-meta">
-                        <div class="card-title">Agent Quick Guide (1 หน้าจบ)</div>
-                        <div class="card-role">คู่มือการใช้งานสำหรับ 20 ตัวแทน Alpha</div>
-                    </div>
-                </div>
-                <div class="card-desc">
-                    สรุปขั้นตอนเริ่มต้นทำงาน: ไม่ต้องจำรหัสผ่าน เชื่อมต่อผ่าน LINE Magic Binding, เบิกกุญแจ, แชร์ทรัพย์ให้ลูกค้า และรับคอมมิชชัน
-                </div>
-            </div>
-            <div>
-                <div class="card-actions">
-                    <a href="https://assets.siwasup.com/agent_quick_guide.html" target="_blank" class="btn btn-live">🌐 เปิด Live (R2)</a>
-                    <a href="agent_quick_guide.html" class="btn btn-local">💾 เปิดในเครื่อง (G:\)</a>
-                </div>
-                <span class="copy-pill" onclick="copyUrl('https://assets.siwasup.com/agent_quick_guide.html')">คัดลอกลิงก์</span>
-            </div>
-        </div>
-
-        <!-- Card 5: Alpha Onboarding Infographic -->
-        <div class="card">
-            <div>
-                <div class="card-top">
-                    <div class="icon-box">📊</div>
-                    <div class="card-meta">
-                        <div class="card-title">Alpha Onboarding Infographic</div>
-                        <div class="card-role">ผังยุทธศาสตร์การรับ 20 หัวกะทิ</div>
-                    </div>
-                </div>
-                <div class="card-desc">
-                    อินโฟกราฟิกแจกแจงแผนยุทธการต้อนรับตัวแทน 20 ท่านแรก เพื่อให้กูลและทีมงานเห็นภาพรวมทิศทางเดียวกันใน 1 แผ่น
-                </div>
-            </div>
-            <div>
-                <div class="card-actions">
-                    <a href="https://assets.siwasup.com/alpha_onboarding_infographic.html" target="_blank" class="btn btn-live">🌐 เปิด Live (R2)</a>
-                    <a href="alpha_onboarding_infographic.html" class="btn btn-local">💾 เปิดในเครื่อง (G:\)</a>
-                </div>
-                <span class="copy-pill" onclick="copyUrl('https://assets.siwasup.com/alpha_onboarding_infographic.html')">คัดลอกลิงก์</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- SECTION 2: BUA CURATION -->
-    <div class="section-header">
-        <div class="section-title">
-            <span>🌸</span>
-            <span>สำหรับบัว (Listing Curator & Operations Division)</span>
-        </div>
-        <span class="section-badge">BUA • THE CURATOR</span>
-    </div>
-
-    <div class="grid">
-        <!-- Card 6: Property Curator 801 Props -->
-        <div class="card">
-            <div>
-                <div class="card-top">
-                    <div class="icon-box">🎯</div>
-                    <div class="card-meta">
-                        <div class="card-title">NPA Spotlight Curator (801 แปลง)</div>
-                        <div class="card-role">ระบบคัดกรองทรัพย์ 100% Match Allabout</div>
-                    </div>
-                </div>
-                <div class="card-desc">
-                    ระบบริบบิ้น 3 สี (🔴 8 หลุดหมวด | 🟢 12 มาใหม่ | 💎 671 ทรัพย์แบงก์) พร้อมระบบปักหมุดคัด Top 20 Hero Deals ส่งต่อให้ทีมกูล
-                </div>
-            </div>
-            <div>
-                <div class="card-actions">
-                    <a href="https://assets.siwasup.com/property_curator.html" target="_blank" class="btn btn-live">🌐 เปิด Live (R2)</a>
-                    <a href="property_curator.html" class="btn btn-local">💾 เปิดในเครื่อง (G:\)</a>
-                </div>
-                <span class="copy-pill" onclick="copyUrl('https://assets.siwasup.com/property_curator.html')">คัดลอกลิงก์</span>
-            </div>
-        </div>
-
-        <!-- Card 7: Bua Alpha Checklist -->
-        <div class="card">
-            <div>
-                <div class="card-top">
-                    <div class="icon-box">📋</div>
-                    <div class="card-meta">
-                        <div class="card-title">Bua Alpha Checklist</div>
-                        <div class="card-role">เช็คลิสต์ตรวจความพร้อม 20 ตัวแทน</div>
-                    </div>
-                </div>
-                <div class="card-desc">
-                    ตารางตรวจสอบความพร้อมรายบุคคลของ 20 Alpha Agents เช็คการยืนยันเบอร์, ผูก LINE และส่งมอบสิทธิ์เข้าถึงคลังทรัพย์
-                </div>
-            </div>
-            <div>
-                <div class="card-actions">
-                    <a href="https://assets.siwasup.com/bua_alpha_checklist.html" target="_blank" class="btn btn-live">🌐 เปิด Live (R2)</a>
-                    <a href="bua_alpha_checklist.html" class="btn btn-local">💾 เปิดในเครื่อง (G:\)</a>
-                </div>
-                <span class="copy-pill" onclick="copyUrl('https://assets.siwasup.com/bua_alpha_checklist.html')">คัดลอกลิงก์</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- SECTION 3: CENTRAL CATALOG & CLIENTS -->
-    <div class="section-header">
-        <div class="section-title">
-            <span>🛒</span>
-            <span>แคตตาล็อกกลาง & โหมดลูกค้า (Central Catalog)</span>
-        </div>
-        <span class="section-badge">PUBLIC & CLIENT VIEW</span>
-    </div>
-
-    <div class="grid">
-        <!-- Card 8: Central Catalog (User/Agent vs Admin Mode) -->
-        <div class="card">
-            <div>
-                <div class="card-top">
-                    <div class="icon-box">🛒</div>
-                    <div class="card-meta">
-                        <div class="card-title">Central Web Catalog (User & Admin)</div>
-                        <div class="card-role">แยกสิทธิ์มุมมองตัวแทนปกติ vs แผงควบคุมแอดมิน</div>
-                    </div>
-                </div>
-                <div class="card-desc">
-                    โหมดตัวแทน (User) ล็อกแถบสลับยศและซ่อนเรทคอมมิชชันป้องกันดราม่า ส่วนโหมดแอดมิน (?admin=1) ปลดล็อกปุ่มสลับครบ 5 โหมด (Admin | Free | พนักงาน | ฝึกหัด | ลูกค้า)
-                </div>
-            </div>
-            <div>
-                <div class="card-actions">
-                    <a href="https://assets.siwasup.com/catalog.html" target="_blank" class="btn btn-live">👤 มุมมองตัวแทน (User)</a>
-                    <a href="https://assets.siwasup.com/catalog.html?admin=1" target="_blank" class="btn btn-local" style="border-color: rgba(194,164,96,0.6); color: #E6CA85;">👑 มุมมอง Admin</a>
-                </div>
-                <span class="copy-pill" onclick="copyUrl('https://assets.siwasup.com/catalog.html')">คัดลอกลิงก์ตัวแทน (User)</span>
-            </div>
-        </div>
-
-        <!-- Card 9: Client Mode Catalog -->
-        <div class="card">
-            <div>
-                <div class="card-top">
-                    <div class="icon-box">📱</div>
-                    <div class="card-meta">
-                        <div class="card-title">Catalog (Client Mode)</div>
-                        <div class="card-role">แคตตาล็อกโหมดสะอาดสำหรับส่งให้ลูกค้าดู</div>
-                    </div>
-                </div>
-                <div class="card-desc">
-                    ซ่อนแถบเครื่องมือด้านบนและข้อมูลภายในทั้งหมด แสดงเฉพาะราคาขาย จุดเด่นทรัพย์ และแบนเนอร์ตัวแทนผู้ดูแล พร้อมปุ่มติดต่อผ่าน LINE OA ทันที
-                </div>
-            </div>
-            <div>
-                <div class="card-actions">
-                    <a href="https://assets.siwasup.com/catalog.html?view=client" target="_blank" class="btn btn-live">🌐 เปิดโหมดลูกค้า (R2)</a>
-                    <a href="catalog.html?view=client" class="btn btn-local">💾 เปิดในเครื่อง (G:\)</a>
-                </div>
-                <span class="copy-pill" onclick="copyUrl('https://assets.siwasup.com/catalog.html?view=client')">คัดลอกลิงก์โหมดลูกค้า</span>
-            </div>
-        </div>
-
-        <!-- Card 10: Sovereign Landing Page -->
-        <div class="card">
-            <div>
-                <div class="card-top">
-                    <div class="icon-box">🌐</div>
-                    <div class="card-meta">
-                        <div class="card-title">Welcome Landing Page</div>
-                        <div class="card-role">หน้าแรกสถาปัตยกรรม 6 Sovereign</div>
-                    </div>
-                </div>
-                <div class="card-desc">
-                    หน้าต้อนรับระดับไฮเอนด์ โชว์ภาพลักษณ์ความน่าเชื่อถือของ Siwasup Co-Broker OS และระบบพันธมิตรธนาคารชั้นนำ
-                </div>
-            </div>
-            <div>
-                <div class="card-actions">
-                    <a href="https://assets.siwasup.com/welcome_landing.html" target="_blank" class="btn btn-live">🌐 เปิด Live (R2)</a>
-                    <a href="welcome_landing.html" class="btn btn-local">💾 เปิดในเครื่อง (G:\)</a>
-                </div>
-                <span class="copy-pill" onclick="copyUrl('https://assets.siwasup.com/welcome_landing.html')">คัดลอกลิงก์</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- SECTION 4: OPERATIONS & LEGAL -->
-    <div class="section-header">
-        <div class="section-title">
-            <span>🔑</span>
-            <span>ฝ่ายปฏิบัติการ & พี่ลิลลี่ (Key Custody & Legal SOP)</span>
-        </div>
-        <span class="section-badge">CENTRAL OPERATIONS</span>
-    </div>
-
-    <div class="grid">
-        <!-- Card 11: Exclusive Listing Audit SOP -->
-        <div class="card">
-            <div>
-                <div class="card-top">
-                    <div class="icon-box">📘</div>
-                    <div class="card-meta">
-                        <div class="card-title">Exclusive Listing Audit Manual</div>
-                        <div class="card-role">คู่มือตรวจสอบสัญญาปิด & ป้องกันการฮั้วดีล (SOP)</div>
-                    </div>
-                </div>
-                <div class="card-desc">
-                    คู่มือภายใน 5 เสาหลัก: ระยะคุ้มครองสัญญา 6-12 เดือน, รอยเท้าดิจิทัล (Digital Footprint), โทรศัพท์สอบถามความพึงพอใจเจ้าของทรัพย์แบบสุภาพ
-                </div>
-            </div>
-            <div>
-                <div class="card-actions">
-                    <a href="EXCLUSIVE_LISTING_AUDIT_MANUAL.md" class="btn btn-local btn-single">💾 เปิดอ่านคู่มือ (Markdown / G:\)</a>
-                </div>
-            </div>
-        </div>
-
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <!-- Card 14: Smart Messenger Dispatch Slip -->
-        <div class="card">
-            <div>
-                <div class="card-top">
-                    <div class="icon-box">🛵</div>
-                    <div class="card-meta">
-                        <div class="card-title">Smart Dispatch Slip (หน้าจอแมสเซนเจอร์)</div>
-                        <div class="card-role">ใบงานนำส่งกุญแจ NPA ผ่านเว็บมือถือ (No-App)</div>
-                    </div>
-                </div>
-                <div class="card-desc">
-                    หน้าจอที่แมสเซนเจอร์/ไรเดอร์เห็นเมื่อกดลิงก์จาก LINE: ปุ่มนำทาง Google Maps 1 คลิก, โทรหาเอเจนต์ 1 คลิก, ยื่น QR สแกนส่งมอบ และปุ่มแจ้งเหตุฉุกเฉินหาพี่ลิลลี่
-                </div>
-            </div>
-            <div>
-                <div class="card-actions">
-                    <a href="https://assets.siwasup.com/messenger_dispatch_slip.html" target="_blank" class="btn btn-live">🌐 เปิด Live (R2)</a>
-                    <a href="messenger_dispatch_slip.html" class="btn btn-local">💾 เปิดในเครื่อง (G:\)</a>
-                </div>
-                <span class="copy-pill" onclick="copyUrl('https://assets.siwasup.com/messenger_dispatch_slip.html')">คัดลอกลิงก์</span>
-            </div>
+        <!-- Squad Hub System -->
+        <div class="neu-card p-4 flex flex-col justify-between" data-category="ops">
+          <div>
+            <span class="text-[10px] font-mono font-bold" style="color: var(--text-muted);">#SQUAD-01</span>
+            <h4 class="text-sm font-bold mt-1" style="color: var(--text-main);">Personalized Squad Hub</h4>
+            <p class="text-xs mt-1" style="color: var(--text-muted);">กระดาน 4 แท็บคุมทีมสด: บัว, กูล, ลิลลี่, คอนเทนต์</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-black/5 dark:border-white/5 flex gap-2">
+            <a href="https://assets.siwasup.com/squad_hub_system.html" target="_blank" class="neu-btn flex-1 py-1.5 text-xs font-semibold text-center" style="color: var(--accent-primary);">เปิด R2 Live</a>
+            <a href="squad_hub_system.html" target="_blank" class="neu-btn px-2.5 py-1.5 text-xs"><i data-lucide="hard-drive" class="w-3.5 h-3.5"></i></a>
+          </div>
         </div>
 
-        <!-- Card 12: Admin Dashboard & Key Dispatch -->
-        <div class="card">
-            <div>
-                <div class="card-top">
-                    <div class="icon-box">🔑</div>
-                    <div class="card-meta">
-                        <div class="card-title">Admin Dashboard & Key Custody</div>
-                        <div class="card-role">ระบบควบคุมกุญแจส่วนกลาง & จัดส่งแมสเซนเจอร์</div>
-                    </div>
-                </div>
-                <div class="card-desc">
-                    ระบบสร้าง Smart Dispatch Slip ส่งผ่าน LINE ให้แมสเซนเจอร์วิ่งส่งกุญแจพร้อมปุ่มนำทาง Google Maps 1 คลิก และสแกน QR รับ-ส่งกุญแจ (ไม่ต้องลงแอป)
-                </div>
-            </div>
-            <div>
-                <div class="card-actions">
-                    <a href="https://assets.siwasup.com/admin_dashboard.html" target="_blank" class="btn btn-live">🌐 เปิด Live (R2)</a>
-                    <a href="admin_dashboard.html" class="btn btn-local">💾 เปิดในเครื่อง (G:\)</a>
-                </div>
-                <span class="copy-pill" onclick="copyUrl('https://assets.siwasup.com/admin_dashboard.html')">คัดลอกลิงก์</span>
-            </div>
+        <!-- Gool Dashboard Single-Page -->
+        <div class="neu-card p-4 flex flex-col justify-between" data-category="strategic">
+          <div>
+            <span class="text-[10px] font-mono font-bold text-amber-500">#GOOL-DASH</span>
+            <h4 class="text-sm font-bold mt-1" style="color: var(--text-main);">👑 แดชบอร์ดกูล & บัว</h4>
+            <p class="text-xs mt-1" style="color: var(--text-muted);">มุมมองผู้บริหารหน้าเดียว สรุปรายได้และสถิติทีมงาน</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-black/5 dark:border-white/5 flex gap-2">
+            <a href="https://assets.siwasup.com/gool_executive_dashboard.html" target="_blank" class="neu-btn flex-1 py-1.5 text-xs font-semibold text-center text-amber-600">เปิด R2 Live</a>
+            <a href="gool_executive_dashboard.html" target="_blank" class="neu-btn px-2.5 py-1.5 text-xs"><i data-lucide="hard-drive" class="w-3.5 h-3.5"></i></a>
+          </div>
         </div>
-    </div>
 
-    <!-- SECTION 5: FBT CORPORATE & HUAMAK MAP -->
-    <div class="section-header">
-        <div class="section-title">
-            <span>🏢</span>
-            <span>ฝ่ายโรงงาน FBT & ที่ดินหัวหมาก (คุณหงส์ & พี่เล็ก)</span>
+        <!-- Keybox Interactive Roleplay -->
+        <div class="neu-card p-4 flex flex-col justify-between" data-category="ops">
+          <div>
+            <span class="text-[10px] font-mono font-bold text-purple-500">#KEYBOX-OTP</span>
+            <h4 class="text-sm font-bold mt-1" style="color: var(--text-main);">🔑 ระบบขอรหัสกุญแจ 7 สเต็ป</h4>
+            <p class="text-xs mt-1" style="color: var(--text-muted);">จำลองเบิก-คืนกุญแจหน้าออฟฟิศท่าข้าม 12 / Messenger</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-black/5 dark:border-white/5 flex gap-2">
+            <a href="https://assets.siwasup.com/siwasup_keybox_interactive_roleplay.html" target="_blank" class="neu-btn flex-1 py-1.5 text-xs font-semibold text-center text-purple-600">เปิด R2 Live</a>
+            <a href="siwasup_keybox_interactive_roleplay.html" target="_blank" class="neu-btn px-2.5 py-1.5 text-xs"><i data-lucide="hard-drive" class="w-3.5 h-3.5"></i></a>
+          </div>
         </div>
-        <span class="section-badge">FBT MASTER ASSETS</span>
-    </div>
 
-    <div class="grid">
-        <!-- Card 13: HuamarkArea_003 Map -->
-        <div class="card">
-            <div>
-                <div class="card-top">
-                    <div class="icon-box">🗺️</div>
-                    <div class="card-meta">
-                        <div class="card-title">FBT HuaMak 12 Parcels Master Map</div>
-                        <div class="card-role">แผนที่แม่บทที่ดินหัวหมาก (HuamarkArea_003)</div>
-                    </div>
-                </div>
-                <div class="card-desc">
-                    ปรับปรุงตามคำสั่งคุณหงส์และพี่เล็ก: เพิ่ม 'ซอยรามคำแหง 67' ฝั่งติดแกรนด์สปอร์ต และแบ่งคูหาร้านหมอฟันตามสภาพจริง บันทึกและสำรองบนแฟลชไดรฟ์เรียบร้อย
-                </div>
-            </div>
-            <div>
-                <div class="card-actions">
-                    <a href="file:///G:/+Hong/HuamarkArea_003_Folder/" class="btn btn-local btn-single">📁 เปิดโฟลเดอร์บน Flash Drive (G:\+Hong\)</a>
-                </div>
-            </div>
+        <!-- Exclusive Listing Audit Manual -->
+        <div class="neu-card p-4 flex flex-col justify-between" data-category="ops">
+          <div>
+            <span class="text-[10px] font-mono font-bold text-emerald-500">#LEGAL-AUDIT</span>
+            <h4 class="text-sm font-bold mt-1" style="color: var(--text-main);">📜 คู่มือสิทธิสัญญาปิด Exclusive</h4>
+            <p class="text-xs mt-1" style="color: var(--text-muted);">แนวทางป้องกันการขายตัดหน้า และตรวจคัดกรองนายหน้า</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-black/5 dark:border-white/5 flex gap-2">
+            <a href="exclusive_contracts.html" target="_blank" class="neu-btn flex-1 py-1.5 text-xs font-semibold text-center text-emerald-600">บอร์ดตรวจสัญญา</a>
+            <a href="EXCLUSIVE_LISTING_AUDIT_MANUAL.md" target="_blank" class="neu-btn px-2.5 py-1.5 text-xs"><i data-lucide="file-text" class="w-3.5 h-3.5"></i></a>
+          </div>
         </div>
-    </div>
 
-    <!-- Footer Note -->
-    <footer class="hub-footer">
-        <div>
-            <strong>Siwasup Co-Broker OS — Enterprise Edition 2026</strong><br>
-            สถาปัตยกรรมระบบโดย ต้น (NASSTY / Senior Advisor) ร่วมกับ hai (Home AI) & Offy (Office AI)
+      </div>
+    </section>
+
+        <!-- SECTION 2: ALPHA DIGITAL BUSINESS CARDS & MARBLE ARCHETYPES -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between px-2">
+        <h2 class="text-sm font-bold uppercase tracking-wider flex items-center gap-2" style="color: var(--text-main);">
+          <i data-lucide="badge-check" class="w-4 h-4 text-amber-500"></i>
+          <span>2. นามบัตรดิจิทัล 6 ขุนพล Alpha (สไตล์ประติมากรรมหินอ่อนขาว 3D Carrara Marble)</span>
+        </h2>
+        <div class="flex items-center gap-2 text-xs">
+          <span style="color: var(--text-muted);">ครบ 8 สัตว์ประจำตำแหน่ง</span>
         </div>
-        <div>
-            สถานะสมอง: <strong>Twin Brain Synchronized 100%</strong>
+      </div>
+
+      <div class="neu-card p-5 space-y-5" data-category="agents">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-black/5 dark:border-white/5 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span style="color: var(--text-main); font-weight: 700;">นามบัตร 6 ขุนพล Alpha ล็อตหลัก:</span>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <a href="https://assets.siwasup.com/agent_profile.html?code=S98&mode=client" target="_blank" class="neu-btn-primary px-3 py-1 text-[11px] font-bold">
+              👥 พรีวิวมุมมองลูกค้า (Client View ทางการ)
+            </a>
+            <a href="https://assets.siwasup.com/agent_registration.html" target="_blank" class="neu-btn px-3 py-1 text-[11px] font-semibold">
+              📝 ฟอร์มลงทะเบียนตัวแทน
+            </a>
+          </div>
         </div>
+
+        <!-- 6 Main Alpha Agent Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          
+          <!-- S98: แป้ง (สิงโต Lion) -->
+          <a href="https://assets.siwasup.com/agent_profile.html?code=S98" target="_blank" 
+             class="neu-inset p-3 sm:p-4 rounded-3xl flex items-center justify-between overflow-hidden relative group hover:shadow-lg transition-all duration-300 border border-white/60">
+            <div class="pl-2 sm:pl-3 py-1 z-10 space-y-0.5">
+              <div class="text-2xl sm:text-3xl font-light font-mono text-sky-400 tracking-tight">S98</div>
+              <div class="text-lg font-bold" style="color: var(--text-main);">แป้ง</div>
+              <div class="text-xs font-medium" style="color: var(--text-muted);">วัชรพล สายไหม</div>
+              <span class="inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-600">🦁 Lion สิงโต</span>
+            </div>
+            <div class="w-32 h-24 sm:w-36 sm:h-28 -mr-3 relative flex items-center justify-end overflow-hidden shrink-0">
+              <img src="assets/marble/marble_lion.jpg" alt="Lion S98" class="h-full w-full object-cover object-center rounded-2xl group-hover:scale-105 transition-transform duration-300" onerror="this.src='assets/badges/Golden__001_lion_web.png';">
+            </div>
+          </a>
+
+          <!-- S120: อ้อน (พญาอินทรี Eagle) -->
+          <a href="https://assets.siwasup.com/agent_profile.html?code=S120" target="_blank" 
+             class="neu-inset p-3 sm:p-4 rounded-3xl flex items-center justify-between overflow-hidden relative group hover:shadow-lg transition-all duration-300 border border-white/60">
+            <div class="pl-2 sm:pl-3 py-1 z-10 space-y-0.5">
+              <div class="text-2xl sm:text-3xl font-light font-mono text-sky-400 tracking-tight">S120</div>
+              <div class="text-lg font-bold" style="color: var(--text-main);">อ้อน</div>
+              <div class="text-xs font-medium" style="color: var(--text-muted);">นนทบุรี บางใหญ่</div>
+              <span class="inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-600">🦅 Eagle พญาอินทรี</span>
+            </div>
+            <div class="w-32 h-24 sm:w-36 sm:h-28 -mr-3 relative flex items-center justify-end overflow-hidden shrink-0">
+              <img src="assets/marble/marble_eagle.jpg" alt="Eagle S120" class="h-full w-full object-cover object-center rounded-2xl group-hover:scale-105 transition-transform duration-300" onerror="this.src='assets/badges/Golden__001_eagle_web.png';">
+            </div>
+          </a>
+
+          <!-- S117: แอ๊ด (เสือขาว White Tiger) -->
+          <a href="https://assets.siwasup.com/agent_profile.html?code=S117" target="_blank" 
+             class="neu-inset p-3 sm:p-4 rounded-3xl flex items-center justify-between overflow-hidden relative group hover:shadow-lg transition-all duration-300 border border-white/60">
+            <div class="pl-2 sm:pl-3 py-1 z-10 space-y-0.5">
+              <div class="text-2xl sm:text-3xl font-light font-mono text-sky-400 tracking-tight">S117</div>
+              <div class="text-lg font-bold" style="color: var(--text-main);">แอ๊ด</div>
+              <div class="text-xs font-medium" style="color: var(--text-muted);">บางนา สมุทรปราการ</div>
+              <span class="inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-500/15 text-orange-600">🐯 White Tiger เสือขาว</span>
+            </div>
+            <div class="w-32 h-24 sm:w-36 sm:h-28 -mr-3 relative flex items-center justify-end overflow-hidden shrink-0">
+              <img src="assets/marble/marble_tiger.jpg" alt="Tiger S117" class="h-full w-full object-cover object-center rounded-2xl group-hover:scale-105 transition-transform duration-300" onerror="this.src='assets/badges/Golden__001_lion_web.png';">
+            </div>
+          </a>
+
+          <!-- S90: นัท (หมาป่า Wolf) -->
+          <a href="https://assets.siwasup.com/agent_profile.html?code=S90" target="_blank" 
+             class="neu-inset p-3 sm:p-4 rounded-3xl flex items-center justify-between overflow-hidden relative group hover:shadow-lg transition-all duration-300 border border-white/60">
+            <div class="pl-2 sm:pl-3 py-1 z-10 space-y-0.5">
+              <div class="text-2xl sm:text-3xl font-light font-mono text-sky-400 tracking-tight">S90</div>
+              <div class="text-lg font-bold" style="color: var(--text-main);">นัท</div>
+              <div class="text-xs font-medium" style="color: var(--text-muted);">ตลิ่งชัน ฝั่งธน</div>
+              <span class="inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-500/15 text-slate-600">🐺 Wolf หมาป่า</span>
+            </div>
+            <div class="w-32 h-24 sm:w-36 sm:h-28 -mr-3 relative flex items-center justify-end overflow-hidden shrink-0">
+              <img src="assets/marble/marble_wolf.jpg" alt="Wolf S90" class="h-full w-full object-cover object-center rounded-2xl group-hover:scale-105 transition-transform duration-300" onerror="this.src='assets/badges/Golden__001_wolf_web.png';">
+            </div>
+          </a>
+
+          <!-- S94: หลิว (เหยี่ยว Falcon) -->
+          <a href="https://assets.siwasup.com/agent_profile.html?code=S94" target="_blank" 
+             class="neu-inset p-3 sm:p-4 rounded-3xl flex items-center justify-between overflow-hidden relative group hover:shadow-lg transition-all duration-300 border border-white/60">
+            <div class="pl-2 sm:pl-3 py-1 z-10 space-y-0.5">
+              <div class="text-2xl sm:text-3xl font-light font-mono text-sky-400 tracking-tight">S94</div>
+              <div class="text-lg font-bold" style="color: var(--text-main);">หลิว</div>
+              <div class="text-xs font-medium" style="color: var(--text-muted);">สาย 2 ทวีวัฒนา</div>
+              <span class="inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-600">🦅 Falcon เหยี่ยว</span>
+            </div>
+            <div class="w-32 h-24 sm:w-36 sm:h-28 -mr-3 relative flex items-center justify-end overflow-hidden shrink-0">
+              <img src="assets/marble/marble_falcon.jpg" alt="Falcon S94" class="h-full w-full object-cover object-center rounded-2xl group-hover:scale-105 transition-transform duration-300" onerror="this.src='assets/badges/Golden__001_falcon_web.png';">
+            </div>
+          </a>
+
+          <!-- S113: ไห้ (หมีจอมพลัง Bear) -->
+          <a href="https://assets.siwasup.com/agent_profile.html?code=S113" target="_blank" 
+             class="neu-inset p-3 sm:p-4 rounded-3xl flex items-center justify-between overflow-hidden relative group hover:shadow-lg transition-all duration-300 border border-white/60">
+            <div class="pl-2 sm:pl-3 py-1 z-10 space-y-0.5">
+              <div class="text-2xl sm:text-3xl font-light font-mono text-sky-400 tracking-tight">S113</div>
+              <div class="text-lg font-bold" style="color: var(--text-main);">ไห้</div>
+              <div class="text-xs font-medium" style="color: var(--text-muted);">ดาวคะนอง ธนบุรี</div>
+              <span class="inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-800/15 text-amber-800">🐻 Bear หมีจอมพลัง</span>
+            </div>
+            <div class="w-32 h-24 sm:w-36 sm:h-28 -mr-3 relative flex items-center justify-end overflow-hidden shrink-0">
+              <img src="assets/marble/marble_bear.jpg" alt="Bear S113" class="h-full w-full object-cover object-center rounded-2xl group-hover:scale-105 transition-transform duration-300" onerror="this.src='assets/badges/Golden__001_bear_web.png';">
+            </div>
+          </a>
+
+        </div>
+
+        <!-- Master Archetype Showcase (The Complete 8 Mythical & Apex Beasts) -->
+        <div class="pt-4 border-t border-black/5 dark:border-white/5 space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold flex items-center gap-1.5" style="color: var(--text-main);">
+              <span>🏛️ คลังประติมากรรมหินอ่อนครบชุด (10 Marble Beasts & Zodiac Vault):</span>
+            </span>
+            <span class="text-[11px]" style="color: var(--text-muted);">Carrara White Marble Bas-Relief (3D)</span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-10 gap-2.5">
+            
+            <div class="neu-card p-2 text-center flex flex-col items-center hover:scale-105 transition duration-200">
+              <img src="assets/marble/marble_lion.jpg" alt="สิงโต" class="w-14 h-14 object-cover rounded-xl shadow-xs">
+              <span class="text-[11px] font-bold mt-1" style="color: var(--text-main);">สิงโต</span>
+              <span class="text-[9px]" style="color: var(--text-muted);">Lion</span>
+            </div>
+
+            <div class="neu-card p-2 text-center flex flex-col items-center hover:scale-105 transition duration-200">
+              <img src="assets/marble/marble_eagle.jpg" alt="พญาอินทรี" class="w-14 h-14 object-cover rounded-xl shadow-xs">
+              <span class="text-[11px] font-bold mt-1" style="color: var(--text-main);">พญาอินทรี</span>
+              <span class="text-[9px]" style="color: var(--text-muted);">Eagle</span>
+            </div>
+
+            <div class="neu-card p-2 text-center flex flex-col items-center hover:scale-105 transition duration-200">
+              <img src="assets/marble/marble_wolf.jpg" alt="หมาป่า" class="w-14 h-14 object-cover rounded-xl shadow-xs">
+              <span class="text-[11px] font-bold mt-1" style="color: var(--text-main);">หมาป่า</span>
+              <span class="text-[9px]" style="color: var(--text-muted);">Wolf</span>
+            </div>
+
+            <div class="neu-card p-2 text-center flex flex-col items-center hover:scale-105 transition duration-200">
+              <img src="assets/marble/marble_falcon.jpg" alt="เหยี่ยว" class="w-14 h-14 object-cover rounded-xl shadow-xs">
+              <span class="text-[11px] font-bold mt-1" style="color: var(--text-main);">เหยี่ยว</span>
+              <span class="text-[9px]" style="color: var(--text-muted);">Falcon</span>
+            </div>
+
+            <div class="neu-card p-2 text-center flex flex-col items-center hover:scale-105 transition duration-200">
+              <img src="assets/marble/marble_gryphon.jpg" alt="กรีฟอน" class="w-14 h-14 object-cover rounded-xl shadow-xs">
+              <span class="text-[11px] font-bold mt-1" style="color: var(--text-main);">กรีฟอน</span>
+              <span class="text-[9px]" style="color: var(--text-muted);">Gryphon</span>
+            </div>
+
+            <div class="neu-card p-2 text-center flex flex-col items-center hover:scale-105 transition duration-200">
+              <img src="assets/marble/marble_bear.jpg" alt="หมีจอมพลัง" class="w-14 h-14 object-cover rounded-xl shadow-xs">
+              <span class="text-[11px] font-bold mt-1" style="color: var(--text-main);">หมีจอมพลัง</span>
+              <span class="text-[9px]" style="color: var(--text-muted);">Bear</span>
+            </div>
+
+            <div class="neu-card p-2 text-center flex flex-col items-center hover:scale-105 transition duration-200">
+              <img src="assets/marble/marble_tiger.jpg" alt="เสือขาว" class="w-14 h-14 object-cover rounded-xl shadow-xs">
+              <span class="text-[11px] font-bold mt-1" style="color: var(--text-main);">เสือขาว</span>
+              <span class="text-[9px]" style="color: var(--text-muted);">White Tiger</span>
+            </div>
+
+            <div class="neu-card p-2 text-center flex flex-col items-center hover:scale-105 transition duration-200">
+              <img src="assets/marble/marble_chimera.jpg" alt="คิเมร่า" class="w-14 h-14 object-cover rounded-xl shadow-xs">
+              <span class="text-[11px] font-bold mt-1" style="color: var(--text-main);">คิเมร่า</span>
+              <span class="text-[9px]" style="color: var(--text-muted);">Chimera</span>
+            </div>
+
+            <div class="neu-card p-2 text-center flex flex-col items-center hover:scale-105 transition duration-200 border border-sky-400/30">
+              <img src="assets/marble/marble_rat.jpg" alt="ชวด (หนู)" class="w-14 h-14 object-cover rounded-xl shadow-xs">
+              <span class="text-[11px] font-bold mt-1" style="color: var(--text-main);">ชวด (หนู)</span>
+              <span class="text-[9px] text-sky-500 font-semibold">Zodiac Rat</span>
+            </div>
+
+            <div class="neu-card p-2 text-center flex flex-col items-center hover:scale-105 transition duration-200 border border-sky-400/30">
+              <img src="assets/marble/marble_ox.jpg" alt="ฉลู (วัวกระทิง)" class="w-14 h-14 object-cover rounded-xl shadow-xs">
+              <span class="text-[11px] font-bold mt-1" style="color: var(--text-main);">ฉลู (วัว)</span>
+              <span class="text-[9px] text-sky-500 font-semibold">Zodiac Ox</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 3: CATALOG & CENTRAL PROPERTY VAULT -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between px-2">
+        <h2 class="text-sm font-bold uppercase tracking-wider flex items-center gap-2" style="color: var(--text-main);">
+          <i data-lucide="layers" class="w-4 h-4 text-emerald-500"></i>
+          <span>3. ฐานข้อมูลทรัพย์กลาง & หน้าร้านแคตตาล็อก (3,161 แปลง)</span>
+        </h2>
+        <span class="text-xs" style="color: var(--text-muted);">คัดกรองคลีน ไม่ติด WAF</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" data-category="ops">
+        
+        <!-- Catalog Main -->
+        <div class="neu-card p-4 flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-mono font-bold text-emerald-500">#PORTAL-MAIN</span>
+            <h4 class="text-sm font-bold mt-1" style="color: var(--text-main);">🌐 แคตตาล็อกทรัพย์ศิวา</h4>
+            <p class="text-xs mt-1" style="color: var(--text-muted);">โหมดตัวแทนค้นหา 3,161 แปลง พร้อมระบบจับคู่ Co-Close</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-black/5 dark:border-white/5 flex gap-2">
+            <a href="https://assets.siwasup.com/catalog.html" target="_blank" class="neu-btn flex-1 py-1.5 text-xs font-semibold text-center text-emerald-600">เปิด R2 Live</a>
+            <a href="catalog.html" target="_blank" class="neu-btn px-2.5 py-1.5 text-xs"><i data-lucide="hard-drive" class="w-3.5 h-3.5"></i></a>
+          </div>
+        </div>
+
+        <!-- Catalog Admin Mode -->
+        <div class="neu-card p-4 flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-mono font-bold text-amber-500">#PORTAL-ADMIN</span>
+            <h4 class="text-sm font-bold mt-1" style="color: var(--text-main);">👑 แคตตาล็อก (Admin Mode)</h4>
+            <p class="text-xs mt-1" style="color: var(--text-muted);">มุมมองแอดมิน ปลดล็อกเลขโฉนด เบอร์เจ้าของ และพิกัดลับ</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-black/5 dark:border-white/5 flex gap-2">
+            <a href="https://assets.siwasup.com/catalog.html?admin=1" target="_blank" class="neu-btn flex-1 py-1.5 text-xs font-semibold text-center text-amber-600">เปิดโหมดแอดมิน</a>
+            <a href="catalog.html?admin=1" target="_blank" class="neu-btn px-2.5 py-1.5 text-xs"><i data-lucide="hard-drive" class="w-3.5 h-3.5"></i></a>
+          </div>
+        </div>
+
+        <!-- Landing Page Welcome -->
+        <div class="neu-card p-4 flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-mono font-bold text-purple-500">#LANDING-PAGE</span>
+            <h4 class="text-sm font-bold mt-1" style="color: var(--text-main);">🌟 หน้าแรกต้อนรับ (Landing)</h4>
+            <p class="text-xs mt-1" style="color: var(--text-muted);">หน้าแนะนำแพลตฟอร์ม และข้อเสนอตัวแทน Co-Broker</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-black/5 dark:border-white/5 flex gap-2">
+            <a href="https://assets.siwasup.com/welcome_landing.html" target="_blank" class="neu-btn flex-1 py-1.5 text-xs font-semibold text-center text-purple-600">เปิด R2 Live</a>
+            <a href="welcome_landing.html" target="_blank" class="neu-btn px-2.5 py-1.5 text-xs"><i data-lucide="hard-drive" class="w-3.5 h-3.5"></i></a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 4: STRATEGIC BRIEFINGS & SPREADSHEETS -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between px-2">
+        <h2 class="text-sm font-bold uppercase tracking-wider flex items-center gap-2" style="color: var(--text-main);">
+          <i data-lucide="file-text" class="w-4 h-4"></i>
+          <span>4. แฟ้มยุทธศาสตร์ & ทำเนียบดาต้าเบส (Data Assets)</span>
+        </h2>
+        <span class="text-xs" style="color: var(--text-muted);">เอกสารแม่บท พ.ย. 2569</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" data-category="strategic">
+        
+        <div class="neu-card p-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 font-bold text-xs" style="color: var(--accent-primary);">
+              <i data-lucide="file-code" class="w-4 h-4"></i>
+              <span>Master Strategic Briefing</span>
+            </div>
+            <h4 class="text-sm font-bold mt-1" style="color: var(--text-main);">Siwasup Master Briefing</h4>
+            <p class="text-xs mt-1" style="color: var(--text-muted);">สรุปยุทธศาสตร์ 6 ด้าน (KKP, TTB, PAMCO, LandsMaps, OCR, Co-Broker)</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-black/5 dark:border-white/5">
+            <a href="file:///E:/TON/%23Siwasub/document/Siwasup_Master_Briefing_For_Claude.md" target="_blank" class="neu-btn block py-1.5 text-xs font-semibold text-center">
+              เปิดอ่านไฟล์ Markdown (E:\)
+            </a>
+          </div>
+        </div>
+
+        <div class="neu-card p-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 text-emerald-500 font-bold text-xs">
+              <i data-lucide="table" class="w-4 h-4"></i>
+              <span>ทำเนียบเจ้าหน้าที่ PAMCO</span>
+            </div>
+            <h4 class="text-sm font-bold mt-1" style="color: var(--text-main);">1,312 ทรัพย์ PAMCO Directory</h4>
+            <p class="text-xs mt-1" style="color: var(--text-muted);">สกัดเลขโฉนด พิกัด GPS และเบอร์ตรง จนท. ดูแลทรัพย์ (telAO)</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-black/5 dark:border-white/5">
+            <a href="file:///G:/Twin_Brain/PAMCO_Officer_Directory.csv" target="_blank" class="neu-btn block py-1.5 text-xs font-semibold text-center text-emerald-600">
+              เปิดไฟล์ CSV (Flash Drive G:\)
+            </a>
+          </div>
+        </div>
+
+        <div class="neu-card p-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 text-amber-500 font-bold text-xs">
+              <i data-lucide="crosshair" class="w-4 h-4"></i>
+              <span>โพยล่าทรัพย์ Pre-Foreclosure</span>
+            </div>
+            <h4 class="text-sm font-bold mt-1" style="color: var(--text-main);">TTB Hunting List (267 แปลง)</h4>
+            <p class="text-xs mt-1" style="color: var(--text-muted);">โพยล่าทรัพย์ก่อนโดนฟ้องยึด พร้อมคะแนนส่วนต่างราคาประเมิน</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-black/5 dark:border-white/5">
+            <a href="file:///E:/TON/%23Siwasub/document/ttb_hunting_scored.csv" target="_blank" class="neu-btn block py-1.5 text-xs font-semibold text-center text-amber-600">
+              เปิดโพย TTB Scored (E:\)
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="neu-card p-6 text-center text-xs space-y-2" style="color: var(--text-muted);">
+      <div class="flex flex-wrap items-center justify-center gap-4 font-medium" style="color: var(--text-main);">
+        <span>Siwasup Co-Broker OS</span>
+        <span>&bull;</span>
+        <span>ระบบคลาวด์ Cloudflare R2: <code class="font-mono">assets.siwasup.com</code></span>
+        <span>&bull;</span>
+        <span>Twin Brain Sync: <code class="font-mono">G:\Twin_Brain</code></span>
+      </div>
+      <p class="text-[11px]" style="color: var(--text-muted);">
+        ออกแบบและพัฒนาโดย คุณต้น (NASSTY / Senior Advisor) & hai (Home Graphic Studio & Tech Assistant)
+      </p>
     </footer>
 
-</div>
+  </div>
 
-<script>
-function copyUrl(url) {
-    navigator.clipboard.writeText(url).then(() => {
-        alert("คัดลอกลิงก์เรียบร้อยแล้ว: " + url);
-    }).catch(err => {
-        prompt("กด Ctrl+C เพื่อคัดลอกลิงก์:", url);
-    });
-}
-</script>
+  <script>
+    // Lucide Icons Render
+    lucide.createIcons();
 
+    // Theme Engine
+    function updateThemeButtons(activeTheme) {
+      const themes = ['light-neumorphic', 'dark-obsidian', 'sage-minimal', 'cyber-clay'];
+      themes.forEach(t => {
+        const btn = document.getElementById(`themeBtn-${t}`);
+        if (btn) {
+          if (t === activeTheme) {
+            btn.className = "px-2.5 py-1 text-[11px] font-bold rounded-xl transition duration-200 flex items-center gap-1 cursor-pointer bg-white text-slate-900 shadow-xs border border-white scale-105";
+          } else {
+            btn.className = "px-2.5 py-1 text-[11px] font-bold rounded-xl transition duration-200 flex items-center gap-1 cursor-pointer text-slate-500 hover:text-slate-800";
+          }
+        }
+      });
+    }
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem('siwasup_hub_theme') || 'light-neumorphic';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeButtons(savedTheme);
+    }
+
+    function switchTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('siwasup_hub_theme', theme);
+      updateThemeButtons(theme);
+    }
+
+    // Call initTheme on startup
+    initTheme();
+
+    // Search filter function
+    function filterCards() {
+      const q = document.getElementById('hubSearch').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.neu-card[data-category]');
+
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (!q || text.includes(q)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Category Filter function
+    function setCategory(cat) {
+      const cards = document.querySelectorAll('.neu-card[data-category]');
+      const tabs = ['all', 'strategic', 'ops', 'agents', 'testing'];
+
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-${t}`);
+        if (btn) {
+          if (t === cat) {
+            btn.className = "neu-btn px-3 py-1.5 font-bold";
+            btn.style.color = "var(--accent-primary)";
+          } else {
+            btn.className = "neu-btn px-3 py-1.5 font-medium";
+            btn.style.color = "var(--text-muted)";
+          }
+        }
+      });
+
+      cards.forEach(card => {
+        const cardCat = card.getAttribute('data-category');
+        if (cat === 'all' || cardCat === cat) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
 </body>
 </html>
