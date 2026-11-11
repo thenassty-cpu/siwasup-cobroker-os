@@ -5940,7 +5940,7 @@
         if (found) {
           const cleanName = (found.name || '').replace(/^(นาย|นางสาว|นาง)\s*/, '');
           const firstName = cleanName.split(' ')[0] || cleanName;
-          const shortName = found.nickname ? คุณ () : คุณ;
+          const shortName = found.nickname ? `คุณ${found.nickname}` : `คุณ${firstName}`;
 
           // Dual-Display Mapping: Convert internal rank to luxury public title
           let publicTitle = 'Verified Property Consultant';
@@ -5976,8 +5976,8 @@
       // 3. Dynamic Fallback for any other custom ref code
       return {
         agentId: cleanId || 'SW001',
-        name: cleanId ? ตัวแทนรหัส  : 'คุณวารินทร์ กูลจีรัง (เจี๊ยบ)',
-        shortName: cleanId ? ตัวแทน  : 'คุณเจี๊ยบ',
+        name: cleanId ? `ตัวแทนรหัส ${cleanId}` : 'คุณวารินทร์ กูลจีรัง (เจี๊ยบ)',
+        shortName: cleanId ? `ตัวแทน ${cleanId}` : 'คุณเจี๊ยบ',
         tier: 'gryphon',
         publicTitle: 'Verified Property Consultant',
         badgeClass: 'bg-neutral-900 text-[#C2A460] border border-neutral-700',
@@ -6468,7 +6468,11 @@
     }
 
     async function initCatalogApp() {
-      if (typeof checkUrlParameters === "function") checkUrlParameters();
+      try {
+        if (typeof checkUrlParameters === 'function') checkUrlParameters();
+      } catch (e) {
+        console.warn('checkUrlParameters fallback:', e);
+      }
       try {
         await loadProperties();
       } catch (err) {
@@ -6922,6 +6926,7 @@
 
     function switchViewMode(mode) {
       currentViewMode = mode;
+      window.currentViewMode = mode;
       if (typeof renderProperties === 'function') {
         renderProperties();
       } else if (typeof renderPropertyCards === 'function') {
