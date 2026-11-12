@@ -13,7 +13,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Siwasup OS">
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-  <title>Siwasup Co-Broker Demo - ศิวาทรัพย์ แอสเซท</title>
+  <title>Siwasup Co-Broker OS - ศิวาทรัพย์ แอสเซท</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -351,7 +351,24 @@
   <div class="w-full max-w-7xl mx-auto bg-white min-h-screen shadow-xl relative flex flex-col border-x border-neutral-200/70">
     
     <!-- 🏛️ Top Header (Sticky, Ton's Master Crimson & White Logo Split Layout + Gold Agent Strip) -->
-    <header class="sticky top-0 z-40 shadow-md w-full overflow-hidden">
+    <header class="sticky top-0 z-40 shadow-md w-full overflow-hidden" id="main-app-header">
+      <!-- 🌟 DEMO ENVIRONMENT TOP BANNER & GOLD ACCENT (Visible only on GitHub Pages / Demo Sandbox) -->
+      <div id="demo-sandbox-notice-bar" class="hidden bg-gradient-to-r from-[#C2A460] via-[#F6E7C8] to-[#C2A460] text-[#3D2B05] px-2.5 sm:px-4 py-1 text-xs font-bold border-b-2 border-[#967C3E] shadow-sm">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+          <div class="flex items-center gap-1.5 sm:gap-2 min-w-0">
+            <span class="px-2 py-0.5 rounded-full bg-[#1D1D1D] text-[#FFE84D] text-[10px] sm:text-[10.5px] uppercase tracking-wider font-extrabold flex items-center gap-1 shrink-0 shadow-2xs border border-[#C2A460]/40">
+              <span>🧪</span><span>DEMO SANDBOX</span>
+            </span>
+            <span class="text-[#3D2B05] font-extrabold text-[11px] sm:text-xs truncate">
+              พื้นที่ทดลองระบบ (ตัวแทนจำลอง) • ระบบจริงสำหรับใช้งาน:
+            </span>
+          </div>
+          <a href="https://assets.siwasup.com/catalog.html" class="px-2.5 sm:px-3 py-0.5 rounded-full bg-[#900D11] hover:bg-[#740A0D] text-white text-[10px] sm:text-[11px] font-black shrink-0 flex items-center gap-1 shadow-sm transition active:scale-95">
+            <span>🌐 เข้าเว็บจริง</span>
+            <span class="hidden sm:inline">(assets.siwasup.com) &rarr;</span>
+          </a>
+        </div>
+      </div>
       
       <!-- 1. Top Role Utility Bar: โทน Charcoal (#1D1D1D) + Active Red Pill -->
       <div id="top-role-utility-bar" class="bg-[#1D1D1D] text-neutral-300 text-xs py-1.5 px-2.5 sm:px-4 border-b border-neutral-800">
@@ -4976,6 +4993,7 @@
     }
 
     function renderMyProfile(code) {
+      if (typeof initPlatformEnvironment === "function") initPlatformEnvironment();
       if (!window.SiwasupAgents) return;
       const agent = window.SiwasupAgents.find(code) || window.SiwasupAgents.find('S90');
       if (!agent) return;
@@ -6507,7 +6525,48 @@
       }
     }
 
+        function initPlatformEnvironment() {
+      try {
+        const isProd = typeof window !== 'undefined' && window.location && window.location.hostname && window.location.hostname.includes('siwasup.com');
+        const demoBanner = document.getElementById('demo-sandbox-notice-bar');
+        const switcherContainer = document.getElementById('profile-agent-switcher-container');
+        const headerEl = document.getElementById('main-app-header') || document.querySelector('header.sticky');
+        const topBar = document.getElementById('top-role-utility-bar');
+
+        if (isProd) {
+          // 🏛️ PRODUCTION ENVIRONMENT (assets.siwasup.com)
+          document.title = 'Siwasup Co-Broker OS - ศิวาทรัพย์ แอสเซท';
+          if (demoBanner) demoBanner.classList.add('hidden');
+          if (switcherContainer) {
+            switcherContainer.classList.add('hidden');
+            switcherContainer.classList.remove('flex');
+          }
+          if (headerEl) {
+            headerEl.classList.remove('border-b-2', 'border-[#C2A460]', 'shadow-[0_4px_25px_rgba(194,164,96,0.35)]');
+          }
+        } else {
+          // 🧪 DEMO SANDBOX ENVIRONMENT (thenassty-cpu.github.io / localhost)
+          document.title = 'Siwasup Co-Broker Demo - ศิวาทรัพย์ แอสเซท';
+          if (demoBanner) demoBanner.classList.remove('hidden');
+          if (switcherContainer) {
+            switcherContainer.classList.remove('hidden');
+            switcherContainer.classList.add('flex');
+          }
+          if (headerEl) {
+            headerEl.classList.add('border-b-2', 'border-[#C2A460]', 'shadow-[0_4px_25px_rgba(194,164,96,0.35)]');
+          }
+          if (topBar) {
+            topBar.style.background = 'linear-gradient(90deg, #1b1610 0%, #292114 50%, #1b1610 100%)';
+            topBar.style.borderBottom = '1px solid rgba(194, 164, 96, 0.4)';
+          }
+        }
+      } catch (e) {
+        console.warn('initPlatformEnvironment fallback:', e);
+      }
+    }
+
     async function initCatalogApp() {
+      initPlatformEnvironment();
       try {
         if (typeof checkUrlParameters === 'function') checkUrlParameters();
       } catch (e) {

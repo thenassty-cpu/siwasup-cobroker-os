@@ -1729,8 +1729,8 @@
 
         <!-- 2. Scrollable Body (เลื่อนดูข้อมูลได้ โดยที่หัวและปุ่มปิดยังคาอยู่ด้านบนเสมอ) -->
         <div class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3.5 custom-scrollbar">
-          <!-- Identity Switcher Dropdown (Select Any Agent) -->
-          <div class="bg-gray-50 p-2 rounded-xl border border-gray-200 flex items-center justify-between text-xs">
+          <!-- Identity Switcher Dropdown (Hidden in Production OS) -->
+          <div id="profile-agent-switcher-container" class="hidden bg-gray-50 p-2 rounded-xl border border-gray-200 items-center justify-between text-xs">
             <label class="text-[11px] font-medium text-gray-600 flex items-center gap-1 shrink-0">
               <i data-lucide="users" class="w-3.5 h-3.5 text-gray-500"></i>
               <span>สลับตัวแทน:</span>
