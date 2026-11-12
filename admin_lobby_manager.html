@@ -90,6 +90,10 @@
         <i data-lucide="smartphone" class="w-3.5 h-3.5 text-blue-600"></i>
         <span>เปิดจอมือถือผู้สมัคร</span>
       </a>
+            <button onclick="resetRosterToTonAndGool()" class="flex-1 sm:flex-initial justify-center px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-[11px] sm:text-xs font-bold text-rose-700 border border-rose-300 flex items-center gap-1.5 shadow-sm transition active:scale-95" title="ล้างกระดานทำเนียบสมาชิกทั้งหมด ให้เหลือเฉพาะคุณต้น และ คุณเจี๊ยบ(กูล)">
+        <i data-lucide="trash-2" class="w-3.5 h-3.5 text-rose-600"></i>
+        <span>ล้างกระดาน (เหลือเรา+กูล)</span>
+      </button>
       <a href="https://assets.siwasup.com/gool_executive_dashboard.html" class="w-full sm:w-auto justify-center px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-[11px] sm:text-xs font-bold text-amber-800 border border-amber-300 flex items-center gap-1.5 shadow-sm transition">
         <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-amber-600"></i>
         <span>Executive Dashboard</span>
@@ -676,6 +680,12 @@
       if (!cloud) return local || DEFAULT_DATA;
       if (!local) return cloud;
 
+      // 🧹 Fresh Start Protocol: If cloud has reset_version different from local, enforce cloud reset
+      if (cloud.reset_version && (!local.reset_version || local.reset_version !== cloud.reset_version)) {
+        console.log('[Lobby] Fresh Start detected. Overwriting local store with cloud reset:', cloud.reset_version);
+        return cloud;
+      }
+
       const map = new Map();
       // First populate with local
       (local.approved || []).forEach(m => { if (m && (m.id || m.phone)) map.set(m.id || m.phone, m); });
@@ -702,6 +712,32 @@
         approved: Array.from(map.values()),
         audit_log: (cloud.audit_log && cloud.audit_log.length > (local.audit_log || []).length) ? cloud.audit_log : (local.audit_log || [])
       };
+    }
+
+        async function resetRosterToTonAndGool() {
+      if (!confirm('ยืนยันล้างกระดานสมาชิกทั้งหมด เพื่อเริ่มใหม่โดยเหลือเฉพาะ [NASSTY] และ [คุณเจี๊ยบ (กูล)] หรือไม่?')) return;
+      try {
+        const r2Res = await fetch(`https://assets.siwasup.com/data/lobby_applicants.json?t=${Date.now()}`, { cache: 'no-store' });
+        if (r2Res.ok) {
+          const freshData = await r2Res.json();
+          lobbyData = freshData;
+          normalizeNasstySeat(lobbyData);
+          localStorage.setItem('siwasup_lobby_data', JSON.stringify(lobbyData));
+          renderLobby();
+          showToastAlert('✅ ล้างกระดานสำเร็จ! ขณะนี้เหลือเฉพาะคุณต้น และคุณเจี๊ยบ (กูล) พร้อมรับผู้สมัครใหม่แล้ว', 'success');
+          return;
+        }
+      } catch (e) {
+        console.warn('reset fetch error:', e);
+      }
+      // Local fallback
+      const tonAndGool = (lobbyData.approved || []).filter(m => m.id === 'app_office_004' || m.id === 'app_office_001' || (m.phone && (m.phone.includes('081 555 5555') || m.phone.includes('094 462 9796'))));
+      lobbyData.approved = tonAndGool;
+      lobbyData.pending = [];
+      lobbyData.reset_version = '2026-11-12_fresh_start';
+      localStorage.setItem('siwasup_lobby_data', JSON.stringify(lobbyData));
+      renderLobby();
+      showToastAlert('✅ ล้างกระดานสำเร็จ! ขณะนี้เหลือเฉพาะคุณต้น และคุณเจี๊ยบ (กูล) พร้อมรับผู้สมัครใหม่แล้ว', 'success');
     }
 
     async function fetchCloudLobby() {
