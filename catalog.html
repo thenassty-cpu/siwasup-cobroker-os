@@ -5867,7 +5867,7 @@
       // 👑 คุณเจี๊ยบ / คุณกูล (Supreme EXE / CEO)
       'SW001': {
         agentId: 'SW001',
-        name: 'คุณวารินทร์ กูลจีรัง (คุณเจี๊ยบ)',
+        name: 'คุณวรินทร กูลจีรัง (คุณเจี๊ยบ)',
         shortName: 'คุณเจี๊ยบ',
         tier: 'gryphon',
         publicTitle: 'Executive Managing Partner',
@@ -5877,7 +5877,7 @@
       },
       'SW-001': {
         agentId: 'SW-001',
-        name: 'คุณวารินทร์ กูลจีรัง (คุณเจี๊ยบ)',
+        name: 'คุณวรินทร กูลจีรัง (คุณเจี๊ยบ)',
         shortName: 'คุณเจี๊ยบ',
         tier: 'gryphon',
         publicTitle: 'Executive Managing Partner',
@@ -6035,12 +6035,12 @@
       // 3. Dynamic Fallback for any other custom ref code
       return {
         agentId: cleanId || 'SW001',
-        name: cleanId ? `ตัวแทนรหัส ${cleanId}` : 'คุณวารินทร์ กูลจีรัง (เจี๊ยบ)',
+        name: cleanId ? `ตัวแทนรหัส ${cleanId}` : 'คุณวรินทร กูลจีรัง (คุณเจี๊ยบ)',
         shortName: cleanId ? `ตัวแทน ${cleanId}` : 'คุณเจี๊ยบ',
         tier: 'gryphon',
         publicTitle: 'Verified Property Consultant',
         badgeClass: 'bg-neutral-900 text-[#C2A460] border border-neutral-700',
-        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+        avatar: cleanId ? 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80' : 'https://sprofile.line-scdn.net/0h755WNVbraBoYLnbBTMoWJGh-a3A7XzEIZB0ufXgqYS4mGXxFZklyeSUuM3pxGC1NYEx3KCp-Yyw6GUg-MU19dU56NSJ2TioeNwhTfU8pT3FjZH8XXCp1JSxQQnNxZGYKZjwgJVt5REphRGYSRjpHCVJ0X2taZ1YHPXkETB0cBpl3LB9PNUgkfyoqPium',
         phone: '094-462-9796'
       };
     }
