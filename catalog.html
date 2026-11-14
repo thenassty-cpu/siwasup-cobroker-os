@@ -436,6 +436,12 @@
               <span class="px-1 py-0.2 rounded bg-[#C2A460]/20 text-[#E5C985] text-[9px] font-bold" id="header-profile-avatar">S90</span>
               <span id="bar-profile-btn-text" class="hidden sm:inline font-medium">นัญ</span>
             </button>
+
+            <!-- ปุ่มเข้าสู่ระบบตัวแทน (สำหรับบุคคลทั่วไปที่ยังไม่ล็อกอิน) -->
+            <a id="btn-header-agent-login" href="agent_registration.html?mode=login" class="hidden h-6 px-2.5 rounded-md bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-300 font-bold items-center gap-1 transition shrink-0" title="เข้าสู่ระบบตัวแทนด้วย LINE">
+              <span>🔑</span>
+              <span>เข้าสู่ระบบตัวแทน</span>
+            </a>
           </div>
 
         </div>
@@ -633,11 +639,11 @@
             </svg>
             <span class="text-white font-medium text-[11px] sm:text-xs whitespace-nowrap shrink-0">ดูแลการเข้าชมโดย</span>
             
-            <!-- แคปซูลสีครีมขาว แสดงชื่อตัวแทน | รหัส -->
+            <!-- แคปซูลสีครีมขาว แสดงชื่อตัวแทน | รหัส (Neutral Fallback) -->
             <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#FAF7F2] shadow-2xs shrink-0">
-              <span id="client-banner-agent-name" class="text-[#8C6D2E] font-extrabold text-xs sm:text-[13px] whitespace-nowrap">คุณณัฐ ระวังภัย</span>
+              <span id="client-banner-agent-name" class="text-[#8C6D2E] font-extrabold text-xs sm:text-[13px] whitespace-nowrap">ศิวาทรัพย์ แอสเซท</span>
               <span class="text-[#C0A366]/70 font-light">|</span>
-              <span id="client-banner-agent-id" class="text-neutral-500 font-semibold text-[10px] sm:text-[11px] whitespace-nowrap">(ID: AG-09)</span>
+              <span id="client-banner-agent-id" class="text-neutral-500 font-semibold text-[10px] sm:text-[11px] whitespace-nowrap">(สำนักงานใหญ่)</span>
             </div>
 
             <span class="hidden sm:inline text-white/95 font-medium text-[11px] sm:text-xs whitespace-nowrap">• ที่ปรึกษาอสังหาริมทรัพย์รับรองโดย ศิวาทรัพย์</span>
@@ -1026,7 +1032,7 @@
   <script src="siwasup_agents.js?v=20261104-conf"></script>
   <script src="modals.js?v=20261112-0115"></script>
   <script src="vinyl_generator.js?v=20261019-2350"></script>
-  <script src="siwasup_all_properties.js?v=20261110-2340"></script>
+  <script src="siwasup_all_properties.js?v=20261114-1400"></script>
   <script>
     let currentMode = 'free_agent';
     let currentCategory = 'all';
@@ -1061,7 +1067,7 @@
         allProperties = window.SIWASUP_PROPERTIES;
       } else {
         try {
-          const resp = await fetch('siwasup_all_properties.json?v=20261110-2135');
+          const resp = await fetch('siwasup_all_properties.json?v=20261114-1400');
           if (resp.ok) {
             allProperties = await resp.json();
           }
@@ -1142,10 +1148,17 @@
       }
     }
 
-    // 🛡️ White-Label Sanitizer for Client Mode (ซ่อนชื่อธนาคาร/NPA ในโหมดลูกค้า 100%)
+    // 🛡️ White-Label Sanitizer for Client & Guest Public Mode (ซ่อนชื่อธนาคาร/NPA 100% เมื่อยังไม่ล็อกอิน)
+    function isWhiteLabelMode() {
+      if (currentMode === 'client') return true;
+      const isAdm = typeof isAdminSession === 'function' && isAdminSession();
+      const hasAuth = !!(localStorage.getItem('siwasup_session') || new URLSearchParams(window.location.search).has('my_agent'));
+      return !isAdm && !hasAuth;
+    }
+
     function sanitizeForClientMode(text) {
       if (!text) return '';
-      if (currentMode !== 'client') return text;
+      if (!isWhiteLabelMode()) return text;
       return String(text)
         .replace(/ทรัพย์\s*NPA\s*(ธนาคาร|กสิกรไทย|กสิกร|ไทยพาณิชย์|กรุงไทย|ออมสิน|ทีเอ็มบีธนชาต|ทหารไทยธนชาต|บสส\.?|SAM|SCB|KBank|KBANK|KTB|TTB|GSB|GHB|BBL|PAMCO)?\s*:\s*/gi, '')
         .replace(/ทรัพย์หลุดจำนอง\s*(บสส\.?\s*\(?SAM\)?|ธนาคาร|SCB|KBank|KBANK|KTB|TTB|GSB|PAMCO)?/gi, 'ทรัพย์คัดพิเศษ')
@@ -1156,6 +1169,7 @@
         .replace(/ประเภทเอกสารสิทธิ์\s*\/\s*เลขที่\s*[:：]\s*[^\n\r]+\n?/gi, '')
         .replace(/โฉนดที่ดิน\s*[:：]?\s*[\d,\s-]+/gi, 'โฉนดพร้อมโอน')
         .replace(/เลขที่\s+\d+[\/\d-]*/gi, '')
+        .replace(/\s*รหัส\s*[:：]?\s*[A-Za-z0-9_-]{3,}/gi, '')
         .trim();
     }
 
@@ -1267,7 +1281,7 @@
       if (!container || !p) return;
 
       const contractUrl = getCustomerContractUrl(p);
-      const isAdminOrAgent = (currentMode === 'owner' || currentMode === 'free_agent' || currentMode === 'employee');
+      const isAdminOrAgent = (currentMode === 'owner' || currentMode === 'free_agent' || currentMode === 'employee') && !isWhiteLabelMode();
 
       const isBooked = (p.status === 'booked' || p.status === 'sold');
       if (!isAdminOrAgent) {
@@ -1612,13 +1626,25 @@
 
         if (topBanner) {
           topBanner.classList.remove('hidden');
-          const storedRef = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : (localStorage.getItem('siwasup_referred_by') || 'AG-09');
-          const agentProfile = (typeof getAgentProfile === 'function') ? getAgentProfile(storedRef) : null;
+          const urlParams = new URLSearchParams(window.location.search);
+          const hasExplicitRef = urlParams.has('ref') || urlParams.has('agent');
+          const hasLogin = !!(localStorage.getItem('siwasup_session') || urlParams.has('my_agent'));
           const bName = document.getElementById('client-banner-agent-name');
           const bId = document.getElementById('client-banner-agent-id');
-          if (agentProfile) {
-            if (bName) bName.textContent = agentProfile.name;
-            if (bId) bId.textContent = `(ID: ${agentProfile.agentId})`;
+
+          if (!isAdmin && !hasExplicitRef && !hasLogin) {
+            if (bName) bName.textContent = 'ศิวาทรัพย์ แอสเซท';
+            if (bId) bId.textContent = '(สำนักงานใหญ่)';
+          } else {
+            const storedRef = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : (localStorage.getItem('siwasup_referred_by') || '');
+            const agentProfile = (storedRef && typeof getAgentProfile === 'function') ? getAgentProfile(storedRef) : null;
+            if (agentProfile) {
+              if (bName) bName.textContent = agentProfile.name;
+              if (bId) bId.textContent = `(ID: ${agentProfile.agentId})`;
+            } else {
+              if (bName) bName.textContent = 'ศิวาทรัพย์ แอสเซท';
+              if (bId) bId.textContent = '(สำนักงานใหญ่)';
+            }
           }
         }
         if (stickyBottomBar) stickyBottomBar.classList.add('hidden');
@@ -1693,7 +1719,10 @@
         }
       }
 
-      if (mode === 'client') {
+      const hasAuthSession = !!(localStorage.getItem('siwasup_session') || new URLSearchParams(window.location.search).has('my_agent'));
+      const isGuestPublic = !isAdmin && !hasAuthSession && mode !== 'client';
+
+      if (mode === 'client' || isGuestPublic) {
         if (quickChipsBar) quickChipsBar.classList.add('hidden');
         if (bankChips) bankChips.classList.add('hidden');
         if (filterBankWrapper) filterBankWrapper.classList.add('hidden');
@@ -1708,14 +1737,26 @@
         if (searchPillGrid) searchPillGrid.className = "grid grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr_1fr_1fr_auto] items-center gap-1 lg:gap-0";
       }
 
+      const agentLoginBtn = document.getElementById('btn-header-agent-login');
       const adminShortcutBtn = document.getElementById('btn-owner-archetype-shortcut');
-      if (adminShortcutBtn) {
-        if (mode !== 'client') {
-          adminShortcutBtn.classList.remove('hidden');
-          adminShortcutBtn.classList.add('flex');
-        } else {
-          adminShortcutBtn.classList.add('hidden');
-          adminShortcutBtn.classList.remove('flex');
+
+      if (isGuestPublic) {
+        if (modeText) modeText.textContent = "คลังทรัพย์พร้อมขาย ศิวาทรัพย์ แอสเซท";
+        if (adminShortcutBtn) { adminShortcutBtn.classList.add('hidden'); adminShortcutBtn.classList.remove('flex'); }
+        if (npaKeyBtn) { npaKeyBtn.classList.add('hidden'); npaKeyBtn.classList.remove('flex'); }
+        if (leaderboardBtn) { leaderboardBtn.classList.add('hidden'); leaderboardBtn.classList.remove('flex'); }
+        if (profileBtn) { profileBtn.classList.add('hidden'); profileBtn.classList.remove('flex'); }
+        if (agentLoginBtn) { agentLoginBtn.classList.remove('hidden'); agentLoginBtn.classList.add('flex'); }
+      } else {
+        if (agentLoginBtn) { agentLoginBtn.classList.add('hidden'); agentLoginBtn.classList.remove('flex'); }
+        if (adminShortcutBtn) {
+          if (mode !== 'client') {
+            adminShortcutBtn.classList.remove('hidden');
+            adminShortcutBtn.classList.add('flex');
+          } else {
+            adminShortcutBtn.classList.add('hidden');
+            adminShortcutBtn.classList.remove('flex');
+          }
         }
       }
 
@@ -2387,9 +2428,15 @@
       const safeTitleAttr = (displayTitle || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
       activeDetailPropertyId = String(p.id);
-      document.getElementById('detail-code').textContent = `รหัส: ${p.id}`;
+      if (typeof window.sendSiwasupClientBeacon === 'function') {
+        window.sendSiwasupClientBeacon('property_click', {
+          property_id: String(p.id || ''),
+          property_title: displayTitle || ''
+        });
+      }
+      document.getElementById('detail-code').textContent = isWhiteLabelMode() ? '' : `รหัส: ${p.id}`;
       document.getElementById('detail-category-badge').textContent = p.category || 'อสังหาฯ';
-      document.getElementById('detail-bank-badge').innerHTML = getBankBadge(p.bank_source);
+      document.getElementById('detail-bank-badge').innerHTML = isWhiteLabelMode() ? '' : getBankBadge(p.bank_source);
       document.getElementById('detail-title').textContent = displayTitle;
       document.getElementById('detail-location').textContent = p.location || 'กรุงเทพฯ และปริมณฑล';
       document.getElementById('detail-desc').textContent = displayDesc;
@@ -2441,7 +2488,7 @@
       const bannerBtnTextEl = document.getElementById('detail-btn-banner-npa-key-text');
 
       if (npaKeyBanner) {
-        if (currentMode === 'client') {
+        if (currentMode === 'client' || isWhiteLabelMode()) {
           npaKeyBanner.classList.add('hidden');
         } else if (currentMode === 'owner') {
           // 🛡️ โหมด ADMIN: แปลงเป็นแผงติดตามสถานะกุญแจ (Key Custody Tracking) ไม่ใช่ "ขอเบิก" หรือ "ขอนัดชม"
@@ -2500,7 +2547,7 @@
           if (btnAdminPrice) btnAdminPrice.onclick = () => { closePropertyDetailModal(); openEditPriceModal(p.id); };
           if (btnAdminShare) btnAdminShare.onclick = () => { openSmartShare(p.id, displayTitle); };
         }
-      } else if (currentMode === 'client') {
+      } else if (currentMode === 'client' || isWhiteLabelMode()) {
         if (agentActionsRow) agentActionsRow.classList.add('hidden');
         if (adminActionsRow) adminActionsRow.classList.add('hidden');
       } else {
@@ -2548,6 +2595,12 @@
               </button>
             `;
           }
+        } else if (isWhiteLabelMode()) {
+          btnOffer.disabled = false;
+          btnOffer.className = "w-full bg-[#06C755] hover:bg-[#05b04b] text-white font-bold py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
+          if (btnOfferLabel) btnOfferLabel.textContent = "LINE นัดชม / สอบถามทรัพย์นี้";
+          btnOffer.onclick = () => { closePropertyDetailModal(); contactViaLine(p.id, displayTitle); };
+          if (waitlistRow) waitlistRow.classList.add('hidden');
         } else {
           btnOffer.disabled = false;
           btnOffer.className = "w-full bg-[#C2A460] hover:bg-[#A98B45] text-white font-bold py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
@@ -3023,7 +3076,7 @@
         const isSelected = selectedBundleIds.has(p.id);
         const isFav = savedFavorites.has(p.id);
         const img = p.main_image || "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600";
-        const bankBadge = getBankBadge(p.bank_source);
+        const bankBadge = isWhiteLabelMode() ? '' : getBankBadge(p.bank_source);
         const displayTitle = getDisplayTitle(p);
         const safeTitleAttr = displayTitle.replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
@@ -3114,8 +3167,8 @@
                 ` : ''}
               </div>
 
-              <!-- Bundle Select Button (for agents) -->
-              ${(currentMode !== 'client' && currentMode !== 'trainee') ? `
+              <!-- Bundle Select Button (for logged-in agents only) -->
+              ${(currentMode !== 'client' && currentMode !== 'trainee' && !isWhiteLabelMode()) ? `
                 <button onclick="event.stopPropagation(); toggleBundleItem('${p.id}')" class="absolute bottom-3 right-3 z-10 text-[10px] font-medium px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1 transition-all ${isSelected ? 'bg-siwasup-gold text-gray-950 ring-2 ring-white scale-105 font-bold' : 'capsule-bokeh hover:bg-slate-900/60'}">
                   <i data-lucide="${isSelected ? 'check' : 'plus'}" class="w-3 h-3 stroke-[2]"></i>
                   <span>${isSelected ? 'ในมัดรวม' : 'มัดรวม'}</span>
@@ -3142,8 +3195,8 @@
               <div class="space-y-1.5">
                 <!-- Property Code -->
                 <div class="flex items-center justify-between text-[11px]">
-                  ${p.bua_verified && currentMode !== 'client' ? '<span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">✓ บัวคัดแล้ว</span>' : '<span>แชร์</span>'}
-                  <span class="text-neutral-500 font-mono">รหัสทรัพย์: ${p.id}</span>
+                  ${p.bua_verified && !isWhiteLabelMode() ? '<span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">✓ บัวคัดแล้ว</span>' : '<span>แชร์</span>'}
+                  ${isWhiteLabelMode() ? '' : `<span class="text-neutral-500 font-mono">รหัสทรัพย์: ${p.id}</span>`}
                 </div>
                 
                 <!-- Title (White-labeled in Client Mode) -->
@@ -3161,7 +3214,7 @@
                 <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-600 font-medium pt-0.5">
                   <span class="flex items-center gap-1"><i data-lucide="grid" class="w-3.5 h-3.5 text-slate-400"></i> ${(p.size && p.size !== '-') ? p.size : 'ตามโฉนด'}</span>
                   <span class="flex items-center gap-1"><i data-lucide="home" class="w-3.5 h-3.5 text-slate-400"></i> ${(p.usable_area && p.usable_area !== '-') ? p.usable_area : (p.floors ? `${p.category || 'อาคาร'} ${p.floors}` : (p.category || 'ตามสภาพ'))}</span>
-                  ${(p.bedrooms && Number(p.bedrooms) > 0) ? `<span class="flex items-center gap-1 text-amber-900 bg-amber-50/80 px-1.5 py-0.2 rounded border border-amber-200/60 text-[11px] font-semibold">🛏️ ${p.bedrooms} นอน${(p.bathrooms && Number(p.bathrooms) > 0) ? ` • 🚿 ${p.bathrooms} น้ำ` : ''}</span>` : ''}
+                  ${(p.bedrooms && Number(p.bedrooms) > 0) ? `<span class="inline-flex items-center gap-1.5 text-[#7A5C29] bg-[#FAF6EE] px-2 py-0.5 rounded-md border border-[#C2A460]/35 text-[11px] font-semibold"><i data-lucide="bed-double" class="w-3.5 h-3.5 text-[#967C3E] shrink-0"></i><span>${p.bedrooms} นอน</span>${(p.bathrooms && Number(p.bathrooms) > 0) ? `<span class="text-[#C2A460]/60">•</span><i data-lucide="bath" class="w-3.5 h-3.5 text-[#967C3E] shrink-0"></i><span>${p.bathrooms} น้ำ</span>` : ''}</span>` : ''}
                 </div>
               </div>
 
@@ -3198,7 +3251,7 @@
                     <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
                     <span>ตั้ง/แก้ราคา</span>
                   </button>
-                ` : currentMode === 'client' ? `
+                ` : (currentMode === 'client' || isWhiteLabelMode()) ? `
                   <button onclick="contactViaLine('${p.id}', '${safeTitleAttr}')" class="py-2.5 px-3 rounded-xl bg-white border border-neutral-200 hover:border-emerald-500 text-neutral-800 hover:text-emerald-700 font-semibold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition active:scale-[0.98]">
                     <span class="w-4 h-4 rounded-full bg-[#06C755] text-white flex items-center justify-center text-[9px] font-black shrink-0">L</span>
                     <span>LINE นัดชม</span>
@@ -3267,7 +3320,7 @@
                     </div>
                   </div>
                 </div>
-              ` : (currentMode === 'free_agent' || currentMode === 'employee') ? `
+              ` : ((currentMode === 'free_agent' || currentMode === 'employee') && !isWhiteLabelMode()) ? `
                 <div class="mt-2.5 flex items-center justify-between px-3 py-1.5 rounded-xl bg-neutral-50 border border-neutral-200/70">
                   <!-- ซ้าย: คอมมิชชั่น (คลีน ขาว/เทา ไม่มีพื้นหลังสีทอง/ส้ม) -->
                   <div class="flex items-center gap-1.5 min-w-0 pr-1">
@@ -4424,6 +4477,22 @@
     }
 
     function openSmartShare(id, title) {
+      if (typeof isWhiteLabelMode === 'function' && isWhiteLabelMode()) {
+        const cleanTitle = (typeof sanitizeForClientMode === 'function') ? sanitizeForClientMode(title || '') : (title || '');
+        const urlParams = new URLSearchParams(window.location.search);
+        const activeRef = urlParams.get('ref') || urlParams.get('agent') || (currentMode === 'client' ? localStorage.getItem('siwasup_referred_by') : '');
+        const shareUrl = activeRef
+          ? `${getBaseUrl()}?view=client&property=${encodeURIComponent(id)}&ref=${encodeURIComponent(activeRef)}`
+          : `${getBaseUrl()}?property=${encodeURIComponent(id)}`;
+        if (navigator.share) {
+          navigator.share({ title: cleanTitle || 'ศิวาทรัพย์ แอสเซท', url: shareUrl }).catch(() => {});
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(shareUrl).then(() => {
+            if (typeof showToast === 'function') showToast('✅ คัดลอกลิงก์บ้านสำหรับส่งต่อให้เพื่อน/ครอบครัวแล้ว');
+          }).catch(() => {});
+        }
+        return;
+      }
       currentShareProp = { id, title };
       const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'AG-บัวรา';
       const refInput = document.getElementById('agent-ref-input');
@@ -6251,7 +6320,7 @@
         text += `\n`;
       });
 
-      text += `✨ ดูรูปภาพ แปลนห้อง และรายละเอียดเต็มของทั้ง ${items.length} หลัง ในหน้า VIP ของคุณ ${clientName} ได้ที่ลิงก์นี้เลยครับ:\n`;
+      text += `✨ ดูรูปภาพแกลเลอรีครบทุกมุม และรายละเอียดเต็มของทั้ง ${items.length} หลัง ในหน้า VIP ของคุณ ${clientName} ได้ที่ลิงก์นี้เลยครับ:\n`;
       text += `👉 ${bundleUrl}\n\n`;
       text += `(หากสนใจหลังไหนเป็นพิเศษ แจ้งผมเพื่อนัดชมห้องจริงได้เลยนะครับ ยินดีช่วยดูแลเรื่องยื่นกู้สินเชื่อฟรีทุกขั้นตอนครับ 😊)`;
 
@@ -6488,18 +6557,146 @@
 
         // Robust Auto-run & Guaranteed Instant Render (No White/Skeleton Screen!)
     
+    // --- CLIENT VIEW TRACKING (VISITOR ID + STATELESS AVATAR TAG) ---
+    const SIWASUP_TRACK_ENDPOINT = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? '/api/track/view'
+      : 'https://siwasup-cobroker-os.onrender.com/api/track/view';
+
+    function getOrCreateSiwasupVisitorId() {
+      try {
+        let vid = localStorage.getItem('siwasup_vid') || '';
+        if (/^V-[A-Z0-9]{6,}$/.test(vid)) return vid;
+        let rnd = '';
+        if (window.crypto && window.crypto.getRandomValues) {
+          const arr = new Uint8Array(4);
+          window.crypto.getRandomValues(arr);
+          rnd = Array.from(arr, b => b.toString(36).toUpperCase().padStart(2, '0')).join('').slice(0, 6);
+        } else {
+          rnd = Math.random().toString(36).slice(2, 8).toUpperCase().padEnd(6, 'X');
+        }
+        vid = 'V-' + rnd;
+        localStorage.setItem('siwasup_vid', vid);
+        return vid;
+      } catch (e) {
+        try {
+          let sVid = sessionStorage.getItem('siwasup_vid') || '';
+          if (/^V-[A-Z0-9]{6,}$/.test(sVid)) return sVid;
+          let rnd = (window.crypto && window.crypto.getRandomValues)
+            ? Array.from(window.crypto.getRandomValues(new Uint8Array(4)), b => b.toString(36).toUpperCase().padStart(2, '0')).join('').slice(0, 6)
+            : Math.random().toString(36).slice(2, 8).toUpperCase().padEnd(6, 'X');
+          sVid = 'V-' + rnd;
+          sessionStorage.setItem('siwasup_vid', sVid);
+          return sVid;
+        } catch (e2) {
+          if (!window._siwasupFallbackVid) {
+            window._siwasupFallbackVid = 'V-TMP' + Math.random().toString(36).slice(2, 6).toUpperCase().padEnd(4, 'X');
+          }
+          return window._siwasupFallbackVid;
+        }
+      }
+    }
+
+    function _siwasupSafeStorage(kind, op, key, val) {
+      try {
+        const store = (kind === 'session') ? window.sessionStorage : window.localStorage;
+        if (!store) return null;
+        if (op === 'get') return store.getItem(key);
+        if (op === 'set') { store.setItem(key, val); return true; }
+        if (op === 'remove') { store.removeItem(key); return true; }
+      } catch (e) {}
+      return null;
+    }
+
+    window.sendSiwasupClientBeacon = function(eventType, extra = {}) {
+      try {
+        if (typeof isAdminSession === 'function' && isAdminSession()) return;
+        if (window.currentMode && window.currentMode === 'owner') return;
+
+        const params = new URLSearchParams(window.location.search);
+        const viewParam = params.get('view') || params.get('mode');
+        const tParam = params.get('t') || _siwasupSafeStorage('session', 'get', 'siwasup_track_t') || '';
+        const cParam = params.get('c') || _siwasupSafeStorage('session', 'get', 'siwasup_track_c') || '';
+        const refParam = params.get('agent') || params.get('ref') || _siwasupSafeStorage('local', 'get', 'siwasup_referred_by') || '';
+        const isClientContext = (window.currentMode === 'client') || viewParam === 'client' || Boolean(tParam || cParam || params.has('ref') || params.has('agent'));
+        if (!isClientContext) return;
+
+        if (eventType === 'catalog_open') {
+          if (window._siwasupCatalogOpenTracked) return;
+          const openKey = 'siwasup_open_sent_' + (tParam || cParam || refParam || 'default');
+          if (_siwasupSafeStorage('session', 'get', openKey)) {
+            window._siwasupCatalogOpenTracked = true;
+            return;
+          }
+          window._siwasupCatalogOpenTracked = true;
+          _siwasupSafeStorage('session', 'set', openKey, '1');
+        } else if (eventType === 'property_click') {
+          const propId = String(extra.property_id || '');
+          if (propId && String(window.activeSinglePropertyFocus || '') === propId) {
+            const focusKey = 'siwasup_focus_clicked_' + propId;
+            if (_siwasupSafeStorage('session', 'get', focusKey)) return;
+            _siwasupSafeStorage('session', 'set', focusKey, '1');
+          }
+          if (window._lastTrackedPropId === propId && (Date.now() - (window._lastTrackedPropTs || 0)) < 3000) {
+            return;
+          }
+          window._lastTrackedPropId = propId;
+          window._lastTrackedPropTs = Date.now();
+        }
+
+        const uaStr = navigator.userAgent || '';
+        const uaType = /Mobi|Android|iPhone|iPad|LINE/i.test(uaStr) ? 'Mobile' : 'Desktop';
+        const payload = {
+          vid: getOrCreateSiwasupVisitorId(),
+          t: tParam,
+          c: cParam,
+          ref: refParam || 'SW001',
+          event: eventType || 'catalog_open',
+          property_id: String(extra.property_id || ''),
+          property_title: String(extra.property_title || ''),
+          ua_type: uaType
+        };
+
+        fetch(SIWASUP_TRACK_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          keepalive: true
+        })
+          .then(r => (r.ok ? r.json() : null))
+          .then(data => {
+            if (data && data.avatar_name) {
+              _siwasupSafeStorage('session', 'set', 'siwasup_client_avatar', data.avatar_name);
+            }
+          })
+          .catch(() => {});
+      } catch (e) {}
+    };
+
     // --- INIT & URL QUERY PARSER ---
     function checkUrlParameters() {
       const params = new URLSearchParams(window.location.search);
       
-      // Store ref & agent into memory & auto-switch to Client View
+      // Store ref & agent into memory & auto-switch to Client View (do NOT overwrite siwasup_my_agent_ref)
       const incomingRef = params.get('agent') || params.get('ref');
       if (incomingRef) {
-        localStorage.setItem('siwasup_referred_by', incomingRef);
-        localStorage.setItem('siwasup_my_agent_ref', incomingRef);
+        _siwasupSafeStorage('local', 'set', 'siwasup_referred_by', incomingRef);
       }
       if (params.has('src')) {
-        localStorage.setItem('siwasup_referred_source', params.get('src'));
+        _siwasupSafeStorage('local', 'set', 'siwasup_referred_source', params.get('src'));
+      }
+      const incomingT = params.get('t');
+      const incomingC = params.get('c');
+      const isFreshNav = Boolean(incomingRef || params.get('view') || params.get('mode') || params.has('bundle') || params.has('p') || params.has('id') || !window.location.search);
+      if (incomingT) {
+        _siwasupSafeStorage('session', 'set', 'siwasup_track_t', incomingT);
+        if (!incomingC) _siwasupSafeStorage('session', 'remove', 'siwasup_track_c');
+      } else if (isFreshNav) {
+        _siwasupSafeStorage('session', 'remove', 'siwasup_track_t');
+      }
+      if (incomingC) {
+        _siwasupSafeStorage('session', 'set', 'siwasup_track_c', incomingC);
+      } else if (isFreshNav) {
+        _siwasupSafeStorage('session', 'remove', 'siwasup_track_c');
       }
 
       // Check view mode & referrals
@@ -6523,6 +6720,10 @@
         }
       } else {
         if (typeof setMode === 'function') setMode('free_agent');
+      }
+
+      if (typeof window.sendSiwasupClientBeacon === 'function') {
+        window.sendSiwasupClientBeacon('catalog_open');
       }
     }
 

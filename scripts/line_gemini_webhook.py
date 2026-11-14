@@ -2,6 +2,7 @@ import http.server
 import json
 import urllib.request
 import urllib.parse
+import urllib.error
 import ssl
 import hmac
 import hashlib
@@ -328,45 +329,49 @@ def auto_heal_member_line_profile(user_id, prof=None, text_content=""):
             matched_member = m
             break
 
-    # 2. Match by extracted phone number
+    # 2. Match by extracted phone number (ONLY unbound seats - prevent takeover!)
     if not matched_member and extracted_phones:
         for m in approved:
+            if m.get('lineUserId'):
+                continue
             m_phone = clean_phone_str(m.get('phone', ''))
             if m_phone and m_phone in extracted_phones:
                 matched_member = m
                 break
 
-    # 3. Match by smart name/nickname heuristics
+    # 3. Match by smart name/nickname heuristics (ONLY unbound seats & distinctive tokens)
     if not matched_member and display_name:
         name_lower = display_name.lower().replace(' ', '')
         keywords_map = [
-            # Strict Distinctive Tokens: Prevent loose substring collisions (e.g., 'ใบบัว', 'ต้นไม้', 'baby oil')
+            # Strict Distinctive Tokens: Prevent loose substring collisions & account takeover
             ('app_office_001', ['varinthorn', 'วรินทร', 'กูลจีรัง', 'sw001 jeab', 'jeab v@r']),
             ('app_office_002', ['ตันฑุลทุกุล', 'ภมรมาศ', 'pamornmas']),
             ('app_office_003', ['ว่องสุวรรณวาร', 'วรวลัญช์', 'vorawalun']),
-            ('app_admin_001',  ['สุภาพร by ศิวาทรัพย์', 'สุภาพร']),
-            ('app_admin_002',  ['ณัฐสุดา พรพริ้ง', 'ณัฐสุดา', 'พรพริ้ง']),
+            ('app_admin_001',  ['สุภาพร by ศิวาทรัพย์']),
+            ('app_admin_002',  ['ณัฐสุดา พรพริ้ง']),
             ('app_office_004', ['nassty', 'thenassty']),
-            ('app_agent_001',  ['เขมิกา ศิวาทรัพย์', 'เขมิกา']),
-            ('app_agent_002',  ['ประกายเกียรติกุล', 'สุภาวดี']),
+            ('app_agent_001',  ['เขมิกา ศิวาทรัพย์']),
+            ('app_agent_002',  ['ประกายเกียรติกุล']),
             ('app_agent_003',  ['อนัญญา(กัญ)', 'อนัญญา สาททอง']),
             ('app_agent_004',  ['สิทธิชัย มฤคพานิช', 'มฤคพานิช', 'มกุลพานิช']),
-            ('app_agent_005',  ['พัชญ์ณิภา เอื้อปัญญากุล', 'พัชญ์ณิภา', 'เอื้อประโยชน์กิจ']),
-            ('app_agent_006',  ['นภมกร วรพัทธ์กุล', 'นภมกร', 'วรพัทธ์ภูดิท']),
+            ('app_agent_005',  ['พัชญ์ณิภา เอื้อปัญญากุล', 'เอื้อประโยชน์กิจ']),
+            ('app_agent_006',  ['นภมกร วรพัทธ์กุล', 'วรพัทธ์ภูดิท']),
             ('app_agent_007',  ['jaidee asset', 'jaidee0902', 'สุหทัย ปานทอง']),
         ]
         for mem_id, kws in keywords_map:
-            if any(k.lower() in name_lower for k in kws):
+            if any(k.lower().replace(' ', '') in name_lower for k in kws):
                 target = next((m for m in approved if m.get('id') == mem_id), None)
-                if target:
+                if target and not target.get('lineUserId'):
                     matched_member = target
                     break
 
     if matched_member:
         changed = False
-        if matched_member.get('lineUserId') != user_id:
+        if not matched_member.get('lineUserId'):
             matched_member['lineUserId'] = user_id
             changed = True
+        elif matched_member.get('lineUserId') != user_id:
+            return None
 
         cur_avatar = str(matched_member.get('avatar', ''))
         # Replace if picture_url is new or replaces unsplash mockup
@@ -1784,6 +1789,681 @@ def save_contracts_data(store):
             threading.Thread(target=lambda: put_object_r2(_R2_CONTRACTS_VAULT_KEY, data_bytes, "application/json"), daemon=True).start()
 
 
+# ==============================================================================
+# CLIENT VIEW TRACKING, HYBRID AVATAR LINK (&t=) & DEVICE VISITOR TRUST (vid)
+# ==============================================================================
+CLIENT_TRACKING_PATH = os.path.join(DATA_DIR, "client_tracking.json")
+CLIENT_TRACKING_LOCK = threading.RLock()
+_R2_CLIENT_TRACKING_VAULT_KEY = "_vault/client_tracking_" + hmac.new(ADMIN_EXPORT_SECRET.encode("utf-8"), b"siwasup_client_tracking_vault_v1", hashlib.sha256).hexdigest()[:32] + ".json"
+_R2_CLIENT_TRACKING_RESTORED = False
+_CLIENT_TRACKING_MEM_CACHE = None
+_R2_CLIENT_TRACKING_UPLOAD_LOCK = threading.Lock()
+_LATEST_CLIENT_TRACKING_BYTES = None
+_TAG_SECRET_SEED = (os.environ.get("ADMIN_EXPORT_SECRET") or LINE_CHANNEL_SECRET or ADMIN_EXPORT_SECRET) + "_client_tag_mask_v2"
+_TAG_MASK_KEY = hashlib.sha256(_TAG_SECRET_SEED.encode("utf-8")).digest()
+_CLIENT_ALERT_COOLDOWN = {}
+_AGENT_ALERT_RATE = {}
+_TRACK_IP_WINDOW = {}
+_CLIENT_ALERT_LOCK = threading.Lock()
+_MAX_TRACKED_VISITORS = 2000
+
+
+def _default_client_tracking_store():
+    return {
+        "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "visitors": {},
+        "events": [],
+        "merge_log": []
+    }
+
+
+def _clone_store(store):
+    return json.loads(json.dumps(store, ensure_ascii=False))
+
+
+def load_client_tracking_data():
+    global _R2_CLIENT_TRACKING_RESTORED, _CLIENT_TRACKING_MEM_CACHE
+    with CLIENT_TRACKING_LOCK:
+        if not _R2_CLIENT_TRACKING_RESTORED and os.environ.get("PORT"):
+            try:
+                url = f"https://assets.siwasup.com/{_R2_CLIENT_TRACKING_VAULT_KEY}?t={int(time.time())}"
+                req = urllib.request.Request(url, headers={"User-Agent": "SiwasupRenderVault/1.0"})
+                with urllib.request.urlopen(req, timeout=8) as r:
+                    if r.status == 200:
+                        cloud_store = json.loads(r.read().decode("utf-8"))
+                        if isinstance(cloud_store, dict) and "visitors" in cloud_store:
+                            os.makedirs(os.path.dirname(CLIENT_TRACKING_PATH), exist_ok=True)
+                            tmp_path = CLIENT_TRACKING_PATH + ".tmp"
+                            with open(tmp_path, "w", encoding="utf-8") as f:
+                                json.dump(cloud_store, f, ensure_ascii=False, indent=2)
+                            os.replace(tmp_path, CLIENT_TRACKING_PATH)
+                            _CLIENT_TRACKING_MEM_CACHE = cloud_store
+                            _R2_CLIENT_TRACKING_RESTORED = True
+                            print(f"[Vault] Restored client_tracking from R2 ({len(cloud_store.get('visitors', {}))} visitors)")
+                            return _clone_store(cloud_store)
+            except urllib.error.HTTPError as he:
+                if he.code == 404:
+                    _R2_CLIENT_TRACKING_RESTORED = True
+                print(f"[Vault] Client tracking initial R2 restore HTTP {he.code}")
+            except Exception as e:
+                print(f"[Vault] Client tracking initial R2 restore note (will retry): {e}")
+        if os.path.exists(CLIENT_TRACKING_PATH):
+            try:
+                with open(CLIENT_TRACKING_PATH, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    if isinstance(data, dict) and "visitors" in data:
+                        _CLIENT_TRACKING_MEM_CACHE = data
+                        return _clone_store(data)
+            except Exception as e:
+                print(f"[Warn] Failed to read client_tracking.json: {e}")
+        if _CLIENT_TRACKING_MEM_CACHE is not None:
+            return _clone_store(_CLIENT_TRACKING_MEM_CACHE)
+        return _default_client_tracking_store()
+
+
+def _sequential_r2_tracking_upload():
+    global _LATEST_CLIENT_TRACKING_BYTES
+    with _R2_CLIENT_TRACKING_UPLOAD_LOCK:
+        with CLIENT_TRACKING_LOCK:
+            payload_bytes = _LATEST_CLIENT_TRACKING_BYTES
+        if payload_bytes and put_object_r2:
+            try:
+                put_object_r2(_R2_CLIENT_TRACKING_VAULT_KEY, payload_bytes, "application/json; charset=utf-8")
+            except Exception as e:
+                print(f"[R2 Client Tracking Sync Warn]: {e}")
+
+
+def save_client_tracking_data(store):
+    global _CLIENT_TRACKING_MEM_CACHE, _LATEST_CLIENT_TRACKING_BYTES
+    with CLIENT_TRACKING_LOCK:
+        prev_count = len((_CLIENT_TRACKING_MEM_CACHE or {}).get("visitors", {}))
+        new_count = len(store.get("visitors", {}))
+        if prev_count > 3 and new_count == 0:
+            print(f"[CRITICAL SAFEGUARD] Blocked attempted client_tracking wipeout! Existing: {prev_count}, Incoming: {new_count}")
+            return
+        store["updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        _CLIENT_TRACKING_MEM_CACHE = _clone_store(store)
+        data_bytes = json.dumps(store, ensure_ascii=False, indent=2).encode("utf-8")
+        try:
+            os.makedirs(os.path.dirname(CLIENT_TRACKING_PATH), exist_ok=True)
+            tmp_path = CLIENT_TRACKING_PATH + ".tmp"
+            with open(tmp_path, "wb") as f:
+                f.write(data_bytes)
+            os.replace(tmp_path, CLIENT_TRACKING_PATH)
+        except Exception as e:
+            print(f"[Error] Failed to save client_tracking local: {e}")
+        _LATEST_CLIENT_TRACKING_BYTES = data_bytes
+        if put_object_r2 and os.environ.get("PORT") and _R2_CLIENT_TRACKING_RESTORED:
+            threading.Thread(target=_sequential_r2_tracking_upload, daemon=True).start()
+
+
+def _derive_tag_keystream(nonce: bytes, length: int) -> bytes:
+    chunks = []
+    blk = 0
+    total = 0
+    while total < length:
+        digest = hashlib.sha256(_TAG_MASK_KEY + nonce + blk.to_bytes(2, "big")).digest()
+        chunks.append(digest)
+        total += len(digest)
+        blk += 1
+    return b"".join(chunks)[:length]
+
+
+def encode_client_tag(avatar_name: str, agent_note: str = "") -> str:
+    """Authenticated salted stream encoding (4B nonce + 6B HMAC-SHA256 + XOR keystream)."""
+    av = re.sub(r"[\t\r\n]+", " ", str(avatar_name or "")).strip()[:25]
+    note = re.sub(r"[\t\r\n]+", " ", str(agent_note or "")).strip()[:60]
+    if not av:
+        return ""
+    raw_str = f"{av}\t{note}" if note else av
+    raw_bytes = raw_str.encode("utf-8")
+    nonce = secrets.token_bytes(4)
+    stream = _derive_tag_keystream(nonce, len(raw_bytes))
+    cipher = bytes(b ^ s for b, s in zip(raw_bytes, stream))
+    mac = hmac.new(_TAG_MASK_KEY, nonce + cipher, hashlib.sha256).digest()[:6]
+    return base64.urlsafe_b64encode(nonce + mac + cipher).decode("ascii").rstrip("=")
+
+
+def decode_client_tag(token: str):
+    """Verify HMAC and decode &t= token back into (avatar_name, agent_note)."""
+    tok = str(token or "").strip()
+    if not tok or len(tok) > 300:
+        return ("", "")
+    try:
+        padded = tok + ("=" * (-len(tok) % 4))
+        blob = base64.urlsafe_b64decode(padded.encode("ascii"))
+        if len(blob) < 11:
+            return ("", "")
+        nonce, mac, cipher = blob[:4], blob[4:10], blob[10:]
+        expect_mac = hmac.new(_TAG_MASK_KEY, nonce + cipher, hashlib.sha256).digest()[:6]
+        if not hmac.compare_digest(mac, expect_mac):
+            return ("", "")
+        stream = _derive_tag_keystream(nonce, len(cipher))
+        raw_bytes = bytes(b ^ s for b, s in zip(cipher, stream))
+        decoded = raw_bytes.decode("utf-8")
+        if any(ord(ch) < 32 and ch != "\t" for ch in decoded):
+            return ("", "")
+        if "\t" in decoded:
+            av, note = decoded.split("\t", 1)
+        else:
+            av, note = decoded, ""
+        return (av.strip()[:25], note.strip()[:60])
+    except Exception:
+        return ("", "")
+
+
+def parse_agent_link_input(raw_input: str):
+    """Parse '<avatar_name> [private note...] [optional_prop_id]' safely."""
+    tokens = str(raw_input or "").strip().split()
+    if not tokens:
+        return ("", "", "")
+    prop_id = ""
+    if len(tokens) >= 2:
+        last_tok = tokens[-1].strip()
+        if find_property_by_id_or_code(last_tok):
+            prop_id = last_tok
+            tokens.pop()
+    avatar_name = tokens[0][:25]
+    agent_note = " ".join(tokens[1:])[:60] if len(tokens) > 1 else ""
+    return (avatar_name, agent_note, prop_id)
+
+
+def resolve_agent_ref_for_member(member):
+    if not isinstance(member, dict):
+        return "AGENT"
+    mid = str(member.get("id", "")).strip()
+    nick_u = str(member.get("nickname", "")).strip().upper()
+    if mid == "app_office_001" or nick_u == "SW001" or nick_u.startswith("SW001 "):
+        return "SW001"
+    if mid == "app_office_004" or nick_u in ("NASSTY", "[NASSTY]"):
+        return "NASSTY"
+    return str(member.get("agent_ref") or member.get("code") or mid or "AGENT").strip()
+
+
+def find_agent_line_uid(agent_ref: str) -> str:
+    ref_clean = str(agent_ref or "").strip().upper()
+    if not ref_clean:
+        return ""
+    store = load_lobby_data()
+    approved = store.get("approved", [])
+    for m in approved:
+        uid = m.get("lineUserId", "")
+        if not uid:
+            continue
+        m_ref = resolve_agent_ref_for_member(m).upper()
+        if m_ref == ref_clean:
+            return uid
+        if ref_clean in (str(m.get("id", "")).upper(), str(m.get("nickname", "")).upper(), str(m.get("line_id", "")).upper()):
+            return uid
+    if ref_clean == "SW001":
+        ceo = next((m for m in approved if m.get("id") == "app_office_001"), None)
+        if ceo and ceo.get("lineUserId"):
+            return ceo["lineUserId"]
+    return ""
+
+
+def build_client_catalog_link(avatar_name: str, agent_note: str = "", agent_ref: str = "SW001", prop_id: str = ""):
+    tok = encode_client_tag(avatar_name, agent_note)
+    url = f"https://assets.siwasup.com/catalog.html?ref={urllib.parse.quote(agent_ref)}&view=client&t={tok}"
+    if prop_id:
+        url += f"&id={urllib.parse.quote(str(prop_id).strip())}"
+    return (url, tok)
+
+
+def compute_visitor_trust(vis: dict):
+    if vis.get("confirmed"):
+        return (100, "✅ ยืนยันตัวตนสมบูรณ์ (100%)")
+    has_name = bool(str(vis.get("primary_name") or "").strip())
+    open_count = int(vis.get("open_count") or 0)
+    prop_clicks = len(vis.get("viewed_properties") or [])
+    if has_name and (open_count >= 2 or prop_clicks >= 2):
+        return (75, "🔥 ความแม่นยำสูง - เข้าชมซ้ำ (75%)")
+    if has_name:
+        return (50, "🏷️ ผูกชื่อ Avatar กับเครื่องแล้ว (50%)")
+    return (25, "🌱 ผู้เข้าชมลิงก์รวม (25%)")
+
+
+def _resolve_root_visitor(visitors: dict, vid: str):
+    cur = vid
+    seen = set()
+    while cur in visitors and visitors[cur].get("merged_into"):
+        nxt = visitors[cur].get("merged_into")
+        if not nxt or nxt in seen or nxt not in visitors:
+            break
+        seen.add(cur)
+        cur = nxt
+    return cur
+
+
+def get_consolidated_visitor(visitors: dict, vid: str, ref_filter: str = ""):
+    """Aggregate opens, property clicks, names, notes_by_ref, refs, and trust score across root + merged aliases."""
+    root_id = _resolve_root_visitor(visitors, vid)
+    root_vis = visitors.get(root_id, {})
+    cons = dict(root_vis)
+    cons["vid"] = root_id
+    aliases = []
+    all_props = list(root_vis.get("viewed_properties") or [])
+    total_opens = int(root_vis.get("open_count") or 0)
+    total_clicks = int(root_vis.get("click_count") or 0)
+    confirmed = bool(root_vis.get("confirmed"))
+    shared_warn = bool(root_vis.get("shared_link_warning"))
+    last_seen = str(root_vis.get("last_seen_at") or "")
+    primary_name = str(root_vis.get("primary_name") or "").strip()
+    all_names = [n for n in (root_vis.get("name_history") or []) if n]
+    if primary_name and primary_name not in all_names:
+        all_names.insert(0, primary_name)
+    all_refs = list(root_vis.get("refs") or [])
+    ref_set_u = {str(r).upper() for r in all_refs if r}
+    merged_notes_by_ref = {str(k).upper(): v for k, v in (root_vis.get("notes_by_ref") or {}).items() if v}
+    if root_vis.get("agent_note") and not root_vis.get("notes_by_ref"):
+        for r_item in all_refs:
+            rk_u = str(r_item).upper()
+            if rk_u and rk_u not in merged_notes_by_ref:
+                merged_notes_by_ref[rk_u] = root_vis["agent_note"]
+
+    alias_items = [
+        (v_key, v_obj)
+        for v_key, v_obj in visitors.items()
+        if v_key != root_id and _resolve_root_visitor(visitors, v_key) == root_id
+    ]
+    alias_items.sort(key=lambda kv: str(kv[1].get("last_seen_at") or ""), reverse=True)
+
+    for v_key, v_obj in alias_items:
+        aliases.append(v_key)
+        total_opens += int(v_obj.get("open_count") or 0)
+        total_clicks += int(v_obj.get("click_count") or 0)
+        confirmed = confirmed or bool(v_obj.get("confirmed"))
+        shared_warn = shared_warn or bool(v_obj.get("shared_link_warning"))
+        for pid in (v_obj.get("viewed_properties") or []):
+            if pid not in all_props:
+                all_props.append(pid)
+        if str(v_obj.get("last_seen_at") or "") > last_seen:
+            last_seen = str(v_obj.get("last_seen_at") or "")
+        a_pname = str(v_obj.get("primary_name") or "").strip()
+        if not primary_name and a_pname:
+            primary_name = a_pname
+        for nm in (v_obj.get("name_history") or ([a_pname] if a_pname else [])):
+            if nm and nm not in all_names:
+                all_names.append(nm)
+        for rf in (v_obj.get("refs") or []):
+            rf_u = str(rf).upper()
+            if rf and rf_u not in ref_set_u:
+                ref_set_u.add(rf_u)
+                all_refs.append(rf)
+        for rk, rv in (v_obj.get("notes_by_ref") or {}).items():
+            rk_u = str(rk).upper()
+            if rk_u and rv and rk_u not in merged_notes_by_ref:
+                merged_notes_by_ref[rk_u] = rv
+        if v_obj.get("agent_note") and not v_obj.get("notes_by_ref"):
+            for r_item in (v_obj.get("refs") or []):
+                rk_u = str(r_item).upper()
+                if rk_u and rk_u not in merged_notes_by_ref:
+                    merged_notes_by_ref[rk_u] = v_obj["agent_note"]
+
+    cons["primary_name"] = primary_name
+    cons["name_history"] = all_names
+    cons["refs"] = all_refs
+    cons["notes_by_ref"] = merged_notes_by_ref
+    cons["open_count"] = total_opens
+    cons["click_count"] = total_clicks
+    cons["viewed_properties"] = all_props
+    cons["confirmed"] = confirmed
+    cons["shared_link_warning"] = shared_warn or (len(all_names) >= 2)
+    cons["last_seen_at"] = last_seen
+    cons["_aliases"] = sorted(aliases)
+    if ref_filter:
+        cons["agent_note"] = merged_notes_by_ref.get(ref_filter.upper(), "")
+    else:
+        cons["agent_note"] = cons.get("agent_note") or next(iter(merged_notes_by_ref.values()), "")
+    score, label = compute_visitor_trust(cons)
+    cons["trust_score"] = score
+    cons["trust_label"] = label
+    return cons
+
+
+def merge_visitor_ids(master_vid: str, alias_vid: str, actor_name: str = "", agent_ref: str = "", is_admin: bool = True):
+    m_id = str(master_vid or "").strip().upper()
+    a_id = str(alias_vid or "").strip().upper()
+    with CLIENT_TRACKING_LOCK:
+        store = load_client_tracking_data()
+        visitors = store.setdefault("visitors", {})
+        if m_id not in visitors:
+            return (False, f"ไม่พบรหัสเครื่องหลัก {m_id} ในระบบ")
+        if a_id not in visitors:
+            return (False, f"ไม่พบรหัสเครื่องพ่วง {a_id} ในระบบ")
+        m_root = _resolve_root_visitor(visitors, m_id)
+        if m_root == a_id:
+            return (False, "ไม่สามารถรวมรหัสเครื่องเดียวกันได้")
+        if not is_admin and agent_ref:
+            ref_u = agent_ref.upper()
+            for check_id in (m_id, m_root, a_id):
+                if ref_u not in [r.upper() for r in (visitors[check_id].get("refs") or [])]:
+                    return (False, "สิทธิ์เฉพาะเจ้าของลูกค้าหรือผู้บริหารเท่านั้น")
+        visitors[a_id]["merged_into"] = m_root
+        for k, v in visitors.items():
+            if k != a_id and v.get("merged_into") == a_id:
+                v["merged_into"] = m_root
+        store.setdefault("merge_log", []).insert(0, {
+            "action": "MERGE",
+            "master_vid": m_root,
+            "alias_vid": a_id,
+            "actor": actor_name,
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        })
+        store["merge_log"] = store["merge_log"][:200]
+        save_client_tracking_data(store)
+        m_name = visitors[m_root].get("primary_name") or m_root
+        return (True, f"รวม #{a_id} เข้ากับ #{m_root} ({m_name}) เรียบร้อย (สามารถพิมพ์ 'แยก {a_id}' เพื่อยกเลิกได้ตลอดเวลา)")
+
+
+def unmerge_visitor_id(alias_vid: str, actor_name: str = "", agent_ref: str = "", is_admin: bool = True):
+    a_id = str(alias_vid or "").strip().upper()
+    with CLIENT_TRACKING_LOCK:
+        store = load_client_tracking_data()
+        visitors = store.setdefault("visitors", {})
+        if a_id not in visitors:
+            return (False, f"ไม่พบรหัสเครื่อง {a_id} ในระบบ")
+        if not is_admin and agent_ref:
+            ref_u = agent_ref.upper()
+            if ref_u not in [r.upper() for r in (visitors[a_id].get("refs") or [])]:
+                return (False, "สิทธิ์เฉพาะเจ้าของลูกค้าหรือผู้บริหารเท่านั้น")
+        prev_master = visitors[a_id].get("merged_into")
+        if not prev_master:
+            return (False, f"รหัส #{a_id} ไม่ได้ถูกพ่วงรวมกับรหัสใดอยู่แล้ว")
+        visitors[a_id]["merged_into"] = None
+        store.setdefault("merge_log", []).insert(0, {
+            "action": "UNMERGE",
+            "prev_master_vid": prev_master,
+            "alias_vid": a_id,
+            "actor": actor_name,
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        })
+        store["merge_log"] = store["merge_log"][:200]
+        save_client_tracking_data(store)
+        return (True, f"แยก #{a_id} ออกจาก #{prev_master} คืนสถานะอิสระ 100% แล้ว")
+
+
+def confirm_visitor_identity(vid: str, actor_name: str = "", agent_ref: str = "", is_admin: bool = True):
+    v_id = str(vid or "").strip().upper()
+    with CLIENT_TRACKING_LOCK:
+        store = load_client_tracking_data()
+        visitors = store.setdefault("visitors", {})
+        if v_id not in visitors:
+            return (False, f"ไม่พบรหัสเครื่อง {v_id} ในระบบ")
+        root_id = _resolve_root_visitor(visitors, v_id)
+        vis = visitors[root_id]
+        if not is_admin and agent_ref:
+            ref_u = agent_ref.upper()
+            if ref_u not in [r.upper() for r in (vis.get("refs") or [])]:
+                return (False, "สิทธิ์เฉพาะเจ้าของลูกค้าหรือผู้บริหารเท่านั้น")
+        vis["confirmed"] = True
+        cons = get_consolidated_visitor(visitors, root_id)
+        vis["trust_score"] = cons["trust_score"]
+        vis["trust_label"] = cons["trust_label"]
+        vis["confirmed_by"] = actor_name
+        vis["confirmed_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        save_client_tracking_data(store)
+        name = vis.get("primary_name") or root_id
+        return (True, f"ยืนยันตัวตน #{root_id} ({name}) สมบูรณ์แล้ว — Trust Score: {cons['trust_score']}%")
+
+
+def _check_track_ip_rate(client_ip: str) -> bool:
+    if not client_ip:
+        return True
+    now_ts = time.time()
+    with _CLIENT_ALERT_LOCK:
+        hist = [t for t in _TRACK_IP_WINDOW.get(client_ip, []) if now_ts - t < 60]
+        if len(hist) >= 40:
+            _TRACK_IP_WINDOW[client_ip] = hist
+            return False
+        hist.append(now_ts)
+        _TRACK_IP_WINDOW[client_ip] = hist
+        if len(_TRACK_IP_WINDOW) > 1000:
+            stale_ips = [ip for ip, ts_list in _TRACK_IP_WINDOW.items() if not ts_list or now_ts - ts_list[-1] > 120]
+            for ip in stale_ips:
+                del _TRACK_IP_WINDOW[ip]
+    return True
+
+
+def _should_send_client_alert(raw_vid: str, event_type: str, property_id: str = "", ref: str = "SW001") -> bool:
+    cooldown = 300 if event_type == "property_click" else 900
+    key = (raw_vid, event_type, property_id if event_type == "property_click" else "")
+    ref_key = str(ref or "SW001").strip().upper()
+    now_ts = time.time()
+    with _CLIENT_ALERT_LOCK:
+        last_ts = _CLIENT_ALERT_COOLDOWN.get(key, 0)
+        if now_ts - last_ts < cooldown:
+            return False
+        ref_hist = [t for t in _AGENT_ALERT_RATE.get(ref_key, []) if now_ts - t < 60]
+        if len(ref_hist) >= 5:
+            _AGENT_ALERT_RATE[ref_key] = ref_hist
+            return False
+        _CLIENT_ALERT_COOLDOWN[key] = now_ts
+        ref_hist.append(now_ts)
+        _AGENT_ALERT_RATE[ref_key] = ref_hist
+        if len(_CLIENT_ALERT_COOLDOWN) > 2000:
+            cutoff = now_ts - 3600
+            stale = [k for k, v in _CLIENT_ALERT_COOLDOWN.items() if v < cutoff]
+            for k in stale:
+                del _CLIENT_ALERT_COOLDOWN[k]
+    return True
+
+
+def _prune_old_visitors(visitors: dict):
+    if len(visitors) <= _MAX_TRACKED_VISITORS:
+        return
+    referenced_roots = {v.get("merged_into") for v in visitors.values() if v.get("merged_into")}
+    candidates = [
+        (v.get("last_seen_at", ""), k)
+        for k, v in visitors.items()
+        if not v.get("confirmed") and not v.get("merged_into") and k not in referenced_roots
+    ]
+    candidates.sort()
+    overflow = len(visitors) - _MAX_TRACKED_VISITORS
+    for _, k in candidates[:overflow]:
+        visitors.pop(k, None)
+
+
+def record_client_tracking_event(payload: dict) -> dict:
+    raw_vid = re.sub(r"[^A-Z0-9\-]", "", str(payload.get("vid") or "").strip().upper())[:24]
+    tag_token = str(payload.get("t") or "").strip()
+    ref = re.sub(r"[^A-Za-z0-9_\-]", "", str(payload.get("ref") or "SW001").strip())[:24] or "SW001"
+    event_type = str(payload.get("event") or "catalog_open").strip()[:32]
+    if event_type not in ("catalog_open", "property_click"):
+        event_type = "catalog_open"
+    property_id = re.sub(r"[^A-Za-z0-9_\-]", "", str(payload.get("property_id") or "").strip())[:40]
+    property_title = re.sub(r"[\r\n\t]+", " ", str(payload.get("property_title") or "")).strip()[:120]
+    if property_id:
+        official_prop = find_property_by_id_or_code(property_id)
+        if official_prop and official_prop.get("title"):
+            property_title = re.sub(r"[\r\n\t]+", " ", str(official_prop.get("title"))).strip()[:120]
+    ua_type = re.sub(r"[\r\n\t]+", " ", str(payload.get("ua_type") or "mobile")).strip()[:20] or "mobile"
+
+    if not raw_vid or not raw_vid.startswith("V-") or len(raw_vid) < 6:
+        raw_vid = "V-" + hashlib.sha256(f"{ua_type}:{ref}:{tag_token}".encode("utf-8")).hexdigest()[:6].upper()
+
+    # Strictly accept cryptographically authenticated &t= tokens only (no unsigned legacy_c spoofing)
+    avatar_name, agent_note = decode_client_tag(tag_token)
+
+    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    now_hm = datetime.now().strftime("%H:%M")
+
+    with CLIENT_TRACKING_LOCK:
+        store = load_client_tracking_data()
+        visitors = store.setdefault("visitors", {})
+        vis = visitors.setdefault(raw_vid, {
+            "vid": raw_vid,
+            "primary_name": "",
+            "agent_note": "",
+            "notes_by_ref": {},
+            "name_history": [],
+            "notes_history": [],
+            "refs": [],
+            "viewed_properties": [],
+            "open_count": 0,
+            "click_count": 0,
+            "first_seen_at": now_str,
+            "last_seen_at": now_str,
+            "ua_type": ua_type,
+            "trust_score": 25,
+            "trust_label": "🌱 ผู้เข้าชมลิงก์รวม (25%)",
+            "confirmed": False,
+            "shared_link_warning": False,
+            "merged_into": None
+        })
+
+        if avatar_name:
+            vis["primary_name"] = avatar_name
+            nh = vis.setdefault("name_history", [])
+            if avatar_name not in nh:
+                nh.append(avatar_name)
+            if len(nh) >= 2:
+                vis["shared_link_warning"] = True
+        if agent_note:
+            vis["agent_note"] = agent_note
+            vis.setdefault("notes_by_ref", {})[ref.upper()] = agent_note
+            noh = vis.setdefault("notes_history", [])
+            if agent_note not in noh:
+                noh.append(agent_note)
+        if ref and ref not in vis.setdefault("refs", []):
+            vis["refs"].append(ref)
+
+        if event_type == "property_click":
+            vis["click_count"] = int(vis.get("click_count") or 0) + 1
+            if property_id and property_id not in vis.setdefault("viewed_properties", []):
+                vis["viewed_properties"].append(property_id)
+        else:
+            vis["open_count"] = int(vis.get("open_count") or 0) + 1
+
+        vis["last_seen_at"] = now_str
+        vis["ua_type"] = ua_type
+        score, label = compute_visitor_trust(vis)
+        vis["trust_score"] = score
+        vis["trust_label"] = label
+
+        events = store.setdefault("events", [])
+        events.insert(0, {
+            "raw_vid": raw_vid,
+            "avatar_name": avatar_name,
+            "agent_note": agent_note,
+            "ref": ref,
+            "event": event_type,
+            "property_id": property_id,
+            "property_title": property_title,
+            "ua_type": ua_type,
+            "timestamp": now_str,
+            "ts": int(time.time())
+        })
+        store["events"] = events[:5000]
+        _prune_old_visitors(visitors)
+        save_client_tracking_data(store)
+
+        cons_vis = get_consolidated_visitor(visitors, raw_vid, ref_filter=ref)
+
+    root_vid = cons_vis.get("vid", raw_vid)
+    eff_score = cons_vis.get("trust_score", score)
+    eff_label = cons_vis.get("trust_label", label)
+
+    # Async LINE Push Notification to owning agent (with per-vid + per-ref anti-spam rate-limit)
+    if _should_send_client_alert(raw_vid, event_type, property_id, ref=ref):
+        target_uid = find_agent_line_uid(ref)
+        if target_uid and LINE_ACCESS_TOKEN:
+            eff_name = cons_vis.get("primary_name") or ""
+            eff_note = cons_vis.get("agent_note") or ""
+            disp_name = (eff_name if eff_name.startswith("คุณ") else f"คุณ{eff_name}") if eff_name else "ลูกค้า (ลิงก์รวมไม่ระบุชื่อ)"
+            merged_tag = f" (พ่วงจาก #{raw_vid})" if root_vid != raw_vid else ""
+            warn_line = "\n⚠️ หมายเหตุ: เครื่องนี้เคยเปิดจากหลายชื่อ (อาจส่งลิงก์ต่อ หรือพิมพ์แก้ไขชื่อ)" if cons_vis.get("shared_link_warning") else ""
+            note_line = f"\n📝 โน้ต: {eff_note}" if eff_note else ""
+            if event_type == "property_click" and property_id:
+                alert_text = (
+                    f"🏠 ลูกค้ากำลังเปิดดูรายละเอียดบ้าน!\n"
+                    f"👤 {disp_name} [#{root_vid}]{merged_tag}{note_line}\n"
+                    f"📌 [{property_id}] {property_title}\n"
+                    f"🛡️ {eff_label}\n"
+                    f"📱 {ua_type} • เวลา {now_hm} น.{warn_line}"
+                )
+            else:
+                alert_text = (
+                    f"🔔 ลูกค้าเปิดดูแคตตาล็อกแล้วค่ะ!\n"
+                    f"👤 {disp_name} [#{root_vid}]{merged_tag}{note_line}\n"
+                    f"🛡️ {eff_label}\n"
+                    f"📱 {ua_type} • เวลา {now_hm} น.{warn_line}"
+                )
+            threading.Thread(target=_push_line_message, args=(target_uid, alert_text), daemon=True).start()
+
+    # Never expose agent_note or historical backend names in public tracking response
+    return {
+        "status": "ok",
+        "vid": raw_vid,
+        "avatar_name": avatar_name,
+        "trust_score": eff_score
+    }
+
+
+def format_client_tracking_report(agent_ref: str = "", target_query: str = "", is_admin: bool = False) -> str:
+    with CLIENT_TRACKING_LOCK:
+        store = load_client_tracking_data()
+        visitors = store.get("visitors", {})
+        q = str(target_query or "").strip()
+        ref_u = str(agent_ref or "").strip().upper()
+
+        roots = {}
+        for vid, vis in visitors.items():
+            if not is_admin and ref_u and ref_u not in [r.upper() for r in (vis.get("refs") or [])]:
+                continue
+            root_id = _resolve_root_visitor(visitors, vid)
+            if root_id not in roots:
+                cons = get_consolidated_visitor(visitors, root_id, ref_filter="" if is_admin else ref_u)
+                if not is_admin and ref_u:
+                    cons_refs = [r.upper() for r in (cons.get("refs") or [])]
+                    if ref_u not in cons_refs:
+                        continue
+                roots[root_id] = cons
+
+    items = list(roots.values())
+    items.sort(key=lambda x: x.get("last_seen_at", ""), reverse=True)
+
+    if q:
+        q_low = q.lower()
+        items = [
+            it for it in items
+            if q_low in str(it.get("vid", "")).lower()
+            or q_low in str(it.get("primary_name", "")).lower()
+            or q_low in str(it.get("agent_note", "")).lower()
+            or any(q_low in str(a).lower() for a in it.get("_aliases", []))
+            or any(q_low in str(n).lower() for n in (it.get("name_history") or []))
+        ]
+
+    if not items:
+        if q:
+            return f"🔍 ยังไม่พบประวัติการเข้าดูของ '{q}' ค่ะ (อาจยังไม่ได้กดเปิดลิงก์)"
+        return (
+            "📊 ยังไม่มีลูกค้ากดเปิดลิงก์ในระบบค่ะ\n\n"
+            "💡 วิธีสร้างลิงก์ส่งลูกค้า:\n"
+            "พิมพ์: ลิงก์ ตั้ม\n"
+            "หรือ: ลิงก์ ตั้ม งบ4ล้าน"
+        )
+
+    lines = [f"📊 รายงานลูกค้าเข้าดูแคตตาล็อก ({len(items)} เครื่องล่าสุด):"]
+    for idx, it in enumerate(items[:8], 1):
+        vid = it.get("vid", "")
+        pname = it.get("primary_name") or "ผู้เข้าชมลิงก์รวม"
+        disp = pname if (pname.startswith("คุณ") or pname == "ผู้เข้าชมลิงก์รวม") else f"คุณ{pname}"
+        note = f" ({it.get('agent_note')})" if it.get("agent_note") else ""
+        score = it.get("trust_score", 25)
+        opens = it.get("open_count", 0)
+        clicks = it.get("click_count", 0)
+        last_seen = str(it.get("last_seen_at") or "")[5:16]
+        props = it.get("viewed_properties", [])
+        prop_txt = f" | ดูบ้าน: {', '.join(props[:3])}" if props else ""
+        alias_txt = f" [พ่วง: {','.join(it['_aliases'])}]" if it.get("_aliases") else ""
+        warn_txt = " ⚠️หลายชื่อ" if it.get("shared_link_warning") else ""
+        lines.append(f"{idx}. {disp}{note} [#{vid}]{alias_txt}\n   🛡️ Trust {score}% | เปิด {opens} ครั้ง | ดูบ้าน {clicks} ครั้ง | ล่าสุด {last_seen}{prop_txt}{warn_txt}")
+
+    lines.append("\n💡 คำสั่งเสริม:\n• ลิงก์ [ชื่อ] [โน้ต] — สร้างลิงก์เฉพาะคน\n• ยืนยัน V-XXXX — อัป Trust เป็น 100%\n• รวม V-XXXX V-YYYY / แยก V-YYYY")
+    return "\n".join(lines)
+
+
 def extract_contract_ocr(image_base64, doc_type="id_card", mime_type="image/jpeg"):
     if "," in image_base64:
         image_base64 = image_base64.split(",", 1)[1]
@@ -1958,6 +2638,76 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             self._send_json(200, {"status": "success", "count": len(contracts), "contracts": contracts})
             return
 
+        if path == "/api/track/summary":
+            secret = query.get("secret", [""])[0]
+            client_ip = self.client_address[0] if hasattr(self, 'client_address') else ''
+            forwarded_for = self.headers.get("X-Forwarded-For", "").strip()
+            is_local = (client_ip in ("127.0.0.1", "localhost", "::1")) and (not os.environ.get("PORT")) and (not forwarded_for)
+            configured_secret = os.environ.get("ADMIN_EXPORT_SECRET", "").strip()
+            is_secret_ok = bool(secret and configured_secret and hmac.compare_digest(secret, configured_secret))
+            acting = None
+            is_admin_req = False
+            if is_local or is_secret_ok:
+                is_admin_req = True
+            else:
+                s = self._session()
+                if not s or not s.get("sub"):
+                    self._send_json(401, {"error": "Unauthorized"})
+                    return
+                lobby = load_lobby_data()
+                acting = next((a for a in lobby.get("approved", []) if a.get("lineUserId") == s.get("sub")), None)
+                if not acting:
+                    self._send_json(403, {"error": "Forbidden"})
+                    return
+                is_admin_req = is_admin_member(acting)
+            req_ref = query.get("ref", [""])[0].strip()
+            if not is_admin_req and acting:
+                req_ref = resolve_agent_ref_for_member(acting)
+            req_vid = query.get("vid", [""])[0].strip().upper()
+            with CLIENT_TRACKING_LOCK:
+                store = load_client_tracking_data()
+                visitors = store.get("visitors", {})
+                events = store.get("events", [])
+                updated_at = store.get("updated_at")
+            if not is_admin_req and req_ref:
+                ref_u = req_ref.upper()
+                vis_list = []
+                for v in visitors.values():
+                    if ref_u in [r.upper() for r in (v.get("refs") or [])]:
+                        v_safe = dict(v)
+                        v_safe["agent_note"] = (v.get("notes_by_ref") or {}).get(ref_u, "")
+                        v_safe.pop("notes_history", None)
+                        v_safe.pop("notes_by_ref", None)
+                        vis_list.append(v_safe)
+                ev_list = [e for e in events if str(e.get("ref", "")).upper() == ref_u]
+            else:
+                vis_list = list(visitors.values())
+                if req_ref:
+                    ref_u = req_ref.upper()
+                    vis_list = [v for v in vis_list if ref_u in [r.upper() for r in (v.get("refs") or [])]]
+                    ev_list = [e for e in events if str(e.get("ref", "")).upper() == ref_u]
+                else:
+                    ev_list = events
+            if req_vid:
+                group_root = _resolve_root_visitor(visitors, req_vid) if req_vid in visitors else req_vid
+                group_vids = {
+                    k for k in visitors
+                    if k == group_root or _resolve_root_visitor(visitors, k) == group_root
+                }
+                if not group_vids:
+                    group_vids = {req_vid}
+                vis_list = [v for v in vis_list if v.get("vid") in group_vids]
+                ev_list = [e for e in ev_list if e.get("raw_vid") in group_vids]
+            vis_list.sort(key=lambda x: x.get("last_seen_at", ""), reverse=True)
+            self._send_json(200, {
+                "status": "success",
+                "updated_at": updated_at,
+                "visitor_count": len(vis_list),
+                "visitors": vis_list[:200],
+                "events": ev_list[:200]
+            })
+            return
+
         if path == "/api/bundle/flex":
             bundle_raw = query.get("bundle", [""])[0]
             client_name = query.get("for", ["คุณลูกค้า"])[0]
@@ -2102,10 +2852,21 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
         if path in ["/logs", "/api/export-logs"]:
             secret = query.get("secret", [""])[0]
             client_ip = self.client_address[0] if hasattr(self, 'client_address') else ''
-            is_local = client_ip in ["127.0.0.1", "localhost", "::1"]
+            forwarded_for = (self.headers.get("X-Forwarded-For") or "").strip()
+            is_local = (client_ip in ["127.0.0.1", "localhost", "::1"]) and (not os.environ.get("PORT")) and (not forwarded_for)
+            configured_secret = os.environ.get("ADMIN_EXPORT_SECRET", "").strip()
+            is_secret_ok = bool(secret and configured_secret and hmac.compare_digest(secret, configured_secret))
+            is_sess_admin = False
+            if not (is_local or is_secret_ok):
+                s = self._session()
+                if s and s.get("sub"):
+                    lobby = load_lobby_data()
+                    acting = next((a for a in lobby.get("approved", []) if a.get("lineUserId") == s.get("sub")), None)
+                    if acting and is_admin_member(acting):
+                        is_sess_admin = True
 
             # Security verification
-            if not is_local and secret != ADMIN_EXPORT_SECRET:
+            if not (is_local or is_secret_ok or is_sess_admin):
                 self.send_response(401)
                 self.send_header('Content-Type', 'application/json; charset=utf-8')
                 self.send_header('Access-Control-Allow-Origin', '*')
@@ -2195,6 +2956,30 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             acting_member = self._require(ADMIN_POST_LEVELS[path])
             if not acting_member:
                 return
+
+        if path == "/api/track/view":
+            try:
+                client_ip = (
+                    (self.headers.get("X-Forwarded-For") or "").split(",")[0].strip()
+                    or (self.client_address[0] if hasattr(self, "client_address") and self.client_address else "")
+                )
+                if not _check_track_ip_rate(client_ip):
+                    self._send_json(429, {"status": "rate_limited", "error": "Too many tracking requests"})
+                    return
+                content_length = int(self.headers.get('Content-Length', 0))
+                if content_length <= 0 or content_length > 16384:
+                    self._send_json(400, {"error": "Invalid payload size"})
+                    return
+                body = self.rfile.read(content_length)
+                payload = json.loads(body.decode('utf-8'))
+                if not isinstance(payload, dict):
+                    self._send_json(400, {"error": "Invalid JSON object"})
+                    return
+                res = record_client_tracking_event(payload)
+                self._send_json(200, res)
+            except Exception as e:
+                self._send_json(400, {"status": "error", "message": str(e)})
+            return
 
         if path == "/api/ocr/contract":
             content_length = int(self.headers.get('Content-Length', 0))
@@ -2571,7 +3356,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         prof = get_line_profile(uid)
                         # Zero-Day Defense Auto-Heal: Auto-link and pull authentic profile picture
                         try:
-                            auto_heal_member_line_profile(uid, prof, text)
+                            auto_heal_member_line_profile(uid, prof, "")
                         except Exception as _ahe:
                             print(f"[Auto-Heal Hook Warn]: {_ahe}")
                         user_name = prof.get("displayName", "ท่าน")
@@ -2619,6 +3404,15 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         try:
                             prof = get_line_profile(uid)
                             print(f"[User Message from {prof.get('displayName')}]: {text}")
+                            matched_member = None
+                            try:
+                                matched_member = auto_heal_member_line_profile(uid, prof, text if mtype == 'text' else "")
+                            except Exception as _ahe:
+                                print(f"[Auto-Heal Msg Warn]: {_ahe}")
+                            if not matched_member and uid in SUPER_ADMIN_LINE_USER_IDS:
+                                lobby_s = load_lobby_data()
+                                ensure_super_tech_seat(lobby_s, uid, prof.get("displayName", ""), prof.get("pictureUrl", ""))
+                                matched_member = next((a for a in lobby_s.get("approved", []) if a.get("lineUserId") == uid), None)
                             if mtype == 'image':
                                 # ---- รูปโฉนด: OCR + LandsMaps Flex Card ----
                                 handle_deed_image(
@@ -2630,6 +3424,22 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                 return
                             elif mtype == 'text':
                                 text_clean = text.strip().lower()
+                                text_raw = text.strip()
+                                m_link = re.match(r'^(?:สร้าง|ขอ|ส่ง)?(?:ลิงก์|ลิงค์)\s+(.+)$', text_raw, re.IGNORECASE)
+                                m_check = re.match(r'^(?:เช็ก|เช็ค|ตรวจ)ลูกค้า(?:\s+(.+))?$|^(?:เช็ก|เช็ค|ตรวจ)\s+(v-[a-z0-9]+)$', text_raw, re.IGNORECASE)
+                                m_merge = re.match(r'^(?:รวม|merge)\s+(v-[a-z0-9]+)\s+(v-[a-z0-9]+)$', text_raw, re.IGNORECASE)
+                                m_unmerge = re.match(r'^(?:แยก|ยกเลิกรวม|unmerge)\s+(v-[a-z0-9]+)$', text_raw, re.IGNORECASE)
+                                m_confirm = re.match(r'^(?:ยืนยัน|confirm)\s+(v-[a-z0-9]+)$', text_raw, re.IGNORECASE)
+                                is_onboarding_link_req = any(k in text_clean for k in ['สมัคร', 'ลงทะเบียน', 'login', 'เข้าสู่ระบบ', 'ขอนามบัตร', 'นามบัตร', 'โปรไฟล์', 'profile', 'เอเจนต์', 'เอเจน', 'ตัวแทน', 'ร่วมงาน', 'ขอเข้ากลุ่ม', 'เข้ากลุ่ม', 'นายหน้า', 'co-broker', 'cobroker', 'วิธีสมัคร', 'อยากเป็นเอเจนต์', 'ลิงก์สมัคร'])
+                                is_prop_or_cmd_link = False
+                                if m_link:
+                                    _raw_link_arg = m_link.group(1).strip()
+                                    _raw_link_lower = _raw_link_arg.lower()
+                                    _first_tok = _raw_link_arg.split()[0].lstrip('#').strip() if _raw_link_arg.split() else ''
+                                    if any(_raw_link_lower.startswith(p) for p in ('โฉนด', 'บ้าน', 'ทาวน์โฮม', 'ทาวน์เฮ้าส์', 'คอนโด', 'ที่ดิน', 'อาคาร', 'สมัคร', 'ลงทะเบียน', 'นามบัตร')):
+                                        is_prop_or_cmd_link = True
+                                    elif ('/' not in _raw_link_arg and '|' not in _raw_link_arg) and _first_tok and find_property_by_id_or_code(_first_tok):
+                                        is_prop_or_cmd_link = True
                                 deed_q = parse_deed_text_query(text)
                                 if deed_q:
                                     deed_no = deed_q.get('deed_no', '')
@@ -2654,6 +3464,50 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                     else:
                                         ai_reply = '🗺️ หากต้องการค้นหาแปลงที่ดิน กรุณาระบุเลขที่โฉนด พร้อมจังหวัดและอำเภอครับ\nตัวอย่าง: โฉนด 52696 ชลบุรี อ.เมือง'
                                         matched_codes, search_mode, matched_props, flex_carousel = [], 'DEED_PROMPT_GEO', [], None
+                                elif matched_member and m_link and not is_onboarding_link_req and not is_prop_or_cmd_link:
+                                    raw_arg = m_link.group(1).strip()
+                                    av_name, ag_note, prop_id = parse_agent_link_input(raw_arg)
+                                    if not av_name:
+                                        ai_reply = "⚠️ กรุณาระบุชื่อเรียก (Avatar) ลูกค้าด้วยค่ะ เช่น: `ลิงก์ คุณA / งบ 3 ล้าน`"
+                                    else:
+                                        ag_ref = resolve_agent_ref_for_member(matched_member)
+                                        client_url, _ = build_client_catalog_link(av_name, ag_note, agent_ref=ag_ref, prop_id=prop_id)
+                                        disp_av = av_name if av_name.startswith("คุณ") else f"คุณ{av_name}"
+                                        note_info = f"\n📝 โน้ตหลังบ้าน (ลูกค้าไม่เห็น): {ag_note}" if ag_note else ""
+                                        prop_info = f"\n📌 ล็อกเปิดบ้านรหัส: {prop_id}" if prop_id else ""
+                                        ai_reply = (
+                                            f"🔗 ลิงก์เฉพาะสำหรับ {disp_av} พร้อมส่งต่อให้ลูกค้าแล้วค่ะ!\n"
+                                            f"(ลิงก์นี้ซ่อนชื่อเป็นรหัสปลอดภัย ลูกค้าไม่เห็นโน้ตหลังบ้าน){note_info}{prop_info}\n\n"
+                                            f"👇 กดค้าง/ส่งต่อข้อความด้านล่างให้ลูกค้าได้เลยค่ะ:\n"
+                                            f"คัดสรรบ้านสวยและทรัพย์คุณภาพไว้ให้ {disp_av} เลือกชมแล้วนะคะ คลิกดูทั้งหมดได้ที่นี่เลยค่ะ 👇\n"
+                                            f"{client_url}\n\n"
+                                            f"🔔 ทันทีที่ลูกค้ากดเปิดดู น้องศิวาจะแจ้งเตือนกลับมาในแชทนี้ทันทีค่ะ"
+                                        )
+                                    matched_codes, search_mode, matched_props, flex_carousel = [], 'CLIENT_LINK_GEN', [], None
+                                elif matched_member and m_check:
+                                    ag_ref = resolve_agent_ref_for_member(matched_member)
+                                    is_adm = is_admin_member(matched_member) or uid in SUPER_ADMIN_LINE_USER_IDS
+                                    q_target = (m_check.group(1) or m_check.group(2) or "").strip()
+                                    ai_reply = format_client_tracking_report(agent_ref=ag_ref, target_query=q_target, is_admin=is_adm)
+                                    matched_codes, search_mode, matched_props, flex_carousel = [], 'CLIENT_TRACK_REPORT', [], None
+                                elif matched_member and m_merge:
+                                    ag_ref = resolve_agent_ref_for_member(matched_member)
+                                    is_adm = is_admin_member(matched_member) or uid in SUPER_ADMIN_LINE_USER_IDS
+                                    ok, msg_res = merge_visitor_ids(m_merge.group(1), m_merge.group(2), actor_name=matched_member.get('name', ''), agent_ref=ag_ref, is_admin=is_adm)
+                                    ai_reply = ("✅ " if ok else "⚠️ ") + msg_res
+                                    matched_codes, search_mode, matched_props, flex_carousel = [], 'CLIENT_MERGE', [], None
+                                elif matched_member and m_unmerge:
+                                    ag_ref = resolve_agent_ref_for_member(matched_member)
+                                    is_adm = is_admin_member(matched_member) or uid in SUPER_ADMIN_LINE_USER_IDS
+                                    ok, msg_res = unmerge_visitor_id(m_unmerge.group(1), actor_name=matched_member.get('name', ''), agent_ref=ag_ref, is_admin=is_adm)
+                                    ai_reply = ("✅ " if ok else "⚠️ ") + msg_res
+                                    matched_codes, search_mode, matched_props, flex_carousel = [], 'CLIENT_UNMERGE', [], None
+                                elif matched_member and m_confirm:
+                                    ag_ref = resolve_agent_ref_for_member(matched_member)
+                                    is_adm = is_admin_member(matched_member) or uid in SUPER_ADMIN_LINE_USER_IDS
+                                    ok, msg_res = confirm_visitor_identity(m_confirm.group(1), actor_name=matched_member.get('name', ''), agent_ref=ag_ref, is_admin=is_adm)
+                                    ai_reply = ("✅ " if ok else "⚠️ ") + msg_res
+                                    matched_codes, search_mode, matched_props, flex_carousel = [], 'CLIENT_CONFIRM', [], None
                                 elif any(k in text_clean for k in ['สมัคร', 'ลงทะเบียน', 'login', 'เข้าสู่ระบบ', 'ขอนามบัตร', 'นามบัตร', 'โปรไฟล์', 'profile', 'เอเจนต์', 'เอเจน', 'ตัวแทน', 'ร่วมงาน', 'ขอเข้ากลุ่ม', 'เข้ากลุ่ม', 'นายหน้า', 'co-broker', 'cobroker', 'ขอลิงก์', 'ขอลิงค์', 'วิธีสมัคร', 'อยากเป็นเอเจนต์', 'ลิงก์สมัคร']):
                                     ai_reply = (
                                         f"สวัสดีครับคุณ {prof.get('displayName', '')}! สำหรับการลงทะเบียนทีมงานออฟฟิศ หรือรับนามบัตรดิจิทัลทางการของ Siwasup Co-Broker OS:\n\n"
@@ -2728,6 +3582,14 @@ def handle_render_shutdown(signum, frame):
                 put_object_r2(_R2_LOBBY_VAULT_KEY, l_bytes, "application/json")
                 put_object_r2("data/lobby_applicants.json", l_bytes, "application/json; charset=utf-8")
                 print("[+] Lobby applicants vault flushed to Cloudflare R2 before sleep!")
+            with CLIENT_TRACKING_LOCK:
+                ct_store = load_client_tracking_data()
+                if put_object_r2 and _R2_CLIENT_TRACKING_RESTORED and len(ct_store.get("visitors", {})) > 0:
+                    ct_bytes = json.dumps(ct_store, ensure_ascii=False, indent=2).encode("utf-8")
+                    put_object_r2(_R2_CLIENT_TRACKING_VAULT_KEY, ct_bytes, "application/json; charset=utf-8")
+                    print("[+] Client tracking vault flushed to Cloudflare R2 before sleep!")
+                else:
+                    print("[~] Skipped client tracking R2 flush (not restored or empty store).")
     except Exception as e:
         print(f"[-] Error during pre-sleep flush: {e}")
     sys.exit(0)
