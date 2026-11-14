@@ -2401,11 +2401,26 @@ def record_client_tracking_event(payload: dict) -> dict:
 
 
 def format_client_tracking_report(agent_ref: str = "", target_query: str = "", is_admin: bool = False) -> str:
+    q = str(target_query or "").strip()
+    ref_u = str(agent_ref or "").strip().upper()
+    q_clean = re.sub(r"\s+", " ", q).lower()
+
+    queried_ref = ""
+    if q_clean in ("กูล", "คุณกูล", "เจี๊ยบ", "คุณเจี๊ยบ", "gool", "jeab", "sw001", "sw001 jeab"):
+        queried_ref = "SW001"
+    elif q_clean in ("ต้น", "พี่ต้น", "คุณต้น", "ton", "nassty", "[nassty]"):
+        queried_ref = "NASSTY"
+    elif re.match(r"^sw\d{3,}$", q_clean):
+        queried_ref = q_clean.upper()
+
+    if queried_ref and not is_admin and queried_ref.upper() != ref_u:
+        return "🔒 คำสั่งตรวจสอบลูกค้าของสายงานอื่น สงวนสิทธิ์เฉพาะผู้บริหารและแอดมินเท่านั้นค่ะ"
+
+    eff_ref_filter = queried_ref if queried_ref else ("" if is_admin else ref_u)
+
     with CLIENT_TRACKING_LOCK:
         store = load_client_tracking_data()
         visitors = store.get("visitors", {})
-        q = str(target_query or "").strip()
-        ref_u = str(agent_ref or "").strip().upper()
 
         roots = {}
         for vid, vis in visitors.items():
@@ -2413,7 +2428,7 @@ def format_client_tracking_report(agent_ref: str = "", target_query: str = "", i
                 continue
             root_id = _resolve_root_visitor(visitors, vid)
             if root_id not in roots:
-                cons = get_consolidated_visitor(visitors, root_id, ref_filter="" if is_admin else ref_u)
+                cons = get_consolidated_visitor(visitors, root_id, ref_filter=eff_ref_filter)
                 if not is_admin and ref_u:
                     cons_refs = [r.upper() for r in (cons.get("refs") or [])]
                     if ref_u not in cons_refs:
@@ -2423,7 +2438,13 @@ def format_client_tracking_report(agent_ref: str = "", target_query: str = "", i
     items = list(roots.values())
     items.sort(key=lambda x: x.get("last_seen_at", ""), reverse=True)
 
-    if q:
+    if queried_ref:
+        q_ref_u = queried_ref.upper()
+        items = [
+            it for it in items
+            if q_ref_u in [str(r).upper() for r in (it.get("refs") or [])]
+        ]
+    elif q:
         q_low = q.lower()
         items = [
             it for it in items
@@ -2432,9 +2453,12 @@ def format_client_tracking_report(agent_ref: str = "", target_query: str = "", i
             or q_low in str(it.get("agent_note", "")).lower()
             or any(q_low in str(a).lower() for a in it.get("_aliases", []))
             or any(q_low in str(n).lower() for n in (it.get("name_history") or []))
+            or any(q_low in str(r).lower() for r in (it.get("refs") or []))
         ]
 
     if not items:
+        if queried_ref:
+            return f"🔍 ยังไม่พบประวัติลูกค้าของสายงาน '{queried_ref}' ที่กดเปิดลิงก์ในระบบค่ะ"
         if q:
             return f"🔍 ยังไม่พบประวัติการเข้าดูของ '{q}' ค่ะ (อาจยังไม่ได้กดเปิดลิงก์)"
         return (
@@ -2444,7 +2468,8 @@ def format_client_tracking_report(agent_ref: str = "", target_query: str = "", i
             "หรือ: ลิงก์ ตั้ม งบ4ล้าน"
         )
 
-    lines = [f"📊 รายงานลูกค้าเข้าดูแคตตาล็อก ({len(items)} เครื่องล่าสุด):"]
+    header_scope = f" [สายงาน: {queried_ref}]" if queried_ref else ""
+    lines = [f"📊 รายงานลูกค้าเข้าดูแคตตาล็อก{header_scope} ({len(items)} เครื่องล่าสุด):"]
     for idx, it in enumerate(items[:8], 1):
         vid = it.get("vid", "")
         pname = it.get("primary_name") or "ผู้เข้าชมลิงก์รวม"
