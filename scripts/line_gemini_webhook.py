@@ -12,7 +12,14 @@ import sys
 import threading
 import time
 import re
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+
+TH_TZ = timezone(timedelta(hours=7))
+
+
+def bkk_now() -> datetime:
+    """Return current datetime in Asia/Bangkok (UTC+7)."""
+    return datetime.now(TH_TZ)
 
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
@@ -383,7 +390,7 @@ def auto_heal_member_line_profile(user_id, prof=None, text_content=""):
         matched_member['line_display_name'] = display_name
 
         if changed:
-            now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            now_str = bkk_now().strftime('%Y-%m-%d %H:%M:%S')
             log_msg = f"[{now_str}] 🛡️✨ [ZERO-DAY AUTO-HEAL] กู้คืนรูปโปรไฟล์ LINE อัตโนมัติ: {matched_member.get('nickname', '')} ({matched_member.get('name', '')}) -> ผูก LINE และเชื่อมรูปภาพสำเร็จ 100%"
             store.setdefault('audit_log', []).insert(0, log_msg)
             save_lobby_data(store)
@@ -440,7 +447,7 @@ def load_chat_logs():
 
     return {
         "bot_name": "Siwasupagent (@813nyyia)",
-        "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "updated_at": bkk_now().strftime("%Y-%m-%d %H:%M:%S"),
         "total_logged": 0,
         "historical_summary": {
             "2026-10-29_replies_sent": 18,
@@ -457,7 +464,7 @@ def append_chat_log(entry):
         store["conversations"].insert(0, entry)
         store["conversations"] = store["conversations"][:500]
         store["total_logged"] = len(store["conversations"])
-        store["updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        store["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
         data_bytes = json.dumps(store, ensure_ascii=False, indent=2).encode("utf-8")
         try:
             with open(CHAT_LOG_PATH, "wb") as f:
@@ -1330,7 +1337,7 @@ def handle_deed_image(message_id: str, reply_token: str, user_id: str, user_name
     _push_flex_message_raw(flex_card, user_id)
     append_chat_log({
         "id": f"LOG_{int(time.time()*1000)}",
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "timestamp": bkk_now().strftime("%Y-%m-%d %H:%M:%S"),
         "user_name": user_name,
         "user_pic": "",
         "user_id_tail": "deed_ocr",
@@ -1578,7 +1585,7 @@ def load_lobby_data():
                 return json.load(f)
         except Exception as e:
             print(f"[Warn] Failed to read lobby_applicants.json: {e}")
-    return {"updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "pending": [], "approved": []}
+    return {"updated_at": bkk_now().strftime("%Y-%m-%d %H:%M:%S"), "pending": [], "approved": []}
 
 def save_lobby_data(store, allow_truncate=False):
     with LOBBY_LOCK:
@@ -1595,7 +1602,7 @@ def save_lobby_data(store, allow_truncate=False):
             except Exception as _chk_e:
                 pass
 
-        store["updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        store["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
         data_bytes = json.dumps(store, ensure_ascii=False, indent=2).encode("utf-8")
         try:
             with open(LOBBY_PATH, "wb") as f:
@@ -1700,7 +1707,7 @@ def ensure_super_tech_seat(store, uid, name="", picture=""):
                 "systemAdmin": True,
             },
             "is_tech": True,
-            "approved_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "approved_at": bkk_now().strftime("%Y-%m-%d %H:%M:%S"),
         }
         store.setdefault("approved", []).insert(0, seat)
         changed = True
@@ -1774,11 +1781,11 @@ def load_contracts_data():
                 return json.load(f)
         except Exception as e:
             print(f"[Warn] Failed to read exclusive_contracts.json: {e}")
-    return {"updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "contracts": []}
+    return {"updated_at": bkk_now().strftime("%Y-%m-%d %H:%M:%S"), "contracts": []}
 
 def save_contracts_data(store):
     with CONTRACTS_LOCK:
-        store["updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        store["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
         data_bytes = json.dumps(store, ensure_ascii=False, indent=2).encode("utf-8")
         try:
             with open(CONTRACTS_PATH, "wb") as f:
@@ -1810,7 +1817,7 @@ _MAX_TRACKED_VISITORS = 2000
 
 def _default_client_tracking_store():
     return {
-        "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "updated_at": bkk_now().strftime("%Y-%m-%d %H:%M:%S"),
         "visitors": {},
         "events": [],
         "merge_log": []
@@ -1881,7 +1888,7 @@ def save_client_tracking_data(store):
         if prev_count > 3 and new_count == 0:
             print(f"[CRITICAL SAFEGUARD] Blocked attempted client_tracking wipeout! Existing: {prev_count}, Incoming: {new_count}")
             return
-        store["updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        store["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
         _CLIENT_TRACKING_MEM_CACHE = _clone_store(store)
         data_bytes = json.dumps(store, ensure_ascii=False, indent=2).encode("utf-8")
         try:
@@ -2008,6 +2015,39 @@ def build_client_catalog_link(avatar_name: str, agent_note: str = "", agent_ref:
     if prop_id:
         url += f"&id={urllib.parse.quote(str(prop_id).strip())}"
     return (url, tok)
+
+
+def resolve_catalog_link_request(text_raw: str, matched_member: dict, is_admin: bool = False):
+    """Detect requests for an agent's client catalog link (e.g. 'ส่งลิงก์บ้านของตัวแทน 001 มาให้ที')."""
+    t = str(text_raw or "").strip()
+    tl = t.lower()
+    if not any(w in tl for w in ("ลิงก์", "ลิงค์", "link")):
+        return None
+    if any(w in tl for w in ("สมัคร", "ลงทะเบียน", "นามบัตร", "login", "เข้าสู่ระบบ")):
+        return None
+    has_direct_catalog_phrase = any(
+        w in tl for w in (
+            "ลิงก์บ้าน", "ลิงค์บ้าน", "ลิงก์ทรัพย์", "ลิงค์ทรัพย์",
+            "ลิงก์แคตตาล็อก", "ลิงค์แคตตาล็อก", "ลิงก์แค็ตตาล็อก", "ลิงค์แค็ตตาล็อก",
+            "ลิงก์ขายบ้าน", "ลิงค์ขายบ้าน", "ลิงก์ของฉัน", "ลิงค์ของฉัน", "ลิงก์ส่วนตัว", "ลิงค์ส่วนตัว"
+        )
+    )
+    starts_with_catalog_req = bool(re.match(
+        r'^(?:สร้าง|ขอ|ส่ง)?(?:ลิงก์|ลิงค์)\s*(?:บ้าน|ทรัพย์|แคตตาล็อก|แค็ตตาล็อก|catalog|ขายบ้าน|ของฉัน|ส่วนตัว|ของตัวแทน|ตัวแทน)',
+        tl
+    ))
+    has_agent_code = bool(re.search(r'(?:ตัวแทน|เอเจนต์?|รหัส)\s*(?:sw)?\d{3}\b', tl, re.IGNORECASE))
+    if not (has_direct_catalog_phrase or starts_with_catalog_req or has_agent_code):
+        return None
+
+    ag_ref = resolve_agent_ref_for_member(matched_member)
+    if is_admin:
+        m_code = re.search(r'\b(sw\d{3}|\d{3})\b', tl, re.IGNORECASE)
+        if m_code:
+            raw_code = m_code.group(1).upper()
+            ag_ref = raw_code if raw_code.startswith("SW") else f"SW{raw_code}"
+    url = f"https://assets.siwasup.com/catalog.html?ref={urllib.parse.quote(ag_ref)}&view=client"
+    return (ag_ref, url)
 
 
 def compute_visitor_trust(vis: dict):
@@ -2148,7 +2188,7 @@ def merge_visitor_ids(master_vid: str, alias_vid: str, actor_name: str = "", age
             "master_vid": m_root,
             "alias_vid": a_id,
             "actor": actor_name,
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            "timestamp": bkk_now().strftime("%Y-%m-%d %H:%M:%S")
         })
         store["merge_log"] = store["merge_log"][:200]
         save_client_tracking_data(store)
@@ -2176,7 +2216,7 @@ def unmerge_visitor_id(alias_vid: str, actor_name: str = "", agent_ref: str = ""
             "prev_master_vid": prev_master,
             "alias_vid": a_id,
             "actor": actor_name,
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            "timestamp": bkk_now().strftime("%Y-%m-%d %H:%M:%S")
         })
         store["merge_log"] = store["merge_log"][:200]
         save_client_tracking_data(store)
@@ -2201,7 +2241,7 @@ def confirm_visitor_identity(vid: str, actor_name: str = "", agent_ref: str = ""
         vis["trust_score"] = cons["trust_score"]
         vis["trust_label"] = cons["trust_label"]
         vis["confirmed_by"] = actor_name
-        vis["confirmed_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        vis["confirmed_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
         save_client_tracking_data(store)
         name = vis.get("primary_name") or root_id
         return (True, f"ยืนยันตัวตน #{root_id} ({name}) สมบูรณ์แล้ว — Trust Score: {cons['trust_score']}%")
@@ -2285,8 +2325,8 @@ def record_client_tracking_event(payload: dict) -> dict:
     # Strictly accept cryptographically authenticated &t= tokens only (no unsigned legacy_c spoofing)
     avatar_name, agent_note = decode_client_tag(tag_token)
 
-    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    now_hm = datetime.now().strftime("%H:%M")
+    now_str = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+    now_hm = bkk_now().strftime("%H:%M")
 
     with CLIENT_TRACKING_LOCK:
         store = load_client_tracking_data()
@@ -2647,7 +2687,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             self._send_json(200, {
                 "status": "healthy",
                 "service": "Siwasup Co-Broker Webhook v2",
-                "server_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "server_time": bkk_now().strftime("%Y-%m-%d %H:%M:%S"),
                 "approved_members": approved_count,
                 "r2_sync": bool(put_object_r2),
                 "anti_downgrade": "ACTIVE",
@@ -2862,7 +2902,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 seat = next((a for a in store.get("approved", []) if a.get("id") == "app_office_004" and not a.get("lineUserId")), None)
                 if seat:
                     seat["lineUserId"] = sub
-                    store.setdefault("audit_log", []).insert(0, f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 🔗 ผูก LINE ผู้ดูแลระบบสูงสุด: {seat.get('name')}")
+                    store.setdefault("audit_log", []).insert(0, f"[{bkk_now().strftime('%Y-%m-%d %H:%M:%S')}] 🔗 ผูก LINE ผู้ดูแลระบบสูงสุด: {seat.get('name')}")
                     save_lobby_data(store)
 
             # Zero-Day Defense Auto-Heal on LINE Login OAuth callback
@@ -2911,7 +2951,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 filtered = []
                 for c in convs:
                     try:
-                        c_dt = datetime.strptime(c.get("timestamp", ""), "%Y-%m-%d %H:%M:%S")
+                        c_dt = datetime.strptime(c.get("timestamp", ""), "%Y-%m-%d %H:%M:%S").replace(tzinfo=TH_TZ)
                         if c_dt.timestamp() >= cutoff_ts:
                             filtered.append(c)
                     except Exception:
@@ -2941,7 +2981,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
 
             export_data = {
                 "bot_name": store.get("bot_name", "Siwasupagent"),
-                "export_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "export_time": bkk_now().strftime("%Y-%m-%d %H:%M:%S"),
                 "total_exported": len(convs),
                 "filter_criteria": {
                     "days": days_str,
@@ -3035,11 +3075,11 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 store = load_contracts_data()
                 cid = payload.get("id") or f"SW-CNT-{int(time.time()*1000)%1000000}"
                 payload["id"] = cid
-                payload["saved_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                payload["saved_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
                 # Expiry calculation (default 90 days if not set)
                 days = int(payload.get("contract_days") or 90)
                 exp_ts = time.time() + (days * 86400)
-                payload["expires_at"] = datetime.fromtimestamp(exp_ts).strftime("%Y-%m-%d")
+                payload["expires_at"] = datetime.fromtimestamp(exp_ts, tz=TH_TZ).strftime("%Y-%m-%d")
                 
                 # Replace or prepend
                 contracts = store.setdefault("contracts", [])
@@ -3102,7 +3142,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         existing["lineUserId"] = applicant["lineUserId"]
                         if applicant.get("avatar") and not existing.get("avatar"):
                             existing["avatar"] = applicant["avatar"]
-                        store.setdefault("audit_log", []).insert(0, f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 🔗 ผูก LINE เข้ากับสมาชิกเดิม: {existing.get('name')}")
+                        store.setdefault("audit_log", []).insert(0, f"[{bkk_now().strftime('%Y-%m-%d %H:%M:%S')}] 🔗 ผูก LINE เข้ากับสมาชิกเดิม: {existing.get('name')}")
                         save_lobby_data(store)
                         self._send_json(200, {"status": "success", "approved": sanitize_member(existing), "linked": True})
                         return
@@ -3119,7 +3159,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         "title": payload.get("title", ""),
                         "badges": payload.get("badges", []),
                         "permissions": payload.get("permissions", {}),
-                        "approved_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        "approved_at": bkk_now().strftime("%Y-%m-%d %H:%M:%S")
                     }
                     store.setdefault("approved", []).insert(0, approved_item)
                     audit_entry = f"[{approved_item['approved_at']}] 🟢 อนุมัติสิทธิ์: {approved_item.get('name')} ({approved_item.get('role')})"
@@ -3195,7 +3235,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     if "title" in payload: m["title"] = payload["title"]
                     if "badges" in payload: m["badges"] = payload["badges"]
                     if "permissions" in payload: m["permissions"] = payload["permissions"]
-                    m["updated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    m["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
                     
                     audit_entry = f"[{m['updated_at']}] ⚙️ ปรับสิทธิ์: {m.get('name')} เป็น {m.get('role')} ({len(m.get('badges', []))} สิทธิ์)"
                     store.setdefault("audit_log", []).insert(0, audit_entry)
@@ -3249,7 +3289,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         "rollback_id": rollback_id,
                         "action": "REVOKE",
                         "member": revoked_member,
-                        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                        "timestamp": bkk_now().strftime("%Y-%m-%d %H:%M:%S"),
                         "reason": reason
                     }
                     store.setdefault("rollback_history", []).insert(0, rollback_record)
@@ -3301,7 +3341,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     if rb_item.get("action") == "REVOKE":
                         restored_member = rb_item.get("member")
                         store.setdefault("approved", []).insert(0, restored_member)
-                        audit_entry = f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ↩️ Rollback คืนสิทธิ์: {restored_member.get('name')}"
+                        audit_entry = f"[{bkk_now().strftime('%Y-%m-%d %H:%M:%S')}] ↩️ Rollback คืนสิทธิ์: {restored_member.get('name')}"
                         store.setdefault("audit_log", []).insert(0, audit_entry)
                         save_lobby_data(store)
                         self.send_response(200)
@@ -3327,13 +3367,13 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
         if path == "/api/lobby/backup":
             try:
                 store = load_lobby_data()
-                backup_name = f"lobby_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+                backup_name = f"lobby_backup_{bkk_now().strftime('%Y%m%d_%H%M%S')}.json"
                 backup_dir = os.path.join(os.path.dirname(LOBBY_PATH), "backups")
                 os.makedirs(backup_dir, exist_ok=True)
                 backup_file = os.path.join(backup_dir, backup_name)
                 with open(backup_file, "w", encoding="utf-8") as bf:
                     json.dump(store, bf, ensure_ascii=False, indent=2)
-                audit_entry = f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 💾 สำรองข้อมูลสถานะ: {backup_name}"
+                audit_entry = f"[{bkk_now().strftime('%Y-%m-%d %H:%M:%S')}] 💾 สำรองข้อมูลสถานะ: {backup_name}"
                 store.setdefault("audit_log", []).insert(0, audit_entry)
                 save_lobby_data(store)
                 self.send_response(200)
@@ -3400,7 +3440,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                             reply_line(rtoken, welcome_msg)
                         append_chat_log({
                             "id": f"LOG_{int(time.time()*1000)}",
-                            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                            "timestamp": bkk_now().strftime("%Y-%m-%d %H:%M:%S"),
                             "user_name": prof.get("displayName"),
                             "user_pic": prof.get("pictureUrl"),
                             "user_id_tail": uid[-6:] if uid else "anon",
@@ -3455,7 +3495,11 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                 m_merge = re.match(r'^(?:รวม|merge)\s+(v-[a-z0-9]+)\s+(v-[a-z0-9]+)$', text_raw, re.IGNORECASE)
                                 m_unmerge = re.match(r'^(?:แยก|ยกเลิกรวม|unmerge)\s+(v-[a-z0-9]+)$', text_raw, re.IGNORECASE)
                                 m_confirm = re.match(r'^(?:ยืนยัน|confirm)\s+(v-[a-z0-9]+)$', text_raw, re.IGNORECASE)
-                                is_onboarding_link_req = any(k in text_clean for k in ['สมัคร', 'ลงทะเบียน', 'login', 'เข้าสู่ระบบ', 'ขอนามบัตร', 'นามบัตร', 'โปรไฟล์', 'profile', 'เอเจนต์', 'เอเจน', 'ตัวแทน', 'ร่วมงาน', 'ขอเข้ากลุ่ม', 'เข้ากลุ่ม', 'นายหน้า', 'co-broker', 'cobroker', 'วิธีสมัคร', 'อยากเป็นเอเจนต์', 'ลิงก์สมัคร'])
+                                _is_adm_member = bool(matched_member and (is_admin_member(matched_member) or uid in SUPER_ADMIN_LINE_USER_IDS))
+                                catalog_link_res = resolve_catalog_link_request(text_raw, matched_member, is_admin=_is_adm_member) if matched_member else None
+                                _onboarding_strict_kw = ['สมัคร', 'ลงทะเบียน', 'login', 'เข้าสู่ระบบ', 'ขอนามบัตร', 'นามบัตร', 'โปรไฟล์', 'profile', 'วิธีสมัคร', 'ลิงก์สมัคร']
+                                _onboarding_public_kw = _onboarding_strict_kw + ['เอเจนต์', 'เอเจน', 'ตัวแทน', 'ร่วมงาน', 'ขอเข้ากลุ่ม', 'เข้ากลุ่ม', 'นายหน้า', 'co-broker', 'cobroker', 'ขอลิงก์', 'ขอลิงค์', 'อยากเป็นเอเจนต์']
+                                is_onboarding_link_req = any(k in text_clean for k in (_onboarding_strict_kw if matched_member else _onboarding_public_kw))
                                 is_prop_or_cmd_link = False
                                 if m_link:
                                     _raw_link_arg = m_link.group(1).strip()
@@ -3489,6 +3533,15 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                     else:
                                         ai_reply = '🗺️ หากต้องการค้นหาแปลงที่ดิน กรุณาระบุเลขที่โฉนด พร้อมจังหวัดและอำเภอครับ\nตัวอย่าง: โฉนด 52696 ชลบุรี อ.เมือง'
                                         matched_codes, search_mode, matched_props, flex_carousel = [], 'DEED_PROMPT_GEO', [], None
+                                elif catalog_link_res:
+                                    ag_ref, catalog_url = catalog_link_res
+                                    ai_reply = (
+                                        f"🏠 ลิงก์แคตตาล็อกบ้านของตัวแทน **{ag_ref}** (มุมมองลูกค้า ซ่อนรหัสแบงก์/ค่าคอม) พร้อมส่งต่อแล้วค่ะ:\n\n"
+                                        f"{catalog_url}\n\n"
+                                        f"💡 หากต้องการสร้างลิงก์เฉพาะเจาะจงรายลูกค้า (เพื่อแจ้งเตือนชื่อและ Trust Score เมื่อลูกค้าเปิดดู) ให้พิมพ์:\n"
+                                        f"`ลิงก์ ชื่อลูกค้า`"
+                                    )
+                                    matched_codes, search_mode, matched_props, flex_carousel = [], 'AGENT_CATALOG_LINK', [], None
                                 elif matched_member and m_link and not is_onboarding_link_req and not is_prop_or_cmd_link:
                                     raw_arg = m_link.group(1).strip()
                                     av_name, ag_note, prop_id = parse_agent_link_input(raw_arg)
@@ -3511,29 +3564,29 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                     matched_codes, search_mode, matched_props, flex_carousel = [], 'CLIENT_LINK_GEN', [], None
                                 elif matched_member and m_check:
                                     ag_ref = resolve_agent_ref_for_member(matched_member)
-                                    is_adm = is_admin_member(matched_member) or uid in SUPER_ADMIN_LINE_USER_IDS
+                                    is_adm = _is_adm_member
                                     q_target = (m_check.group(1) or m_check.group(2) or "").strip()
                                     ai_reply = format_client_tracking_report(agent_ref=ag_ref, target_query=q_target, is_admin=is_adm)
                                     matched_codes, search_mode, matched_props, flex_carousel = [], 'CLIENT_TRACK_REPORT', [], None
                                 elif matched_member and m_merge:
                                     ag_ref = resolve_agent_ref_for_member(matched_member)
-                                    is_adm = is_admin_member(matched_member) or uid in SUPER_ADMIN_LINE_USER_IDS
+                                    is_adm = _is_adm_member
                                     ok, msg_res = merge_visitor_ids(m_merge.group(1), m_merge.group(2), actor_name=matched_member.get('name', ''), agent_ref=ag_ref, is_admin=is_adm)
                                     ai_reply = ("✅ " if ok else "⚠️ ") + msg_res
                                     matched_codes, search_mode, matched_props, flex_carousel = [], 'CLIENT_MERGE', [], None
                                 elif matched_member and m_unmerge:
                                     ag_ref = resolve_agent_ref_for_member(matched_member)
-                                    is_adm = is_admin_member(matched_member) or uid in SUPER_ADMIN_LINE_USER_IDS
+                                    is_adm = _is_adm_member
                                     ok, msg_res = unmerge_visitor_id(m_unmerge.group(1), actor_name=matched_member.get('name', ''), agent_ref=ag_ref, is_admin=is_adm)
                                     ai_reply = ("✅ " if ok else "⚠️ ") + msg_res
                                     matched_codes, search_mode, matched_props, flex_carousel = [], 'CLIENT_UNMERGE', [], None
                                 elif matched_member and m_confirm:
                                     ag_ref = resolve_agent_ref_for_member(matched_member)
-                                    is_adm = is_admin_member(matched_member) or uid in SUPER_ADMIN_LINE_USER_IDS
+                                    is_adm = _is_adm_member
                                     ok, msg_res = confirm_visitor_identity(m_confirm.group(1), actor_name=matched_member.get('name', ''), agent_ref=ag_ref, is_admin=is_adm)
                                     ai_reply = ("✅ " if ok else "⚠️ ") + msg_res
                                     matched_codes, search_mode, matched_props, flex_carousel = [], 'CLIENT_CONFIRM', [], None
-                                elif any(k in text_clean for k in ['สมัคร', 'ลงทะเบียน', 'login', 'เข้าสู่ระบบ', 'ขอนามบัตร', 'นามบัตร', 'โปรไฟล์', 'profile', 'เอเจนต์', 'เอเจน', 'ตัวแทน', 'ร่วมงาน', 'ขอเข้ากลุ่ม', 'เข้ากลุ่ม', 'นายหน้า', 'co-broker', 'cobroker', 'ขอลิงก์', 'ขอลิงค์', 'วิธีสมัคร', 'อยากเป็นเอเจนต์', 'ลิงก์สมัคร']):
+                                elif is_onboarding_link_req:
                                     ai_reply = (
                                         f"สวัสดีครับคุณ {prof.get('displayName', '')}! สำหรับการลงทะเบียนทีมงานออฟฟิศ หรือรับนามบัตรดิจิทัลทางการของ Siwasup Co-Broker OS:\n\n"
                                         "👉 คลิกที่นี่เพื่อลงทะเบียน/เข้าสู่ระบบได้ทันทีครับ:\n"
@@ -3562,7 +3615,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
 
                             append_chat_log({
                                 "id": f"LOG_{int(time.time()*1000)}",
-                                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                                "timestamp": bkk_now().strftime("%Y-%m-%d %H:%M:%S"),
                                 "user_name": prof.get("displayName"),
                                 "user_pic": prof.get("pictureUrl"),
                                 "user_id_tail": uid[-6:] if uid else "anon",
