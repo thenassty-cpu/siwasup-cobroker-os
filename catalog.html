@@ -1515,6 +1515,16 @@
       }
     }
 
+    function resolveVerifiedMemberRef(m) {
+      if (!m) return '';
+      const rawCode = String(m.code || m.agent_ref || '').trim().toUpperCase();
+      if (rawCode) return rawCode;
+      const mid = String(m.id || '').trim().toLowerCase();
+      if (mid === 'app_office_001') return 'SW001';
+      if (mid === 'app_office_004') return 'SW004';
+      return String(m.nickname || m.phone || m.name || '').trim();
+    }
+
     async function verifySiwasupAgentSession() {
       try {
         if (window.location.hash && window.location.hash.includes('session=')) {
@@ -1571,11 +1581,12 @@
             id === 'app_office_004' ||
             me.member.role === 'admin'
           );
-          if (code) {
+          const resolvedCode = resolveVerifiedMemberRef(me.member);
+          if (resolvedCode) {
             if (typeof _siwasupSafeStorage === 'function') {
-              _siwasupSafeStorage('local', 'set', 'siwasup_my_agent_ref', code);
+              _siwasupSafeStorage('local', 'set', 'siwasup_my_agent_ref', resolvedCode);
             } else {
-              localStorage.setItem('siwasup_my_agent_ref', code);
+              localStorage.setItem('siwasup_my_agent_ref', resolvedCode);
             }
           }
           syncClientToAgentSwitchButton();
@@ -1620,15 +1631,16 @@
       }
       // Clean client-view query params & referral override so Refresh/Banner reflect the logged-in Agent/Admin
       try {
+        const verifiedCode = resolveVerifiedMemberRef(window._siwasupVerifiedMember);
         if (typeof _siwasupSafeStorage === 'function') {
           _siwasupSafeStorage('local', 'remove', 'siwasup_referred_by');
-          if (window._siwasupVerifiedMember && window._siwasupVerifiedMember.code) {
-            _siwasupSafeStorage('local', 'set', 'siwasup_my_agent_ref', String(window._siwasupVerifiedMember.code).toUpperCase());
+          if (verifiedCode) {
+            _siwasupSafeStorage('local', 'set', 'siwasup_my_agent_ref', verifiedCode);
           }
         } else {
           localStorage.removeItem('siwasup_referred_by');
-          if (window._siwasupVerifiedMember && window._siwasupVerifiedMember.code) {
-            localStorage.setItem('siwasup_my_agent_ref', String(window._siwasupVerifiedMember.code).toUpperCase());
+          if (verifiedCode) {
+            localStorage.setItem('siwasup_my_agent_ref', verifiedCode);
           }
         }
         const cleanParams = new URLSearchParams(window.location.search);
@@ -1844,8 +1856,8 @@
             if (bId) bId.textContent = '(สำนักงานใหญ่)';
           } else {
             const loggedMember = window._siwasupVerifiedMember;
-            const loggedCode = loggedMember && loggedMember.code ? String(loggedMember.code).toUpperCase() : '';
-            const storedRef = loggedCode || ((typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : (localStorage.getItem('siwasup_referred_by') || ''));
+            const loggedCode = resolveVerifiedMemberRef(loggedMember);
+            const storedRef = loggedCode || localStorage.getItem('siwasup_my_agent_ref') || ((typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : '');
             const agentProfile = (storedRef && typeof getAgentProfile === 'function') ? getAgentProfile(storedRef) : null;
             if (agentProfile) {
               if (bName) bName.textContent = agentProfile.name;
@@ -6297,6 +6309,16 @@
         phone: '092-583-6565'
       },
       // 💻 [NASSTY] (Tech Architect)
+      'SW004': {
+        agentId: 'SW004',
+        name: 'คุณณัฐ ระวังภัย (Ton / NASSTY)',
+        shortName: 'คุณต้น',
+        tier: 'eagle',
+        publicTitle: 'Senior Technology Architect',
+        badgeClass: 'bg-[#C2A460] text-neutral-950 font-bold border border-[#E5CF94]',
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
+        phone: '081-555-5555'
+      },
       'NASSTY': {
         agentId: 'NASSTY',
         name: 'คุณณัฐ ระวังภัย (Ton / NASSTY)',
@@ -6368,8 +6390,11 @@
       if (upper.includes('LILY') || cleanId.includes('ลิลลี่') || digitsOnly === '0925836565') {
         return AGENT_PROFILES['SW-003'];
       }
+      if (upper === 'SW004') {
+        return AGENT_PROFILES['SW004'];
+      }
       if (upper.includes('NASSTY') || upper.includes('TON') || upper.includes('SW004') || cleanId.includes('ต้น') || digitsOnly === '0815555555') {
-        return AGENT_PROFILES['NASSTY'];
+        return AGENT_PROFILES['SW004'];
       }
 
       // 2. 🏆 Look up in the official 125 Siwasup Agents roster (siwasup_agents.js)
@@ -6425,8 +6450,10 @@
     }
 
     function getStoredAgentRef() {
-      if (typeof currentMode !== 'undefined' && currentMode !== 'client' && window._siwasupVerifiedMember && window._siwasupVerifiedMember.code) {
-        return String(window._siwasupVerifiedMember.code).toUpperCase();
+      if (typeof currentMode !== 'undefined' && currentMode !== 'client') {
+        const verifiedCode = resolveVerifiedMemberRef(window._siwasupVerifiedMember);
+        if (verifiedCode) return verifiedCode;
+        return localStorage.getItem('siwasup_my_agent_ref') || localStorage.getItem('siwasup_referred_by') || 'SW001';
       }
       return localStorage.getItem('siwasup_referred_by') || localStorage.getItem('siwasup_my_agent_ref') || 'SW001';
     }

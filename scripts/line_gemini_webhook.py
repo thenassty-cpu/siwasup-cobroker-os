@@ -1686,6 +1686,7 @@ def ensure_super_tech_seat(store, uid, name="", picture=""):
     if not seat:
         seat = {
             "id": "app_office_004",
+            "code": "SW004",
             "name": "[NASSTY]",
             "nickname": "NASSTY",
             "phone": "0815555555",
@@ -1713,6 +1714,9 @@ def ensure_super_tech_seat(store, uid, name="", picture=""):
         store.setdefault("approved", []).insert(0, seat)
         changed = True
     else:
+        if seat.get("code") != "SW004":
+            seat["code"] = "SW004"
+            changed = True
         if seat.get("name") != "[NASSTY]":
             seat["name"] = "[NASSTY]"
             changed = True
