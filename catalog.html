@@ -554,8 +554,9 @@
                   <!-- ช่องที่ 4: โซนทำเล -->
                   <div class="px-3 py-0.5 lg:border-l border-neutral-200/80">
                     <label class="block text-[9px] font-semibold text-neutral-400 uppercase tracking-wider">โซนทำเล</label>
-                    <select id="filter-location" onchange="applyAllFilters()" class="w-full bg-transparent text-xs font-bold text-neutral-900 focus:outline-none cursor-pointer truncate">
-                      <option value="all">ทุกทำเล</option>
+                    <select id="filter-location" onchange="onLocationFilterChange()" class="w-full bg-transparent text-xs font-bold text-neutral-900 focus:outline-none cursor-pointer truncate">
+                      <option value="all">ทุกทำเล (ทั้งหมด)</option>
+                      <option value="bkk_metro">กทม. + ปริมณฑล (ทุกโซน)</option>
                       <option value="พระราม 2">พระราม 2 / ท่าข้าม / บางขุนเทียน</option>
                       <option value="ท่าพระ">ฝั่งธน / ท่าพระ / บางแค / เพชรเกษม</option>
                       <option value="รามอินทรา">รามอินทรา / สายไหม / บางเขน / มีนบุรี</option>
@@ -566,6 +567,7 @@
                       <option value="ลาดกระบัง">ลาดกระบัง / อ่อนนุช / สุวรรณภูมิ</option>
                       <option value="บางใหญ่">บางใหญ่ / บางบัวทอง / นนทบุรี</option>
                       <option value="รังสิต">รังสิต / ลำลูกกา / คลองหลวง / ปทุมธานี</option>
+                      <option value="upcountry">🗺️ ต่างจังหวัด (เลือกจังหวัด...)</option>
                     </select>
                   </div>
 
@@ -596,6 +598,16 @@
                   </div>
 
                 </div>
+              </div>
+              <!-- Contextual Tier-2: แถบเลือกจังหวัดต่างจังหวัด (ผุดขึ้นเฉพาะเมื่อเลือก 'ต่างจังหวัด') -->
+              <div id="upcountry-province-bar" class="hidden mt-2 bg-[#FAF7F2] border border-[#E5C985]/60 rounded-2xl px-3.5 py-2 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div class="flex items-center gap-2 min-w-0 flex-1">
+                  <span class="font-bold text-[#8C6D2E] whitespace-nowrap shrink-0">🗺️ จังหวัด (ต่างจังหวัด):</span>
+                  <select id="filter-upcountry-province" onchange="applyAllFilters()" class="bg-white border border-[#C0A366]/50 rounded-xl px-2.5 py-1 text-xs font-bold text-neutral-900 focus:outline-none focus:ring-1 focus:ring-[#C0A366] cursor-pointer max-w-[230px] sm:max-w-xs truncate">
+                    <option value="all">ทุกจังหวัด (ต่างจังหวัด)</option>
+                  </select>
+                </div>
+                <button type="button" onclick="resetUpcountryFilter()" class="text-[11px] font-semibold text-neutral-600 hover:text-[#990000] underline cursor-pointer shrink-0">กลับดูทั้งหมด</button>
               </div>
             </div>
 
@@ -2904,7 +2916,16 @@
       if (q) parts.push(`"${q}"`);
       if (cat && cat !== 'all') parts.push(cat);
       if (currentMode !== 'client' && bank && bank !== 'all') parts.push(bank);
-      if (loc && loc !== 'all') parts.push(loc);
+      if (loc && loc !== 'all') {
+        if (loc === 'bkk_metro') parts.push('กทม.+ปริมณฑล');
+        else if (loc === 'upcountry') {
+          const upProvEl = document.getElementById('filter-upcountry-province');
+          const upVal = upProvEl ? upProvEl.value : 'all';
+          parts.push(upVal && upVal !== 'all' ? upVal : 'ต่างจังหวัด');
+        } else {
+          parts.push(loc);
+        }
+      }
       if (budget && budget !== 'all') {
         const bMap = { 'under2m': '< 2ลบ.', '2to3.5m': '2-3.5ลบ.', '3.5to5m': '3.5-5ลบ.', 'above5m': '> 5ลบ.' };
         parts.push(bMap[budget] || budget);
@@ -2928,6 +2949,51 @@
       lastScrollY = currentScrollY;
     }, { passive: true });
 
+    const BKK_METRO_PROVINCES = new Set(['กรุงเทพมหานคร', 'นนทบุรี', 'ปทุมธานี', 'สมุทรปราการ', 'สมุทรสาคร', 'นครปฐม']);
+
+    function populateUpcountryProvinceOptions() {
+      const sel = document.getElementById('filter-upcountry-province');
+      if (!sel || !Array.isArray(allProperties)) return;
+      const counts = {};
+      let totalUp = 0;
+      allProperties.forEach(p => {
+        if (!p || p.is_image_soldout || p.status === 'sold_archive' || p.status === 'transferred') return;
+        const pv = (p.province_th || p.province || '').trim();
+        if (pv && !BKK_METRO_PROVINCES.has(pv)) {
+          counts[pv] = (counts[pv] || 0) + 1;
+          totalUp++;
+        }
+      });
+      const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      const prev = sel.value || 'all';
+      sel.innerHTML = `<option value="all">ทุกจังหวัด ตจว. (${totalUp.toLocaleString()} หลัง)</option>` +
+        sorted.map(([pv, cnt]) => `<option value="${pv}">${pv} (${cnt.toLocaleString()} หลัง)</option>`).join('');
+      if (prev !== 'all' && counts[prev]) sel.value = prev;
+    }
+
+    function onLocationFilterChange() {
+      const locEl = document.getElementById('filter-location');
+      const bar = document.getElementById('upcountry-province-bar');
+      const upSel = document.getElementById('filter-upcountry-province');
+      const val = locEl ? locEl.value : 'all';
+      if (bar) {
+        if (val === 'upcountry') {
+          populateUpcountryProvinceOptions();
+          bar.classList.remove('hidden');
+        } else {
+          bar.classList.add('hidden');
+          if (upSel) upSel.value = 'all';
+        }
+      }
+      applyAllFilters();
+    }
+
+    function resetUpcountryFilter() {
+      const locEl = document.getElementById('filter-location');
+      if (locEl) locEl.value = 'all';
+      onLocationFilterChange();
+    }
+
     function applyAllFilters() {
       updateMiniBarSummary();
       renderProperties();
@@ -2937,6 +3003,8 @@
       if (document.getElementById('search-input')) document.getElementById('search-input').value = '';
       if (document.getElementById('filter-bank')) document.getElementById('filter-bank').value = 'all';
       if (document.getElementById('filter-location')) document.getElementById('filter-location').value = 'all';
+      if (document.getElementById('filter-upcountry-province')) document.getElementById('filter-upcountry-province').value = 'all';
+      if (document.getElementById('upcountry-province-bar')) document.getElementById('upcountry-province-bar').classList.add('hidden');
       if (document.getElementById('filter-budget')) document.getElementById('filter-budget').value = 'all';
       if (document.getElementById('filter-category')) document.getElementById('filter-category').value = 'all';
 
@@ -3029,6 +3097,9 @@
       const query = (document.getElementById('search-input') ? document.getElementById('search-input').value : '').trim().toLowerCase();
       const bank = document.getElementById('filter-bank') ? document.getElementById('filter-bank').value : 'all';
       const loc = document.getElementById('filter-location') ? document.getElementById('filter-location').value : 'all';
+      const upProv = (loc === 'upcountry' && document.getElementById('filter-upcountry-province'))
+        ? document.getElementById('filter-upcountry-province').value
+        : 'all';
       const budget = document.getElementById('filter-budget') ? document.getElementById('filter-budget').value : 'all';
       const cat = document.getElementById('filter-category') ? document.getElementById('filter-category').value : 'all';
 
@@ -3039,7 +3110,7 @@
       }
 
       // Reset visible count to 16 whenever any filter criteria changes
-      const currentFilterKey = `${currentMode}|${query}|${bank}|${loc}|${budget}|${cat}|${(activeBundleFilter || []).join(',')}|${showSoldArchiveInOwnerMode}|${showTransferredInOwnerMode}`;
+      const currentFilterKey = `${currentMode}|${query}|${bank}|${loc}|${upProv}|${budget}|${cat}|${(activeBundleFilter || []).join(',')}|${showSoldArchiveInOwnerMode}|${showTransferredInOwnerMode}`;
       if (currentFilterKey !== lastFilterKey) {
         propertiesVisibleCount = PROPERTIES_PAGE_SIZE;
         lastFilterKey = currentFilterKey;
@@ -3082,10 +3153,18 @@
           if (!(p.category || '').includes(cat)) return false;
         }
 
-        // Location Filter
+        // Location Filter (BKK+Metro zones + Contextual Upcountry Province)
         if (loc !== 'all') {
-          const haystack = ((p.title || '') + ' ' + (p.description || '') + ' ' + (p.location || '') + ' ' + (p.search_keywords || '')).toLowerCase();
-          if (!haystack.includes(loc.toLowerCase())) return false;
+          const pv = (p.province_th || p.province || '').trim();
+          if (loc === 'bkk_metro') {
+            if (!BKK_METRO_PROVINCES.has(pv)) return false;
+          } else if (loc === 'upcountry') {
+            if (!pv || BKK_METRO_PROVINCES.has(pv)) return false;
+            if (upProv && upProv !== 'all' && pv !== upProv) return false;
+          } else {
+            const haystack = ((p.title || '') + ' ' + (p.description || '') + ' ' + (p.location || '') + ' ' + pv + ' ' + (p.search_keywords || '')).toLowerCase();
+            if (!haystack.includes(loc.toLowerCase())) return false;
+          }
         }
 
         // Budget Filter
@@ -7143,6 +7222,9 @@
         await loadProperties();
       } catch (err) {
         console.warn("loadProperties fallback:", err);
+      }
+      if (typeof populateUpcountryProvinceOptions === 'function') {
+        populateUpcountryProvinceOptions();
       }
       
       if (typeof renderProperties === 'function') {
