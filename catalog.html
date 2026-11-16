@@ -1570,6 +1570,13 @@
             id === 'app_office_004' ||
             me.member.role === 'admin'
           );
+          if (code) {
+            if (typeof _siwasupSafeStorage === 'function') {
+              _siwasupSafeStorage('local', 'set', 'siwasup_my_agent_ref', code);
+            } else {
+              localStorage.setItem('siwasup_my_agent_ref', code);
+            }
+          }
           syncClientToAgentSwitchButton();
           if (typeof currentMode !== 'undefined' && currentMode !== 'client' && typeof setMode === 'function') {
             const p = new URLSearchParams(window.location.search);
@@ -1610,8 +1617,19 @@
         promptAgentModeLogin();
         return;
       }
-      // Clean client-view query params from URL so Refresh stays in Agent/Admin Mode (keep property/id)
+      // Clean client-view query params & referral override so Refresh/Banner reflect the logged-in Agent/Admin
       try {
+        if (typeof _siwasupSafeStorage === 'function') {
+          _siwasupSafeStorage('local', 'remove', 'siwasup_referred_by');
+          if (window._siwasupVerifiedMember && window._siwasupVerifiedMember.code) {
+            _siwasupSafeStorage('local', 'set', 'siwasup_my_agent_ref', String(window._siwasupVerifiedMember.code).toUpperCase());
+          }
+        } else {
+          localStorage.removeItem('siwasup_referred_by');
+          if (window._siwasupVerifiedMember && window._siwasupVerifiedMember.code) {
+            localStorage.setItem('siwasup_my_agent_ref', String(window._siwasupVerifiedMember.code).toUpperCase());
+          }
+        }
         const cleanParams = new URLSearchParams(window.location.search);
         ['view', 'mode', 'ref', 'agent', 'src', 't', 'c'].forEach(k => cleanParams.delete(k));
         const qs = cleanParams.toString();
@@ -1824,11 +1842,16 @@
             if (bName) bName.textContent = 'ศิวาทรัพย์ แอสเซท';
             if (bId) bId.textContent = '(สำนักงานใหญ่)';
           } else {
-            const storedRef = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : (localStorage.getItem('siwasup_referred_by') || '');
+            const loggedMember = window._siwasupVerifiedMember;
+            const loggedCode = loggedMember && loggedMember.code ? String(loggedMember.code).toUpperCase() : '';
+            const storedRef = loggedCode || ((typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : (localStorage.getItem('siwasup_referred_by') || ''));
             const agentProfile = (storedRef && typeof getAgentProfile === 'function') ? getAgentProfile(storedRef) : null;
             if (agentProfile) {
               if (bName) bName.textContent = agentProfile.name;
               if (bId) bId.textContent = `(ID: ${agentProfile.agentId})`;
+            } else if (loggedMember) {
+              if (bName) bName.textContent = loggedMember.nickname || loggedMember.name || 'ตัวแทนศิวาทรัพย์';
+              if (bId) bId.textContent = loggedCode ? `(ID: ${loggedCode})` : '(Verified Agent)';
             } else {
               if (bName) bName.textContent = 'ศิวาทรัพย์ แอสเซท';
               if (bId) bId.textContent = '(สำนักงานใหญ่)';
@@ -6395,6 +6418,9 @@
     }
 
     function getStoredAgentRef() {
+      if (typeof currentMode !== 'undefined' && currentMode !== 'client' && window._siwasupVerifiedMember && window._siwasupVerifiedMember.code) {
+        return String(window._siwasupVerifiedMember.code).toUpperCase();
+      }
       return localStorage.getItem('siwasup_referred_by') || localStorage.getItem('siwasup_my_agent_ref') || 'SW001';
     }
 
