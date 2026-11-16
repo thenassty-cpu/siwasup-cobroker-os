@@ -5589,7 +5589,9 @@
     }
   
     function openMyProfileModal(targetCode = null) {
-      const code = targetCode || getActiveAgentRef();
+      const verified = window._siwasupVerifiedMember;
+      const verifiedRef = verified ? resolveVerifiedMemberRef(verified) : '';
+      const code = targetCode || verifiedRef || getActiveAgentRef();
       renderMyProfile(code);
       const modal = document.getElementById('modal-my-profile');
       if (modal) {
@@ -5776,7 +5778,33 @@
     function renderMyProfile(code) {
       if (typeof initPlatformEnvironment === "function") initPlatformEnvironment();
       if (!window.SiwasupAgents) return;
-      const agent = window.SiwasupAgents.find(code) || window.SiwasupAgents.find('S90');
+      const verified = window._siwasupVerifiedMember;
+      const verifiedRef = verified ? resolveVerifiedMemberRef(verified) : '';
+      const cleanCode = String(code || verifiedRef || '').trim().toUpperCase();
+      let baseAgent = window.SiwasupAgents.find(cleanCode)
+        || (cleanCode === 'SW004' ? (window.SiwasupAgents.find('TON') || window.SiwasupAgents.find('AG-09')) : null)
+        || (cleanCode === 'SW001' ? (window.SiwasupAgents.find('JEAB') || window.SiwasupAgents.find('S01')) : null);
+
+      let agent = null;
+      if (verified && (!code || cleanCode === verifiedRef)) {
+        const isAdm = Boolean(window._siwasupVerifiedIsAdmin);
+        agent = Object.assign({}, baseAgent || {}, {
+          code: verifiedRef || cleanCode || 'SW',
+          nickname: verified.nickname || verified.name || (baseAgent && baseAgent.nickname) || verifiedRef,
+          name: verified.name || verified.nickname || (baseAgent && baseAgent.name) || verifiedRef,
+          phone: verified.phone || (baseAgent && baseAgent.phone) || '06-2396-5161',
+          lineId: verified.lineId || (baseAgent && baseAgent.lineId) || '@siwasup',
+          startDate: verified.startDate || (baseAgent && baseAgent.startDate) || '',
+          tierId: (baseAgent && baseAgent.tierId) || (isAdm ? 'diamond' : 'active'),
+          tierIcon: (baseAgent && baseAgent.tierIcon) || (isAdm ? '👑' : '🦁'),
+          tierName: (baseAgent && baseAgent.tierName) || (isAdm ? 'Executive Admin' : 'Verified Agent'),
+          totalPoints: (baseAgent && typeof baseAgent.totalPoints === 'number') ? baseAgent.totalPoints : (isAdm ? 1000 : 100),
+          activityPoints: (baseAgent && typeof baseAgent.activityPoints === 'number') ? baseAgent.activityPoints : (isAdm ? 100 : 50),
+          performancePoints: (baseAgent && typeof baseAgent.performancePoints === 'number') ? baseAgent.performancePoints : (isAdm ? 900 : 50)
+        });
+      } else {
+        agent = baseAgent || window.SiwasupAgents.find('S90');
+      }
       if (!agent) return;
 
       // Populate Switcher Dropdown (Alpha 6 Pioneers grouped at Top)
