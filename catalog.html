@@ -1064,9 +1064,9 @@
   </div>
 
   <script src="siwasup_agents.js?v=20261104-conf"></script>
-  <script src="modals.js?v=20261116-2350"></script>
+  <script src="modals.js?v=20261117-0100"></script>
   <script src="vinyl_generator.js?v=20261019-2350"></script>
-  <script src="siwasup_all_properties.js?v=20261114-1400"></script>
+  <script src="siwasup_all_properties.js?v=20261117-0100"></script>
   <script>
     let currentMode = 'free_agent';
     let currentCategory = 'all';
@@ -1089,7 +1089,7 @@
         allProperties = window.SIWASUP_PROPERTIES;
       } else {
         try {
-          const resp = await fetch('siwasup_all_properties.json?v=20261114-1400');
+          const resp = await fetch('siwasup_all_properties.json?v=20261117-0100');
           if (resp.ok) {
             allProperties = await resp.json();
           }
@@ -7886,7 +7886,7 @@
     // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').then((reg) => {
+        navigator.serviceWorker.register('./sw.js?v=20261117-0100').then((reg) => {
           console.log('Siwasup PWA Service Worker Registered (v2):', reg.scope);
           // Auto check for updates on each load
           if (reg.update) reg.update();
