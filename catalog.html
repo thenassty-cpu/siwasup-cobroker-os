@@ -1492,8 +1492,9 @@
       const labelEl = document.getElementById('btn-client-to-agent-label');
       const isVerified = Boolean(window._siwasupVerifiedMember);
       const isAdm = Boolean(window._siwasupVerifiedIsAdmin);
+      const isClientView = (typeof currentMode !== 'undefined' && currentMode === 'client');
       if (switchBtn) {
-        if (isVerified) {
+        if (isVerified && isClientView) {
           switchBtn.classList.remove('hidden');
           switchBtn.classList.add('inline-flex');
           if (iconEl) iconEl.textContent = isAdm ? '👑' : '🔑';
@@ -1504,7 +1505,7 @@
         }
       }
       if (signinBtn) {
-        if (isVerified) {
+        if (isVerified || !isClientView) {
           signinBtn.classList.add('hidden');
           signinBtn.classList.remove('inline-flex');
         } else {
@@ -1974,6 +1975,9 @@
         }
       }
 
+      if (typeof syncClientToAgentSwitchButton === 'function') {
+        syncClientToAgentSwitchButton();
+      }
       updateMiniBarSummary();
       renderProperties();
       if (window.lucide) { lucide.createIcons(); }
@@ -3018,6 +3022,9 @@
     }
 
     function applyAllFilters() {
+      if (typeof syncClientToAgentSwitchButton === 'function') {
+        syncClientToAgentSwitchButton();
+      }
       updateMiniBarSummary();
       renderProperties();
     }
