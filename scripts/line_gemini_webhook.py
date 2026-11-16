@@ -1631,6 +1631,7 @@ FRONTEND_URLS = {
     "register": "https://assets.siwasup.com/agent_registration.html",
     "admin": "https://assets.siwasup.com/admin_lobby_manager.html",
     "catalog": "https://assets.siwasup.com/catalog.html",
+    "seller": "https://assets.siwasup.com/catalog.html?view=seller",
 }
 ADMIN_PERM_KEYS = ("standardAdmin", "executiveAuthority", "keyboxAdmin", "systemAdmin")
 SESSION_TTL = 12 * 3600
@@ -1911,6 +1912,134 @@ def save_intake_data(store):
         if put_object_r2 and os.environ.get("PORT"):
             _LATEST_INTAKE_BYTES = data_bytes
             threading.Thread(target=_sequential_r2_intake_upload, daemon=True).start()
+
+
+# ==============================================================================
+# SELLER (PROPERTY OWNER) AUTH VAULT — Isolated from Co-Broker Lobby
+# ==============================================================================
+SELLERS_PATH = os.path.join(DATA_DIR, "sellers_vault.json")
+SELLERS_LOCK = threading.RLock()
+_R2_SELLERS_VAULT_KEY = "_vault/sellers_" + hmac.new(ADMIN_EXPORT_SECRET.encode("utf-8"), b"siwasup_sellers_vault_v1", hashlib.sha256).hexdigest()[:32] + ".json"
+_R2_SELLERS_RESTORED = False
+_SELLERS_MEM_CACHE = None
+
+
+def load_sellers_data():
+    global _R2_SELLERS_RESTORED, _SELLERS_MEM_CACHE
+    with SELLERS_LOCK:
+        if not _R2_SELLERS_RESTORED and os.environ.get("PORT"):
+            try:
+                url = f"https://assets.siwasup.com/{_R2_SELLERS_VAULT_KEY}?t={int(time.time())}"
+                req = urllib.request.Request(url, headers={"User-Agent": "SiwasupRenderVault/1.0"})
+                with urllib.request.urlopen(req, timeout=8) as r:
+                    if r.status == 200:
+                        cloud_store = json.loads(r.read().decode("utf-8"))
+                        if isinstance(cloud_store, dict) and isinstance(cloud_store.get("sellers"), list):
+                            os.makedirs(os.path.dirname(SELLERS_PATH), exist_ok=True)
+                            tmp_path = SELLERS_PATH + ".tmp"
+                            with open(tmp_path, "w", encoding="utf-8") as f:
+                                json.dump(cloud_store, f, ensure_ascii=False, indent=2)
+                            os.replace(tmp_path, SELLERS_PATH)
+                            _SELLERS_MEM_CACHE = json.loads(json.dumps(cloud_store))
+                            _R2_SELLERS_RESTORED = True
+                            return cloud_store
+            except urllib.error.HTTPError as he:
+                if he.code == 404:
+                    _R2_SELLERS_RESTORED = True
+            except Exception as e:
+                print(f"[Vault] Sellers R2 restore note: {e}")
+        if os.path.exists(SELLERS_PATH):
+            try:
+                with open(SELLERS_PATH, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    if isinstance(data, dict) and isinstance(data.get("sellers"), list):
+                        _SELLERS_MEM_CACHE = json.loads(json.dumps(data))
+                        return data
+            except Exception as e:
+                print(f"[Warn] Failed to read sellers_vault.json: {e}")
+        if _SELLERS_MEM_CACHE is not None:
+            return json.loads(json.dumps(_SELLERS_MEM_CACHE))
+        return {"updated_at": bkk_now().strftime("%Y-%m-%d %H:%M:%S"), "sellers": []}
+
+
+def save_sellers_data(store):
+    global _SELLERS_MEM_CACHE
+    with SELLERS_LOCK:
+        store["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+        _SELLERS_MEM_CACHE = json.loads(json.dumps(store))
+        data_bytes = json.dumps(store, ensure_ascii=False, indent=2).encode("utf-8")
+        try:
+            os.makedirs(os.path.dirname(SELLERS_PATH), exist_ok=True)
+            tmp_path = SELLERS_PATH + ".tmp"
+            with open(tmp_path, "wb") as f:
+                f.write(data_bytes)
+            os.replace(tmp_path, SELLERS_PATH)
+        except Exception as e:
+            print(f"[Error] Failed to save sellers_vault local: {e}")
+        if put_object_r2 and os.environ.get("PORT"):
+            threading.Thread(target=lambda: put_object_r2(_R2_SELLERS_VAULT_KEY, data_bytes, "application/json; charset=utf-8"), daemon=True).start()
+
+
+def upsert_seller_account(line_user_id: str, name: str = "", picture: str = "", phone: str = "") -> dict:
+    with SELLERS_LOCK:
+        store = load_sellers_data()
+        sellers = store.setdefault("sellers", [])
+        now_str = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+        seller = next((x for x in sellers if x.get("lineUserId") == line_user_id), None)
+        if not seller:
+            seller = {
+                "id": f"SLR-{int(time.time()*1000)%1000000:06d}",
+                "role": "seller",
+                "lineUserId": line_user_id,
+                "name": name,
+                "picture": picture,
+                "phone": phone,
+                "created_at": now_str,
+                "last_active_at": now_str,
+            }
+            sellers.insert(0, seller)
+        else:
+            if name:
+                seller["name"] = name
+            if picture:
+                seller["picture"] = picture
+            if phone:
+                seller["phone"] = phone
+            seller["last_active_at"] = now_str
+        save_sellers_data(store)
+        return seller
+
+
+def _sanitize_intake_for_seller(it: dict) -> dict:
+    return {
+        "id": it.get("id", ""),
+        "swc_code": it.get("swc_code", ""),
+        "type": it.get("type", ""),
+        "title": it.get("title", ""),
+        "price": it.get("price", ""),
+        "size": it.get("size", ""),
+        "contract_mode": it.get("contract_mode", ""),
+        "status": it.get("status", "pending_review"),
+        "review_note": it.get("review_note", "") if it.get("status") == "need_revision" else "",
+        "created_at": it.get("created_at", ""),
+        "updated_at": it.get("updated_at", ""),
+    }
+
+
+def _sanitize_contract_for_seller(c: dict) -> dict:
+    return {
+        "id": c.get("id", ""),
+        "swc_code": c.get("swc_code", ""),
+        "contract_type": c.get("contract_type", ""),
+        "contract_mode": c.get("contract_mode", ""),
+        "project_name": c.get("project_name") or c.get("property_title") or c.get("title") or "",
+        "sale_price": c.get("sale_price") or c.get("price") or "",
+        "area": c.get("area") or c.get("size") or "",
+        "deed_no": c.get("deed_no", ""),
+        "expires_at": c.get("expires_at", ""),
+        "saved_at": c.get("saved_at", ""),
+        "status": c.get("status", "active"),
+    }
 
 
 # ==============================================================================
@@ -2996,7 +3125,57 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             if pend:
                 self._send_json(200, {"status": "pending", "applicant": sanitize_member(pend), "line": line_info})
                 return
+            sellers_store = load_sellers_data()
+            seller = next((x for x in sellers_store.get("sellers", []) if x.get("lineUserId") == sub), None)
+            if seller:
+                self._send_json(200, {
+                    "status": "seller",
+                    "seller": {
+                        "id": seller.get("id"),
+                        "role": "seller",
+                        "name": seller.get("name", s.get("name", "")),
+                        "picture": seller.get("picture", s.get("picture", "")),
+                        "phone": seller.get("phone", ""),
+                    },
+                    "line": line_info,
+                })
+                return
             self._send_json(200, {"status": "guest", "line": line_info})
+            return
+
+        if path == "/api/seller/my-listings":
+            s = self._session()
+            if not s or not s.get("sub"):
+                self._send_json(401, {"error": "กรุณาเข้าสู่ระบบด้วย LINE"})
+                return
+            sub = s["sub"]
+            sellers_store = load_sellers_data()
+            seller = next((x for x in sellers_store.get("sellers", []) if x.get("lineUserId") == sub), None)
+            seller_phone = (seller or {}).get("phone", "").strip()
+
+            with LISTING_INTAKE_LOCK:
+                intake_store = load_intake_data()
+                my_intakes = [
+                    _sanitize_intake_for_seller(it)
+                    for it in intake_store.get("intakes", [])
+                    if it.get("seller_line_id") == sub
+                    or it.get("submitted_by_line_id") == sub
+                    or (seller_phone and it.get("phone", "").strip() == seller_phone)
+                ]
+            with CONTRACTS_LOCK:
+                contract_store = load_contracts_data()
+                my_contracts = [
+                    _sanitize_contract_for_seller(c)
+                    for c in contract_store.get("contracts", [])
+                    if c.get("seller_line_id") == sub
+                    or (seller_phone and (c.get("seller_phone") or c.get("phone") or "").strip() == seller_phone)
+                ]
+            self._send_json(200, {
+                "status": "success",
+                "role": "seller",
+                "intakes": my_intakes,
+                "contracts": my_contracts,
+            })
             return
 
         if path == "/api/auth/line/start":
@@ -3065,6 +3244,11 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 auto_heal_member_line_profile(sub, {"displayName": name, "pictureUrl": picture})
             except Exception as _cb_e:
                 print(f"[LINE Login Auto-Heal Warn]: {_cb_e}")
+            if st.get("r") == "seller":
+                try:
+                    upsert_seller_account(sub, name=name, picture=picture)
+                except Exception as _sl_e:
+                    print(f"[Seller Upsert Warn]: {_sl_e}")
             session = make_token({"sub": sub, "name": name, "picture": picture}, SESSION_TTL)
             self._redirect(FRONTEND_URLS[st.get("r", "register")] + "#session=" + session, clear_cookie)
             return
@@ -3435,6 +3619,48 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     target["updated_at"] = now_str
                     save_intake_data(store)
                 self._send_json(200, {"status": "success", "intake": target})
+            except Exception as e:
+                self._send_json(500, {"status": "error", "message": str(e)})
+            return
+
+        if path == "/api/seller/bind":
+            acting = self._require("admin")
+            if not acting:
+                return
+            try:
+                content_length = int(self.headers.get('Content-Length', 0))
+                if content_length <= 0 or content_length > 4096:
+                    self._send_json(400, {"error": "Invalid payload size"})
+                    return
+                body = self.rfile.read(content_length)
+                payload = json.loads(body.decode('utf-8'))
+                seller_line_id = str(payload.get("seller_line_id") or "").strip()[:80]
+                seller_phone = str(payload.get("seller_phone") or "").strip()[:40]
+                intake_id = str(payload.get("intake_id") or "").strip()[:80]
+                contract_id = str(payload.get("contract_id") or "").strip()[:80]
+                if not seller_line_id:
+                    self._send_json(400, {"error": "Missing seller_line_id"})
+                    return
+                upsert_seller_account(seller_line_id, name=str(payload.get("seller_name") or "").strip()[:100], phone=seller_phone)
+                updated = []
+                if intake_id:
+                    with LISTING_INTAKE_LOCK:
+                        istore = load_intake_data()
+                        it = next((x for x in istore.get("intakes", []) if x.get("id") == intake_id), None)
+                        if it:
+                            it["seller_line_id"] = seller_line_id
+                            it["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+                            save_intake_data(istore)
+                            updated.append(intake_id)
+                if contract_id:
+                    with CONTRACTS_LOCK:
+                        cstore = load_contracts_data()
+                        ct = next((x for x in cstore.get("contracts", []) if x.get("id") == contract_id), None)
+                        if ct:
+                            ct["seller_line_id"] = seller_line_id
+                            save_contracts_data(cstore)
+                            updated.append(contract_id)
+                self._send_json(200, {"status": "success", "seller_line_id": seller_line_id, "bound_ids": updated})
             except Exception as e:
                 self._send_json(500, {"status": "error", "message": str(e)})
             return
