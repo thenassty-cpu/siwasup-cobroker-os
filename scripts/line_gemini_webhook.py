@@ -1776,7 +1776,7 @@ def _http_post_form(url, data):
 
 
 CONTRACTS_PATH = os.path.join(DATA_DIR, "exclusive_contracts.json")
-CONTRACTS_LOCK = threading.Lock()
+CONTRACTS_LOCK = threading.RLock()
 _R2_CONTRACTS_VAULT_KEY = "_vault/contracts_" + hmac.new(ADMIN_EXPORT_SECRET.encode("utf-8"), b"siwasup_contracts_vault_v1", hashlib.sha256).hexdigest()[:32] + ".json"
 
 def load_contracts_data():
@@ -1799,6 +1799,118 @@ def save_contracts_data(store):
             print(f"[Error] Failed to save contracts local: {e}")
         if put_object_r2 and os.environ.get("PORT"):
             threading.Thread(target=lambda: put_object_r2(_R2_CONTRACTS_VAULT_KEY, data_bytes, "application/json"), daemon=True).start()
+
+
+# ==============================================================================
+# LISTING INTAKE VAULT (Phase 1: Consignment & Digital Contract Intake)
+# ==============================================================================
+LISTING_INTAKE_PATH = os.path.join(DATA_DIR, "listing_intake.json")
+LISTING_INTAKE_LOCK = threading.RLock()
+_R2_INTAKE_VAULT_KEY = "_vault/listing_intake_" + hmac.new(ADMIN_EXPORT_SECRET.encode("utf-8"), b"siwasup_listing_intake_vault_v1", hashlib.sha256).hexdigest()[:32] + ".json"
+_R2_INTAKE_RESTORED = False
+_INTAKE_MEM_CACHE = None
+_R2_INTAKE_UPLOAD_LOCK = threading.Lock()
+_LATEST_INTAKE_BYTES = None
+_INTAKE_IP_WINDOW = {}
+_INTAKE_RATE_LOCK = threading.Lock()
+
+
+def _default_intake_store():
+    return {
+        "updated_at": bkk_now().strftime("%Y-%m-%d %H:%M:%S"),
+        "intakes": [],
+    }
+
+
+def _check_intake_ip_rate(client_ip: str) -> bool:
+    if not client_ip:
+        return True
+    now = time.time()
+    with _INTAKE_RATE_LOCK:
+        cutoff = now - 600.0
+        recent = [ts for ts in _INTAKE_IP_WINDOW.get(client_ip, []) if ts > cutoff]
+        if len(recent) >= 6:
+            _INTAKE_IP_WINDOW[client_ip] = recent
+            return False
+        recent.append(now)
+        _INTAKE_IP_WINDOW[client_ip] = recent
+        return True
+
+
+def load_intake_data():
+    global _R2_INTAKE_RESTORED, _INTAKE_MEM_CACHE
+    with LISTING_INTAKE_LOCK:
+        if not _R2_INTAKE_RESTORED and os.environ.get("PORT"):
+            try:
+                url = f"https://assets.siwasup.com/{_R2_INTAKE_VAULT_KEY}?t={int(time.time())}"
+                req = urllib.request.Request(url, headers={"User-Agent": "SiwasupRenderVault/1.0"})
+                with urllib.request.urlopen(req, timeout=8) as r:
+                    if r.status == 200:
+                        cloud_store = json.loads(r.read().decode("utf-8"))
+                        if isinstance(cloud_store, dict) and isinstance(cloud_store.get("intakes"), list):
+                            os.makedirs(os.path.dirname(LISTING_INTAKE_PATH), exist_ok=True)
+                            tmp_path = LISTING_INTAKE_PATH + ".tmp"
+                            with open(tmp_path, "w", encoding="utf-8") as f:
+                                json.dump(cloud_store, f, ensure_ascii=False, indent=2)
+                            os.replace(tmp_path, LISTING_INTAKE_PATH)
+                            _INTAKE_MEM_CACHE = json.loads(json.dumps(cloud_store))
+                            _R2_INTAKE_RESTORED = True
+                            print(f"[Vault] Restored listing_intake from R2 ({len(cloud_store.get('intakes', []))} items)")
+                            return cloud_store
+            except urllib.error.HTTPError as he:
+                if he.code == 404:
+                    _R2_INTAKE_RESTORED = True
+                print(f"[Vault] Listing intake initial R2 restore HTTP {he.code}")
+            except Exception as e:
+                print(f"[Vault] Listing intake initial R2 restore note (will retry): {e}")
+        if os.path.exists(LISTING_INTAKE_PATH):
+            try:
+                with open(LISTING_INTAKE_PATH, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    if isinstance(data, dict) and isinstance(data.get("intakes"), list):
+                        _INTAKE_MEM_CACHE = json.loads(json.dumps(data))
+                        return data
+            except Exception as e:
+                print(f"[Warn] Failed to read listing_intake.json: {e}")
+        if _INTAKE_MEM_CACHE is not None:
+            return json.loads(json.dumps(_INTAKE_MEM_CACHE))
+        return _default_intake_store()
+
+
+def _sequential_r2_intake_upload():
+    global _LATEST_INTAKE_BYTES
+    with _R2_INTAKE_UPLOAD_LOCK:
+        with LISTING_INTAKE_LOCK:
+            payload_bytes = _LATEST_INTAKE_BYTES
+        if payload_bytes and put_object_r2:
+            try:
+                put_object_r2(_R2_INTAKE_VAULT_KEY, payload_bytes, "application/json; charset=utf-8")
+            except Exception as e:
+                print(f"[R2 Listing Intake Sync Warn]: {e}")
+
+
+def save_intake_data(store):
+    global _INTAKE_MEM_CACHE, _LATEST_INTAKE_BYTES
+    with LISTING_INTAKE_LOCK:
+        prev_count = len((_INTAKE_MEM_CACHE or {}).get("intakes", []))
+        new_count = len(store.get("intakes", []))
+        if prev_count > 3 and new_count == 0:
+            print(f"[CRITICAL SAFEGUARD] Blocked attempted listing_intake wipeout! Existing: {prev_count}, Incoming: {new_count}")
+            return
+        store["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+        _INTAKE_MEM_CACHE = json.loads(json.dumps(store))
+        data_bytes = json.dumps(store, ensure_ascii=False, indent=2).encode("utf-8")
+        try:
+            os.makedirs(os.path.dirname(LISTING_INTAKE_PATH), exist_ok=True)
+            tmp_path = LISTING_INTAKE_PATH + ".tmp"
+            with open(tmp_path, "wb") as f:
+                f.write(data_bytes)
+            os.replace(tmp_path, LISTING_INTAKE_PATH)
+        except Exception as e:
+            print(f"[Error] Failed to save listing_intake local: {e}")
+        if put_object_r2 and os.environ.get("PORT"):
+            _LATEST_INTAKE_BYTES = data_bytes
+            threading.Thread(target=_sequential_r2_intake_upload, daemon=True).start()
 
 
 # ==============================================================================
@@ -2664,7 +2776,9 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             self._send_json(401, {"error": "บัญชี LINE นี้ยังไม่ได้รับอนุมัติเป็นสมาชิก"})
             return None
         perms = m.get("permissions") or {}
-        if level == "exec":
+        if level == "member":
+            ok = True
+        elif level == "exec":
             ok = bool(perms.get("executiveAuthority") or perms.get("systemAdmin"))
         else:
             ok = is_admin_member(m)
@@ -2700,12 +2814,48 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             })
             return
         if path == "/api/contracts/list":
+            acting = self._require("member")
+            if not acting:
+                return
             agent_ref = query.get("agent_ref", [""])[0]
             store = load_contracts_data()
             contracts = store.get("contracts", [])
-            if agent_ref:
-                contracts = [c for c in contracts if c.get("agent_ref") == agent_ref or c.get("agent_id") == agent_ref]
+            if not is_admin_member(acting):
+                my_refs = {str(acting.get("code") or "").strip(), str(acting.get("id") or "").strip(), str(acting.get("lineUserId") or "").strip()}
+                my_refs.discard("")
+                contracts = [
+                    c for c in contracts
+                    if (c.get("agent_ref") in my_refs or c.get("agent_id") in my_refs or c.get("submitted_by_ref") in my_refs or c.get("submitted_by_line_id") in my_refs)
+                ]
+            elif agent_ref:
+                contracts = [c for c in contracts if c.get("agent_ref") == agent_ref or c.get("agent_id") == agent_ref or c.get("submitted_by_ref") == agent_ref]
             self._send_json(200, {"status": "success", "count": len(contracts), "contracts": contracts})
+            return
+
+        if path == "/api/intake/list":
+            acting = self._require("member")
+            if not acting:
+                return
+            status_filter = query.get("status", [""])[0].strip()
+            store = load_intake_data()
+            intakes = store.get("intakes", [])
+            if not is_admin_member(acting):
+                my_refs = {str(acting.get("code") or "").strip(), str(acting.get("id") or "").strip(), str(acting.get("lineUserId") or "").strip()}
+                my_refs.discard("")
+                intakes = [
+                    it for it in intakes
+                    if (it.get("submitted_by_ref") in my_refs or it.get("submitted_by_line_id") in my_refs)
+                ]
+            if status_filter:
+                intakes = [it for it in intakes if it.get("status") == status_filter]
+            pending_count = sum(1 for it in intakes if it.get("status") == "pending_review")
+            self._send_json(200, {
+                "status": "success",
+                "count": len(intakes),
+                "pending_count": pending_count,
+                "is_admin": is_admin_member(acting),
+                "intakes": intakes,
+            })
             return
 
         if path == "/api/track/summary":
@@ -3081,7 +3231,13 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             return
 
         if path == "/api/ocr/contract":
+            acting = self._require("member")
+            if not acting:
+                return
             content_length = int(self.headers.get('Content-Length', 0))
+            if content_length <= 0 or content_length > 10 * 1024 * 1024:
+                self._send_json(400, {"error": "Invalid payload size"})
+                return
             body = self.rfile.read(content_length)
             try:
                 payload = json.loads(body.decode('utf-8'))
@@ -3102,26 +3258,183 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             return
 
         if path == "/api/contracts/save":
+            acting = self._require("member")
+            if not acting:
+                return
             content_length = int(self.headers.get('Content-Length', 0))
+            if content_length <= 0 or content_length > 2 * 1024 * 1024:
+                self._send_json(400, {"error": "Invalid payload size"})
+                return
             body = self.rfile.read(content_length)
             try:
                 payload = json.loads(body.decode('utf-8'))
-                store = load_contracts_data()
-                cid = payload.get("id") or f"SW-CNT-{int(time.time()*1000)%1000000}"
-                payload["id"] = cid
-                payload["saved_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
-                # Expiry calculation (default 90 days if not set)
-                days = int(payload.get("contract_days") or 90)
-                exp_ts = time.time() + (days * 86400)
-                payload["expires_at"] = datetime.fromtimestamp(exp_ts, tz=TH_TZ).strftime("%Y-%m-%d")
-                
-                # Replace or prepend
-                contracts = store.setdefault("contracts", [])
-                contracts = [c for c in contracts if c.get("id") != cid]
-                contracts.insert(0, payload)
-                store["contracts"] = contracts
-                save_contracts_data(store)
+                with CONTRACTS_LOCK:
+                    store = load_contracts_data()
+                    contracts = store.setdefault("contracts", [])
+                    cid = payload.get("id") or f"SW-CNT-{int(time.time()*1000)%1000000}"
+                    existing = next((c for c in contracts if c.get("id") == cid), None)
+                    if existing and not is_admin_member(acting):
+                        my_refs = {str(acting.get("code") or "").strip(), str(acting.get("id") or "").strip(), str(acting.get("lineUserId") or "").strip()}
+                        my_refs.discard("")
+                        is_owner = (
+                            existing.get("submitted_by_line_id") == acting.get("lineUserId")
+                            or existing.get("submitted_by_ref") in my_refs
+                            or existing.get("agent_ref") in my_refs
+                            or existing.get("agent_id") in my_refs
+                        )
+                        if not is_owner:
+                            self._send_json(403, {"error": "ไม่มีสิทธิ์แก้ไขสัญญาของตัวแทนท่านอื่น"})
+                            return
+                    payload["id"] = cid
+                    payload["saved_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+                    payload["submitted_by_ref"] = acting.get("code") or acting.get("id") or ""
+                    payload["submitted_by_name"] = acting.get("nickname") or acting.get("name") or ""
+                    payload["submitted_by_line_id"] = acting.get("lineUserId") or ""
+                    # Expiry calculation (default 90 days if not set)
+                    days = int(payload.get("contract_days") or 90)
+                    exp_ts = time.time() + (days * 86400)
+                    payload["expires_at"] = datetime.fromtimestamp(exp_ts, tz=TH_TZ).strftime("%Y-%m-%d")
+
+                    # Replace or prepend
+                    contracts = [c for c in contracts if c.get("id") != cid]
+                    contracts.insert(0, payload)
+                    store["contracts"] = contracts
+                    save_contracts_data(store)
                 self._send_json(200, {"status": "success", "contract": payload})
+            except Exception as e:
+                self._send_json(500, {"status": "error", "message": str(e)})
+            return
+
+        if path == "/api/intake/submit":
+            try:
+                client_ip = (
+                    (self.headers.get("X-Forwarded-For") or "").split(",")[0].strip()
+                    or (self.client_address[0] if hasattr(self, "client_address") and self.client_address else "")
+                )
+                if not _check_intake_ip_rate(client_ip):
+                    self._send_json(429, {"status": "rate_limited", "error": "ส่งข้อมูลถี่เกินไป กรุณารอสักครู่แล้วลองใหม่"})
+                    return
+                content_length = int(self.headers.get('Content-Length', 0))
+                if content_length <= 0 or content_length > 16384:
+                    self._send_json(400, {"error": "Invalid payload size"})
+                    return
+                body = self.rfile.read(content_length)
+                payload = json.loads(body.decode('utf-8'))
+                if not isinstance(payload, dict):
+                    self._send_json(400, {"error": "Invalid JSON object"})
+                    return
+                # Honeypot check
+                if str(payload.get("_hp_website") or "").strip():
+                    self._send_json(200, {"status": "success", "intake_id": "INTAKE-OK"})
+                    return
+
+                prop_type = str(payload.get("type") or "").strip()[:40]
+                title = str(payload.get("title") or "").strip()[:200]
+                price_raw = str(payload.get("price") or "").replace(",", "").strip()
+                size = str(payload.get("size") or "-").strip()[:60]
+                owner_name = str(payload.get("owner_name") or "").strip()[:100]
+                phone = str(payload.get("phone") or "").strip()[:40]
+                contract_mode = str(payload.get("contract_mode") or "unsure").strip()[:40]
+                note = str(payload.get("note") or "").strip()[:500]
+                if not title or not owner_name or not phone:
+                    self._send_json(400, {"error": "กรุณากรอกข้อมูลทรัพย์ ชื่อ และเบอร์โทรศัพท์ให้ครบถ้วน"})
+                    return
+                try:
+                    price_num = int(float(price_raw)) if price_raw else 0
+                except Exception:
+                    price_num = 0
+
+                submitted_by_ref = str(payload.get("agent_ref") or "").strip()[:40]
+                submitted_by_name = ""
+                submitted_by_line_id = ""
+                s = self._session()
+                if s and s.get("sub"):
+                    lobby = load_lobby_data()
+                    mem = next((a for a in lobby.get("approved", []) if a.get("lineUserId") == s.get("sub")), None)
+                    if mem:
+                        submitted_by_ref = mem.get("code") or mem.get("id") or submitted_by_ref
+                        submitted_by_name = mem.get("nickname") or mem.get("name") or ""
+                        submitted_by_line_id = mem.get("lineUserId") or ""
+
+                now_dt = bkk_now()
+                intake_id = f"INTAKE-{now_dt.strftime('%Y%m%d')}-{int(time.time()*1000)%10000:04d}"
+                item = {
+                    "id": intake_id,
+                    "type": prop_type or "บ้าน",
+                    "title": title,
+                    "price": f"{price_num:,}" if price_num > 0 else price_raw,
+                    "price_num": price_num,
+                    "size": size or "-",
+                    "owner_name": owner_name,
+                    "phone": phone,
+                    "contract_mode": contract_mode,
+                    "note": note,
+                    "source": "agent_intake" if submitted_by_line_id else "public_consign",
+                    "submitted_by_ref": submitted_by_ref,
+                    "submitted_by_name": submitted_by_name,
+                    "submitted_by_line_id": submitted_by_line_id,
+                    "status": "pending_review",
+                    "swc_code": "",
+                    "review_note": "",
+                    "created_at": now_dt.strftime("%Y-%m-%d %H:%M:%S"),
+                    "updated_at": now_dt.strftime("%Y-%m-%d %H:%M:%S"),
+                }
+
+                with LISTING_INTAKE_LOCK:
+                    store = load_intake_data()
+                    intakes = store.setdefault("intakes", [])
+                    intakes.insert(0, item)
+                    save_intake_data(store)
+                self._send_json(200, {"status": "success", "intake": item})
+            except Exception as e:
+                self._send_json(500, {"status": "error", "message": str(e)})
+            return
+
+        if path == "/api/intake/review":
+            acting = self._require("admin")
+            if not acting:
+                return
+            try:
+                content_length = int(self.headers.get('Content-Length', 0))
+                if content_length <= 0 or content_length > 16384:
+                    self._send_json(400, {"error": "Invalid payload size"})
+                    return
+                body = self.rfile.read(content_length)
+                payload = json.loads(body.decode('utf-8'))
+                intake_id = str(payload.get("id") or "").strip()
+                action = str(payload.get("action") or "").strip()
+                review_note = str(payload.get("review_note") or "").strip()[:500]
+                if not intake_id or action not in ("approve", "need_revision", "reject", "archive"):
+                    self._send_json(400, {"error": "Invalid id or action"})
+                    return
+
+                with LISTING_INTAKE_LOCK:
+                    store = load_intake_data()
+                    intakes = store.get("intakes", [])
+                    target = next((it for it in intakes if it.get("id") == intake_id), None)
+                    if not target:
+                        self._send_json(404, {"error": "ไม่พบรายการฝากขายนี้"})
+                        return
+
+                    now_str = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+                    if action == "approve":
+                        target["status"] = "approved"
+                        if not target.get("swc_code"):
+                            seq = sum(1 for it in intakes if it.get("swc_code")) + 1
+                            target["swc_code"] = f"SWC-{bkk_now().strftime('%y%m')}-{seq:03d}"
+                    elif action == "need_revision":
+                        target["status"] = "need_revision"
+                    elif action == "reject":
+                        target["status"] = "rejected"
+                    elif action == "archive":
+                        target["status"] = "archived"
+
+                    target["review_note"] = review_note
+                    target["reviewed_by"] = acting.get("nickname") or acting.get("name") or acting.get("code") or "Admin"
+                    target["reviewed_at"] = now_str
+                    target["updated_at"] = now_str
+                    save_intake_data(store)
+                self._send_json(200, {"status": "success", "intake": target})
             except Exception as e:
                 self._send_json(500, {"status": "error", "message": str(e)})
             return

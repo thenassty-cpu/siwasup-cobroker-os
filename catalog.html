@@ -1051,7 +1051,7 @@
   </div>
 
   <script src="siwasup_agents.js?v=20261104-conf"></script>
-  <script src="modals.js?v=20261112-0115"></script>
+  <script src="modals.js?v=20261116-2335"></script>
   <script src="vinyl_generator.js?v=20261019-2350"></script>
   <script src="siwasup_all_properties.js?v=20261114-1400"></script>
   <script>
@@ -1063,20 +1063,8 @@
     let allProperties = (typeof ALL_PROPERTIES_DATA !== 'undefined' && Array.isArray(ALL_PROPERTIES_DATA)) ? ALL_PROPERTIES_DATA : ((typeof window !== 'undefined' && (window.SIWASUP_ALL_PROPERTIES || window.SIWASUP_PROPERTIES)) ? (window.SIWASUP_ALL_PROPERTIES || window.SIWASUP_PROPERTIES) : []);
     let pendingBookingId = null;
 
-    // In-memory consignments (Leads from /consign)
-    let consignments = [
-      {
-        id: "CS-101",
-        title: "ทาวน์โฮม 2 ชั้น พฤกษา 12 รังสิต คลองสาม",
-        type: "ทาวน์โฮม",
-        price: "1,890,000",
-        size: "24 ตร.ว.",
-        owner_name: "คุณวิภาวรรณ",
-        phone: "081-992-xxxx",
-        created_at: "เมื่อสักครู่",
-        status: "pending"
-      }
-    ];
+    // Real consignments / listing intakes loaded from backend R2 vault
+    let consignments = [];
 
     // Load data from JS bundle or fetch or fallback
     async function loadProperties() {
@@ -1593,6 +1581,9 @@
             }
           }
           syncClientToAgentSwitchButton();
+          if (typeof loadRealIntakes === 'function') {
+            loadRealIntakes();
+          }
           if (typeof currentMode !== 'undefined' && currentMode !== 'client' && typeof setMode === 'function') {
             const p = new URLSearchParams(window.location.search);
             const explicitView = p.get('view') || p.get('mode');
@@ -3788,9 +3779,19 @@
     // --- NEW PHASE 1 FUNCTIONS: CONSIGNMENT, MGM, OFFER, AND OWNER LEADS ---
     let pendingOfferProp = null;
 
+    function escapeHtmlIntake(str) {
+      return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     function updateConsignBadge() {
+      const pendingCount = consignments.filter(c => c.status === 'pending_review' || c.status === 'pending').length;
       const badge = document.getElementById('consign-count-badge');
-      if (badge) badge.textContent = consignments.length;
+      if (badge) badge.textContent = pendingCount || consignments.length;
 
       const notifyBtn = document.getElementById('btn-owner-leads-notify');
       if (notifyBtn) {
@@ -3801,6 +3802,25 @@
           notifyBtn.classList.add('hidden');
           notifyBtn.classList.remove('flex');
         }
+      }
+    }
+
+    async function loadRealIntakes() {
+      try {
+        const token = localStorage.getItem('siwasup_session') || '';
+        if (!token) return;
+        const apiBase = window.SIWASUP_API_BASE || 'https://siwasup-cobroker-os.onrender.com';
+        const res = await fetch(`${apiBase}/api/intake/list`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data && data.status === 'success' && Array.isArray(data.intakes)) {
+          consignments = data.intakes;
+          updateConsignBadge();
+        }
+      } catch (err) {
+        console.warn('loadRealIntakes error:', err);
       }
     }
 
@@ -3823,50 +3843,98 @@
       document.getElementById('consign-modal').classList.add('hidden');
     }
 
-    function handleConsignSubmit(e) {
+    async function handleConsignSubmit(e) {
       e.preventDefault();
       const type = document.getElementById('consign-type').value;
-      const title = document.getElementById('consign-title').value;
+      const contractModeEl = document.getElementById('consign-contract-mode');
+      const contractMode = contractModeEl ? contractModeEl.value : 'unsure';
+      const title = document.getElementById('consign-title').value.trim();
       const price = document.getElementById('consign-price').value;
-      const size = document.getElementById('consign-size').value;
-      const name = document.getElementById('consign-name').value;
-      const phone = document.getElementById('consign-phone').value;
+      const size = document.getElementById('consign-size').value.trim();
+      const name = document.getElementById('consign-name').value.trim();
+      const phone = document.getElementById('consign-phone').value.trim();
+      const noteEl = document.getElementById('consign-note');
+      const note = noteEl ? noteEl.value.trim() : '';
+      const hpEl = document.getElementById('consign-hp-website');
+      const hpWebsite = hpEl ? hpEl.value : '';
+      const submitBtn = document.getElementById('consign-submit-btn');
 
-      const newId = `CS-${Date.now().toString().slice(-4)}`;
-      const newLead = {
-        id: newId,
-        title: title,
-        type: type,
-        price: parseInt(price).toLocaleString(),
-        size: size || '-',
-        owner_name: name,
-        phone: phone,
-        created_at: "เมื่อสักครู่",
-        status: "pending"
-      };
-
-      consignments.unshift(newLead);
-      updateConsignBadge();
-      closeConsignModal();
-
-      // Show Admin Toast Notification
-      document.getElementById('admin-toast-body').innerHTML = `
-        📥 <strong>มีทรัพย์ฝากขายใหม่เข้ามา!</strong><br>
-        • ${title} (${type})<br>
-        • ราคา: ${parseInt(price).toLocaleString()} บ.<br>
-        • เจ้าของ: คุณ${name} (${phone})<br>
-        <span class="text-amber-300 font-bold">💡 โทรชวนเป็น Free Agent ได้ทันที</span>
-      `;
-      document.getElementById('admin-toast').classList.remove('hidden');
-
-      if (currentMode === 'trainee') {
-        showToast("🎉 ส่งทรัพย์หลังที่ 2 สำเร็จ! ส่งอีก 1 หลังเพื่อปลดล็อก Free Agent");
-      } else {
-        showToast("✅ ส่งข้อมูลฝากขายสำเร็จ! เจ้าหน้าที่จะติดต่อกลับภายใน 24 ชม.");
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-60');
       }
 
-      if (currentMode === 'owner') {
-        document.getElementById('owner-leads-bar').classList.remove('hidden');
+      try {
+        const apiBase = window.SIWASUP_API_BASE || 'https://siwasup-cobroker-os.onrender.com';
+        const token = localStorage.getItem('siwasup_session') || '';
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
+        const resp = await fetch(`${apiBase}/api/intake/submit`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            type,
+            contract_mode: contractMode,
+            title,
+            price,
+            size: size || '-',
+            owner_name: name,
+            phone,
+            note,
+            agent_ref: (typeof getStoredAgentRef === 'function' ? getStoredAgentRef() : ''),
+            _hp_website: hpWebsite
+          })
+        });
+        const data = await resp.json();
+        if (!resp.ok || data.status !== 'success') {
+          throw new Error(data.error || data.message || 'ส่งข้อมูลไม่สำเร็จ');
+        }
+
+        const newLead = data.intake;
+        if (newLead && newLead.id) {
+          consignments.unshift(newLead);
+          updateConsignBadge();
+        }
+        if (e.target && typeof e.target.reset === 'function') e.target.reset();
+        closeConsignModal();
+
+        const safeTitle = escapeHtmlIntake(title);
+        const safeType = escapeHtmlIntake(type);
+        const safeName = escapeHtmlIntake(name);
+        const safePhone = escapeHtmlIntake(phone);
+        const safePrice = parseInt(price || '0', 10).toLocaleString();
+
+        const toastBody = document.getElementById('admin-toast-body');
+        const adminToast = document.getElementById('admin-toast');
+        if (toastBody && adminToast && currentMode === 'owner') {
+          toastBody.innerHTML = `
+            📥 <strong>บันทึกทรัพย์ฝากขายใหม่เข้าคลังแล้ว! (${escapeHtmlIntake(newLead?.id || '')})</strong><br>
+            • ${safeTitle} (${safeType})<br>
+            • ราคา: ${safePrice} บ.<br>
+            • เจ้าของ: คุณ${safeName} (${safePhone})<br>
+            <span class="text-amber-300 font-bold">💡 กดดูในเมนู "ฝากขาย" เพื่อตรวจและอนุมัติ</span>
+          `;
+          adminToast.classList.remove('hidden');
+        }
+
+        if (currentMode === 'trainee') {
+          showToast("🎉 ส่งทรัพย์เข้าพอร์ตสำเร็จ! รอแอดมินตรวจสอบและอนุมัติ");
+        } else {
+          showToast("✅ บันทึกข้อมูลฝากขายสำเร็จ! เจ้าหน้าที่จะติดต่อกลับภายใน 24 ชม.");
+        }
+
+        const leadsBar = document.getElementById('owner-leads-bar');
+        if (currentMode === 'owner' && leadsBar) {
+          leadsBar.classList.remove('hidden');
+        }
+      } catch (err) {
+        showToast(`⚠️ ${err.message || 'ไม่สามารถส่งข้อมูลได้ กรุณาลองใหม่อีกครั้ง'}`);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('opacity-60');
+        }
       }
     }
 
@@ -4392,39 +4460,118 @@
     }
 
     // 4. Owner Leads Management
-    function openOwnerLeadsModal() {
+    const CONTRACT_MODE_LABELS = {
+      exclusive_6m: '🔒 สัญญาปิด 6 ด.',
+      exclusive_12m: '🔒 สัญญาปิด 12 ด.',
+      exclusive_3m: '🔒 สัญญาปิด 3 ด.',
+      open: '🔓 สัญญาเปิด',
+      unsure: '💬 รอปรึกษา'
+    };
+
+    const INTAKE_STATUS_BADGES = {
+      pending_review: '<span class="bg-amber-100 text-amber-800 text-[9px] font-bold px-1.5 py-0.5 rounded">รอตรวจสอบ</span>',
+      approved: '<span class="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-1.5 py-0.5 rounded">อนุมัติแล้ว</span>',
+      need_revision: '<span class="bg-orange-100 text-orange-800 text-[9px] font-bold px-1.5 py-0.5 rounded">ขอข้อมูลเพิ่ม</span>',
+      rejected: '<span class="bg-rose-100 text-rose-800 text-[9px] font-bold px-1.5 py-0.5 rounded">ไม่รับเคส</span>',
+      archived: '<span class="bg-gray-200 text-gray-600 text-[9px] font-bold px-1.5 py-0.5 rounded">เก็บถาวร</span>'
+    };
+
+    function renderOwnerLeadsList() {
       const container = document.getElementById('owner-leads-container');
+      if (!container) return;
       if (consignments.length === 0) {
-        container.innerHTML = `<div class="text-center py-6 text-gray-400">ยังไม่มีทรัพย์ฝากขายใหม่</div>`;
-      } else {
-        container.innerHTML = consignments.map(c => `
+        container.innerHTML = `<div class="text-center py-6 text-gray-400">ยังไม่มีทรัพย์ฝากขายใหม่ในระบบ</div>`;
+        return;
+      }
+      container.innerHTML = consignments.map(c => {
+        const stBadge = INTAKE_STATUS_BADGES[c.status] || INTAKE_STATUS_BADGES.pending_review;
+        const modeLabel = CONTRACT_MODE_LABELS[c.contract_mode] || '';
+        const swcTag = c.swc_code ? `<span class="bg-emerald-700 text-white text-[9px] font-mono font-bold px-1.5 py-0.5 rounded">${escapeHtmlIntake(c.swc_code)}</span>` : '';
+        const submitterTag = c.submitted_by_ref ? `<span class="text-[10px] text-indigo-700 font-semibold">ส่งโดย: ${escapeHtmlIntake(c.submitted_by_name || c.submitted_by_ref)}</span>` : '';
+        return `
           <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-1.5 relative">
-            <div class="flex justify-between items-start">
-              <div>
-                <span class="bg-gray-900 text-white text-[9px] font-bold px-1.5 py-0.2 rounded">${c.type}</span>
-                <span class="font-bold text-gray-900 text-xs ml-1">${c.title}</span>
+            <div class="flex justify-between items-start gap-2">
+              <div class="flex flex-wrap items-center gap-1">
+                <span class="bg-gray-900 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">${escapeHtmlIntake(c.type)}</span>
+                ${stBadge}
+                ${swcTag}
+                ${modeLabel ? `<span class="bg-amber-50 border border-amber-200 text-amber-900 text-[9px] font-semibold px-1.5 py-0.5 rounded">${modeLabel}</span>` : ''}
+                <span class="font-bold text-gray-900 text-xs">${escapeHtmlIntake(c.title)}</span>
               </div>
-              <span class="text-[10px] text-gray-400">${c.created_at}</span>
+              <span class="text-[10px] text-gray-400 shrink-0">${escapeHtmlIntake(c.created_at)}</span>
             </div>
-            <div class="text-[11px] text-gray-800 font-semibold flex items-center gap-1.5">
-              <span class="icon-circle w-4 h-4"><i data-lucide="coins" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-              <span>ราคาเสนอขาย: ${c.price} บาท | พื้นที่: ${c.size}</span>
+            <div class="text-[11px] text-gray-800 font-semibold flex flex-wrap items-center gap-2">
+              <span class="flex items-center gap-1">
+                <span class="icon-circle w-4 h-4"><i data-lucide="coins" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+                <span>ราคา: ${escapeHtmlIntake(c.price)} บาท | พื้นที่: ${escapeHtmlIntake(c.size)}</span>
+              </span>
+              ${submitterTag}
             </div>
-            <div class="text-[11px] text-gray-600 flex items-center justify-between pt-1 border-t border-gray-200">
+            ${c.note ? `<div class="text-[10.5px] text-gray-600 bg-white px-2 py-1 rounded border border-gray-100">📝 ${escapeHtmlIntake(c.note)}</div>` : ''}
+            <div class="text-[11px] text-gray-600 flex flex-wrap items-center justify-between gap-2 pt-1.5 border-t border-gray-200">
               <span class="flex items-center gap-1.5">
                 <span class="icon-circle w-3.5 h-3.5"><i data-lucide="user" class="w-2 h-2 stroke-[1.5]"></i></span>
-                <span>${c.owner_name} (<a href="tel:${c.phone}" class="text-[#990000] font-bold underline">${c.phone}</a>)</span>
+                <span>${escapeHtmlIntake(c.owner_name)} (<a href="tel:${escapeHtmlIntake(c.phone)}" class="text-[#990000] font-bold underline">${escapeHtmlIntake(c.phone)}</a>)</span>
               </span>
-              <button onclick="convertLeadToAgent('${c.id}')" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold text-[10px] px-2.5 py-1 rounded shadow-xs flex items-center gap-1">
-                <span class="icon-circle w-3.5 h-3.5"><i data-lucide="user-plus" class="w-2 h-2 stroke-[1.5]"></i></span>
-                <span>ชวนเป็น Free Agent</span>
-              </button>
+              <div class="flex items-center gap-1.5 flex-wrap">
+                ${c.status !== 'approved' ? `<button type="button" onclick="reviewIntakeItem('${escapeHtmlIntake(c.id)}', 'approve')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] px-2 py-1 rounded shadow-xs">✅ อนุมัติรับเข้าพอร์ต</button>` : ''}
+                ${c.status === 'pending_review' ? `<button type="button" onclick="reviewIntakeItem('${escapeHtmlIntake(c.id)}', 'need_revision')" class="bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 font-bold text-[10px] px-2 py-1 rounded">ขอข้อมูลเพิ่ม</button>` : ''}
+                <button type="button" onclick="convertLeadToAgent('${escapeHtmlIntake(c.id)}')" class="bg-siwasup-gold hover:opacity-95 text-gray-950 font-bold text-[10px] px-2 py-1 rounded shadow-xs flex items-center gap-1">
+                  <span class="icon-circle w-3.5 h-3.5"><i data-lucide="user-plus" class="w-2 h-2 stroke-[1.5]"></i></span>
+                  <span>ชวนเป็น Agent</span>
+                </button>
+              </div>
             </div>
           </div>
-        `).join('');
-      }
+        `;
+      }).join('');
+      if (window.lucide) { lucide.createIcons(); }
+    }
+
+    async function openOwnerLeadsModal() {
+      renderOwnerLeadsList();
       document.getElementById('owner-leads-modal').classList.remove('hidden');
       if (window.lucide) { lucide.createIcons(); }
+      await loadRealIntakes();
+      renderOwnerLeadsList();
+    }
+
+    async function reviewIntakeItem(id, action) {
+      const token = localStorage.getItem('siwasup_session') || '';
+      if (!token) {
+        showToast('⚠️ กรุณาเข้าสู่ระบบ LINE ก่อนดำเนินการ');
+        return;
+      }
+      let reviewNote = '';
+      if (action === 'need_revision') {
+        reviewNote = prompt('ระบุสิ่งที่ต้องการให้ส่งเพิ่มเติม (เช่น รูปหน้าบ้าน / หน้าโฉนด):', '') || '';
+      }
+      try {
+        const apiBase = window.SIWASUP_API_BASE || 'https://siwasup-cobroker-os.onrender.com';
+        const res = await fetch(`${apiBase}/api/intake/review`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ id, action, review_note: reviewNote })
+        });
+        const data = await res.json();
+        if (!res.ok || data.status !== 'success') {
+          throw new Error(data.error || 'อัปเดตสถานะไม่สำเร็จ');
+        }
+        const idx = consignments.findIndex(c => c.id === id);
+        if (idx >= 0 && data.intake) {
+          consignments[idx] = data.intake;
+        }
+        updateConsignBadge();
+        renderOwnerLeadsList();
+        showToast(action === 'approve'
+          ? `✅ อนุมัติแล้ว! ออกรหัสทรัพย์ ${data.intake?.swc_code || ''}`
+          : '📝 อัปเดตสถานะเรียบร้อย');
+      } catch (err) {
+        showToast(`⚠️ ${err.message || 'เกิดข้อผิดพลาด'}`);
+      }
     }
 
     function closeOwnerLeadsModal() {

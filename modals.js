@@ -378,7 +378,12 @@
             <label class="block font-medium mb-1">วันที่สะดวกเข้าชม (โดยประมาณ)</label>
             <input type="text" id="inquiry-date" placeholder="เช่น เสาร์นี้ ช่วงบ่าย" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900">
           </div>
-          <button type="submit" class="w-full bg-[#C2A460] hover:bg-[#A98B45] text-neutral-900 font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2 flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+          <div>
+            <label class="block font-medium mb-1">รายละเอียดเพิ่มเติม / พิกัด / โน้ต (ถ้ามี)</label>
+            <input type="text" id="consign-note" placeholder="เช่น 3 นอน 2 น้ำ รีโนเวทใหม่ หรือลิงก์ Google Maps" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900">
+          </div>
+
+          <button type="submit" id="consign-submit-btn" class="w-full bg-[#C2A460] hover:bg-[#A98B45] text-neutral-900 font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2 flex items-center justify-center gap-1.5 active:scale-95 transition-all">
             <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
             <span>ยืนยันส่งข้อมูลนัดหมาย</span>
           </button>
@@ -456,15 +461,28 @@
         </div>
 
         <form onsubmit="handleConsignSubmit(event)" class="space-y-2.5 text-xs">
-          <div>
-            <label class="block font-medium mb-1">ประเภททรัพย์ <span class="text-red-500">*</span></label>
-            <select id="consign-type" required class="w-full border rounded-lg p-2 bg-gray-50 outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900">
-              <option value="ทาวน์โฮม">ทาวน์โฮม / ทาวน์เฮ้าส์</option>
-              <option value="บ้านเดี่ยว">บ้านเดี่ยว / บ้านแฝด</option>
-              <option value="คอนโด">คอนโดมิเนียม</option>
-              <option value="ที่ดิน">ที่ดินเปล่า</option>
-              <option value="อาคารพาณิชย์">อาคารพาณิชย์ / ตึกแถว</option>
-            </select>
+          <input type="text" id="consign-hp-website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" aria-hidden="true">
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block font-medium mb-1">ประเภททรัพย์ <span class="text-red-500">*</span></label>
+              <select id="consign-type" required class="w-full border rounded-lg p-2 bg-gray-50 outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900">
+                <option value="ทาวน์โฮม">ทาวน์โฮม / ทาวน์เฮ้าส์</option>
+                <option value="บ้านเดี่ยว">บ้านเดี่ยว / บ้านแฝด</option>
+                <option value="คอนโด">คอนโดมิเนียม</option>
+                <option value="ที่ดิน">ที่ดินเปล่า</option>
+                <option value="อาคารพาณิชย์">อาคารพาณิชย์ / ตึกแถว</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-medium mb-1">รูปแบบการฝากขาย</label>
+              <select id="consign-contract-mode" class="w-full border rounded-lg p-2 bg-gray-50 outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900">
+                <option value="exclusive_6m">🔒 สัญญาปิด (6 เดือน)</option>
+                <option value="exclusive_12m">🔒 สัญญาปิด (12 เดือน)</option>
+                <option value="exclusive_3m">🔒 สัญญาปิด (3 เดือน)</option>
+                <option value="open">🔓 สัญญาเปิด (ทั่วไป)</option>
+                <option value="unsure">💬 ขอปรึกษาก่อน</option>
+              </select>
+            </div>
           </div>
 
           <div>
@@ -500,7 +518,12 @@
             <p class="text-[10px] text-gray-400 mt-0.5">แนบรูปช่วยให้ประเมินราคาและปล่อยขายได้ไวยิ่งขึ้น</p>
           </div>
 
-          <button type="submit" class="w-full bg-[#C2A460] hover:bg-[#A98B45] text-neutral-900 font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2 flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+          <div>
+            <label class="block font-medium mb-1">รายละเอียดเพิ่มเติม / พิกัด / โน้ต (ถ้ามี)</label>
+            <input type="text" id="consign-note" placeholder="เช่น 3 นอน 2 น้ำ รีโนเวทใหม่ หรือลิงก์ Google Maps" class="w-full border rounded-lg p-2 outline-none focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900">
+          </div>
+
+          <button type="submit" id="consign-submit-btn" class="w-full bg-[#C2A460] hover:bg-[#A98B45] text-neutral-900 font-bold py-2.5 rounded-xl shadow-xs text-xs mt-2 flex items-center justify-center gap-1.5 active:scale-95 transition-all">
             <span class="icon-circle w-4 h-4"><i data-lucide="send" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
             <span>ยืนยันส่งข้อมูลฝากขาย (ฟรี)</span>
           </button>
