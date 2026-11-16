@@ -424,6 +424,13 @@
               <span class="hidden sm:inline">สัญญา</span>
             </button>
 
+            <!-- ปุ่มเข้าหน้า Lobby จัดการตัวแทน (Admin Only) -->
+            <a id="btn-header-admin-lobby" href="admin_lobby_manager.html" target="_blank" rel="noopener" class="hidden relative h-6 px-1.5 sm:px-2 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-amber-500/40 text-[#E5C985] items-center gap-1 transition cursor-pointer active:scale-95 shrink-0" title="เข้าหน้า Lobby จัดการ & อนุมัติตัวแทน">
+              <span>🏛️</span>
+              <span class="hidden sm:inline font-bold">Lobby</span>
+              <span id="header-lobby-pending-badge" class="hidden px-1.5 py-0.2 rounded-full bg-rose-600 text-white text-[9px] font-black leading-tight">0</span>
+            </a>
+
             <!-- ปุ่มกุญแจ NPA -->
             <button id="btn-header-npa-key" type="button" onclick="openNpaKeyModal()" class="h-6 px-1.5 sm:px-2 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-300 flex items-center gap-1 transition cursor-pointer active:scale-95 shrink-0" title="ระบบเบิกกุญแจ NPA & Messenger">
               <span class="text-[#D4BC8B]">🔑</span>
@@ -1519,6 +1526,32 @@
       return String(m.nickname || m.phone || m.name || '').trim();
     }
 
+    function syncAdminLobbyBadge(pendingCount, isAdm) {
+      const count = Number(pendingCount || 0);
+      window._siwasupLobbyPendingCount = count;
+      const isClient = (typeof isWhiteLabelMode !== 'undefined' && isWhiteLabelMode) || (typeof currentMode !== 'undefined' && currentMode === 'client');
+      const showAdmin = Boolean(isAdm) && !isClient;
+      const hdrBtn = document.getElementById('btn-header-admin-lobby');
+      const hdrBadge = document.getElementById('header-lobby-pending-badge');
+      const profBox = document.getElementById('profile-admin-lobby-box');
+      const profBadge = document.getElementById('profile-lobby-pending-badge');
+      if (hdrBtn) {
+        hdrBtn.classList.toggle('hidden', !showAdmin);
+        hdrBtn.classList.toggle('flex', showAdmin);
+      }
+      if (hdrBadge) {
+        hdrBadge.textContent = String(count);
+        hdrBadge.classList.toggle('hidden', !(showAdmin && count > 0));
+      }
+      if (profBox) {
+        profBox.classList.toggle('hidden', !showAdmin);
+      }
+      if (profBadge) {
+        profBadge.textContent = `${count} รออนุมัติ`;
+        profBadge.classList.toggle('hidden', !(showAdmin && count > 0));
+      }
+    }
+
     async function verifySiwasupAgentSession() {
       try {
         if (window.location.hash && window.location.hash.includes('session=')) {
@@ -1556,6 +1589,7 @@
             window._siwasupVerifiedMember = null;
             window._siwasupVerifiedIsAdmin = false;
             adminUnlockedManual = false;
+            syncAdminLobbyBadge(0, false);
             if (typeof currentMode !== 'undefined' && currentMode !== 'client' && typeof setMode === 'function') {
               setMode(currentMode);
             }
@@ -1569,6 +1603,7 @@
           const code = String(me.member.code || '').toUpperCase();
           const id = String(me.member.id || '').toLowerCase();
           window._siwasupVerifiedIsAdmin = (
+            Boolean(me.isAdmin) ||
             code === 'SW001' ||
             code === 'SW004' ||
             id === 'app_office_001' ||
@@ -1584,6 +1619,14 @@
             }
             if (typeof updateProfileButtons === 'function') {
               updateProfileButtons(resolvedCode);
+            }
+          }
+          const lobbyPending = Number(me.lobbyPendingCount || 0);
+          syncAdminLobbyBadge(lobbyPending, window._siwasupVerifiedIsAdmin);
+          if (window._siwasupVerifiedIsAdmin && lobbyPending > 0 && !window._siwasupLobbyToastShown) {
+            window._siwasupLobbyToastShown = true;
+            if (typeof showToast === 'function') {
+              showToast(`🔔 มีผู้สมัครรอใน Lobby ${lobbyPending} ท่าน (กดปุ่ม 🏛️ Lobby ด้านบนเพื่อตรวจสอบ)`);
             }
           }
           syncClientToAgentSwitchButton();
@@ -1608,6 +1651,7 @@
           window._siwasupVerifiedMember = null;
           window._siwasupVerifiedIsAdmin = false;
           adminUnlockedManual = false;
+          syncAdminLobbyBadge(0, false);
           syncClientToAgentSwitchButton();
           if (typeof currentMode !== 'undefined' && currentMode !== 'client' && typeof setMode === 'function') {
             const p = new URLSearchParams(window.location.search);
@@ -1650,6 +1694,9 @@
         history.replaceState(null, '', nextUrl);
       } catch (e) {}
       const isAdm = Boolean(window._siwasupVerifiedIsAdmin);
+      if (typeof syncAdminLobbyBadge === 'function') {
+        syncAdminLobbyBadge(window._siwasupLobbyPendingCount || 0, isAdm);
+      }
       if (isAdm) {
         adminUnlockedManual = true;
         setMode('owner');
@@ -1786,6 +1833,11 @@
         if (ownerNotifyBtn) {
           ownerNotifyBtn.classList.add('hidden');
           ownerNotifyBtn.classList.remove('flex');
+        }
+        const adminLobbyHeaderBtn = document.getElementById('btn-header-admin-lobby');
+        if (adminLobbyHeaderBtn) {
+          adminLobbyHeaderBtn.classList.add('hidden');
+          adminLobbyHeaderBtn.classList.remove('flex');
         }
 
         const storedRef = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : (localStorage.getItem('siwasup_referred_by') || 'SW-042');
@@ -1973,6 +2025,8 @@
         if (adminShortcutBtn) { adminShortcutBtn.classList.add('hidden'); adminShortcutBtn.classList.remove('flex'); }
         if (npaKeyBtn) { npaKeyBtn.classList.add('hidden'); npaKeyBtn.classList.remove('flex'); }
         if (myContractsBtn) { myContractsBtn.classList.add('hidden'); myContractsBtn.classList.remove('flex'); }
+        const lobbyBtn = document.getElementById('btn-header-admin-lobby');
+        if (lobbyBtn) { lobbyBtn.classList.add('hidden'); lobbyBtn.classList.remove('flex'); }
         if (leaderboardBtn) { leaderboardBtn.classList.add('hidden'); leaderboardBtn.classList.remove('flex'); }
         if (profileBtn) { profileBtn.classList.add('hidden'); profileBtn.classList.remove('flex'); }
         const hasPendingSession = Boolean(localStorage.getItem('siwasup_session'));
@@ -1986,6 +2040,9 @@
           }
         }
       } else {
+        if (typeof syncAdminLobbyBadge === 'function') {
+          syncAdminLobbyBadge(window._siwasupLobbyPendingCount || 0, window._siwasupVerifiedIsAdmin);
+        }
         if (profileBtn) {
           if (mode !== 'client') { profileBtn.classList.remove('hidden'); profileBtn.classList.add('flex'); }
           else { profileBtn.classList.add('hidden'); profileBtn.classList.remove('flex'); }
@@ -5788,6 +5845,9 @@
       let agent = null;
       if (verified && (!code || cleanCode === verifiedRef)) {
         const isAdm = Boolean(window._siwasupVerifiedIsAdmin);
+        if (typeof syncAdminLobbyBadge === 'function') {
+          syncAdminLobbyBadge(window._siwasupLobbyPendingCount || 0, isAdm);
+        }
         agent = Object.assign({}, baseAgent || {}, {
           code: verifiedRef || cleanCode || 'SW',
           nickname: verified.nickname || verified.name || (baseAgent && baseAgent.nickname) || verifiedRef,

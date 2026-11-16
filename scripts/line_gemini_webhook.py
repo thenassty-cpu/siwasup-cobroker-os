@@ -3119,7 +3119,16 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             if mem:
                 mem["last_active_at"] = int(time.time())
                 save_lobby_data(store)
-                self._send_json(200, {"status": "approved", "member": sanitize_member(mem), "isAdmin": is_admin_member(mem), "line": line_info})
+                is_adm = is_admin_member(mem)
+                me_payload = {
+                    "status": "approved",
+                    "member": sanitize_member(mem),
+                    "isAdmin": is_adm,
+                    "line": line_info,
+                }
+                if is_adm:
+                    me_payload["lobbyPendingCount"] = len(store.get("pending", []))
+                self._send_json(200, me_payload)
                 return
             pend = next((a for a in store.get("pending", []) if a.get("lineUserId") == sub), None)
             if pend:
@@ -3690,6 +3699,36 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 store["pending"] = [p for p in store.get("pending", []) if p.get("lineUserId") != uid]
                 store["pending"].insert(0, safe)
                 save_lobby_data(store)
+                try:
+                    admin_uids = {
+                        a.get("lineUserId") for a in store.get("approved", [])
+                        if is_admin_member(a) and a.get("lineUserId")
+                    } | {u for u in SUPER_ADMIN_LINE_USER_IDS if u}
+                    pending_total = len(store.get("pending", []))
+                    if LINE_ACCESS_TOKEN and admin_uids:
+                        _app_snap = dict(safe)
+                        def _notify_lobby_admins():
+                            _name = _app_snap.get("name") or _app_snap.get("lineDisplayName") or "-"
+                            _nick = _app_snap.get("nickname") or "-"
+                            _phone = _app_snap.get("phone") or "-"
+                            _line_id = _app_snap.get("line_id") or "-"
+                            _zone = _app_snap.get("zone") or "-"
+                            _aff = _app_snap.get("affiliation_label") or _app_snap.get("affiliation") or "-"
+                            _msg = (
+                                "🏛️ [แจ้งเตือน Lobby] มีผู้สมัครตัวแทนใหม่รอการอนุมัติ!\n"
+                                f"👤 ชื่อ: {_name} (ชื่อเล่น: {_nick})\n"
+                                f"📱 โทร: {_phone} | LINE: {_line_id}\n"
+                                f"📍 โซน: {_zone}\n"
+                                f"🏢 สังกัด: {_aff}\n"
+                                f"⏳ คิวรอใน Lobby ทั้งหมด: {pending_total} ท่าน\n"
+                                "👉 กดตรวจสอบและอนุมัติ:\n"
+                                "https://assets.siwasup.com/admin_lobby_manager.html"
+                            )
+                            for auid in admin_uids:
+                                _push_line_message(auid, _msg)
+                        threading.Thread(target=_notify_lobby_admins, daemon=True).start()
+                except Exception as _ne:
+                    print(f"[Warn] Lobby admin notify failed: {_ne}")
                 self._send_json(200, {"status": "success", "applicant": sanitize_member(safe)})
             except Exception as e:
                 self._send_json(500, {"error": str(e)})

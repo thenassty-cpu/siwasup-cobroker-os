@@ -432,7 +432,11 @@
           <p class="text-xs sm:text-sm text-slate-400 mt-1">ยกระดับการทำงานของตัวแทนศิวาทรัพย์ด้วยระบบดิจิทัลที่ปกป้องสิทธิ์และบันทึกผลงานอัตโนมัติ</p>
         </div>
 
-        <div class="admin-only-el hidden flex items-center gap-2">
+        <div class="admin-only-el hidden flex flex-wrap items-center gap-2">
+          <a href="admin_lobby_manager.html" target="_blank" rel="noopener" class="text-xs text-[#E6CA85] bg-slate-900/90 border border-[#C2A460]/60 px-3 py-1.5 rounded-xl hover:bg-slate-800 font-bold flex items-center gap-1.5 shadow-sm">
+            <span>🏛️ เข้าหน้า Lobby จัดการตัวแทน</span>
+            <span id="landing-lobby-pending-badge" class="hidden px-2 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-black animate-pulse">0 รออนุมัติ</span>
+          </a>
           <a href="agent_quick_guide.html" class="text-xs text-amber-300 bg-amber-500/15 border border-amber-400/50 px-3 py-1.5 rounded-xl hover:bg-amber-500/25 font-semibold flex items-center gap-1.5">
             <span>⚠️ [Admin ตรวจสอบ] เปิดคู่มือการใช้งานฉบับพกพา</span>
             <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
@@ -637,8 +641,14 @@
               showMyWelcomePass(me.member);
               const code = (me.member.code || '').toUpperCase();
               const id = (me.member.id || '').toLowerCase();
-              if (code === 'SW001' || code === 'SW004' || id === 'app_office_001' || id === 'app_office_004' || me.member.role === 'admin') {
+              if (Boolean(me.isAdmin) || code === 'SW001' || code === 'SW004' || id === 'app_office_001' || id === 'app_office_004' || me.member.role === 'admin') {
                 revealAdminOnlyElements();
+                const pendingCnt = Number(me.lobbyPendingCount || 0);
+                const lBadge = document.getElementById('landing-lobby-pending-badge');
+                if (lBadge && pendingCnt > 0) {
+                  lBadge.textContent = `${pendingCnt} รออนุมัติ`;
+                  lBadge.classList.remove('hidden');
+                }
               }
             }
           } else if (r.status === 401) {

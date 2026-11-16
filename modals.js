@@ -1868,6 +1868,17 @@
                 <span>ทดลองเปิดดู</span>
               </button>
             </div>
+
+            <!-- 🏛️ Admin Only: Lobby Manager & Pending Notification -->
+            <div id="profile-admin-lobby-box" class="hidden pt-2 border-t border-amber-200/60">
+              <a href="admin_lobby_manager.html" target="_blank" rel="noopener" class="w-full bg-gradient-to-r from-slate-900 via-neutral-900 to-slate-800 hover:from-slate-800 hover:to-neutral-800 text-[#E5C985] border border-amber-500/40 font-bold text-xs py-2.5 px-3 rounded-xl shadow flex items-center justify-between gap-2 transition active:scale-95">
+                <span class="flex items-center gap-2">
+                  <span>🏛️</span>
+                  <span>เข้าหน้า Lobby จัดการ &amp; อนุมัติตัวแทน</span>
+                </span>
+                <span id="profile-lobby-pending-badge" class="hidden px-2 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-black animate-pulse">0 รออนุมัติ</span>
+              </a>
+            </div>
           </div>
 
           <!-- 4 Archetype Stage Visual Selector (Bear -> Wolf -> Lion -> Eagle) -->
