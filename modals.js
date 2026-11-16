@@ -822,6 +822,54 @@
       </div>
     </div>
 
+    <!-- 📋 My Contracts & Intakes Modal (สำหรับเซลล์ดูสัญญาและงานฝากขายที่ตัวเองรับผิดชอบ) -->
+    <div id="agent-contracts-modal" class="hidden modal-backdrop !items-center px-3 pt-10 pb-6 sm:p-6">
+      <div class="modal-card space-y-3">
+        <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
+          <div>
+            <h3 class="font-bold text-sm text-gray-900 flex items-center gap-1.5">
+              <span class="icon-circle w-5 h-5"><i data-lucide="file-text" class="w-3 h-3 stroke-[1.5]"></i></span>
+              <span>สัญญาและงานฝากขายของฉัน</span>
+            </h3>
+            <p class="text-[10px] text-gray-500">แสดงเฉพาะสัญญาและรายการฝากขายที่คุณเป็นผู้รับผิดชอบ</p>
+          </div>
+          <button 
+            type="button" 
+            onclick="closeMyContractsModal()" 
+            aria-label="ปิดหน้าต่าง"
+            class="w-9 h-9 rounded-full bg-neutral-900/80 hover:bg-neutral-900 text-white backdrop-blur-md flex items-center justify-center transition-all shadow-md active:scale-90 cursor-pointer shrink-0"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-1.5 bg-gray-100 p-1 rounded-lg text-[11px] font-bold">
+            <button type="button" id="tab-my-contracts" onclick="switchMyContractsTab('contracts')" class="px-2.5 py-1 rounded-md bg-neutral-900 text-white transition">
+              📄 สัญญาแต่งตั้ง (<span id="my-contracts-count">0</span>)
+            </button>
+            <button type="button" id="tab-my-intakes" onclick="switchMyContractsTab('intakes')" class="px-2.5 py-1 rounded-md text-gray-600 hover:text-gray-900 transition">
+              📥 งานฝากขาย (<span id="my-intakes-count">0</span>)
+            </button>
+          </div>
+          <button type="button" onclick="closeMyContractsModal(); openConsignModal();" class="bg-[#C2A460] hover:bg-[#A98B45] text-neutral-900 font-bold text-[10.5px] px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition active:scale-95">
+            <span>+ ส่งฝากขายใหม่</span>
+          </button>
+        </div>
+
+        <div>
+          <input type="text" id="my-contracts-search" oninput="renderMyContractsView()" placeholder="ค้นหาชื่อโครงการ, เลขสัญญา, ชื่อเจ้าของ, รหัส SWC..." class="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs bg-gray-50 outline-none focus:ring-1 focus:ring-neutral-900">
+        </div>
+
+        <div id="my-contracts-container" class="space-y-2.5 text-xs max-h-[58vh] overflow-y-auto pr-0.5">
+          <div class="text-center py-6 text-gray-400">กำลังโหลดข้อมูลสัญญา...</div>
+        </div>
+      </div>
+    </div>
+
     <!-- 💰 Edit Price Modal (สำหรับเจ้าของ/แอดมิน บัว & กูล) -->
     <div id="edit-price-modal" class="hidden modal-backdrop !items-center px-3 pt-10 pb-6 sm:p-6">
       <div class="modal-card-sm space-y-3.5">
