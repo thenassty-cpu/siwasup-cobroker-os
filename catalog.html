@@ -1560,7 +1560,13 @@
           );
           syncClientToAgentSwitchButton();
           if (typeof currentMode !== 'undefined' && currentMode !== 'client' && typeof setMode === 'function') {
-            setMode(currentMode);
+            const p = new URLSearchParams(window.location.search);
+            const explicitView = p.get('view') || p.get('mode');
+            if (window._siwasupVerifiedIsAdmin && !explicitView && p.get('admin') !== '0' && p.get('user') !== '1') {
+              setMode('owner');
+            } else {
+              setMode(currentMode);
+            }
           }
         } else {
           if (typeof _siwasupSafeStorage === 'function') {
@@ -1573,7 +1579,13 @@
           adminUnlockedManual = false;
           syncClientToAgentSwitchButton();
           if (typeof currentMode !== 'undefined' && currentMode !== 'client' && typeof setMode === 'function') {
-            setMode(currentMode);
+            const p = new URLSearchParams(window.location.search);
+            const explicitView = p.get('view') || p.get('mode');
+            if (window._siwasupVerifiedIsAdmin && !explicitView && p.get('admin') !== '0' && p.get('user') !== '1') {
+              setMode('owner');
+            } else {
+              setMode(currentMode);
+            }
           }
         }
       } catch (e) {
@@ -1586,6 +1598,14 @@
         promptAgentModeLogin();
         return;
       }
+      // Clean client-view query params from URL so Refresh stays in Agent/Admin Mode (keep property/id)
+      try {
+        const cleanParams = new URLSearchParams(window.location.search);
+        ['view', 'mode', 'ref', 'agent', 'src', 't', 'c'].forEach(k => cleanParams.delete(k));
+        const qs = cleanParams.toString();
+        const nextUrl = window.location.pathname + (qs ? '?' + qs : '');
+        history.replaceState(null, '', nextUrl);
+      } catch (e) {}
       const isAdm = Boolean(window._siwasupVerifiedIsAdmin);
       if (isAdm) {
         adminUnlockedManual = true;
