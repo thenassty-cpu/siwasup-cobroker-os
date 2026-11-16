@@ -5650,6 +5650,9 @@
       const verifiedRef = verified ? resolveVerifiedMemberRef(verified) : '';
       const code = targetCode || verifiedRef || getActiveAgentRef();
       renderMyProfile(code);
+      if (typeof syncAdminLobbyBadge === 'function') {
+        syncAdminLobbyBadge(window._siwasupLobbyPendingCount || 0, window._siwasupVerifiedIsAdmin);
+      }
       const modal = document.getElementById('modal-my-profile');
       if (modal) {
         modal.classList.remove('hidden');
