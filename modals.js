@@ -116,6 +116,28 @@
               <div id="agent-autocomplete-dropdown" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50 max-h-48 overflow-y-auto no-scrollbar py-1"></div>
             </div>
 
+            <!-- Optional Customer Tracking (&t=) -->
+            <div class="p-2 rounded-lg border border-amber-200/80 bg-amber-50/40 space-y-1.5">
+              <div class="flex items-center justify-between">
+                <label for="share-client-name" class="font-semibold text-[10.5px] text-amber-950 flex items-center gap-1">
+                  <span>🏷️ ติดตามลูกค้าเฉพาะราย (Optional)</span>
+                </label>
+                <span id="share-track-badge" class="text-[9.5px] font-medium text-gray-500 bg-white px-1.5 py-0.5 rounded border border-gray-200">ไม่ระบุ (แชร์ทั่วไป)</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                <input type="text" id="share-client-name" maxlength="25"
+                       placeholder="ชื่อลูกค้า (เช่น คุณเอ)"
+                       oninput="scheduleShareTrackTag()"
+                       onblur="scheduleShareTrackTag(true)"
+                       class="w-full border border-amber-200/80 rounded-lg py-1 px-2 text-[11px] font-medium focus:ring-1 focus:ring-amber-500 outline-none bg-white">
+                <input type="text" id="share-client-note" maxlength="60"
+                       placeholder="โน้ตส่วนตัว (ไม่แสดงให้ลูกค้าเห็น)"
+                       oninput="scheduleShareTrackTag()"
+                       onblur="scheduleShareTrackTag(true)"
+                       class="w-full border border-amber-200/80 rounded-lg py-1 px-2 text-[11px] focus:ring-1 focus:ring-amber-500 outline-none bg-white">
+              </div>
+            </div>
+
                         <!-- Native System Share Button (1-Click Share to All Apps) -->
             <button type="button" onclick="shareViaSystemNative()" class="w-full bg-gradient-to-r from-amber-600 to-[#8C734B] hover:from-amber-700 hover:to-[#735d3b] text-white font-bold py-2 px-3 rounded-xl shadow-xs text-xs flex items-center justify-center gap-2 active:scale-95 transition-all mb-1">
               <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
@@ -208,14 +230,6 @@
                 </div>
               </div>
               <button onclick="toggleQrView()" class="shrink-0 ml-2 bg-neutral-900 hover:bg-neutral-800 text-white font-medium py-1 px-3 rounded-lg text-[11px] shadow-xs flex items-center gap-1 active:scale-95 transition-all">
-                <i data-lucide="scan-line" class="w-3 h-3"></i>
-                <span id="qr-toggle-text">เปิดดู QR</span>
-              </button>
-            </div>
-                  <div class="text-[10px] text-amber-700 truncate">สแกนป้ายแล้วล็อกค่าคอม 60 วัน</div>
-                </div>
-              </div>
-              <button onclick="toggleQrView()" class="shrink-0 ml-2 bg-neutral-900 hover:bg-neutral-800 text-white font-medium py-1 px-3 rounded text-[11px] shadow-xs flex items-center gap-1 active:scale-95 transition-all">
                 <i data-lucide="scan-line" class="w-3 h-3"></i>
                 <span id="qr-toggle-text">เปิดดู QR</span>
               </button>
@@ -880,14 +894,22 @@
           </div>
         </div>
 
-        <div>
-          <label class="block font-medium text-xs mb-1 text-gray-700 flex items-center gap-1.5">
-            <span class="icon-circle w-4 h-4"><i data-lucide="user" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
-            <span>ชื่อลูกค้าผู้รับ (ใส่เพื่อเพิ่มความประทับใจ VIP):</span>
-          </label>
-          <input type="text" id="bundle-client-name" value="คุณวิชัย" oninput="updateBundlePreview()"
-                 placeholder="เช่น คุณวิชัย, คุณสมชาย" 
-                 class="w-full border rounded-lg p-2 text-xs font-semibold focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900 outline-none bg-gray-50">
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label for="bundle-client-name" class="block font-medium text-xs text-gray-700 flex items-center gap-1.5">
+              <span class="icon-circle w-4 h-4"><i data-lucide="user" class="w-2.5 h-2.5 stroke-[1.5]"></i></span>
+              <span>ชื่อลูกค้าผู้รับ (ใส่เพื่อเพิ่มความประทับใจ VIP):</span>
+            </label>
+            <span id="bundle-track-badge" class="text-[9.5px] font-medium text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded border border-gray-200">กำลังเตรียม &amp;t=...</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+            <input type="text" id="bundle-client-name" value="คุณวิชัย" maxlength="25" oninput="scheduleBundleTrackTag(); updateBundlePreview()"
+                   placeholder="เช่น คุณวิชัย, คุณสมชาย" 
+                   class="w-full border rounded-lg p-2 text-xs font-semibold focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900 outline-none bg-gray-50">
+            <input type="text" id="bundle-client-note" maxlength="60" oninput="scheduleBundleTrackTag(); updateBundlePreview()"
+                   placeholder="โน้ตส่วนตัว (ไม่แสดงให้ลูกค้าเห็น เช่น งบ 4 ล.)"
+                   class="w-full border rounded-lg p-2 text-xs focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900 outline-none bg-gray-50">
+          </div>
         </div>
 
         <!-- Selected Properties List Preview -->

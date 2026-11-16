@@ -648,6 +648,15 @@
 
             <span class="hidden sm:inline text-white/95 font-medium text-[11px] sm:text-xs whitespace-nowrap">• ที่ปรึกษาอสังหาริมทรัพย์รับรองโดย ศิวาทรัพย์</span>
           </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button id="btn-client-to-agent-mode" type="button" onclick="switchBackToAgentMode()" class="hidden items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#1D1D1D] hover:bg-neutral-800 text-[#E5C985] border border-[#965920]/40 text-[10px] sm:text-[11px] font-bold whitespace-nowrap shadow-2xs cursor-pointer transition active:scale-95" title="สลับกลับไปมุมมองตัวแทน/แอดมิน เพื่อเช็กข้อมูลแบงก์และค่าคอม">
+              <span id="btn-client-to-agent-icon">🔑</span>
+              <span id="btn-client-to-agent-label">โหมดตัวแทน</span>
+            </button>
+            <button id="btn-client-agent-signin" type="button" onclick="promptAgentModeLogin()" class="inline-flex items-center justify-center w-6 h-6 rounded-full text-white/55 hover:text-white hover:bg-black/15 transition cursor-pointer" title="สำหรับตัวแทน: ยืนยันตัวตนเพื่อสลับกลับโหมดตัวแทน">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+            </button>
+          </div>
         </div>
       </div>
     </header>
@@ -1152,7 +1161,10 @@
     function isWhiteLabelMode() {
       if (currentMode === 'client') return true;
       const isAdm = typeof isAdminSession === 'function' && isAdminSession();
-      const hasAuth = !!(localStorage.getItem('siwasup_session') || new URLSearchParams(window.location.search).has('my_agent'));
+      const isProd = typeof window !== 'undefined' && window.location && window.location.hostname && window.location.hostname.includes('siwasup.com');
+      const hasAuth = isProd
+        ? Boolean(window._siwasupVerifiedMember)
+        : Boolean(window._siwasupVerifiedMember || localStorage.getItem('siwasup_session') || new URLSearchParams(window.location.search).has('my_agent'));
       return !isAdm && !hasAuth;
     }
 
@@ -1451,11 +1463,155 @@
 
     let adminUnlockedManual = false;
     function isAdminSession() {
-      if (adminUnlockedManual) return true;
       const params = new URLSearchParams(window.location.search);
       if (params.get('admin') === '0' || params.get('user') === '1') return false;
+      if (window._siwasupVerifiedIsAdmin) return true;
+      const isProd = typeof window !== 'undefined' && window.location && window.location.hostname && window.location.hostname.includes('siwasup.com');
+      if (isProd) return false;
+      if (adminUnlockedManual) return true;
       if (params.get('admin') === '1' || params.get('demo') === '1' || params.get('view') === 'owner') return true;
       return false;
+    }
+
+    function syncClientToAgentSwitchButton() {
+      const switchBtn = document.getElementById('btn-client-to-agent-mode');
+      const signinBtn = document.getElementById('btn-client-agent-signin');
+      const iconEl = document.getElementById('btn-client-to-agent-icon');
+      const labelEl = document.getElementById('btn-client-to-agent-label');
+      const isVerified = Boolean(window._siwasupVerifiedMember);
+      const isAdm = Boolean(window._siwasupVerifiedIsAdmin);
+      if (switchBtn) {
+        if (isVerified) {
+          switchBtn.classList.remove('hidden');
+          switchBtn.classList.add('inline-flex');
+          if (iconEl) iconEl.textContent = isAdm ? '👑' : '🔑';
+          if (labelEl) labelEl.textContent = isAdm ? 'กลับโหมด Admin' : 'กลับโหมดตัวแทน';
+        } else {
+          switchBtn.classList.add('hidden');
+          switchBtn.classList.remove('inline-flex');
+        }
+      }
+      if (signinBtn) {
+        if (isVerified) {
+          signinBtn.classList.add('hidden');
+          signinBtn.classList.remove('inline-flex');
+        } else {
+          signinBtn.classList.remove('hidden');
+          signinBtn.classList.add('inline-flex');
+        }
+      }
+    }
+
+    async function verifySiwasupAgentSession() {
+      try {
+        if (window.location.hash && window.location.hash.includes('session=')) {
+          const hashParams = new URLSearchParams(window.location.hash.slice(1));
+          const incomingSess = hashParams.get('session');
+          if (incomingSess) {
+            if (typeof _siwasupSafeStorage === 'function') {
+              _siwasupSafeStorage('local', 'set', 'siwasup_session', incomingSess);
+            } else {
+              localStorage.setItem('siwasup_session', incomingSess);
+            }
+          }
+          try {
+            history.replaceState(null, '', window.location.pathname + window.location.search);
+          } catch (e) {}
+        }
+        const sess = (typeof _siwasupSafeStorage === 'function')
+          ? _siwasupSafeStorage('local', 'get', 'siwasup_session')
+          : localStorage.getItem('siwasup_session');
+        if (!sess) {
+          syncClientToAgentSwitchButton();
+          return;
+        }
+        const r = await fetch('https://siwasup-cobroker-os.onrender.com/api/auth/me', {
+          headers: { 'Authorization': 'Bearer ' + sess },
+          cache: 'no-store'
+        });
+        if (!r.ok) {
+          if (r.status === 401 || r.status === 403) {
+            if (typeof _siwasupSafeStorage === 'function') {
+              _siwasupSafeStorage('local', 'remove', 'siwasup_session');
+            } else {
+              localStorage.removeItem('siwasup_session');
+            }
+            window._siwasupVerifiedMember = null;
+            window._siwasupVerifiedIsAdmin = false;
+            adminUnlockedManual = false;
+            if (typeof currentMode !== 'undefined' && currentMode !== 'client' && typeof setMode === 'function') {
+              setMode(currentMode);
+            }
+          }
+          syncClientToAgentSwitchButton();
+          return;
+        }
+        const me = await r.json();
+        if (me && me.status === 'approved' && me.member) {
+          window._siwasupVerifiedMember = me.member;
+          const code = String(me.member.code || '').toUpperCase();
+          const id = String(me.member.id || '').toLowerCase();
+          window._siwasupVerifiedIsAdmin = (
+            code === 'SW001' ||
+            code === 'SW004' ||
+            id === 'app_office_001' ||
+            id === 'app_office_004' ||
+            me.member.role === 'admin'
+          );
+          syncClientToAgentSwitchButton();
+          if (typeof currentMode !== 'undefined' && currentMode !== 'client' && typeof setMode === 'function') {
+            setMode(currentMode);
+          }
+        } else {
+          if (typeof _siwasupSafeStorage === 'function') {
+            _siwasupSafeStorage('local', 'remove', 'siwasup_session');
+          } else {
+            localStorage.removeItem('siwasup_session');
+          }
+          window._siwasupVerifiedMember = null;
+          window._siwasupVerifiedIsAdmin = false;
+          adminUnlockedManual = false;
+          syncClientToAgentSwitchButton();
+          if (typeof currentMode !== 'undefined' && currentMode !== 'client' && typeof setMode === 'function') {
+            setMode(currentMode);
+          }
+        }
+      } catch (e) {
+        syncClientToAgentSwitchButton();
+      }
+    }
+
+    function switchBackToAgentMode() {
+      if (!window._siwasupVerifiedMember) {
+        promptAgentModeLogin();
+        return;
+      }
+      const isAdm = Boolean(window._siwasupVerifiedIsAdmin);
+      if (isAdm) {
+        adminUnlockedManual = true;
+        setMode('owner');
+      } else {
+        const role = window._siwasupVerifiedMember.role === 'employee' ? 'employee' : 'free_agent';
+        setMode(role);
+      }
+      // Refresh open property detail modal immediately so bank badge, code, and commission appear
+      const detailModal = document.getElementById('property-detail-modal');
+      if (detailModal && !detailModal.classList.contains('hidden') && typeof activeDetailPropertyId !== 'undefined' && activeDetailPropertyId && typeof openPropertyDetailModal === 'function') {
+        openPropertyDetailModal(activeDetailPropertyId);
+      }
+      if (typeof showToast === 'function') {
+        showToast(isAdm ? '👑 สลับกลับสู่โหมด Admin แล้ว' : '🔑 สลับกลับสู่โหมดตัวแทนแล้ว');
+      }
+    }
+
+    function promptAgentModeLogin() {
+      if (window._siwasupVerifiedMember) {
+        switchBackToAgentMode();
+        return;
+      }
+      if (confirm('ยืนยันตัวตนตัวแทนศิวาทรัพย์ผ่าน LINE Login เพื่อสลับกลับไปดูข้อมูลหลังบ้าน (แบงก์/รหัส/ค่าคอม)?')) {
+        window.location.href = 'https://siwasup-cobroker-os.onrender.com/api/auth/line/start?return=catalog';
+      }
     }
 
     function toggleAdminConsoleUnlock() {
@@ -1719,7 +1875,10 @@
         }
       }
 
-      const hasAuthSession = !!(localStorage.getItem('siwasup_session') || new URLSearchParams(window.location.search).has('my_agent'));
+      const isProdEnv = typeof window !== 'undefined' && window.location && window.location.hostname && window.location.hostname.includes('siwasup.com');
+      const hasAuthSession = isProdEnv
+        ? Boolean(window._siwasupVerifiedMember)
+        : Boolean(window._siwasupVerifiedMember || localStorage.getItem('siwasup_session') || new URLSearchParams(window.location.search).has('my_agent'));
       const isGuestPublic = !isAdmin && !hasAuthSession && mode !== 'client';
 
       if (mode === 'client' || isGuestPublic) {
@@ -4481,9 +4640,11 @@
         const cleanTitle = (typeof sanitizeForClientMode === 'function') ? sanitizeForClientMode(title || '') : (title || '');
         const urlParams = new URLSearchParams(window.location.search);
         const activeRef = urlParams.get('ref') || urlParams.get('agent') || (currentMode === 'client' ? localStorage.getItem('siwasup_referred_by') : '');
+        const activeT = urlParams.get('t') || (typeof _siwasupSafeStorage === 'function' ? _siwasupSafeStorage('session', 'get', 'siwasup_track_t') : '') || '';
+        const tSuffix = activeT ? `&t=${encodeURIComponent(activeT)}` : '';
         const shareUrl = activeRef
-          ? `${getBaseUrl()}?view=client&property=${encodeURIComponent(id)}&ref=${encodeURIComponent(activeRef)}`
-          : `${getBaseUrl()}?property=${encodeURIComponent(id)}`;
+          ? `${getBaseUrl()}?view=client&property=${encodeURIComponent(id)}&ref=${encodeURIComponent(activeRef)}${tSuffix}`
+          : `${getBaseUrl()}?property=${encodeURIComponent(id)}${tSuffix}`;
         if (navigator.share) {
           navigator.share({ title: cleanTitle || 'ศิวาทรัพย์ แอสเซท', url: shareUrl }).catch(() => {});
         } else if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -4530,6 +4691,7 @@
       closeMobileQrModal();
       document.getElementById('share-modal').classList.remove('hidden');
       if (window.lucide) { lucide.createIcons(); }
+      if (typeof scheduleShareTrackTag === 'function') scheduleShareTrackTag(true);
       updateShareUrls();
     }
 
@@ -4551,7 +4713,8 @@
       localStorage.setItem('siwasup_my_agent_ref', rawRef || 'AG-บัวรา');
       
       const safePropId = encodeURIComponent(currentShareProp.id);
-      const qrUrl = `${getBaseUrl()}?view=client&prop=${safePropId}&ref=${ref}&src=qr_sign`;
+      const tParam = (typeof getActiveShareTrackParam === 'function') ? getActiveShareTrackParam() : '';
+      const qrUrl = `${getBaseUrl()}?view=client&prop=${safePropId}&ref=${ref}&src=qr_sign${tParam}`;
       const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrUrl)}`;
 
       const desktopImg = document.getElementById('qr-image-desktop');
@@ -4574,14 +4737,17 @@
       return list.find(x => String(x.id || '').trim().toLowerCase() === cleanId || String(x.code || '').trim().toLowerCase() === cleanId) || currentShareProp;
     }
 
-    function shareDirectToLine() {
+    async function shareDirectToLine() {
       const p = getSharePropertyObject();
       if (!p) return;
       const refInput = document.getElementById('agent-ref-input');
       const rawRef = refInput ? refInput.value.trim() : 'S90';
       const ref = encodeURIComponent(rawRef || 'S90');
       const safePropId = encodeURIComponent(p.id);
-      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=line`;
+      const tParam = (typeof ensureActiveShareTrackParam === 'function')
+        ? await ensureActiveShareTrackParam()
+        : ((typeof getActiveShareTrackParam === 'function') ? getActiveShareTrackParam() : '');
+      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=line${tParam}`;
 
       const title = (typeof getDisplayTitle === 'function' ? getDisplayTitle(p) : (p.title || `ทรัพย์ NPA รหัส #${p.id}`));
       const price = p.price || '';
@@ -4606,14 +4772,15 @@
       showToast('🚀 กำลังเปิด LINE เพื่อส่งต่อ...');
     }
 
-    function copyLineCaption() {
+    async function copyLineCaption() {
       const p = getSharePropertyObject();
       if (!p) return;
       const refInput = document.getElementById('agent-ref-input');
       const rawRef = refInput ? refInput.value.trim() : 'S90';
       const ref = encodeURIComponent(rawRef || 'S90');
       const safePropId = encodeURIComponent(p.id);
-      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=line`;
+      const tParam = (typeof ensureActiveShareTrackParam === 'function') ? await ensureActiveShareTrackParam() : '';
+      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=line${tParam}`;
 
       const title = (typeof getDisplayTitle === 'function' ? getDisplayTitle(p) : (p.title || `ทรัพย์ NPA รหัส #${p.id}`));
       const price = p.price || '';
@@ -4626,14 +4793,17 @@
       closeShareModal();
     }
 
-    function shareDirectToFacebook() {
+    async function shareDirectToFacebook() {
       const p = getSharePropertyObject();
       if (!p) return;
       const refInput = document.getElementById('agent-ref-input');
       const rawRef = refInput ? refInput.value.trim() : 'S90';
       const ref = encodeURIComponent(rawRef || 'S90');
       const safePropId = encodeURIComponent(p.id);
-      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=facebook`;
+      const tParam = (typeof ensureActiveShareTrackParam === 'function')
+        ? await ensureActiveShareTrackParam()
+        : ((typeof getActiveShareTrackParam === 'function') ? getActiveShareTrackParam() : '');
+      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=facebook${tParam}`;
 
       if (window.SiwasupAgents && typeof window.SiwasupAgents.award === 'function' && rawRef) {
         window.SiwasupAgents.award(rawRef, 'smart_share_click', { channel: 'facebook', propId: p.id });
@@ -4649,14 +4819,17 @@
       showToast('🚀 เปิดหน้าต่างแชร์ Facebook เรียบร้อย');
     }
 
-    function copyFacebookPost() {
+    async function copyFacebookPost() {
       const p = getSharePropertyObject();
       if (!p) return;
       const refInput = document.getElementById('agent-ref-input');
       const rawRef = refInput ? refInput.value.trim() : 'S90';
       const ref = encodeURIComponent(rawRef || 'S90');
       const safePropId = encodeURIComponent(p.id);
-      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=facebook`;
+      const tParam = (typeof ensureActiveShareTrackParam === 'function')
+        ? await ensureActiveShareTrackParam()
+        : ((typeof getActiveShareTrackParam === 'function') ? getActiveShareTrackParam() : '');
+      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=facebook${tParam}`;
 
       const title = (typeof getDisplayTitle === 'function' ? getDisplayTitle(p) : (p.title || `ทรัพย์ NPA #${p.id}`));
       const price = p.price || '';
@@ -4679,14 +4852,17 @@
       closeShareModal();
     }
 
-    function copyTikTokBioCaption() {
+    async function copyTikTokBioCaption() {
       const p = getSharePropertyObject();
       if (!p) return;
       const refInput = document.getElementById('agent-ref-input');
       const rawRef = refInput ? refInput.value.trim() : 'S90';
       const ref = encodeURIComponent(rawRef || 'S90');
       const safePropId = encodeURIComponent(p.id);
-      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=tiktok`;
+      const tParam = (typeof ensureActiveShareTrackParam === 'function')
+        ? await ensureActiveShareTrackParam()
+        : ((typeof getActiveShareTrackParam === 'function') ? getActiveShareTrackParam() : '');
+      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=tiktok${tParam}`;
 
       const title = (typeof getDisplayTitle === 'function' ? getDisplayTitle(p) : (p.title || `ทรัพย์ NPA #${p.id}`));
       const price = p.price || '';
@@ -4698,14 +4874,17 @@
       closeShareModal();
     }
 
-    function shareViaSystemNative() {
+    async function shareViaSystemNative() {
       const p = getSharePropertyObject();
       if (!p) return;
       const refInput = document.getElementById('agent-ref-input');
       const rawRef = refInput ? refInput.value.trim() : 'S90';
       const ref = encodeURIComponent(rawRef || 'S90');
       const safePropId = encodeURIComponent(p.id);
-      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=native_share`;
+      const tParam = (typeof ensureActiveShareTrackParam === 'function')
+        ? await ensureActiveShareTrackParam()
+        : ((typeof getActiveShareTrackParam === 'function') ? getActiveShareTrackParam() : '');
+      const targetUrl = `${getBaseUrl()}?view=client&property=${safePropId}&ref=${ref}&src=native_share${tParam}`;
 
       const title = (typeof getDisplayTitle === 'function' ? getDisplayTitle(p) : (p.title || `ทรัพย์ NPA #${p.id}`));
       const price = p.price || '';
@@ -4735,13 +4914,14 @@
       }
     }
 
-    function copyChannelLink(channel) {
+    async function copyChannelLink(channel) {
       if (!currentShareProp) return;
       const refInput = document.getElementById('agent-ref-input');
       const rawRef = refInput ? refInput.value.trim() : 'S90';
       const ref = encodeURIComponent(rawRef || 'S90');
       const safePropId = encodeURIComponent(currentShareProp.id);
-      const targetUrl = `${getBaseUrl()}?view=client&prop=${safePropId}&ref=${ref}&src=${channel}`;
+      const tParam = (typeof ensureActiveShareTrackParam === 'function') ? await ensureActiveShareTrackParam() : '';
+      const targetUrl = `${getBaseUrl()}?view=client&prop=${safePropId}&ref=${ref}&src=${channel}${tParam}`;
       
       // Automated Point Trigger: Smart Share Activity (+5 points)
       if (window.SiwasupAgents && typeof window.SiwasupAgents.award === 'function' && rawRef) {
@@ -4823,12 +5003,13 @@
       }
     }
 
-    function downloadQrImage() {
+    async function downloadQrImage() {
       if (!currentShareProp) return;
       const refInput = document.getElementById('agent-ref-input');
       const rawRef = refInput ? refInput.value.trim() : 'AG-บัวรา';
       const ref = encodeURIComponent(rawRef || 'AG-บัวรา');
-      const qrUrl = `${getBaseUrl()}?view=client&prop=${currentShareProp.id}&ref=${ref}&src=qr_sign`;
+      const tParam = (typeof ensureActiveShareTrackParam === 'function') ? await ensureActiveShareTrackParam() : '';
+      const qrUrl = `${getBaseUrl()}?view=client&prop=${currentShareProp.id}&ref=${ref}&src=qr_sign${tParam}`;
       const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(qrUrl)}`;
       
       showToast('⏳ กำลังเตรียมไฟล์รูป QR Code...');
@@ -6262,6 +6443,7 @@
       updateBundlePreview();
       document.getElementById('bundle-modal').classList.remove('hidden');
       if (window.lucide) { lucide.createIcons(); }
+      if (typeof scheduleBundleTrackTag === 'function') scheduleBundleTrackTag(true);
     }
 
     function closeBundleModal() {
@@ -6308,7 +6490,8 @@
       const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'AG-บัวรา';
       const items = allProperties.filter(p => selectedBundleIds.has(p.id));
       const bundleIds = Array.from(selectedBundleIds).join(',');
-      const bundleUrl = `${getBaseUrl()}?bundle=${bundleIds}&for=${encodeURIComponent(clientName)}&ref=${encodeURIComponent(savedRef)}&src=bundle_line`;
+      const tParam = (typeof getActiveBundleTrackParam === 'function') ? getActiveBundleTrackParam() : '';
+      const bundleUrl = `${getBaseUrl()}?bundle=${bundleIds}&for=${encodeURIComponent(clientName)}&ref=${encodeURIComponent(savedRef)}&src=bundle_line${tParam}`;
 
       let text = `สวัสดีครับ ${clientName} 🌟\n`;
       text += `ตามที่ได้คุยกันเรื่องมองหาบ้าน/คอนโด วันนี้ผมคัดสรรทรัพย์พิเศษที่คุ้มค่า น่าอยู่ และตรงโจทย์มาให้ชม ${items.length} หลังครับ:\n\n`;
@@ -6334,7 +6517,8 @@
       }
     }
 
-    function copyBundleMessage() {
+    async function copyBundleMessage() {
+      if (typeof ensureActiveBundleTrackParam === 'function') await ensureActiveBundleTrackParam();
       const msg = getBundleMessageText();
       navigator.clipboard.writeText(msg).then(() => {
         showToast("✅ คัดลอกข้อความแคปชั่นพร้อมส่ง LINE แล้ว (รีเซ็ตถาดมัดรวมแล้ว)");
@@ -6345,13 +6529,15 @@
       });
     }
 
-    function sendBundleToLine() {
+    async function sendBundleToLine() {
+      if (typeof ensureActiveBundleTrackParam === 'function') await ensureActiveBundleTrackParam();
       const msg = getBundleMessageText();
       const clientName = (document.getElementById('bundle-client-name').value || 'คุณลูกค้า').trim();
       const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'TON';
       const items = allProperties.filter(p => selectedBundleIds.has(p.id));
       const bundleIds = Array.from(selectedBundleIds).join(',');
-      const bundleUrl = getBaseUrl() + '?bundle=' + bundleIds + '&for=' + encodeURIComponent(clientName) + '&ref=' + encodeURIComponent(savedRef) + '&src=bundle_line';
+      const tParam = (typeof getActiveBundleTrackParam === 'function') ? getActiveBundleTrackParam() : '';
+      const bundleUrl = getBaseUrl() + '?bundle=' + bundleIds + '&for=' + encodeURIComponent(clientName) + '&ref=' + encodeURIComponent(savedRef) + '&src=bundle_line' + tParam;
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(msg).catch(() => {});
@@ -6561,6 +6747,162 @@
     const SIWASUP_TRACK_ENDPOINT = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
       ? '/api/track/view'
       : 'https://siwasup-cobroker-os.onrender.com/api/track/view';
+    const SIWASUP_TRACK_TAG_ENDPOINT = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? '/api/track/tag'
+      : 'https://siwasup-cobroker-os.onrender.com/api/track/tag';
+
+    window._siwasupTrackTagCache = window._siwasupTrackTagCache || {};
+    window._siwasupTrackTagInflight = window._siwasupTrackTagInflight || {};
+    let _siwasupShareTagTimer = null;
+    let _siwasupBundleTagTimer = null;
+
+    function _siwasupTagKey(name, note) {
+      return `${String(name || '').trim().slice(0, 25)}\t${String(note || '').trim().slice(0, 60)}`;
+    }
+
+    function getCachedTrackParam(name, note) {
+      const cleanName = String(name || '').trim().slice(0, 25);
+      if (!cleanName || cleanName === 'คุณลูกค้า') return '';
+      const tok = window._siwasupTrackTagCache[_siwasupTagKey(cleanName, note)];
+      return tok ? `&t=${encodeURIComponent(tok)}` : '';
+    }
+
+    function getActiveShareTrackParam() {
+      const nameEl = document.getElementById('share-client-name');
+      const noteEl = document.getElementById('share-client-note');
+      return getCachedTrackParam(nameEl ? nameEl.value : '', noteEl ? noteEl.value : '');
+    }
+
+    function getActiveBundleTrackParam() {
+      const nameEl = document.getElementById('bundle-client-name');
+      const noteEl = document.getElementById('bundle-client-note');
+      return getCachedTrackParam(nameEl ? nameEl.value : '', noteEl ? noteEl.value : '');
+    }
+
+    async function ensureActiveShareTrackParam() {
+      const nameEl = document.getElementById('share-client-name');
+      const noteEl = document.getElementById('share-client-note');
+      const name = nameEl ? nameEl.value.trim().slice(0, 25) : '';
+      const note = noteEl ? noteEl.value.trim().slice(0, 60) : '';
+      if (!name || name === 'คุณลูกค้า') return '';
+      const tok = await requestClientTrackTag(name, note);
+      return tok ? `&t=${encodeURIComponent(tok)}` : '';
+    }
+
+    async function ensureActiveBundleTrackParam() {
+      const nameEl = document.getElementById('bundle-client-name');
+      const noteEl = document.getElementById('bundle-client-note');
+      const name = nameEl ? nameEl.value.trim().slice(0, 25) : '';
+      const note = noteEl ? noteEl.value.trim().slice(0, 60) : '';
+      if (!name || name === 'คุณลูกค้า') return '';
+      const tok = await requestClientTrackTag(name, note);
+      return tok ? `&t=${encodeURIComponent(tok)}` : '';
+    }
+
+    async function requestClientTrackTag(name, note) {
+      const cleanName = String(name || '').trim().slice(0, 25);
+      const cleanNote = String(note || '').trim().slice(0, 60);
+      if (!cleanName || cleanName === 'คุณลูกค้า') return '';
+      const key = _siwasupTagKey(cleanName, cleanNote);
+      if (window._siwasupTrackTagCache[key]) return window._siwasupTrackTagCache[key];
+      if (window._siwasupTrackTagInflight[key]) return window._siwasupTrackTagInflight[key];
+      window._siwasupTrackTagInflight[key] = (async () => {
+        try {
+          const res = await fetch(SIWASUP_TRACK_TAG_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ avatar_name: cleanName, agent_note: cleanNote })
+          });
+          if (!res.ok) return '';
+          const data = await res.json();
+          if (data && data.t) {
+            window._siwasupTrackTagCache[key] = data.t;
+            return data.t;
+          }
+        } catch (e) {}
+        finally {
+          delete window._siwasupTrackTagInflight[key];
+        }
+        return '';
+      })();
+      return window._siwasupTrackTagInflight[key];
+    }
+
+    function _updateTrackBadge(badgeId, state, name) {
+      const el = document.getElementById(badgeId);
+      if (!el) return;
+      if (state === 'empty') {
+        el.textContent = 'ไม่ระบุ (แชร์ทั่วไป)';
+        el.className = 'text-[9.5px] font-medium text-gray-500 bg-white px-1.5 py-0.5 rounded border border-gray-200';
+      } else if (state === 'loading') {
+        el.textContent = '⏳ กำลังสร้าง &t=...';
+        el.className = 'text-[9.5px] font-medium text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200';
+      } else if (state === 'ready') {
+        el.textContent = `🏷️ ติดตาม: ${name}`;
+        el.className = 'text-[9.5px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200';
+      } else {
+        el.textContent = '⚠️ แชร์แบบไม่มี &t=';
+        el.className = 'text-[9.5px] font-medium text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded border border-gray-200';
+      }
+    }
+
+    function scheduleShareTrackTag(immediate = false) {
+      if (_siwasupShareTagTimer) clearTimeout(_siwasupShareTagTimer);
+      const run = async () => {
+        const nameEl = document.getElementById('share-client-name');
+        const noteEl = document.getElementById('share-client-note');
+        const name = nameEl ? nameEl.value.trim().slice(0, 25) : '';
+        const note = noteEl ? noteEl.value.trim().slice(0, 60) : '';
+        if (!name || name === 'คุณลูกค้า') {
+          _updateTrackBadge('share-track-badge', 'empty', '');
+          updateShareUrls();
+          return;
+        }
+        if (getCachedTrackParam(name, note)) {
+          _updateTrackBadge('share-track-badge', 'ready', name);
+          updateShareUrls();
+          return;
+        }
+        _updateTrackBadge('share-track-badge', 'loading', name);
+        const tok = await requestClientTrackTag(name, note);
+        const curName = nameEl ? nameEl.value.trim().slice(0, 25) : '';
+        const curNote = noteEl ? noteEl.value.trim().slice(0, 60) : '';
+        if (curName !== name || curNote !== note) return;
+        _updateTrackBadge('share-track-badge', tok ? 'ready' : 'error', name);
+        updateShareUrls();
+      };
+      if (immediate) run();
+      else _siwasupShareTagTimer = setTimeout(run, 120);
+    }
+
+    function scheduleBundleTrackTag(immediate = false) {
+      if (_siwasupBundleTagTimer) clearTimeout(_siwasupBundleTagTimer);
+      const run = async () => {
+        const nameEl = document.getElementById('bundle-client-name');
+        const noteEl = document.getElementById('bundle-client-note');
+        const name = nameEl ? nameEl.value.trim().slice(0, 25) : '';
+        const note = noteEl ? noteEl.value.trim().slice(0, 60) : '';
+        if (!name || name === 'คุณลูกค้า') {
+          _updateTrackBadge('bundle-track-badge', 'empty', '');
+          if (typeof updateBundlePreview === 'function') updateBundlePreview();
+          return;
+        }
+        if (getCachedTrackParam(name, note)) {
+          _updateTrackBadge('bundle-track-badge', 'ready', name);
+          if (typeof updateBundlePreview === 'function') updateBundlePreview();
+          return;
+        }
+        _updateTrackBadge('bundle-track-badge', 'loading', name);
+        const tok = await requestClientTrackTag(name, note);
+        const curName = nameEl ? nameEl.value.trim().slice(0, 25) : '';
+        const curNote = noteEl ? noteEl.value.trim().slice(0, 60) : '';
+        if (curName !== name || curNote !== note) return;
+        _updateTrackBadge('bundle-track-badge', tok ? 'ready' : 'error', name);
+        if (typeof updateBundlePreview === 'function') updateBundlePreview();
+      };
+      if (immediate) run();
+      else _siwasupBundleTagTimer = setTimeout(run, 120);
+    }
 
     function getOrCreateSiwasupVisitorId() {
       try {
@@ -6774,6 +7116,9 @@
       } catch (e) {
         console.warn('checkUrlParameters fallback:', e);
       }
+      if (typeof verifySiwasupAgentSession === 'function') {
+        verifySiwasupAgentSession();
+      }
       try {
         await loadProperties();
       } catch (err) {
@@ -6983,14 +7328,17 @@
       }).join('');
     }
 
-    function getBundleFlexPayload() {
+    async function getBundleFlexPayload() {
       const clientName = (document.getElementById('bundle-client-name').value || 'คุณลูกค้า').trim();
       const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'TON';
       const items = allProperties.filter(p => selectedBundleIds.has(String(p.id)) || selectedBundleIds.has(p.id));
 
+      const tParam = (typeof ensureActiveBundleTrackParam === 'function')
+        ? await ensureActiveBundleTrackParam()
+        : ((typeof getActiveBundleTrackParam === 'function') ? getActiveBundleTrackParam() : '');
       const bubbles = items.slice(0, 10).map(p => {
         const pid = String(p.id || p.code || '');
-        const detailUrl = `${getBaseUrl()}?id=${encodeURIComponent(pid)}&property=${encodeURIComponent(pid)}&ref=${encodeURIComponent(savedRef)}&src=flex_carousel#prop-${encodeURIComponent(pid)}`;
+        const detailUrl = `${getBaseUrl()}?id=${encodeURIComponent(pid)}&property=${encodeURIComponent(pid)}&ref=${encodeURIComponent(savedRef)}&src=flex_carousel${tParam}#prop-${encodeURIComponent(pid)}`;
         const img = p.main_image || "https://assets.siwasup.com/fallback_property.jpg";
         return {
           type: "bubble",
@@ -7060,16 +7408,19 @@
       };
     }
 
-    function sendBundleAsFlexCarousel() {
+    async function sendBundleAsFlexCarousel() {
       const clientName = (document.getElementById('bundle-client-name').value || 'คุณลูกค้า').trim();
       const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'TON';
       const items = allProperties.filter(p => selectedBundleIds.has(String(p.id)) || selectedBundleIds.has(p.id));
       const bundleIds = Array.from(selectedBundleIds).join(',');
-      const bundleUrl = `${getBaseUrl()}?bundle=${bundleIds}&for=${encodeURIComponent(clientName)}&ref=${encodeURIComponent(savedRef)}&src=bundle_flex`;
+      const tParam = (typeof ensureActiveBundleTrackParam === 'function')
+        ? await ensureActiveBundleTrackParam()
+        : ((typeof getActiveBundleTrackParam === 'function') ? getActiveBundleTrackParam() : '');
+      const bundleUrl = `${getBaseUrl()}?bundle=${bundleIds}&for=${encodeURIComponent(clientName)}&ref=${encodeURIComponent(savedRef)}&src=bundle_flex${tParam}`;
 
       // 1. If inside LINE LIFF and shareTargetPicker is supported
       if (window.liff && typeof liff.isApiAvailable === 'function' && liff.isApiAvailable('shareTargetPicker')) {
-        const payload = getBundleFlexPayload();
+        const payload = await getBundleFlexPayload();
         liff.shareTargetPicker([payload]).then((res) => {
           if (res) {
             showToast('🎉 ส่งการ์ดรูปสไลด์ (Flex Carousel) เข้าแชท LINE สำเร็จแล้ว!');

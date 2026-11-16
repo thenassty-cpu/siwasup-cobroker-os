@@ -1630,6 +1630,7 @@ SUPER_ADMIN_LINE_USER_IDS = {x.strip() for x in os.environ.get("SUPER_ADMIN_LINE
 FRONTEND_URLS = {
     "register": "https://assets.siwasup.com/agent_registration.html",
     "admin": "https://assets.siwasup.com/admin_lobby_manager.html",
+    "catalog": "https://assets.siwasup.com/catalog.html",
 }
 ADMIN_PERM_KEYS = ("standardAdmin", "executiveAuthority", "keyboxAdmin", "systemAdmin")
 SESSION_TTL = 12 * 3600
@@ -2872,7 +2873,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             code = query.get("code", [""])[0]
             st = verify_token(query.get("state", [""])[0])
             cm = re.search(r"line_state=([^;]+)", self.headers.get("Cookie", ""))
-            if not code or not st or (cm and not hmac.compare_digest(cm.group(1), st.get("n", ""))):
+            if not code or not st or not cm or not hmac.compare_digest(cm.group(1), st.get("n", "")):
                 self._redirect(FRONTEND_URLS["register"] + "#auth_error=state", clear_cookie)
                 return
             try:
@@ -3042,6 +3043,35 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     return
                 res = record_client_tracking_event(payload)
                 self._send_json(200, res)
+            except Exception as e:
+                self._send_json(400, {"status": "error", "message": str(e)})
+            return
+
+        if path == "/api/track/tag":
+            try:
+                client_ip = (
+                    (self.headers.get("X-Forwarded-For") or "").split(",")[0].strip()
+                    or (self.client_address[0] if hasattr(self, "client_address") and self.client_address else "")
+                )
+                if not _check_track_ip_rate(client_ip):
+                    self._send_json(429, {"status": "rate_limited", "error": "Too many tracking requests"})
+                    return
+                content_length = int(self.headers.get('Content-Length', 0))
+                if content_length <= 0 or content_length > 4096:
+                    self._send_json(400, {"error": "Invalid payload size"})
+                    return
+                body = self.rfile.read(content_length)
+                payload = json.loads(body.decode('utf-8'))
+                if not isinstance(payload, dict):
+                    self._send_json(400, {"error": "Invalid JSON object"})
+                    return
+                avatar_name = re.sub(r"[\t\r\n]+", " ", str(payload.get("avatar_name") or payload.get("name") or "")).strip()[:25]
+                agent_note = re.sub(r"[\t\r\n]+", " ", str(payload.get("agent_note") or payload.get("note") or "")).strip()[:60]
+                if not avatar_name:
+                    self._send_json(400, {"status": "error", "error": "Missing avatar_name"})
+                    return
+                tok = encode_client_tag(avatar_name, agent_note)
+                self._send_json(200, {"status": "ok", "t": tok, "avatar_name": avatar_name})
             except Exception as e:
                 self._send_json(400, {"status": "error", "message": str(e)})
             return
