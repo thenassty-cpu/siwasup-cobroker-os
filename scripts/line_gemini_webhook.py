@@ -3520,7 +3520,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                             elif mtype == 'text':
                                 text_clean = text.strip().lower()
                                 text_raw = text.strip()
-                                m_link = re.match(r'^(?:สร้าง|ขอ|ส่ง)?(?:ลิงก์|ลิงค์)\s+(.+)$', text_raw, re.IGNORECASE)
+                                m_link = re.match(r'^(?:สร้าง|ขอ|ส่ง)?(?:ลิงก์|ลิงค์|ลิ้งก์|ลิ้งค์|ลิ้ง|ลิง|link)\s*(.+)$', text_raw, re.IGNORECASE)
                                 m_check = re.match(r'^(?:เช็ก|เช็ค|ตรวจ)ลูกค้า(?:\s+(.+))?$|^(?:เช็ก|เช็ค|ตรวจ)\s+(v-[a-z0-9]+)$', text_raw, re.IGNORECASE)
                                 m_merge = re.match(r'^(?:รวม|merge)\s+(v-[a-z0-9]+)\s+(v-[a-z0-9]+)$', text_raw, re.IGNORECASE)
                                 m_unmerge = re.match(r'^(?:แยก|ยกเลิกรวม|unmerge)\s+(v-[a-z0-9]+)$', text_raw, re.IGNORECASE)
