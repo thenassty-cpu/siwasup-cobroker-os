@@ -430,11 +430,11 @@
               <span>125</span>
             </button>
 
-            <!-- โปรไฟล์ตัวแทน -->
-            <button type="button" onclick="openMyProfileModal()" id="btn-header-profile" class="h-6 pl-1 pr-1.5 sm:pr-2.5 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-200 flex items-center gap-1 sm:gap-1.5 transition cursor-pointer active:scale-95 shrink-0" title="กระเป๋าคะแนน & โปรไฟล์">
-              <img id="header-profile-3d-badge" src="assets/characters/badge_bear.png" alt="Badge" class="w-3.5 h-3.5 object-contain">
-              <span class="px-1 py-0.2 rounded bg-[#C2A460]/20 text-[#E5C985] text-[9px] font-bold" id="header-profile-avatar">S90</span>
-              <span id="bar-profile-btn-text" class="hidden sm:inline font-medium">นัญ</span>
+            <!-- โปรไฟล์ตัวแทน (ซ่อนไว้จนกว่าจะยืนยันสิทธิ์เสร็จ เพื่อไม่ให้กระพริบ S90) -->
+            <button type="button" onclick="openMyProfileModal()" id="btn-header-profile" class="hidden h-6 pl-1 pr-1.5 sm:pr-2.5 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-200 items-center gap-1 sm:gap-1.5 transition cursor-pointer active:scale-95 shrink-0" title="กระเป๋าคะแนน & โปรไฟล์">
+              <img id="header-profile-3d-badge" src="assets/characters/badge_eagle.png" alt="Badge" class="w-3.5 h-3.5 object-contain">
+              <span class="px-1 py-0.2 rounded bg-[#C2A460]/20 text-[#E5C985] text-[9px] font-bold" id="header-profile-avatar">...</span>
+              <span id="bar-profile-btn-text" class="hidden sm:inline font-medium">ตัวแทน</span>
             </button>
 
             <!-- ปุ่มเข้าสู่ระบบตัวแทน (สำหรับบุคคลทั่วไปที่ยังไม่ล็อกอิน) -->
@@ -1588,6 +1588,9 @@
             } else {
               localStorage.setItem('siwasup_my_agent_ref', resolvedCode);
             }
+            if (typeof updateProfileButtons === 'function') {
+              updateProfileButtons(resolvedCode);
+            }
           }
           syncClientToAgentSwitchButton();
           if (typeof currentMode !== 'undefined' && currentMode !== 'client' && typeof setMode === 'function') {
@@ -1973,8 +1976,18 @@
         if (npaKeyBtn) { npaKeyBtn.classList.add('hidden'); npaKeyBtn.classList.remove('flex'); }
         if (leaderboardBtn) { leaderboardBtn.classList.add('hidden'); leaderboardBtn.classList.remove('flex'); }
         if (profileBtn) { profileBtn.classList.add('hidden'); profileBtn.classList.remove('flex'); }
-        if (agentLoginBtn) { agentLoginBtn.classList.remove('hidden'); agentLoginBtn.classList.add('flex'); }
+        const hasPendingSession = Boolean(localStorage.getItem('siwasup_session'));
+        if (agentLoginBtn) {
+          if (hasPendingSession) {
+            agentLoginBtn.classList.add('hidden');
+            agentLoginBtn.classList.remove('flex');
+          } else {
+            agentLoginBtn.classList.remove('hidden');
+            agentLoginBtn.classList.add('flex');
+          }
+        }
       } else {
+        if (profileBtn && mode !== 'client') { profileBtn.classList.remove('hidden'); profileBtn.classList.add('flex'); }
         if (agentLoginBtn) { agentLoginBtn.classList.add('hidden'); agentLoginBtn.classList.remove('flex'); }
         if (adminShortcutBtn) {
           if (mode !== 'client') {
@@ -5247,16 +5260,36 @@
     }
 
     function updateProfileButtons(code) {
-      if (!window.SiwasupAgents) return;
-      const agent = window.SiwasupAgents.find(code) || window.SiwasupAgents.find('S90');
-      if (!agent) return;
-
       const headerAvatar = document.getElementById('header-profile-avatar');
       const headerName = document.getElementById('header-profile-name');
       const barText = document.getElementById('bar-profile-btn-text');
       const headerBadgeImg = document.getElementById('header-profile-3d-badge');
 
-      if (headerAvatar) headerAvatar.textContent = agent.code;
+      const verified = window._siwasupVerifiedMember;
+      const verifiedRef = verified ? resolveVerifiedMemberRef(verified) : '';
+      const cleanCode = String(code || verifiedRef || '').trim().toUpperCase();
+
+      if (verified && (!code || cleanCode === verifiedRef)) {
+        const displayCode = verifiedRef || cleanCode || 'SW';
+        const displayNick = verified.nickname || verified.name || displayCode;
+        if (headerAvatar) headerAvatar.textContent = displayCode;
+        if (headerName) headerName.textContent = displayNick;
+        if (barText) barText.textContent = displayNick;
+        if (headerBadgeImg) {
+          headerBadgeImg.src = window._siwasupVerifiedIsAdmin
+            ? 'assets/characters/badge_eagle.png'
+            : 'assets/characters/badge_lion.png';
+        }
+        return;
+      }
+
+      if (!window.SiwasupAgents) return;
+      const agent = window.SiwasupAgents.find(cleanCode)
+        || (cleanCode === 'SW004' ? (window.SiwasupAgents.find('TON') || window.SiwasupAgents.find('AG-09')) : null)
+        || window.SiwasupAgents.find('S90');
+      if (!agent) return;
+
+      if (headerAvatar) headerAvatar.textContent = cleanCode || agent.code;
       if (headerName) headerName.textContent = agent.nickname || agent.code;
       if (barText) barText.textContent = agent.nickname || agent.name || agent.code;
       if (headerBadgeImg && typeof window.SiwasupAgents.getArchetype === 'function') {
