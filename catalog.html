@@ -1170,9 +1170,27 @@
       }
     }
 
+    function isVerifiedCustomerMember(member) {
+      if (!member) return false;
+      const perms = member.permissions || {};
+      const roleCode = String(member.role_code || '').toUpperCase();
+      const role = String(member.role || '').toLowerCase();
+      if (perms.systemAdmin || perms.standardAdmin || perms.executiveAuthority || perms.keyboxAdmin || role === 'admin') return false;
+      return Boolean(
+        perms.vipClient ||
+        perms.sellerClient ||
+        roleCode === 'VIP_CLIENT' ||
+        roleCode === 'SELLER' ||
+        role.includes('vip') ||
+        role.includes('seller') ||
+        role.includes('ฝากขาย')
+      );
+    }
+
     // 🛡️ White-Label Sanitizer for Client & Guest Public Mode (ซ่อนชื่อธนาคาร/NPA 100% เมื่อยังไม่ล็อกอิน)
     function isWhiteLabelMode() {
       if (currentMode === 'client') return true;
+      if (window._siwasupVerifiedMember && isVerifiedCustomerMember(window._siwasupVerifiedMember)) return true;
       const isAdm = typeof isAdminSession === 'function' && isAdminSession();
       const isProd = typeof window !== 'undefined' && window.location && window.location.hostname && window.location.hostname.includes('siwasup.com');
       const hasAuth = isProd
@@ -1476,6 +1494,7 @@
 
     let adminUnlockedManual = false;
     function isAdminSession() {
+      if (window._siwasupVerifiedMember && isVerifiedCustomerMember(window._siwasupVerifiedMember)) return false;
       const params = new URLSearchParams(window.location.search);
       if (params.get('admin') === '0' || params.get('user') === '1') return false;
       if (window._siwasupVerifiedIsAdmin) return true;
@@ -1491,7 +1510,7 @@
       const signinBtn = document.getElementById('btn-client-agent-signin');
       const iconEl = document.getElementById('btn-client-to-agent-icon');
       const labelEl = document.getElementById('btn-client-to-agent-label');
-      const isVerified = Boolean(window._siwasupVerifiedMember);
+      const isVerified = Boolean(window._siwasupVerifiedMember) && !isVerifiedCustomerMember(window._siwasupVerifiedMember);
       const isAdm = Boolean(window._siwasupVerifiedIsAdmin);
       const isClientView = (typeof currentMode !== 'undefined' && currentMode === 'client');
       if (switchBtn) {
@@ -1506,7 +1525,8 @@
         }
       }
       if (signinBtn) {
-        if (isVerified || !isClientView) {
+        const isCustomerLoggedIn = Boolean(window._siwasupVerifiedMember) && isVerifiedCustomerMember(window._siwasupVerifiedMember);
+        if (isVerified || isCustomerLoggedIn || !isClientView) {
           signinBtn.classList.add('hidden');
           signinBtn.classList.remove('inline-flex');
         } else {
@@ -1600,9 +1620,10 @@
         const me = await r.json();
         if (me && me.status === 'approved' && me.member) {
           window._siwasupVerifiedMember = me.member;
+          const isCustomerOnly = isVerifiedCustomerMember(me.member);
           const code = String(me.member.code || '').toUpperCase();
           const id = String(me.member.id || '').toLowerCase();
-          window._siwasupVerifiedIsAdmin = (
+          window._siwasupVerifiedIsAdmin = !isCustomerOnly && (
             Boolean(me.isAdmin) ||
             code === 'SW001' ||
             code === 'SW004' ||
@@ -1633,13 +1654,17 @@
           if (typeof loadRealIntakes === 'function') {
             loadRealIntakes();
           }
-          if (typeof currentMode !== 'undefined' && currentMode !== 'client' && typeof setMode === 'function') {
-            const p = new URLSearchParams(window.location.search);
-            const explicitView = p.get('view') || p.get('mode');
-            if (window._siwasupVerifiedIsAdmin && !explicitView && p.get('admin') !== '0' && p.get('user') !== '1') {
-              setMode('owner');
-            } else {
-              setMode(currentMode);
+          if (typeof setMode === 'function') {
+            if (isCustomerOnly) {
+              setMode('client');
+            } else if (typeof currentMode !== 'undefined' && currentMode !== 'client') {
+              const p = new URLSearchParams(window.location.search);
+              const explicitView = p.get('view') || p.get('mode');
+              if (window._siwasupVerifiedIsAdmin && !explicitView && p.get('admin') !== '0' && p.get('user') !== '1') {
+                setMode('owner');
+              } else {
+                setMode(currentMode);
+              }
             }
           }
         } else {
@@ -1654,13 +1679,7 @@
           syncAdminLobbyBadge(0, false);
           syncClientToAgentSwitchButton();
           if (typeof currentMode !== 'undefined' && currentMode !== 'client' && typeof setMode === 'function') {
-            const p = new URLSearchParams(window.location.search);
-            const explicitView = p.get('view') || p.get('mode');
-            if (window._siwasupVerifiedIsAdmin && !explicitView && p.get('admin') !== '0' && p.get('user') !== '1') {
-              setMode('owner');
-            } else {
-              setMode(currentMode);
-            }
+            setMode(currentMode);
           }
         }
       } catch (e) {
@@ -1671,6 +1690,10 @@
     function switchBackToAgentMode() {
       if (!window._siwasupVerifiedMember) {
         promptAgentModeLogin();
+        return;
+      }
+      if (isVerifiedCustomerMember(window._siwasupVerifiedMember)) {
+        if (typeof setMode === 'function') setMode('client');
         return;
       }
       // Clean client-view query params & referral override so Refresh/Banner reflect the logged-in Agent/Admin
@@ -1725,6 +1748,11 @@
     }
 
     function toggleAdminConsoleUnlock() {
+      if (window._siwasupVerifiedMember && isVerifiedCustomerMember(window._siwasupVerifiedMember)) {
+        adminUnlockedManual = false;
+        setMode('client');
+        return;
+      }
       adminUnlockedManual = !adminUnlockedManual;
       setMode(adminUnlockedManual ? 'owner' : 'free_agent');
       if (typeof showToast === 'function') {
@@ -1733,6 +1761,9 @@
     }
 
     function setMode(mode) {
+      if (window._siwasupVerifiedMember && isVerifiedCustomerMember(window._siwasupVerifiedMember)) {
+        mode = 'client';
+      }
       const isAdmin = isAdminSession();
       // ป้องกันผู้ใช้ทั่วไปเข้าโหมด owner โดยไม่มีสิทธิ์ Admin
       if (!isAdmin && mode === 'owner') {
@@ -1996,9 +2027,12 @@
       }
 
       const isProdEnv = typeof window !== 'undefined' && window.location && window.location.hostname && window.location.hostname.includes('siwasup.com');
-      const hasAuthSession = isProdEnv
-        ? Boolean(window._siwasupVerifiedMember)
-        : Boolean(window._siwasupVerifiedMember || localStorage.getItem('siwasup_session') || new URLSearchParams(window.location.search).has('my_agent'));
+      const isCustomerOnlySession = Boolean(window._siwasupVerifiedMember) && isVerifiedCustomerMember(window._siwasupVerifiedMember);
+      const hasAuthSession = isCustomerOnlySession
+        ? false
+        : (isProdEnv
+          ? Boolean(window._siwasupVerifiedMember)
+          : Boolean(window._siwasupVerifiedMember || localStorage.getItem('siwasup_session') || new URLSearchParams(window.location.search).has('my_agent')));
       const isGuestPublic = !isAdmin && !hasAuthSession && mode !== 'client';
 
       if (mode === 'client' || isGuestPublic) {
@@ -7889,7 +7923,7 @@
     // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=20261117-0100').then((reg) => {
+        navigator.serviceWorker.register('./sw.js?v=20261118-0025').then((reg) => {
           console.log('Siwasup PWA Service Worker Registered (v2):', reg.scope);
           // Auto check for updates on each load
           if (reg.update) reg.update();

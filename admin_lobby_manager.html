@@ -274,7 +274,25 @@
             <div class="text-[8px] text-slate-400 pt-0.5">ปล่อยเพื่อแต่งตั้ง</div>
           </div>
 
-          <!-- Drop Zone 8: Reject Trash -->
+          <!-- Drop Zone 8: VIP Client (Champagne Gold #C2A460) -->
+          <div class="drop-zone p-3 rounded-2xl bg-[#FAF7F0] hover:bg-[#F3ECD8] border-2 border-dashed border-[#C2A460] text-center space-y-1"
+               ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'vip_client')">
+            <div class="text-base">👑</div>
+            <div class="font-bold text-[#7A5E22] leading-tight">VIP Client</div>
+            <div class="text-[9px] text-[#9A7B38] font-semibold">ลูกค้า VIP (รอเคาะสิทธิ์)</div>
+            <div class="text-[8px] text-slate-400 pt-0.5">ปล่อยเพื่อแต่งตั้ง</div>
+          </div>
+
+          <!-- Drop Zone 9: Seller (Teal #0d9488) -->
+          <div class="drop-zone p-3 rounded-2xl bg-teal-50/70 hover:bg-teal-100/70 border-2 border-dashed border-teal-400 text-center space-y-1"
+               ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'seller')">
+            <div class="text-base">🏠</div>
+            <div class="font-bold text-teal-900 leading-tight">Seller</div>
+            <div class="text-[9px] text-teal-700 font-semibold">ลูกค้าฝากขายบ้าน</div>
+            <div class="text-[8px] text-slate-400 pt-0.5">ปล่อยเพื่อแต่งตั้ง</div>
+          </div>
+
+          <!-- Drop Zone 10: Reject Trash -->
           <div class="drop-zone p-3 rounded-2xl bg-red-50/50 hover:bg-red-50 border-2 border-dashed border-red-300 text-center space-y-1"
                ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'reject')">
             <div class="text-base">🗑️</div>
@@ -350,6 +368,16 @@
           <button onclick="setRosterFilter('free_agent')" id="filterBtn_free_agent" 
                   class="roster-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">
             🤝 Free Agent (<span id="count_free_agent">0</span>)
+          </button>
+
+          <button onclick="setRosterFilter('vip_client')" id="filterBtn_vip_client" 
+                  class="roster-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold transition bg-[#FAF7F0] text-[#7A5E22] border border-[#C2A460]/50 hover:bg-[#F3ECD8]">
+            👑 VIP Client (<span id="count_vip_client">0</span>)
+          </button>
+
+          <button onclick="setRosterFilter('seller')" id="filterBtn_seller" 
+                  class="roster-filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold transition bg-teal-50 text-teal-800 border border-teal-200 hover:bg-teal-100">
+            🏠 Seller (<span id="count_seller">0</span>)
           </button>
         </div>
 
@@ -834,6 +862,20 @@
         badges: ["📜 บัตรดิจิทัลทางการ", "🔒 ล็อกค่านายหน้า 60 วัน", "📅 จองเปิดบ้าน", "🚫 ล็อกแอดมิน"],
         permissions: { standardAdmin: false, editPrice: false, keyboxAdmin: false, leadInspector: false, executiveAuthority: false, catalogCurator: false, systemAdmin: false, contractAgent: false }
       },
+      vip_client: {
+        role: "👑 VIP Client (ลูกค้า VIP)",
+        title: "Siwasup VIP Client Pass",
+        role_code: "VIP_CLIENT",
+        badges: ["👑 สิทธิ์ลูกค้า VIP", "🔒 โหมดลูกค้า (ซ่อนหลังบ้าน)", "⏳ รอเคาะสิทธิ์เพิ่มเติม"],
+        permissions: { standardAdmin: false, editPrice: false, keyboxAdmin: false, leadInspector: false, executiveAuthority: false, catalogCurator: false, systemAdmin: false, contractAgent: false, vipClient: true, sellerClient: false }
+      },
+      seller: {
+        role: "🏠 Seller (ลูกค้าฝากขายบ้าน)",
+        title: "Property Owner / Seller",
+        role_code: "SELLER",
+        badges: ["🏠 เจ้าของทรัพย์ฝากขาย", "🔒 โหมดลูกค้า (ซ่อนหลังบ้าน)", "📋 ส่งข้อมูลฝากขาย"],
+        permissions: { standardAdmin: false, editPrice: false, keyboxAdmin: false, leadInspector: false, executiveAuthority: false, catalogCurator: false, systemAdmin: false, contractAgent: false, vipClient: false, sellerClient: true }
+      },
       agent: {
         role: "🤝 Free Agent (ตัวแทนอิสระ)",
         title: "Certified Free Agent Partner",
@@ -863,6 +905,26 @@
              title.includes('contract') || badges.some(b => b.includes('สัญญา')));
     }
 
+    function isVipClientItem(item) {
+      if (isAdminItem(item) || isContractAgentItem(item)) return false;
+      const role = (item.role || '').toLowerCase();
+      const title = (item.title || '').toLowerCase();
+      const perms = item.permissions || {};
+      return !!(perms.vipClient || item.role_code === 'VIP_CLIENT' || role.includes('vip') || title.includes('vip'));
+    }
+
+    function isSellerItem(item) {
+      if (isAdminItem(item) || isContractAgentItem(item) || isVipClientItem(item)) return false;
+      const role = (item.role || '').toLowerCase();
+      const title = (item.title || '').toLowerCase();
+      const perms = item.permissions || {};
+      return !!(perms.sellerClient || item.role_code === 'SELLER' || role.includes('seller') || role.includes('ฝากขาย') || title.includes('seller'));
+    }
+
+    function isFreeAgentItem(item) {
+      return !isAdminItem(item) && !isContractAgentItem(item) && !isVipClientItem(item) && !isSellerItem(item);
+    }
+
     function getRoleTierBadge(item) {
       const role = (item.role || "").toLowerCase();
       const perms = item.permissions || {};
@@ -878,6 +940,12 @@
       if (perms.standardAdmin) {
         return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-800 border border-blue-300 shadow-2xs">🏢 OFFICE ADMIN</span>`;
       }
+      if (isVipClientItem(item)) {
+        return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black text-[#4A3711] border shadow-2xs" style="background-color: #E5CF94; border-color: #C2A460;">👑 VIP CLIENT</span>`;
+      }
+      if (isSellerItem(item)) {
+        return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black text-white border shadow-2xs" style="background-color: #0d9488; border-color: #0f766e;">🏠 SELLER</span>`;
+      }
       if (isContractAgentItem(item)) {
         return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black text-white border shadow-2xs" style="background-color: #ffa8b6; border-color: #e58e9c;">📑 CONTRACT AGENT</span>`;
       }
@@ -885,13 +953,13 @@
     }
 
     let currentRosterViewMode = 'cards';
-    let currentRosterFilter = 'all'; // 'all' | 'admin' | 'contract_agent' | 'free_agent'
+    let currentRosterFilter = 'all'; // 'all' | 'admin' | 'contract_agent' | 'free_agent' | 'vip_client' | 'seller'
     let currentRosterSort = 'tier';   // 'tier' | 'name' | 'zone' | 'newest'
     let currentRosterSearch = '';
 
     function setRosterFilter(filter) {
       currentRosterFilter = filter;
-      ['all', 'admin', 'contract_agent', 'free_agent'].forEach(k => {
+      ['all', 'admin', 'contract_agent', 'free_agent', 'vip_client', 'seller'].forEach(k => {
         const btn = document.getElementById('filterBtn_' + k);
         if (!btn) return;
         if (k === filter) {
@@ -924,8 +992,12 @@
         list = list.filter(item => isAdminItem(item));
       } else if (currentRosterFilter === 'contract_agent') {
         list = list.filter(item => isContractAgentItem(item));
+      } else if (currentRosterFilter === 'vip_client') {
+        list = list.filter(item => isVipClientItem(item));
+      } else if (currentRosterFilter === 'seller') {
+        list = list.filter(item => isSellerItem(item));
       } else if (currentRosterFilter === 'free_agent' || currentRosterFilter === 'agent') {
-        list = list.filter(item => !isAdminItem(item) && !isContractAgentItem(item));
+        list = list.filter(item => isFreeAgentItem(item));
       }
 
       // 2) Live search query
@@ -952,6 +1024,8 @@
           if (th.key === 'keymaster') return 80;
           if (th.key === 'admin') return 70;
           if (th.key === 'contract_agent') return 30;
+          if (th.key === 'free_agent') return 20;
+          if (th.key === 'vip_client') return 15;
           return 10;
         };
         list.sort((a, b) => getTierScore(b) - getTierScore(a));
@@ -1181,8 +1255,18 @@
       member.permissions.catalogCurator = bList.some(b => b.includes('ช่วยคัดสต๊อก'));
       member.permissions.systemAdmin = bList.some(b => b.includes('Technical'));
       member.permissions.contractAgent = bList.some(b => b.includes('สัญญา'));
+      member.permissions.vipClient = bList.some(b => b.includes('VIP')) || member.role_code === 'VIP_CLIENT';
+      member.permissions.sellerClient = bList.some(b => b.includes('ฝากขาย')) || member.role_code === 'SELLER';
       if (!isAdminItem(member)) {
-        if (member.permissions.contractAgent) {
+        if (member.permissions.vipClient) {
+          member.role = "👑 VIP Client (ลูกค้า VIP)";
+          member.title = "Siwasup VIP Client Pass";
+          member.role_code = "VIP_CLIENT";
+        } else if (member.permissions.sellerClient) {
+          member.role = "🏠 Seller (ลูกค้าฝากขายบ้าน)";
+          member.title = "Property Owner / Seller";
+          member.role_code = "SELLER";
+        } else if (member.permissions.contractAgent) {
           member.role = "📑 Contract Agent (ตัวแทนสัญญา)";
           member.title = "Official Contract Agent";
           member.role_code = "CONTRACT_AGENT";
@@ -1314,7 +1398,45 @@
         };
       }
 
-      // 5) Contract Agent (ตัวแทนสัญญาสังกัด) -> สีชมพู Pink Sand (#ffa8B6)
+      // 5) VIP Client (ลูกค้า VIP) -> สีทองแชมเปญ Champagne Gold (#C2A460)
+      if (isVipClientItem(item)) {
+        return {
+          key: 'vip_client',
+          roleBadgeText: 'VIP Client',
+          icon: 'crown',
+          primaryHex: '#C2A460',
+          bannerHex: '#C2A460',
+          badgeBg: '#E5CF94',
+          badgeBorder: '#C2A460',
+          badgeTextColor: '#4A3711',
+          badgeIconBg: '#C2A460',
+          badgeIconColor: '#ffffff',
+          titleColor: '#9A7B38',
+          bottomBarHex: '#C2A460',
+          isLocked: false
+        };
+      }
+
+      // 6) Seller (ลูกค้าฝากขายบ้าน) -> สีเขียว Teal (#0d9488)
+      if (isSellerItem(item)) {
+        return {
+          key: 'seller',
+          roleBadgeText: 'Seller (ฝากขาย)',
+          icon: 'home',
+          primaryHex: '#0d9488',
+          bannerHex: '#0d9488',
+          badgeBg: '#0d9488',
+          badgeBorder: '#0f766e',
+          badgeTextColor: '#ffffff',
+          badgeIconBg: '#0f766e',
+          badgeIconColor: '#ffffff',
+          titleColor: '#0f766e',
+          bottomBarHex: '#0d9488',
+          isLocked: false
+        };
+      }
+
+      // 7) Contract Agent (ตัวแทนสัญญาสังกัด) -> สีชมพู Pink Sand (#ffa8B6)
       if (isContractAgentItem(item)) {
         return {
           key: 'contract_agent',
@@ -1446,6 +1568,14 @@
                   <div class="font-bold text-[#4a4269]">🤝 Free Agent</div>
                   <div class="text-[9px] text-[#5e5485]">ตัวแทนอิสระ</div>
                 </button>
+                <button onclick="approveWithPreset('${item.id}', 'vip_client')" class="p-2 rounded-xl bg-[#FAF7F0] hover:bg-[#F3ECD8] border border-[#C2A460] text-left transition space-y-0.5 shadow-2xs active:scale-95">
+                  <div class="font-bold text-[#7A5E22]">👑 VIP Client</div>
+                  <div class="text-[9px] text-[#9A7B38]">ลูกค้า VIP</div>
+                </button>
+                <button onclick="approveWithPreset('${item.id}', 'seller')" class="p-2 rounded-xl bg-teal-50/80 hover:bg-teal-100/80 border border-teal-400 text-left transition space-y-0.5 shadow-2xs active:scale-95">
+                  <div class="font-bold text-teal-900">🏠 Seller</div>
+                  <div class="text-[9px] text-teal-700">ลูกค้าฝากขายบ้าน</div>
+                </button>
               </div>
             </div>
 
@@ -1462,16 +1592,22 @@
         const allList = lobbyData.approved || [];
         const adminCount = allList.filter(item => isAdminItem(item)).length;
         const contractAgentCount = allList.filter(item => isContractAgentItem(item)).length;
-        const freeAgentCount = allList.filter(item => !isAdminItem(item) && !isContractAgentItem(item)).length;
+        const vipClientCount = allList.filter(item => isVipClientItem(item)).length;
+        const sellerCount = allList.filter(item => isSellerItem(item)).length;
+        const freeAgentCount = allList.filter(item => isFreeAgentItem(item)).length;
 
         const countAllEl = document.getElementById('count_all');
         const countAdminEl = document.getElementById('count_admin');
         const countContractEl = document.getElementById('count_contract_agent');
         const countFreeEl = document.getElementById('count_free_agent');
+        const countVipEl = document.getElementById('count_vip_client');
+        const countSellerEl = document.getElementById('count_seller');
         if (countAllEl) countAllEl.innerText = allList.length;
         if (countAdminEl) countAdminEl.innerText = adminCount;
         if (countContractEl) countContractEl.innerText = contractAgentCount;
         if (countFreeEl) countFreeEl.innerText = freeAgentCount;
+        if (countVipEl) countVipEl.innerText = vipClientCount;
+        if (countSellerEl) countSellerEl.innerText = sellerCount;
 
         // 1) RENDER EXECUTIVE CARDS (admin_001 Illustrator Style, 4-Columns on PC)
         if (approvedCardsGrid) {
@@ -1713,6 +1849,7 @@
             applicantId: applicantId,
             role: preset.role,
             title: preset.title,
+            role_code: preset.role_code || '',
             badges: preset.badges,
             permissions: preset.permissions
           })
@@ -1731,6 +1868,7 @@
         avatar: applicant.avatar,
         role: preset.role,
         title: preset.title,
+        role_code: preset.role_code || '',
         badges: preset.badges,
         permissions: preset.permissions,
         approved_at: new Date().toISOString()
@@ -1771,131 +1909,7 @@
       const bc = new BroadcastChannel('siwasup_lobby_channel');
       bc.onmessage = (msg) => {
         if (msg.data && msg.data.type === 'NEW_APPLICANT') {
-          
-    // ==========================================
-    // PERMISSION EDITING LOGIC
-    // ==========================================
-    let editingMemberId = null;
-
-    function openEditPermissionModal(id) {
-      editingMemberId = id;
-      const member = (lobbyData.approved || []).find(m => m.id === id);
-      if (!member) {
-        alert('ไม่พบรายชื่อในระบบ');
-        return;
-      }
-
-      document.getElementById('editMemberAvatar').src = member.avatar || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80';
-      document.getElementById('editMemberName').innerText = member.name;
-      document.getElementById('editMemberSub').innerText = `${member.phone} • ${member.zone}`;
-      document.getElementById('editMemberRoleInput').value = member.role || '';
-      document.getElementById('editMemberTitleInput').value = member.title || '';
-      const zoneInp = document.getElementById('editMemberZoneInput');
-      if (zoneInp) zoneInp.value = member.zone || '';
-
-      const p = member.permissions || {};
-      const chkContract = document.getElementById('chk_contractAgent');
-      if (chkContract) chkContract.checked = isContractAgentItem(member);
-      document.getElementById('chk_standardAdmin').checked = !!p.standardAdmin;
-      document.getElementById('chk_editPrice').checked = !!p.editPrice;
-      document.getElementById('chk_executiveAuthority').checked = !!p.executiveAuthority;
-      document.getElementById('chk_keyboxAdmin').checked = !!p.keyboxAdmin;
-      document.getElementById('chk_leadInspector').checked = !!p.leadInspector;
-      document.getElementById('chk_catalogCurator').checked = !!p.catalogCurator;
-      document.getElementById('chk_systemAdmin').checked = !!p.systemAdmin;
-      const isRootTarget = (member.id === 'app_office_004' || member.is_tech);
-      ['chk_standardAdmin', 'chk_executiveAuthority', 'chk_systemAdmin'].forEach(cid => {
-        const el = document.getElementById(cid);
-        if (el) {
-          if (isRootTarget) el.checked = true;
-          el.disabled = isRootTarget;
-        }
-      });
-
-      const modal = document.getElementById('editPermissionModal');
-      if (modal) modal.classList.remove('hidden');
-      if (window.lucide) lucide.createIcons();
-    }
-
-    function closeEditPermissionModal() {
-      editingMemberId = null;
-      const modal = document.getElementById('editPermissionModal');
-      if (modal) modal.classList.add('hidden');
-    }
-
-    async function executeSavePermissions() {
-      if (!editingMemberId) return;
-      const memberIdx = (lobbyData.approved || []).findIndex(m => m.id === editingMemberId);
-      if (memberIdx === -1) return;
-      const member = lobbyData.approved[memberIdx];
-
-      const newRole = document.getElementById('editMemberRoleInput').value.trim() || member.role;
-      const newTitle = document.getElementById('editMemberTitleInput').value.trim() || member.title;
-      const newZoneEl = document.getElementById('editMemberZoneInput');
-      const newZone = (newZoneEl && newZoneEl.value.trim()) ? newZoneEl.value.trim() : member.zone;
-
-      const isContractChecked = document.getElementById('chk_contractAgent') ? document.getElementById('chk_contractAgent').checked : false;
-      const newPerms = {
-        standardAdmin: document.getElementById('chk_standardAdmin').checked,
-        editPrice: document.getElementById('chk_editPrice').checked,
-        executiveAuthority: document.getElementById('chk_executiveAuthority').checked,
-        keyboxAdmin: document.getElementById('chk_keyboxAdmin').checked,
-        leadInspector: document.getElementById('chk_leadInspector').checked,
-        catalogCurator: document.getElementById('chk_catalogCurator').checked,
-        systemAdmin: document.getElementById('chk_systemAdmin').checked,
-        contractAgent: isContractChecked
-      };
-
-      // Derive badges
-      const newBadges = [];
-      if (newPerms.contractAgent) {
-        newBadges.push("📑 สัญญาสังกัดทางการ");
-        newBadges.push("🎯 รับลีดกลางบริษัท");
-      }
-      if (newPerms.editPrice) newBadges.push("💰 เคาะราคาบ้าน");
-      if (newPerms.executiveAuthority) newBadges.push("👑 สิทธิ์บริหาร");
-      if (newPerms.leadInspector) newBadges.push("💬 ดูแชทลีด");
-      if (newPerms.keyboxAdmin) newBadges.push("🔑 คุมกุญแจ OTP 100%");
-      if (newPerms.catalogCurator) newBadges.push("🏷️ ช่วยคัดสต๊อก");
-      if (newPerms.systemAdmin) newBadges.push("⚙️ Technical Admin");
-      if (newPerms.standardAdmin) newBadges.push("🛡️ Standard Admin");
-      if (!newPerms.editPrice) newBadges.push("🚫 ล็อกแก้ราคา");
-      if (newBadges.length === 0) newBadges.push("📜 บัตรดิจิทัลทางการ");
-
-      member.role = newRole;
-      member.title = newTitle;
-      member.zone = newZone;
-      member.permissions = newPerms;
-      member.badges = newBadges;
-
-      const auditMsg = `[${new Date().toLocaleString('th-TH')}] ⚙️ ปรับสิทธิ์: ${member.name} เป็น ${newRole} (${newBadges.length} สิทธิ์)`;
-      lobbyData.audit_log = lobbyData.audit_log || [];
-      lobbyData.audit_log.unshift(auditMsg);
-
-      saveLobbyData();
-      renderLobby();
-      closeEditPermissionModal();
-      alert(`✅ บันทึกสิทธิ์ใหม่ให้ "${member.name}" เรียบร้อยแล้ว!`);
-
-      // Sync to cloud
-      try {
-        await fetch(`${API_BASE}/api/lobby/update-permissions`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            applicantId: member.id,
-            role: newRole,
-            title: newTitle,
-            badges: newBadges,
-            permissions: newPerms
-          })
-        });
-      } catch (err) {
-        console.log('Cloud update-permissions note:', err);
-      }
-    }
-
-    fetchCloudLobby();
+          fetchCloudLobby();
         }
       };
     } catch(e) {}
@@ -2108,6 +2122,10 @@
       const p = member.permissions || {};
       const chkContract = document.getElementById('chk_contractAgent');
       if (chkContract) chkContract.checked = isContractAgentItem(member);
+      const chkVip = document.getElementById('chk_vipClient');
+      if (chkVip) chkVip.checked = isVipClientItem(member);
+      const chkSeller = document.getElementById('chk_sellerClient');
+      if (chkSeller) chkSeller.checked = isSellerItem(member);
       document.getElementById('chk_standardAdmin').checked = !!p.standardAdmin;
       document.getElementById('chk_editPrice').checked = !!p.editPrice;
       document.getElementById('chk_executiveAuthority').checked = !!p.executiveAuthority;
@@ -2147,6 +2165,8 @@
       const newZone = (newZoneEl && newZoneEl.value.trim()) ? newZoneEl.value.trim() : member.zone;
 
       const isContractChecked = document.getElementById('chk_contractAgent') ? document.getElementById('chk_contractAgent').checked : false;
+      const isVipChecked = document.getElementById('chk_vipClient') ? document.getElementById('chk_vipClient').checked : false;
+      const isSellerChecked = document.getElementById('chk_sellerClient') ? document.getElementById('chk_sellerClient').checked : false;
       const newPerms = {
         standardAdmin: document.getElementById('chk_standardAdmin').checked,
         editPrice: document.getElementById('chk_editPrice').checked,
@@ -2155,11 +2175,21 @@
         leadInspector: document.getElementById('chk_leadInspector').checked,
         catalogCurator: document.getElementById('chk_catalogCurator').checked,
         systemAdmin: document.getElementById('chk_systemAdmin').checked,
-        contractAgent: isContractChecked
+        contractAgent: isContractChecked,
+        vipClient: isVipChecked,
+        sellerClient: isSellerChecked
       };
 
       // Derive badges
       const newBadges = [];
+      if (newPerms.vipClient) {
+        newBadges.push("👑 สิทธิ์ลูกค้า VIP");
+        newBadges.push("🔒 โหมดลูกค้า (ซ่อนหลังบ้าน)");
+      }
+      if (newPerms.sellerClient) {
+        newBadges.push("🏠 เจ้าของทรัพย์ฝากขาย");
+        newBadges.push("🔒 โหมดลูกค้า (ซ่อนหลังบ้าน)");
+      }
       if (newPerms.contractAgent) {
         newBadges.push("📑 สัญญาสังกัดทางการ");
         newBadges.push("🎯 รับลีดกลางบริษัท");
@@ -2179,6 +2209,17 @@
       member.zone = newZone;
       member.permissions = newPerms;
       member.badges = newBadges;
+      if (newPerms.vipClient) {
+        member.role_code = 'VIP_CLIENT';
+      } else if (newPerms.sellerClient) {
+        member.role_code = 'SELLER';
+      } else if (newPerms.contractAgent) {
+        member.role_code = 'CONTRACT_AGENT';
+      } else if (newPerms.systemAdmin || newPerms.executiveAuthority || newPerms.keyboxAdmin || newPerms.standardAdmin) {
+        member.role_code = 'ADMIN';
+      } else {
+        member.role_code = 'FREE_AGENT';
+      }
 
       const auditMsg = `[${new Date().toLocaleString('th-TH')}] ⚙️ ปรับสิทธิ์: ${member.name} เป็น ${newRole} (${newBadges.length} สิทธิ์)`;
       lobbyData.audit_log = lobbyData.audit_log || [];
@@ -2198,6 +2239,7 @@
             applicantId: member.id,
             role: newRole,
             title: newTitle,
+            role_code: member.role_code,
             badges: newBadges,
             permissions: newPerms
           })
@@ -2356,7 +2398,23 @@
               <input type="checkbox" id="chk_contractAgent" class="mt-0.5 rounded text-pink-500 focus:ring-0">
               <div>
                 <strong class="text-[#9e3b4f]">📑 Contract Agent (ตัวแทนสัญญาสังกัดทางการ - Pink Sand #ffa8B6)</strong>
-                <p class="text-[11px] text-[#b84a60]">ตัวแทนที่มีสัญญาแต่งตั้ง รับสิทธิ์ลีดกลางบริษัท (หากไม่ติ๊กและไม่ได้เป็น Admin จะเป็น Free Agent สีม่วง #786ea1)</p>
+                <p class="text-[11px] text-[#b84a60]">ตัวแทนที่มีสัญญาแต่งตั้ง รับสิทธิ์ลีดกลางบริษัท (หากไม่ติ๊กและไม่ได้เป็น Admin/VIP/Seller จะเป็น Free Agent สีม่วง #786ea1)</p>
+              </div>
+            </label>
+
+            <label class="flex items-start gap-2.5 p-2 rounded-xl bg-[#FAF7F0] hover:bg-[#F3ECD8] cursor-pointer border border-[#C2A460]">
+              <input type="checkbox" id="chk_vipClient" class="mt-0.5 rounded text-amber-600 focus:ring-0">
+              <div>
+                <strong class="text-[#7A5E22]">👑 VIP Client (ลูกค้า VIP - Champagne Gold #C2A460)</strong>
+                <p class="text-[11px] text-[#9A7B38]">ล็อกให้อยู่ในโหมดลูกค้าเท่านั้น (ซ่อนรหัสแบงก์/ค่าคอม 100%) พร้อมรองรับสิทธิ์ VIP ที่คุณกูลจะกำหนดเพิ่ม</p>
+              </div>
+            </label>
+
+            <label class="flex items-start gap-2.5 p-2 rounded-xl bg-teal-50/70 hover:bg-teal-100/70 cursor-pointer border border-teal-400">
+              <input type="checkbox" id="chk_sellerClient" class="mt-0.5 rounded text-teal-600 focus:ring-0">
+              <div>
+                <strong class="text-teal-900">🏠 Seller (ลูกค้าฝากขายบ้าน - Teal #0d9488)</strong>
+                <p class="text-[11px] text-teal-700">เจ้าของทรัพย์ที่ลงทะเบียนฝากขายบ้าน (ล็อกให้อยู่ในโหมดลูกค้า ซ่อนข้อมูลหลังบ้าน 100%)</p>
               </div>
             </label>
 

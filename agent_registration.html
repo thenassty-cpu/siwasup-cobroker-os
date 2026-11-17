@@ -272,7 +272,7 @@
             <i data-lucide="briefcase" class="w-3.5 h-3.5 text-amber-600"></i>
             <span>รูปแบบการร่วมงาน *</span>
           </label>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
             <label class="flex items-center gap-2 p-2.5 rounded-2xl bg-[#786ea1]/15 border border-[#786ea1] cursor-pointer hover:bg-[#786ea1]/25 transition">
               <input type="radio" name="affiliation" value="free_agent" checked class="text-[#786ea1] focus:ring-0">
               <div>
@@ -292,6 +292,20 @@
               <div>
                 <div class="text-xs font-bold text-slate-900">🏢 ทีมงานออฟฟิศ</div>
                 <div class="text-[9px] text-slate-500">เจ้าหน้าที่ประจำ</div>
+              </div>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-2xl bg-[#FAF7F0] border border-[#C2A460] cursor-pointer hover:bg-[#F3ECD8] transition">
+              <input type="radio" name="affiliation" value="vip_client" class="text-[#C2A460] focus:ring-0">
+              <div>
+                <div class="text-xs font-bold text-[#7A5E22]">👑 VIP Client</div>
+                <div class="text-[9px] text-[#9A7B38]">ลูกค้าคนพิเศษ / VIP</div>
+              </div>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-2xl bg-teal-50/80 border border-teal-400 cursor-pointer hover:bg-teal-100/70 transition">
+              <input type="radio" name="affiliation" value="seller" class="text-teal-600 focus:ring-0">
+              <div>
+                <div class="text-xs font-bold text-teal-900">🏠 ลูกค้าฝากขาย</div>
+                <div class="text-[9px] text-teal-700">เจ้าของทรัพย์ฝากขาย</div>
               </div>
             </label>
           </div>
@@ -518,9 +532,9 @@
             🎉 ยินดีด้วยครับ! ท่านได้รับการแต่งตั้งเป็น: <span id="grantedRoleName" class="underline text-emerald-950 font-black text-sm"></span>
           </div>
 
-          <a id="btnGoWelcome" href="https://assets.siwasup.com/welcome_landing.html?checkin=1" class="w-full gold-gradient hover:brightness-105 text-slate-950 font-black py-3.5 rounded-2xl shadow-lg text-sm flex items-center justify-center gap-2 transition">
+          <a id="btnGoWelcome" href="https://assets.siwasup.com/welcome_landing.html" class="w-full gold-gradient hover:brightness-105 text-slate-950 font-black py-3.5 rounded-2xl shadow-lg text-sm flex items-center justify-center gap-2 transition">
             <i data-lucide="sparkles" class="w-4 h-4"></i>
-            <span>เข้าสู่หน้าต้อนรับศิวาทรัพย์ (รับ +10 แต้มแรกเข้าเรียบร้อย!)</span>
+            <span>เข้าสู่หน้าหลักศิวาทรัพย์</span>
           </a>
 
           <a id="btnGoCard" href="#" target="_blank" class="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-bold py-2.5 rounded-2xl border border-emerald-300 text-xs flex items-center justify-center gap-2 shadow-2xs transition">
@@ -787,7 +801,15 @@
         line_id: lineId || "ไม่ระบุ",
         zone: zone,
         affiliation: affiliation,
-        affiliation_label: affiliation === 'office' ? "🏢 พนักงาน/ทีมงานออฟฟิศ" : (affiliation === 'contract_agent' ? "📑 สมัคร Contract Agent (ตัวแทนสัญญา)" : "🤝 สมัคร Free Agent (ตัวแทนอิสระ)"),
+        affiliation_label: affiliation === 'office'
+          ? "🏢 พนักงาน/ทีมงานออฟฟิศ"
+          : (affiliation === 'contract_agent'
+            ? "📑 สมัคร Contract Agent (ตัวแทนสัญญา)"
+            : (affiliation === 'vip_client'
+              ? "👑 สมัคร VIP Client (ลูกค้าคนพิเศษ)"
+              : (affiliation === 'seller'
+                ? "🏠 สมัคร Seller (ลูกค้าฝากขายบ้าน)"
+                : "🤝 สมัคร Free Agent (ตัวแทนอิสระ)"))),
         avatar: selectedAvatarUrl,
         status: "pending",
         submitted_at: "เมื่อสักครู่"
@@ -1065,6 +1087,10 @@
         tierHtml = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-400">🔑 KEYBOX MASTER</span>`;
       } else if (perms.standardAdmin) {
         tierHtml = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-800 border border-blue-300">🏢 OFFICE ADMIN</span>`;
+      } else if (perms.vipClient || member.role_code === 'VIP_CLIENT' || roleLower.includes('vip')) {
+        tierHtml = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black text-[#4A3711] border shadow-2xs" style="background-color: #E5CF94; border-color: #C2A460;">👑 VIP CLIENT</span>`;
+      } else if (perms.sellerClient || member.role_code === 'SELLER' || roleLower.includes('seller') || roleLower.includes('ฝากขาย')) {
+        tierHtml = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black text-white border shadow-2xs" style="background-color: #0d9488; border-color: #0f766e;">🏠 SELLER (ฝากขาย)</span>`;
       } else if (perms.contractAgent || member.role_code === 'CONTRACT_AGENT' || roleLower.includes('contract') || roleLower.includes('สัญญา') || (member.badges || []).some(b => b.includes('สัญญา'))) {
         tierHtml = `<span class="px-2 py-0.5 rounded-full text-[10px] font-black text-white border shadow-2xs" style="background-color: #ffa8b6; border-color: #e58e9c;">📑 CONTRACT AGENT</span>`;
       }
@@ -1115,12 +1141,12 @@
       `);
 
       actions.unshift(`
-        <a href="https://assets.siwasup.com/welcome_landing.html${catParams}#announcements" class="sm:col-span-2 p-3.5 rounded-2xl gold-gradient hover:brightness-105 text-slate-950 font-black flex items-center justify-between transition shadow-md">
+        <a href="https://assets.siwasup.com/welcome_landing.html${catParams}" class="sm:col-span-2 p-3.5 rounded-2xl gold-gradient hover:brightness-105 text-slate-950 font-black flex items-center justify-between transition shadow-md">
           <div class="flex items-center gap-2">
             <i data-lucide="sparkles" class="w-4 h-4 text-slate-950"></i>
-            <span>เข้าสู่หน้าต้อนรับ Season 1 & กระดานคะแนน (${syncedCode})</span>
+            <span>เข้าสู่หน้าหลักศิวาทรัพย์ (${syncedCode})</span>
           </div>
-          <span class="text-[10px] bg-slate-950 text-amber-300 px-2 py-0.5 rounded-full font-bold">หน้าต้อนรับ →</span>
+          <span class="text-[10px] bg-slate-950 text-amber-300 px-2 py-0.5 rounded-full font-bold">หน้าหลัก &rarr;</span>
         </a>
       `);
       actions.push(`
