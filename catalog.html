@@ -1089,7 +1089,7 @@
         allProperties = window.SIWASUP_PROPERTIES;
       } else {
         try {
-          const resp = await fetch('siwasup_all_properties.json?v=20261117-0100');
+          const resp = await fetch('siwasup_all_properties.json?v=20261118-0045');
           if (resp.ok) {
             allProperties = await resp.json();
           }
@@ -1208,6 +1208,7 @@
         .replace(/\bNPA\s*(KBank|KBANK|SCB|SAM|KTB|TTB|GSB|GHB|BBL|PAMCO)?\b/gi, 'ทรัพย์คัดพิเศษ')
         .replace(/ทรัพย์\s*(SCB|KBank|KBANK|SAM|KTB|TTB|GSB|GHB|BBL|PAMCO)\b/gi, 'ทรัพย์สภาพดี')
         .replace(/\(\s*(SAM|SCB|KBank|KBANK|KTB|TTB|GSB|GHB|BBL|PAMCO)\s*\)/gi, '')
+        .replace(/บัวตรวจสถานะพร้อมขาย/gi, 'ฝ่ายตรวจสอบทรัพย์ยืนยันสถานะพร้อมขาย')
         .replace(/บสส\.?|บริหารสินทรัพย์\s*สุขุมวิท|บริหารสินทรัพย์\s*พรอสเพอริตี้/gi, 'ศิวาทรัพย์')
         .replace(/ประเภทเอกสารสิทธิ์\s*\/\s*เลขที่\s*[:：]\s*[^\n\r]+\n?/gi, '')
         .replace(/โฉนดที่ดิน\s*[:：]?\s*[\d,\s-]+/gi, 'โฉนดพร้อมโอน')

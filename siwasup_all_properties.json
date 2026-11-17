@@ -815,8 +815,8 @@
     "status": "available",
     "bua_verified": true,
     "is_npa_tagged": true,
-    "location": "บางคอแหลม",
-    "search_keywords": "บางคอแหลม พระราม 3 เจริญกรุง สาทร ดินแดง รัชดา พระราม 9 ห้วยขวาง วิภาวดี ห้วยขวาง รัชดา พระราม 9 ลาดพร้าว เหม่งจ๋าย เลียบด่วน",
+    "location": "วังทอง • พิษณุโลก",
+    "search_keywords": "วังทอง • พิษณุโลก พิษณุโลก",
     "province_th": "พิษณุโลก"
   },
   {
@@ -835,9 +835,9 @@
     "bank_source": "Siwasup",
     "status": "available",
     "bua_verified": true,
-    "location": "บ้านแพ้ว",
-    "search_keywords": "บ้านแพ้ว สมุทรสาคร พระราม 2 บางบอน พระราม 2 เอกชัย กาญจนาภิเษก ท่าข้าม บางคอแหลม พระราม 3 เจริญกรุง สาทร",
-    "province_th": "สมุทรสาคร"
+    "location": "พญาไท",
+    "search_keywords": "พญาไท กรุงเทพมหานคร",
+    "province_th": "กรุงเทพมหานคร"
   },
   {
     "id": "1332494",
@@ -940,8 +940,8 @@
     "bua_verified": true,
     "is_npa_tagged": true,
     "location": "บางกะปิ",
-    "search_keywords": "บางกะปิ ลาดพร้าว รามคำแหง ศรีนครินทร์ นวมินทร์ บางคอแหลม พระราม 3 เจริญกรุง สาทร บึงกุ่ม นวมินทร์ เกษตร-นวมินทร์ รามอินทรา เสรีไทย ลาดพร้าว",
-    "province_th": "เลย"
+    "search_keywords": "บางกะปิ กรุงเทพมหานคร",
+    "province_th": "กรุงเทพมหานคร"
   },
   {
     "id": "1327386",
@@ -959,8 +959,8 @@
     "bank_source": "Siwasup",
     "status": "available",
     "bua_verified": true,
-    "location": "บางคอแหลม",
-    "search_keywords": "บางคอแหลม พระราม 3 เจริญกรุง สาทร บางกรวย พระราม 5 ราชพฤกษ์ ปิ่นเกล้า นนทบุรี ดินแดง รัชดา พระราม 9 ห้วยขวาง วิภาวดี",
+    "location": "พนัสนิคม • ชลบุรี",
+    "search_keywords": "พนัสนิคม • ชลบุรี ชลบุรี",
     "province_th": "ชลบุรี"
   },
   {
@@ -1266,8 +1266,8 @@
     "bua_verified": true,
     "description": "[✓ บัวตรวจสถานะพร้อมขาย 30 ต.ค. 69] ",
     "is_npa_tagged": true,
-    "location": "บางคอแหลม",
-    "search_keywords": "บางคอแหลม พระราม 3 เจริญกรุง สาทร ดินแดง รัชดา พระราม 9 ห้วยขวาง วิภาวดี ห้วยขวาง รัชดา พระราม 9 ลาดพร้าว เหม่งจ๋าย เลียบด่วน",
+    "location": "เมืองกาญจนบุรี • กาญจนบุรี",
+    "search_keywords": "เมืองกาญจนบุรี • กาญจนบุรี กาญจนบุรี",
     "gallery": [
       "https://shop-image.readyplanet.com/am9Kuz7D64A21f-vxQo-JMroNGA=/500x500/76cd6ca9521e45ac98b316f49d920dc0"
     ],
@@ -1626,13 +1626,13 @@
     "bua_verified": true,
     "description": "[✓ บัวตรวจสถานะพร้อมขาย 30 ต.ค. 69] ",
     "is_npa_tagged": true,
-    "location": "บางคอแหลม",
-    "search_keywords": "บางคอแหลม พระราม 3 เจริญกรุง สาทร ดินแดง รัชดา พระราม 9 ห้วยขวาง วิภาวดี ห้วยขวาง รัชดา พระราม 9 ลาดพร้าว เหม่งจ๋าย เลียบด่วน",
+    "location": "หัวหิน • ประจวบคีรีขันธ์",
+    "search_keywords": "หัวหิน • ประจวบคีรีขันธ์ ประจวบคีรีขันธ์",
     "gallery": [
       "https://shop-image.readyplanet.com/5x8VQN1kWAlvyNMKs-DjTs-0vcA=/500x500/66c1adda5858429792e092c2adfcc995"
     ],
     "gallery_count": 1,
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "ประจวบคีรีขันธ์"
   },
   {
     "id": "1069562",
@@ -2239,8 +2239,8 @@
     ],
     "is_image_soldout": false,
     "bank_source": "Siwasup",
-    "location": "บางคอแหลม",
-    "search_keywords": "บางคอแหลม พระราม 3 เจริญกรุง สาทร หนองแขม เพชรเกษม บางแค พุทธมณฑลสาย 3 พุทธมณฑลสาย 4 เอกชัย พระประแดง สุขสวัสดิ์ ปู่เจ้า ประชาอุทิศ พระราม 3",
+    "location": "เมืองเชียงใหม่ • เชียงใหม่",
+    "search_keywords": "เมืองเชียงใหม่ • เชียงใหม่ เชียงใหม่",
     "province_th": "เชียงใหม่"
   },
   {
@@ -2583,8 +2583,8 @@
     ],
     "is_image_soldout": false,
     "bank_source": "Siwasup",
-    "location": "บางนา",
-    "search_keywords": "บางนา สุขุมวิท ศรีนครินทร์ แบริ่ง ลาซาล บางนา-ตราด คลองเตย สุขุมวิท พระราม 4 อโศก ทองหล่อ เอกมัย เมืองสมุทรปราการ ศรีนครินทร์ แพรกษา สุขุมวิท เทพารักษ์ บางนา",
+    "location": "เมืองชลบุรี • ชลบุรี",
+    "search_keywords": "เมืองชลบุรี • ชลบุรี ชลบุรี",
     "province_th": "ชลบุรี"
   },
   {
@@ -2691,9 +2691,9 @@
     ],
     "is_image_soldout": false,
     "bank_source": "Siwasup",
-    "location": "บ้านแพ้ว",
-    "search_keywords": "บ้านแพ้ว สมุทรสาคร พระราม 2 บางบอน พระราม 2 เอกชัย กาญจนาภิเษก ท่าข้าม บางคอแหลม พระราม 3 เจริญกรุง สาทร",
-    "province_th": "เลย"
+    "location": "บางพลัด",
+    "search_keywords": "บางพลัด กรุงเทพมหานคร",
+    "province_th": "กรุงเทพมหานคร"
   },
   {
     "id": "1272011",
@@ -2709,9 +2709,9 @@
     ],
     "is_image_soldout": false,
     "bank_source": "Siwasup",
-    "location": "บางแค",
-    "search_keywords": "บางแค เพชรเกษม ท่าพระ กาญจนาภิเษก ภาษีเจริญ คลองเตย สุขุมวิท พระราม 4 อโศก ทองหล่อ เอกมัย กระทุ่มแบน เพชรเกษม อ้อมน้อย พุทธสาคร สมุทรสาคร",
-    "province_th": "กรุงเทพมหานคร"
+    "location": "หัวหิน • ประจวบคีรีขันธ์",
+    "search_keywords": "หัวหิน • ประจวบคีรีขันธ์ ประจวบคีรีขันธ์",
+    "province_th": "ประจวบคีรีขันธ์"
   },
   {
     "id": "1272270",
@@ -2850,7 +2850,9 @@
     "is_image_soldout": true,
     "status": "sold_archive",
     "bank_source": "Siwasup",
-    "province_th": "เลย"
+    "province_th": "ประจวบคีรีขันธ์",
+    "location": "หัวหิน • ประจวบคีรีขันธ์",
+    "search_keywords": "หัวหิน • ประจวบคีรีขันธ์ ประจวบคีรีขันธ์"
   },
   {
     "id": "1321186",
@@ -2867,8 +2869,8 @@
     "is_image_soldout": false,
     "bank_source": "Siwasup",
     "is_npa_tagged": true,
-    "location": "บางคอแหลม",
-    "search_keywords": "บางคอแหลม พระราม 3 เจริญกรุง สาทร บางกรวย พระราม 5 ราชพฤกษ์ ปิ่นเกล้า นนทบุรี ดุสิต สามเสน พระราม 5 เตาปูน",
+    "location": "เมืองระยอง • ระยอง",
+    "search_keywords": "เมืองระยอง • ระยอง ระยอง",
     "province_th": "ระยอง"
   },
   {
@@ -2919,8 +2921,8 @@
     ],
     "is_image_soldout": false,
     "bank_source": "Siwasup",
-    "location": "บางนา",
-    "search_keywords": "บางนา สุขุมวิท ศรีนครินทร์ แบริ่ง ลาซาล บางนา-ตราด คลองเตย สุขุมวิท พระราม 4 อโศก ทองหล่อ เอกมัย เมืองสมุทรปราการ ศรีนครินทร์ แพรกษา สุขุมวิท เทพารักษ์ บางนา",
+    "location": "พานทอง • ชลบุรี",
+    "search_keywords": "พานทอง • ชลบุรี ชลบุรี",
     "province_th": "ชลบุรี"
   },
   {
@@ -2993,7 +2995,9 @@
     "is_image_soldout": false,
     "bank_source": "Siwasup",
     "is_npa_tagged": true,
-    "province_th": "เลย"
+    "province_th": "สงขลา",
+    "location": "หาดใหญ่ • สงขลา",
+    "search_keywords": "หาดใหญ่ • สงขลา สงขลา"
   },
   {
     "id": "1325872",
@@ -3098,8 +3102,8 @@
     "is_image_soldout": false,
     "bank_source": "Siwasup",
     "location": "บางกรวย",
-    "search_keywords": "บางกรวย พระราม 5 ราชพฤกษ์ ปิ่นเกล้า นนทบุรี บางพลัด จรัญสนิทวงศ์ ปิ่นเกล้า ท่าพระ บางกอกน้อย จรัญสนิทวงศ์ ท่าพระ ปิ่นเกล้า ศิริราช พรานนก",
-    "province_th": "เลย"
+    "search_keywords": "บางกรวย นนทบุรี",
+    "province_th": "นนทบุรี"
   },
   {
     "id": "1332905",
@@ -3135,9 +3139,9 @@
     ],
     "is_image_soldout": false,
     "bank_source": "Siwasup",
-    "location": "บางคอแหลม",
-    "search_keywords": "บางคอแหลม พระราม 3 เจริญกรุง สาทร หนองแขม เพชรเกษม บางแค พุทธมณฑลสาย 3 พุทธมณฑลสาย 4 เอกชัย พระประแดง สุขสวัสดิ์ ปู่เจ้า ประชาอุทิศ พระราม 3",
-    "province_th": "กรุงเทพมหานคร"
+    "location": "อุทัย • พระนครศรีอยุธยา",
+    "search_keywords": "อุทัย • พระนครศรีอยุธยา พระนครศรีอยุธยา",
+    "province_th": "พระนครศรีอยุธยา"
   },
   {
     "id": "1334412",
@@ -5315,13 +5319,13 @@
     "bank_source": "Siwasup",
     "status": "available",
     "is_npa_tagged": true,
-    "location": "บางแค",
-    "search_keywords": "บางแค เพชรเกษม ท่าพระ กาญจนาภิเษก ภาษีเจริญ กระทุ่มแบน เพชรเกษม อ้อมน้อย พุทธสาคร สมุทรสาคร เมืองนครปฐม นครปฐม เพชรเกษม",
+    "location": "หัวหิน • ประจวบคีรีขันธ์",
+    "search_keywords": "หัวหิน • ประจวบคีรีขันธ์ ประจวบคีรีขันธ์",
     "gallery": [
       "https://shop-image.readyplanet.com/Vc0d1qa8lav99ce5Du2aFDOQO-8=/500x500/0cbe8df30a3a45868f5e510da699e817"
     ],
     "gallery_count": 1,
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "ประจวบคีรีขันธ์"
   },
   {
     "id": "1298436",
@@ -6196,13 +6200,13 @@
     "bank_source": "Siwasup",
     "status": "available",
     "is_npa_tagged": true,
-    "location": "บ้านแพ้ว",
-    "search_keywords": "บ้านแพ้ว สมุทรสาคร พระราม 2 บางบอน พระราม 2 เอกชัย กาญจนาภิเษก ท่าข้าม บางขุนเทียน พระราม 2 ท่าข้าม เทียนทะเล เอกชัย",
+    "location": "หัวหิน • ประจวบคีรีขันธ์",
+    "search_keywords": "หัวหิน • ประจวบคีรีขันธ์ ประจวบคีรีขันธ์",
     "gallery": [
       "https://shop-image.readyplanet.com/wHb9XHRajqK-i_h_fhVPIhyNon4=/500x500/caec01dce8f142ae924b460d2e70b172"
     ],
     "gallery_count": 1,
-    "province_th": "สมุทรสาคร"
+    "province_th": "ประจวบคีรีขันธ์"
   },
   {
     "id": "1291930",
@@ -6565,13 +6569,13 @@
     "bank_source": "Siwasup",
     "status": "available",
     "is_npa_tagged": true,
-    "location": "บางคอแหลม",
-    "search_keywords": "บางคอแหลม พระราม 3 เจริญกรุง สาทร บางกรวย พระราม 5 ราชพฤกษ์ ปิ่นเกล้า นนทบุรี ดุสิต สามเสน พระราม 5 เตาปูน",
+    "location": "เมืองสุราษฎร์ธานี • สุราษฎร์ธานี",
+    "search_keywords": "เมืองสุราษฎร์ธานี • สุราษฎร์ธานี สุราษฎร์ธานี",
     "gallery": [
       "https://shop-image.readyplanet.com/umWb3a86DHxFH-X8yf43PiQuuYw=/500x500/75f44b50c87d428bae73ff221f8a8b4a"
     ],
     "gallery_count": 1,
-    "province_th": "เลย"
+    "province_th": "สุราษฎร์ธานี"
   },
   {
     "id": "1289035",
@@ -6619,13 +6623,13 @@
     "bank_source": "Siwasup",
     "status": "available",
     "is_npa_tagged": true,
-    "location": "บ้านแพ้ว",
-    "search_keywords": "บ้านแพ้ว สมุทรสาคร พระราม 2 บางบอน พระราม 2 เอกชัย กาญจนาภิเษก ท่าข้าม บางคอแหลม พระราม 3 เจริญกรุง สาทร",
+    "location": "พระโขนง",
+    "search_keywords": "พระโขนง กรุงเทพมหานคร",
     "gallery": [
       "https://shop-image.readyplanet.com/IT65i6VX6PF0Kkw6QhmWIT7t6Jw=/500x500/5a172238346d465694eddb1404b361ca"
     ],
     "gallery_count": 1,
-    "province_th": "สมุทรสาคร"
+    "province_th": "กรุงเทพมหานคร"
   },
   {
     "id": "1288213",
@@ -74202,12 +74206,12 @@
     "is_image_soldout": false,
     "latitude": "13.990918",
     "longitude": "100.510178",
-    "search_keywords": "b13984 ทาวน์เฮ้าส์ เอส เกต กรุงเทพ-ปทุมธานี ทาวน์เฮ้าส์  pamco",
+    "search_keywords": "บางเดื่อ • เมืองปทุมธานี • ปทุมธานี ปทุมธานี",
     "project_name": "เอส เกต กรุงเทพ-ปทุมธานี",
     "house_no": "115/194",
     "deed_no": "โฉนด ฉ.99093",
     "street": "กรุงเทพ-ปทุมธานี (ทล.307) วัดหนองปรง",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "ปทุมธานี"
   },
   {
     "id": "PAMCO_B13980",
