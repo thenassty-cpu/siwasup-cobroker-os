@@ -6969,7 +6969,10 @@
         if (verifiedCode) return verifiedCode;
         return localStorage.getItem('siwasup_my_agent_ref') || localStorage.getItem('siwasup_referred_by') || 'SW001';
       }
-      return localStorage.getItem('siwasup_referred_by') || localStorage.getItem('siwasup_my_agent_ref') || 'SW001';
+      const refFromLink = localStorage.getItem('siwasup_referred_by');
+      if (refFromLink) return refFromLink;
+      // ในโหมดลูกค้า (client): ห้ามดึง siwasup_my_agent_ref มาเป็นคนรับสาย (กันเคสลูกค้าโทรหาตัวเอง หรือติดรหัส SW-APP-xxx)
+      return 'SW001';
     }
 
     function getStoredSource() {

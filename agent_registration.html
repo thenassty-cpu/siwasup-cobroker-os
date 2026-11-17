@@ -895,7 +895,19 @@
       const cardUrl = `https://assets.siwasup.com/agent_profile.html?id=${encodeURIComponent(approvedData.id || '')}&name=${encodeURIComponent(approvedData.name)}&phone=${encodeURIComponent(approvedData.phone)}&zone=${encodeURIComponent(approvedData.zone)}&title=${encodeURIComponent(approvedData.title || '')}&mode=client${safeAvParam}`;
       document.getElementById('btnGoCard').href = cardUrl;
 
-      if (window.SiwasupAgents && typeof window.SiwasupAgents.syncMember === 'function') {
+      const isCustomerRole = Boolean(
+        (approvedData.permissions && (approvedData.permissions.vipClient || approvedData.permissions.sellerClient)) ||
+        approvedData.role_code === 'VIP_CLIENT' || approvedData.role_code === 'SELLER' ||
+        (approvedData.role || '').toLowerCase().includes('vip') || (approvedData.role || '').includes('ฝากขาย')
+      );
+      if (isCustomerRole) {
+        const cardBtn = document.getElementById('btnGoCard');
+        if (cardBtn) cardBtn.classList.add('hidden');
+        const wBtn = document.getElementById('btnGoWelcome');
+        const cBtn = document.getElementById('btnGoCatalog');
+        if (wBtn) wBtn.href = 'https://assets.siwasup.com/welcome_landing.html';
+        if (cBtn) cBtn.href = 'https://assets.siwasup.com/catalog.html?view=client';
+      } else if (window.SiwasupAgents && typeof window.SiwasupAgents.syncMember === 'function') {
         const sr = window.SiwasupAgents.syncMember(approvedData, true);
         if (sr && sr.agent) {
           const q = `?my_agent=${encodeURIComponent(sr.agent.code)}&my_name=${encodeURIComponent(approvedData.name || '')}&my_nick=${encodeURIComponent(approvedData.nickname || '')}&checkin=1`;
@@ -1124,21 +1136,33 @@
         }
       }
 
+      const isCustomerPortal = Boolean(
+        perms.vipClient || perms.sellerClient ||
+        member.role_code === 'VIP_CLIENT' || member.role_code === 'SELLER' ||
+        roleLower.includes('vip') || roleLower.includes('seller') || roleLower.includes('ฝากขาย')
+      );
+      const scorecardBox = document.getElementById('portalScorecardBox');
+      if (scorecardBox) scorecardBox.classList.toggle('hidden', isCustomerPortal);
+
       const rawAv = member.avatar || '';
       const safeAv = rawAv.startsWith('http') ? `&avatar=${encodeURIComponent(rawAv)}` : '';
       const cardUrl = `https://assets.siwasup.com/agent_profile.html?id=${encodeURIComponent(syncedCode)}&name=${encodeURIComponent(member.name)}&phone=${encodeURIComponent(member.phone)}&zone=${encodeURIComponent(member.zone)}&title=${encodeURIComponent(member.title || '')}&mode=client${safeAv}`;
-      const catParams = `?my_agent=${encodeURIComponent(syncedCode)}&my_name=${encodeURIComponent(member.name || '')}&my_nick=${encodeURIComponent(member.nickname || '')}&checkin=1${isAdminUser ? '&admin=1' : ''}`;
+      const catParams = isCustomerPortal
+        ? '?view=client'
+        : `?my_agent=${encodeURIComponent(syncedCode)}&my_name=${encodeURIComponent(member.name || '')}&my_nick=${encodeURIComponent(member.nickname || '')}&checkin=1${isAdminUser ? '&admin=1' : ''}`;
 
       let actions = [];
-      actions.push(`
-        <a href="${cardUrl}" target="_blank" class="p-3 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-300 text-amber-900 font-bold flex items-center justify-between transition shadow-2xs">
-          <div class="flex items-center gap-2">
-            <i data-lucide="credit-card" class="w-4 h-4 text-amber-700"></i>
-            <span>เปิดดูนามบัตรดิจิทัลของท่าน</span>
-          </div>
-          <span class="text-[10px] bg-amber-200/80 px-1.5 py-0.5 rounded">แชร์ลูกค้า</span>
-        </a>
-      `);
+      if (!isCustomerPortal) {
+        actions.push(`
+          <a href="${cardUrl}" target="_blank" class="p-3 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-300 text-amber-900 font-bold flex items-center justify-between transition shadow-2xs">
+            <div class="flex items-center gap-2">
+              <i data-lucide="credit-card" class="w-4 h-4 text-amber-700"></i>
+              <span>เปิดดูนามบัตรดิจิทัลของท่าน</span>
+            </div>
+            <span class="text-[10px] bg-amber-200/80 px-1.5 py-0.5 rounded">แชร์ลูกค้า</span>
+          </a>
+        `);
+      }
 
       actions.unshift(`
         <a href="https://assets.siwasup.com/welcome_landing.html${catParams}" class="sm:col-span-2 p-3.5 rounded-2xl gold-gradient hover:brightness-105 text-slate-950 font-black flex items-center justify-between transition shadow-md">
