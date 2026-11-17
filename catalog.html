@@ -1529,7 +1529,7 @@
     function syncAdminLobbyBadge(pendingCount, isAdm) {
       const count = Number(pendingCount || 0);
       window._siwasupLobbyPendingCount = count;
-      const isClient = (typeof isWhiteLabelMode !== 'undefined' && isWhiteLabelMode) || (typeof currentMode !== 'undefined' && currentMode === 'client');
+      const isClient = (typeof isWhiteLabelMode === 'function' && isWhiteLabelMode()) || (typeof currentMode !== 'undefined' && currentMode === 'client');
       const showAdmin = Boolean(isAdm) && !isClient;
       const hdrBtn = document.getElementById('btn-header-admin-lobby');
       const hdrBadge = document.getElementById('header-lobby-pending-badge');
