@@ -1203,17 +1203,24 @@
       if (!text) return '';
       if (!isWhiteLabelMode()) return text;
       return String(text)
+        .replace(/รหัสทรัพย์(?:สิน)?\s*(?:PAMCO|GSB|SCB|TTB|SAM|KTB|KBank|KBANK|GHB|BBL|ALPHA)?\s*[:：]?\s*[A-Za-z0-9_-]+\s*\|?\s*/gi, '')
+        .replace(/(?:SCB\s*)?project_id\s*[:：]\s*[A-Za-z0-9_-]+\s*/gi, '')
+        .replace(/(?:ประเภท)?เอกสารสิทธิ์(?:\s*\/\s*เลขที่)?\s*[:：]\s*[^\n\r|]+/gi, 'เอกสารสิทธิ์: โฉนดพร้อมโอน (ตรวจสอบแล้ว)')
+        .replace(/เลขที่กรรมสิทธิ์\s*[:：]\s*[^\n\r|]+/gi, 'เอกสารสิทธิ์: โฉนดพร้อมโอน (ตรวจสอบแล้ว)')
+        .replace(/บ้านเลขที่\s*[:：]?\s*[\d\/-]+(?:\s*\(เดิม[^)]*\))?\s*/gi, '')
         .replace(/ทรัพย์\s*NPA\s*(ธนาคาร|กสิกรไทย|กสิกร|ไทยพาณิชย์|กรุงไทย|ออมสิน|ทีเอ็มบีธนชาต|ทหารไทยธนชาต|บสส\.?|SAM|SCB|KBank|KBANK|KTB|TTB|GSB|GHB|BBL|PAMCO)?\s*:\s*/gi, '')
         .replace(/ทรัพย์หลุดจำนอง\s*(บสส\.?\s*\(?SAM\)?|ธนาคาร|SCB|KBank|KBANK|KTB|TTB|GSB|PAMCO)?/gi, 'ทรัพย์คัดพิเศษ')
         .replace(/\bNPA\s*(KBank|KBANK|SCB|SAM|KTB|TTB|GSB|GHB|BBL|PAMCO)?\b/gi, 'ทรัพย์คัดพิเศษ')
         .replace(/ทรัพย์\s*(SCB|KBank|KBANK|SAM|KTB|TTB|GSB|GHB|BBL|PAMCO)\b/gi, 'ทรัพย์สภาพดี')
+        .replace(/(จาก|โดย)\s*(SCB|KBank|KBANK|SAM|KTB|TTB|GSB|GHB|BBL|PAMCO|ALPHA)\b/gi, '$1 ศิวาทรัพย์')
         .replace(/\(\s*(SAM|SCB|KBank|KBANK|KTB|TTB|GSB|GHB|BBL|PAMCO)\s*\)/gi, '')
         .replace(/บัวตรวจสถานะพร้อมขาย/gi, 'ฝ่ายตรวจสอบทรัพย์ยืนยันสถานะพร้อมขาย')
         .replace(/บสส\.?|บริหารสินทรัพย์\s*สุขุมวิท|บริหารสินทรัพย์\s*พรอสเพอริตี้/gi, 'ศิวาทรัพย์')
-        .replace(/ประเภทเอกสารสิทธิ์\s*\/\s*เลขที่\s*[:：]\s*[^\n\r]+\n?/gi, '')
         .replace(/โฉนดที่ดิน\s*[:：]?\s*[\d,\s-]+/gi, 'โฉนดพร้อมโอน')
-        .replace(/เลขที่\s+\d+[\/\d-]*/gi, '')
+        .replace(/เลขที่\s+\d+[\/\d-]*(?:\s*\(เดิม[^)]*\))?/gi, '')
         .replace(/\s*รหัส\s*[:：]?\s*[A-Za-z0-9_-]{3,}/gi, '')
+        .replace(/\|\s*\|/g, '|')
+        .replace(/^\s*\|\s*/gm, '')
         .trim();
     }
 
@@ -7927,7 +7934,7 @@
     // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=20261118-0025').then((reg) => {
+        navigator.serviceWorker.register('./sw.js?v=20261118-0050').then((reg) => {
           console.log('Siwasup PWA Service Worker Registered (v2):', reg.scope);
           // Auto check for updates on each load
           if (reg.update) reg.update();
