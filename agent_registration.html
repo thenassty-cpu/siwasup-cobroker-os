@@ -125,6 +125,19 @@
     <!-- ============================================================== -->
     <div id="viewRegisterForm" class="space-y-4">
 
+      <!-- Notice for deleted / revoked / unregistered login attempts -->
+      <div id="guestAccountNotice" class="hidden rounded-2xl p-4 border-2 border-rose-300 bg-rose-50 text-rose-950 shadow-sm space-y-2">
+        <div class="flex items-start justify-between gap-3">
+          <div class="text-xs leading-relaxed">
+            <strong id="guestAccountNoticeTitle" class="block text-sm font-black text-rose-800">ไม่พบบัญชีสมาชิกในระบบ</strong>
+            <span id="guestAccountNoticeDesc" class="block mt-0.5 text-rose-900"></span>
+          </div>
+          <button type="button" onclick="logoutUser()" class="shrink-0 px-3 py-1.5 rounded-xl bg-white hover:bg-rose-100 border border-rose-300 text-rose-800 text-[11px] font-bold transition cursor-pointer">
+            สลับบัญชี LINE
+          </button>
+        </div>
+      </div>
+
       <!-- ==================== STEP 1 CARD: ADD FRIEND & LINE CONNECT ==================== -->
       <div id="wizardStep1" class="card-light rounded-3xl p-6 border-2 border-amber-300 space-y-5 shadow-md">
         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -155,7 +168,7 @@
               <strong class="block text-sm">2. กดเชื่อมบัญชี LINE ของท่าน (ไม่ต้องตั้งรหัสผ่าน)</strong>
               <span>หากท่านเป็นสมาชิกที่ได้รับอนุมัติแล้ว ระบบจะพาท่านเข้าสู่หน้าต้อนรับทันที</span>
             </div>
-            <button id="regLineBannerBtn" type="button" onclick="startLineLogin('register')" class="w-full py-3.5 px-4 rounded-2xl bg-[#06C755] hover:brightness-95 text-white font-black text-sm shadow-md flex items-center justify-center gap-2 transition active:scale-[0.99] cursor-pointer">
+            <button id="regLineBannerBtn" type="button" onclick="startLineLogin(currentAuthMode === 'login' ? 'login' : 'register')" class="w-full py-3.5 px-4 rounded-2xl bg-[#06C755] hover:brightness-95 text-white font-black text-sm shadow-md flex items-center justify-center gap-2 transition active:scale-[0.99] cursor-pointer">
               <i data-lucide="log-in" class="w-4 h-4"></i>
               <span>เชื่อมบัญชี LINE & ดำเนินการต่อ</span>
             </button>
@@ -982,7 +995,15 @@
       const btn = document.getElementById('regLineBannerBtn');
       if (!txt || !btn) return;
       if (me && me.line) {
-        txt.innerHTML = '<strong class="text-emerald-800 text-sm">✅ เชื่อมบัญชี LINE สำเร็จ: ' + (me.line.name || 'บัญชี LINE') + '</strong><span class="block text-emerald-700 mt-0.5">กดปุ่มถัดไปเพื่อกรอกชื่อและเบอร์โทรใน Step 2 ได้เลยครับ</span>';
+        txt.innerHTML = '';
+        const strong = document.createElement('strong');
+        strong.className = 'text-emerald-800 text-sm';
+        strong.textContent = '✅ เชื่อมบัญชี LINE สำเร็จ: ' + (me.line.name || 'บัญชี LINE');
+        const sub = document.createElement('span');
+        sub.className = 'block text-emerald-700 mt-0.5';
+        sub.textContent = 'กดปุ่มถัดไปเพื่อกรอกชื่อและเบอร์โทรใน Step 2 ได้เลยครับ';
+        txt.appendChild(strong);
+        txt.appendChild(sub);
         btn.classList.add('hidden');
       } else {
         txt.innerHTML = '<strong class="block text-sm">2. กดเชื่อมบัญชี LINE ของท่าน (ไม่ต้องตั้งรหัสผ่าน)</strong><span>หากท่านเป็นสมาชิกที่ได้รับอนุมัติแล้ว ระบบจะพาท่านเข้าสู่ Step 4 ทันที</span>';
@@ -1003,8 +1024,44 @@
       el.textContent = 'LINE User ID (สำหรับผู้ดูแลระบบ): ' + userId;
     }
 
+    function clearStaleLocalAuthState(lineUserId) {
+      try { localStorage.removeItem('siwasup_my_agent_ref'); } catch(e) {}
+      if (!lineUserId) return;
+      try {
+        const raw = localStorage.getItem('siwasup_lobby_data');
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        let changed = false;
+        if (Array.isArray(parsed.approved)) {
+          const nextApp = parsed.approved.filter(m => m && m.lineUserId !== lineUserId);
+          if (nextApp.length !== parsed.approved.length) { parsed.approved = nextApp; changed = true; }
+        }
+        if (Array.isArray(parsed.pending)) {
+          const nextPend = parsed.pending.filter(m => m && m.lineUserId !== lineUserId);
+          if (nextPend.length !== parsed.pending.length) { parsed.pending = nextPend; changed = true; }
+        }
+        if (changed) localStorage.setItem('siwasup_lobby_data', JSON.stringify(parsed));
+      } catch(e) {}
+    }
+
+    function showGuestAccountNotice(title, desc) {
+      const box = document.getElementById('guestAccountNotice');
+      const titleEl = document.getElementById('guestAccountNoticeTitle');
+      const descEl = document.getElementById('guestAccountNoticeDesc');
+      if (!box || !titleEl || !descEl) return;
+      titleEl.textContent = title;
+      descEl.textContent = desc;
+      box.classList.remove('hidden');
+    }
+
+    function hideGuestAccountNotice() {
+      const box = document.getElementById('guestAccountNotice');
+      if (box) box.classList.add('hidden');
+    }
+
     async function applyMe(me, mode) {
       renderLineBanner(me);
+      hideGuestAccountNotice();
       if (!me) {
         if (mode === 'login') switchAuthMode('login');
         return;
@@ -1024,7 +1081,26 @@
         showLineIdHint(me.line && me.line.userId);
         startPollingForApproval();
         if (window.lucide) lucide.createIcons();
+      } else if (me.status === 'seller') {
+        const sellerName = (me.seller && me.seller.name) || (me.line && me.line.name) || 'ผู้ฝากขาย';
+        showGuestAccountNotice(
+          `🏠 ท่านเข้าสู่ระบบในสถานะผู้ฝากขาย (Seller): ${sellerName}`,
+          'บัญชีนี้ลงทะเบียนเป็นผู้ฝากขายไว้แล้ว ท่านสามารถกดปุ่ม "ถัดไป" ด้านล่างเพื่อสมัครเป็นตัวแทน Co-Broker เพิ่มเติม หรือสลับบัญชี LINE ได้ครับ'
+        );
+        goToRegStep(1);
       } else {
+        clearStaleLocalAuthState(me.line && me.line.userId);
+        if (me.revoked) {
+          showGuestAccountNotice(
+            '⚠️ บัญชีหรือรหัสตัวแทนของท่านถูกลบ / เพิกถอนสิทธิ์ออกจากระบบแล้ว',
+            'หากต้องการใช้งานต่อ กรุณาติดต่อผู้ดูแลระบบ หรือกรอกข้อมูลสมัครเข้า Lobby ใหม่อีกครั้งด้านล่างครับ'
+          );
+        } else if (mode === 'login' && me.status === 'guest') {
+          showGuestAccountNotice(
+            'ℹ️ ไม่พบบัญชีสมาชิกของ LINE นี้ในระบบ',
+            'บัญชีนี้อาจยังไม่ได้ลงทะเบียน หรือรหัสผู้สมัครถูกลบออกจากระบบแล้ว ท่านสามารถกรอกข้อมูลสมัครใหม่ด้านล่าง หรือสลับบัญชี LINE ได้ครับ'
+          );
+        }
         restoreDraft();
         const nameEl = document.getElementById('regName');
         if (nameEl && !nameEl.value && me.line && me.line.name) {
@@ -1052,22 +1128,29 @@
       const viewWait = document.getElementById('viewLobbyWaiting');
       const viewPort = document.getElementById('viewLoggedInPortal');
 
-      if (mode === 'register') {
-        btnReg.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 bg-amber-600 text-white shadow-xs";
-        btnLog.className = "flex-1 py-2 px-3 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5";
-        viewReg.classList.remove('hidden');
-        viewLog.classList.add('hidden');
-        viewPort.classList.add('hidden');
-      } else {
-        btnLog.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 bg-amber-600 text-white shadow-xs";
-        btnReg.className = "flex-1 py-2 px-3 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5";
-        viewReg.classList.add('hidden');
-        if (loggedInMember) {
-          viewPort.classList.remove('hidden');
-          viewLog.classList.add('hidden');
+      if (btnReg && btnLog) {
+        if (mode === 'register') {
+          btnReg.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 bg-amber-600 text-white shadow-xs";
+          btnLog.className = "flex-1 py-2 px-3 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5";
         } else {
-          viewLog.classList.remove('hidden');
-          viewPort.classList.add('hidden');
+          btnLog.className = "flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 bg-amber-600 text-white shadow-xs";
+          btnReg.className = "flex-1 py-2 px-3 rounded-xl text-xs font-medium text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5";
+        }
+      }
+
+      if (mode === 'login' && loggedInMember) {
+        if (viewReg) viewReg.classList.add('hidden');
+        if (viewPort) viewPort.classList.remove('hidden');
+        if (viewLog) viewLog.classList.add('hidden');
+      } else {
+        if (viewReg) viewReg.classList.remove('hidden');
+        if (viewLog) viewLog.classList.add('hidden');
+        if (viewPort) viewPort.classList.add('hidden');
+        if (mode === 'login' && !getSession()) {
+          const txt = document.getElementById('regLineBannerText');
+          if (txt) {
+            txt.innerHTML = '<strong class="block text-sm">🔐 เข้าสู่ระบบสมาชิกด้วย LINE (ไม่ต้องตั้งรหัสผ่าน)</strong><span>กดปุ่มสีเขียวด้านล่างเพื่อยืนยันตัวตน หากบัญชีของท่านยังอยู่ในระบบ จะเข้าสู่หน้าสมาชิกทันที</span>';
+          }
         }
       }
       if (viewWait) viewWait.classList.add('hidden');
@@ -1247,7 +1330,11 @@
 
     function logoutUser() {
       loggedInMember = null;
-      try { localStorage.removeItem(SESSION_KEY); } catch(e) {}
+      try {
+        localStorage.removeItem(SESSION_KEY);
+        localStorage.removeItem('siwasup_my_agent_ref');
+      } catch(e) {}
+      hideGuestAccountNotice();
       renderLineBanner(null);
       goToRegStep(1);
     }
@@ -1261,6 +1348,7 @@
       if (window.location.hash) history.replaceState(null, '', window.location.pathname + window.location.search);
       if (authErr) alert('เข้าสู่ระบบด้วย LINE ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
       const mode = new URLSearchParams(window.location.search).get('mode');
+      if (mode === 'login') currentAuthMode = 'login';
       const me = await fetchMe();
       await applyMe(me, mode);
     });

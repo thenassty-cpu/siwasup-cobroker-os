@@ -1629,6 +1629,7 @@ PUBLIC_BASE_URL = os.environ.get("PUBLIC_BASE_URL", "https://siwasup-cobroker-os
 SUPER_ADMIN_LINE_USER_IDS = {x.strip() for x in os.environ.get("SUPER_ADMIN_LINE_USER_IDS", "").split(",") if x.strip()}
 FRONTEND_URLS = {
     "register": "https://assets.siwasup.com/agent_registration.html",
+    "login": "https://assets.siwasup.com/agent_registration.html?mode=login",
     "admin": "https://assets.siwasup.com/admin_lobby_manager.html",
     "catalog": "https://assets.siwasup.com/catalog.html",
     "seller": "https://assets.siwasup.com/catalog.html?view=seller",
@@ -3149,7 +3150,20 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     "line": line_info,
                 })
                 return
-            self._send_json(200, {"status": "guest", "line": line_info})
+            revoked_rb = next(
+                (
+                    rb for rb in store.get("rollback_history", [])
+                    if rb.get("action") == "REVOKE"
+                    and isinstance(rb.get("member"), dict)
+                    and rb["member"].get("lineUserId") == sub
+                ),
+                None,
+            )
+            guest_payload = {"status": "guest", "line": line_info}
+            if revoked_rb:
+                guest_payload["revoked"] = True
+                guest_payload["revokedAt"] = revoked_rb.get("timestamp", "")
+            self._send_json(200, guest_payload)
             return
 
         if path == "/api/seller/my-listings":

@@ -1676,10 +1676,14 @@
             }
           }
         } else {
-          if (typeof _siwasupSafeStorage === 'function') {
-            _siwasupSafeStorage('local', 'remove', 'siwasup_session');
-          } else {
-            localStorage.removeItem('siwasup_session');
+          if (!me || me.status === 'guest') {
+            if (typeof _siwasupSafeStorage === 'function') {
+              _siwasupSafeStorage('local', 'remove', 'siwasup_session');
+              _siwasupSafeStorage('local', 'remove', 'siwasup_my_agent_ref');
+            } else {
+              localStorage.removeItem('siwasup_session');
+              localStorage.removeItem('siwasup_my_agent_ref');
+            }
           }
           window._siwasupVerifiedMember = null;
           window._siwasupVerifiedIsAdmin = false;

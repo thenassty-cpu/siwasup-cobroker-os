@@ -650,6 +650,9 @@
                   lBadge.classList.remove('hidden');
                 }
               }
+            } else if (!me || me.status === 'guest') {
+              localStorage.removeItem('siwasup_session');
+              localStorage.removeItem('siwasup_my_agent_ref');
             }
           } else if (r.status === 401) {
             localStorage.removeItem('siwasup_session');
