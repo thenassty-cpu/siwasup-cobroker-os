@@ -770,7 +770,7 @@
       }
     }
 
-    function submitToLobby() {
+    async function submitToLobby() {
       if (!getSession()) {
         alert('กรุณาเชื่อมบัญชี LINE ก่อนส่งข้อมูลครับ');
         startLineLogin('register');
@@ -833,14 +833,47 @@
         localStorage.setItem("siwasup_current_avatar", selectedAvatarUrl);
       } catch(e) {}
 
-      // 1. Sync to Cloud Server & LocalStorage
+      // 1. Sync to Cloud Server FIRST (wait for confirmation so applicant is never lost)
+      const submitBtn = document.querySelector('#wizardStep3 button[onclick="submitToLobby()"]');
+      const origBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>⏳ กำลังบันทึกข้อมูลเข้า Lobby บนคลาวด์...</span>';
+      }
       try {
-        fetch('https://siwasup-cobroker-os.onrender.com/api/lobby/register', {
+        const ctrl = new AbortController();
+        const tid = setTimeout(() => ctrl.abort(), 45000);
+        const res = await fetch('https://siwasup-cobroker-os.onrender.com/api/lobby/register', {
           method: 'POST',
           headers: authHeaders(),
-          body: JSON.stringify(currentApplicant)
-        }).catch(err => console.error('Cloud register error:', err));
-      } catch(e) {}
+          body: JSON.stringify(currentApplicant),
+          signal: ctrl.signal
+        });
+        clearTimeout(tid);
+        if (!res.ok) {
+          let errMsg = `HTTP ${res.status}`;
+          try {
+            const errJson = await res.json();
+            if (errJson && errJson.error) errMsg = errJson.error;
+          } catch(e) {}
+          if (res.status === 401) {
+            alert('⚠️ เซสชัน LINE หมดอายุ กรุณาเชื่อมบัญชี LINE ใหม่อีกครั้งครับ');
+            logoutUser();
+            return;
+          }
+          alert('❌ ไม่สามารถส่งข้อมูลเข้า Lobby ได้ในขณะนี้: ' + errMsg + '\nกรุณากดส่งใหม่อีกครั้งครับ');
+          return;
+        }
+      } catch (err) {
+        console.error('Cloud register error:', err);
+        alert('⚠️ เซิร์ฟเวอร์กำลังตื่นหรือเชื่อมต่อขัดข้อง กรุณารอสักครู่แล้วกดส่งข้อมูลใหม่อีกครั้งครับ');
+        return;
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = origBtnHtml;
+        }
+      }
 
       const rawData = localStorage.getItem('siwasup_lobby_data');
       let lobbyData = rawData ? JSON.parse(rawData) : { pending: [], approved: [] };

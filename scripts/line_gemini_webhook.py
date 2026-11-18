@@ -1560,25 +1560,33 @@ LOBBY_PATH = os.path.join(DATA_DIR, "lobby_applicants.json")
 LOBBY_LOCK = threading.Lock()
 
 _R2_LOBBY_VAULT_KEY = "_vault/lobby_" + hmac.new(ADMIN_EXPORT_SECRET.encode("utf-8"), b"siwasup_lobby_vault_v2", hashlib.sha256).hexdigest()[:32] + ".json"
+_R2_LOBBY_SNAP_PREFIX = hmac.new(ADMIN_EXPORT_SECRET.encode("utf-8"), b"siwasup_lobby_snap_v1", hashlib.sha256).hexdigest()[:24]
+_R2_LOBBY_SNAP_INDEX_KEY = f"_vault/lobby_snap_idx_{_R2_LOBBY_SNAP_PREFIX}.json"
 _R2_LOBBY_RESTORED = False
+_R2_LOBBY_SNAP_LOCK = threading.Lock()
+
+def _fetch_r2_json(key, timeout=12):
+    url = f"https://assets.siwasup.com/{key}?t={int(time.time())}"
+    req = urllib.request.Request(url, headers={"User-Agent": "SiwasupRenderVault/1.0"})
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        if r.status == 200:
+            return json.loads(r.read().decode("utf-8"))
+    return None
 
 def load_lobby_data():
     global _R2_LOBBY_RESTORED
     if not _R2_LOBBY_RESTORED and os.environ.get("PORT"):
-        _R2_LOBBY_RESTORED = True
-        try:
-            url = f"https://assets.siwasup.com/{_R2_LOBBY_VAULT_KEY}?t={int(time.time())}"
-            req = urllib.request.Request(url, headers={"User-Agent": "SiwasupRenderVault/1.0"})
-            with urllib.request.urlopen(req, timeout=8) as r:
-                if r.status == 200:
-                    cloud_store = json.loads(r.read().decode("utf-8"))
-                    if isinstance(cloud_store, dict) and ("approved" in cloud_store or "pending" in cloud_store):
-                        with open(LOBBY_PATH, "w", encoding="utf-8") as f:
-                            json.dump(cloud_store, f, ensure_ascii=False, indent=2)
-                        print(f"[Vault] Restored lobby_applicants from R2 ({len(cloud_store.get('approved', []))} approved)")
-                        return cloud_store
-        except Exception as e:
-            print(f"[Vault] Initial R2 restore note: {e}")
+        for r2_key in (_R2_LOBBY_VAULT_KEY, "data/lobby_applicants.json"):
+            try:
+                cloud_store = _fetch_r2_json(r2_key, timeout=12)
+                if isinstance(cloud_store, dict) and ("approved" in cloud_store or "pending" in cloud_store):
+                    with open(LOBBY_PATH, "w", encoding="utf-8") as f:
+                        json.dump(cloud_store, f, ensure_ascii=False, indent=2)
+                    _R2_LOBBY_RESTORED = True
+                    print(f"[Vault] Restored lobby_applicants from R2 ({r2_key}: {len(cloud_store.get('approved', []))} approved, {len(cloud_store.get('pending', []))} pending)")
+                    return cloud_store
+            except Exception as e:
+                print(f"[Vault] R2 restore attempt ({r2_key}) note: {e}")
     if os.path.exists(LOBBY_PATH):
         try:
             with open(LOBBY_PATH, "r", encoding="utf-8") as f:
@@ -1587,7 +1595,43 @@ def load_lobby_data():
             print(f"[Warn] Failed to read lobby_applicants.json: {e}")
     return {"updated_at": bkk_now().strftime("%Y-%m-%d %H:%M:%S"), "pending": [], "approved": []}
 
-def save_lobby_data(store, allow_truncate=False):
+def _upload_lobby_snapshot_r2(snapshot_bytes, approved_cnt, pending_cnt, reason):
+    if not put_object_r2:
+        return
+    with _R2_LOBBY_SNAP_LOCK:
+        try:
+            ts_id = bkk_now().strftime("%Y%m%d_%H%M%S")
+            snap_key = f"_vault/lobby_snap_{_R2_LOBBY_SNAP_PREFIX}_{ts_id}.json"
+            put_object_r2(snap_key, snapshot_bytes, "application/json")
+            idx_list = []
+            try:
+                cur = _fetch_r2_json(_R2_LOBBY_SNAP_INDEX_KEY, timeout=8)
+                if isinstance(cur, list):
+                    idx_list = cur
+            except Exception:
+                pass
+            idx_list.insert(0, {
+                "key": snap_key,
+                "ts": bkk_now().strftime("%Y-%m-%d %H:%M:%S"),
+                "reason": reason or "auto",
+                "approved": approved_cnt,
+                "pending": pending_cnt,
+            })
+            # Deduplicate by key and keep latest 30 snapshots
+            seen = set()
+            deduped = []
+            for item in idx_list:
+                k = item.get("key")
+                if k and k not in seen:
+                    seen.add(k)
+                    deduped.append(item)
+                if len(deduped) >= 30:
+                    break
+            put_object_r2(_R2_LOBBY_SNAP_INDEX_KEY, json.dumps(deduped, ensure_ascii=False, indent=2).encode("utf-8"), "application/json")
+        except Exception as _se:
+            print(f"[R2 Snapshot Warn]: {_se}")
+
+def save_lobby_data(store, allow_truncate=False, create_snapshot=False, snapshot_reason=""):
     with LOBBY_LOCK:
         # Zero-Day Anti-Downgrade Safeguard: Prevent accidental roster truncation/wipeout
         if not allow_truncate and os.path.exists(LOBBY_PATH):
@@ -1596,8 +1640,8 @@ def save_lobby_data(store, allow_truncate=False):
                     _existing = json.load(_chk_f)
                     _existing_count = len(_existing.get("approved", []))
                     _new_count = len(store.get("approved", []))
-                    if _existing_count > 3 and _new_count <= 1:
-                        print(f"[CRITICAL SAFEGUARD] Blocked attempted roster wipeout! Existing: {_existing_count}, Incoming: {_new_count}")
+                    if (_existing_count > 3 and _new_count <= 1) or (_existing_count >= 2 and _new_count < _existing_count):
+                        print(f"[CRITICAL SAFEGUARD] Blocked attempted roster downgrade! Existing: {_existing_count}, Incoming: {_new_count}")
                         return
             except Exception as _chk_e:
                 pass
@@ -1609,10 +1653,20 @@ def save_lobby_data(store, allow_truncate=False):
                 f.write(data_bytes)
         except Exception as e:
             print(f"[Error] Failed to save lobby local: {e}")
+        # Never overwrite R2 from an un-restored Render worker unless explicitly forced
+        if os.environ.get("PORT") and not _R2_LOBBY_RESTORED and not allow_truncate:
+            print("[Vault] Skipped R2 lobby write because initial R2 restore has not succeeded yet.")
+            return
         if put_object_r2:
             try:
                 put_object_r2(_R2_LOBBY_VAULT_KEY, data_bytes, "application/json")
                 put_object_r2("data/lobby_applicants.json", data_bytes, "application/json; charset=utf-8")
+                if create_snapshot:
+                    threading.Thread(
+                        target=_upload_lobby_snapshot_r2,
+                        args=(data_bytes, len(store.get("approved", [])), len(store.get("pending", [])), snapshot_reason),
+                        daemon=True,
+                    ).start()
             except Exception as e:
                 print(f"[R2 Vault Sync Error]: {e}")
 
@@ -3089,6 +3143,20 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             self._send_json(200, {"ok": True, "now": int(time.time())})
             return
 
+        if path == "/api/lobby/snapshots":
+            acting = self._require("admin")
+            if not acting:
+                return
+            snaps = []
+            try:
+                cur = _fetch_r2_json(_R2_LOBBY_SNAP_INDEX_KEY, timeout=8)
+                if isinstance(cur, list):
+                    snaps = cur
+            except Exception:
+                pass
+            self._send_json(200, {"status": "success", "snapshots": snaps})
+            return
+
         if path == "/api/lobby/list":
             acting = self._require("admin")
             if not acting:
@@ -3376,6 +3444,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             "/api/lobby/revoke": "admin",
             "/api/lobby/rollback": "admin",
             "/api/lobby/backup": "admin",
+            "/api/lobby/snapshots/restore": "admin",
             "/api/lobby/update-permissions": "exec",
         }
         acting_member = None
@@ -3712,7 +3781,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     safe["id"] = f"SW-APP-{int(time.time()) % 100000}"
                 store["pending"] = [p for p in store.get("pending", []) if p.get("lineUserId") != uid]
                 store["pending"].insert(0, safe)
-                save_lobby_data(store)
+                save_lobby_data(store, create_snapshot=True, snapshot_reason=f"register:{safe.get('name', uid)}")
                 try:
                     admin_uids = {
                         a.get("lineUserId") for a in store.get("approved", [])
@@ -3779,9 +3848,12 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         "phone": applicant.get("phone"),
                         "line_id": applicant.get("line_id"),
                         "zone": applicant.get("zone"),
+                        "affiliation": applicant.get("affiliation", ""),
+                        "submitted_at": applicant.get("submitted_at", ""),
                         "avatar": applicant.get("avatar", ""),
                         "lineUserId": applicant.get("lineUserId"),
                         "role": payload.get("role", "Co-Broker Partner"),
+                        "role_code": payload.get("role_code", ""),
                         "title": payload.get("title", ""),
                         "badges": payload.get("badges", []),
                         "permissions": payload.get("permissions", {}),
@@ -3791,7 +3863,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     audit_entry = f"[{approved_item['approved_at']}] 🟢 อนุมัติสิทธิ์: {approved_item.get('name')} ({approved_item.get('role')})"
                     store.setdefault("audit_log", []).insert(0, audit_entry)
                     store["audit_log"] = store["audit_log"][:100]
-                    save_lobby_data(store)
+                    save_lobby_data(store, create_snapshot=True, snapshot_reason=f"approve:{approved_item.get('name', app_id)}")
                     self.send_response(200)
                     self.send_header('Content-Type', 'application/json; charset=utf-8')
                     self.send_header('Access-Control-Allow-Origin', '*')
@@ -3819,7 +3891,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 app_id = payload.get("applicantId")
                 store = load_lobby_data()
                 store["pending"] = [p for p in store.get("pending", []) if p.get("id") != app_id]
-                save_lobby_data(store)
+                save_lobby_data(store, create_snapshot=True, snapshot_reason=f"reject:{app_id}")
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json; charset=utf-8')
                 self.send_header('Access-Control-Allow-Origin', '*')
@@ -3866,7 +3938,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     audit_entry = f"[{m['updated_at']}] ⚙️ ปรับสิทธิ์: {m.get('name')} เป็น {m.get('role')} ({len(m.get('badges', []))} สิทธิ์)"
                     store.setdefault("audit_log", []).insert(0, audit_entry)
                     store["audit_log"] = store["audit_log"][:100]
-                    save_lobby_data(store)
+                    save_lobby_data(store, allow_truncate=True, create_snapshot=True, snapshot_reason=f"revoke:{revoked_member.get('name', app_id)}")
                     self.send_response(200)
                     self.send_header('Content-Type', 'application/json; charset=utf-8')
                     self.send_header('Access-Control-Allow-Origin', '*')
@@ -3923,7 +3995,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     audit_entry = f"[{rollback_record['timestamp']}] คัดออก/เพิกถอนสิทธิ์: {revoked_member.get('name')} ({revoked_member.get('role')})"
                     store.setdefault("audit_log", []).insert(0, audit_entry)
                     store["audit_log"] = store["audit_log"][:100]
-                    save_lobby_data(store)
+                    save_lobby_data(store, allow_truncate=True, create_snapshot=True, snapshot_reason=f"revoke:{revoked_member.get('name', app_id)}")
                     self.send_response(200)
                     self.send_header('Content-Type', 'application/json; charset=utf-8')
                     self.send_header('Access-Control-Allow-Origin', '*')
@@ -3990,6 +4062,27 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
             return
 
+        if path == "/api/lobby/snapshots/restore":
+            try:
+                content_length = int(self.headers.get('Content-Length', 0))
+                payload = json.loads(self.rfile.read(content_length).decode('utf-8'))
+                snap_key = str(payload.get("key") or "").strip()
+                expected_prefix = f"_vault/lobby_snap_{_R2_LOBBY_SNAP_PREFIX}_"
+                if not snap_key.startswith(expected_prefix) or not snap_key.endswith(".json"):
+                    self._send_json(400, {"error": "Invalid snapshot key"})
+                    return
+                snap_data = _fetch_r2_json(snap_key, timeout=12)
+                if not isinstance(snap_data, dict) or ("approved" not in snap_data and "pending" not in snap_data):
+                    self._send_json(404, {"error": "Snapshot not found or invalid"})
+                    return
+                snap_data.setdefault("audit_log", []).insert(0, f"[{bkk_now().strftime('%Y-%m-%d %H:%M:%S')}] ⏪ กู้คืนข้อมูล Lobby จาก Snapshot: {snap_key}")
+                snap_data["audit_log"] = snap_data["audit_log"][:100]
+                save_lobby_data(snap_data, allow_truncate=True, create_snapshot=True, snapshot_reason=f"restore:{snap_key}")
+                self._send_json(200, {"status": "success", "approved": len(snap_data.get("approved", [])), "pending": len(snap_data.get("pending", []))})
+            except Exception as e:
+                self._send_json(500, {"error": str(e)})
+            return
+
         if path == "/api/lobby/backup":
             try:
                 store = load_lobby_data()
@@ -4001,7 +4094,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     json.dump(store, bf, ensure_ascii=False, indent=2)
                 audit_entry = f"[{bkk_now().strftime('%Y-%m-%d %H:%M:%S')}] 💾 สำรองข้อมูลสถานะ: {backup_name}"
                 store.setdefault("audit_log", []).insert(0, audit_entry)
-                save_lobby_data(store)
+                save_lobby_data(store, create_snapshot=True, snapshot_reason=f"manual:{backup_name}")
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json; charset=utf-8')
                 self.send_header('Access-Control-Allow-Origin', '*')
@@ -4281,11 +4374,14 @@ def handle_render_shutdown(signum, frame):
                 put_object_r2(_R2_CONTRACTS_VAULT_KEY, c_bytes, "application/json")
                 print("[+] Exclusive contracts vault flushed to Cloudflare R2 before sleep!")
             with LOBBY_LOCK:
-                l_store = load_lobby_data()
-                l_bytes = json.dumps(l_store, ensure_ascii=False, indent=2).encode("utf-8")
-                put_object_r2(_R2_LOBBY_VAULT_KEY, l_bytes, "application/json")
-                put_object_r2("data/lobby_applicants.json", l_bytes, "application/json; charset=utf-8")
-                print("[+] Lobby applicants vault flushed to Cloudflare R2 before sleep!")
+                if put_object_r2 and _R2_LOBBY_RESTORED:
+                    l_store = load_lobby_data()
+                    l_bytes = json.dumps(l_store, ensure_ascii=False, indent=2).encode("utf-8")
+                    put_object_r2(_R2_LOBBY_VAULT_KEY, l_bytes, "application/json")
+                    put_object_r2("data/lobby_applicants.json", l_bytes, "application/json; charset=utf-8")
+                    print("[+] Lobby applicants vault flushed to Cloudflare R2 before sleep!")
+                else:
+                    print("[~] Skipped lobby R2 flush (not restored from R2 yet).")
             with CLIENT_TRACKING_LOCK:
                 ct_store = load_client_tracking_data()
                 if put_object_r2 and _R2_CLIENT_TRACKING_RESTORED and len(ct_store.get("visitors", {})) > 0:

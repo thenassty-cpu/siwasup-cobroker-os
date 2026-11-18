@@ -1842,7 +1842,7 @@
       const preset = ROLE_PRESETS[presetKey];
 
       try {
-        await fetch(`${API_BASE}/api/lobby/approve`, {
+        const res = await fetch(`${API_BASE}/api/lobby/approve`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -1854,8 +1854,16 @@
             permissions: preset.permissions
           })
         });
+        if (!res.ok) {
+          let errMsg = `HTTP ${res.status}`;
+          try { const ej = await res.json(); if (ej && ej.error) errMsg = ej.error; } catch(_) {}
+          alert(`❌ อนุมัติไม่สำเร็จ (${errMsg}) กรุณารีเฟรชหน้า Lobby หรือลองใหม่อีกครั้ง`);
+          return;
+        }
       } catch(e) {
         console.error('Cloud approve error:', e);
+        alert('❌ เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ ไม่สามารถอนุมัติสิทธิ์ได้ในขณะนี้');
+        return;
       }
 
       const approvedMember = {
@@ -1887,12 +1895,19 @@
     async function rejectApplicant(applicantId) {
       if (!confirm("คุณต้องการปฏิเสธและดีดรายชื่อนี้ออกจาก Lobby ใช่หรือไม่?")) return;
       try {
-        await fetch(`${API_BASE}/api/lobby/reject`, {
+        const res = await fetch(`${API_BASE}/api/lobby/reject`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ applicantId })
         });
-      } catch(e) {}
+        if (!res.ok) {
+          alert(`❌ ปฏิเสธไม่สำเร็จ (HTTP ${res.status}) กรุณาลองใหม่อีกครั้ง`);
+          return;
+        }
+      } catch(e) {
+        alert('❌ เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ');
+        return;
+      }
       lobbyData.pending = lobbyData.pending.filter(a => a.id !== applicantId);
       saveLobbyData();
       renderLobby();
