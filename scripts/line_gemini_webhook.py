@@ -3930,7 +3930,9 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                             payload["permissions"]["executiveAuthority"] = True
                     old_role = m.get("role")
                     if "role" in payload: m["role"] = payload["role"]
+                    if "role_code" in payload: m["role_code"] = payload["role_code"]
                     if "title" in payload: m["title"] = payload["title"]
+                    if "zone" in payload and payload["zone"]: m["zone"] = payload["zone"]
                     if "badges" in payload: m["badges"] = payload["badges"]
                     if "permissions" in payload: m["permissions"] = payload["permissions"]
                     m["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
@@ -3938,7 +3940,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     audit_entry = f"[{m['updated_at']}] ⚙️ ปรับสิทธิ์: {m.get('name')} เป็น {m.get('role')} ({len(m.get('badges', []))} สิทธิ์)"
                     store.setdefault("audit_log", []).insert(0, audit_entry)
                     store["audit_log"] = store["audit_log"][:100]
-                    save_lobby_data(store, allow_truncate=True, create_snapshot=True, snapshot_reason=f"revoke:{revoked_member.get('name', app_id)}")
+                    save_lobby_data(store, create_snapshot=True, snapshot_reason=f"update_perms:{m.get('name', app_id)}")
                     self.send_response(200)
                     self.send_header('Content-Type', 'application/json; charset=utf-8')
                     self.send_header('Access-Control-Allow-Origin', '*')
@@ -3970,11 +3972,11 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 if acting_member and acting_member.get("id") == app_id:
                     self._send_json(400, {"error": "ไม่สามารถคัดตัวเองออกจากระบบได้"})
                     return
+                store = load_lobby_data()
                 target_member = next((a for a in store.get("approved", []) if a.get("id") == app_id), None)
                 if target_member and is_super_tech_root(target_member):
                     self._send_json(403, {"error": "🔒 บัญชีสถาปัตยกรรมระบบสูงสุด (Super Tech Root) ถูกล็อกถาวร ไม่สามารถคัดออกได้"})
                     return
-                store = load_lobby_data()
                 target_idx = -1
                 for idx, a in enumerate(store.get("approved", [])):
                     if a.get("id") == app_id:

@@ -90,9 +90,9 @@
         <i data-lucide="smartphone" class="w-3.5 h-3.5 text-blue-600"></i>
         <span>เปิดจอมือถือผู้สมัคร</span>
       </a>
-            <button onclick="resetRosterToTonAndGool()" class="flex-1 sm:flex-initial justify-center px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-[11px] sm:text-xs font-bold text-rose-700 border border-rose-300 flex items-center gap-1.5 shadow-sm transition active:scale-95" title="ล้างกระดานทำเนียบสมาชิกทั้งหมด ให้เหลือเฉพาะคุณต้น และ คุณเจี๊ยบ(กูล)">
-        <i data-lucide="trash-2" class="w-3.5 h-3.5 text-rose-600"></i>
-        <span>ล้างกระดาน (เหลือเรา+กูล)</span>
+      <button onclick="fetchCloudLobby().then(() => showToastAlert('🔄 อัปเดตข้อมูลล่าสุดจาก Cloud แล้ว', 'success'))" class="flex-1 sm:flex-initial justify-center px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-[11px] sm:text-xs font-semibold text-emerald-700 border border-emerald-200 flex items-center gap-1.5 shadow-sm transition active:scale-95">
+        <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-emerald-600"></i>
+        <span>รีเฟรช</span>
       </button>
       <a href="https://assets.siwasup.com/gool_executive_dashboard.html" class="w-full sm:w-auto justify-center px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-[11px] sm:text-xs font-bold text-amber-800 border border-amber-300 flex items-center gap-1.5 shadow-sm transition">
         <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-amber-600"></i>
@@ -490,7 +490,7 @@
 
       <!-- APPROVED ROSTER: RESPONSIVE DISPLAY -->
       <!-- VIEW 1: EXECUTIVE CARDS GRID (4 Columns on PC >= xl:grid-cols-4 for compact pro dashboard view) -->
-      <div id="approvedCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-4.5">
+      <div id="approvedCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-4.5 px-2 sm:px-0">
         <!-- Rendered dynamically via JavaScript -->
       </div>
 
@@ -742,8 +742,12 @@
       };
     }
 
-        async function resetRosterToTonAndGool() {
-      if (!confirm('ยืนยันล้างกระดานสมาชิกทั้งหมด เพื่อเริ่มใหม่โดยเหลือเฉพาะ [NASSTY] และ [คุณเจี๊ยบ (กูล)] หรือไม่?')) return;
+    async function resetRosterToTonAndGool() {
+      const typed = prompt('⚠️ คำเตือนอันตราย: ต้องการรีซิงก์/ล้างแคชกระดานในเครื่องนี้ใช่หรือไม่?\n\nกรุณาพิมพ์คำว่า RESET (ตัวพิมพ์ใหญ่) เพื่อยืนยัน:');
+      if (!typed || typed.trim().toUpperCase() !== 'RESET') {
+        if (typed !== null) alert('❌ ยกเลิกคำสั่ง: พิมพ์คำยืนยันไม่ถูกต้อง (ต้องพิมพ์ RESET)');
+        return;
+      }
       try {
         const r2Res = await fetch(`https://assets.siwasup.com/data/lobby_applicants.json?t=${Date.now()}`, { cache: 'no-store' });
         if (r2Res.ok) {
@@ -1147,6 +1151,21 @@
       e.currentTarget.classList.remove('border-amber-400', 'bg-amber-50/50');
     }
 
+    async function persistPermissionsToCloud(payload) {
+      const res = await fetch(`${API_BASE}/api/lobby/update-permissions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      let data = {};
+      try { data = await res.json(); } catch (_) {}
+      if (!res.ok) {
+        const msg = data.error || (res.status === 403 ? 'สิทธิ์ไม่เพียงพอ (ต้องระดับ Executive/Tech Admin เท่านั้น)' : `HTTP ${res.status}`);
+        throw new Error(msg);
+      }
+      return data;
+    }
+
     async function handleCardBadgeDrop(e, targetMemberId) {
       e.preventDefault();
       e.currentTarget.classList.remove('border-amber-400', 'bg-amber-50/50');
@@ -1164,33 +1183,32 @@
         return;
       }
 
-      member.badges = member.badges || [];
-      if (member.badges.includes(badgeToAdd)) {
+      if ((member.badges || []).includes(badgeToAdd)) {
         showToastAlert(`คุณ ${member.name} มีสิทธิ์ "${badgeToAdd}" อยู่แล้ว`, 'info');
         return;
       }
 
-      member.badges.push(badgeToAdd);
-      syncMemberPermissionsFromBadges(member);
-      saveLobbyData();
-      renderLobby();
-      showToastAlert(`🎉 มอบสิทธิ์ "${badgeToAdd}" ให้แก่คุณ ${member.name} สำเร็จ!`, 'success');
+      const draft = JSON.parse(JSON.stringify(member));
+      draft.badges = draft.badges || [];
+      draft.badges.push(badgeToAdd);
+      syncMemberPermissionsFromBadges(draft);
 
-      // Sync to cloud
       try {
-        await fetch(`${API_BASE}/api/lobby/update-permissions`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            applicantId: member.id,
-            role: member.role,
-            title: member.title,
-            badges: member.badges,
-            permissions: member.permissions
-          })
+        const resData = await persistPermissionsToCloud({
+          applicantId: draft.id,
+          role: draft.role,
+          role_code: draft.role_code || '',
+          title: draft.title,
+          zone: draft.zone,
+          badges: draft.badges,
+          permissions: draft.permissions
         });
+        Object.assign(member, resData.member || draft);
+        saveLobbyData();
+        renderLobby();
+        showToastAlert(`🎉 มอบสิทธิ์ "${badgeToAdd}" ให้แก่คุณ ${member.name} สำเร็จ!`, 'success');
       } catch (err) {
-        console.log('Cloud sync error:', err);
+        showToastAlert(`❌ มอบสิทธิ์ไม่สำเร็จ: ${err.message}`, 'error');
       }
     }
 
@@ -1220,27 +1238,26 @@
         return;
       }
 
-      member.badges = (member.badges || []).filter(b => b !== badgeName);
-      syncMemberPermissionsFromBadges(member);
-      saveLobbyData();
-      renderLobby();
-      showToastAlert(`🗑️ ถอดสิทธิ์ "${badgeName}" ออกจาก ${member.name} สำเร็จ!`, 'success');
+      const draft = JSON.parse(JSON.stringify(member));
+      draft.badges = (draft.badges || []).filter(b => b !== badgeName);
+      syncMemberPermissionsFromBadges(draft);
 
-      // Sync to cloud
       try {
-        await fetch(`${API_BASE}/api/lobby/update-permissions`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            applicantId: member.id,
-            role: member.role,
-            title: member.title,
-            badges: member.badges,
-            permissions: member.permissions
-          })
+        const resData = await persistPermissionsToCloud({
+          applicantId: draft.id,
+          role: draft.role,
+          role_code: draft.role_code || '',
+          title: draft.title,
+          zone: draft.zone,
+          badges: draft.badges,
+          permissions: draft.permissions
         });
+        Object.assign(member, resData.member || draft);
+        saveLobbyData();
+        renderLobby();
+        showToastAlert(`🗑️ ถอดสิทธิ์ "${badgeName}" ออกจาก ${member.name} สำเร็จ!`, 'success');
       } catch (err) {
-        console.log('Cloud sync error:', err);
+        showToastAlert(`❌ ถอดสิทธิ์ไม่สำเร็จ: ${err.message}`, 'error');
       }
     }
 
@@ -1529,12 +1546,20 @@
               </div>
             </div>
 
-            <!-- Quick 1-Click Buttons for Mobile/Tap -->
-            <div class="space-y-1.5 pt-1">
+            <!-- Mobile Safe Action Button (prevents accidental 1-tap while scrolling) -->
+            <div class="sm:hidden pt-1 flex items-center justify-between gap-2">
+              <button onclick="openRolePickerModal('${item.id}')" class="flex-1 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-sm active:scale-95 transition flex items-center justify-center gap-1.5">
+                <i data-lucide="user-check" class="w-4 h-4"></i>
+                <span>🎯 เลือกกลุ่ม & อนุมัติ...</span>
+              </button>
+            </div>
+
+            <!-- Quick 1-Click Buttons for Desktop (hidden on mobile for safe scrolling) -->
+            <div class="hidden sm:block space-y-1.5 pt-1">
               <div class="flex items-center justify-between text-[11px] text-slate-600 font-bold">
                 <span class="flex items-center gap-1.5">
                   <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-600"></i>
-                  <span>หรือแตะ 1-Click แต่งตั้งทันที:</span>
+                  <span>เลือกกลุ่มแต่งตั้ง (มีหน้าต่างยืนยันกันพลาด):</span>
                 </span>
                 <span class="text-[10px] text-slate-400 font-normal">แตะเลือกหรือลากการ์ดด้านบนไปปล่อยก็ได้</span>
               </div>
@@ -1678,7 +1703,7 @@
                       <!-- Avatar -->
                       <div class="shrink-0">
                         <img src="${item.avatar || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80'}" 
-                             class="w-16 h-16 sm:w-18 sm:h-18 xl:w-20 xl:h-20 rounded-full object-cover border-3 border-white shadow-md">
+                             class="w-14 h-14 sm:w-18 sm:h-18 xl:w-20 xl:h-20 rounded-full object-cover border-3 border-white shadow-md">
                       </div>
                     </div>
 
@@ -1840,6 +1865,12 @@
 
       const applicant = lobbyData.pending[idx];
       const preset = ROLE_PRESETS[presetKey];
+      if (!preset) return;
+
+      if (!confirm(`ยืนยันแต่งตั้งผู้สมัคร:\n• ชื่อ: ${applicant.name}\n• เบอร์: ${applicant.phone || '-'}\n• กลุ่ม: ${preset.role}\n\nต้องการดำเนินการต่อใช่หรือไม่?`)) {
+        return;
+      }
+      if (typeof closeRolePickerModal === 'function') closeRolePickerModal();
 
       try {
         const res = await fetch(`${API_BASE}/api/lobby/approve`, {
@@ -2219,49 +2250,107 @@
       if (!newPerms.editPrice) newBadges.push("🚫 ล็อกแก้ราคา");
       if (newBadges.length === 0) newBadges.push("📜 บัตรดิจิทัลทางการ");
 
-      member.role = newRole;
-      member.title = newTitle;
-      member.zone = newZone;
-      member.permissions = newPerms;
-      member.badges = newBadges;
+      let newRoleCode = 'FREE_AGENT';
       if (newPerms.vipClient) {
-        member.role_code = 'VIP_CLIENT';
+        newRoleCode = 'VIP_CLIENT';
       } else if (newPerms.sellerClient) {
-        member.role_code = 'SELLER';
+        newRoleCode = 'SELLER';
       } else if (newPerms.contractAgent) {
-        member.role_code = 'CONTRACT_AGENT';
+        newRoleCode = 'CONTRACT_AGENT';
       } else if (newPerms.systemAdmin || newPerms.executiveAuthority || newPerms.keyboxAdmin || newPerms.standardAdmin) {
-        member.role_code = 'ADMIN';
-      } else {
-        member.role_code = 'FREE_AGENT';
+        newRoleCode = 'ADMIN';
       }
 
-      const auditMsg = `[${new Date().toLocaleString('th-TH')}] ⚙️ ปรับสิทธิ์: ${member.name} เป็น ${newRole} (${newBadges.length} สิทธิ์)`;
-      lobbyData.audit_log = lobbyData.audit_log || [];
-      lobbyData.audit_log.unshift(auditMsg);
-
-      saveLobbyData();
-      renderLobby();
-      closeEditPermissionModal();
-      alert(`✅ บันทึกสิทธิ์ใหม่ให้ "${member.name}" เรียบร้อยแล้ว!`);
-
-      // Sync to cloud
       try {
-        await fetch(`${API_BASE}/api/lobby/update-permissions`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            applicantId: member.id,
-            role: newRole,
-            title: newTitle,
-            role_code: member.role_code,
-            badges: newBadges,
-            permissions: newPerms
-          })
+        const resData = await persistPermissionsToCloud({
+          applicantId: member.id,
+          role: newRole,
+          role_code: newRoleCode,
+          title: newTitle,
+          zone: newZone,
+          badges: newBadges,
+          permissions: newPerms
         });
+
+        if (resData.member) {
+          Object.assign(member, resData.member);
+        } else {
+          member.role = newRole;
+          member.title = newTitle;
+          member.zone = newZone;
+          member.permissions = newPerms;
+          member.badges = newBadges;
+          member.role_code = newRoleCode;
+        }
+
+        const auditMsg = `[${new Date().toLocaleString('th-TH')}] ⚙️ ปรับสิทธิ์: ${member.name} เป็น ${member.role} (${(member.badges || []).length} สิทธิ์)`;
+        lobbyData.audit_log = lobbyData.audit_log || [];
+        lobbyData.audit_log.unshift(auditMsg);
+
+        saveLobbyData();
+        renderLobby();
+        closeEditPermissionModal();
+        alert(`✅ บันทึกสิทธิ์ใหม่ให้ "${member.name}" ขึ้น Cloud เรียบร้อยแล้ว!`);
       } catch (err) {
-        console.log('Cloud update-permissions note:', err);
+        alert(`❌ บันทึกสิทธิ์ไม่สำเร็จ: ${err.message}`);
       }
+    }
+
+    function applyPresetToEditModal(presetKey) {
+      const preset = ROLE_PRESETS[presetKey];
+      if (!preset) return;
+      document.getElementById('editMemberRoleInput').value = preset.role || '';
+      document.getElementById('editMemberTitleInput').value = preset.title || '';
+      const p = preset.permissions || {};
+      const mapIds = {
+        chk_contractAgent: !!p.contractAgent,
+        chk_vipClient: !!p.vipClient,
+        chk_sellerClient: !!p.sellerClient,
+        chk_standardAdmin: !!p.standardAdmin,
+        chk_editPrice: !!p.editPrice,
+        chk_executiveAuthority: !!p.executiveAuthority,
+        chk_keyboxAdmin: !!p.keyboxAdmin,
+        chk_leadInspector: !!p.leadInspector,
+        chk_catalogCurator: !!p.catalogCurator,
+        chk_systemAdmin: !!p.systemAdmin
+      };
+      Object.entries(mapIds).forEach(([cid, val]) => {
+        const el = document.getElementById(cid);
+        if (el && !el.disabled) el.checked = val;
+      });
+    }
+
+    function openRolePickerModal(applicantId) {
+      const applicant = (lobbyData.pending || []).find(a => a.id === applicantId);
+      if (!applicant) return;
+      document.getElementById('rolePickerName').innerText = applicant.name || '-';
+      document.getElementById('rolePickerSub').innerText = `${applicant.phone || '-'} • ${applicant.zone || '-'}`;
+      const listEl = document.getElementById('rolePickerButtons');
+      const items = [
+        { key: 'free_agent', label: '🤝 Free Agent (ตัวแทนอิสระ)', sub: 'บัตรดิจิทัล + จองเปิดบ้าน', cls: 'bg-[#786ea1]/15 border-[#786ea1] text-[#4a4269]' },
+        { key: 'contract_agent', label: '📑 Contract Agent (ตัวแทนสัญญา)', sub: 'สังกัดทางการ + รับลีดกลาง', cls: 'bg-[#ffa8b6]/20 border-[#ffa8b6] text-[#9e3b4f]' },
+        { key: 'vip_client', label: '👑 VIP Client (ลูกค้า VIP)', sub: 'โหมดลูกค้า VIP (ซ่อนหลังบ้าน)', cls: 'bg-[#FAF7F0] border-[#C2A460] text-[#7A5E22]' },
+        { key: 'seller', label: '🏠 Seller (ลูกค้าฝากขายบ้าน)', sub: 'เจ้าของทรัพย์ฝากขาย', cls: 'bg-teal-50 border-teal-400 text-teal-900' },
+        { key: 'support', label: '🏢 ซัพพอร์ตออฟฟิศ', sub: 'Standard Admin', cls: 'bg-blue-50 border-blue-300 text-blue-900' },
+        { key: 'lily', label: '🔑 พี่ลิลลี่ (Head of Viewing)', sub: 'คุมกุญแจ OTP 100%', cls: 'bg-emerald-50 border-emerald-400 text-emerald-900' },
+        { key: 'bua', label: '👑 คุณบัว (Executive Partner)', sub: 'สิทธิ์บริหารแทน CEO', cls: 'bg-amber-50 border-amber-400 text-amber-900' },
+        { key: 'gool', label: '👑 เจี๊ยบ(กูล) / CEO', sub: 'CEO / เคาะราคา', cls: 'bg-amber-50 border-amber-400 text-amber-900' }
+      ];
+      listEl.innerHTML = items.map(it => `
+        <button onclick="approveWithPreset('${applicant.id}', '${it.key}')" class="w-full p-3 rounded-2xl border ${it.cls} text-left active:scale-95 transition flex items-center justify-between gap-2">
+          <div>
+            <div class="text-xs font-bold">${it.label}</div>
+            <div class="text-[11px] opacity-80">${it.sub}</div>
+          </div>
+          <span class="text-xs font-bold opacity-60">เลือก →</span>
+        </button>
+      `).join('');
+      document.getElementById('rolePickerModal').classList.remove('hidden');
+    }
+
+    function closeRolePickerModal() {
+      const m = document.getElementById('rolePickerModal');
+      if (m) m.classList.add('hidden');
     }
 
     // ==========================================
@@ -2342,6 +2431,21 @@
   </div>
 
 
+  <!-- MOBILE ROLE PICKER MODAL (Safe approval without accidental taps while scrolling) -->
+  <div id="rolePickerModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-5 shadow-2xl border-2 border-amber-300 space-y-3 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div>
+          <h3 id="rolePickerName" class="text-sm font-bold text-slate-900">...</h3>
+          <p id="rolePickerSub" class="text-[11px] text-slate-500">...</p>
+        </div>
+        <button onclick="closeRolePickerModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-sm font-bold">✕</button>
+      </div>
+      <div class="text-[11px] font-bold text-slate-600">เลือกกลุ่มที่ต้องการแต่งตั้ง (มีหน้าต่างยืนยันก่อนบันทึก):</div>
+      <div id="rolePickerButtons" class="space-y-2"></div>
+    </div>
+  </div>
+
   <!-- EDIT PERMISSION MODAL -->
   <div id="editPermissionModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border-2 border-amber-300 space-y-4 max-h-[90vh] overflow-y-auto">
@@ -2355,6 +2459,18 @@
           </div>
         </div>
         <button onclick="closeEditPermissionModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-sm font-bold">✕</button>
+      </div>
+
+      <div class="space-y-1.5 bg-slate-50 p-3 rounded-2xl border border-slate-200">
+        <div class="text-[11px] font-bold text-slate-700">⚡ สลับกลุ่มด่วน (1-Click Preset — เปลี่ยนชื่อตำแหน่งและสิทธิ์ให้ครบอัตโนมัติ):</div>
+        <div class="flex flex-wrap gap-1.5">
+          <button type="button" onclick="applyPresetToEditModal('free_agent')" class="px-2.5 py-1 rounded-lg bg-[#786ea1]/15 hover:bg-[#786ea1]/25 border border-[#786ea1] text-[#4a4269] text-[11px] font-bold">🤝 Free Agent</button>
+          <button type="button" onclick="applyPresetToEditModal('contract_agent')" class="px-2.5 py-1 rounded-lg bg-[#ffa8b6]/20 hover:bg-[#ffa8b6]/35 border border-[#ffa8b6] text-[#9e3b4f] text-[11px] font-bold">📑 Contract Agent</button>
+          <button type="button" onclick="applyPresetToEditModal('vip_client')" class="px-2.5 py-1 rounded-lg bg-[#FAF7F0] hover:bg-[#F3ECD8] border border-[#C2A460] text-[#7A5E22] text-[11px] font-bold">👑 VIP Client</button>
+          <button type="button" onclick="applyPresetToEditModal('seller')" class="px-2.5 py-1 rounded-lg bg-teal-50 hover:bg-teal-100 border border-teal-400 text-teal-900 text-[11px] font-bold">🏠 Seller</button>
+          <button type="button" onclick="applyPresetToEditModal('support')" class="px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-300 text-blue-900 text-[11px] font-bold">🏢 ซัพพอร์ต</button>
+          <button type="button" onclick="applyPresetToEditModal('lily')" class="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-400 text-emerald-900 text-[11px] font-bold">🔑 พี่ลิลลี่</button>
+        </div>
       </div>
 
       <div class="space-y-3">

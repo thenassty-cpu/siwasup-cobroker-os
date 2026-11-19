@@ -17,36 +17,37 @@
       font-family: 'Prompt', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     .hero-gradient {
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.82) 0%, rgba(26, 20, 16, 0.94) 100%), 
+      background: linear-gradient(180deg, rgba(255, 252, 246, 0.86) 0%, rgba(247, 239, 225, 0.94) 100%), 
                   url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
     }
-    /* 🏛️ Authentic Siwasup Satin Architectural Gold Gradient */
+    /* 🏛️ Authentic Siwasup Satin Architectural Gold Gradient (Light Theme) */
     .gold-gradient-text {
-      background: linear-gradient(135deg, #F5E6C4 0%, #D4BA7A 40%, #C2A460 75%, #967C3E 100%);
+      background: linear-gradient(135deg, #A8833D 0%, #8A6525 50%, #C2A460 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
     .gold-gradient-btn {
-      background: linear-gradient(135deg, #D4BA7A 0%, #C2A460 55%, #967C3E 100%);
-      color: #0f172a;
+      background: linear-gradient(135deg, #DFC791 0%, #C2A460 55%, #A58442 100%);
+      color: #241A0E;
     }
     .gold-gradient-btn:hover {
-      background: linear-gradient(135deg, #E2CE99 0%, #D4BA7A 55%, #A98B45 100%);
+      background: linear-gradient(135deg, #E8D4A6 0%, #CFAF69 55%, #B4914B 100%);
     }
     .bronze-card {
-      background: linear-gradient(145deg, rgba(30, 41, 59, 0.7) 0%, rgba(42, 29, 18, 0.5) 100%);
-      border: 1px solid rgba(194, 164, 96, 0.25);
+      background: linear-gradient(145deg, #FFFFFF 0%, #FAF5EB 100%);
+      border: 1px solid rgba(194, 164, 96, 0.4);
+      box-shadow: 0 4px 20px -6px rgba(138, 101, 37, 0.08);
     }
     .bronze-card:hover {
-      border-color: rgba(194, 164, 96, 0.55);
-      box-shadow: 0 10px 30px -10px rgba(194, 164, 96, 0.15);
+      border-color: rgba(165, 132, 66, 0.75);
+      box-shadow: 0 12px 28px -10px rgba(165, 132, 66, 0.22);
     }
   </style>
 </head>
-<body class="bg-[#0b0f17] text-slate-100 flex flex-col min-h-screen">
+<body class="bg-[#FAF7F2] text-[#2C2218] flex flex-col min-h-screen">
 
   <!-- TOP BRAND NAVBAR -->
-  <nav class="sticky top-0 z-50 bg-[#0b0f17]/95 backdrop-blur-md border-b border-[#C2A460]/20">
+  <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#D8C39A]/60 shadow-2xs">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       
       <!-- LOGO & COMPANY NAME -->
@@ -55,45 +56,45 @@
         <img 
           src="https://assets.siwasup.com/siwasup_logo.svg" 
           alt="ศิวาทรัพย์ แอสเซท" 
-          class="h-12 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform" 
+          class="h-12 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform" 
           onerror="this.onerror=null; this.src='assets/siwasup_logo.png';"
         >
-        <div>
-          <span class="text-xl sm:text-2xl font-black tracking-tight text-white block leading-none">
+        <div class="whitespace-nowrap">
+          <span class="text-base sm:text-xl lg:text-2xl font-black tracking-normal text-[#2C2218] block leading-none">
             SIWASUP <span class="gold-gradient-text font-bold">ASSET</span>
           </span>
-          <span class="text-[11px] tracking-wider text-[#D4BA7A]/80 uppercase font-medium">
+          <span class="text-[10px] sm:text-[11px] tracking-wider text-[#8A6D3B] uppercase font-semibold block mt-0.5">
             ศิวาทรัพย์ แอสเซท จำกัด
           </span>
         </div>
       </a>
 
       <!-- DESKTOP NAV LINKS -->
-      <div class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
-        <a href="#welcome" class="hover:text-[#D4BA7A] transition-colors">หน้าแรก</a>
-        <a href="#announcements" class="hover:text-[#D4BA7A] transition-colors">ร่วมงานตัวแทน</a>
-        <a href="#activities" class="hover:text-[#D4BA7A] transition-colors">เครื่องมือตัวแทน (OS)</a>
-        <a href="#articles" class="admin-only-el hidden hover:text-amber-300 text-amber-400/90 transition-colors">⚠️ บทความ (Admin)</a>
+      <div class="hidden lg:flex items-center gap-7 text-sm font-semibold text-[#5C4B37] whitespace-nowrap">
+        <a href="#welcome" class="hover:text-[#967332] transition-colors">หน้าแรก</a>
+        <a href="#announcements" class="hover:text-[#967332] transition-colors">ร่วมงานตัวแทน</a>
+        <a href="#activities" class="hover:text-[#967332] transition-colors">เครื่องมือตัวแทน (OS)</a>
+        <a href="#articles" class="admin-only-el hidden hover:text-amber-700 text-amber-700 transition-colors">⚠️ บทความ (Admin)</a>
       </div>
 
       <!-- ACTION BUTTONS -->
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0 whitespace-nowrap">
         <!-- เข้าสู่แคตาล็อกบ้าน -->
-        <a href="catalog.html" class="gold-gradient-btn font-bold px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-[#C2A460]/20 active:scale-95 transition-all">
-          <i data-lucide="home" class="w-4 h-4 text-slate-950"></i>
+        <a href="catalog.html" class="gold-gradient-btn font-bold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2 shadow-md shadow-[#C2A460]/25 active:scale-95 transition-all">
+          <i data-lucide="home" class="w-4 h-4 text-[#241A0E]"></i>
           <span class="hidden sm:inline">แคตาล็อกบ้าน</span>
           <span class="sm:hidden">คลังบ้าน</span>
         </a>
 
         <!-- สมัคร Co-Broker -->
-        <a id="nav-register-btn" href="agent_registration.html" class="hidden sm:flex bg-[#1a1410] hover:bg-[#2a1d12] border border-[#C2A460]/50 text-[#E6CA85] font-semibold px-3.5 py-2.5 rounded-xl text-xs sm:text-sm items-center gap-1.5 transition-all">
-          <i data-lucide="user-plus" class="w-4 h-4 text-[#D4BA7A]"></i>
+        <a id="nav-register-btn" href="agent_registration.html" class="hidden md:flex bg-[#FAF5EB] hover:bg-[#F3E9D4] border border-[#C2A460]/60 text-[#7A5B22] font-semibold px-3.5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm items-center gap-1.5 transition-all">
+          <i data-lucide="user-plus" class="w-4 h-4 text-[#967332]"></i>
           <span>สมัครตัวแทน</span>
         </a>
 
         <!-- เข้าสู่ระบบสมาชิก -->
-        <a id="nav-login-btn" href="agent_registration.html?mode=login" class="flex bg-slate-900/90 hover:bg-slate-800 border border-amber-400 text-amber-300 font-bold px-3.5 py-2.5 rounded-xl text-xs sm:text-sm items-center gap-1.5 shadow-sm transition-all">
-          <i data-lucide="log-in" class="w-4 h-4 text-amber-400"></i>
+        <a id="nav-login-btn" href="agent_registration.html?mode=login" class="flex bg-white hover:bg-[#FAF5EB] border border-[#C2A460] text-[#7A5B22] font-bold px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm items-center gap-1.5 shadow-2xs transition-all">
+          <i data-lucide="log-in" class="w-4 h-4 text-[#967332]"></i>
           <span id="nav-login-text">เข้าสู่ระบบ</span>
         </a>
       </div>
@@ -102,67 +103,77 @@
   </nav>
 
   <!-- 1. HERO GATE / WELCOME SECTION (หน้าเกิดต้อนรับ) -->
-  <header id="welcome" class="relative hero-gradient py-24 sm:py-32 flex items-center justify-center border-b border-[#C2A460]/20 overflow-hidden">
-    <!-- Ambient Warm Gold & Deep Bronze Glow -->
-    <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[32rem] h-[32rem] bg-[#C2A460]/15 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute bottom-0 right-10 w-96 h-96 bg-[#967C3E]/10 rounded-full blur-3xl pointer-events-none"></div>
+  <header id="welcome" class="relative hero-gradient py-20 sm:py-28 flex items-center justify-center border-b border-[#D8C39A]/60 overflow-hidden">
+    <!-- Ambient Warm Cream & Gold Glow -->
+    <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[32rem] h-[32rem] bg-[#E6CA85]/25 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 right-10 w-96 h-96 bg-[#D4BA7A]/20 rounded-full blur-3xl pointer-events-none"></div>
 
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
       
       <!-- Pill Badge -->
-      <div class="inline-flex items-center gap-2 bg-[#C2A460]/10 border border-[#C2A460]/30 text-[#E6CA85] text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full mb-8 backdrop-blur-sm shadow-sm">
-        <i data-lucide="sparkles" class="w-4 h-4 text-[#D4BA7A]"></i>
-        <span>ยินดีต้อนรับสู่ศูนย์กลางทรัพย์ NPA และอสังหาริมทรัพย์เพื่อการลงทุน</span>
+      <div class="inline-flex items-center gap-2 bg-white/85 border border-[#C2A460]/50 text-[#7A5B22] text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full mb-7 backdrop-blur-sm shadow-sm">
+        <i data-lucide="sparkles" class="w-4 h-4 text-[#A58442]"></i>
+        <span id="hero-badge-text">ศูนย์รวมบ้านคัดพิเศษกว่า 4,000+ หลัง ทั่วไทย</span>
       </div>
 
       <!-- CENTER HERO LOGO (Large Vector SVG) -->
-      <div class="flex justify-center mb-8">
+      <div class="flex justify-center mb-7">
         <img 
           src="https://assets.siwasup.com/siwasup_logo.svg" 
           alt="ศิวาทรัพย์ แอสเซท" 
-          class="h-32 sm:h-44 w-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-300" 
+          class="h-28 sm:h-40 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform duration-300" 
           onerror="this.onerror=null; this.src='assets/siwasup_logo.png';"
         >
       </div>
 
-      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight sm:leading-tight">
-        เปิดประตูสู่บ้านคุณภาพ <br class="hidden sm:inline">
-        และโอกาสการลงทุนที่ <span class="gold-gradient-text">คุ้มค่าที่สุด</span>
+      <h1 id="hero-headline" class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#2C2218]" style="line-height: 1.38; letter-spacing: 0.03em;">
+        บ้านคัดสรรคุณภาพ ในราคาที่คุ้มค่า <br class="hidden sm:inline">
+        พร้อมระบบ <span class="gold-gradient-text">ตัวแทนมืออาชีพ</span> ครบวงจร
       </h1>
 
-      <p class="mt-5 text-sm sm:text-lg text-slate-300 max-w-2xl mx-auto font-light leading-relaxed">
-        บริษัท ศิวาทรัพย์ แอสเซท จำกัด คัดสรรทรัพย์สินรอการขาย (NPA) เกรดเอ พร้อมบ้านรีโนเวทคุณภาพมาตรฐาน และบริการดูแลสินเชื่อครบวงจร เพื่อส่งมอบบ้านที่ดีที่สุดให้คุณ
+      <p id="hero-subtitle" class="mt-6 text-sm sm:text-lg text-[#5C4B37] max-w-2xl mx-auto font-normal leading-[1.75] tracking-[0.01em]">
+        ค้นหาบ้านรีโนเวทและทรัพย์ทำเลดีพร้อมบริการยื่นกู้ฟรี หรือเข้าร่วมเป็นพาร์ทเนอร์ตัวแทนกับ ศิวาทรัพย์ แอสเซท เพื่อเข้าถึงคลังบ้านพร้อมขายทันที
       </p>
 
       <!-- Main Action Call-to-Actions -->
       <div class="mt-9 flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="catalog.html" class="w-full sm:w-auto gold-gradient-btn font-bold px-8 py-4 rounded-2xl text-base sm:text-lg flex items-center justify-center gap-3 shadow-xl shadow-[#C2A460]/25 active:scale-95 transition-all">
-          <i data-lucide="search" class="w-5 h-5 text-slate-950"></i>
+        <a href="catalog.html" class="w-full sm:w-auto gold-gradient-btn font-bold px-8 py-4 rounded-2xl text-base sm:text-lg flex items-center justify-center gap-3 shadow-lg shadow-[#C2A460]/30 active:scale-95 transition-all">
+          <i data-lucide="search" class="w-5 h-5 text-[#241A0E]"></i>
           <span>เลือกชมแคตาล็อกบ้านทั้งหมด</span>
         </a>
-        <a id="hero-login-btn" href="agent_registration.html?mode=login" class="w-full sm:w-auto bg-[#1f1914]/80 hover:bg-[#2b221a] text-[#E6CA85] border border-[#C2A460]/35 font-semibold px-6 py-4 rounded-2xl text-sm sm:text-base flex items-center justify-center gap-2 backdrop-blur-sm transition-all">
-          <i data-lucide="log-in" class="w-4 h-4 text-[#D4BA7A]"></i>
+        <a id="hero-login-btn" href="agent_registration.html?mode=login" class="w-full sm:w-auto bg-white/90 hover:bg-white text-[#7A5B22] border border-[#C2A460]/60 font-bold px-6 py-4 rounded-2xl text-sm sm:text-base flex items-center justify-center gap-2 backdrop-blur-sm shadow-sm transition-all">
+          <i data-lucide="log-in" class="w-4 h-4 text-[#967332]"></i>
           <span id="hero-login-text">เข้าสู่ระบบ / สมัครตัวแทน</span>
         </a>
       </div>
 
-      <!-- Trust Badges (Warm Architectural Bronze Tone) -->
-      <div class="mt-14 grid grid-cols-2 md:grid-cols-4 gap-4 text-center border-t border-[#C2A460]/20 pt-8">
-        <div class="p-3">
-          <span class="block text-2xl sm:text-3xl font-extrabold text-white">4,000+</span>
-          <span class="text-xs text-slate-400">คลังบ้าน NPA &amp; โครงการ</span>
+      <!-- Subtle Role Copy Switcher (for quick preview of each audience) -->
+      <div class="mt-5 flex flex-wrap items-center justify-center gap-1.5 text-[11px] text-[#8A755E]">
+        <span class="mr-1 opacity-75">มุมมอง:</span>
+        <button type="button" onclick="previewHeroRole('guest')" data-role-preview="guest" class="px-2.5 py-0.5 rounded-full border border-[#C2A460] bg-white/80 text-[#7A5B22] font-semibold transition">ทั่วไป</button>
+        <button type="button" onclick="previewHeroRole('agent')" data-role-preview="agent" class="px-2.5 py-0.5 rounded-full border border-[#E5D5B5]/80 bg-white/40 hover:bg-white/80 transition">ตัวแทน</button>
+        <button type="button" onclick="previewHeroRole('vip')" data-role-preview="vip" class="px-2.5 py-0.5 rounded-full border border-[#E5D5B5]/80 bg-white/40 hover:bg-white/80 transition">VIP</button>
+        <button type="button" onclick="previewHeroRole('seller')" data-role-preview="seller" class="px-2.5 py-0.5 rounded-full border border-[#E5D5B5]/80 bg-white/40 hover:bg-white/80 transition">ฝากขาย</button>
+        <button type="button" onclick="previewHeroRole('exec')" data-role-preview="exec" class="px-2.5 py-0.5 rounded-full border border-[#E5D5B5]/80 bg-white/40 hover:bg-white/80 transition">ผู้บริหาร</button>
+      </div>
+
+      <!-- Trust Badges (Warm White & Champagne Gold Tone) -->
+      <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 text-center border-t border-[#C2A460]/30 pt-8">
+        <div class="p-3 rounded-2xl bg-white/70 border border-[#E5D5B5]/70">
+          <span class="block text-2xl sm:text-3xl font-extrabold text-[#2C2218]">4,000+</span>
+          <span class="text-xs text-[#6E5A44] font-medium">คลังบ้าน NPA &amp; โครงการ</span>
         </div>
-        <div class="p-3">
-          <span class="block text-2xl sm:text-3xl font-extrabold text-[#D4BA7A]">0 บาท</span>
-          <span class="text-xs text-slate-400">ค่านายหน้าผู้ซื้อ &amp; ชมฟรี</span>
+        <div class="p-3 rounded-2xl bg-white/70 border border-[#E5D5B5]/70">
+          <span class="block text-2xl sm:text-3xl font-extrabold text-[#967332]">0 บาท</span>
+          <span class="text-xs text-[#6E5A44] font-medium">ค่านายหน้าผู้ซื้อ &amp; ชมฟรี</span>
         </div>
-        <div class="p-3">
-          <span class="block text-2xl sm:text-3xl font-extrabold text-white">100%</span>
-          <span class="text-xs text-slate-400">ตรวจเอกสารสิทธิ์ถูกต้อง</span>
+        <div class="p-3 rounded-2xl bg-white/70 border border-[#E5D5B5]/70">
+          <span class="block text-2xl sm:text-3xl font-extrabold text-[#2C2218]">100%</span>
+          <span class="text-xs text-[#6E5A44] font-medium">ตรวจเอกสารสิทธิ์ถูกต้อง</span>
         </div>
-        <div class="p-3">
-          <span class="block text-2xl sm:text-3xl font-extrabold text-[#D4BA7A]">ฟรีทุกแบงก์</span>
-          <span class="text-xs text-slate-400">บริการยื่นกู้สินเชื่อถึงวันโอน</span>
+        <div class="p-3 rounded-2xl bg-white/70 border border-[#E5D5B5]/70">
+          <span class="block text-2xl sm:text-3xl font-extrabold text-[#967332]">ฟรีทุกแบงก์</span>
+          <span class="text-xs text-[#6E5A44] font-medium">บริการยื่นกู้สินเชื่อถึงวันโอน</span>
         </div>
       </div>
 
@@ -170,20 +181,20 @@
   </header>
 
   <!-- 2. AGENT ONBOARDING & LOGIN PORTAL -->
-  <section id="announcements" class="py-16 sm:py-24 bg-[#0d111a] border-y border-white/5 relative">
+  <section id="announcements" class="py-16 sm:py-24 bg-white border-y border-[#E5D5B5]/60 relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
 
       <!-- Section Header -->
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 pb-6">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[#E5D5B5]/70 pb-6">
         <div>
-          <div class="inline-flex items-center gap-1.5 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-2">
+          <div class="inline-flex items-center gap-1.5 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-2">
             <i data-lucide="users" class="w-4 h-4"></i>
             <span>SIWASUP CO-BROKER PARTNER</span>
           </div>
-          <h2 class="text-2xl sm:text-3xl font-black text-white">
+          <h2 class="text-2xl sm:text-3xl font-black text-[#2C2218]">
             ร่วมงานเป็นตัวแทนกับ <span class="gold-gradient-text">Siwasup Co-Broker OS</span>
           </h2>
-          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+          <p class="text-xs sm:text-sm text-[#6E5A44] mt-1">
             ระบบบริหารงานขายอสังหาริมทรัพย์ครบวงจร เข้าสู่ระบบง่ายๆ ผ่าน LINE ไม่ต้องจำรหัสผ่าน
           </p>
         </div>
@@ -193,19 +204,19 @@
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
 
         <!-- Left (6 cols): Verified Welcome Pass (if logged in) + Clean 2-Step Onboarding -->
-        <div class="lg:col-span-6 rounded-3xl p-6 sm:p-7 border border-[#C2A460]/40 flex flex-col justify-between relative overflow-hidden bg-gradient-to-b from-amber-500/10 via-[#111622] to-[#111622]">
+        <div class="lg:col-span-6 rounded-3xl p-6 sm:p-7 border border-[#D8C39A] flex flex-col justify-between relative overflow-hidden bg-gradient-to-b from-[#FAF5EB] via-white to-[#FAF7F2] shadow-sm">
           <div class="space-y-4">
             <!-- Dynamic Box: Shown ONLY when user is genuinely logged in via LINE Session -->
-            <div id="myWelcomePassBox" class="hidden p-5 rounded-2xl bg-emerald-950/50 border-2 border-emerald-400/60 space-y-3 text-left shadow-lg">
+            <div id="myWelcomePassBox" class="hidden p-5 rounded-2xl bg-emerald-50 border-2 border-emerald-400 space-y-3 text-left shadow-sm">
               <div class="flex items-center justify-between">
                 <span class="px-2.5 py-0.5 rounded-md bg-amber-400 text-slate-950 font-mono font-black text-xs" id="passAgentCode">S--</span>
-                <span class="text-xs font-bold text-emerald-300">✅ เข้าสู่ระบบแล้ว</span>
+                <span class="text-xs font-bold text-emerald-700">✅ เข้าสู่ระบบแล้ว</span>
               </div>
               <div>
-                <div class="text-lg font-black text-white" id="passAgentName">ยินดีต้อนรับสมาชิก</div>
-                <div class="text-xs text-slate-300 mt-0.5">คะแนนสะสมปัจจุบันของคุณ: <strong class="text-amber-300 font-mono text-sm" id="passAgentPoints">0 แต้ม</strong></div>
+                <div class="text-lg font-black text-[#2C2218]" id="passAgentName">ยินดีต้อนรับสมาชิก</div>
+                <div class="text-xs text-[#5C4B37] mt-0.5">คะแนนสะสมปัจจุบันของคุณ: <strong class="text-[#967332] font-mono text-sm" id="passAgentPoints">0 แต้ม</strong></div>
               </div>
-              <a id="passGoCatalogBtn" href="catalog.html" class="w-full py-3 px-4 rounded-xl gold-gradient-btn font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition">
+              <a id="passGoCatalogBtn" href="catalog.html" class="w-full py-3 px-4 rounded-xl gold-gradient-btn font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition">
                 <i data-lucide="building-2" class="w-4 h-4"></i>
                 <span>เข้าสู่คลังทรัพย์พร้อมขาย &amp; แชร์ลิงก์ลูกค้า &rarr;</span>
               </a>
@@ -213,32 +224,32 @@
 
             <!-- Step-by-Step Onboarding Box -->
             <div id="stepOnboardingBox" class="space-y-3">
-              <h3 class="text-lg font-black text-white leading-snug">
+              <h3 class="text-lg font-black text-[#2C2218] leading-snug">
                 เริ่มต้นใช้งานใน 2 ขั้นตอนง่ายๆ
               </h3>
-              <p class="text-xs text-slate-300 leading-relaxed">
+              <p class="text-xs text-[#6E5A44] leading-relaxed">
                 สำหรับตัวแทนใหม่หรือสมาชิกปัจจุบัน สามารถเชื่อมต่อผ่านบัญชี LINE ของท่านได้ทันที:
               </p>
 
               <!-- Step 1: Add Friend LINE OA -->
-              <a href="https://line.me/R/ti/p/@813nyyia" target="_blank" class="w-full p-3.5 rounded-2xl bg-[#06C755]/15 hover:bg-[#06C755]/25 border border-[#06C755]/50 flex items-center justify-between transition group">
+              <a href="https://line.me/R/ti/p/@813nyyia" target="_blank" class="w-full p-3.5 rounded-2xl bg-[#06C755]/10 hover:bg-[#06C755]/15 border border-[#06C755]/40 flex items-center justify-between transition group">
                 <div class="flex items-center gap-3">
                   <span class="w-7 h-7 rounded-xl bg-[#06C755] text-white font-black text-xs flex items-center justify-center shrink-0">1</span>
                   <div class="text-left">
-                    <div class="text-xs sm:text-sm font-black text-white group-hover:text-emerald-300 transition">แอดเพื่อน LINE OA ศิวาทรัพย์</div>
-                    <div class="text-[11px] text-slate-400">รับแจ้งเตือนคิวเปิดบ้านและลีดลูกค้า (@813nyyia)</div>
+                    <div class="text-xs sm:text-sm font-black text-[#1E3A2A] group-hover:text-[#059642] transition">แอดเพื่อน LINE OA ศิวาทรัพย์</div>
+                    <div class="text-[11px] text-[#5C4B37]">รับแจ้งเตือนคิวเปิดบ้านและลีดลูกค้า (@813nyyia)</div>
                   </div>
                 </div>
                 <span class="px-2.5 py-1 rounded-lg bg-[#06C755] text-white text-[11px] font-bold shrink-0">แอดเพื่อน &rarr;</span>
               </a>
 
               <!-- Step 2: Register & Connect LINE -->
-              <a href="agent_registration.html" class="w-full p-3.5 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/60 flex items-center justify-between transition group">
+              <a href="agent_registration.html" class="w-full p-3.5 rounded-2xl bg-[#FAF2E1] hover:bg-[#F5E7CA] border border-[#C2A460] flex items-center justify-between transition group">
                 <div class="flex items-center gap-3">
-                  <span class="w-7 h-7 rounded-xl bg-amber-400 text-slate-950 font-black text-xs flex items-center justify-center shrink-0">2</span>
+                  <span class="w-7 h-7 rounded-xl bg-[#C2A460] text-white font-black text-xs flex items-center justify-center shrink-0">2</span>
                   <div class="text-left">
-                    <div class="text-xs sm:text-sm font-black text-amber-300 group-hover:text-white transition">สมัครสมาชิก / เข้าสู่ระบบด้วย LINE</div>
-                    <div class="text-[11px] text-slate-300">ยืนยันตัวตนครั้งเดียว ไม่ต้องตั้งรหัสผ่าน</div>
+                    <div class="text-xs sm:text-sm font-black text-[#7A5B22] group-hover:text-[#2C2218] transition">สมัครสมาชิก / เข้าสู่ระบบด้วย LINE</div>
+                    <div class="text-[11px] text-[#6E5A44]">ยืนยันตัวตนครั้งเดียว ไม่ต้องตั้งรหัสผ่าน</div>
                   </div>
                 </div>
                 <span class="px-2.5 py-1 rounded-lg gold-gradient-btn text-[11px] font-black shrink-0">เริ่มต้นเลย &rarr;</span>
@@ -246,43 +257,43 @@
             </div>
           </div>
 
-          <div class="pt-4 mt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400">
-            <span>เป็นสมาชิกอยู่แล้ว? <a href="agent_registration.html?mode=login" class="text-amber-300 hover:underline font-bold">กดเข้าสู่ระบบที่นี่</a></span>
-            <a href="catalog.html" class="text-slate-300 hover:text-amber-300 font-semibold">ดูคลังบ้าน &rarr;</a>
+          <div class="pt-4 mt-4 border-t border-[#E5D5B5]/70 flex items-center justify-between text-[11px] text-[#6E5A44]">
+            <span>เป็นสมาชิกอยู่แล้ว? <a href="agent_registration.html?mode=login" class="text-[#8A6525] hover:underline font-bold">กดเข้าสู่ระบบที่นี่</a></span>
+            <a href="catalog.html" class="text-[#5C4B37] hover:text-[#8A6525] font-semibold">ดูคลังบ้าน &rarr;</a>
           </div>
         </div>
 
         <!-- Right (6 cols): Partner Value Proposition -->
         <div class="lg:col-span-6 rounded-3xl p-6 sm:p-8 bronze-card flex flex-col justify-between space-y-6">
           <div class="space-y-4">
-            <span class="text-xs font-bold text-[#D4BA7A] uppercase tracking-wider flex items-center gap-1.5">
+            <span class="text-xs font-bold text-[#967332] uppercase tracking-wider flex items-center gap-1.5">
               <i data-lucide="award" class="w-4 h-4"></i>
               <span>ทำไมต้องเป็นตัวแทนศิวาทรัพย์ แอสเซท</span>
             </span>
-            <h3 class="text-xl sm:text-2xl font-black text-white">
+            <h3 class="text-xl sm:text-2xl font-black text-[#2C2218]">
               มีทรัพย์พร้อมขายกว่า 4,000+ รายการ พร้อมระบบดูแลครบวงจร
             </h3>
-            <ul class="space-y-3 text-xs sm:text-sm text-slate-300">
+            <ul class="space-y-3 text-xs sm:text-sm text-[#5C4B37]">
               <li class="flex items-start gap-2.5">
-                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
-                <span><strong class="text-white">ลิงก์แคตตาล็อกส่วนตัวพร้อมนามบัตร:</strong> แชร์บ้านให้ลูกค้าในชื่อของคุณเอง</span>
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"></i>
+                <span><strong class="text-[#2C2218]">ลิงก์แคตตาล็อกส่วนตัวพร้อมนามบัตร:</strong> แชร์บ้านให้ลูกค้าในชื่อของคุณเอง</span>
               </li>
               <li class="flex items-start gap-2.5">
-                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
-                <span><strong class="text-white">ระบบคุ้มครองสิทธิ์ลูกค้า:</strong> บันทึกประวัติการนำเสนอและการพาชมชัดเจน</span>
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"></i>
+                <span><strong class="text-[#2C2218]">ระบบคุ้มครองสิทธิ์ลูกค้า:</strong> บันทึกประวัติการนำเสนอและการพาชมชัดเจน</span>
               </li>
               <li class="flex items-start gap-2.5">
-                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
-                <span><strong class="text-white">ทีมซัพพอร์ตสินเชื่อและนิติกรรม:</strong> ดูแลลูกค้าตั้งแต่ยื่นกู้จนถึงวันโอน</span>
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5"></i>
+                <span><strong class="text-[#2C2218]">ทีมซัพพอร์ตสินเชื่อและนิติกรรม:</strong> ดูแลลูกค้าตั้งแต่ยื่นกู้จนถึงวันโอน</span>
               </li>
             </ul>
           </div>
 
-          <div class="p-4 rounded-2xl bg-slate-900/90 border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div class="text-xs text-slate-300">
+          <div class="p-4 rounded-2xl bg-[#F5EFE4] border border-[#D8C39A]/70 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="text-xs text-[#5C4B37] font-medium">
               ต้องการชมรายการบ้านทั้งหมดก่อนตัดสินใจ?
             </div>
-            <a href="catalog.html" class="w-full sm:w-auto text-center px-5 py-2.5 rounded-xl gold-gradient-btn font-black text-xs shrink-0 shadow-md transition">
+            <a href="catalog.html" class="w-full sm:w-auto text-center px-5 py-2.5 rounded-xl gold-gradient-btn font-black text-xs shrink-0 shadow-sm transition">
               เปิดคลังทรัพย์พร้อมขาย &rarr;
             </a>
           </div>
@@ -294,33 +305,33 @@
   </section>
 
   <!-- 10. CONTENT & SEO & [HOT NEWS] สำหรับลูกค้า (ซ่อนจากบุคคลทั่วไป รอบทความจริงจากป๊อบปี้และบัว) -->
-  <section id="articles" class="admin-only-el hidden py-16 sm:py-20 bg-[#0b0f17] border-b border-amber-500/40 relative">
+  <section id="articles" class="admin-only-el hidden py-16 sm:py-20 bg-[#FAF7F2] border-b border-[#D8C39A]/60 relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <!-- ⚠️ ADMIN WARNING BANNER -->
-      <div class="mb-8 p-4 rounded-2xl bg-amber-500/15 border-2 border-amber-400/60 flex items-start gap-3 text-amber-200 text-xs sm:text-sm">
+      <div class="mb-8 p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 flex items-start gap-3 text-amber-900 text-xs sm:text-sm">
         <span class="text-lg shrink-0">⚠️</span>
         <div>
-          <strong class="block text-amber-300 font-black">[ADMIN ONLY — ซ่อนจากบุคคลทั่วไปชั่วคราว]</strong>
+          <strong class="block text-amber-950 font-black">[ADMIN ONLY — ซ่อนจากบุคคลทั่วไปชั่วคราว]</strong>
           <span>โซนบทความนี้ยังเป็นเนื้อหาตัวอย่าง (Placeholder) และปุ่ม "อ่านบทความเต็ม" ยังเป็นลิงก์ว่าง (<code>#</code>) — เดี๋ยวต้องขอบทความจริงจาก <strong>ป๊อบปี้และบัว</strong> มาใส่ก่อนเปิดแสดงสาธารณะ</span>
         </div>
       </div>
       
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
         <div>
-          <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#D4BA7A] bg-[#C2A460]/10 border border-[#C2A460]/30 px-3 py-1 rounded-full mb-2">
-            <i data-lucide="flame" class="w-3.5 h-3.5 text-[#D4BA7A]"></i>
+          <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#8A6525] bg-[#FAF2E1] border border-[#D8C39A] px-3 py-1 rounded-full mb-2">
+            <i data-lucide="flame" class="w-3.5 h-3.5 text-[#A58442]"></i>
             <span>SIWASUP MARKET INSIGHTS & NEWS</span>
           </div>
-          <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">สาระน่ารู้เรื่องบ้าน & ข่าวสารอสังหาฯ ด่วน</h2>
-          <p class="text-xs sm:text-sm text-slate-400 mt-1">บทความวิเคราะห์เจาะลึก เคล็ดลับสินเชื่อบ้าน และข่าวสารบ้านราคาพิเศษ</p>
+          <h2 class="text-2xl sm:text-3xl font-bold text-[#2C2218] tracking-tight">สาระน่ารู้เรื่องบ้าน & ข่าวสารอสังหาฯ ด่วน</h2>
+          <p class="text-xs sm:text-sm text-[#6E5A44] mt-1">บทความวิเคราะห์เจาะลึก เคล็ดลับสินเชื่อบ้าน และข่าวสารบ้านราคาพิเศษ</p>
         </div>
 
         <!-- Hot News Badge -->
-        <div class="inline-flex items-center gap-2 bg-[#2a170d] border border-[#C2A460]/40 text-[#F5E6C4] text-xs font-semibold px-3 py-1.5 rounded-xl">
+        <div class="inline-flex items-center gap-2 bg-[#FAF2E1] border border-[#C2A460] text-[#7A5B22] text-xs font-semibold px-3 py-1.5 rounded-xl">
           <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D4BA7A] opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#C2A460]"></span>
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C2A460] opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#967332]"></span>
           </span>
           <span>[HOT NEWS] ดอกเบี้ยกู้บ้านปรับลดระลอกใหม่ปลายปี 2569</span>
         </div>
@@ -331,25 +342,25 @@
         
         <!-- Article 1: NPA Buying Guide -->
         <article class="bronze-card rounded-3xl overflow-hidden transition-all flex flex-col group">
-          <div class="aspect-[16/9] w-full bg-slate-800 relative overflow-hidden">
+          <div class="aspect-[16/9] w-full bg-[#EFE7D8] relative overflow-hidden">
             <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80" alt="ทริคเลือกซื้อบ้าน NPA" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-            <span class="absolute top-3 left-3 bg-[#0b0f17]/90 backdrop-blur-md text-[#E6CA85] border border-[#C2A460]/30 text-[11px] font-semibold px-2.5 py-1 rounded-lg">
+            <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-md text-[#7A5B22] border border-[#D8C39A] text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-2xs">
               คู่มือผู้ซื้อ
             </span>
           </div>
           <div class="p-6 flex-1 flex flex-col justify-between">
             <div>
-              <span class="text-[11px] text-slate-400 block mb-1">26 ต.ค. 2569 • 5 นาทีในการอ่าน</span>
-              <h3 class="text-base font-bold text-white group-hover:text-[#D4BA7A] transition-colors leading-snug">
+              <span class="text-[11px] text-[#8A755E] block mb-1">26 ต.ค. 2569 • 5 นาทีในการอ่าน</span>
+              <h3 class="text-base font-bold text-[#2C2218] group-hover:text-[#967332] transition-colors leading-snug">
                 5 ทริคเลือกซื้อทรัพย์ NPA ให้ได้ของดี ราคาต่ำกว่าตลาด 30% โดยไม่มีภาระผูกพัน
               </h3>
-              <p class="text-xs text-slate-400 mt-2.5 line-clamp-3 leading-relaxed">
+              <p class="text-xs text-[#6E5A44] mt-2.5 line-clamp-3 leading-relaxed">
                 ทำความเข้าใจความต่างระหว่างทรัพย์ธนาคาร ทรัพย์บังคับคดี และทรัพย์คัดสรรจากศิวาทรัพย์ วิธีตรวจเช็คเอกสารสิทธิ์ และการตรวจสอบสภาพโครงสร้างก่อนวางเงินมัดจำ
               </p>
             </div>
-            <div class="mt-5 pt-4 border-t border-[#C2A460]/20 flex items-center justify-between">
-              <span class="text-xs text-slate-500 font-medium">หมวด: ทรัพย์ NPA</span>
-              <a href="#" class="text-xs font-semibold text-[#D4BA7A] hover:underline flex items-center gap-1">
+            <div class="mt-5 pt-4 border-t border-[#E5D5B5] flex items-center justify-between">
+              <span class="text-xs text-[#8A755E] font-medium">หมวด: ทรัพย์ NPA</span>
+              <a href="#" class="text-xs font-semibold text-[#8A6525] hover:underline flex items-center gap-1">
                 <span>อ่านบทความเต็ม</span>
                 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
               </a>
@@ -359,7 +370,7 @@
 
         <!-- Article 2: Mortgage Loans 2570 -->
         <article class="bronze-card rounded-3xl overflow-hidden transition-all flex flex-col group">
-          <div class="aspect-[16/9] w-full bg-slate-800 relative overflow-hidden">
+          <div class="aspect-[16/9] w-full bg-[#EFE7D8] relative overflow-hidden">
             <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80" alt="เตรียมตัวกู้สินเชื่อบ้าน" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
             <span class="absolute top-3 left-3 bg-[#990000] text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-sm">
               HOT NEWS
@@ -367,17 +378,17 @@
           </div>
           <div class="p-6 flex-1 flex flex-col justify-between">
             <div>
-              <span class="text-[11px] text-slate-400 block mb-1">20 ต.ค. 2569 • 4 นาทีในการอ่าน</span>
-              <h3 class="text-base font-bold text-white group-hover:text-[#D4BA7A] transition-colors leading-snug">
+              <span class="text-[11px] text-[#8A755E] block mb-1">20 ต.ค. 2569 • 4 นาทีในการอ่าน</span>
+              <h3 class="text-base font-bold text-[#2C2218] group-hover:text-[#967332] transition-colors leading-snug">
                 เตรียมพร้อมกู้บ้านปี 2570: เคล็ดลับเตรียม Statement ให้กู้ได้ 100% เต็ม
               </h3>
-              <p class="text-xs text-slate-400 mt-2.5 line-clamp-3 leading-relaxed">
+              <p class="text-xs text-[#6E5A44] mt-2.5 line-clamp-3 leading-relaxed">
                 อัปเดตเกณฑ์ LTV ใหม่ มาตรการผ่อนปรนของธนาคารแห่งประเทศไทย และข้อผิดพลาดที่คนซื้อมักตกม้าตายเรื่องเครดิตบูโรก่อนยื่นขอสินเชื่อบ้านมือสอง
               </p>
             </div>
-            <div class="mt-5 pt-4 border-t border-[#C2A460]/20 flex items-center justify-between">
-              <span class="text-xs text-slate-500 font-medium">หมวด: สินเชื่อการเงิน</span>
-              <a href="#" class="text-xs font-semibold text-[#D4BA7A] hover:underline flex items-center gap-1">
+            <div class="mt-5 pt-4 border-t border-[#E5D5B5] flex items-center justify-between">
+              <span class="text-xs text-[#8A755E] font-medium">หมวด: สินเชื่อการเงิน</span>
+              <a href="#" class="text-xs font-semibold text-[#8A6525] hover:underline flex items-center gap-1">
                 <span>อ่านบทความเต็ม</span>
                 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
               </a>
@@ -387,25 +398,25 @@
 
         <!-- Article 3: Renovation Value-Add -->
         <article class="bronze-card rounded-3xl overflow-hidden transition-all flex flex-col group">
-          <div class="aspect-[16/9] w-full bg-slate-800 relative overflow-hidden">
+          <div class="aspect-[16/9] w-full bg-[#EFE7D8] relative overflow-hidden">
             <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80" alt="รีโนเวทบ้านคุ้มค่า" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-            <span class="absolute top-3 left-3 bg-[#0b0f17]/90 backdrop-blur-md text-[#E6CA85] border border-[#C2A460]/30 text-[11px] font-semibold px-2.5 py-1 rounded-lg">
+            <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-md text-[#7A5B22] border border-[#D8C39A] text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-2xs">
               การรีโนเวท
             </span>
           </div>
           <div class="p-6 flex-1 flex flex-col justify-between">
             <div>
-              <span class="text-[11px] text-slate-400 block mb-1">15 ต.ค. 2569 • 6 นาทีในการอ่าน</span>
-              <h3 class="text-base font-bold text-white group-hover:text-[#D4BA7A] transition-colors leading-snug">
+              <span class="text-[11px] text-[#8A755E] block mb-1">15 ต.ค. 2569 • 6 นาทีในการอ่าน</span>
+              <h3 class="text-base font-bold text-[#2C2218] group-hover:text-[#967332] transition-colors leading-snug">
                 3 จุดในบ้านเก่าที่รีโนเวทแล้วคุ้มที่สุด: เพิ่มมูลค่าบ้านได้เกินต้นทุนที่ลงไป
               </h3>
-              <p class="text-xs text-slate-400 mt-2.5 line-clamp-3 leading-relaxed">
+              <p class="text-xs text-[#6E5A44] mt-2.5 line-clamp-3 leading-relaxed">
                 ถอดรหัสงานรีโนเวทสไตล์ศิวาทรัพย์ ทำไมงานระบบน้ำ-ไฟ ห้องน้ำ และส่วนหน้าบ้าน ถึงเป็นจุดเปลี่ยนที่ช่วยให้ขายบ้านได้ไวกว่าเดิม 3 เท่า
               </p>
             </div>
-            <div class="mt-5 pt-4 border-t border-[#C2A460]/20 flex items-center justify-between">
-              <span class="text-xs text-slate-500 font-medium">หมวด: พลิกฟื้นทรัพย์</span>
-              <a href="#" class="text-xs font-semibold text-[#D4BA7A] hover:underline flex items-center gap-1">
+            <div class="mt-5 pt-4 border-t border-[#E5D5B5] flex items-center justify-between">
+              <span class="text-xs text-[#8A755E] font-medium">หมวด: พลิกฟื้นทรัพย์</span>
+              <a href="#" class="text-xs font-semibold text-[#8A6525] hover:underline flex items-center gap-1">
                 <span>อ่านบทความเต็ม</span>
                 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
               </a>
@@ -419,25 +430,25 @@
   </section>
 
   <!-- 4. SIWASUP CO-BROKER OS CORE TOOLS (4 เครื่องมือมาตรฐานวิชาชีพสำหรับตัวแทน) -->
-  <section id="activities" class="py-16 sm:py-20 bg-[#0e131d] border-b border-[#C2A460]/15">
+  <section id="activities" class="py-16 sm:py-20 bg-[#F5EFE4] border-b border-[#D8C39A]/60">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
         <div>
-          <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#D4BA7A] bg-[#C2A460]/10 border border-[#C2A460]/30 px-3 py-1 rounded-full mb-2">
-            <i data-lucide="layers" class="w-3.5 h-3.5 text-[#D4BA7A]"></i>
+          <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#8A6525] bg-white border border-[#D8C39A] px-3 py-1 rounded-full mb-2 shadow-2xs">
+            <i data-lucide="layers" class="w-3.5 h-3.5 text-[#A58442]"></i>
             <span>SIWASUP CO-BROKER OS • 4 CORE PILLARS</span>
           </div>
-          <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">4 เครื่องมือมาตรฐานวิชาชีพที่ตัวแทนได้รับทันที</h2>
-          <p class="text-xs sm:text-sm text-slate-400 mt-1">ยกระดับการทำงานของตัวแทนศิวาทรัพย์ด้วยระบบดิจิทัลที่ปกป้องสิทธิ์และบันทึกผลงานอัตโนมัติ</p>
+          <h2 class="text-2xl sm:text-3xl font-bold text-[#2C2218] tracking-tight">4 เครื่องมือมาตรฐานวิชาชีพที่ตัวแทนได้รับทันที</h2>
+          <p class="text-xs sm:text-sm text-[#6E5A44] mt-1">ยกระดับการทำงานของตัวแทนศิวาทรัพย์ด้วยระบบดิจิทัลที่ปกป้องสิทธิ์และบันทึกผลงานอัตโนมัติ</p>
         </div>
 
         <div class="admin-only-el hidden flex flex-wrap items-center gap-2">
-          <a href="admin_lobby_manager.html" target="_blank" rel="noopener" class="text-xs text-[#E6CA85] bg-slate-900/90 border border-[#C2A460]/60 px-3 py-1.5 rounded-xl hover:bg-slate-800 font-bold flex items-center gap-1.5 shadow-sm">
+          <a href="admin_lobby_manager.html" target="_blank" rel="noopener" class="text-xs text-[#7A5B22] bg-white border border-[#C2A460] px-3 py-1.5 rounded-xl hover:bg-[#FAF5EB] font-bold flex items-center gap-1.5 shadow-sm">
             <span>🏛️ เข้าหน้า Lobby จัดการตัวแทน</span>
             <span id="landing-lobby-pending-badge" class="hidden px-2 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-black animate-pulse">0 รออนุมัติ</span>
           </a>
-          <a href="agent_quick_guide.html" class="text-xs text-amber-300 bg-amber-500/15 border border-amber-400/50 px-3 py-1.5 rounded-xl hover:bg-amber-500/25 font-semibold flex items-center gap-1.5">
+          <a href="agent_quick_guide.html" class="text-xs text-amber-800 bg-amber-50 border border-amber-300 px-3 py-1.5 rounded-xl hover:bg-amber-100 font-semibold flex items-center gap-1.5">
             <span>⚠️ [Admin ตรวจสอบ] เปิดคู่มือการใช้งานฉบับพกพา</span>
             <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
           </a>
@@ -449,16 +460,16 @@
         <!-- Tool 1: Digital Card -->
         <a href="agent_registration.html" class="bronze-card p-6 rounded-3xl flex flex-col justify-between transition group">
           <div>
-            <div class="w-12 h-12 rounded-2xl bg-[#C2A460]/20 text-[#D4BA7A] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <div class="w-12 h-12 rounded-2xl bg-[#FAF2E1] border border-[#D8C39A] text-[#967332] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <i data-lucide="credit-card" class="w-6 h-6"></i>
             </div>
-            <span class="text-[11px] text-[#D4BA7A] font-semibold">1. VERIFIED IDENTITY</span>
-            <h3 class="text-base font-bold text-white mt-1">นามบัตรดิจิทัลทางการ</h3>
-            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+            <span class="text-[11px] text-[#967332] font-bold">1. VERIFIED IDENTITY</span>
+            <h3 class="text-base font-bold text-[#2C2218] mt-1">นามบัตรดิจิทัลทางการ</h3>
+            <p class="text-xs text-[#6E5A44] mt-2 leading-relaxed">
               ออกนามบัตรดิจิทัลรับรองโดยศิวาทรัพย์ แอสเซท พร้อมลิงก์พอร์ตทรัพย์ส่วนตัวและปุ่มติดต่อ LINE ทันที
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-[#C2A460]/20 text-xs font-bold text-[#E6CA85] flex items-center justify-between">
+          <div class="mt-5 pt-3 border-t border-[#E5D5B5] text-xs font-bold text-[#8A6525] flex items-center justify-between">
             <span>สมัคร / เปิดนามบัตร</span>
             <i data-lucide="chevron-right" class="w-4 h-4"></i>
           </div>
@@ -467,16 +478,16 @@
         <!-- Tool 2: Smart Share & 60-Day Lead Lock -->
         <a href="catalog.html" class="bronze-card p-6 rounded-3xl flex flex-col justify-between transition group">
           <div>
-            <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <i data-lucide="shield-check" class="w-6 h-6"></i>
             </div>
-            <span class="text-[11px] text-emerald-400 font-semibold">2. 60-DAY LEAD LOCK</span>
-            <h3 class="text-base font-bold text-white mt-1">แชร์ทรัพย์ & ล็อกสิทธิ์ลูกค้า</h3>
-            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+            <span class="text-[11px] text-emerald-700 font-bold">2. 60-DAY LEAD LOCK</span>
+            <h3 class="text-base font-bold text-[#2C2218] mt-1">แชร์ทรัพย์ & ล็อกสิทธิ์ลูกค้า</h3>
+            <p class="text-xs text-[#6E5A44] mt-2 leading-relaxed">
               ส่งลิงก์บ้านให้ลูกค้าพร้อมฝังรหัสตัวแทนอัตโนมัติ ล็อกสิทธิ์คุ้มครองคอมมิชชั่นนาน 60 วัน (+5 แต้มต่อการแชร์)
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-[#C2A460]/20 text-xs font-bold text-emerald-400 flex items-center justify-between">
+          <div class="mt-5 pt-3 border-t border-[#E5D5B5] text-xs font-bold text-emerald-700 flex items-center justify-between">
             <span>เลือกทรัพย์เพื่อแชร์</span>
             <i data-lucide="chevron-right" class="w-4 h-4"></i>
           </div>
@@ -485,16 +496,16 @@
         <!-- Tool 3: Auto Vinyl & GPS Proof -->
         <a href="catalog.html" class="bronze-card p-6 rounded-3xl flex flex-col justify-between transition group">
           <div>
-            <div class="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <div class="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <i data-lucide="map-pin" class="w-6 h-6"></i>
             </div>
-            <span class="text-[11px] text-amber-400 font-semibold">3. SMART VINYL & GPS</span>
-            <h3 class="text-base font-bold text-white mt-1">สร้างแบบป้ายไวนิล & พิกัด GPS</h3>
-            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+            <span class="text-[11px] text-amber-700 font-bold">3. SMART VINYL & GPS</span>
+            <h3 class="text-base font-bold text-[#2C2218] mt-1">สร้างแบบป้ายไวนิล & พิกัด GPS</h3>
+            <p class="text-xs text-[#6E5A44] mt-2 leading-relaxed">
               ระบบดึงเบอร์โทรตัวแทนลงแบบป้ายไวนิลอัตโนมัติ พร้อมส่งภาพติดป้ายหน้างานยืนยันพิกัด GPS (+15 แต้ม)
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-[#C2A460]/20 text-xs font-bold text-amber-300 flex items-center justify-between">
+          <div class="mt-5 pt-3 border-t border-[#E5D5B5] text-xs font-bold text-amber-700 flex items-center justify-between">
             <span>ใช้งานในหน้าคลังทรัพย์</span>
             <i data-lucide="chevron-right" class="w-4 h-4"></i>
           </div>
@@ -503,16 +514,16 @@
         <!-- Tool 4: Keybox OTP Protocol -->
         <a id="card-login-btn" href="agent_registration.html?mode=login" class="bronze-card p-6 rounded-3xl flex flex-col justify-between transition group">
           <div>
-            <div class="w-12 h-12 rounded-2xl bg-blue-500/15 text-blue-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 text-blue-700 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <i data-lucide="key" class="w-6 h-6"></i>
             </div>
-            <span class="text-[11px] text-blue-400 font-semibold">4. KEYBOX OTP PROTOCOL</span>
-            <h3 class="text-base font-bold text-white mt-1">จองคิวเปิดบ้าน &amp; รหัสกุญแจ OTP</h3>
-            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+            <span class="text-[11px] text-blue-700 font-bold">4. KEYBOX OTP PROTOCOL</span>
+            <h3 class="text-base font-bold text-[#2C2218] mt-1">จองคิวเปิดบ้าน &amp; รหัสกุญแจ OTP</h3>
+            <p class="text-xs text-[#6E5A44] mt-2 leading-relaxed">
               นัดหมายพาชมบ้านล่วงหน้า รับรหัสเปิดกล่องกุญแจดิจิทัลหน้างาน และบันทึกผลงานพาชมบ้านจริงผ่านระบบตัวแทน
             </p>
           </div>
-          <div class="mt-5 pt-3 border-t border-[#C2A460]/20 text-xs font-bold text-blue-300 flex items-center justify-between">
+          <div class="mt-5 pt-3 border-t border-[#E5D5B5] text-xs font-bold text-blue-700 flex items-center justify-between">
             <span id="card-login-text">เข้าสู่ระบบเพื่อใช้งาน</span>
             <i data-lucide="chevron-right" class="w-4 h-4"></i>
           </div>
@@ -523,21 +534,21 @@
     </div>
   </section>
 
-  <!-- BOTTOM CALL TO ACTION (Warm Mahogany / Dark Bronze Tone) -->
-  <section class="py-16 bg-gradient-to-r from-[#1f150e] via-[#332213] to-[#1a120c] border-t border-[#C2A460]/30 text-white text-center">
+  <!-- BOTTOM CALL TO ACTION (Warm Champagne Gold & Cream Tone) -->
+  <section class="py-16 bg-gradient-to-r from-[#F6ECDA] via-[#EFE0C4] to-[#F7EFE1] border-t border-[#D8C39A] text-[#2C2218] text-center">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+      <h2 class="text-2xl sm:text-4xl font-extrabold tracking-[0.01em] leading-[1.4]">
         พร้อมค้นหาบ้านในฝัน หรือสนใจร่วมเป็นตัวแทนกับเรา?
       </h2>
-      <p class="mt-3 text-sm sm:text-base text-slate-300 font-light">
+      <p class="mt-3 text-sm sm:text-base text-[#5C4B37] font-normal">
         ศิวาทรัพย์ แอสเซท พร้อมเคียงข้างคุณทุกขั้นตอน ทั้งการซื้ออยู่อาศัยและการสร้างรายได้จากอสังหาริมทรัพย์
       </p>
       <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-        <a href="catalog.html" class="gold-gradient-btn font-bold px-8 py-3.5 rounded-2xl text-sm sm:text-base shadow-xl transition-all active:scale-95">
+        <a href="catalog.html" class="gold-gradient-btn font-bold px-8 py-3.5 rounded-2xl text-sm sm:text-base shadow-lg transition-all active:scale-95">
           <span>เข้าสู่แคตาล็อกบ้าน</span>
         </a>
-        <a href="https://line.me/R/ti/p/@813nyyia" target="_blank" class="bg-[#0b0f17] hover:bg-slate-900 text-[#E6CA85] border border-[#C2A460]/40 font-bold px-7 py-3.5 rounded-2xl text-sm sm:text-base shadow-lg transition-all flex items-center gap-2 active:scale-95">
-          <i data-lucide="message-circle" class="w-4 h-4 text-emerald-400"></i>
+        <a href="https://line.me/R/ti/p/@813nyyia" target="_blank" class="bg-white hover:bg-[#FAF7F2] text-[#7A5B22] border border-[#C2A460] font-bold px-7 py-3.5 rounded-2xl text-sm sm:text-base shadow-sm transition-all flex items-center gap-2 active:scale-95">
+          <i data-lucide="message-circle" class="w-4 h-4 text-emerald-600"></i>
           <span>ปรึกษาผ่าน LINE OA</span>
         </a>
       </div>
@@ -545,25 +556,25 @@
   </section>
 
   <!-- FOOTER -->
-  <footer class="bg-[#070a10] border-t border-[#C2A460]/20 text-slate-400 py-12 text-xs">
+  <footer class="bg-[#EFE7D8] border-t border-[#D8C39A] text-[#5C4B37] py-12 text-xs">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
       
       <div class="flex items-center gap-3.5">
         <img src="https://assets.siwasup.com/siwasup_logo.svg" alt="ศิวาทรัพย์ แอสเซท" class="h-10 w-auto object-contain" onerror="this.onerror=null; this.src='assets/siwasup_logo.png';">
         <div>
-          <span class="text-sm font-bold text-white block">บริษัท ศิวาทรัพย์ แอสเซท จำกัด</span>
-          <span class="text-slate-400">สำนักงานใหญ่: โซนพระราม 2 กรุงเทพมหานคร</span>
+          <span class="text-sm font-bold text-[#2C2218] block">บริษัท ศิวาทรัพย์ แอสเซท จำกัด</span>
+          <span class="text-[#6E5A44]">สำนักงานใหญ่: โซนพระราม 2 กรุงเทพมหานคร</span>
         </div>
       </div>
 
-      <div class="flex items-center gap-6 text-slate-400 flex-wrap">
-        <a href="#welcome" class="hover:text-[#D4BA7A]">หน้าแรก</a>
-        <a href="catalog.html" class="hover:text-[#D4BA7A]">แคตาล็อกทรัพย์</a>
-        <a href="agent_registration.html" class="hover:text-[#D4BA7A]">สมัคร Co-Broker</a>
-        <a href="agent_registration.html?mode=login" class="hover:text-[#D4BA7A]">เข้าสู่ระบบสมาชิก</a>
+      <div class="flex items-center gap-6 text-[#5C4B37] flex-wrap font-medium">
+        <a href="#welcome" class="hover:text-[#967332]">หน้าแรก</a>
+        <a href="catalog.html" class="hover:text-[#967332]">แคตาล็อกทรัพย์</a>
+        <a href="agent_registration.html" class="hover:text-[#967332]">สมัคร Co-Broker</a>
+        <a href="agent_registration.html?mode=login" class="hover:text-[#967332]">เข้าสู่ระบบสมาชิก</a>
       </div>
 
-      <p class="text-slate-500">
+      <p class="text-[#7E6B54]">
         © 2026-2027 SIWASUP ASSET CO., LTD. All Rights Reserved.
       </p>
 
@@ -577,8 +588,77 @@
       document.querySelectorAll('.admin-only-el').forEach(el => el.classList.remove('hidden'));
     }
 
-    function showMyWelcomePass(member) {
+    function updateHeroCopyForMember(member, isAdminFlag) {
+      const badgeEl = document.getElementById('hero-badge-text');
+      const headEl = document.getElementById('hero-headline');
+      const subEl = document.getElementById('hero-subtitle');
+      if (!badgeEl || !headEl || !subEl || !member) return;
+
+      const roleCode = String(member.role_code || '').toUpperCase();
+      const perms = member.permissions || {};
+      const isExec = Boolean(isAdminFlag || perms.executiveAuthority || perms.systemAdmin || perms.standardAdmin || perms.keyboxAdmin);
+
+      if (isExec) {
+        previewHeroRole('exec');
+      } else if (roleCode === 'VIP_CLIENT' || perms.vipClient) {
+        previewHeroRole('vip');
+      } else if (roleCode === 'SELLER' || perms.sellerClient) {
+        previewHeroRole('seller');
+      } else {
+        previewHeroRole('agent');
+      }
+    }
+
+    function previewHeroRole(mode) {
+      const badgeEl = document.getElementById('hero-badge-text');
+      const headEl = document.getElementById('hero-headline');
+      const subEl = document.getElementById('hero-subtitle');
+      if (!badgeEl || !headEl || !subEl) return;
+
+      const copyMap = {
+        guest: {
+          badge: 'ศูนย์รวมบ้านคัดพิเศษกว่า 4,000+ หลัง ทั่วไทย',
+          head: 'บ้านคัดสรรคุณภาพ ในราคาที่คุ้มค่า <br class="hidden sm:inline">พร้อมระบบ <span class="gold-gradient-text">ตัวแทนมืออาชีพ</span> ครบวงจร',
+          sub: 'ค้นหาบ้านรีโนเวทและทรัพย์ทำเลดีพร้อมบริการยื่นกู้ฟรี หรือเข้าร่วมเป็นพาร์ทเนอร์ตัวแทนกับ ศิวาทรัพย์ แอสเซท เพื่อเข้าถึงคลังบ้านพร้อมขายทันที'
+        },
+        agent: {
+          badge: 'พอร์ตทำงานของคุณพร้อมแล้ว • คลังทรัพย์ 4,000+ รายการ',
+          head: 'คลังบ้านพร้อมขาย 4,000+ หลัง <br class="hidden sm:inline"><span class="gold-gradient-text">อยู่ในมือคุณแล้ว</span>',
+          sub: 'แชร์ลิงก์บ้านติดนามบัตรของคุณ ล็อกสิทธิ์ลูกค้า 60 วัน และจองคิวเปิดบ้านผ่านระบบได้ทันที'
+        },
+        vip: {
+          badge: 'เอกสิทธิ์พิเศษสำหรับลูกค้า VIP ศิวาทรัพย์',
+          head: 'คัดสรรบ้านที่ใช่ <br class="hidden sm:inline">ในทำเลที่ <span class="gold-gradient-text">ดีที่สุดเพื่อคุณ</span>',
+          sub: 'เลือกชมบ้านคุณภาพพร้อมนัดชมส่วนตัวและทีมดูแลสินเชื่อทุกธนาคารฟรีจนถึงวันโอน'
+        },
+        seller: {
+          badge: 'พันธมิตรฝากขายบ้าน ศิวาทรัพย์ แอสเซท',
+          head: 'ส่งต่อบ้านของคุณ <br class="hidden sm:inline">สู่เครือข่าย <span class="gold-gradient-text">ผู้ซื้อคุณภาพ</span>',
+          sub: 'ทีมตัวแทนมืออาชีพพร้อมช่วยทำการตลาด นัดชม และดูแลนิติกรรมจนปิดการขายอย่างโปร่งใส'
+        },
+        exec: {
+          badge: 'EXECUTIVE COMMAND CENTER • SIWASUP ASSET',
+          head: 'คุมเกมอสังหาฯ ทั้งอาณาจักร 4,000+ หลัง <br class="hidden sm:inline"><span class="gold-gradient-text">ในมือเดียว</span>',
+          sub: 'บริหารสต๊อกคัดเกรด อนุมัติทีมขายระดับแม่ทัพ และคุมมาตรฐานเปิดบ้านแบบเรียลไทม์ — ครบทุกมิติในศูนย์บัญชาการเดียว'
+        }
+      };
+
+      const chosen = copyMap[mode] || copyMap.guest;
+      badgeEl.textContent = chosen.badge;
+      headEl.innerHTML = chosen.head;
+      subEl.textContent = chosen.sub;
+
+      document.querySelectorAll('[data-role-preview]').forEach(btn => {
+        const active = btn.getAttribute('data-role-preview') === mode;
+        btn.className = active
+          ? 'px-2.5 py-0.5 rounded-full border border-[#C2A460] bg-white/80 text-[#7A5B22] font-semibold transition'
+          : 'px-2.5 py-0.5 rounded-full border border-[#E5D5B5]/80 bg-white/40 hover:bg-white/80 transition';
+      });
+    }
+
+    function showMyWelcomePass(member, isAdminFlag = false) {
       if (!member) return;
+      updateHeroCopyForMember(member, isAdminFlag);
       const code = member.code || member.id || '';
       const nick = member.nickname || member.name || 'สมาชิก';
       const passBox = document.getElementById('myWelcomePassBox');
@@ -600,7 +680,7 @@
       const navLoginText = document.getElementById('nav-login-text');
       if (navLoginBtn && navLoginText) {
         navLoginBtn.href = 'catalog.html';
-        navLoginBtn.className = 'flex bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-400/70 text-emerald-300 font-bold px-3.5 py-2 rounded-xl text-xs sm:text-sm items-center gap-1.5 shadow-sm transition-all';
+        navLoginBtn.className = 'flex bg-emerald-50 hover:bg-emerald-100 border border-emerald-500 text-emerald-800 font-bold px-3.5 py-2 rounded-xl text-xs sm:text-sm items-center gap-1.5 shadow-2xs transition-all';
         navLoginText.textContent = `✅ ${nick} (${code})`;
       }
 
@@ -608,7 +688,7 @@
       const heroLoginText = document.getElementById('hero-login-text');
       if (heroLoginBtn && heroLoginText) {
         heroLoginBtn.href = 'catalog.html';
-        heroLoginBtn.className = 'w-full sm:w-auto bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-400/50 font-bold px-6 py-4 rounded-2xl text-sm sm:text-base flex items-center justify-center gap-2 backdrop-blur-sm transition-all';
+        heroLoginBtn.className = 'w-full sm:w-auto bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-500 font-bold px-6 py-4 rounded-2xl text-sm sm:text-base flex items-center justify-center gap-2 shadow-sm transition-all';
         heroLoginText.textContent = `✅ เข้าสู่ระบบแล้ว (${nick}) • เปิดคลังงาน`;
       }
 
@@ -638,10 +718,11 @@
           if (r.ok) {
             const me = await r.json();
             if (me && me.status === 'approved' && me.member) {
-              showMyWelcomePass(me.member);
               const code = (me.member.code || '').toUpperCase();
               const id = (me.member.id || '').toLowerCase();
-              if (Boolean(me.isAdmin) || code === 'SW001' || code === 'SW004' || id === 'app_office_001' || id === 'app_office_004' || me.member.role === 'admin') {
+              const isAdminUser = Boolean(me.isAdmin || code === 'SW001' || code === 'SW004' || id === 'app_office_001' || id === 'app_office_004' || me.member.role === 'admin');
+              showMyWelcomePass(me.member, isAdminUser);
+              if (isAdminUser) {
                 revealAdminOnlyElements();
                 const pendingCnt = Number(me.lobbyPendingCount || 0);
                 const lBadge = document.getElementById('landing-lobby-pending-badge');
