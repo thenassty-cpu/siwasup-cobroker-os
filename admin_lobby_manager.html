@@ -2114,10 +2114,15 @@
         `[${new Date().toLocaleString('th-TH')}] เริ่มต้นระบบ Audit Trail & Rollback Archive พร้อมปฏิบัติการ`
       ];
       container.innerHTML = logs.slice(0, 30).map((log) => {
-        const isRevoke = log.includes('คัดออก') || log.includes('เพิกถอน');
-        const isApprove = log.includes('อนุมัติ');
-        const isRollback = log.includes('Rollback') || log.includes('คืนสิทธิ์');
-        const isBackup = log.includes('สำรองข้อมูล');
+        const logText = (typeof log === 'string')
+          ? log
+          : (log && typeof log === 'object')
+            ? `[${log.timestamp || log.time || '-'}] ${log.message || log.detail || log.action || JSON.stringify(log)}`
+            : String(log || '');
+        const isRevoke = logText.includes('คัดออก') || logText.includes('เพิกถอน');
+        const isApprove = logText.includes('อนุมัติ');
+        const isRollback = logText.includes('Rollback') || logText.includes('คืนสิทธิ์');
+        const isBackup = logText.includes('สำรองข้อมูล');
         
         let badge = '<span class="px-2 py-0.5 rounded text-[10px] bg-slate-100 text-slate-700 font-bold">INFO</span>';
         if (isRevoke) badge = '<span class="px-2 py-0.5 rounded text-[10px] bg-red-100 text-red-700 font-bold">🔴 REVOKE</span>';
@@ -2127,7 +2132,7 @@
 
         let rollbackBtn = '';
         if (isRevoke && lobbyData.rollback_history) {
-          const matchRb = lobbyData.rollback_history.find(rb => rb && rb.member && log.includes(rb.member.name));
+          const matchRb = lobbyData.rollback_history.find(rb => rb && rb.member && logText.includes(rb.member.name));
           if (matchRb) {
             rollbackBtn = `<button onclick="rollbackSpecific('${matchRb.rollback_id}')" class="ml-auto text-[11px] font-bold text-amber-600 hover:text-amber-800 underline shrink-0">↩️ กู้คืนสิทธิ์</button>`;
           }
@@ -2136,7 +2141,7 @@
         return `
           <div class="flex items-center gap-2 p-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs transition">
             ${badge}
-            <span class="text-slate-700 flex-1 truncate font-mono text-[11px]">${log}</span>
+            <span class="text-slate-700 flex-1 truncate font-mono text-[11px]">${logText}</span>
             ${rollbackBtn}
           </div>
         `;
