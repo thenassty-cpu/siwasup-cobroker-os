@@ -104,9 +104,9 @@
           <i data-lucide="plus-circle" class="w-4 h-4" stroke-width="1.5"></i>
           <span>เพิ่มบ้านฝากขาย</span>
         </button>
-        <button onclick="resetToSeedTest()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition" title="รีเซ็ตข้อมูลเทส 3 หลัง">
+        <button onclick="resetToSeedTest()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition" title="รีเซ็ตกลับไปใช้ข้อมูลตั้งต้น (48 หลัง)">
           <i data-lucide="rotate-ccw" class="w-3.5 h-3.5" stroke-width="1.5"></i>
-          <span>รีเซ็ตเทส</span>
+          <span>รีเซ็ตตั้งต้น</span>
         </button>
       </div>
     </div>
@@ -423,7 +423,7 @@
   <script>
     const API_BASE = 'https://siwasup-cobroker-os.onrender.com';
     const SESSION_KEY = 'siwasup_session';
-    const STORAGE_KEY = 'siwasup_consignment_offline_v1';
+    const STORAGE_KEY = 'siwasup_consignment_offline_v2';
 
     (function () {
       const hp = new URLSearchParams(window.location.hash.replace(/^#/, ''));
@@ -464,7 +464,7 @@
     function getNextPropertyId(offset = 0) {
       let maxNum = 2600;
       properties.forEach(p => {
-        const m = String(p.id || '').match(/(\d+)$/);
+        const m = String(p.id || '').match(/^SWC-(\d+)$/);
         if (m) {
           const n = parseInt(m[1], 10);
           if (n > maxNum) maxNum = n;
@@ -594,7 +594,7 @@
     }
 
     async function resetToSeedTest(confirmReset = true) {
-      if (confirmReset && !confirm('รีเซ็ตกลับไปใช้ข้อมูลเทสตั้งต้น 3 หลังใช่หรือไม่?')) return;
+      if (confirmReset && !confirm('รีเซ็ตกลับไปใช้ข้อมูลตั้งต้น (48 หลัง) ใช่หรือไม่?')) return;
       try {
         const res = await fetch('data/consignment_seed_test.json?t=' + Date.now(), { cache: 'no-store' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -627,7 +627,7 @@
         if (currentFilter === 'available' && p.status !== 'available') return false;
         if (['no_contract', 'open_contract', 'exclusive_contract'].includes(currentFilter) && p.consignment_type !== currentFilter) return false;
         if (q) {
-          const hay = `${p.id} ${p.title} ${p.zone} ${p.assigned_agent_name}`.toLowerCase();
+          const hay = `${p.id} ${p.title} ${p.zone} ${p.district || ''} ${p.province || ''} ${p.address || ''} ${p.assigned_agent_name}`.toLowerCase();
           if (!hay.includes(q)) return false;
         }
         return true;
@@ -660,7 +660,7 @@
             <div>
               <div class="aspect-[16/10] bg-[#EFE7D8] relative flex items-center justify-center overflow-hidden">
                 ${hasImg
-                  ? `<img src="${imgUrl}" class="w-full h-full object-cover">`
+                  ? `<img src="${imgUrl}" loading="lazy" decoding="async" class="w-full h-full object-cover">`
                   : `<div class="text-center p-4 text-[#8A755E] flex flex-col items-center"><i data-lucide="image" class="w-9 h-9 mb-1 text-[#8A755E]" stroke-width="1.25"></i><div class="text-xs font-bold">รอลงรูปภาพ</div></div>`
                 }
                 <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-lg text-[10px] font-bold bg-white/95 text-[#2C2218] border border-[#D8C39A]">${pid}</span>
