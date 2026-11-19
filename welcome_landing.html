@@ -70,7 +70,7 @@
       </a>
 
       <!-- DESKTOP NAV LINKS -->
-      <div class="hidden lg:flex items-center gap-7 text-sm font-semibold text-[#5C4B37] whitespace-nowrap">
+      <div class="hidden xl:flex items-center gap-6 text-sm font-semibold text-[#5C4B37] whitespace-nowrap">
         <a href="#welcome" class="hover:text-[#967332] transition-colors">หน้าแรก</a>
         <a href="#announcements" class="hover:text-[#967332] transition-colors">ร่วมงานตัวแทน</a>
         <a href="#activities" class="hover:text-[#967332] transition-colors">เครื่องมือตัวแทน (OS)</a>
@@ -674,7 +674,11 @@
 
       // Update Navbar, Hero & Card buttons so logged-in user does not have to re-login
       const navRegBtn = document.getElementById('nav-register-btn');
-      if (navRegBtn) navRegBtn.classList.add('hidden');
+      if (navRegBtn) {
+        navRegBtn.classList.remove('md:flex', 'sm:flex');
+        navRegBtn.classList.add('hidden');
+        navRegBtn.style.display = 'none';
+      }
 
       const navLoginBtn = document.getElementById('nav-login-btn');
       const navLoginText = document.getElementById('nav-login-text');
