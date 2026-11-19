@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ศิวาทรัพย์ - ศูนย์จัดการบ้านฝากขาย (Consignment Hub)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      font-family: 'Prompt', 'Tahoma', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #FAF7F2;
+      color: #2C2218;
+    }
+    .gold-card {
+      background: #FFFFFF;
+      border: 1px solid #E5D5B5;
+      box-shadow: 0 4px 20px -6px rgba(138, 101, 37, 0.08);
+    }
+    .gold-btn {
+      background: linear-gradient(135deg, #DFC791 0%, #C2A460 55%, #A58442 100%);
+      color: #241A0E;
+    }
+    .gold-btn:hover {
+      background: linear-gradient(135deg, #E8D4A6 0%, #CFAF69 55%, #B4914B 100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- FOUNDERS-ONLY GATE OVERLAY (SW001 Gool & SW004 Ton; auto-unlocked on localhost preview) -->
+  <div id="consignmentGateOverlay" class="fixed inset-0 z-[100] bg-[#FAF7F2]/98 backdrop-blur-xl flex items-center justify-center p-4">
+    <div class="gold-card rounded-3xl max-w-md w-full p-6 sm:p-7 text-center space-y-4 border-2 border-[#C2A460] shadow-2xl">
+      <div class="w-14 h-14 mx-auto rounded-2xl bg-[#FAF2E1] border border-[#C2A460] flex items-center justify-center text-[#8A6525]">
+        <i data-lucide="lock" class="w-7 h-7" stroke-width="1.5"></i>
+      </div>
+      <div class="space-y-1">
+        <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 uppercase tracking-wider">
+          RESTRICTED • SANDBOX FOUNDERS ONLY
+        </span>
+        <h2 class="text-lg font-extrabold text-[#2C2218] pt-1">ศูนย์จัดการบ้านฝากขาย (ปิดสิทธิ์ชั่วคราว)</h2>
+        <p id="consignmentGateMsg" class="text-xs text-[#6E5A44] leading-relaxed">
+          กำลังตรวจสอบสิทธิ์ LINE Login...<br>อนุญาตเฉพาะ <strong>คุณกูล (SW001)</strong> และ <strong>คุณต้น (SW004)</strong> เท่านั้น
+        </p>
+      </div>
+      <div id="consignmentGateActions" class="hidden space-y-2.5 pt-1">
+        <a id="consignmentGateLoginBtn" href="https://siwasup-cobroker-os.onrender.com/api/auth/line/start?return=consignment" class="w-full py-3 px-4 rounded-2xl bg-[#06C755] hover:bg-[#05b34c] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-md transition">
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          <span>เข้าสู่ระบบด้วย LINE</span>
+        </a>
+        <a href="https://assets.siwasup.com/welcome_landing.html" class="block text-xs text-[#6E5A44] hover:underline">
+          ← กลับหน้าหลักศิวาทรัพย์
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROLE SIMULATOR BAR (Founders / Localhost Preview) -->
+  <div id="roleSimContainer" class="bg-[#2C2218] text-[#FAF7F2] px-4 py-2 text-xs">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded-md bg-[#C2A460] text-[#241A0E] font-extrabold text-[10px]">SANDBOX TEST</span>
+        <span>จำลองสิทธิ์เพื่อทดสอบ (ข้อมูลเก็บในเบราว์เซอร์เครื่องนี้):</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-1.5" id="roleSimBar">
+        <button onclick="setSimulatedRole('bua')" data-sim="bua" class="px-3 py-1 rounded-lg bg-[#C2A460] text-[#241A0E] font-bold transition flex items-center gap-1.5">
+          <i data-lucide="crown" class="w-3.5 h-3.5" stroke-width="1.5"></i>
+          <span>คุณบัว (ปล่อยขึ้นระบบ &amp; แจกสิทธิ์คนเดียว)</span>
+        </button>
+        <button onclick="setSimulatedRole('poppy')" data-sim="poppy" class="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5">
+          <i data-lucide="pen-line" class="w-3.5 h-3.5" stroke-width="1.5"></i>
+          <span>ทีมงานบริษัท (ป๊อบปี้/ซัพพอร์ต)</span>
+        </button>
+        <button onclick="setSimulatedRole('agent')" data-sim="agent" class="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5">
+          <i data-lucide="user" class="w-3.5 h-3.5" stroke-width="1.5"></i>
+          <span>ตัวแทน / เซลล์ (จำลอง: พี่ไห้ เห็นเฉพาะงานตัวเอง)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-[#E5D5B5] sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <img src="https://assets.siwasup.com/siwasup_logo.svg" alt="ศิวาทรัพย์" class="h-9 w-auto object-contain" onerror="this.style.display='none'">
+        <div>
+          <h1 class="text-base sm:text-lg font-extrabold text-[#2C2218]">ศูนย์จัดการบ้านฝากขาย (Consignment Hub)</h1>
+          <p class="text-[11px] text-[#6E5A44]">
+            Sandbox เตรียมข้อมูลร่วมกันทั้งทีม • เมื่อรายการไหนพร้อม <strong>คุณบัว</strong> เป็นคนกดปล่อยขึ้นระบบจริง &amp; แจกผู้ดูแล
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <button id="btnImportCsv" onclick="openCsvModal()" class="px-3 py-2 rounded-xl bg-[#FAF5EB] hover:bg-[#F3E9D4] border border-[#C2A460] text-[#7A5B22] text-xs font-bold flex items-center gap-1.5 transition">
+          <i data-lucide="file-spreadsheet" class="w-4 h-4" stroke-width="1.5"></i>
+          <span>โยนตาราง CSV ตั้งต้น</span>
+        </button>
+        <button id="btnAddProperty" onclick="openAddPropertyModal()" class="px-3.5 py-2 rounded-xl gold-btn text-xs font-extrabold flex items-center gap-1.5 shadow-sm transition active:scale-95">
+          <i data-lucide="plus-circle" class="w-4 h-4" stroke-width="1.5"></i>
+          <span>เพิ่มบ้านฝากขาย</span>
+        </button>
+        <button onclick="resetToSeedTest()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5 transition" title="รีเซ็ตข้อมูลเทส 3 หลัง">
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5" stroke-width="1.5"></i>
+          <span>รีเซ็ตเทส</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex-1 space-y-6">
+
+    <!-- KPI BAR -->
+    <div id="kpiBarSection" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+      <div class="gold-card rounded-2xl p-3.5">
+        <div class="text-[11px] text-[#6E5A44] font-semibold flex items-center gap-1.5">
+          <i data-lucide="layers" class="w-3.5 h-3.5 text-[#8A6525]" stroke-width="1.5"></i>
+          <span>ทั้งหมด</span>
+        </div>
+        <div id="kpiAll" class="text-2xl font-black text-[#2C2218] mt-1">0</div>
+      </div>
+      <div class="gold-card rounded-2xl p-3.5 border-amber-300 bg-amber-50/40">
+        <div class="text-[11px] text-amber-800 font-bold flex items-center gap-1.5">
+          <i data-lucide="image" class="w-3.5 h-3.5" stroke-width="1.5"></i>
+          <span>รอลงรูป</span>
+        </div>
+        <div id="kpiPendingPhotos" class="text-2xl font-black text-amber-700 mt-1">0</div>
+      </div>
+      <div class="gold-card rounded-2xl p-3.5 border-blue-300 bg-blue-50/40">
+        <div class="text-[11px] text-blue-800 font-bold flex items-center gap-1.5">
+          <i data-lucide="clipboard-list" class="w-3.5 h-3.5" stroke-width="1.5"></i>
+          <span>รอบัวปล่อย</span>
+        </div>
+        <div id="kpiReadyForReview" class="text-2xl font-black text-blue-700 mt-1">0</div>
+      </div>
+      <div class="gold-card rounded-2xl p-3.5 border-emerald-300 bg-emerald-50/40">
+        <div class="text-[11px] text-emerald-800 font-bold flex items-center gap-1.5">
+          <i data-lucide="check-check" class="w-3.5 h-3.5" stroke-width="1.5"></i>
+          <span>ขึ้นระบบแล้ว</span>
+        </div>
+        <div id="kpiAvailable" class="text-2xl font-black text-emerald-700 mt-1">0</div>
+      </div>
+      <div class="gold-card rounded-2xl p-3.5">
+        <div class="text-[11px] text-emerald-700 font-bold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>ไม่ติดสัญญา</span>
+        </div>
+        <div id="kpiNoContract" class="text-2xl font-black text-[#2C2218] mt-1">0</div>
+      </div>
+      <div class="gold-card rounded-2xl p-3.5">
+        <div class="text-[11px] text-amber-700 font-bold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+          <span>สัญญาเปิด</span>
+        </div>
+        <div id="kpiOpenContract" class="text-2xl font-black text-[#2C2218] mt-1">0</div>
+      </div>
+      <div class="gold-card rounded-2xl p-3.5">
+        <div class="text-[11px] text-rose-700 font-bold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+          <span>สัญญาปิด</span>
+        </div>
+        <div id="kpiExclusive" class="text-2xl font-black text-[#2C2218] mt-1">0</div>
+      </div>
+    </div>
+
+    <!-- FILTER & SEARCH BAR -->
+    <div class="gold-card rounded-2xl p-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex flex-wrap items-center gap-1.5" id="filterPills">
+        <button onclick="setFilter('all')" data-filter="all" class="px-3 py-1.5 rounded-xl bg-[#2C2218] text-white text-xs font-bold">ทั้งหมด</button>
+        <button onclick="setFilter('pending_photos')" data-filter="pending_photos" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-[#6E5A44] text-xs font-bold flex items-center gap-1">
+          <i data-lucide="image" class="w-3.5 h-3.5" stroke-width="1.5"></i><span>รอลงรูป</span>
+        </button>
+        <button onclick="setFilter('ready_for_review')" data-filter="ready_for_review" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-blue-800 text-xs font-bold flex items-center gap-1">
+          <i data-lucide="clipboard-list" class="w-3.5 h-3.5" stroke-width="1.5"></i><span>รอบัวปล่อย</span>
+        </button>
+        <button onclick="setFilter('available')" data-filter="available" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-emerald-800 text-xs font-bold flex items-center gap-1">
+          <i data-lucide="check-check" class="w-3.5 h-3.5" stroke-width="1.5"></i><span>ขึ้นระบบแล้ว</span>
+        </button>
+        <button onclick="setFilter('no_contract')" data-filter="no_contract" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-emerald-800 text-xs font-bold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>ไม่ติดสัญญา</span>
+        </button>
+        <button onclick="setFilter('open_contract')" data-filter="open_contract" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-amber-800 text-xs font-bold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-amber-500"></span><span>สัญญาเปิด</span>
+        </button>
+        <button onclick="setFilter('exclusive_contract')" data-filter="exclusive_contract" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-rose-800 text-xs font-bold flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-rose-500"></span><span>สัญญาปิด</span>
+        </button>
+      </div>
+      <div class="relative w-full sm:w-64">
+        <i data-lucide="search" class="w-3.5 h-3.5 text-[#8A755E] absolute left-3 top-1/2 -translate-y-1/2"></i>
+        <input type="text" id="searchInput" oninput="renderCards()" placeholder="ค้นหาชื่อโครงการ, โซน, รหัส..." class="w-full pl-8 pr-3.5 py-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A] text-xs focus:outline-none focus:border-[#967332]">
+      </div>
+    </div>
+
+    <!-- PROPERTY CARDS GRID -->
+    <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+  </main>
+
+  <!-- MODAL 1: UPLOAD PHOTOS & PUBLISH -->
+  <div id="photoModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 border-2 border-[#C2A460] shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-[#E5D5B5]">
+        <div>
+          <h3 class="text-base font-extrabold text-[#2C2218] flex items-center gap-2">
+            <i data-lucide="image" class="w-5 h-5 text-[#967332]" stroke-width="1.5"></i>
+            <span>อัปโหลดรูปลงการ์ดบ้าน</span>
+          </h3>
+          <p id="photoModalTitle" class="text-xs text-[#6E5A44] mt-0.5">...</p>
+        </div>
+        <button onclick="closePhotoModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <label class="block border-2 border-dashed border-[#C2A460] rounded-2xl p-6 text-center bg-[#FAF7F2] hover:bg-[#FAF2E1] cursor-pointer transition">
+        <input type="file" id="photoFileInput" accept="image/*" multiple class="hidden" onchange="handlePhotoFilesSelected(event)">
+        <i data-lucide="upload-cloud" class="w-8 h-8 mx-auto mb-1.5 text-[#967332]" stroke-width="1.25"></i>
+        <div class="text-sm font-bold text-[#7A5B22]">คลิกเพื่อเลือกรูปภาพ (เลือกได้หลายรูปพร้อมกัน)</div>
+        <div class="text-[11px] text-[#6E5A44] mt-1">ในโหมด Sandbox จะพรีวิวลงเครื่องทันที (Production จะย่อ WebP ขึ้น R2)</div>
+      </label>
+
+      <div id="photoPreviewGrid" class="grid grid-cols-3 gap-2"></div>
+
+      <div class="flex items-center gap-2 pt-2 border-t border-[#E5D5B5]">
+        <button onclick="closePhotoModal()" class="flex-1 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-600">ปิด</button>
+        <button id="btnPhotoSaveSubmit" onclick="publishCardWithPhotos()" class="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold shadow-sm flex items-center justify-center gap-1.5">
+          <i data-lucide="clipboard-list" class="w-4 h-4" stroke-width="1.5"></i>
+          <span>บันทึกรูป (รอคุณบัวปล่อย)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: ASSIGN CARETAKER (BUA ONLY) -->
+  <div id="assignModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 border-2 border-[#C2A460] shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-[#E5D5B5]">
+        <div>
+          <h3 class="text-base font-extrabold text-[#2C2218] flex items-center gap-2">
+            <i data-lucide="user-check" class="w-5 h-5 text-[#967332]" stroke-width="1.5"></i>
+            <span>แจกสิทธิ์ผู้ดูแลลูกค้า (เฉพาะคุณบัว)</span>
+          </h3>
+          <p id="assignModalTitle" class="text-xs text-[#6E5A44] mt-0.5">...</p>
+        </div>
+        <button onclick="closeAssignModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="space-y-2 text-xs">
+        <label class="font-bold text-[#2C2218] block">เลือกผู้ดูแลลูกค้าสำหรับบ้านหลังนี้:</label>
+        <select id="assignAgentSelect" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A] font-semibold">
+          <option value="">คุณบัวดูแลเอง (ค่าเริ่มต้น)</option>
+          <option value="SW_HAI|สิทธิชัย (ไห้)">สิทธิชัย (ไห้) — Free Agent</option>
+          <option value="SW001|คุณเจี๊ยบ (กูล)">คุณเจี๊ยบ (กูล) — CEO</option>
+          <option value="SW_POPPY|ป๊อบปี้ (ทีมซัพพอร์ต)">ป๊อบปี้ — ทีมซัพพอร์ต</option>
+        </select>
+      </div>
+
+      <div class="flex items-center gap-2 pt-2">
+        <button onclick="closeAssignModal()" class="flex-1 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-600">ยกเลิก</button>
+        <button onclick="confirmAssignAgent()" class="flex-1 py-2.5 rounded-xl gold-btn text-xs font-extrabold shadow-sm flex items-center justify-center gap-1.5">
+          <i data-lucide="check-check" class="w-4 h-4" stroke-width="1.5"></i>
+          <span>ยืนยันมอบหมาย</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: ADD PROPERTY -->
+  <div id="addModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 border-2 border-[#C2A460] shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto text-xs">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E5D5B5]">
+        <h3 class="text-base font-extrabold text-[#2C2218] flex items-center gap-2">
+          <i data-lucide="plus-circle" class="w-5 h-5 text-[#967332]" stroke-width="1.5"></i>
+          <span>เพิ่มบ้านฝากขายใหม่</span>
+        </h3>
+        <button onclick="closeAddPropertyModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div class="space-y-2.5">
+        <div>
+          <label class="font-bold block mb-1">ชื่อโครงการ / หัวข้อบ้าน *</label>
+          <input id="addTitle" type="text" placeholder="เช่น บ้านเดี่ยว 2 ชั้น มัณฑนา พระราม 2" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold block mb-1">ราคาขาย (บาท) *</label>
+            <input id="addPrice" type="number" placeholder="3500000" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+          </div>
+          <div>
+            <label class="font-bold block mb-1">ประเภททรัพย์</label>
+            <select id="addPropType" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+              <option value="บ้านเดี่ยว">บ้านเดี่ยว</option>
+              <option value="ทาวน์เฮาส์">ทาวน์เฮาส์</option>
+              <option value="คอนโด">คอนโด</option>
+              <option value="ที่ดิน">ที่ดิน</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold block mb-1">ประเภทสัญญาฝากขาย *</label>
+            <select id="addContractType" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+              <option value="no_contract">ไม่ติดสัญญา (ลงได้เลย)</option>
+              <option value="open_contract">สัญญาเปิด</option>
+              <option value="exclusive_contract">สัญญาปิด (Exclusive)</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold block mb-1">วันหมดสัญญา (ถ้ามี)</label>
+            <input id="addExpiry" type="date" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+          </div>
+        </div>
+        <div>
+          <label class="font-bold block mb-1">โซน / ทำเล</label>
+          <input id="addZone" type="text" placeholder="เช่น โซนพระราม 2-บางขุนเทียน" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+        </div>
+        <div>
+          <label class="font-bold block mb-1">หมายเหตุภายใน (ซ่อนจากลูกค้า)</label>
+          <input id="addNote" type="text" placeholder="เช่น นัดเจ้าของล่วงหน้า 1 วัน" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+        </div>
+      </div>
+      <div class="flex items-center gap-2 pt-2">
+        <button onclick="closeAddPropertyModal()" class="flex-1 py-2.5 rounded-xl border border-slate-300 font-bold text-slate-600">ยกเลิก</button>
+        <button onclick="saveNewProperty()" class="flex-1 py-2.5 rounded-xl gold-btn font-extrabold shadow-sm flex items-center justify-center gap-1.5">
+          <i data-lucide="save" class="w-4 h-4" stroke-width="1.5"></i>
+          <span>บันทึกเป็น "รอลงรูป"</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: CSV IMPORT -->
+  <div id="csvModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 border-2 border-[#C2A460] shadow-2xl space-y-3 text-xs">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E5D5B5]">
+        <h3 class="text-base font-extrabold text-[#2C2218] flex items-center gap-2">
+          <i data-lucide="file-spreadsheet" class="w-5 h-5 text-[#967332]" stroke-width="1.5"></i>
+          <span>โยนตาราง CSV ตั้งต้น (สร้างการ์ดรอลงรูป)</span>
+        </h3>
+        <button onclick="closeCsvModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <p class="text-[#6E5A44]">รูปแบบคอลัมน์: <code>ชื่อโครงการ,ประเภท,ราคา,โซน,ประเภทสัญญา(no_contract/open_contract/exclusive_contract)</code></p>
+      <textarea id="csvTextarea" rows="5" class="w-full p-3 rounded-xl bg-[#FAF7F2] border border-[#D8C39A] font-mono text-[11px]" placeholder="บ้านเดี่ยว 2 ชั้น พระราม 2,บ้านเดี่ยว,4500000,โซนพระราม 2,no_contract"></textarea>
+      <div class="flex items-center gap-2">
+        <button onclick="closeCsvModal()" class="flex-1 py-2.5 rounded-xl border border-slate-300 font-bold text-slate-600">ปิด</button>
+        <button onclick="importCsvRows()" class="flex-1 py-2.5 rounded-xl gold-btn font-extrabold flex items-center justify-center gap-1.5">
+          <i data-lucide="check-check" class="w-4 h-4" stroke-width="1.5"></i>
+          <span>สร้างการ์ดรอลงรูปทันที</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: CONTRACT ATTACHMENT & TYPE -->
+  <div id="contractModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 border-2 border-[#C2A460] shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto text-xs">
+      <div class="flex items-center justify-between pb-3 border-b border-[#E5D5B5]">
+        <div>
+          <h3 class="text-base font-extrabold text-[#2C2218] flex items-center gap-2">
+            <i data-lucide="file-text" class="w-5 h-5 text-[#967332]" stroke-width="1.5"></i>
+            <span>จัดการสัญญาฝากขาย (เฉพาะทีมภายใน)</span>
+          </h3>
+          <p id="contractModalTitle" class="text-xs text-[#6E5A44] mt-0.5">...</p>
+        </div>
+        <button onclick="closeContractModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <div>
+          <label class="font-bold block mb-1">ประเภทสัญญา</label>
+          <select id="editContractType" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A] font-semibold">
+            <option value="no_contract">ไม่ติดสัญญา (ลงได้เลย)</option>
+            <option value="open_contract">สัญญาเปิด</option>
+            <option value="exclusive_contract">สัญญาปิด (Exclusive)</option>
+          </select>
+        </div>
+        <div>
+          <label class="font-bold block mb-1">วันหมดสัญญา</label>
+          <input id="editContractExpiry" type="date" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+        </div>
+      </div>
+
+      <label class="block border-2 border-dashed border-[#C2A460] rounded-2xl p-5 text-center bg-[#FAF7F2] hover:bg-[#FAF2E1] cursor-pointer transition">
+        <input type="file" id="contractFileInput" accept="image/*,.pdf" multiple class="hidden" onchange="handleContractFilesSelected(event)">
+        <i data-lucide="paperclip" class="w-7 h-7 mx-auto mb-1 text-[#967332]" stroke-width="1.25"></i>
+        <div class="text-xs font-bold text-[#7A5B22]">คลิกแนบไฟล์สัญญา (รูปภาพ / PDF / แชทอนุญาตลงขาย)</div>
+        <div class="text-[11px] text-[#6E5A44] mt-1">ไฟล์สัญญาจะถูกซ่อนจากลูกค้าและตัวแทนทั่วไปอัตโนมัติ</div>
+      </label>
+
+      <div id="contractFilesList" class="space-y-2"></div>
+
+      <div class="p-3 rounded-2xl bg-[#FAF5EB] border border-[#E5D5B5] flex items-center justify-between gap-2">
+        <span class="text-[11px] text-[#6E5A44]">ยังไม่มีใบสัญญา? ออกสัญญาใหม่ในระบบ:</span>
+        <a id="openExclusiveBuilderLink" href="exclusive_contracts.html" target="_blank" class="px-3 py-1.5 rounded-xl bg-white border border-[#C2A460] text-[#7A5B22] font-bold hover:bg-[#FAF2E1] shrink-0 flex items-center gap-1.5">
+          <i data-lucide="pen-line" class="w-3.5 h-3.5" stroke-width="1.5"></i>
+          <span>ออกใบสัญญา →</span>
+        </a>
+      </div>
+
+      <div class="flex items-center gap-2 pt-2 border-t border-[#E5D5B5]">
+        <button onclick="closeContractModal()" class="flex-1 py-2.5 rounded-xl border border-slate-300 font-bold text-slate-600">ปิด</button>
+        <button onclick="saveContractDetails()" class="flex-1 py-2.5 rounded-xl gold-btn font-extrabold shadow-sm flex items-center justify-center gap-1.5">
+          <i data-lucide="save" class="w-4 h-4" stroke-width="1.5"></i>
+          <span>บันทึกข้อมูลสัญญา</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'https://siwasup-cobroker-os.onrender.com';
+    const SESSION_KEY = 'siwasup_session';
+    const STORAGE_KEY = 'siwasup_consignment_offline_v1';
+
+    (function () {
+      const hp = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+      if (hp.get('session')) { try { localStorage.setItem(SESSION_KEY, hp.get('session')); } catch (e) {} }
+      if (window.location.hash) history.replaceState(null, '', window.location.pathname + window.location.search);
+    })();
+
+    let properties = [];
+    let currentFilter = 'all';
+    let simRole = 'bua'; // 'bua' | 'poppy' | 'agent'
+    let activePhotoTargetId = null;
+    let activeAssignTargetId = null;
+    let activeContractTargetId = null;
+
+    const CONTRACT_BADGES = {
+      no_contract: { label: 'ไม่ติดสัญญา (ลงได้เลย)', dot: 'bg-emerald-500', cls: 'bg-emerald-50 text-emerald-800 border-emerald-300' },
+      open_contract: { label: 'สัญญาเปิด', dot: 'bg-amber-500', cls: 'bg-amber-50 text-amber-800 border-amber-300' },
+      exclusive_contract: { label: 'สัญญาปิด (Exclusive)', dot: 'bg-rose-500', cls: 'bg-rose-50 text-rose-800 border-rose-300' }
+    };
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function safeUrl(url) {
+      const s = String(url || '').trim();
+      if (s.startsWith('https://') || s.startsWith('http://') || s.startsWith('data:image/') || s.startsWith('data:application/pdf')) {
+        return s;
+      }
+      return '';
+    }
+
+    function getNextPropertyId(offset = 0) {
+      let maxNum = 2600;
+      properties.forEach(p => {
+        const m = String(p.id || '').match(/(\d+)$/);
+        if (m) {
+          const n = parseInt(m[1], 10);
+          if (n > maxNum) maxNum = n;
+        }
+      });
+      return `SWC-${maxNum + 1 + offset}`;
+    }
+
+    async function checkFoundersGateAndInit() {
+      const overlay = document.getElementById('consignmentGateOverlay');
+      const msgEl = document.getElementById('consignmentGateMsg');
+      const actEl = document.getElementById('consignmentGateActions');
+      const isLocal = (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+
+      if (isLocal) {
+        if (overlay) overlay.classList.add('hidden');
+        await loadInitialData();
+        setSimulatedRole('bua');
+        return;
+      }
+
+      const sess = localStorage.getItem(SESSION_KEY) || '';
+      if (!sess) {
+        if (msgEl) msgEl.innerHTML = 'กรุณาเข้าสู่ระบบด้วย LINE เพื่อยืนยันตัวตน<br>อนุญาตเฉพาะ <strong>คุณกูล (SW001)</strong> และ <strong>คุณต้น (SW004)</strong> เท่านั้น';
+        if (actEl) actEl.classList.remove('hidden');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/api/auth/me`, {
+          headers: { 'Authorization': 'Bearer ' + sess },
+          cache: 'no-store'
+        });
+        if (!res.ok) {
+          if (res.status === 401) localStorage.removeItem(SESSION_KEY);
+          if (msgEl) msgEl.innerHTML = 'เซสชันหมดอายุ กรุณาเข้าสู่ระบบด้วย LINE ใหม่อีกครั้ง';
+          if (actEl) actEl.classList.remove('hidden');
+          return;
+        }
+        const me = await res.json();
+        const m = (me && me.member) ? me.member : {};
+        const id = String(m.id || '').toLowerCase();
+        const code = String(m.code || '').toUpperCase();
+        const isFounder = (me && me.status === 'approved') &&
+          (id === 'app_office_001' || id === 'app_office_004' || code === 'SW001' || code === 'SW004');
+
+        if (!isFounder) {
+          if (msgEl) msgEl.innerHTML = `บัญชี <strong>${escapeHtml(m.nickname || m.name || 'ของคุณ')}</strong> ยังไม่มีสิทธิ์เข้าถึงหน้า Sandbox นี้<br>จำกัดเฉพาะ <strong>คุณกูล (SW001)</strong> และ <strong>คุณต้น (SW004)</strong> เท่านั้น`;
+          if (actEl) {
+            const loginBtn = document.getElementById('consignmentGateLoginBtn');
+            if (loginBtn) loginBtn.classList.add('hidden');
+            actEl.classList.remove('hidden');
+          }
+          return;
+        }
+
+        if (overlay) overlay.classList.add('hidden');
+        await loadInitialData();
+        setSimulatedRole('bua');
+      } catch (err) {
+        if (msgEl) msgEl.innerHTML = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ตรวจสอบสิทธิ์ได้ กรุณาลองใหม่อีกครั้ง';
+        if (actEl) actEl.classList.remove('hidden');
+      }
+    }
+
+    function setSimulatedRole(role) {
+      simRole = role;
+      document.querySelectorAll('[data-sim]').forEach(b => {
+        const active = b.getAttribute('data-sim') === role;
+        b.className = active
+          ? 'px-3 py-1 rounded-lg bg-[#C2A460] text-[#241A0E] font-bold transition flex items-center gap-1.5'
+          : 'px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5';
+      });
+      const canEdit = (role === 'bua' || role === 'poppy');
+      const isAgentView = (role === 'agent');
+      const btnAdd = document.getElementById('btnAddProperty');
+      const btnCsv = document.getElementById('btnImportCsv');
+      const kpiBar = document.getElementById('kpiBarSection');
+      const filterPills = document.getElementById('filterPills');
+      if (btnAdd) btnAdd.classList.toggle('hidden', !canEdit);
+      if (btnCsv) btnCsv.classList.toggle('hidden', !canEdit);
+      if (kpiBar) kpiBar.classList.toggle('hidden', isAgentView);
+      if (filterPills) filterPills.classList.toggle('hidden', isAgentView);
+      if (isAgentView) {
+        currentFilter = 'available';
+      } else if (currentFilter === 'available') {
+        setFilter('all');
+        return;
+      }
+      renderCards();
+    }
+
+    function setFilter(f) {
+      currentFilter = f;
+      document.querySelectorAll('[data-filter]').forEach(b => {
+        const active = b.getAttribute('data-filter') === f;
+        b.className = active
+          ? 'px-3 py-1.5 rounded-xl bg-[#2C2218] text-white text-xs font-bold flex items-center gap-1.5'
+          : 'px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-[#6E5A44] text-xs font-bold flex items-center gap-1.5';
+      });
+      renderCards();
+    }
+
+    function saveLocal() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(properties));
+        return true;
+      } catch (e) {
+        alert('พื้นที่เก็บข้อมูลในเบราว์เซอร์เต็ม (โหมด Offline เก็บรูปขนาดใหญ่ได้จำกัด ~5MB) กรุณาลบรูปบางส่วนหรือรีเซ็ตข้อมูลเทสครับ');
+        return false;
+      }
+    }
+
+    async function loadInitialData() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            properties = parsed;
+            renderCards();
+            return;
+          }
+        } catch (_) {}
+      }
+      await resetToSeedTest(false);
+    }
+
+    async function resetToSeedTest(confirmReset = true) {
+      if (confirmReset && !confirm('รีเซ็ตกลับไปใช้ข้อมูลเทสตั้งต้น 3 หลังใช่หรือไม่?')) return;
+      try {
+        const res = await fetch('data/consignment_seed_test.json?t=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        properties = Array.isArray(data.properties) ? data.properties : [];
+      } catch (e) {
+        alert('ไม่สามารถโหลดข้อมูลตั้งต้น (consignment_seed_test.json) ได้: ' + e.message);
+        properties = [];
+      }
+      saveLocal();
+      renderCards();
+    }
+
+    function renderCards() {
+      document.getElementById('kpiAll').textContent = properties.length;
+      document.getElementById('kpiPendingPhotos').textContent = properties.filter(p => p.status === 'pending_photos').length;
+      document.getElementById('kpiReadyForReview').textContent = properties.filter(p => p.status === 'ready_for_review').length;
+      document.getElementById('kpiAvailable').textContent = properties.filter(p => p.status === 'available').length;
+      document.getElementById('kpiNoContract').textContent = properties.filter(p => p.consignment_type === 'no_contract').length;
+      document.getElementById('kpiOpenContract').textContent = properties.filter(p => p.consignment_type === 'open_contract').length;
+      document.getElementById('kpiExclusive').textContent = properties.filter(p => p.consignment_type === 'exclusive_contract').length;
+
+      const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+      const isAgentView = (simRole === 'agent');
+      const SIM_AGENT_CODE = 'SW_HAI';
+      const list = properties.filter(p => {
+        if (isAgentView && (p.status !== 'available' || p.assigned_agent_code !== SIM_AGENT_CODE)) return false;
+        if (currentFilter === 'pending_photos' && p.status !== 'pending_photos') return false;
+        if (currentFilter === 'ready_for_review' && p.status !== 'ready_for_review') return false;
+        if (currentFilter === 'available' && p.status !== 'available') return false;
+        if (['no_contract', 'open_contract', 'exclusive_contract'].includes(currentFilter) && p.consignment_type !== currentFilter) return false;
+        if (q) {
+          const hay = `${p.id} ${p.title} ${p.zone} ${p.assigned_agent_name}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      const grid = document.getElementById('cardsGrid');
+      const canUpload = (simRole === 'bua' || simRole === 'poppy');
+      const canAssign = (simRole === 'bua');
+
+      grid.innerHTML = list.map(p => {
+        const pid = escapeHtml(p.id);
+        const cInfo = CONTRACT_BADGES[p.consignment_type] || CONTRACT_BADGES.no_contract;
+        const imgUrl = (p.images && p.images.length > 0) ? safeUrl(p.images[0]) : '';
+        const hasImg = Boolean(imgUrl);
+        const isPending = p.status === 'pending_photos';
+        const isReview = p.status === 'ready_for_review';
+
+        const statusBadge = isPending
+          ? `<span class="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold bg-amber-500 text-white flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i><span>รอลงรูป (Sandbox)</span></span>`
+          : isReview
+            ? `<span class="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold bg-blue-600 text-white flex items-center gap-1"><i data-lucide="clipboard-list" class="w-3 h-3"></i><span>พร้อมรอคุณบัวปล่อย</span></span>`
+            : `<span class="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold bg-emerald-600 text-white flex items-center gap-1"><i data-lucide="check-check" class="w-3 h-3"></i><span>ขึ้นระบบจริงแล้ว</span></span>`;
+
+        const caretakerLabel = p.assigned_agent_name
+          ? `<span class="inline-flex items-center gap-1"><i data-lucide="user-check" class="w-3.5 h-3.5 text-[#967332]"></i><span>${escapeHtml(p.assigned_agent_name)}</span><span class="text-[10px] text-[#6E5A44] font-normal">(บัวมอบหมาย)</span></span>`
+          : `<span class="inline-flex items-center gap-1"><i data-lucide="crown" class="w-3.5 h-3.5 text-[#967332]"></i><span>คุณบัว (ดูแลหลัก)</span></span>`;
+
+        return `
+          <div class="gold-card rounded-3xl overflow-hidden flex flex-col justify-between transition">
+            <div>
+              <div class="aspect-[16/10] bg-[#EFE7D8] relative flex items-center justify-center overflow-hidden">
+                ${hasImg
+                  ? `<img src="${imgUrl}" class="w-full h-full object-cover">`
+                  : `<div class="text-center p-4 text-[#8A755E] flex flex-col items-center"><i data-lucide="image" class="w-9 h-9 mb-1 text-[#8A755E]" stroke-width="1.25"></i><div class="text-xs font-bold">รอลงรูปภาพ</div></div>`
+                }
+                <span class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-lg text-[10px] font-bold bg-white/95 text-[#2C2218] border border-[#D8C39A]">${pid}</span>
+                ${statusBadge}
+              </div>
+
+              <div class="p-4 space-y-2.5">
+                ${!isAgentView ? `
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold border inline-flex items-center gap-1.5 ${cInfo.cls}">
+                    <span class="w-2 h-2 rounded-full ${cInfo.dot}"></span>
+                    <span>${cInfo.label}</span>
+                  </span>
+                  ${p.contract_expiry ? `<span class="text-[10px] text-[#6E5A44]">หมด: ${escapeHtml(p.contract_expiry)}</span>` : ''}
+                  ${(p.consignment_type !== 'no_contract') ? (
+                    (p.contract_files && p.contract_files.length > 0)
+                      ? `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 inline-flex items-center gap-1"><i data-lucide="file-check" class="w-3 h-3"></i><span>แนบแล้ว (${p.contract_files.length})</span></span>`
+                      : `<span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-300 inline-flex items-center gap-1"><i data-lucide="alert-triangle" class="w-3 h-3"></i><span>ยังไม่แนบสัญญา</span></span>`
+                  ) : ''}
+                </div>
+                ` : ''}
+
+                <div>
+                  <h3 class="text-sm font-bold text-[#2C2218] leading-snug">${escapeHtml(p.title)}</h3>
+                  <div class="text-xs text-[#6E5A44] mt-0.5">${escapeHtml(p.zone || '-')} • ${escapeHtml(p.property_type || 'บ้าน')}</div>
+                </div>
+
+                <div class="text-lg font-black text-[#967332]">฿${Number(p.price || 0).toLocaleString()}</div>
+
+                ${!isAgentView ? `
+                <div class="p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E5D5B5] text-xs space-y-1">
+                  <div class="text-[10px] text-[#6E5A44]">ผู้ดูแลลูกค้า:</div>
+                  <div class="font-bold text-[#2C2218]">${caretakerLabel}</div>
+                  ${p.internal_note ? `<div class="text-[10px] text-[#8A755E] pt-0.5 flex items-start gap-1"><i data-lucide="sticky-note" class="w-3 h-3 shrink-0 mt-0.5"></i><span>${escapeHtml(p.internal_note)}</span></div>` : ''}
+                </div>
+                ` : `
+                <div class="p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E5D5B5] text-xs flex items-center gap-1.5 text-[#6E5A44]">
+                  <i data-lucide="building-2" class="w-3.5 h-3.5 text-[#967332] shrink-0"></i>
+                  <span>ประสานงานกลาง: <strong class="text-[#2C2218]">ศิวาทรัพย์ แอสเซท</strong></span>
+                </div>
+                `}
+              </div>
+            </div>
+
+            <div class="p-3 bg-[#FAF5EB] border-t border-[#E5D5B5] flex flex-wrap items-center gap-2 text-xs">
+              ${canUpload ? `
+                <button onclick="openPhotoModal('${pid}')" class="flex-1 py-2 px-2.5 rounded-xl bg-white hover:bg-[#FAF7F2] border border-[#C2A460] text-[#7A5B22] font-bold transition whitespace-nowrap flex items-center justify-center gap-1.5">
+                  <i data-lucide="image" class="w-4 h-4" stroke-width="1.25"></i>
+                  <span>${hasImg ? `รูป (${p.images.length})` : 'ลงรูป'}</span>
+                </button>
+                <button onclick="openContractModal('${pid}')" class="flex-1 py-2 px-2.5 rounded-xl bg-white hover:bg-[#FAF7F2] border border-[#C2A460] text-[#7A5B22] font-bold transition whitespace-nowrap flex items-center justify-center gap-1.5">
+                  <i data-lucide="file-text" class="w-4 h-4" stroke-width="1.25"></i>
+                  <span>สัญญา${(p.contract_files && p.contract_files.length) ? ` (${p.contract_files.length})` : ''}</span>
+                </button>
+              ` : ''}
+              ${canAssign ? `
+                <button onclick="openAssignModal('${pid}')" class="flex-1 py-2 px-2.5 rounded-xl bg-white hover:bg-[#FAF7F2] border border-[#C2A460] text-[#2C2218] font-bold transition whitespace-nowrap flex items-center justify-center gap-1.5">
+                  <i data-lucide="user-check" class="w-4 h-4" stroke-width="1.25"></i>
+                  <span>แจกผู้ดูแล</span>
+                </button>
+                <button onclick="togglePublishLive('${pid}')" class="w-full py-2 px-3 rounded-xl ${p.status === 'available' ? 'bg-slate-200 text-slate-700 hover:bg-slate-300' : 'bg-emerald-600 hover:bg-emerald-700 text-white'} font-extrabold transition flex items-center justify-center gap-1.5">
+                  <i data-lucide="${p.status === 'available' ? 'pause-circle' : 'check-check'}" class="w-4 h-4" stroke-width="1.5"></i>
+                  <span>${p.status === 'available' ? 'ดึงกลับ Sandbox' : 'ปล่อยขึ้นระบบจริง'}</span>
+                </button>
+              ` : `
+                <div class="flex-1 py-2 px-3 rounded-xl bg-slate-100 text-slate-500 font-bold text-center text-[11px] border border-slate-200 flex items-center justify-center gap-1.5">
+                  <i data-lucide="lock" class="w-3.5 h-3.5" stroke-width="1.5"></i>
+                  <span>ปล่อยขึ้นระบบ &amp; แจกสิทธิ์เฉพาะคุณบัว</span>
+                </div>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openPhotoModal(id) {
+      activePhotoTargetId = id;
+      const p = properties.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('photoModalTitle').textContent = `${p.id} • ${p.title}`;
+      renderPhotoPreviews(p.images || []);
+      document.getElementById('photoModal').classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+    function closePhotoModal() { document.getElementById('photoModal').classList.add('hidden'); }
+    function renderPhotoPreviews(imgs) {
+      document.getElementById('photoPreviewGrid').innerHTML = imgs.map((src, idx) => {
+        const cleanSrc = safeUrl(src);
+        if (!cleanSrc) return '';
+        return `
+          <div class="relative aspect-square rounded-xl overflow-hidden border border-[#D8C39A]">
+            <img src="${cleanSrc}" class="w-full h-full object-cover">
+            <button onclick="removePhoto(${idx})" class="absolute top-1 right-1 w-6 h-6 rounded-full bg-red-600 text-white flex items-center justify-center shadow">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        `;
+      }).join('');
+      if (window.lucide) lucide.createIcons();
+    }
+    function removePhoto(idx) {
+      const p = properties.find(x => x.id === activePhotoTargetId);
+      if (!p) return;
+      p.images.splice(idx, 1);
+      renderPhotoPreviews(p.images);
+    }
+    function handlePhotoFilesSelected(e) {
+      const files = Array.from(e.target.files || []);
+      e.target.value = '';
+      const p = properties.find(x => x.id === activePhotoTargetId);
+      if (!p || !files.length) return;
+      p.images = p.images || [];
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = ev => {
+          p.images.push(ev.target.result);
+          renderPhotoPreviews(p.images);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+    function publishCardWithPhotos() {
+      const p = properties.find(x => x.id === activePhotoTargetId);
+      if (!p) return;
+      if (p.images && p.images.length > 0) {
+        if (p.status !== 'available') p.status = 'ready_for_review';
+      } else {
+        p.status = 'pending_photos';
+      }
+      saveLocal();
+      renderCards();
+      closePhotoModal();
+    }
+
+    function togglePublishLive(id) {
+      if (simRole !== 'bua') return alert('สิทธิ์ปล่อยขึ้นระบบจริงสงวนไว้เฉพาะคุณบัวคนเดียวเท่านั้น');
+      const p = properties.find(x => x.id === id);
+      if (!p) return;
+      if (p.status === 'available') {
+        p.status = (p.images && p.images.length > 0) ? 'ready_for_review' : 'pending_photos';
+      } else {
+        if (!p.images || p.images.length === 0) return alert('กรุณาอัปโหลดรูปอย่างน้อย 1 รูปก่อนปล่อยขึ้นระบบจริงครับ');
+        if (p.consignment_type !== 'no_contract' && (!p.contract_files || p.contract_files.length === 0)) {
+          if (!confirm('บ้านหลังนี้ระบุว่ามีสัญญา แต่ยังไม่ได้แนบไฟล์สัญญา\nต้องการปล่อยขึ้นระบบจริงเลยหรือไม่?')) return;
+        }
+        p.status = 'available';
+      }
+      saveLocal();
+      renderCards();
+    }
+
+    function openContractModal(id) {
+      activeContractTargetId = id;
+      const p = properties.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('contractModalTitle').textContent = `${p.id} • ${p.title}`;
+      document.getElementById('editContractType').value = p.consignment_type || 'no_contract';
+      document.getElementById('editContractExpiry').value = p.contract_expiry || '';
+      const linkEl = document.getElementById('openExclusiveBuilderLink');
+      if (linkEl) linkEl.href = `exclusive_contracts.html?title=${encodeURIComponent(p.title || '')}&price=${encodeURIComponent(p.price || '')}`;
+      renderContractFiles(p.contract_files || []);
+      document.getElementById('contractModal').classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+    function closeContractModal() { document.getElementById('contractModal').classList.add('hidden'); }
+    function renderContractFiles(files) {
+      const box = document.getElementById('contractFilesList');
+      if (!files.length) {
+        box.innerHTML = '<div class="text-center text-[#8A755E] py-2">ยังไม่มีไฟล์สัญญาแนบ</div>';
+        return;
+      }
+      box.innerHTML = files.map((f, idx) => {
+        const href = safeUrl(f.dataUrl);
+        return `
+          <div class="flex items-center justify-between gap-2 p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E5D5B5]">
+            <div class="truncate font-semibold text-[#2C2218] flex items-center gap-1.5">
+              <i data-lucide="file-text" class="w-4 h-4 text-[#967332] shrink-0"></i>
+              <span class="truncate">${escapeHtml(f.name)}</span>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              ${href ? `<a href="${href}" target="_blank" rel="noopener" class="text-blue-700 font-bold hover:underline">เปิดดู</a>` : ''}
+              <button onclick="removeContractFile(${idx})" class="text-rose-600 font-bold">ลบ</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      if (window.lucide) lucide.createIcons();
+    }
+    function handleContractFilesSelected(e) {
+      const files = Array.from(e.target.files || []);
+      e.target.value = '';
+      const p = properties.find(x => x.id === activeContractTargetId);
+      if (!p || !files.length) return;
+      p.contract_files = p.contract_files || [];
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = ev => {
+          p.contract_files.push({ name: file.name, type: file.type, dataUrl: ev.target.result });
+          renderContractFiles(p.contract_files);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+    function removeContractFile(idx) {
+      const p = properties.find(x => x.id === activeContractTargetId);
+      if (!p || !p.contract_files) return;
+      p.contract_files.splice(idx, 1);
+      renderContractFiles(p.contract_files);
+    }
+    function saveContractDetails() {
+      const p = properties.find(x => x.id === activeContractTargetId);
+      if (!p) return;
+      p.consignment_type = document.getElementById('editContractType').value;
+      p.contract_expiry = document.getElementById('editContractExpiry').value || '';
+      saveLocal();
+      renderCards();
+      closeContractModal();
+    }
+
+    function openAssignModal(id) {
+      if (simRole !== 'bua') return alert('สิทธิ์แจกผู้ดูแลสงวนไว้เฉพาะคุณบัวคนเดียวเท่านั้น');
+      activeAssignTargetId = id;
+      const p = properties.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('assignModalTitle').textContent = `${p.id} • ${p.title}`;
+      document.getElementById('assignAgentSelect').value = p.assigned_agent_code ? `${p.assigned_agent_code}|${p.assigned_agent_name}` : '';
+      document.getElementById('assignModal').classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+    function closeAssignModal() { document.getElementById('assignModal').classList.add('hidden'); }
+    function confirmAssignAgent() {
+      const p = properties.find(x => x.id === activeAssignTargetId);
+      if (!p) return;
+      const val = document.getElementById('assignAgentSelect').value;
+      if (!val) {
+        p.assigned_agent_code = '';
+        p.assigned_agent_name = '';
+      } else {
+        const [code, name] = val.split('|');
+        p.assigned_agent_code = code;
+        p.assigned_agent_name = name;
+      }
+      saveLocal();
+      renderCards();
+      closeAssignModal();
+    }
+
+    function openAddPropertyModal() {
+      document.getElementById('addModal').classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+    function closeAddPropertyModal() { document.getElementById('addModal').classList.add('hidden'); }
+    function saveNewProperty() {
+      const title = document.getElementById('addTitle').value.trim();
+      const price = Number(document.getElementById('addPrice').value || 0);
+      if (!title || !price) return alert('กรุณากรอกชื่อโครงการและราคาขาย');
+      properties.unshift({
+        id: getNextPropertyId(),
+        title,
+        property_type: document.getElementById('addPropType').value,
+        price,
+        zone: document.getElementById('addZone').value.trim() || 'กรุงเทพฯ-ปริมณฑล',
+        consignment_type: document.getElementById('addContractType').value,
+        contract_expiry: document.getElementById('addExpiry').value || '',
+        status: 'pending_photos',
+        caretaker_name: 'คุณบัว (ดูแลหลัก)',
+        assigned_agent_code: '',
+        assigned_agent_name: '',
+        internal_note: document.getElementById('addNote').value.trim(),
+        images: [],
+        contract_files: []
+      });
+      document.getElementById('addTitle').value = '';
+      document.getElementById('addPrice').value = '';
+      document.getElementById('addZone').value = '';
+      document.getElementById('addNote').value = '';
+      document.getElementById('addExpiry').value = '';
+      saveLocal();
+      renderCards();
+      closeAddPropertyModal();
+    }
+
+    function parseCsvLine(line) {
+      const out = [];
+      let cur = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') {
+          inQuotes = !inQuotes;
+        } else if (ch === ',' && !inQuotes) {
+          out.push(cur.trim());
+          cur = '';
+        } else {
+          cur += ch;
+        }
+      }
+      out.push(cur.trim());
+      return out;
+    }
+
+    function openCsvModal() {
+      document.getElementById('csvModal').classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+    function closeCsvModal() { document.getElementById('csvModal').classList.add('hidden'); }
+    function importCsvRows() {
+      const lines = (document.getElementById('csvTextarea').value || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      if (!lines.length) return alert('กรุณาวางข้อมูลอย่างน้อย 1 แถว');
+      let added = 0;
+      lines.forEach((line) => {
+        const [title, propType, rawPrice, zone, cType] = parseCsvLine(line);
+        if (!title || title.includes('ชื่อโครงการ')) return;
+        const price = Number(String(rawPrice || '0').replace(/[^0-9.]/g, '')) || 0;
+        const validType = ['no_contract', 'open_contract', 'exclusive_contract'].includes(cType) ? cType : 'no_contract';
+        properties.unshift({
+          id: getNextPropertyId(),
+          title,
+          property_type: propType || 'บ้านเดี่ยว',
+          price,
+          zone: zone || 'กรุงเทพฯ-ปริมณฑล',
+          consignment_type: validType,
+          contract_expiry: '',
+          status: 'pending_photos',
+          caretaker_name: 'คุณบัว (ดูแลหลัก)',
+          assigned_agent_code: '',
+          assigned_agent_name: '',
+          internal_note: 'นำเข้าจากตาราง CSV',
+          images: [],
+          contract_files: []
+        });
+        added++;
+      });
+      if (!added) return alert('ไม่พบแถวข้อมูลที่นำเข้าได้');
+      document.getElementById('csvTextarea').value = '';
+      saveLocal();
+      renderCards();
+      closeCsvModal();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      checkFoundersGateAndInit();
+    });
+  </script>
+</body>
+</html>

@@ -1686,6 +1686,7 @@ FRONTEND_URLS = {
     "login": "https://assets.siwasup.com/agent_registration.html?mode=login",
     "admin": "https://assets.siwasup.com/admin_lobby_manager.html",
     "exec": "https://assets.siwasup.com/gool_executive_dashboard.html",
+    "consignment": "https://assets.siwasup.com/admin_consignment.html",
     "catalog": "https://assets.siwasup.com/catalog.html",
     "seller": "https://assets.siwasup.com/catalog.html?view=seller",
 }

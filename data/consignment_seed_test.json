@@ -1,0 +1,61 @@
+{
+  "updated_at": "2026-11-19 19:02:00",
+  "properties": [
+    {
+      "id": "SWC-2601",
+      "title": "บ้านเดี่ยว 2 ชั้น หมู่บ้านมัณฑนา พระราม 2 – เทียนทะเล",
+      "property_type": "บ้านเดี่ยว",
+      "price": 5890000,
+      "zone": "โซนพระราม 2-บางขุนเทียน",
+      "area_sqw": 62.5,
+      "bedrooms": 4,
+      "bathrooms": 3,
+      "consignment_type": "no_contract",
+      "contract_expiry": "",
+      "status": "pending_photos",
+      "caretaker_name": "คุณบัว (ดูแลหลัก)",
+      "assigned_agent_code": "",
+      "assigned_agent_name": "",
+      "internal_note": "เจ้าของอนุญาตลงขายได้เลย ติดต่อผ่านคุณบัว",
+      "images": []
+    },
+    {
+      "id": "SWC-2602",
+      "title": "ทาวน์โฮม 2 ชั้น รีโนเวทใหม่ ประชาอุทิศ 90",
+      "property_type": "ทาวน์เฮาส์",
+      "price": 2490000,
+      "zone": "โซนสุขสวัสดิ์-ประชาอุทิศ",
+      "area_sqw": 21.0,
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "consignment_type": "open_contract",
+      "contract_expiry": "2027-05-19",
+      "status": "pending_photos",
+      "caretaker_name": "คุณบัว (ดูแลหลัก)",
+      "assigned_agent_code": "",
+      "assigned_agent_name": "",
+      "internal_note": "สัญญาเปิด 6 เดือน กุญแจอยู่ที่เจ้าของ นัดล่วงหน้า 1 วัน",
+      "images": []
+    },
+    {
+      "id": "SWC-2603",
+      "title": "บ้านเดี่ยวหลังมุม โครงการเดอะแกรนด์ พระราม 2",
+      "property_type": "บ้านเดี่ยว",
+      "price": 8900000,
+      "zone": "โซนท่าข้าม-พระราม 2",
+      "area_sqw": 78.0,
+      "bedrooms": 4,
+      "bathrooms": 4,
+      "consignment_type": "exclusive_contract",
+      "contract_expiry": "2027-11-19",
+      "status": "available",
+      "caretaker_name": "คุณบัว (ดูแลหลัก)",
+      "assigned_agent_code": "SW_HAI",
+      "assigned_agent_name": "สิทธิชัย (ไห้)",
+      "internal_note": "สัญญาปิด 1 ปี (Exclusive) • คุณบัวมอบหมายให้พี่ไห้ช่วยดูแลลูกค้าโซนนี้",
+      "images": [
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80"
+      ]
+    }
+  ]
+}
