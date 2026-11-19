@@ -537,11 +537,11 @@
             <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
             <span>↩️ กู้คืนรายการล่าสุด (Undo/Rollback)</span>
           </button>
-          <button onclick="createBackupSnapshot()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs border border-slate-300 shadow-2xs flex items-center gap-1.5 transition">
+          <button id="btnBackupSnapshot" onclick="createBackupSnapshot()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs border border-slate-300 shadow-2xs flex items-center gap-1.5 transition-all active:scale-95">
             <i data-lucide="save" class="w-3.5 h-3.5 text-blue-600"></i>
             <span>💾 สำรองข้อมูล (Backup)</span>
           </button>
-          <button onclick="exportAuditLogJson()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs border border-slate-300 shadow-2xs flex items-center gap-1.5 transition">
+          <button id="btnExportLogJson" onclick="exportAuditLogJson()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs border border-slate-300 shadow-2xs flex items-center gap-1.5 transition-all active:scale-95">
             <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-600"></i>
             <span>📑 Export Log (.json)</span>
           </button>
@@ -2082,19 +2082,52 @@
     }
 
     async function createBackupSnapshot() {
+      const btn = document.getElementById('btnBackupSnapshot');
+      if (btn && btn.disabled) return;
+      const origHtml = btn ? btn.innerHTML : '';
+      const origCls = btn ? btn.className : '';
+
+      if (btn) {
+        btn.disabled = true;
+        btn.className = 'px-3 py-1.5 rounded-xl bg-blue-50 text-blue-700 font-bold text-xs border border-blue-300 shadow-2xs flex items-center gap-1.5 cursor-wait';
+        btn.innerHTML = '<span class="inline-block w-3.5 h-3.5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></span><span>กำลังสำรองขึ้น Cloud...</span>';
+      }
+
       const ts = new Date().toISOString().replace(/[:.]/g, '-');
       const backupData = JSON.stringify(lobbyData, null, 2);
       localStorage.setItem(`siwasup_lobby_backup_${ts}`, backupData);
-      lobbyData.audit_log = lobbyData.audit_log || [];
-      lobbyData.audit_log.unshift(`[${new Date().toLocaleString('th-TH')}] 💾 สำรองข้อมูลสถานะสำเร็จ: siwasup_lobby_backup_${ts}`);
-      saveLobbyData();
-      renderLobby();
 
       try {
-        await fetch(`${API_BASE}/api/lobby/backup`, { method: 'POST' });
-      } catch(e) {}
+        const res = await fetch(`${API_BASE}/api/lobby/backup`, { method: 'POST' });
+        let data = {};
+        try { data = await res.json(); } catch (_) {}
+        if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
 
-      alert(`💾 สำรองข้อมูลเรียบร้อย!\nบันทึกสถานะ snapshot ณ เวลาปัจจุบันไว้ในระบบ`);
+        lobbyData.audit_log = lobbyData.audit_log || [];
+        lobbyData.audit_log.unshift(`[${new Date().toLocaleString('th-TH')}] 💾 สำรองข้อมูลขึ้น Cloud สำเร็จ: ${data.backup_file || ts}`);
+        saveLobbyData();
+        renderLobby();
+
+        if (btn) {
+          btn.className = 'px-3.5 py-1.5 rounded-xl bg-emerald-500 text-white font-bold text-xs border border-emerald-600 shadow-md ring-2 ring-emerald-300 flex items-center gap-1.5 transition-all scale-105';
+          btn.innerHTML = '<span>✅ สำรองขึ้น Cloud สำเร็จแล้ว!</span>';
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.className = origCls;
+            btn.innerHTML = origHtml;
+            if (window.lucide) lucide.createIcons();
+          }, 4000);
+        }
+        showToastAlert(`🎉 สำรองข้อมูลขึ้น Cloud เรียบร้อย! (${data.backup_file || 'Snapshot Saved'})`, 'success');
+      } catch (e) {
+        if (btn) {
+          btn.disabled = false;
+          btn.className = origCls;
+          btn.innerHTML = origHtml;
+          if (window.lucide) lucide.createIcons();
+        }
+        showToastAlert(`⚠️ สำรองในเครื่องแล้ว แต่ส่งขึ้น Cloud ไม่สำเร็จ: ${e.message}`, 'error');
+      }
     }
 
     function exportAuditLogJson() {
@@ -2105,6 +2138,22 @@
       document.body.appendChild(dlAnchor);
       dlAnchor.click();
       dlAnchor.remove();
+
+      const btn = document.getElementById('btnExportLogJson');
+      if (btn && !btn.disabled) {
+        const origHtml = btn.innerHTML;
+        const origCls = btn.className;
+        btn.disabled = true;
+        btn.className = 'px-3.5 py-1.5 rounded-xl bg-emerald-500 text-white font-bold text-xs border border-emerald-600 shadow-md ring-2 ring-emerald-300 flex items-center gap-1.5 transition-all';
+        btn.innerHTML = '<span>✅ ดาวน์โหลด .json แล้ว!</span>';
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.className = origCls;
+          btn.innerHTML = origHtml;
+          if (window.lucide) lucide.createIcons();
+        }, 2500);
+      }
+      showToastAlert('📥 ดาวน์โหลดไฟล์สำรอง .json เรียบร้อยแล้ว!', 'success');
     }
 
     function renderAuditLog() {
