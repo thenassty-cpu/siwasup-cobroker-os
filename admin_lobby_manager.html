@@ -32,6 +32,30 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+    /* Cloud Sparkle Burst Animation */
+    @keyframes cloudFloatUp {
+      0%   { opacity: 0; transform: translate(-50%, 0) scale(0.7); }
+      15%  { opacity: 1; transform: translate(-50%, -24px) scale(1.08); }
+      70%  { opacity: 0.95; transform: translate(-50%, -180px) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -260px) scale(0.92); }
+    }
+    @keyframes sparkleRise {
+      0%   { opacity: 0; transform: translate(0, 0) scale(0.4) rotate(0deg); }
+      20%  { opacity: 1; transform: translate(var(--dx-mid, 0px), -55px) scale(1.15) rotate(25deg); }
+      100% { opacity: 0; transform: translate(var(--dx-end, 0px), var(--dy-end, -280px)) scale(0.5) rotate(90deg); }
+    }
+    .cloud-burst-badge {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      animation: cloudFloatUp 1.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .cloud-sparkle-particle {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      animation: sparkleRise var(--dur, 1.2s) cubic-bezier(0.16, 1, 0.3, 1) var(--delay, 0ms) forwards;
+    }
     /* Drag & Drop Visual Styles */
     .drag-card {
       cursor: grab;
@@ -2081,6 +2105,44 @@
       rollbackSpecific(latest.rollback_id);
     }
 
+    function triggerCloudSparkleBurst(anchorEl) {
+      const rect = anchorEl ? anchorEl.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0 };
+      const originX = rect.left + rect.width / 2;
+      const originY = rect.top;
+
+      // 1) Floating Cloud Badge
+      const badge = document.createElement('div');
+      badge.className = 'cloud-burst-badge px-3.5 py-1.5 rounded-full bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500 text-white text-xs font-extrabold shadow-xl border border-white/60 flex items-center gap-1.5 whitespace-nowrap';
+      badge.style.left = `${originX}px`;
+      badge.style.top = `${originY - 8}px`;
+      badge.innerHTML = '<span>☁️</span><span>Saved to Cloud</span><span>✨</span>';
+      document.body.appendChild(badge);
+      setTimeout(() => badge.remove(), 1550);
+
+      // 2) Rising Sparkles
+      const icons = ['✨', '⭐', '💫', '☁️', '🌟'];
+      const count = 14;
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('span');
+        p.className = 'cloud-sparkle-particle select-none';
+        p.textContent = icons[i % icons.length];
+        const spreadX = (Math.random() - 0.5) * 140;
+        const riseY = -(190 + Math.random() * 140);
+        const dur = (1.05 + Math.random() * 0.5).toFixed(2) + 's';
+        const delay = Math.round(Math.random() * 220) + 'ms';
+        p.style.left = `${originX + (Math.random() - 0.5) * 40}px`;
+        p.style.top = `${originY}px`;
+        p.style.fontSize = `${12 + Math.round(Math.random() * 8)}px`;
+        p.style.setProperty('--dx-mid', `${(spreadX * 0.45).toFixed(0)}px`);
+        p.style.setProperty('--dx-end', `${spreadX.toFixed(0)}px`);
+        p.style.setProperty('--dy-end', `${riseY.toFixed(0)}px`);
+        p.style.setProperty('--dur', dur);
+        p.style.setProperty('--delay', delay);
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 1800);
+      }
+    }
+
     async function createBackupSnapshot() {
       const btn = document.getElementById('btnBackupSnapshot');
       if (btn && btn.disabled) return;
@@ -2109,6 +2171,7 @@
         renderLobby();
 
         if (btn) {
+          triggerCloudSparkleBurst(btn);
           btn.className = 'px-3.5 py-1.5 rounded-xl bg-emerald-500 text-white font-bold text-xs border border-emerald-600 shadow-md ring-2 ring-emerald-300 flex items-center gap-1.5 transition-all scale-105';
           btn.innerHTML = '<span>✅ สำรองขึ้น Cloud สำเร็จแล้ว!</span>';
           setTimeout(() => {
