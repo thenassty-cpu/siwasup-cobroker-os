@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" data-theme="siwasup-gold">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Siwasup Co-Broker OS - Executive Dashboard สำหรับคุณเจี๊ยบ (กูล) & คุณบัว</title>
+  <title>Siwasup Co-Broker OS - Executive Dashboard สำหรับคุณเจี๊ยบ (กูล) &amp; คุณบัว</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts: Prompt & Tahoma fallback -->
@@ -15,220 +15,92 @@
   <style>
     body {
       font-family: 'Prompt', 'Tahoma', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-surface);
+      color: var(--text-main);
+      transition: background-color 0.25s ease, color 0.25s ease;
     }
-    .card-glass {
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+
+    /* Default: Bright White + Warm Cream + Champagne Gold (matches welcome_landing.html) */
+    html[data-theme="siwasup-gold"] {
+      --bg-surface: #FAF7F2;
+      --card-bg: #FFFFFF;
+      --inset-bg: #FAF5EB;
+      --panel-border: #E5D5B5;
+      --text-main: #2C2218;
+      --text-muted: #6E5A44;
     }
-    .gold-gradient {
-      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-    }
-    .gold-border {
-      border: 1px solid rgba(245, 158, 11, 0.35);
-    }
-    @media print {
-      body { background: #FFFFFF; color: #000000; }
-      .card-glass { background: #FFFFFF; border: 1px solid #CBD5E1; color: #000000; }
-      .text-white { color: #000000 !important; }
-      .text-slate-300, .text-slate-400 { color: #475569 !important; }
-    }
-  </style>
-<style>
-    /* ==========================================================================
-       THEME ENGINE DEFINITIONS (SYNCED WITH EXECUTIVE QUICK HUB)
-       ========================================================================== */
-    html[data-theme="light-neumorphic"], body[data-theme="light-neumorphic"] {
-      --bg-surface: #EEF2F6;
-      --card-bg: #F4F7FB;
-      --card-border: rgba(255, 255, 255, 0.9);
+    html[data-theme="light-clean"] {
+      --bg-surface: #F1F5F9;
+      --card-bg: #FFFFFF;
+      --inset-bg: #F8FAFC;
+      --panel-border: #CBD5E1;
       --text-main: #0F172A;
       --text-muted: #64748B;
-      --shadow-light: #FFFFFF;
-      --shadow-dark: rgba(166, 180, 200, 0.45);
-      --inset-bg: #EAEFF5;
-      --inset-shadow-dark: rgba(166, 180, 200, 0.45);
-      --accent-primary: #0284C7;
-      --accent-badge-bg: #E0F2FE;
-      --accent-badge-text: #0369A1;
-      --panel-border: #CBD5E1;
     }
-    html[data-theme="dark-obsidian"], body[data-theme="dark-obsidian"] {
+    html[data-theme="dark-obsidian"] {
       --bg-surface: #07090E;
       --card-bg: #111622;
-      --card-border: rgba(194, 164, 96, 0.25);
+      --inset-bg: #0B0F17;
+      --panel-border: rgba(194, 164, 96, 0.28);
       --text-main: #F8FAFC;
       --text-muted: #94A3B8;
-      --shadow-light: rgba(255, 255, 255, 0.04);
-      --shadow-dark: rgba(0, 0, 0, 0.65);
-      --inset-bg: #090D14;
-      --inset-shadow-dark: rgba(0, 0, 0, 0.8);
-      --accent-primary: #C2A460;
-      --accent-badge-bg: rgba(194, 164, 96, 0.15);
-      --accent-badge-text: #FCD34D;
-      --panel-border: rgba(255, 255, 255, 0.08);
-    }
-    html[data-theme="sage-minimal"], body[data-theme="sage-minimal"] {
-      --bg-surface: #F2F5F0;
-      --card-bg: #F8FAF7;
-      --card-border: rgba(255, 255, 255, 0.95);
-      --text-main: #1C281D;
-      --text-muted: #607262;
-      --shadow-light: #FFFFFF;
-      --shadow-dark: rgba(160, 175, 162, 0.35);
-      --inset-bg: #E7ECE4;
-      --inset-shadow-dark: rgba(160, 175, 162, 0.4);
-      --accent-primary: #2D6A4F;
-      --accent-badge-bg: #D8F3DC;
-      --accent-badge-text: #1B4332;
-      --panel-border: #D1D5DB;
-    }
-    html[data-theme="cyber-clay"], body[data-theme="cyber-clay"] {
-      --bg-surface: #F0F2FA;
-      --card-bg: #F7F8FD;
-      --card-border: rgba(255, 255, 255, 0.95);
-      --text-main: #14162B;
-      --text-muted: #62678A;
-      --shadow-light: #FFFFFF;
-      --shadow-dark: rgba(160, 170, 210, 0.45);
-      --inset-bg: #E8EBF8;
-      --inset-shadow-dark: rgba(160, 170, 210, 0.45);
-      --accent-primary: #6366F1;
-      --accent-badge-bg: #EEF2FF;
-      --accent-badge-text: #4338CA;
-      --panel-border: #DDD6FE;
     }
 
-    body {
-      background-color: var(--bg-surface) !important;
-      color: var(--text-main) !important;
-      transition: background-color 0.3s ease, color 0.3s ease;
+    .exec-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--panel-border);
+      box-shadow: 0 4px 20px -6px rgba(138, 101, 37, 0.08);
     }
+    .exec-inset {
+      background-color: var(--inset-bg);
+      border: 1px solid var(--panel-border);
+    }
+    .text-exec-main { color: var(--text-main); }
+    .text-exec-muted { color: var(--text-muted); }
 
-    /* Light, Sage, Cyber theme overrides for dark Tailwind classes */
-    html[data-theme="light-neumorphic"] .bg-slate-950,
-    html[data-theme="sage-minimal"] .bg-slate-950,
-    html[data-theme="cyber-clay"] .bg-slate-950,
-    html[data-theme="light-neumorphic"] .bg-slate-900,
-    html[data-theme="sage-minimal"] .bg-slate-900,
-    html[data-theme="cyber-clay"] .bg-slate-900,
-    html[data-theme="light-neumorphic"] .bg-\[\#07090e\],
-    html[data-theme="sage-minimal"] .bg-\[\#07090e\],
-    html[data-theme="cyber-clay"] .bg-\[\#07090e\] {
-      background-color: var(--card-bg) !important;
-      border-color: var(--panel-border) !important;
-      color: var(--text-main) !important;
+    @media print {
+      body { background: #FFFFFF !important; color: #000000 !important; }
+      .exec-card { background: #FFFFFF !important; border: 1px solid #CBD5E1 !important; box-shadow: none !important; }
+      .no-print { display: none !important; }
     }
-
-    html[data-theme="light-neumorphic"] .bg-slate-900\/95,
-    html[data-theme="sage-minimal"] .bg-slate-900\/95,
-    html[data-theme="cyber-clay"] .bg-slate-900\/95,
-    html[data-theme="light-neumorphic"] .bg-slate-900\/90,
-    html[data-theme="sage-minimal"] .bg-slate-900\/90,
-    html[data-theme="cyber-clay"] .bg-slate-900\/90 {
-      background-color: var(--card-bg) !important;
-      border-color: var(--panel-border) !important;
-      color: var(--text-main) !important;
-    }
-
-    html[data-theme="light-neumorphic"] .bg-slate-800,
-    html[data-theme="sage-minimal"] .bg-slate-800,
-    html[data-theme="cyber-clay"] .bg-slate-800,
-    html[data-theme="light-neumorphic"] .bg-slate-800\/50,
-    html[data-theme="sage-minimal"] .bg-slate-800\/50,
-    html[data-theme="cyber-clay"] .bg-slate-800\/50 {
-      background-color: var(--inset-bg) !important;
-      border-color: var(--panel-border) !important;
-      color: var(--text-main) !important;
-    }
-
-    html[data-theme="light-neumorphic"] .text-white,
-    html[data-theme="sage-minimal"] .text-white,
-    html[data-theme="cyber-clay"] .text-white,
-    html[data-theme="light-neumorphic"] .text-slate-100,
-    html[data-theme="sage-minimal"] .text-slate-100,
-    html[data-theme="cyber-clay"] .text-slate-100 {
-      color: var(--text-main) !important;
-    }
-
-    html[data-theme="light-neumorphic"] .text-slate-400,
-    html[data-theme="sage-minimal"] .text-slate-400,
-    html[data-theme="cyber-clay"] .text-slate-400,
-    html[data-theme="light-neumorphic"] .text-slate-300,
-    html[data-theme="sage-minimal"] .text-slate-300,
-    html[data-theme="cyber-clay"] .text-slate-300 {
-      color: var(--text-muted) !important;
-    }
-
-    html[data-theme="light-neumorphic"] .border-slate-800,
-    html[data-theme="sage-minimal"] .border-slate-800,
-    html[data-theme="cyber-clay"] .border-slate-800,
-    html[data-theme="light-neumorphic"] .border-slate-700,
-    html[data-theme="sage-minimal"] .border-slate-700,
-    html[data-theme="cyber-clay"] .border-slate-700 {
-      border-color: var(--panel-border) !important;
-    }
-
-    html[data-theme="light-neumorphic"] input,
-    html[data-theme="sage-minimal"] input,
-    html[data-theme="cyber-clay"] input,
-    html[data-theme="light-neumorphic"] select,
-    html[data-theme="sage-minimal"] select,
-    html[data-theme="cyber-clay"] select {
-      background-color: var(--inset-bg) !important;
-      color: var(--text-main) !important;
-      border-color: var(--panel-border) !important;
-    }
-</style>
+  </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-amber-500 selection:text-slate-950">
-
-  <!-- Floating 4-Theme Switcher Bar -->
-  <div class="fixed top-3 right-3 z-50 flex items-center gap-1 p-1 rounded-2xl bg-slate-900/90 border border-slate-700 shadow-xl backdrop-blur-md text-xs" id="adminThemeBar">
-    <span class="px-2 py-0.5 text-[10px] font-bold text-slate-400 flex items-center gap-1">
-      <i data-lucide="palette" class="w-3.5 h-3.5 text-amber-500"></i>
-      <span class="hidden sm:inline">ธีม:</span>
-    </span>
-    <button onclick="switchAdminTheme('light-neumorphic')" id="themeBtn-light-neumorphic" class="px-2 py-0.5 text-[10px] font-bold rounded-lg transition cursor-pointer">🤍 คลีน</button>
-    <button onclick="switchAdminTheme('dark-obsidian')" id="themeBtn-dark-obsidian" class="px-2 py-0.5 text-[10px] font-bold rounded-lg transition cursor-pointer">🖤 ดาร์ก</button>
-    <button onclick="switchAdminTheme('sage-minimal')" id="themeBtn-sage-minimal" class="px-2 py-0.5 text-[10px] font-bold rounded-lg transition cursor-pointer">🌿 เซจ</button>
-    <button onclick="switchAdminTheme('cyber-clay')" id="themeBtn-cyber-clay" class="px-2 py-0.5 text-[10px] font-bold rounded-lg transition cursor-pointer">⚡ ไซเบอร์</button>
-  </div>
-
+<body class="min-h-screen flex flex-col selection:bg-amber-200 selection:text-[#2C2218]">
 
   <!-- TOP EXECUTIVE HEADER -->
-  <header class="bg-slate-900/95 border-b border-slate-800 sticky top-0 z-50 backdrop-blur-md">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-3">
+  <header class="exec-card sticky top-0 z-50 border-x-0 border-t-0 backdrop-blur-md">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
       
       <!-- Brand & Title -->
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-amber-500/20">
-          <i data-lucide="shield-check" class="w-6 h-6"></i>
-        </div>
+        <img src="https://assets.siwasup.com/siwasup_logo.svg" alt="ศิวาทรัพย์" class="h-9 w-auto object-contain" onerror="this.onerror=null; this.src='assets/siwasup_logo.png';">
         <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-base sm:text-lg font-bold text-white tracking-tight">Siwasup Co-Broker OS</h1>
-            <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
-              EXECUTIVE BOARD BRIEFING
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-base sm:text-lg font-extrabold text-exec-main">Siwasup Co-Broker OS</h1>
+            <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-[#FAF2E1] text-[#8A6525] border border-[#C2A460]">
+              EXECUTIVE BRIEFING
             </span>
           </div>
-          <p class="text-[11px] text-slate-400">แดชบอร์ดภาพรวมระบบ & การจัดสรรสิทธิ์ 5 คน สำหรับคุณเจี๊ยบ (กูล) & คุณบัว</p>
+          <p class="text-[11px] text-exec-muted">แดชบอร์ดภาพรวมระบบ &amp; การจัดสรรสิทธิ์ 5 คน สำหรับคุณเจี๊ยบ (กูล) &amp; คุณบัว</p>
         </div>
       </div>
 
-      <!-- System Status -->
-      <div class="flex items-center gap-2 text-right">
-        <div class="hidden sm:block text-[11px]">
-          <div class="text-slate-400">สถานะคลาวด์เซิร์ฟเวอร์</div>
-          <div class="text-emerald-400 font-extrabold flex items-center gap-1 justify-end">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>ออนไลน์ 24/7/365 (สิงคโปร์)</span>
-          </div>
+      <!-- Right Controls: Theme Switcher + Status + Print -->
+      <div class="flex items-center gap-2 flex-wrap no-print">
+        <div class="flex items-center gap-1 p-1 rounded-xl exec-inset text-[10px] font-bold">
+          <button onclick="switchAdminTheme('siwasup-gold')" id="themeBtn-siwasup-gold" class="px-2 py-1 rounded-lg transition cursor-pointer">✨ ขาวทอง</button>
+          <button onclick="switchAdminTheme('light-clean')" id="themeBtn-light-clean" class="px-2 py-1 rounded-lg transition cursor-pointer">🤍 คลีน</button>
+          <button onclick="switchAdminTheme('dark-obsidian')" id="themeBtn-dark-obsidian" class="px-2 py-1 rounded-lg transition cursor-pointer">🖤 ดาร์ก</button>
         </div>
-        <button onclick="window.print()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition">
-          <i data-lucide="printer" class="w-3.5 h-3.5"></i>
-          <span class="hidden sm:inline">พิมพ์ / บันทึก PDF</span>
+
+        <div class="hidden md:flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Cloud Online 24/7</span>
+        </div>
+
+        <button onclick="window.print()" class="px-3 py-1.5 rounded-xl exec-inset hover:opacity-80 text-exec-main text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
+          <i data-lucide="printer" class="w-3.5 h-3.5 text-[#967332]"></i>
+          <span class="hidden sm:inline">พิมพ์ / PDF</span>
         </button>
       </div>
 
@@ -238,200 +110,163 @@
   <!-- MAIN SINGLE-PAGE DASHBOARD CONTAINER -->
   <main class="max-w-6xl mx-auto px-4 sm:px-6 py-6 flex-1 w-full space-y-6">
 
-    <!-- 1. EXECUTIVE KPI CARDS (4 เสาหลักทางธุรกิจ) -->
+    <!-- 1. EXECUTIVE KPI CARDS (4 เสาหลักทางธุรกิจ - Updated to live 4,000+ inventory) -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       
       <!-- Card 1: Property Inventory -->
-      <div class="card-glass rounded-2xl p-4 border border-amber-500/30 space-y-1 relative overflow-hidden shadow-lg">
-        <div class="flex items-center justify-between text-slate-400 text-xs">
+      <div class="exec-card rounded-2xl p-4 space-y-1 relative overflow-hidden">
+        <div class="flex items-center justify-between text-exec-muted text-xs font-medium">
           <span>คลังทรัพย์ในระบบ</span>
-          <i data-lucide="home" class="w-4 h-4 text-amber-400"></i>
+          <i data-lucide="home" class="w-4 h-4 text-[#967332]"></i>
         </div>
-        <div class="text-xl sm:text-2xl font-black text-white">59,468 <span class="text-xs font-normal text-slate-400">หลัง</span></div>
-        <div class="text-[10px] text-amber-400 font-medium">BAM (18k) + JAM (40k) + ทรัพย์โครงการ</div>
+        <div class="text-xl sm:text-2xl font-black text-exec-main">4,000+ <span class="text-xs font-normal text-exec-muted">หลัง</span></div>
+        <div class="text-[10px] text-[#967332] font-semibold">KTB • TTB • SAM • SCB • GSB • ALPHA • PAMCO • ศิวาทรัพย์</div>
       </div>
 
       <!-- Card 2: Lily Viewing Speed -->
-      <div class="card-glass rounded-2xl p-4 border border-emerald-500/30 space-y-1 relative overflow-hidden shadow-lg">
-        <div class="flex items-center justify-between text-slate-400 text-xs">
+      <div class="exec-card rounded-2xl p-4 space-y-1 relative overflow-hidden">
+        <div class="flex items-center justify-between text-exec-muted text-xs font-medium">
           <span>ความเร็วอนุมัติกุญแจ (พี่ลิลลี่)</span>
-          <i data-lucide="zap" class="w-4 h-4 text-emerald-400"></i>
+          <i data-lucide="zap" class="w-4 h-4 text-emerald-600"></i>
         </div>
-        <div class="text-xl sm:text-2xl font-black text-emerald-400">&lt; 3 <span class="text-xs font-normal text-slate-400">วินาที / เคส</span></div>
-        <div class="text-[10px] text-emerald-400 font-medium">Stress Test 6 คนพร้อมกัน • ไร้คอขวด 100%</div>
+        <div class="text-xl sm:text-2xl font-black text-emerald-700">&lt; 3 <span class="text-xs font-normal text-exec-muted">วินาที / เคส</span></div>
+        <div class="text-[10px] text-emerald-700 font-semibold">อนุมัติผ่าน LINE Bot ทันที • ไร้คอขวด</div>
       </div>
 
       <!-- Card 3: Commission Lock -->
-      <div class="card-glass rounded-2xl p-4 border border-blue-500/30 space-y-1 relative overflow-hidden shadow-lg">
-        <div class="flex items-center justify-between text-slate-400 text-xs">
-          <span>การคุ้มครองสิทธิ์คอมมิชชัน</span>
-          <i data-lucide="lock" class="w-4 h-4 text-blue-400"></i>
+      <div class="exec-card rounded-2xl p-4 space-y-1 relative overflow-hidden">
+        <div class="flex items-center justify-between text-exec-muted text-xs font-medium">
+          <span>การคุ้มครองสิทธิ์ลูกค้า</span>
+          <i data-lucide="lock" class="w-4 h-4 text-blue-600"></i>
         </div>
-        <div class="text-xl sm:text-2xl font-black text-blue-400">60 <span class="text-xs font-normal text-slate-400">วันเต็ม</span></div>
-        <div class="text-[10px] text-blue-300 font-medium">ล็อกชื่อลูกค้าทันทีที่อนุมัติ • เอเจนต์มั่นใจ</div>
+        <div class="text-xl sm:text-2xl font-black text-blue-700">60 <span class="text-xs font-normal text-exec-muted">วันเต็ม</span></div>
+        <div class="text-[10px] text-blue-700 font-semibold">ล็อกสิทธิ์ผ่าน Tracking อัตโนมัติ • เอเจนต์มั่นใจ</div>
       </div>
 
       <!-- Card 4: Office Security -->
-      <div class="card-glass rounded-2xl p-4 border border-purple-500/30 space-y-1 relative overflow-hidden shadow-lg">
-        <div class="flex items-center justify-between text-slate-400 text-xs">
-          <span>ทีมงานออฟฟิศ 5 คน</span>
-          <i data-lucide="users" class="w-4 h-4 text-purple-400"></i>
+      <div class="exec-card rounded-2xl p-4 space-y-1 relative overflow-hidden">
+        <div class="flex items-center justify-between text-exec-muted text-xs font-medium">
+          <span>ทีมบริหาร &amp; ออฟฟิศ</span>
+          <i data-lucide="users" class="w-4 h-4 text-purple-600"></i>
         </div>
-        <div class="text-xl sm:text-2xl font-black text-purple-400">5 <span class="text-xs font-normal text-slate-400">คนชัดเจน</span></div>
-        <div class="text-[10px] text-purple-300 font-medium">เจี๊ยบ(กูล) • บัว • ต้น • ลิลลี่ • ซัพพอร์ต</div>
+        <div class="text-xl sm:text-2xl font-black text-purple-700">5 <span class="text-xs font-normal text-exec-muted">บทบาทหลัก</span></div>
+        <div class="text-[10px] text-purple-700 font-semibold">เจี๊ยบ(กูล) • บัว • ต้น • ลิลลี่ • ซัพพอร์ต</div>
       </div>
 
     </div>
 
-    <!-- 2. MASTER ADMIN PERMISSION MATRIX (ตารางสิทธิ์แอดมินสำหรับทีมงาน 5 คน) -->
-    <div class="card-glass rounded-3xl p-5 sm:p-6 border border-amber-500/30 space-y-4 shadow-xl">
+    <!-- 2. MASTER ADMIN PERMISSION MATRIX -->
+    <div class="exec-card rounded-3xl p-5 sm:p-6 space-y-4">
       
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b" style="border-color: var(--panel-border);">
         <div>
-          <div class="flex items-center gap-2">
-            <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-              <i data-lucide="sliders" class="w-5 h-5 text-amber-400"></i>
-              <span>ตารางจัดสรรสิทธิ์ระบบแอดมิน (Admin Access & Role Matrix)</span>
-            </h2>
-          </div>
-          <p class="text-xs text-slate-400">
-            หลักการ: ทีมงานทั้ง 5 คนมี <strong>Standard Admin เป็นสิทธิ์พื้นฐาน</strong> สำหรับดูทรัพย์และช่วยตรวจงาน และมี <strong>สิทธิ์เฉพาะด้าน</strong> ที่ติ๊กมอบหมายตามบทบาทจริง
+          <h2 class="text-base sm:text-lg font-bold text-exec-main flex items-center gap-2">
+            <i data-lucide="sliders" class="w-5 h-5 text-[#967332]"></i>
+            <span>ตารางจัดสรรสิทธิ์ระบบแอดมิน (Admin Access &amp; Role Matrix)</span>
+          </h2>
+          <p class="text-xs text-exec-muted mt-0.5">
+            หลักการ: ทีมงานทั้ง 5 คนมี <strong>Standard Admin เป็นสิทธิ์พื้นฐาน</strong> และมี <strong>สิทธิ์เฉพาะด้าน</strong> ตามบทบาทจริง
           </p>
         </div>
-        <div class="text-right">
-          <span class="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-            ✓ สิทธิ์ปลอดภัย ล็อกแก้ราคาเฉพาะเจี๊ยบ/บัว
+        <div class="text-right shrink-0">
+          <span class="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
+            ✓ ล็อกสิทธิ์แก้ราคาเฉพาะเจี๊ยบ/บัว
           </span>
         </div>
       </div>
 
       <!-- Responsive Table -->
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs border-collapse">
+        <table class="w-full text-left text-xs border-collapse min-w-[680px]">
           <thead>
-            <tr class="bg-slate-900/90 text-slate-300 border-b border-slate-800">
+            <tr class="exec-inset text-exec-main">
               <th class="py-3 px-3.5 font-bold rounded-l-xl">หมวดหมู่สิทธิ์การใช้งาน</th>
-              <th class="py-3 px-3.5 font-bold text-amber-400">👑 คุณเจี๊ยบ (กูล) & คุณบัว<br><span class="text-[10px] font-normal text-slate-400">(บอสใหญ่ / บัวทำแทนได้ 100%)</span></th>
-              <th class="py-3 px-3.5 font-bold text-rose-400">💻 คุณต้น<br><span class="text-[10px] font-normal text-slate-400">(Tech Architect)</span></th>
-              <th class="py-3 px-3.5 font-bold text-emerald-400">🔑 พี่ลิลลี่<br><span class="text-[10px] font-normal text-slate-400">(Head of Viewing ท่าข้าม 12)</span></th>
-              <th class="py-3 px-3.5 font-bold text-slate-400 rounded-r-xl">🏢 ธุรการ/ซัพพอร์ต<br><span class="text-[10px] font-normal text-slate-500">(เจ้าหน้าที่ออฟฟิศ)</span></th>
+              <th class="py-3 px-3.5 font-bold text-[#8A6525]">👑 คุณเจี๊ยบ (กูล) &amp; คุณบัว<br><span class="text-[10px] font-normal text-exec-muted">(บอสใหญ่ / บัวทำแทนได้ 100%)</span></th>
+              <th class="py-3 px-3.5 font-bold text-rose-700">💻 คุณต้น<br><span class="text-[10px] font-normal text-exec-muted">(Tech Architect)</span></th>
+              <th class="py-3 px-3.5 font-bold text-emerald-700">🔑 พี่ลิลลี่<br><span class="text-[10px] font-normal text-exec-muted">(Head of Viewing ท่าข้าม 12)</span></th>
+              <th class="py-3 px-3.5 font-bold text-exec-muted rounded-r-xl">🏢 ธุรการ/ซัพพอร์ต<br><span class="text-[10px] font-normal opacity-80">(เจ้าหน้าที่ออฟฟิศ)</span></th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-800/60 text-slate-200">
+          <tbody class="divide-y" style="border-color: var(--panel-border);">
             
-            <!-- Row 1: Standard Admin -->
-            <tr class="hover:bg-slate-900/40 transition">
+            <tr>
               <td class="py-3 px-3.5">
-                <div class="font-bold text-white flex items-center gap-1.5">
-                  <i data-lucide="shield" class="w-3.5 h-3.5 text-slate-400"></i>
-                  <span>🛡️ Standard Admin (สิทธิ์พื้นฐาน)</span>
-                </div>
-                <div class="text-[10px] text-slate-400">ดูทรัพย์ทั้งหมด, ดึงนามบัตร, เช็กคิวทั่วไป</div>
+                <div class="font-bold text-exec-main">🛡️ Standard Admin (สิทธิ์พื้นฐาน)</div>
+                <div class="text-[10px] text-exec-muted">ดูทรัพย์ทั้งหมด, ดึงนามบัตร, เช็กคิวทั่วไป</div>
               </td>
-              <td class="py-3 px-3.5 text-emerald-400 font-bold">🟢 เปิดใช้งาน</td>
-              <td class="py-3 px-3.5 text-emerald-400 font-bold">🟢 เปิดใช้งาน</td>
-              <td class="py-3 px-3.5 text-emerald-400 font-bold">🟢 เปิดใช้งาน</td>
-              <td class="py-3 px-3.5 text-emerald-400 font-bold">🟢 เปิดใช้งาน</td>
+              <td class="py-3 px-3.5 text-emerald-700 font-bold">🟢 เปิดใช้งาน</td>
+              <td class="py-3 px-3.5 text-emerald-700 font-bold">🟢 เปิดใช้งาน</td>
+              <td class="py-3 px-3.5 text-emerald-700 font-bold">🟢 เปิดใช้งาน</td>
+              <td class="py-3 px-3.5 text-emerald-700 font-bold">🟢 เปิดใช้งาน</td>
             </tr>
 
-            <!-- Row 2: Price Editing -->
-            <tr class="bg-amber-500/5 hover:bg-amber-500/10 transition">
+            <tr style="background-color: rgba(194, 164, 96, 0.08);">
               <td class="py-3 px-3.5">
-                <div class="font-bold text-amber-400 flex items-center gap-1.5">
-                  <i data-lucide="dollar-sign" class="w-3.5 h-3.5"></i>
-                  <span>💰 สิทธิ์ปรับแก้ราคาบ้าน & ส่วนลดพิเศษ</span>
-                </div>
-                <div class="text-[10px] text-slate-400">เคาะราคาขายตั้งต้น, ลดราคา Shock Price, และปรับเรตคอม</div>
+                <div class="font-bold text-[#8A6525]">💰 สิทธิ์ปรับแก้ราคาบ้าน &amp; ส่วนลดพิเศษ</div>
+                <div class="text-[10px] text-exec-muted">เคาะราคาขายตั้งต้น, ลดราคา Shock Price, และปรับเรตคอม</div>
               </td>
-              <td class="py-3 px-3.5 text-emerald-400 font-bold">
-                <div class="flex items-center gap-1">
-                  <span>🟢 อนุญาต</span>
-                  <span class="text-[9px] px-1.5 py-0.2 bg-amber-500/20 text-amber-300 font-bold rounded">อำนาจเคาะสูงสุด</span>
-                </div>
+              <td class="py-3 px-3.5 text-emerald-700 font-bold">
+                <span>🟢 อนุญาต</span>
+                <span class="ml-1 text-[9px] px-1.5 py-0.5 bg-[#FAF2E1] text-[#8A6525] border border-[#C2A460] font-bold rounded">อำนาจเคาะสูงสุด</span>
               </td>
-              <td class="py-3 px-3.5 text-emerald-400 font-bold">🟢 อนุญาต <span class="text-[9px] text-slate-400">(คอนฟิกระบบ)</span></td>
-              <td class="py-3 px-3.5 text-red-400 font-bold">🔴 ล็อกสิทธิ์</td>
-              <td class="py-3 px-3.5 text-red-400 font-bold">🔴 ล็อกสิทธิ์</td>
+              <td class="py-3 px-3.5 text-emerald-700 font-bold">🟢 อนุญาต <span class="text-[9px] text-exec-muted">(คอนฟิกระบบ)</span></td>
+              <td class="py-3 px-3.5 text-rose-600 font-bold">🔴 ล็อกสิทธิ์</td>
+              <td class="py-3 px-3.5 text-rose-600 font-bold">🔴 ล็อกสิทธิ์</td>
             </tr>
 
-            <!-- Row 3: Executive Reports -->
-            <tr class="hover:bg-slate-900/40 transition">
+            <tr>
               <td class="py-3 px-3.5">
-                <div class="font-bold text-white flex items-center gap-1.5">
-                  <i data-lucide="trending-up" class="w-3.5 h-3.5 text-purple-400"></i>
-                  <span>👑 สิทธิ์ผู้บริหาร & รายงาน KPI ภาพรวม</span>
-                </div>
-                <div class="text-[10px] text-slate-400">ดูสถิติยอดขายรวม, ประสิทธิภาพทีมงาน, อนุมัติสัญญา Co-Broker</div>
+                <div class="font-bold text-exec-main">👑 สิทธิ์ผู้บริหาร &amp; รายงาน KPI ภาพรวม</div>
+                <div class="text-[10px] text-exec-muted">ดูสถิติยอดขายรวม, ประสิทธิภาพทีมงาน, อนุมัติสัญญา Co-Broker</div>
               </td>
-              <td class="py-3 px-3.5 text-emerald-400 font-bold">🟢 อนุญาต</td>
-              <td class="py-3 px-3.5 text-emerald-400 font-bold">🟢 อนุญาต</td>
-              <td class="py-3 px-3.5 text-red-400 font-bold">🔴 ล็อกสิทธิ์</td>
-              <td class="py-3 px-3.5 text-red-400 font-bold">🔴 ล็อกสิทธิ์</td>
+              <td class="py-3 px-3.5 text-emerald-700 font-bold">🟢 อนุญาต</td>
+              <td class="py-3 px-3.5 text-emerald-700 font-bold">🟢 อนุญาต</td>
+              <td class="py-3 px-3.5 text-rose-600 font-bold">🔴 ล็อกสิทธิ์</td>
+              <td class="py-3 px-3.5 text-rose-600 font-bold">🔴 ล็อกสิทธิ์</td>
             </tr>
 
-            <!-- Row 4: Keybox & OTP -->
-            <tr class="hover:bg-slate-900/40 transition">
+            <tr>
               <td class="py-3 px-3.5">
-                <div class="font-bold text-white flex items-center gap-1.5">
-                  <i data-lucide="key" class="w-3.5 h-3.5 text-emerald-400"></i>
-                  <span>🔑 สิทธิ์คุมกุญแจ & อนุมัติรหัส OTP</span>
-                </div>
-                <div class="text-[10px] text-slate-400">อนุมัติคิวเปิดบ้านใน 3 วิ, ออกรหัส OTP, เลื่อนนัด, ยกเลิกฉุกเฉิน</div>
+                <div class="font-bold text-exec-main">🔑 สิทธิ์คุมกุญแจ &amp; อนุมัติรหัส OTP</div>
+                <div class="text-[10px] text-exec-muted">อนุมัติคิวเปิดบ้านใน 3 วิ, ออกรหัส OTP, เลื่อนนัด, ยกเลิกฉุกเฉิน</div>
               </td>
-              <td class="py-3 px-3.5 text-amber-400 font-bold">
-                <div class="flex items-center gap-1">
-                  <span>🟡 มีสิทธิ์สำรอง</span>
-                  <span class="text-[9px] px-1 bg-amber-500/20 text-amber-300 rounded">ช่วยเมื่อลิลลี่ไม่อยู่</span>
-                </div>
-              </td>
-              <td class="py-3 px-3.5 text-slate-400">🟢 มีสิทธิ์ฉุกเฉิน</td>
-              <td class="py-3 px-3.5 text-emerald-400 font-extrabold bg-emerald-500/10">🟢 อนุมัติหลัก 100% (Lily Cockpit)</td>
-              <td class="py-3 px-3.5 text-red-400 font-bold">🔴 ล็อกสิทธิ์</td>
+              <td class="py-3 px-3.5 text-amber-700 font-bold">🟡 มีสิทธิ์สำรอง <span class="text-[9px] font-normal">(เมื่อลิลลี่ไม่อยู่)</span></td>
+              <td class="py-3 px-3.5 text-exec-muted font-semibold">🟢 สิทธิ์ฉุกเฉิน</td>
+              <td class="py-3 px-3.5 text-emerald-700 font-extrabold bg-emerald-50/70">🟢 อนุมัติหลัก 100% (Lily Cockpit)</td>
+              <td class="py-3 px-3.5 text-rose-600 font-bold">🔴 ล็อกสิทธิ์</td>
             </tr>
 
-            <!-- Row 5: Lead & Chat Inspection -->
-            <tr class="hover:bg-slate-900/40 transition">
+            <tr>
               <td class="py-3 px-3.5">
-                <div class="font-bold text-white flex items-center gap-1.5">
-                  <i data-lucide="message-square" class="w-3.5 h-3.5 text-blue-400"></i>
-                  <span>📊 สิทธิ์ตรวจลีด & ประวัติแชทลูกค้า</span>
-                </div>
-                <div class="text-[10px] text-slate-400">ตรวจดูบทสนทนากับ AI ศิวา, ติดตามลูกค้า, ตรวจสอบตัวแทนใหม่</div>
+                <div class="font-bold text-exec-main">📊 สิทธิ์ตรวจลีด &amp; ประวัติแชทลูกค้า</div>
+                <div class="text-[10px] text-exec-muted">ตรวจดูบทสนทนากับ AI ศิวา, ติดตามลูกค้า, ตรวจสอบตัวแทนใหม่</div>
               </td>
-              <td class="py-3 px-3.5 text-emerald-400 font-extrabold bg-blue-500/10">🟢 บริหารลีด & เอเจนต์หลัก</td>
-              <td class="py-3 px-3.5 text-emerald-400 font-bold">🟢 อนุญาต</td>
-              <td class="py-3 px-3.5 text-red-400 font-bold">🔴 ล็อกสิทธิ์</td>
-              <td class="py-3 px-3.5 text-red-400 font-bold">🔴 ล็อกสิทธิ์</td>
+              <td class="py-3 px-3.5 text-emerald-700 font-extrabold bg-blue-50/70">🟢 บริหารลีด &amp; เอเจนต์หลัก</td>
+              <td class="py-3 px-3.5 text-emerald-700 font-bold">🟢 อนุญาต</td>
+              <td class="py-3 px-3.5 text-rose-600 font-bold">🔴 ล็อกสิทธิ์</td>
+              <td class="py-3 px-3.5 text-rose-600 font-bold">🔴 ล็อกสิทธิ์</td>
             </tr>
 
-            <!-- Row 6: NPA & Spotlight Curator -->
-            <tr class="hover:bg-slate-900/40 transition">
+            <tr>
               <td class="py-3 px-3.5">
-                <div class="font-bold text-white flex items-center gap-1.5">
-                  <i data-lucide="tag" class="w-3.5 h-3.5 text-amber-300"></i>
-                  <span>🏷️ สิทธิ์คัดสรรทรัพย์เด่น NPA & ป้ายโปร</span>
-                </div>
-                <div class="text-[10px] text-slate-400">คัดแยกบ้าน 59,000 หลังขึ้นหน้าแรก [Hero / Hot Deals / รีโนเวท]</div>
+                <div class="font-bold text-exec-main">🏷️ สิทธิ์คัดสรรทรัพย์เด่น &amp; บ้านฝากขาย</div>
+                <div class="text-[10px] text-exec-muted">คัดแยกบ้าน 4,000+ หลังขึ้นหน้าแรก [Hot Deals / รีโนเวท / ฝากขาย]</div>
               </td>
-              <td class="py-3 px-3.5 text-emerald-400 font-bold">🟢 อนุญาต</td>
-              <td class="py-3 px-3.5 text-emerald-400 font-bold">🟢 อนุญาต</td>
-              <td class="py-3 px-3.5 text-red-400 font-bold">🔴 ล็อกสิทธิ์</td>
-              <td class="py-3 px-3.5 text-emerald-400 font-bold">🟢 ช่วยจัดสต๊อก</td>
+              <td class="py-3 px-3.5 text-emerald-700 font-bold">🟢 อนุญาต</td>
+              <td class="py-3 px-3.5 text-emerald-700 font-bold">🟢 อนุญาต</td>
+              <td class="py-3 px-3.5 text-rose-600 font-bold">🔴 ล็อกสิทธิ์</td>
+              <td class="py-3 px-3.5 text-emerald-700 font-bold">🟢 ช่วยจัดสต๊อก</td>
             </tr>
 
-            <!-- Row 7: Cloud & Infrastructure -->
-            <tr class="hover:bg-slate-900/40 transition">
+            <tr>
               <td class="py-3 px-3.5">
-                <div class="font-bold text-white flex items-center gap-1.5">
-                  <i data-lucide="server" class="w-3.5 h-3.5 text-rose-400"></i>
-                  <span>⚙️ สิทธิ์เทคนิค คลาวด์ & คอนฟิกเซิร์ฟเวอร์</span>
-                </div>
-                <div class="text-[10px] text-slate-400">คุม Render Cloud, Webhook LINE API, และ Data Cleansing</div>
+                <div class="font-bold text-exec-main">⚙️ สิทธิ์เทคนิค คลาวด์ &amp; คอนฟิกเซิร์ฟเวอร์</div>
+                <div class="text-[10px] text-exec-muted">คุม Render Cloud, Webhook LINE API, และ Data Cleansing</div>
               </td>
-              <td class="py-3 px-3.5 text-red-400 font-bold">🔴 ล็อกสิทธิ์</td>
-              <td class="py-3 px-3.5 text-emerald-400 font-extrabold bg-rose-500/10">🟢 ดูแลระบบเดี่ยว</td>
-              <td class="py-3 px-3.5 text-red-400 font-bold">🔴 ล็อกสิทธิ์</td>
-              <td class="py-3 px-3.5 text-red-400 font-bold">🔴 ล็อกสิทธิ์</td>
+              <td class="py-3 px-3.5 text-rose-600 font-bold">🔴 ล็อกสิทธิ์</td>
+              <td class="py-3 px-3.5 text-emerald-700 font-extrabold bg-rose-50/70">🟢 ดูแลระบบเดี่ยว</td>
+              <td class="py-3 px-3.5 text-rose-600 font-bold">🔴 ล็อกสิทธิ์</td>
+              <td class="py-3 px-3.5 text-rose-600 font-bold">🔴 ล็อกสิทธิ์</td>
             </tr>
 
           </tbody>
@@ -440,93 +275,98 @@
 
     </div>
 
-    <!-- 3. STRATEGIC ROLLOUT FRAMEWORK (ยุทธศาสตร์เปิดตัวสองเฟส ไร้ความเสี่ยง) -->
+    <!-- 3. STRATEGIC ROLLOUT FRAMEWORK -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
       
-      <!-- Phase 1 Card -->
-      <div class="card-glass rounded-3xl p-5 border-2 border-emerald-500/40 space-y-3 relative overflow-hidden">
+      <div class="exec-card rounded-3xl p-5 border-2 border-emerald-400/70 space-y-2.5">
         <div class="flex items-center justify-between">
-          <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-extrabold text-[11px] border border-emerald-500/30">
+          <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-extrabold text-[11px] border border-emerald-200">
             PHASE 1: SOFT-LAUNCH (ใช้งานทันที)
           </span>
-          <span class="text-emerald-400 font-bold">ความเสี่ยงฮาร์ดแวร์ 0%</span>
+          <span class="text-emerald-700 font-bold">ความเสี่ยงฮาร์ดแวร์ 0%</span>
         </div>
-        <h3 class="text-sm font-bold text-white">Smart Concierge Handover (ส่งมอบกุญแจที่มีพยานบุคคล)</h3>
-        <p class="text-slate-300 text-[11px] leading-relaxed">
-          จองผ่าน <strong>น้องศิวา (LINE Bot)</strong> + พี่ลิลลี่กดอนุมัติออก <strong>Digital Pass</strong> 
-          เอเจนต์นำไปแสดงรับกุญแจดอกจริงที่ <strong>"นิติบุคคล / แม่บ้านโครงการ / หรือ Messenger วิ่งส่ง"</strong> 
-          เจ้าของบ้านสบายใจ มีคนดูแล ไม่มีความเสี่ยงเรื่องถ่านหมดหรือเน็ตหลุดหน้างาน
+        <h3 class="text-sm font-bold text-exec-main">Smart Concierge Handover (ส่งมอบกุญแจที่มีพยานบุคคล)</h3>
+        <p class="text-exec-muted text-[11px] leading-relaxed">
+          จองผ่าน <strong>น้องศิวา (LINE Bot)</strong> + พี่ลิลลี่กดอนุมัติออก <strong>Digital Pass</strong>
+          เอเจนต์นำไปแสดงรับกุญแจดอกจริงที่ <strong>"นิติบุคคล / แม่บ้านโครงการ / หรือ Messenger วิ่งส่ง"</strong>
         </p>
       </div>
 
-      <!-- Phase 2 Card -->
-      <div class="card-glass rounded-3xl p-5 border border-slate-800 space-y-3 relative overflow-hidden">
+      <div class="exec-card rounded-3xl p-5 space-y-2.5">
         <div class="flex items-center justify-between">
-          <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-extrabold text-[11px] border border-amber-500/30">
+          <span class="px-2.5 py-0.5 rounded-full bg-[#FAF2E1] text-[#8A6525] font-extrabold text-[11px] border border-[#C2A460]">
             PHASE 2: FULL AUTOMATION (เมื่อกล่องพร้อม)
           </span>
-          <span class="text-amber-400 font-bold">IoT Smart Keybox</span>
+          <span class="text-[#967332] font-bold">IoT Smart Keybox</span>
         </div>
-        <h3 class="text-sm font-bold text-white">Smart Keybox with Dynamic OTP (ตู้เซฟอัจฉริยะหน้าบ้าน)</h3>
-        <p class="text-slate-300 text-[11px] leading-relaxed">
-          ใช้ Flow การจองและการอนุมัติของพี่ลิลลี่แบบเดิม 100% โดยระบบจะส่งรหัส <strong>OTP 6 หลัก (Time-lock 60 นาที)</strong> 
-          ให้เอเจนต์ไปกดแป้นหน้าบ้านได้ด้วยตนเอง พร้อมถ่ายรูปคืนกุญแจเพื่อปิดเคส ติดตั้งนำร่อง 5 หลังแรกก่อนขยายทั้งบริษัท
+        <h3 class="text-sm font-bold text-exec-main">Smart Keybox with Dynamic OTP (ตู้เซฟอัจฉริยะหน้าบ้าน)</h3>
+        <p class="text-exec-muted text-[11px] leading-relaxed">
+          ใช้ Flow การจองและการอนุมัติของพี่ลิลลี่แบบเดิม 100% โดยระบบจะส่งรหัส <strong>OTP 6 หลัก (Time-lock 60 นาที)</strong>
+          ให้เอเจนต์ไปกดแป้นหน้าบ้านได้ด้วยตนเอง พร้อมถ่ายรูปคืนกุญแจเพื่อปิดเคส
         </p>
       </div>
 
     </div>
 
-    <!-- 4. 1-CLICK LIVE SYSTEM VERIFICATION (ปุ่มเปิดดูระบบจริงสำหรับคุณเจี๊ยบ/คุณบัว) -->
-    <div class="card-glass rounded-3xl p-5 border border-slate-800 space-y-3 shadow-xl">
-      <div class="flex items-center justify-between">
+    <!-- 4. 1-CLICK LIVE SYSTEM LINKS (Updated with real working URLs) -->
+    <div class="exec-card rounded-3xl p-5 space-y-3 no-print">
+      <div class="flex items-center justify-between flex-wrap gap-2">
         <div class="flex items-center gap-2">
-          <i data-lucide="play-circle" class="w-4 h-4 text-amber-400"></i>
-          <span class="text-xs font-bold text-white">ปุ่มเปิดทดลองระบบจริง (Live System Demos for Jeab & Bua):</span>
+          <i data-lucide="play-circle" class="w-4 h-4 text-[#967332]"></i>
+          <span class="text-xs font-bold text-exec-main">ทางลัดเข้าใช้งานระบบจริง (Live System Links for Jeab &amp; Bua):</span>
         </div>
-        <span class="text-[10px] text-slate-400">คลิกทดสอบได้ทันทีบนมือถือ</span>
+        <span class="text-[10px] text-exec-muted">คลิกเปิดใช้งานได้ทันที</span>
       </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-xs">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs">
         
-        <a href="https://assets.siwasup.com/siwasup_keybox_interactive_roleplay.html?view=lily" target="_blank" class="p-3 rounded-2xl bg-slate-900 hover:bg-emerald-500/20 border border-slate-800 hover:border-emerald-500/40 text-left transition space-y-1">
-          <div class="font-bold text-emerald-400 flex items-center gap-1.5">
+        <a href="https://assets.siwasup.com/admin_lobby_manager.html" target="_blank" class="p-3 rounded-2xl exec-inset hover:border-[#C2A460] text-left transition space-y-1">
+          <div class="font-bold text-[#8A6525] flex items-center gap-1.5">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+            <span>Lobby ตัวแทน</span>
+          </div>
+          <div class="text-[10px] text-exec-muted">อนุมัติทีม &amp; จัดสรรสิทธิ์</div>
+        </a>
+
+        <a href="https://assets.siwasup.com/catalog.html" target="_blank" class="p-3 rounded-2xl exec-inset hover:border-[#C2A460] text-left transition space-y-1">
+          <div class="font-bold text-[#2C2218] flex items-center gap-1.5">
+            <i data-lucide="home" class="w-4 h-4 text-[#967332]"></i>
+            <span>คลังบ้าน 4,000+</span>
+          </div>
+          <div class="text-[10px] text-exec-muted">ค้นหาบ้าน &amp; แชร์ลิงก์</div>
+        </a>
+
+        <a href="https://assets.siwasup.com/welcome_landing.html" target="_blank" class="p-3 rounded-2xl exec-inset hover:border-[#C2A460] text-left transition space-y-1">
+          <div class="font-bold text-amber-700 flex items-center gap-1.5">
+            <i data-lucide="layout-template" class="w-4 h-4"></i>
+            <span>หน้าแรกเว็บ</span>
+          </div>
+          <div class="text-[10px] text-exec-muted">โทนขาว-ทองใหม่</div>
+        </a>
+
+        <a href="https://assets.siwasup.com/agent_profile.html?ref=SW001&mode=client" target="_blank" class="p-3 rounded-2xl exec-inset hover:border-[#C2A460] text-left transition space-y-1">
+          <div class="font-bold text-blue-700 flex items-center gap-1.5">
+            <i data-lucide="credit-card" class="w-4 h-4"></i>
+            <span>นามบัตรคุณกูล</span>
+          </div>
+          <div class="text-[10px] text-exec-muted">ตัวอย่างนามบัตร SW001</div>
+        </a>
+
+        <a href="https://assets.siwasup.com/siwasup_keybox_interactive_roleplay.html?view=lily" target="_blank" class="p-3 rounded-2xl exec-inset hover:border-emerald-400 text-left transition space-y-1">
+          <div class="font-bold text-emerald-700 flex items-center gap-1.5">
             <i data-lucide="key" class="w-4 h-4"></i>
             <span>หน้าจอพี่ลิลลี่</span>
           </div>
-          <div class="text-[10px] text-slate-400">ลองกดอนุมัติ OTP & เลื่อนนัด</div>
+          <div class="text-[10px] text-exec-muted">จำลองอนุมัติ OTP</div>
         </a>
 
-        <a href="https://assets.siwasup.com/agent_profile.html?name=คุณนภชกร&mode=client" target="_blank" class="p-3 rounded-2xl bg-slate-900 hover:bg-amber-500/20 border border-slate-800 hover:border-amber-500/40 text-left transition space-y-1">
-          <div class="font-bold text-amber-400 flex items-center gap-1.5">
-            <i data-lucide="credit-card" class="w-4 h-4"></i>
-            <span>นามบัตรทางการ</span>
-          </div>
-          <div class="text-[10px] text-slate-400">ดูนามบัตรมุมมองลูกค้า</div>
-        </a>
-
-        <a href="https://assets.siwasup.com/agent_registration.html" target="_blank" class="p-3 rounded-2xl bg-slate-900 hover:bg-blue-500/20 border border-slate-800 hover:border-blue-500/40 text-left transition space-y-1">
-          <div class="font-bold text-blue-400 flex items-center gap-1.5">
-            <i data-lucide="user-plus" class="w-4 h-4"></i>
-            <span>ฟอร์มลงทะเบียนทีม</span>
-          </div>
-          <div class="text-[10px] text-slate-400">ระบบสิทธิ์ & ออกนามบัตร</div>
-        </a>
-
-        <a href="https://line.me/R/ti/p/@813nyyia" target="_blank" class="p-3 rounded-2xl bg-slate-900 hover:bg-emerald-500/20 border border-slate-800 hover:border-emerald-500/40 text-left transition space-y-1">
-          <div class="font-bold text-emerald-400 flex items-center gap-1.5">
+        <a href="https://line.me/R/ti/p/@813nyyia" target="_blank" class="p-3 rounded-2xl exec-inset hover:border-emerald-400 text-left transition space-y-1">
+          <div class="font-bold text-emerald-700 flex items-center gap-1.5">
             <i data-lucide="message-circle" class="w-4 h-4"></i>
-            <span>แชทคุยกับน้องศิวา</span>
+            <span>LINE น้องศิวา</span>
           </div>
-          <div class="text-[10px] text-slate-400">LINE Bot @813nyyia สด</div>
+          <div class="text-[10px] text-exec-muted">LINE Bot @813nyyia สด</div>
         </a>
-        <a href="https://assets.siwasup.com/agent_onboarding_qr.html" target="_blank" class="p-3 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/40 text-left transition space-y-1 shadow-md">
-          <div class="font-bold text-amber-300 flex items-center gap-1.5">
-            <i data-lucide="qr-code" class="w-4 h-4 text-amber-400"></i>
-            <span>ป้ายสแกน QR หน้างาน</span>
-          </div>
-          <div class="text-[10px] text-amber-200/80">โชว์จอ / พิมพ์ Tent Card</div>
-        </a>
-
 
       </div>
     </div>
@@ -534,12 +374,32 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="border-t border-slate-900 bg-slate-950 py-4 text-center text-[11px] text-slate-500">
-    Siwasup Co-Broker OS &copy; 2026 • Executive Board Dashboard for Jeab (Gool) & Bua • Prepared by NASSTY
+  <footer class="border-t py-4 text-center text-[11px] text-exec-muted" style="border-color: var(--panel-border);">
+    Siwasup Co-Broker OS &copy; 2026 • Executive Board Dashboard for Jeab (Gool) &amp; Bua • Prepared by NASSTY
   </footer>
 
   <script>
     lucide.createIcons();
+
+    function switchAdminTheme(themeName) {
+      const valid = ['siwasup-gold', 'light-clean', 'dark-obsidian'];
+      const chosen = valid.includes(themeName) ? themeName : 'siwasup-gold';
+      document.documentElement.setAttribute('data-theme', chosen);
+      try { localStorage.setItem('siwasup_exec_theme', chosen); } catch (_) {}
+      valid.forEach(t => {
+        const btn = document.getElementById('themeBtn-' + t);
+        if (!btn) return;
+        btn.className = (t === chosen)
+          ? 'px-2.5 py-1 rounded-lg bg-[#C2A460] text-white font-extrabold shadow-2xs transition cursor-pointer'
+          : 'px-2 py-1 rounded-lg text-exec-muted hover:opacity-80 transition cursor-pointer';
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      let saved = 'siwasup-gold';
+      try { saved = localStorage.getItem('siwasup_exec_theme') || 'siwasup-gold'; } catch (_) {}
+      switchAdminTheme(saved);
+    });
   </script>
 </body>
 </html>
