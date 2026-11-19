@@ -31,7 +31,7 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- FOUNDERS-ONLY GATE OVERLAY (SW001 Gool & SW004 Ton; auto-unlocked on localhost preview) -->
+  <!-- FOUNDERS-ONLY GATE OVERLAY (SW001 Gool, app_office_002 Bua & SW004 Ton; auto-unlocked on localhost preview) -->
   <div id="consignmentGateOverlay" class="fixed inset-0 z-[100] bg-[#FAF7F2]/98 backdrop-blur-xl flex items-center justify-center p-4">
     <div class="gold-card rounded-3xl max-w-md w-full p-6 sm:p-7 text-center space-y-4 border-2 border-[#C2A460] shadow-2xl">
       <div class="w-14 h-14 mx-auto rounded-2xl bg-[#FAF2E1] border border-[#C2A460] flex items-center justify-center text-[#8A6525]">
@@ -39,11 +39,11 @@
       </div>
       <div class="space-y-1">
         <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 uppercase tracking-wider">
-          RESTRICTED • SANDBOX FOUNDERS ONLY
+          RESTRICTED • SANDBOX FOUNDERS & BUA
         </span>
         <h2 class="text-lg font-extrabold text-[#2C2218] pt-1">ศูนย์จัดการบ้านฝากขาย (ปิดสิทธิ์ชั่วคราว)</h2>
         <p id="consignmentGateMsg" class="text-xs text-[#6E5A44] leading-relaxed">
-          กำลังตรวจสอบสิทธิ์ LINE Login...<br>อนุญาตเฉพาะ <strong>คุณกูล (SW001)</strong> และ <strong>คุณต้น (SW004)</strong> เท่านั้น
+          กำลังตรวจสอบสิทธิ์ LINE Login...<br>อนุญาตเฉพาะ <strong>คุณกูล (SW001)</strong>, <strong>คุณบัว</strong> และ <strong>คุณต้น (SW004)</strong> เท่านั้น
         </p>
       </div>
       <div id="consignmentGateActions" class="hidden space-y-2.5 pt-1">
@@ -488,7 +488,7 @@
 
       const sess = localStorage.getItem(SESSION_KEY) || '';
       if (!sess) {
-        if (msgEl) msgEl.innerHTML = 'กรุณาเข้าสู่ระบบด้วย LINE เพื่อยืนยันตัวตน<br>อนุญาตเฉพาะ <strong>คุณกูล (SW001)</strong> และ <strong>คุณต้น (SW004)</strong> เท่านั้น';
+        if (msgEl) msgEl.innerHTML = 'กรุณาเข้าสู่ระบบด้วย LINE เพื่อยืนยันตัวตน<br>อนุญาตเฉพาะ <strong>คุณกูล (SW001)</strong>, <strong>คุณบัว</strong> และ <strong>คุณต้น (SW004)</strong> เท่านั้น';
         if (actEl) actEl.classList.remove('hidden');
         return;
       }
@@ -509,10 +509,10 @@
         const id = String(m.id || '').toLowerCase();
         const code = String(m.code || '').toUpperCase();
         const isFounder = (me && me.status === 'approved') &&
-          (id === 'app_office_001' || id === 'app_office_004' || code === 'SW001' || code === 'SW004');
+          (id === 'app_office_001' || id === 'app_office_002' || id === 'app_office_004' || code === 'SW001' || code === 'SW004');
 
         if (!isFounder) {
-          if (msgEl) msgEl.innerHTML = `บัญชี <strong>${escapeHtml(m.nickname || m.name || 'ของคุณ')}</strong> ยังไม่มีสิทธิ์เข้าถึงหน้า Sandbox นี้<br>จำกัดเฉพาะ <strong>คุณกูล (SW001)</strong> และ <strong>คุณต้น (SW004)</strong> เท่านั้น`;
+          if (msgEl) msgEl.innerHTML = `บัญชี <strong>${escapeHtml(m.nickname || m.name || 'ของคุณ')}</strong> ยังไม่มีสิทธิ์เข้าถึงหน้า Sandbox นี้<br>จำกัดเฉพาะ <strong>คุณกูล (SW001)</strong>, <strong>คุณบัว</strong> และ <strong>คุณต้น (SW004)</strong> เท่านั้น`;
           if (actEl) {
             const loginBtn = document.getElementById('consignmentGateLoginBtn');
             if (loginBtn) loginBtn.classList.add('hidden');
