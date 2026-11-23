@@ -2932,12 +2932,19 @@ def _recheck_thai_location(subdistrict: str, district: str, province: str) -> tu
     return subdistrict, d_clean or district, p_clean, ""
 
 
+_THAI_TO_ARABIC_TRANS = str.maketrans("๐๑๒๓๔๕๖๗๘๙", "0123456789")
+
+
+def _thai_digits_to_arabic(text: str) -> str:
+    return (text or "").translate(_THAI_TO_ARABIC_TRANS)
+
+
 def _normalize_rawang(raw: str) -> str:
-    """Normalize Thai title deed UTM map sheet (ระวาง), fixing Roman numeral misreads."""
-    s = re.sub(r"\s+", " ", (raw or "").strip())
+    """Normalize Thai title deed UTM map sheet (ระวาง), converting Thai digits and fixing Roman numerals."""
+    s = re.sub(r"\s+", " ", _thai_digits_to_arabic(raw or "").strip())
     if not s:
         return ""
-    m = re.match(r"^(\d{4})\s*([IVXil1|!]+)\s*(\d{4})(.*)$", s, re.I)
+    m = re.search(r"(\d{4})\s*([IVXil1|!]+)\s*(\d{4})(\s*-\s*\d{1,2})?", s, re.I)
     if not m:
         return s
     p1, mid, p2, tail = m.groups()
@@ -2949,7 +2956,8 @@ def _normalize_rawang(raw: str) -> str:
         "1V": "IV", "IV": "IV", "4": "IV",
     }
     roman = roman_map.get(mid_clean, mid.upper())
-    return f"{p1} {roman} {p2}{tail}".strip()
+    tail_clean = re.sub(r"\s+", " ", tail or "").strip()
+    return f"{p1} {roman} {p2}" + (f" {tail_clean}" if tail_clean else "")
 
 
 def _validate_thai_id_checksum(id_number: str) -> dict:
@@ -3027,9 +3035,10 @@ def extract_contract_ocr(image_base64, doc_type="id_card", mime_type="image/jpeg
     elif doc_type == "title_deed":
         prompt = """คุณคือ AI ผู้ช่วยตรวจสอบและสกัดข้อมูลจาก 'โฉนดที่ดินไทย (น.ส. 4 จ.)' สำหรับร่างสัญญาแต่งตั้งตัวแทนขายอสังหาริมทรัพย์
 คำแนะนำสำคัญในการอ่านโฉนดไทย:
-1. ตัวเลขในโฉนดเก่ามักเขียนด้วย "เลขไทยลายมือ" (๐ ๑ ๒ ๓ ๔ ๕ ๖ ๗ ๘ ๙) ให้แปลงเป็นเลขอารบิกอย่างระมัดระวัง โดยเฉพาะ "โฉนดที่ดิน เลขที่" มุมขวาบน และ "หน้าสำรวจ" มุมซ้ายบน
-2. "ระวาง" มีรูปแบบมาตรฐานคือ <เลข 4 หลัก> <เลขโรมัน I, II, III หรือ IV> <เลข 4 หลัก> เช่น 5340 III 8824 (ระวังเลขเขียนมือ 8 กับ 6, 2 กับ 1)
+1. ตัวเลขในโฉนดเก่ามักเขียนด้วย "เลขไทยลายมือ" (๐ ๑ ๒ ๓ ๔ ๕ ๖ ๗ ๘ ๙) ต้องแปลงเป็นเลขอารบิก (0-9) ทุกช่อง ห้ามส่งเลขไทยกลับมาใน JSON โดยเฉพาะ "โฉนดที่ดิน เลขที่" มุมขวาบน และ "หน้าสำรวจ" มุมซ้ายบน
+2. "ระวาง" มีรูปแบบมาตรฐานคือ <เลข 4 หลัก> <เลขโรมัน I, II, III หรือ IV> <เลข 4 หลัก> เช่น 5140 I 1446 หรือ 5340 III 8824 (ห้ามมีตัวอักษรไทยปน ระวังเลขเขียนมือ 8 กับ 6, 2 กับ 1)
 3. "เนื้อที่ดิน" ให้อ่านทั้งตัวเลขไทยและ "คำอ่านภาษาไทยในวงเล็บ" ใต้บรรทัด เช่น (ยี่สิบห้าไร่สองงานหกสิบสามตารางวา) เพื่อยืนยันความถูกต้อง 100% ก่อนตอบ
+4. "ข้อความที่ถูกขีดฆ่า หรืออยู่ในวงเล็บ" (เช่น (บ้านโพธน์) ซับสมอทอด, (หนองไผ่) บึงสามพัน, ๓๗ ๑๑๕, ๑๒๗/๕ ๔๒๐๗): ให้ตัดค่าเก่าที่ขีดฆ่า/อยู่ในวงเล็บทิ้ง แล้วเลือกอ่านเฉพาะ "ค่าใหม่ที่เขียนแก้ไว้ข้างๆ หรือด้านหลัง" เสมอ!
 
 ตอบกลับเฉพาะ JSON ที่มีโครงสร้างดังนี้เท่านั้น:
 {
@@ -3094,6 +3103,9 @@ def extract_contract_ocr(image_base64, doc_type="id_card", mime_type="image/jpeg
                         parsed = json.loads(raw_json)
                         if isinstance(parsed, dict):
                             if doc_type == "title_deed":
+                                for nf in ("deed_number", "land_number", "survey_page", "rawang", "area_rai", "area_ngan", "area_sqw"):
+                                    if parsed.get(nf) is not None:
+                                        parsed[nf] = _thai_digits_to_arabic(str(parsed[nf])).strip()
                                 if parsed.get("rawang"):
                                     parsed["rawang"] = _normalize_rawang(str(parsed["rawang"]))
                                 try:
