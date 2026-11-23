@@ -1639,6 +1639,12 @@
             id === 'app_office_004' ||
             me.member.role === 'admin'
           );
+          const mPerms = (me.member && me.member.permissions) ? me.member.permissions : {};
+          window._siwasupCanSwitchRoles = !isCustomerOnly && (
+            Boolean(mPerms.systemAdmin) ||
+            code === 'SW004' ||
+            id === 'app_office_004'
+          );
           const resolvedCode = resolveVerifiedMemberRef(me.member);
           if (resolvedCode) {
             if (typeof _siwasupSafeStorage === 'function') {
@@ -1805,7 +1811,8 @@
           topUtilityBar.classList.remove('hidden');
         }
       }
-      if (isAdmin) {
+      const canSwitchRoles = Boolean(window._siwasupCanSwitchRoles) || (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+      if (canSwitchRoles) {
         if (mobileRoleSelect) {
           mobileRoleSelect.classList.remove('hidden');
           mobileRoleSelect.classList.add('lg:hidden');
@@ -3388,7 +3395,7 @@
                 <div class="w-7 h-7 rounded-lg bg-neutral-900 text-[#D4BC8B] flex items-center justify-center text-xs font-bold shadow-2xs">
                   ♛
                 </div>
-                <span class="text-sm font-bold text-neutral-900 tracking-tight">แผงควบคุมผู้บริหาร (บัว & กูล)</span>
+                <span class="text-sm font-bold text-neutral-900 tracking-tight">ศูนย์ควบคุมคลังทรัพย์ส่วนกลาง</span>
               </div>
               <div class="flex items-center gap-2">
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-neutral-50 text-neutral-500 border border-neutral-200/60 shrink-0 whitespace-nowrap">
@@ -3444,10 +3451,6 @@
             <div class="px-5 py-2.5 bg-neutral-50/70 border-t border-neutral-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
               <span class="text-neutral-400">${showSoldArchiveInOwnerMode ? '👁️ กำลังแสดงทรัพย์ Sold Out จากภาพระบบเก่า' : showTransferredInOwnerMode ? '👁️ กำลังแสดงรวมทรัพย์ที่โอนแล้ว' : 'ทรัพย์ที่มีสถานะ Sold Out และโอนแล้ว จะถูกซ่อนจากหน้าบ้านอัตโนมัติ'}</span>
               <div class="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto whitespace-nowrap">
-                <a href="Siwasup_Brand_Color_System_Dashboard.html" target="_blank" class="inline-flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 transition font-medium cursor-pointer" title="เปิดดูแดชบอร์ดสรุประบบสี CI และสัดส่วน 75-15-5-5 สำหรับนำเสนอบอร์ดบริหาร">
-                  <i data-lucide="palette" class="w-3.5 h-3.5 text-[#8B0000]"></i>
-                  <span>แดชบอร์ดระบบสี CI</span>
-                </a>
                 <button onclick="openOwnerLeadsModal()" class="inline-flex items-center gap-1.5 font-semibold text-neutral-800 hover:text-[#9A7D46] transition self-start sm:self-auto cursor-pointer">
                   <span class="w-2 h-2 rounded-full bg-rose-500"></span>
                   <span>ดูคลังฝากขายใหม่ (${consignments.length})</span>
