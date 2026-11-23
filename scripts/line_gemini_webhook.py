@@ -1687,6 +1687,7 @@ FRONTEND_URLS = {
     "admin": "https://assets.siwasup.com/admin_lobby_manager.html",
     "exec": "https://assets.siwasup.com/gool_executive_dashboard.html",
     "consignment": "https://assets.siwasup.com/admin_consignment.html",
+    "contracts": "https://assets.siwasup.com/exclusive_contracts.html",
     "catalog": "https://assets.siwasup.com/catalog.html",
     "seller": "https://assets.siwasup.com/catalog.html?view=seller",
 }
@@ -1988,7 +1989,12 @@ def _is_consignment_founder(member: dict) -> bool:
         return False
     mid = str(member.get("id") or "").strip().lower()
     code = str(member.get("code") or "").strip().upper()
-    return mid in ("app_office_001", "app_office_002", "app_office_004") or code in ("SW001", "SW002", "SW004")
+    if mid in ("app_office_001", "app_office_002", "app_office_004") or code in ("SW001", "SW002", "SW004"):
+        return True
+    perms = member.get("permissions") or {}
+    if bool(perms.get("executiveAuthority") or perms.get("systemAdmin") or member.get("is_leader")):
+        return True
+    return clean_phone_str(member.get("phone") or "") == "0853365703"
 
 
 def _default_consignment_store():

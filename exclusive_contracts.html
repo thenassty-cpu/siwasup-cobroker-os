@@ -221,6 +221,10 @@
         </div>
       </div>
       <div class="flex items-center gap-2">
+        <a href="admin_consignment.html" class="px-2.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-[#D4BA7A] text-xs font-bold flex items-center gap-1.5 transition">
+          <i data-lucide="home" class="w-3.5 h-3.5"></i>
+          <span>ศูนย์บ้านฝากขาย</span>
+        </a>
         <a href="catalog.html" class="text-xs text-slate-400 hover:text-white font-medium hidden sm:inline">
           กลับสู่แคตตาล็อก
         </a>
@@ -238,10 +242,10 @@
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <span id="agent-name-display" class="font-bold text-white text-sm sm:text-base">คุณต้น (Ton)</span>
-            <span id="agent-ref-badge" class="font-mono text-xs text-[#D4BA7A] bg-amber-950/60 border border-amber-600/40 px-2 py-0.5 rounded">TON</span>
+            <span id="agent-name-display" class="font-bold text-white text-sm sm:text-base">กำลังโหลด...</span>
+            <span id="agent-ref-badge" class="font-mono text-xs text-[#D4BA7A] bg-amber-950/60 border border-amber-600/40 px-2 py-0.5 rounded">--</span>
           </div>
-          <div class="text-xs text-slate-400 mt-0.5">Senior Advisor • Young Design & Co-Broker Hub</div>
+          <div id="agent-role-display" class="text-xs text-slate-400 mt-0.5">Siwasup Co-Broker OS</div>
         </div>
       </div>
 
@@ -580,6 +584,33 @@
 
   </main>
 
+  <!-- LINE LOGIN GATE OVERLAY (Auto-unlocked on localhost preview) -->
+  <div id="contractsGateOverlay" class="fixed inset-0 z-[100] bg-[#0d0f12]/95 backdrop-blur-xl flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl max-w-md w-full p-6 sm:p-7 text-center space-y-4 border border-amber-500/40 shadow-2xl">
+      <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-[#D4BA7A]">
+        <i data-lucide="file-signature" class="w-7 h-7"></i>
+      </div>
+      <div class="space-y-1">
+        <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-500/15 text-[#D4BA7A] border border-amber-500/30 uppercase tracking-wider">
+          EXCLUSIVE CONTRACT HUB
+        </span>
+        <h2 class="text-lg font-extrabold text-white pt-1">ยืนยันตัวตนก่อนเข้าใช้งานระบบสัญญา</h2>
+        <p id="contractsGateMsg" class="text-xs text-slate-400 leading-relaxed">
+          กำลังตรวจสอบสิทธิ์ LINE Login...
+        </p>
+      </div>
+      <div id="contractsGateActions" class="hidden space-y-2.5 pt-1">
+        <a id="contractsGateLoginBtn" href="https://siwasup-cobroker-os.onrender.com/api/auth/line/start?return=contracts" class="w-full py-3 px-4 rounded-2xl bg-[#06C755] hover:bg-[#05b34c] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-md transition">
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          <span>เข้าสู่ระบบด้วย LINE</span>
+        </a>
+        <a href="admin_consignment.html" class="block text-xs text-slate-400 hover:text-white hover:underline">
+          ← กลับศูนย์บ้านฝากขาย
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- Notification Toast -->
   <div id="toast" class="fixed bottom-6 inset-x-0 mx-auto max-w-sm px-4 py-2.5 rounded-2xl bg-neutral-900/95 text-white text-xs text-center border border-amber-500/30 shadow-2xl transition-all duration-300 opacity-0 pointer-events-none z-50">
     ข้อความแจ้งเตือน
@@ -587,8 +618,69 @@
 
   <script>
     const BACKEND_URL = "https://siwasup-cobroker-os.onrender.com";
-    const CURRENT_AGENT_REF = localStorage.getItem('siwasup_my_agent_ref') || 'TON';
+    let CURRENT_AGENT_REF = localStorage.getItem('siwasup_my_agent_ref') || '';
+    let CURRENT_AGENT_NAME = '';
+    let CURRENT_AGENT_ROLE = 'Siwasup Co-Broker OS';
     let myContracts = [];
+
+    (function () {
+      const hp = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+      if (hp.get('session')) { try { localStorage.setItem('siwasup_session', hp.get('session')); } catch (e) {} }
+      if (window.location.hash) history.replaceState(null, '', window.location.pathname + window.location.search);
+    })();
+
+    async function checkContractsAuthAndInit() {
+      const overlay = document.getElementById('contractsGateOverlay');
+      const msgEl = document.getElementById('contractsGateMsg');
+      const actEl = document.getElementById('contractsGateActions');
+      const isLocal = (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+      if (isLocal) {
+        if (!CURRENT_AGENT_REF) CURRENT_AGENT_REF = 'LOCAL_PREVIEW';
+        if (!CURRENT_AGENT_NAME) CURRENT_AGENT_NAME = 'Local Preview';
+        if (overlay) overlay.classList.add('hidden');
+        return true;
+      }
+      const token = localStorage.getItem('siwasup_session') || '';
+      if (!token) {
+        if (msgEl) msgEl.textContent = 'กรุณาเข้าสู่ระบบด้วย LINE เพื่อใช้งานระบบทำสัญญาและซิงก์ข้อมูลส่วนตัว';
+        if (actEl) actEl.classList.remove('hidden');
+        return false;
+      }
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/auth/me`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+          cache: 'no-store'
+        });
+        if (!res.ok) {
+          if (res.status === 401) localStorage.removeItem('siwasup_session');
+          if (msgEl) msgEl.textContent = 'เซสชันหมดอายุ กรุณาเข้าสู่ระบบด้วย LINE ใหม่อีกครั้ง';
+          if (actEl) actEl.classList.remove('hidden');
+          return false;
+        }
+        const me = await res.json();
+        if (!me || me.status !== 'approved' || !me.member) {
+          const st = (me && me.status) ? String(me.status) : '';
+          if (msgEl) {
+            msgEl.textContent = (st === 'pending')
+              ? 'บัญชีของคุณอยู่ระหว่างรอการอนุมัติจากทีมงานศิวาทรัพย์'
+              : 'บัญชีนี้ยังไม่ได้ลงทะเบียนเป็นตัวแทนหรือผู้บริหารในระบบศิวาทรัพย์';
+          }
+          if (actEl) actEl.classList.remove('hidden');
+          return false;
+        }
+        const m = me.member;
+        CURRENT_AGENT_REF = String(m.code || m.nickname || m.name || m.id || 'MEMBER').trim();
+        CURRENT_AGENT_NAME = String(m.name || m.nickname || CURRENT_AGENT_REF).trim();
+        CURRENT_AGENT_ROLE = String(m.title || m.role || 'Siwasup Co-Broker OS').trim();
+        localStorage.setItem('siwasup_my_agent_ref', CURRENT_AGENT_REF);
+        if (overlay) overlay.classList.add('hidden');
+        return true;
+      } catch (e) {
+        if (msgEl) msgEl.textContent = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ตรวจสอบสิทธิ์ได้ กรุณาลองใหม่อีกครั้ง';
+        if (actEl) actEl.classList.remove('hidden');
+        return false;
+      }
+    }
 
     function getAuthHeaders(includeJson = false) {
       const headers = {};
@@ -1314,11 +1406,13 @@
     }
 
     async function loadMyContracts() {
-      renderContractsList();
       const token = localStorage.getItem('siwasup_session') || '';
-      if (!token) return;
+      if (!token) {
+        renderContractsList();
+        return;
+      }
       try {
-        const resp = await fetch(`${BACKEND_URL}/api/contracts/list?agent_ref=${CURRENT_AGENT_REF}`, {
+        const resp = await fetch(`${BACKEND_URL}/api/contracts/list?agent_ref=${encodeURIComponent(CURRENT_AGENT_REF)}`, {
           headers: getAuthHeaders(false)
         });
         if (resp.status === 401) {
@@ -1327,12 +1421,14 @@
         }
         if (resp.ok) {
           const res = await resp.json();
-          if (res && res.contracts && res.contracts.length > 0) {
+          if (res && Array.isArray(res.contracts)) {
             localStorage.setItem('siwasup_my_contracts', JSON.stringify(res.contracts));
             renderContractsList();
+            return;
           }
         }
       } catch (e) {}
+      renderContractsList();
     }
 
     function generateContractPDF(cid) {
@@ -1574,9 +1670,15 @@
     }
 
     // Init on load
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('agent-ref-badge').textContent = CURRENT_AGENT_REF;
-      document.getElementById('agent-avatar-text').textContent = CURRENT_AGENT_REF.slice(0, 2).toUpperCase();
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.lucide) { lucide.createIcons(); }
+      const authed = await checkContractsAuthAndInit();
+      const refLabel = CURRENT_AGENT_REF || 'MEMBER';
+      const nameLabel = CURRENT_AGENT_NAME || refLabel;
+      document.getElementById('agent-name-display').textContent = nameLabel;
+      document.getElementById('agent-role-display').textContent = CURRENT_AGENT_ROLE || 'Siwasup Co-Broker OS';
+      document.getElementById('agent-ref-badge').textContent = refLabel;
+      document.getElementById('agent-avatar-text').textContent = refLabel.slice(0, 2).toUpperCase();
       const dateEl = document.getElementById('contract_date');
       if (dateEl && !dateEl.value) {
         const now = new Date();
@@ -1601,7 +1703,9 @@
 
       initSignaturePad('owner');
       initSignaturePad('agent');
-      loadMyContracts();
+      if (authed) {
+        loadMyContracts();
+      }
       if (window.lucide) { lucide.createIcons(); }
     });
   </script>
