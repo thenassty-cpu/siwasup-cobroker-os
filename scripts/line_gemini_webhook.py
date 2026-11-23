@@ -1972,6 +1972,125 @@ def save_intake_data(store):
 
 
 # ==============================================================================
+# CONSIGNMENT DEMO VAULT (Shared Sandbox for Founders & Bua - Isolated from Catalog)
+# ==============================================================================
+CONSIGNMENT_DEMO_PATH = os.path.join(DATA_DIR, "consignment_demo_vault.json")
+CONSIGNMENT_DEMO_LOCK = threading.RLock()
+_R2_CONSIGNMENT_VAULT_KEY = "_vault/consignment_demo_" + hmac.new(ADMIN_EXPORT_SECRET.encode("utf-8"), b"siwasup_consignment_demo_v1", hashlib.sha256).hexdigest()[:32] + ".json"
+_R2_CONSIGNMENT_RESTORED = False
+_CONSIGNMENT_MEM_CACHE = None
+_R2_CONSIGNMENT_UPLOAD_LOCK = threading.Lock()
+_LATEST_CONSIGNMENT_BYTES = None
+
+
+def _is_consignment_founder(member: dict) -> bool:
+    if not isinstance(member, dict):
+        return False
+    mid = str(member.get("id") or "").strip().lower()
+    code = str(member.get("code") or "").strip().upper()
+    return mid in ("app_office_001", "app_office_002", "app_office_004") or code in ("SW001", "SW002", "SW004")
+
+
+def _default_consignment_store():
+    seed_path = os.path.join(DATA_DIR, "consignment_seed_test.json")
+    if os.path.exists(seed_path):
+        try:
+            with open(seed_path, "r", encoding="utf-8") as f:
+                seed_data = json.load(f)
+                if isinstance(seed_data, dict) and isinstance(seed_data.get("properties"), list):
+                    return {
+                        "updated_at": bkk_now().strftime("%Y-%m-%d %H:%M:%S"),
+                        "updated_by": "seed_init",
+                        "properties": seed_data["properties"],
+                    }
+        except Exception as e:
+            print(f"[Consignment Seed Read Error]: {e}")
+    return {
+        "updated_at": bkk_now().strftime("%Y-%m-%d %H:%M:%S"),
+        "updated_by": "empty_init",
+        "properties": [],
+    }
+
+
+def load_consignment_data():
+    global _R2_CONSIGNMENT_RESTORED, _CONSIGNMENT_MEM_CACHE
+    with CONSIGNMENT_DEMO_LOCK:
+        if not _R2_CONSIGNMENT_RESTORED and os.environ.get("PORT"):
+            try:
+                url = f"https://assets.siwasup.com/{_R2_CONSIGNMENT_VAULT_KEY}?t={int(time.time())}"
+                req = urllib.request.Request(url, headers={"User-Agent": "SiwasupRenderVault/1.0"})
+                with urllib.request.urlopen(req, timeout=8) as r:
+                    if r.status == 200:
+                        cloud_store = json.loads(r.read().decode("utf-8"))
+                        if isinstance(cloud_store, dict) and isinstance(cloud_store.get("properties"), list):
+                            os.makedirs(os.path.dirname(CONSIGNMENT_DEMO_PATH), exist_ok=True)
+                            tmp_path = CONSIGNMENT_DEMO_PATH + ".tmp"
+                            with open(tmp_path, "w", encoding="utf-8") as f:
+                                json.dump(cloud_store, f, ensure_ascii=False, indent=2)
+                            os.replace(tmp_path, CONSIGNMENT_DEMO_PATH)
+                            _CONSIGNMENT_MEM_CACHE = json.loads(json.dumps(cloud_store))
+                            _R2_CONSIGNMENT_RESTORED = True
+                            print(f"[Vault] Restored consignment_demo from R2 ({len(cloud_store.get('properties', []))} items)")
+                            return cloud_store
+            except urllib.error.HTTPError as he:
+                if he.code == 404:
+                    _R2_CONSIGNMENT_RESTORED = True
+                print(f"[Vault] Consignment demo initial R2 restore HTTP {he.code}")
+            except Exception as e:
+                print(f"[Vault] Consignment demo initial R2 restore note: {e}")
+        if os.path.exists(CONSIGNMENT_DEMO_PATH):
+            try:
+                with open(CONSIGNMENT_DEMO_PATH, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    if isinstance(data, dict) and isinstance(data.get("properties"), list):
+                        _CONSIGNMENT_MEM_CACHE = json.loads(json.dumps(data))
+                        return data
+            except Exception as e:
+                print(f"[Warn] Failed to read consignment_demo_vault.json: {e}")
+        if _CONSIGNMENT_MEM_CACHE is not None:
+            return json.loads(json.dumps(_CONSIGNMENT_MEM_CACHE))
+        seed = _default_consignment_store()
+        _CONSIGNMENT_MEM_CACHE = json.loads(json.dumps(seed))
+        return seed
+
+
+def _sequential_r2_consignment_upload():
+    global _LATEST_CONSIGNMENT_BYTES
+    with _R2_CONSIGNMENT_UPLOAD_LOCK:
+        with CONSIGNMENT_DEMO_LOCK:
+            payload_bytes = _LATEST_CONSIGNMENT_BYTES
+        if payload_bytes and put_object_r2:
+            try:
+                put_object_r2(_R2_CONSIGNMENT_VAULT_KEY, payload_bytes, "application/json; charset=utf-8")
+            except Exception as e:
+                print(f"[R2 Consignment Demo Sync Warn]: {e}")
+
+
+def save_consignment_data(store):
+    global _CONSIGNMENT_MEM_CACHE, _LATEST_CONSIGNMENT_BYTES
+    with CONSIGNMENT_DEMO_LOCK:
+        prev_count = len((_CONSIGNMENT_MEM_CACHE or {}).get("properties", []))
+        new_count = len(store.get("properties", []))
+        if prev_count > 3 and new_count == 0:
+            print(f"[CRITICAL SAFEGUARD] Blocked attempted consignment_demo wipeout! Existing: {prev_count}, Incoming: {new_count}")
+            return
+        store["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+        _CONSIGNMENT_MEM_CACHE = json.loads(json.dumps(store))
+        data_bytes = json.dumps(store, ensure_ascii=False, indent=2).encode("utf-8")
+        try:
+            os.makedirs(os.path.dirname(CONSIGNMENT_DEMO_PATH), exist_ok=True)
+            tmp_path = CONSIGNMENT_DEMO_PATH + ".tmp"
+            with open(tmp_path, "wb") as f:
+                f.write(data_bytes)
+            os.replace(tmp_path, CONSIGNMENT_DEMO_PATH)
+        except Exception as e:
+            print(f"[Error] Failed to save consignment_demo local: {e}")
+        if put_object_r2 and os.environ.get("PORT"):
+            _LATEST_CONSIGNMENT_BYTES = data_bytes
+            threading.Thread(target=_sequential_r2_consignment_upload, daemon=True).start()
+
+
+# ==============================================================================
 # SELLER (PROPERTY OWNER) AUTH VAULT — Isolated from Co-Broker Lobby
 # ==============================================================================
 SELLERS_PATH = os.path.join(DATA_DIR, "sellers_vault.json")
@@ -3243,6 +3362,23 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 contracts = [c for c in contracts if c.get("agent_ref") == agent_ref or c.get("agent_id") == agent_ref or c.get("submitted_by_ref") == agent_ref]
             self._send_json(200, {"status": "success", "count": len(contracts), "contracts": contracts})
             return
+        if path == "/api/consignment/list":
+            acting = self._require("member")
+            if not acting:
+                return
+            if not _is_consignment_founder(acting):
+                self._send_json(403, {"error": "จำกัดสิทธิ์เฉพาะคุณกูล คุณบัว และคุณต้น"})
+                return
+            store = load_consignment_data()
+            props = store.get("properties", [])
+            self._send_json(200, {
+                "status": "success",
+                "updated_at": store.get("updated_at", ""),
+                "updated_by": store.get("updated_by", ""),
+                "count": len(props),
+                "properties": props,
+            })
+            return
 
         if path == "/api/intake/list":
             acting = self._require("member")
@@ -3805,6 +3941,46 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     store["contracts"] = contracts
                     save_contracts_data(store)
                 self._send_json(200, {"status": "success", "contract": payload})
+            except Exception as e:
+                self._send_json(500, {"status": "error", "message": str(e)})
+            return
+
+        if path == "/api/consignment/save":
+            acting = self._require("member")
+            if not acting:
+                return
+            if not _is_consignment_founder(acting):
+                self._send_json(403, {"error": "จำกัดสิทธิ์เฉพาะคุณกูล คุณบัว และคุณต้น"})
+                return
+            content_length = int(self.headers.get('Content-Length', 0))
+            if content_length <= 0 or content_length > 5 * 1024 * 1024:
+                self._send_json(400, {"error": "Invalid payload size (max 5MB)"})
+                return
+            try:
+                payload = json.loads(self.rfile.read(content_length).decode('utf-8'))
+                action = str(payload.get("action") or "save_all").strip()
+                actor_name = str(acting.get("nickname") or acting.get("name") or acting.get("code") or "").strip()
+                with CONSIGNMENT_DEMO_LOCK:
+                    if action == "reset_seed":
+                        store = _default_consignment_store()
+                        store["updated_by"] = f"reset:{actor_name}"
+                        save_consignment_data(store)
+                    else:
+                        props = payload.get("properties")
+                        if not isinstance(props, list):
+                            self._send_json(400, {"error": "Missing properties list"})
+                            return
+                        store = load_consignment_data()
+                        store["properties"] = props
+                        store["updated_by"] = actor_name
+                        save_consignment_data(store)
+                self._send_json(200, {
+                    "status": "success",
+                    "updated_at": store.get("updated_at", ""),
+                    "updated_by": store.get("updated_by", ""),
+                    "count": len(store.get("properties", [])),
+                    "properties": store.get("properties", []) if action == "reset_seed" else None,
+                })
             except Exception as e:
                 self._send_json(500, {"status": "error", "message": str(e)})
             return

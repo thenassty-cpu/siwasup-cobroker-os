@@ -62,8 +62,9 @@
   <div id="roleSimContainer" class="bg-[#2C2218] text-[#FAF7F2] px-4 py-2 text-xs">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
       <div class="flex items-center gap-2">
-        <span class="px-2 py-0.5 rounded-md bg-[#C2A460] text-[#241A0E] font-extrabold text-[10px]">SANDBOX TEST</span>
-        <span>จำลองสิทธิ์เพื่อทดสอบ (ข้อมูลเก็บในเบราว์เซอร์เครื่องนี้):</span>
+        <span class="px-2 py-0.5 rounded-md bg-[#C2A460] text-[#241A0E] font-extrabold text-[10px]">DEMO R2 SYNC</span>
+        <span>ซิงก์ร่วมกันทั้งทีม (ยังไม่ขึ้นหน้าลูกค้า):</span>
+        <span id="cloudSyncBadge" class="px-2 py-0.5 rounded-md bg-white/10 text-emerald-300 font-semibold text-[10px]">พร้อมเชื่อมต่อ</span>
       </div>
       <div class="flex flex-wrap items-center gap-1.5" id="roleSimBar">
         <button onclick="setSimulatedRole('bua')" data-sim="bua" class="px-3 py-1 rounded-lg bg-[#C2A460] text-[#241A0E] font-bold transition flex items-center gap-1.5">
@@ -509,7 +510,7 @@
         const id = String(m.id || '').toLowerCase();
         const code = String(m.code || '').toUpperCase();
         const isFounder = (me && me.status === 'approved') &&
-          (id === 'app_office_001' || id === 'app_office_002' || id === 'app_office_004' || code === 'SW001' || code === 'SW004');
+          (id === 'app_office_001' || id === 'app_office_002' || id === 'app_office_004' || code === 'SW001' || code === 'SW002' || code === 'SW004');
 
         if (!isFounder) {
           if (msgEl) msgEl.innerHTML = `บัญชี <strong>${escapeHtml(m.nickname || m.name || 'ของคุณ')}</strong> ยังไม่มีสิทธิ์เข้าถึงหน้า Sandbox นี้<br>จำกัดเฉพาะ <strong>คุณกูล (SW001)</strong>, <strong>คุณบัว</strong> และ <strong>คุณต้น (SW004)</strong> เท่านั้น`;
@@ -568,23 +569,80 @@
       renderCards();
     }
 
-    function saveLocal() {
+    function setSyncBadge(text, ok = true) {
+      const el = document.getElementById('cloudSyncBadge');
+      if (!el) return;
+      el.textContent = text;
+      el.className = ok
+        ? 'px-2 py-0.5 rounded-md bg-white/10 text-emerald-300 font-semibold text-[10px]'
+        : 'px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-300 font-semibold text-[10px]';
+    }
+
+    async function syncPropertiesToCloud() {
+      const sess = localStorage.getItem(SESSION_KEY) || '';
+      if (!sess) return;
+      setSyncBadge('กำลังซิงก์ขึ้น R2...', true);
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(properties));
-        return true;
+        const res = await fetch(`${API_BASE}/api/consignment/save`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + sess
+          },
+          body: JSON.stringify({ action: 'save_all', properties })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        setSyncBadge(`☁️ ซิงก์แล้ว (${data.updated_at || 'ล่าสุด'})`, true);
       } catch (e) {
-        alert('พื้นที่เก็บข้อมูลในเบราว์เซอร์เต็ม (โหมด Offline เก็บรูปขนาดใหญ่ได้จำกัด ~5MB) กรุณาลบรูปบางส่วนหรือรีเซ็ตข้อมูลเทสครับ');
-        return false;
+        console.warn('Cloud consignment sync warn:', e);
+        setSyncBadge('⚠️ ซิงก์ Cloud ไม่สำเร็จ (เก็บในเครื่องแล้ว)', false);
       }
     }
 
+    function saveLocal() {
+      let ok = true;
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(properties));
+      } catch (e) {
+        ok = false;
+      }
+      syncPropertiesToCloud();
+      return ok;
+    }
+
     async function loadInitialData() {
+      const sess = localStorage.getItem(SESSION_KEY) || '';
+      if (sess) {
+        setSyncBadge('กำลังโหลดจาก R2...', true);
+        try {
+          const res = await fetch(`${API_BASE}/api/consignment/list`, {
+            headers: { 'Authorization': 'Bearer ' + sess },
+            cache: 'no-store'
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data && Array.isArray(data.properties)) {
+              properties = data.properties;
+              try { localStorage.setItem(STORAGE_KEY, JSON.stringify(properties)); } catch (_) {}
+              const who = data.updated_by ? ` โดย ${data.updated_by}` : '';
+              setSyncBadge(`☁️ R2 Demo (${data.count || properties.length} หลัง${who})`, true);
+              renderCards();
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn('Cloud consignment load fallback:', e);
+        }
+      }
+
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
           if (Array.isArray(parsed) && parsed.length > 0) {
             properties = parsed;
+            setSyncBadge('โหมดเครื่องตัวเอง (Offline)', false);
             renderCards();
             return;
           }
@@ -594,7 +652,33 @@
     }
 
     async function resetToSeedTest(confirmReset = true) {
-      if (confirmReset && !confirm('รีเซ็ตกลับไปใช้ข้อมูลตั้งต้น (48 หลัง) ใช่หรือไม่?')) return;
+      if (confirmReset && !confirm('รีเซ็ตกลับไปใช้ข้อมูลตั้งต้น (48 หลัง) บนระบบ Demo ใช่หรือไม่?')) return;
+      const sess = localStorage.getItem(SESSION_KEY) || '';
+      if (confirmReset && sess) {
+        setSyncBadge('กำลังรีเซ็ตบน R2...', true);
+        try {
+          const res = await fetch(`${API_BASE}/api/consignment/save`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + sess
+            },
+            body: JSON.stringify({ action: 'reset_seed' })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data.properties)) {
+              properties = data.properties;
+              try { localStorage.setItem(STORAGE_KEY, JSON.stringify(properties)); } catch (_) {}
+              setSyncBadge(`☁️ รีเซ็ตตั้งต้นแล้ว (${properties.length} หลัง)`, true);
+              renderCards();
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn('Reset seed cloud err:', e);
+        }
+      }
       try {
         const res = await fetch('data/consignment_seed_test.json?t=' + Date.now(), { cache: 'no-store' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -604,7 +688,8 @@
         alert('ไม่สามารถโหลดข้อมูลตั้งต้น (consignment_seed_test.json) ได้: ' + e.message);
         properties = [];
       }
-      saveLocal();
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(properties)); } catch (_) {}
+      setSyncBadge('โหลดไฟล์ตั้งต้น 48 หลัง', true);
       renderCards();
     }
 
