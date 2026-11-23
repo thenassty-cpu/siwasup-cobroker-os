@@ -4071,7 +4071,8 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                             ctype = "exclusive_contract" if str(payload.get("contract_type") or "") == "exclusive" else "open_contract"
                             tprop["consignment_type"] = ctype
                             tprop["contract_expiry"] = payload["expires_at"]
-                            tprop["contract_verified"] = True
+                            if role == "founder":
+                                tprop["contract_verified"] = True
                             tprop["linked_contract_id"] = cid
                             tprop["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
                             tprop["updated_by"] = actor_name
