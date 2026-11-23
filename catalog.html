@@ -1558,7 +1558,8 @@
       const count = Number(pendingCount || 0);
       window._siwasupLobbyPendingCount = count;
       const isClient = (typeof isWhiteLabelMode === 'function' && isWhiteLabelMode()) || (typeof currentMode !== 'undefined' && currentMode === 'client');
-      const showAdmin = Boolean(isAdm) && !isClient;
+      const isOwnerView = (typeof currentMode === 'undefined' || currentMode === 'owner');
+      const showAdmin = Boolean(isAdm) && !isClient && isOwnerView;
       const hdrBtn = document.getElementById('btn-header-admin-lobby');
       const hdrBadge = document.getElementById('header-lobby-pending-badge');
       const profBox = document.getElementById('profile-admin-lobby-box');
@@ -2105,7 +2106,7 @@
           else { myContractsBtn.classList.add('hidden'); myContractsBtn.classList.remove('flex'); }
         }
         if (agentLoginBtn) { agentLoginBtn.classList.add('hidden'); agentLoginBtn.classList.remove('flex'); }
-        const showMockDirectory = (mode !== 'client') && (Boolean(window._siwasupCanSwitchRoles) || new URLSearchParams(window.location.search).get('dev') === '1');
+        const showMockDirectory = (mode === 'owner') && (new URLSearchParams(window.location.search).get('dev') === '1');
         if (adminShortcutBtn) {
           if (showMockDirectory) {
             adminShortcutBtn.classList.remove('hidden');
