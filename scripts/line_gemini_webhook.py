@@ -2017,6 +2017,31 @@ def _is_consignment_owner(prop: dict, member: dict) -> bool:
     return (bool(mid) and sub_id == mid) or (bool(code) and (sub_code == code or ass_code == code))
 
 
+def _is_contract_verified(prop: dict) -> bool:
+    """Catalog Publish Guard: only verified non-expired properties may enter catalog."""
+    if not isinstance(prop, dict):
+        return False
+    if str(prop.get("status") or "").strip() == "expired":
+        return False
+    if not bool(prop.get("contract_verified")):
+        return False
+    ctype = str(prop.get("consignment_type") or "open_contract").strip()
+    if ctype == "no_contract":
+        return True
+    has_files = bool(prop.get("contract_files")) or bool(prop.get("linked_contract_id"))
+    if not has_files:
+        return False
+    exp_str = str(prop.get("contract_expiry") or "").strip()
+    if exp_str:
+        try:
+            exp_dt = datetime.strptime(exp_str[:10], "%Y-%m-%d").date()
+            if exp_dt < bkk_now().date():
+                return False
+        except Exception:
+            pass
+    return True
+
+
 def _default_consignment_store():
     seed_path = os.path.join(DATA_DIR, "consignment_seed_test.json")
     if os.path.exists(seed_path):
@@ -3407,6 +3432,65 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             })
             return
 
+        if path == "/api/consignment/catalog":
+            acting = self._require("member")
+            if not acting:
+                return
+            store = load_consignment_data()
+            out = []
+            for p in store.get("properties", []):
+                if p.get("status") == "available" and _is_contract_verified(p):
+                    safe_p = {k: v for k, v in p.items() if k not in ("contract_files", "internal_note")}
+                    out.append(safe_p)
+            self._send_json(200, {
+                "status": "success",
+                "count": len(out),
+                "properties": out,
+            })
+            return
+
+        if path == "/api/consignment/contract-file":
+            acting = self._require("member")
+            if not acting:
+                return
+            role = _consignment_role(acting)
+            r2_key = str(query.get("key", [""])[0] or "").strip()
+            m_key = re.match(r"^_vault/consignment_contracts/([A-Za-z0-9_-]+)_[a-f0-9]+\.(pdf|jpg|png|webp)$", r2_key)
+            if not m_key:
+                self._send_json(400, {"error": "Invalid contract file key"})
+                return
+            pid_from_key = m_key.group(1)
+            ext_from_key = m_key.group(2)
+            if role == "agent":
+                store = load_consignment_data()
+                target_prop = next((x for x in store.get("properties", []) if str(x.get("id") or "").strip() == pid_from_key), None)
+                if not target_prop or not _is_consignment_owner(target_prop, acting):
+                    self._send_json(403, {"error": "ไม่มีสิทธิ์เข้าถึงเอกสารสัญญาของผู้อื่น"})
+                    return
+            ctype_map = {
+                "pdf": "application/pdf",
+                "jpg": "image/jpeg",
+                "png": "image/png",
+                "webp": "image/webp",
+            }
+            try:
+                url = f"https://assets.siwasup.com/{r2_key}"
+                req = urllib.request.Request(url, headers={"User-Agent": "SiwasupContractProxy/1.0"})
+                with urllib.request.urlopen(req, timeout=12) as r:
+                    file_bytes = r.read()
+                self.send_response(200)
+                self.send_header("Content-Type", ctype_map.get(ext_from_key, "application/octet-stream"))
+                self.send_header("Content-Length", str(len(file_bytes)))
+                self.send_header("Cache-Control", "private, no-store")
+                self.send_header("X-Content-Type-Options", "nosniff")
+                self.end_headers()
+                self.wfile.write(file_bytes)
+            except urllib.error.HTTPError as he:
+                self._send_json(he.code if he.code in (403, 404) else 502, {"error": f"Contract file fetch HTTP {he.code}"})
+            except Exception as e:
+                self._send_json(500, {"error": str(e)})
+            return
+
         if path == "/api/intake/list":
             acting = self._require("member")
             if not acting:
@@ -3957,16 +4041,43 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     payload["submitted_by_ref"] = acting.get("code") or acting.get("id") or ""
                     payload["submitted_by_name"] = acting.get("nickname") or acting.get("name") or ""
                     payload["submitted_by_line_id"] = acting.get("lineUserId") or ""
-                    # Expiry calculation (default 90 days if not set)
-                    days = int(payload.get("contract_days") or 90)
-                    exp_ts = time.time() + (days * 86400)
-                    payload["expires_at"] = datetime.fromtimestamp(exp_ts, tz=TH_TZ).strftime("%Y-%m-%d")
+                    # Expiry calculation (from contract_date + contract_days, default 90 days)
+                    days = max(1, int(payload.get("contract_days") or 90))
+                    base_dt = bkk_now()
+                    cdate_str = str(payload.get("contract_date") or "").strip()
+                    if cdate_str:
+                        try:
+                            base_dt = datetime.strptime(cdate_str[:10], "%Y-%m-%d").replace(tzinfo=TH_TZ)
+                        except Exception:
+                            pass
+                    payload["expires_at"] = (base_dt + timedelta(days=days)).strftime("%Y-%m-%d")
 
                     # Replace or prepend
                     contracts = [c for c in contracts if c.get("id") != cid]
                     contracts.insert(0, payload)
                     store["contracts"] = contracts
                     save_contracts_data(store)
+
+                # Two-way sync back to Consignment Vault (outside CONTRACTS_LOCK to prevent nested locks)
+                linked_pid = str(payload.get("property_id") or "").strip()
+                if linked_pid:
+                    role = _consignment_role(acting)
+                    actor_name = str(acting.get("nickname") or acting.get("name") or acting.get("code") or "").strip()
+                    with CONSIGNMENT_DEMO_LOCK:
+                        cstore = load_consignment_data()
+                        cprops = list(cstore.get("properties", []))
+                        tprop = next((x for x in cprops if str(x.get("id") or "").strip() == linked_pid), None)
+                        if tprop and (role in ("founder", "staff") or _is_consignment_owner(tprop, acting)):
+                            ctype = "exclusive_contract" if str(payload.get("contract_type") or "") == "exclusive" else "open_contract"
+                            tprop["consignment_type"] = ctype
+                            tprop["contract_expiry"] = payload["expires_at"]
+                            tprop["contract_verified"] = True
+                            tprop["linked_contract_id"] = cid
+                            tprop["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+                            tprop["updated_by"] = actor_name
+                            cstore["properties"] = cprops
+                            cstore["updated_by"] = actor_name
+                            save_consignment_data(cstore)
                 self._send_json(200, {"status": "success", "contract": payload})
             except Exception as e:
                 self._send_json(500, {"status": "error", "message": str(e)})
@@ -4029,6 +4140,8 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                 prop["assigned_agent_name"] = existing.get("assigned_agent_name", "")
                             if str(prop.get("status") or "") == "available" and (not existing or existing.get("status") != "available"):
                                 prop["status"] = "ready_for_review"
+                        if role != "founder":
+                            prop["contract_verified"] = bool(existing.get("contract_verified")) if existing else False
                         prop["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
                         prop["updated_by"] = actor_name
                         if existing_idx is not None:
@@ -4123,15 +4236,18 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 rand_hex = secrets.token_hex(8)
                 if kind == "contract":
                     r2_key = f"_vault/consignment_contracts/{pid}_{rand_hex}.{ext}"
+                    out_url = f"{PUBLIC_BASE_URL}/api/consignment/contract-file?key={urllib.parse.quote(r2_key)}"
                 else:
                     r2_key = f"consignment_uploads/{pid}_{rand_hex}.{ext}"
+                    out_url = f"https://assets.siwasup.com/{r2_key}"
                 st = put_object_r2(r2_key, file_bytes, ctype)
                 if int(st) not in (200, 201):
                     self._send_json(502, {"error": f"R2 upload failed ({st})"})
                     return
                 self._send_json(200, {
                     "status": "success",
-                    "url": f"https://assets.siwasup.com/{r2_key}",
+                    "url": out_url,
+                    "r2_key": r2_key,
                     "content_type": ctype,
                     "size": len(file_bytes),
                 })

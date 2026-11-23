@@ -621,6 +621,7 @@
     let CURRENT_AGENT_REF = localStorage.getItem('siwasup_my_agent_ref') || '';
     let CURRENT_AGENT_NAME = '';
     let CURRENT_AGENT_ROLE = 'Siwasup Co-Broker OS';
+    let LINKED_PROPERTY_ID = '';
     let myContracts = [];
 
     (function () {
@@ -1225,6 +1226,7 @@
 
       const newContract = {
         id: `SW-CNT-${Date.now().toString().slice(-6)}`,
+        property_id: LINKED_PROPERTY_ID || '',
         agent_ref: CURRENT_AGENT_REF,
         contract_type: document.getElementById('contract_type').value,
         contract_date: document.getElementById('contract_date').value,
@@ -1394,15 +1396,47 @@
       if (window.lucide) { lucide.createIcons(); }
     }
 
-    function extendContract(cid) {
+    async function extendContract(cid) {
       let contracts = JSON.parse(localStorage.getItem('siwasup_my_contracts') || '[]');
-      const c = contracts.find(x => x.id === cid);
-      if (c) {
-        c.contract_days = parseInt(c.contract_days || 90, 10) + 90;
-        localStorage.setItem('siwasup_my_contracts', JSON.stringify(contracts));
-        renderContractsList();
-        showToast("✓ ต่ออายุสัญญาเพิ่มอีก 90 วันเรียบร้อยแล้ว!");
+      const idx = contracts.findIndex(x => x.id === cid);
+      if (idx < 0) return;
+      const addStr = prompt('ระบุจำนวนวันที่ต้องการต่ออายุสัญญา (เช่น 30, 60, 90):', '90');
+      if (addStr === null) return;
+      const addDays = parseInt(addStr.trim(), 10);
+      if (!addDays || addDays <= 0 || addDays > 3650) {
+        showToast('กรุณาระบุจำนวนวันให้ถูกต้อง (1 - 3650 วัน)');
+        return;
       }
+      const c = Object.assign({}, contracts[idx]);
+      c.contract_days = parseInt(c.contract_days || 90, 10) + addDays;
+      const token = localStorage.getItem('siwasup_session') || '';
+      if (token) {
+        try {
+          const resp = await fetch(`${BACKEND_URL}/api/contracts/save`, {
+            method: 'POST',
+            headers: getAuthHeaders(true),
+            body: JSON.stringify(c)
+          });
+          if (!resp.ok) {
+            showToast(`ต่ออายุบน Cloud ไม่สำเร็จ (HTTP ${resp.status})`);
+            return;
+          }
+          const data = await resp.json().catch(() => ({}));
+          if (data && data.contract) {
+            contracts[idx] = data.contract;
+          } else {
+            contracts[idx] = c;
+          }
+        } catch (e) {
+          showToast('ไม่สามารถเชื่อมต่อ Cloud เพื่อบันทึกการต่อสัญญาได้');
+          return;
+        }
+      } else {
+        contracts[idx] = c;
+      }
+      localStorage.setItem('siwasup_my_contracts', JSON.stringify(contracts));
+      renderContractsList();
+      showToast(`✓ ต่ออายุสัญญาเพิ่มอีก ${addDays} วันเรียบร้อยแล้ว!`);
     }
 
     async function loadMyContracts() {
@@ -1690,8 +1724,12 @@
       updateContractExpiryDisplay();
 
       const qp = new URLSearchParams(window.location.search);
+      const qPropId = qp.get('property_id');
       const qTitle = qp.get('title');
       const qPrice = qp.get('price');
+      if (qPropId) {
+        LINKED_PROPERTY_ID = qPropId.trim();
+      }
       if (qTitle && document.getElementById('property_project')) {
         document.getElementById('property_project').value = qTitle;
       }
