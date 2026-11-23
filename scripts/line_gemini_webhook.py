@@ -2832,6 +2832,126 @@ def format_client_tracking_report(agent_ref: str = "", target_query: str = "", i
     return "\n".join(lines)
 
 
+_THAI_TAMBONS_CACHE = None
+
+
+def _load_thai_tambons():
+    global _THAI_TAMBONS_CACHE
+    if _THAI_TAMBONS_CACHE is not None:
+        return _THAI_TAMBONS_CACHE
+    path = os.path.join(DATA_DIR, "thai_tambons.json")
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            _THAI_TAMBONS_CACHE = json.load(f)
+    except Exception as e:
+        print(f"[Thai Tambons Load Error]: {e}")
+        _THAI_TAMBONS_CACHE = {}
+    return _THAI_TAMBONS_CACHE
+
+
+def _strip_thai_admin_prefix(text: str) -> str:
+    s = re.sub(r"\s+", "", (text or "").strip())
+    s = re.sub(r"^(?:ตำบล|ต\.|แขวง|อำเภอ|อ\.|เขต|จังหวัด|จ\.)", "", s)
+    return s
+
+
+def _thai_consonant_skeleton(text: str) -> str:
+    s = _strip_thai_admin_prefix(text)
+    return re.sub(r"[\u0e30-\u0e3a\u0e40-\u0e4e]", "", s)
+
+
+def _recheck_thai_location(subdistrict: str, district: str, province: str) -> tuple[str, str, str, str]:
+    """Cross-check OCR (subdistrict, district, province) against official Thai geography."""
+    import difflib
+    geo = _load_thai_tambons()
+    if not geo:
+        return subdistrict, district, province, ""
+
+    p_clean = _strip_thai_admin_prefix(province)
+    if p_clean in ("กรุงเทพ", "กทม", "กทม.", "กรุงเทพฯ"):
+        p_clean = "กรุงเทพมหานคร"
+    if p_clean not in geo:
+        p_matches = difflib.get_close_matches(p_clean, list(geo.keys()), n=1, cutoff=0.75)
+        if p_matches:
+            p_clean = p_matches[0]
+        else:
+            return subdistrict, district, province, ""
+
+    dmap = geo[p_clean]
+    d_clean = _strip_thai_admin_prefix(district)
+    if d_clean not in dmap:
+        d_matches = difflib.get_close_matches(d_clean, list(dmap.keys()), n=1, cutoff=0.75)
+        if d_matches:
+            d_clean = d_matches[0]
+
+    s_clean = _strip_thai_admin_prefix(subdistrict)
+    if not s_clean:
+        return subdistrict, d_clean or district, p_clean, ""
+
+    # Tier 1: Search within matched district
+    if d_clean in dmap:
+        subs = dmap[d_clean]
+        if s_clean in subs:
+            return s_clean, d_clean, p_clean, ""
+        s_skel = _thai_consonant_skeleton(s_clean)
+        skel_hits = [sub for sub in subs if _thai_consonant_skeleton(sub) == s_skel]
+        if len(skel_hits) == 1:
+            return skel_hits[0], d_clean, p_clean, ""
+        if skel_hits:
+            best = max(skel_hits, key=lambda x: difflib.SequenceMatcher(None, s_clean, x).ratio())
+            return best, d_clean, p_clean, ""
+        close = difflib.get_close_matches(s_clean, subs, n=1, cutoff=0.72)
+        if close:
+            return close[0], d_clean, p_clean, ""
+
+    # Tier 2: Province-wide fallback (handles old deeds whose subdistrict moved to a newer district)
+    s_skel = _thai_consonant_skeleton(s_clean)
+    exact_prov_hits = []
+    skel_prov_hits = []
+    for dist_name, subs in dmap.items():
+        if s_clean in subs:
+            exact_prov_hits.append((s_clean, dist_name))
+        for sub in subs:
+            if s_skel and _thai_consonant_skeleton(sub) == s_skel:
+                skel_prov_hits.append((sub, dist_name))
+
+    if len(exact_prov_hits) == 1:
+        sub_m, dist_m = exact_prov_hits[0]
+        note = f"ปัจจุบัน อ.{dist_m}" if d_clean and dist_m != d_clean else ""
+        return sub_m, d_clean or dist_m, p_clean, note
+
+    if skel_prov_hits:
+        best_sub, best_dist = max(
+            skel_prov_hits,
+            key=lambda item: difflib.SequenceMatcher(None, s_clean, item[0]).ratio(),
+        )
+        if difflib.SequenceMatcher(None, s_clean, best_sub).ratio() >= 0.65:
+            note = f"ปัจจุบัน อ.{best_dist}" if d_clean and best_dist != d_clean else ""
+            return best_sub, d_clean or best_dist, p_clean, note
+
+    return subdistrict, d_clean or district, p_clean, ""
+
+
+def _normalize_rawang(raw: str) -> str:
+    """Normalize Thai title deed UTM map sheet (ระวาง), fixing Roman numeral misreads."""
+    s = re.sub(r"\s+", " ", (raw or "").strip())
+    if not s:
+        return ""
+    m = re.match(r"^(\d{4})\s*([IVXil1|!]+)\s*(\d{4})(.*)$", s, re.I)
+    if not m:
+        return s
+    p1, mid, p2, tail = m.groups()
+    mid_clean = mid.upper().replace("L", "I").replace("|", "I").replace("!", "I")
+    roman_map = {
+        "1": "I", "I": "I",
+        "11": "II", "II": "II",
+        "111": "III", "III": "III",
+        "1V": "IV", "IV": "IV", "4": "IV",
+    }
+    roman = roman_map.get(mid_clean, mid.upper())
+    return f"{p1} {roman} {p2}{tail}".strip()
+
+
 def extract_contract_ocr(image_base64, doc_type="id_card", mime_type="image/jpeg"):
     if "," in image_base64:
         image_base64 = image_base64.split(",", 1)[1]
@@ -2860,27 +2980,36 @@ def extract_contract_ocr(image_base64, doc_type="id_card", mime_type="image/jpeg
 หากมองไม่เห็นฟิลด์ใด ให้ใส่เป็นสตริงว่าง "" ห้ามเดาข้อมูล"""
     elif doc_type == "title_deed":
         prompt = """คุณคือ AI ผู้ช่วยตรวจสอบและสกัดข้อมูลจาก 'โฉนดที่ดินไทย (น.ส. 4 จ.)' สำหรับร่างสัญญาแต่งตั้งตัวแทนขายอสังหาริมทรัพย์
-จงอ่านและสกัดข้อมูลจากภาพอย่างละเอียด ถูกต้อง 100% ตอบกลับเฉพาะ JSON ที่มีโครงสร้างดังนี้เท่านั้น:
+คำแนะนำสำคัญในการอ่านโฉนดไทย:
+1. ตัวเลขในโฉนดเก่ามักเขียนด้วย "เลขไทยลายมือ" (๐ ๑ ๒ ๓ ๔ ๕ ๖ ๗ ๘ ๙) ให้แปลงเป็นเลขอารบิกอย่างระมัดระวัง โดยเฉพาะ "โฉนดที่ดิน เลขที่" มุมขวาบน และ "หน้าสำรวจ" มุมซ้ายบน
+2. "ระวาง" มีรูปแบบมาตรฐานคือ <เลข 4 หลัก> <เลขโรมัน I, II, III หรือ IV> <เลข 4 หลัก> เช่น 5340 III 8824 (ระวังเลขเขียนมือ 8 กับ 6, 2 กับ 1)
+3. "เนื้อที่ดิน" ให้อ่านทั้งตัวเลขไทยและ "คำอ่านภาษาไทยในวงเล็บ" ใต้บรรทัด เช่น (ยี่สิบห้าไร่สองงานหกสิบสามตารางวา) เพื่อยืนยันความถูกต้อง 100% ก่อนตอบ
+
+ตอบกลับเฉพาะ JSON ที่มีโครงสร้างดังนี้เท่านั้น:
 {
   "doc_type": "title_deed",
-  "deed_number": "โฉนดที่ดินเลขที่",
-  "land_number": "เลขที่ดิน",
-  "survey_page": "หน้าสำรวจ",
-  "rawang": "ระวาง",
-  "subdistrict": "ตำบล/แขวง",
-  "district": "อำเภอ/เขต",
-  "province": "จังหวัด",
-  "area_rai": "จำนวนไร่ (ตัวเลข)",
-  "area_ngan": "จำนวนงาน (ตัวเลข)",
-  "area_sqw": "จำนวนตารางวา (ตัวเลข)",
-  "area_total_sqw": "คำนวณพื้นที่รวมเป็นตารางวา เช่น 1 ไร่ 2 งาน 50 วา = 650 ตร.ว.",
+  "deed_number": "โฉนดที่ดินเลขที่ (เลขอารบิก)",
+  "land_number": "เลขที่ดิน (เลขอารบิก)",
+  "survey_page": "หน้าสำรวจ (เลขอารบิก)",
+  "rawang": "ระวาง เช่น 5340 III 8824",
+  "subdistrict": "ตำบล/แขวง (ไม่ต้องใส่คำว่า ตำบล/แขวง)",
+  "district": "อำเภอ/เขต (ไม่ต้องใส่คำว่า อำเภอ/เขต)",
+  "province": "จังหวัด (ไม่ต้องใส่คำว่า จังหวัด)",
+  "area_rai": "จำนวนไร่ (ตัวเลขอารบิก)",
+  "area_ngan": "จำนวนงาน (ตัวเลขอารบิก)",
+  "area_sqw": "จำนวนตารางวา (ตัวเลขอารบิก)",
+  "area_total_sqw": "คำนวณพื้นที่รวมเป็นตารางวา (ตัวเลขล้วน เช่น 10263)",
   "owner_name": "ชื่อผู้ถือกรรมสิทธิ์ / ผู้ถือกรรมสิทธิ์เดิม"
 }
 หากมองไม่เห็นฟิลด์ใด ให้ใส่เป็นสตริงว่าง "" ห้ามเดาข้อมูล"""
     else:
         prompt = """สกัดข้อมูลสำคัญจากเอกสารอสังหาริมทรัพย์ไทยในภาพนี้ ตอบกลับเป็น JSON ที่ระบุประเภทเอกสารและข้อมูลสำคัญ"""
 
-    models_to_try = ["gemini-flash-lite-latest", "gemini-flash-latest"]
+    models_to_try = (
+        ["gemini-flash-latest", "gemini-flash-lite-latest"]
+        if doc_type == "title_deed"
+        else ["gemini-flash-lite-latest", "gemini-flash-latest"]
+    )
     for m in models_to_try:
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent?key={GEMINI_API_KEY}"
         payload = {
@@ -2916,7 +3045,34 @@ def extract_contract_ocr(image_base64, doc_type="id_card", mime_type="image/jpeg
                     parts = candidates[0].get('content', {}).get('parts', [])
                     if parts:
                         raw_json = parts[0].get('text', '').strip()
-                        return json.loads(raw_json)
+                        parsed = json.loads(raw_json)
+                        if isinstance(parsed, dict):
+                            if doc_type == "title_deed":
+                                if parsed.get("rawang"):
+                                    parsed["rawang"] = _normalize_rawang(str(parsed["rawang"]))
+                                try:
+                                    r_v = float(str(parsed.get("area_rai") or 0).replace(",", "") or 0)
+                                    n_v = float(str(parsed.get("area_ngan") or 0).replace(",", "") or 0)
+                                    w_v = float(str(parsed.get("area_sqw") or 0).replace(",", "") or 0)
+                                    if r_v or n_v or w_v:
+                                        tot = r_v * 400 + n_v * 100 + w_v
+                                        parsed["area_total_sqw"] = str(int(tot)) if tot.is_integer() else f"{tot:.1f}"
+                                except Exception:
+                                    pass
+                            sub_m, dist_m, prov_m, loc_note = _recheck_thai_location(
+                                str(parsed.get("subdistrict") or ""),
+                                str(parsed.get("district") or ""),
+                                str(parsed.get("province") or ""),
+                            )
+                            if sub_m:
+                                parsed["subdistrict"] = sub_m
+                            if dist_m:
+                                parsed["district"] = dist_m
+                            if prov_m:
+                                parsed["province"] = prov_m
+                            if loc_note:
+                                parsed["location_note"] = loc_note
+                        return parsed
         except Exception as e:
             print(f"[OCR Error on {m}]: {e}")
             continue

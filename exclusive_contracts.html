@@ -189,8 +189,8 @@
 </head>
 <body class="min-h-screen pb-24">
 
-  <!-- Floating 4-Theme Switcher Bar -->
-  <div class="fixed top-3 right-3 z-50 flex items-center gap-1 p-1 rounded-2xl bg-slate-900/90 border border-slate-700 shadow-xl backdrop-blur-md text-xs" id="adminThemeBar">
+  <!-- Floating 4-Theme Switcher Bar (inline above header on mobile to avoid overlap) -->
+  <div class="sm:fixed sm:top-3 sm:right-3 z-50 flex items-center justify-end gap-1 p-1 mx-3 mt-2 sm:m-0 rounded-2xl bg-slate-900/90 border border-slate-700 shadow-xl backdrop-blur-md text-xs" id="adminThemeBar">
     <span class="px-2 py-0.5 text-[10px] font-bold text-slate-400 flex items-center gap-1">
       <i data-lucide="palette" class="w-3.5 h-3.5 text-amber-500"></i>
       <span class="hidden sm:inline">ธีม:</span>
@@ -598,10 +598,12 @@
       spinner.classList.remove('hidden');
 
       try {
-        // 1. Client-side fast compression (Reduces 10MB phone photo -> 300KB for instant upload & no timeout)
+        // 1. Client-side fast compression (Higher res 2048px for title deeds with small handwritten Thai numerals)
         let base64Data;
+        const maxDim = (docType === 'title_deed') ? 2048 : 1600;
+        const imgQuality = (docType === 'title_deed') ? 0.88 : 0.82;
         try {
-          base64Data = await compressImageFile(file, 1600, 1600, 0.82);
+          base64Data = await compressImageFile(file, maxDim, maxDim, imgQuality);
         } catch (compErr) {
           console.warn("Canvas compression fallback to raw file", compErr);
           base64Data = await new Promise((res, rej) => {
@@ -678,14 +680,24 @@
         if (data.land_number) document.getElementById('land_no').value = data.land_number;
         if (data.survey_page) document.getElementById('survey_no').value = data.survey_page;
         if (data.rawang) document.getElementById('rawang_no').value = data.rawang;
-        if (data.area_total_sqw) document.getElementById('land_size').value = `${data.area_total_sqw} ตร.ว.`;
-        else if (data.area_sqw) document.getElementById('land_size').value = `${data.area_sqw} ตร.ว.`;
+        if (data.area_total_sqw) {
+          const r = data.area_rai ? `${data.area_rai} ไร่ ` : '';
+          const n = data.area_ngan ? `${data.area_ngan} งาน ` : '';
+          const w = data.area_sqw ? `${data.area_sqw} ตร.ว.` : '';
+          const rnw = `${r}${n}${w}`.trim();
+          document.getElementById('land_size').value = rnw ? `${rnw} (${data.area_total_sqw} ตร.ว.)` : `${data.area_total_sqw} ตร.ว.`;
+        } else if (data.area_sqw) {
+          document.getElementById('land_size').value = `${data.area_sqw} ตร.ว.`;
+        }
         
         let locParts = [];
         if (data.subdistrict) locParts.push(data.subdistrict);
         if (data.district) locParts.push(data.district);
         if (data.province) locParts.push(data.province);
-        if (locParts.length > 0) document.getElementById('deed_location').value = locParts.join(' • ');
+        if (locParts.length > 0) {
+          const noteSuffix = data.location_note ? ` (${data.location_note})` : '';
+          document.getElementById('deed_location').value = locParts.join(' • ') + noteSuffix;
+        }
 
         if (data.owner_name && !document.getElementById('owner_name').value) {
           document.getElementById('owner_name').value = data.owner_name;
