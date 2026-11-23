@@ -413,7 +413,7 @@
             </button>
 
             <!-- แอดมินจัดกลุ่มสัตว์ 4 กลุ่ม -->
-            <button id="btn-owner-archetype-shortcut" type="button" onclick="openAgentLeaderboardModal('animal_matrix')" class="h-6 px-1.5 sm:px-2 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-300 flex items-center gap-1 transition cursor-pointer active:scale-95 shrink-0" title="วิเคราะห์ศักยภาพตัวแทน 4 กลุ่มสัตว์ (Animal Matrix)">
+            <button id="btn-owner-archetype-shortcut" type="button" onclick="openAgentLeaderboardModal('animal_matrix')" class="hidden h-6 px-1.5 sm:px-2 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-300 items-center gap-1 transition cursor-pointer active:scale-95 shrink-0" title="วิเคราะห์ศักยภาพตัวแทน 4 กลุ่มสัตว์ (Animal Matrix)">
               <img src="assets/characters/badge_eagle.png" alt="Matrix" class="w-3.5 h-3.5 object-contain">
               <span class="hidden sm:inline">4 สาย</span>
             </button>
@@ -438,7 +438,7 @@
             </button>
 
             <!-- ทำเนียบตัวแทน 125 -->
-            <button id="btn-header-leaderboard" type="button" onclick="openAgentLeaderboardModal()" class="h-6 px-1.5 sm:px-2 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-[#E5C985] font-semibold flex items-center gap-1 transition cursor-pointer active:scale-95 shrink-0" title="ทำเนียบตัวแทน 125 ท่าน">
+            <button id="btn-header-leaderboard" type="button" onclick="openAgentLeaderboardModal()" class="hidden h-6 px-1.5 sm:px-2 rounded-md bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-[#E5C985] font-semibold items-center gap-1 transition cursor-pointer active:scale-95 shrink-0" title="ทำเนียบตัวแทน 125 ท่าน">
               <span>♛</span>
               <span>125</span>
             </button>
@@ -2105,13 +2105,23 @@
           else { myContractsBtn.classList.add('hidden'); myContractsBtn.classList.remove('flex'); }
         }
         if (agentLoginBtn) { agentLoginBtn.classList.add('hidden'); agentLoginBtn.classList.remove('flex'); }
+        const showMockDirectory = (mode !== 'client') && (Boolean(window._siwasupCanSwitchRoles) || new URLSearchParams(window.location.search).get('dev') === '1');
         if (adminShortcutBtn) {
-          if (mode !== 'client') {
+          if (showMockDirectory) {
             adminShortcutBtn.classList.remove('hidden');
             adminShortcutBtn.classList.add('flex');
           } else {
             adminShortcutBtn.classList.add('hidden');
             adminShortcutBtn.classList.remove('flex');
+          }
+        }
+        if (leaderboardBtn) {
+          if (showMockDirectory) {
+            leaderboardBtn.classList.remove('hidden');
+            leaderboardBtn.classList.add('flex');
+          } else {
+            leaderboardBtn.classList.add('hidden');
+            leaderboardBtn.classList.remove('flex');
           }
         }
       }
