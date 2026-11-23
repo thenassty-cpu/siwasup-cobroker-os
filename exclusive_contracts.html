@@ -314,18 +314,25 @@
               <span class="flex items-center gap-1.5"><i data-lucide="id-card" class="w-3.5 h-3.5 text-amber-400"></i> บัตรประจำตัวประชาชน</span>
               <span id="badge-id-status" class="text-[10px] text-slate-500">รอถ่ายรูป</span>
             </div>
-            <div class="relative w-full h-28 bg-slate-950/60 rounded-lg flex items-center justify-center overflow-hidden border border-slate-800">
+            <div onclick="document.getElementById('input-id-file').click()" class="relative w-full h-28 bg-slate-950/60 rounded-lg flex items-center justify-center overflow-hidden border border-slate-800 cursor-pointer">
               <img id="preview-id-img" class="w-full h-full object-contain hidden">
-              <div id="placeholder-id" class="text-center space-y-1">
+              <div id="placeholder-id" class="text-center space-y-1 pointer-events-none">
                 <i data-lucide="camera" class="w-6 h-6 text-slate-500 mx-auto"></i>
-                <div class="text-[10px] text-slate-400">กดเพื่อเปิดกล้อง หรือเลือกรูปบัตร ปชช.</div>
+                <div class="text-[10px] text-slate-400">กดถ่ายรูป หรือเลือกรูปบัตร ปชช.</div>
               </div>
-              <input type="file" id="input-id-file" accept="image/*" onchange="handleFileUpload(event, 'id_card')" class="absolute inset-0 opacity-0 cursor-pointer">
             </div>
-            <button type="button" onclick="document.getElementById('input-id-file').click()" class="w-full py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition flex items-center justify-center gap-1">
-              <i data-lucide="upload" class="w-3 h-3"></i>
-              <span>เลือกภาพ / ถ่ายรูปบัตร</span>
-            </button>
+            <input type="file" id="input-id-camera" accept="image/*" capture="environment" onchange="handleFileUpload(event, 'id_card')" class="hidden">
+            <input type="file" id="input-id-file" accept="image/*" onchange="handleFileUpload(event, 'id_card')" class="hidden">
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" onclick="document.getElementById('input-id-camera').click()" class="py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-xs font-semibold transition flex items-center justify-center gap-1">
+                <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                <span>ถ่ายรูป</span>
+              </button>
+              <button type="button" onclick="document.getElementById('input-id-file').click()" class="py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition flex items-center justify-center gap-1">
+                <i data-lucide="image" class="w-3.5 h-3.5"></i>
+                <span>แกลเลอรี</span>
+              </button>
+            </div>
           </div>
 
           <!-- Card 2: Title Deed -->
@@ -334,18 +341,25 @@
               <span class="flex items-center gap-1.5"><i data-lucide="map" class="w-3.5 h-3.5 text-emerald-400"></i> โฉนดที่ดิน (น.ส. 4 จ.)</span>
               <span id="badge-deed-status" class="text-[10px] text-slate-500">รอถ่ายรูป</span>
             </div>
-            <div class="relative w-full h-28 bg-slate-950/60 rounded-lg flex items-center justify-center overflow-hidden border border-slate-800">
+            <div onclick="document.getElementById('input-deed-file').click()" class="relative w-full h-28 bg-slate-950/60 rounded-lg flex items-center justify-center overflow-hidden border border-slate-800 cursor-pointer">
               <img id="preview-deed-img" class="w-full h-full object-contain hidden">
-              <div id="placeholder-deed" class="text-center space-y-1">
+              <div id="placeholder-deed" class="text-center space-y-1 pointer-events-none">
                 <i data-lucide="camera" class="w-6 h-6 text-slate-500 mx-auto"></i>
-                <div class="text-[10px] text-slate-400">กดเพื่อเปิดกล้อง หรือเลือกรูปโฉนด</div>
+                <div class="text-[10px] text-slate-400">กดถ่ายรูป หรือเลือกรูปโฉนด</div>
               </div>
-              <input type="file" id="input-deed-file" accept="image/*" onchange="handleFileUpload(event, 'title_deed')" class="absolute inset-0 opacity-0 cursor-pointer">
             </div>
-            <button type="button" onclick="document.getElementById('input-deed-file').click()" class="w-full py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition flex items-center justify-center gap-1">
-              <i data-lucide="upload" class="w-3 h-3"></i>
-              <span>เลือกภาพ / ถ่ายรูปโฉนด</span>
-            </button>
+            <input type="file" id="input-deed-camera" accept="image/*" capture="environment" onchange="handleFileUpload(event, 'title_deed')" class="hidden">
+            <input type="file" id="input-deed-file" accept="image/*" onchange="handleFileUpload(event, 'title_deed')" class="hidden">
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" onclick="document.getElementById('input-deed-camera').click()" class="py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 text-xs font-semibold transition flex items-center justify-center gap-1">
+                <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                <span>ถ่ายรูป</span>
+              </button>
+              <button type="button" onclick="document.getElementById('input-deed-file').click()" class="py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition flex items-center justify-center gap-1">
+                <i data-lucide="image" class="w-3.5 h-3.5"></i>
+                <span>แกลเลอรี</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -497,6 +511,14 @@
     const CURRENT_AGENT_REF = localStorage.getItem('siwasup_my_agent_ref') || 'TON';
     let myContracts = [];
 
+    function getAuthHeaders(includeJson = false) {
+      const headers = {};
+      if (includeJson) headers['Content-Type'] = 'application/json';
+      const token = localStorage.getItem('siwasup_session') || '';
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+      return headers;
+    }
+
     function showToast(msg) {
       const toast = document.getElementById('toast');
       if (!toast) return;
@@ -598,12 +620,20 @@
         statusBadge.textContent = "กำลังอ่านข้อมูล AI...";
 
         // 3. Send lightweight compressed base64 to OCR backend
+        const token = localStorage.getItem('siwasup_session') || '';
+        if (!token) {
+          throw new Error("กรุณาเข้าสู่ระบบ LINE จากหน้าหลัก/แคตตาล็อกก่อนใช้งาน OCR");
+        }
+
         const resp = await fetch(`${BACKEND_URL}/api/ocr/contract`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: getAuthHeaders(true),
           body: jsonPayload(docType, base64Data, 'image/jpeg')
         });
 
+        if (resp.status === 401) {
+          throw new Error("เซสชันหมดอายุ (401) กรุณาเข้าสู่ระบบ LINE ใหม่อีกครั้ง");
+        }
         if (!resp.ok) {
           throw new Error(`Server returned HTTP ${resp.status}`);
         }
@@ -694,15 +724,30 @@
       localStorage.setItem('siwasup_my_contracts', JSON.stringify(localList));
 
       // Sync to cloud backend
-      try {
-        fetch(`${BACKEND_URL}/api/contracts/save`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newContract)
-        }).catch(() => {});
-      } catch (e) {}
+      const token = localStorage.getItem('siwasup_session') || '';
+      if (!token) {
+        showToast("บันทึกในเครื่องแล้ว (กรุณาเข้าสู่ระบบ LINE เพื่อซิงก์ขึ้น Cloud)");
+        switchTab('list');
+        return;
+      }
 
-      showToast("🎉 บันทึกสัญญาปิดเรียบร้อยแล้ว!");
+      try {
+        const resp = await fetch(`${BACKEND_URL}/api/contracts/save`, {
+          method: 'POST',
+          headers: getAuthHeaders(true),
+          body: JSON.stringify(newContract)
+        });
+        if (resp.status === 401) {
+          showToast("เซสชันหมดอายุ (401) กรุณาเข้าสู่ระบบ LINE ใหม่เพื่อซิงก์ขึ้น Cloud");
+        } else if (!resp.ok) {
+          showToast(`บันทึกในเครื่องแล้ว แต่ซิงก์ Cloud ไม่สำเร็จ (HTTP ${resp.status})`);
+        } else {
+          showToast("🎉 บันทึกสัญญาปิดขึ้นระบบเรียบร้อยแล้ว!");
+        }
+      } catch (e) {
+        showToast("บันทึกในเครื่องแล้ว (ไม่สามารถเชื่อมต่อ Cloud ได้ชั่วคราว)");
+      }
+
       switchTab('list');
     }
 
@@ -827,8 +872,16 @@
 
     async function loadMyContracts() {
       renderContractsList();
+      const token = localStorage.getItem('siwasup_session') || '';
+      if (!token) return;
       try {
-        const resp = await fetch(`${BACKEND_URL}/api/contracts/list?agent_ref=${CURRENT_AGENT_REF}`);
+        const resp = await fetch(`${BACKEND_URL}/api/contracts/list?agent_ref=${CURRENT_AGENT_REF}`, {
+          headers: getAuthHeaders(false)
+        });
+        if (resp.status === 401) {
+          showToast("เซสชันหมดอายุ (401) กรุณาเข้าสู่ระบบ LINE ใหม่เพื่อซิงก์สัญญา");
+          return;
+        }
         if (resp.ok) {
           const res = await resp.json();
           if (res && res.contracts && res.contracts.length > 0) {
