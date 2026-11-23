@@ -1997,6 +1997,26 @@ def _is_consignment_founder(member: dict) -> bool:
     return clean_phone_str(member.get("phone") or "") == "0853365703"
 
 
+def _consignment_role(member: dict) -> str:
+    if _is_consignment_founder(member):
+        return "founder"
+    perms = (member or {}).get("permissions") or {}
+    if bool(perms.get("standardAdmin") or perms.get("keyboxAdmin")):
+        return "staff"
+    return "agent"
+
+
+def _is_consignment_owner(prop: dict, member: dict) -> bool:
+    if not isinstance(prop, dict) or not isinstance(member, dict):
+        return False
+    mid = str(member.get("id") or "").strip().lower()
+    code = str(member.get("code") or "").strip().upper()
+    sub_id = str(prop.get("submitted_by_id") or "").strip().lower()
+    sub_code = str(prop.get("submitted_by_code") or "").strip().upper()
+    ass_code = str(prop.get("assigned_agent_code") or "").strip().upper()
+    return (bool(mid) and sub_id == mid) or (bool(code) and (sub_code == code or ass_code == code))
+
+
 def _default_consignment_store():
     seed_path = os.path.join(DATA_DIR, "consignment_seed_test.json")
     if os.path.exists(seed_path):
@@ -3372,13 +3392,14 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             acting = self._require("member")
             if not acting:
                 return
-            if not _is_consignment_founder(acting):
-                self._send_json(403, {"error": "จำกัดสิทธิ์เฉพาะคุณกูล คุณบัว และคุณต้น"})
-                return
+            role = _consignment_role(acting)
             store = load_consignment_data()
             props = store.get("properties", [])
+            if role == "agent":
+                props = [p for p in props if _is_consignment_owner(p, acting)]
             self._send_json(200, {
                 "status": "success",
+                "role": role,
                 "updated_at": store.get("updated_at", ""),
                 "updated_by": store.get("updated_by", ""),
                 "count": len(props),
@@ -3955,9 +3976,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             acting = self._require("member")
             if not acting:
                 return
-            if not _is_consignment_founder(acting):
-                self._send_json(403, {"error": "จำกัดสิทธิ์เฉพาะคุณกูล คุณบัว และคุณต้น"})
-                return
+            role = _consignment_role(acting)
             content_length = int(self.headers.get('Content-Length', 0))
             if content_length <= 0 or content_length > 5 * 1024 * 1024:
                 self._send_json(400, {"error": "Invalid payload size (max 5MB)"})
@@ -3966,7 +3985,72 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 payload = json.loads(self.rfile.read(content_length).decode('utf-8'))
                 action = str(payload.get("action") or "save_all").strip()
                 actor_name = str(acting.get("nickname") or acting.get("name") or acting.get("code") or "").strip()
+                actor_id = str(acting.get("id") or "").strip()
+                actor_code = str(acting.get("code") or "").strip().upper()
                 with CONSIGNMENT_DEMO_LOCK:
+                    if action == "upsert_property":
+                        prop = payload.get("property")
+                        is_new = bool(payload.get("is_new"))
+                        if not isinstance(prop, dict) or (not is_new and not str(prop.get("id") or "").strip()):
+                            self._send_json(400, {"error": "Missing property object or id"})
+                            return
+                        store = load_consignment_data()
+                        props = list(store.get("properties", []))
+                        if is_new:
+                            max_num = 2600
+                            for x in props:
+                                m = re.match(r"^SWC-(\d+)$", str(x.get("id") or "").strip(), re.IGNORECASE)
+                                if m:
+                                    n = int(m.group(1))
+                                    if n > max_num:
+                                        max_num = n
+                            pid = f"SWC-{max_num + 1}"
+                            prop["id"] = pid
+                            existing_idx = None
+                            existing = None
+                        else:
+                            pid = str(prop.get("id")).strip()
+                            existing_idx = next((i for i, x in enumerate(props) if str(x.get("id") or "").strip() == pid), None)
+                            existing = props[existing_idx] if existing_idx is not None else None
+                        if role == "agent":
+                            if existing is not None and not _is_consignment_owner(existing, acting):
+                                self._send_json(403, {"error": "ไม่มีสิทธิ์แก้ไขทรัพย์ของผู้อื่น"})
+                                return
+                            prop["submitted_by_id"] = existing.get("submitted_by_id") if existing else actor_id
+                            prop["submitted_by_code"] = existing.get("submitted_by_code") if existing else actor_code
+                            prop["submitted_by_name"] = existing.get("submitted_by_name") if existing else actor_name
+                            prop["assigned_agent_code"] = existing.get("assigned_agent_code", "") if existing else actor_code
+                            prop["assigned_agent_name"] = existing.get("assigned_agent_name", "") if existing else actor_name
+                            if str(prop.get("status") or "") not in ("pending_photos", "ready_for_review"):
+                                prop["status"] = "pending_photos" if not (prop.get("images") or []) else "ready_for_review"
+                        elif role == "staff":
+                            if existing is not None:
+                                prop["assigned_agent_code"] = existing.get("assigned_agent_code", "")
+                                prop["assigned_agent_name"] = existing.get("assigned_agent_name", "")
+                            if str(prop.get("status") or "") == "available" and (not existing or existing.get("status") != "available"):
+                                prop["status"] = "ready_for_review"
+                        prop["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+                        prop["updated_by"] = actor_name
+                        if existing_idx is not None:
+                            props[existing_idx] = prop
+                        else:
+                            props.insert(0, prop)
+                        store["properties"] = props
+                        store["updated_by"] = actor_name
+                        save_consignment_data(store)
+                        visible_count = len([p for p in props if _is_consignment_owner(p, acting)]) if role == "agent" else len(props)
+                        self._send_json(200, {
+                            "status": "success",
+                            "updated_at": store.get("updated_at", ""),
+                            "updated_by": store.get("updated_by", ""),
+                            "count": visible_count,
+                            "property": prop,
+                        })
+                        return
+
+                    if role != "founder":
+                        self._send_json(403, {"error": "คำสั่งนี้จำกัดเฉพาะผู้บริหาร"})
+                        return
                     if action == "reset_seed":
                         store = _default_consignment_store()
                         store["updated_by"] = f"reset:{actor_name}"
@@ -3986,6 +4070,70 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     "updated_by": store.get("updated_by", ""),
                     "count": len(store.get("properties", [])),
                     "properties": store.get("properties", []) if action == "reset_seed" else None,
+                })
+            except Exception as e:
+                self._send_json(500, {"status": "error", "message": str(e)})
+            return
+
+        if path == "/api/consignment/upload":
+            acting = self._require("member")
+            if not acting:
+                return
+            role = _consignment_role(acting)
+            content_length = int(self.headers.get('Content-Length', 0))
+            if content_length <= 0 or content_length > 12 * 1024 * 1024:
+                self._send_json(400, {"error": "ไฟล์ใหญ่เกินกำหนด (สูงสุด 8MB)"})
+                return
+            try:
+                payload = json.loads(self.rfile.read(content_length).decode('utf-8'))
+                pid = re.sub(r"[^A-Za-z0-9_-]", "", str(payload.get("property_id") or "").strip())
+                kind = str(payload.get("kind") or "image").strip().lower()
+                data_url = str(payload.get("data_url") or "")
+                if not pid or kind not in ("image", "contract") or ";base64," not in data_url:
+                    self._send_json(400, {"error": "ข้อมูลไฟล์ไม่ถูกต้อง"})
+                    return
+                if role == "agent":
+                    store = load_consignment_data()
+                    existing = next((x for x in store.get("properties", []) if str(x.get("id") or "").strip() == pid), None)
+                    if existing is not None and not _is_consignment_owner(existing, acting):
+                        self._send_json(403, {"error": "ไม่มีสิทธิ์อัปโหลดไฟล์เข้าทรัพย์ของผู้อื่น"})
+                        return
+                raw_b64 = data_url.split(";base64,", 1)[1]
+                file_bytes = base64.b64decode(raw_b64, validate=True)
+                if len(file_bytes) == 0 or len(file_bytes) > 8 * 1024 * 1024:
+                    self._send_json(400, {"error": "ขนาดไฟล์ต้องไม่เกิน 8MB"})
+                    return
+                # Verify real magic bytes (anti-spoof)
+                ext = None
+                ctype = None
+                if file_bytes.startswith(b"\xff\xd8\xff"):
+                    ext, ctype = "jpg", "image/jpeg"
+                elif file_bytes.startswith(b"\x89PNG\r\n\x1a\n"):
+                    ext, ctype = "png", "image/png"
+                elif len(file_bytes) >= 12 and file_bytes[:4] == b"RIFF" and file_bytes[8:12] == b"WEBP":
+                    ext, ctype = "webp", "image/webp"
+                elif kind == "contract" and file_bytes.startswith(b"%PDF"):
+                    ext, ctype = "pdf", "application/pdf"
+                if not ext:
+                    self._send_json(400, {"error": "รองรับเฉพาะไฟล์ JPG, PNG, WebP (และ PDF สำหรับสัญญา)"})
+                    return
+                if not put_object_r2:
+                    self._send_json(503, {"error": "R2 storage not configured"})
+                    return
+                rand_hex = secrets.token_hex(8)
+                if kind == "contract":
+                    r2_key = f"_vault/consignment_contracts/{pid}_{rand_hex}.{ext}"
+                else:
+                    r2_key = f"consignment_uploads/{pid}_{rand_hex}.{ext}"
+                st = put_object_r2(r2_key, file_bytes, ctype)
+                if int(st) not in (200, 201):
+                    self._send_json(502, {"error": f"R2 upload failed ({st})"})
+                    return
+                self._send_json(200, {
+                    "status": "success",
+                    "url": f"https://assets.siwasup.com/{r2_key}",
+                    "content_type": ctype,
+                    "size": len(file_bytes),
                 })
             except Exception as e:
                 self._send_json(500, {"status": "error", "message": str(e)})
