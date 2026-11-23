@@ -38,12 +38,12 @@
         <i data-lucide="lock" class="w-7 h-7" stroke-width="1.5"></i>
       </div>
       <div class="space-y-1">
-        <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 uppercase tracking-wider">
-          RESTRICTED • SANDBOX FOUNDERS & BUA
+        <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-[#FAF2E1] text-[#8A6525] border border-[#C2A460] uppercase tracking-wider">
+          SIWASUP CONSIGNMENT HUB
         </span>
-        <h2 class="text-lg font-extrabold text-[#2C2218] pt-1">ศูนย์จัดการบ้านฝากขาย (ปิดสิทธิ์ชั่วคราว)</h2>
+        <h2 class="text-lg font-extrabold text-[#2C2218] pt-1">ศูนย์จัดการบ้านฝากขาย</h2>
         <p id="consignmentGateMsg" class="text-xs text-[#6E5A44] leading-relaxed">
-          กำลังตรวจสอบสิทธิ์ LINE Login...<br>อนุญาตเฉพาะ <strong>คุณกูล (SW001)</strong>, <strong>คุณบัว</strong> และ <strong>คุณต้น (SW004)</strong> เท่านั้น
+          กำลังตรวจสอบสิทธิ์ LINE Login...<br>กรุณาเข้าสู่ระบบด้วย LINE เพื่อใช้งาน
         </p>
       </div>
       <div id="consignmentGateActions" class="hidden space-y-2.5 pt-1">
@@ -682,13 +682,45 @@
       }
     }
 
-    async function uploadConsignmentFile(pid, kind, file) {
-      const dataUrl = await new Promise((resolve, reject) => {
+    async function compressImageDataUrl(file, maxDim = 1600, quality = 0.82) {
+      const rawDataUrl = await new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = ev => resolve(ev.target.result);
         reader.onerror = reject;
         reader.readAsDataURL(file);
       });
+      if (!file.type || !file.type.startsWith('image/')) return rawDataUrl;
+      return await new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w >= h) { h = Math.round(h * maxDim / w); w = maxDim; }
+            else { w = Math.round(w * maxDim / h); h = maxDim; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          try {
+            const out = canvas.toDataURL('image/jpeg', quality);
+            resolve(out && out.startsWith('data:image/jpeg') ? out : rawDataUrl);
+          } catch (_) {
+            resolve(rawDataUrl);
+          }
+        };
+        img.onerror = () => resolve(rawDataUrl);
+        img.src = rawDataUrl;
+      });
+    }
+
+    async function uploadConsignmentFile(pid, kind, file) {
+      const isImg = Boolean(file.type && file.type.startsWith('image/'));
+      const dataUrl = isImg
+        ? await compressImageDataUrl(file, kind === 'contract' ? 2000 : 1600, kind === 'contract' ? 0.85 : 0.82)
+        : await compressImageDataUrl(file);
       const sess = localStorage.getItem(SESSION_KEY) || '';
       if (!sess) return dataUrl;
       const res = await fetch(`${API_BASE}/api/consignment/upload`, {
@@ -1057,14 +1089,29 @@
         window.open(url, '_blank', 'noopener');
         return;
       }
+      const win = window.open('', '_blank');
+      if (win && win.document) {
+        win.document.write('<!DOCTYPE html><html><body style="font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#FAF7F2;color:#2C2218;">กำลังเปิดเอกสารสัญญา...</body></html>');
+      }
       try {
         const res = await fetch(url, { headers: { 'Authorization': 'Bearer ' + sess } });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const blob = await res.blob();
         const blobUrl = URL.createObjectURL(blob);
-        window.open(blobUrl, '_blank', 'noopener');
+        if (win && !win.closed) {
+          win.location.href = blobUrl;
+        } else {
+          const a = document.createElement('a');
+          a.href = blobUrl;
+          a.target = '_blank';
+          a.rel = 'noopener';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        }
         setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
       } catch (e) {
+        if (win && !win.closed) win.close();
         alert('ไม่สามารถเปิดไฟล์สัญญาได้: ' + e.message);
       }
     }
