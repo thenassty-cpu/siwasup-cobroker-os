@@ -394,7 +394,8 @@
             </div>
             <div>
               <label class="block text-slate-400 mb-1">เลขประจำตัวประชาชน (13 หลัก):</label>
-              <input type="text" id="owner_id_card" required maxlength="13" placeholder="1100000000000" class="glass-input w-full p-2.5 rounded-xl font-mono">
+              <input type="text" id="owner_id_card" required maxlength="13" oninput="validateThaiIdInput()" placeholder="1100000000000" class="glass-input w-full p-2.5 rounded-xl font-mono">
+              <div id="id-precheck-badge" class="hidden mt-1 text-[10px] font-semibold"></div>
             </div>
             <div class="sm:col-span-2">
               <label class="block text-slate-400 mb-1">ที่อยู่ตามบัตรประชาชน:</label>
@@ -419,7 +420,12 @@
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
             <div>
-              <label class="block text-slate-400 mb-1">โฉนดที่ดินเลขที่:</label>
+              <div class="flex items-center justify-between mb-1">
+                <label class="block text-slate-400">โฉนดที่ดินเลขที่:</label>
+                <button type="button" onclick="checkOnLandsMaps()" class="text-[10px] text-sky-400 hover:text-sky-300 font-bold flex items-center gap-0.5 cursor-pointer" title="คัดลอกเลขโฉนดและเปิดเว็บ LandsMaps ของกรมที่ดิน">
+                  <span>🗺️ เช็ก LandsMaps</span>
+                </button>
+              </div>
               <input type="text" id="deed_no" required placeholder="เช่น 54231" class="glass-input w-full p-2.5 rounded-xl font-semibold">
             </div>
             <div>
@@ -432,12 +438,14 @@
             </div>
             <div>
               <label class="block text-slate-400 mb-1">ระวาง:</label>
-              <input type="text" id="rawang_no" placeholder="เช่น 5136 I" class="glass-input w-full p-2.5 rounded-xl">
+              <input type="text" id="rawang_no" oninput="validateRawangInput()" placeholder="เช่น 5136 I 4862" class="glass-input w-full p-2.5 rounded-xl">
+              <div id="rawang-precheck-badge" class="hidden mt-1 text-[10px] font-semibold"></div>
             </div>
 
             <div class="col-span-2">
               <label class="block text-slate-400 mb-1">ตำบล/แขวง & อำเภอ/เขต:</label>
               <input type="text" id="deed_location" required placeholder="เช่น ตลิ่งชัน • กรุงเทพมหานคร" class="glass-input w-full p-2.5 rounded-xl">
+              <div id="location-precheck-badge" class="hidden mt-1 text-[10px] font-semibold"></div>
             </div>
             <div>
               <label class="block text-slate-400 mb-1">เนื้อที่ดินรวม:</label>
@@ -670,16 +678,81 @@
       });
     }
 
+    function setPrecheckBadge(elId, ok, text) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      if (!text) { el.classList.add('hidden'); el.textContent = ''; return; }
+      el.classList.remove('hidden');
+      el.className = ok
+        ? 'mt-1 text-[10px] font-semibold text-emerald-400'
+        : 'mt-1 text-[10px] font-semibold text-amber-400';
+      el.textContent = text;
+    }
+
+    function validateThaiIdInput() {
+      const val = (document.getElementById('owner_id_card').value || '').replace(/\D/g, '');
+      if (!val) { setPrecheckBadge('id-precheck-badge', true, ''); return; }
+      if (val.length !== 13) {
+        setPrecheckBadge('id-precheck-badge', false, `⚠️ กรอกแล้ว ${val.length}/13 หลัก`);
+        return;
+      }
+      let sum = 0;
+      for (let i = 0; i < 12; i++) sum += parseInt(val[i], 10) * (13 - i);
+      const check = (11 - (sum % 11)) % 10;
+      const ok = (check === parseInt(val[12], 10));
+      setPrecheckBadge('id-precheck-badge', ok, ok
+        ? '✓ เลขบัตรประชาชนถูกต้องตามสูตร 13 หลัก'
+        : '⚠️ เลขบัตรไม่ผ่าน Checksum (อาจอ่านผิดบางหลัก กรุณาตรวจซ้ำ)');
+    }
+
+    function validateRawangInput() {
+      const raw = (document.getElementById('rawang_no').value || '').trim().replace(/\s+/g, ' ');
+      if (!raw) { setPrecheckBadge('rawang-precheck-badge', true, ''); return; }
+      const m = raw.match(/^(\d{4})\s+(I|II|III|IV)\s+(\d{4})(?:\s*-\s*(\d{1,2}))?$/i);
+      if (!m) {
+        setPrecheckBadge('rawang-precheck-badge', false, '⚠️ รูปแบบระวางไม่ครบ (<4หลัก> <I-IV> <4หลัก>) กรุณาตรวจซ้ำ');
+        return;
+      }
+      const g1 = m[1];
+      const col = parseInt(g1.slice(0, 2), 10), row = parseInt(g1.slice(2), 10);
+      const sub = m[4] ? parseInt(m[4], 10) : null;
+      if (col < 43 || col > 62 || row < 20 || row > 55) {
+        setPrecheckBadge('rawang-precheck-badge', false, `⚠️ รหัสโซน ${g1} นอกพิกัดประเทศไทย กรุณาตรวจซ้ำ`);
+        return;
+      }
+      if (sub !== null && (sub < 1 || sub > 16)) {
+        setPrecheckBadge('rawang-precheck-badge', false, `⚠️ เลขระวางย่อย (-${sub}) ต้องอยู่ระหว่าง 1-16`);
+        return;
+      }
+      setPrecheckBadge('rawang-precheck-badge', true, '✓ รูปแบบระวาง UTM ถูกต้องตามมาตรฐานกรมที่ดิน');
+    }
+
+    function checkOnLandsMaps() {
+      const deed = (document.getElementById('deed_no').value || '').trim();
+      const loc = (document.getElementById('deed_location').value || '').trim();
+      const summary = [deed ? `โฉนดเลขที่ ${deed}` : '', loc].filter(Boolean).join(' | ');
+      if (summary && navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(summary).catch(() => {});
+        showToast(`📋 คัดลอก "${summary}" แล้ว — กำลังเปิด LandsMaps`);
+      } else {
+        showToast('กำลังเปิด LandsMaps กรมที่ดิน...');
+      }
+      window.open('https://landsmaps.dol.go.th/', '_blank', 'noopener');
+    }
+
     function applyOcrDataToForm(docType, data) {
+      const v = (data && data.validation) ? data.validation : {};
       if (docType === 'id_card') {
         if (data.full_name_th) document.getElementById('owner_name').value = data.full_name_th;
         if (data.id_number) document.getElementById('owner_id_card').value = data.id_number;
         if (data.full_address) document.getElementById('owner_address').value = data.full_address;
+        validateThaiIdInput();
       } else if (docType === 'title_deed') {
         if (data.deed_number) document.getElementById('deed_no').value = data.deed_number;
         if (data.land_number) document.getElementById('land_no').value = data.land_number;
         if (data.survey_page) document.getElementById('survey_no').value = data.survey_page;
         if (data.rawang) document.getElementById('rawang_no').value = data.rawang;
+        validateRawangInput();
         if (data.area_total_sqw) {
           const r = data.area_rai ? `${data.area_rai} ไร่ ` : '';
           const n = data.area_ngan ? `${data.area_ngan} งาน ` : '';
@@ -697,6 +770,13 @@
         if (locParts.length > 0) {
           const noteSuffix = data.location_note ? ` (${data.location_note})` : '';
           document.getElementById('deed_location').value = locParts.join(' • ') + noteSuffix;
+        }
+        if (v.location_verified === true) {
+          setPrecheckBadge('location-precheck-badge', true, data.location_note
+            ? `✓ ตำบลมีอยู่จริงในทำเนียบไทย (${data.location_note})`
+            : '✓ ตำบล/อำเภอ/จังหวัด มีอยู่จริงในทำเนียบไทย');
+        } else if (locParts.length > 0) {
+          setPrecheckBadge('location-precheck-badge', false, '⚠️ ไม่พบชื่อตำบลในทำเนียบไทย กรุณาตรวจตัวสะกด');
         }
 
         if (data.owner_name && !document.getElementById('owner_name').value) {

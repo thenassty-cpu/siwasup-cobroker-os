@@ -2952,6 +2952,52 @@ def _normalize_rawang(raw: str) -> str:
     return f"{p1} {roman} {p2}{tail}".strip()
 
 
+def _validate_thai_id_checksum(id_number: str) -> dict:
+    """Validate 13-digit Thai National ID using modulus-11 checksum."""
+    digits = re.sub(r"\D", "", str(id_number or ""))
+    if not digits:
+        return {"valid": False, "digits": "", "reason": "empty"}
+    if len(digits) != 13:
+        return {"valid": False, "digits": digits, "reason": "ต้องมีครบ 13 หลัก"}
+    total = sum(int(digits[i]) * (13 - i) for i in range(12))
+    check = (11 - (total % 11)) % 10
+    ok = (check == int(digits[12]))
+    return {
+        "valid": ok,
+        "digits": digits,
+        "reason": "เลขบัตรถูกต้องตามสูตร 13 หลัก" if ok else "Checksum ไม่ผ่าน (อาจอ่านผิดบางหลัก)"
+    }
+
+
+def _validate_rawang_utm(rawang: str) -> dict:
+    """Validate Thai Land Department UTM map sheet format: <4-digit> <I|II|III|IV> <4-digit> [- 1..16]."""
+    norm = _normalize_rawang(rawang)
+    if not norm:
+        return {"valid": False, "normalized": "", "reason": "empty"}
+    m = re.match(r"^(\d{4})\s+(I|II|III|IV)\s+(\d{4})(?:\s*-\s*(\d{1,2}))?$", norm)
+    if not m:
+        return {
+            "valid": False,
+            "normalized": norm,
+            "reason": "รูปแบบไม่ตรงมาตรฐาน UTM (<4หลัก> <I-IV> <4หลัก>)"
+        }
+    g1, roman, g2, sub = m.groups()
+    col, row = int(g1[:2]), int(g1[2:])
+    if not (43 <= col <= 62 and 20 <= row <= 55):
+        return {
+            "valid": False,
+            "normalized": norm,
+            "reason": f"รหัสโซน {g1} อยู่นอกพิกัดกริดประเทศไทย"
+        }
+    if sub is not None and not (1 <= int(sub) <= 16):
+        return {
+            "valid": False,
+            "normalized": norm,
+            "reason": f"เลขระวางย่อย (-{sub}) ต้องอยู่ระหว่าง 1-16"
+        }
+    return {"valid": True, "normalized": norm, "reason": "รูปแบบระวาง UTM ถูกต้อง"}
+
+
 def extract_contract_ocr(image_base64, doc_type="id_card", mime_type="image/jpeg"):
     if "," in image_base64:
         image_base64 = image_base64.split(",", 1)[1]
@@ -3072,6 +3118,18 @@ def extract_contract_ocr(image_base64, doc_type="id_card", mime_type="image/jpeg
                                 parsed["province"] = prov_m
                             if loc_note:
                                 parsed["location_note"] = loc_note
+                            geo = _load_thai_tambons()
+                            prov_key = str(parsed.get("province") or "")
+                            sub_key = str(parsed.get("subdistrict") or "")
+                            loc_verified = bool(
+                                geo and prov_key in geo and any(sub_key in subs for subs in geo[prov_key].values())
+                            )
+                            validation = {"location_verified": loc_verified}
+                            if doc_type == "id_card":
+                                validation["id_checksum"] = _validate_thai_id_checksum(str(parsed.get("id_number") or ""))
+                            elif doc_type == "title_deed":
+                                validation["rawang_check"] = _validate_rawang_utm(str(parsed.get("rawang") or ""))
+                            parsed["validation"] = validation
                         return parsed
         except Exception as e:
             print(f"[OCR Error on {m}]: {e}")
