@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
   <style>
     body {
@@ -322,7 +323,7 @@
               </div>
             </div>
             <input type="file" id="input-id-camera" accept="image/*" capture="environment" onchange="handleFileUpload(event, 'id_card')" class="hidden">
-            <input type="file" id="input-id-file" accept="image/*" onchange="handleFileUpload(event, 'id_card')" class="hidden">
+            <input type="file" id="input-id-file" accept="image/*,application/pdf" onchange="handleFileUpload(event, 'id_card')" class="hidden">
             <div class="grid grid-cols-2 gap-2">
               <button type="button" onclick="document.getElementById('input-id-camera').click()" class="py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-xs font-semibold transition flex items-center justify-center gap-1">
                 <i data-lucide="camera" class="w-3.5 h-3.5"></i>
@@ -330,8 +331,15 @@
               </button>
               <button type="button" onclick="document.getElementById('input-id-file').click()" class="py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition flex items-center justify-center gap-1">
                 <i data-lucide="image" class="w-3.5 h-3.5"></i>
-                <span>แกลเลอรี</span>
+                <span>รูป / PDF</span>
               </button>
+            </div>
+            <div id="pdf-picker-id_card" class="hidden mt-2 p-2 rounded-lg bg-slate-950/70 border border-amber-500/30 flex items-center justify-between gap-2 text-[11px]">
+              <span id="pdf-info-id_card" class="text-amber-300 font-semibold truncate">PDF</span>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <select id="pdf-page-id_card" class="glass-input px-2 py-1 rounded text-[11px] font-bold"></select>
+                <button type="button" onclick="scanSelectedPdfPage('id_card')" class="px-2.5 py-1 rounded bg-amber-500 text-slate-950 font-bold hover:bg-amber-400">สแกนหน้านี้</button>
+              </div>
             </div>
           </div>
 
@@ -345,11 +353,11 @@
               <img id="preview-deed-img" class="w-full h-full object-contain hidden">
               <div id="placeholder-deed" class="text-center space-y-1 pointer-events-none">
                 <i data-lucide="camera" class="w-6 h-6 text-slate-500 mx-auto"></i>
-                <div class="text-[10px] text-slate-400">กดถ่ายรูป หรือเลือกรูปโฉนด</div>
+                <div class="text-[10px] text-slate-400">กดถ่ายรูป หรือเลือกไฟล์รูป/PDF โฉนด</div>
               </div>
             </div>
             <input type="file" id="input-deed-camera" accept="image/*" capture="environment" onchange="handleFileUpload(event, 'title_deed')" class="hidden">
-            <input type="file" id="input-deed-file" accept="image/*" onchange="handleFileUpload(event, 'title_deed')" class="hidden">
+            <input type="file" id="input-deed-file" accept="image/*,application/pdf" onchange="handleFileUpload(event, 'title_deed')" class="hidden">
             <div class="grid grid-cols-2 gap-2">
               <button type="button" onclick="document.getElementById('input-deed-camera').click()" class="py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 text-xs font-semibold transition flex items-center justify-center gap-1">
                 <i data-lucide="camera" class="w-3.5 h-3.5"></i>
@@ -357,8 +365,15 @@
               </button>
               <button type="button" onclick="document.getElementById('input-deed-file').click()" class="py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition flex items-center justify-center gap-1">
                 <i data-lucide="image" class="w-3.5 h-3.5"></i>
-                <span>แกลเลอรี</span>
+                <span>รูป / PDF</span>
               </button>
+            </div>
+            <div id="pdf-picker-title_deed" class="hidden mt-2 p-2 rounded-lg bg-slate-950/70 border border-emerald-500/30 flex items-center justify-between gap-2 text-[11px]">
+              <span id="pdf-info-title_deed" class="text-emerald-300 font-semibold truncate">PDF</span>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <select id="pdf-page-title_deed" class="glass-input px-2 py-1 rounded text-[11px] font-bold"></select>
+                <button type="button" onclick="scanSelectedPdfPage('title_deed')" class="px-2.5 py-1 rounded bg-emerald-500 text-slate-950 font-bold hover:bg-emerald-400">สแกนหน้านี้</button>
+              </div>
             </div>
           </div>
         </div>
@@ -461,6 +476,10 @@
                 <option value="ที่ดินเปล่า">ที่ดินเปล่า</option>
               </select>
             </div>
+            <div class="col-span-2 sm:col-span-4">
+              <label class="block text-slate-400 mb-1">ชื่อโครงการ / หมู่บ้าน / บ้านเลขที่ทรัพย์ (ถ้าคนละที่กับบัตร ปชช.):</label>
+              <input type="text" id="property_project" placeholder="เช่น มบ.เดอะ ซีนิท วังทองหลาง บ้านเลขที่ 88/12" class="glass-input w-full p-2.5 rounded-xl">
+            </div>
           </div>
         </div>
 
@@ -468,15 +487,31 @@
         <div class="space-y-2 pt-2 border-t border-slate-800">
           <div class="text-xs font-bold text-[#D4BA7A] flex items-center gap-1.5">
             <i data-lucide="badge-dollar-sign" class="w-3.5 h-3.5"></i>
-            <span>เงื่อนไขการเสนอขาย & ค่านายหน้า</span>
+            <span>ประเภทสัญญา วันที่ &amp; เงื่อนไขค่านายหน้า</span>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            <div>
+              <label class="block text-slate-400 mb-1">ประเภทสัญญา:</label>
+              <select id="contract_type" class="glass-input w-full p-2.5 rounded-xl font-bold text-amber-300">
+                <option value="exclusive">สัญญาแต่งตั้งแบบปิด (Exclusive)</option>
+                <option value="open">สัญญาแต่งตั้งแบบเปิด (Open)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">วันที่ทำสัญญา:</label>
+              <input type="date" id="contract_date" required onchange="updateContractExpiryDisplay()" class="glass-input w-full p-2.5 rounded-xl font-semibold">
+              <div id="contract_expiry_preview" class="mt-1 text-[10px] text-emerald-400 font-semibold"></div>
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">สถานที่ทำสัญญา:</label>
+              <input type="text" id="contract_place" value="บริษัท ศิวาทรัพย์ แอสเซท จำกัด" placeholder="เช่น บริษัท ศิวาทรัพย์ แอสเซท จำกัด" class="glass-input w-full p-2.5 rounded-xl">
+            </div>
             <div>
               <label class="block text-slate-400 mb-1">ราคาตั้งขายสุทธิ (บาท):</label>
               <input type="text" id="selling_price" required placeholder="เช่น 4,500,000" class="glass-input w-full p-2.5 rounded-xl font-bold text-amber-400 text-sm">
             </div>
             <div>
-              <label class="block text-slate-400 mb-1">อัตราค่านายหน้าปิด (%):</label>
+              <label class="block text-slate-400 mb-1">อัตราค่านายหน้า (%):</label>
               <select id="commission_rate" class="glass-input w-full p-2.5 rounded-xl font-bold text-emerald-400">
                 <option value="3">3.0% (มาตรฐาน Co-Broker)</option>
                 <option value="4">4.0% (ทรัพย์พิเศษ/รีโนเวท)</option>
@@ -484,12 +519,47 @@
               </select>
             </div>
             <div>
-              <label class="block text-slate-400 mb-1">ระยะเวลาสัญญาแบบปิด:</label>
-              <select id="contract_duration" class="glass-input w-full p-2.5 rounded-xl font-semibold">
+              <label class="block text-slate-400 mb-1">ระยะเวลาสัญญา:</label>
+              <select id="contract_duration" onchange="updateContractExpiryDisplay()" class="glass-input w-full p-2.5 rounded-xl font-semibold">
                 <option value="90">3 เดือน (90 วัน)</option>
                 <option value="180">6 เดือน (180 วัน - แนะนำ)</option>
                 <option value="365">1 ปี (365 วัน)</option>
               </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section D: Caretaker, Witness & Live Signatures -->
+        <div class="space-y-3 pt-2 border-t border-slate-800">
+          <div class="text-xs font-bold text-[#D4BA7A] flex items-center gap-1.5">
+            <i data-lucide="pen-tool" class="w-3.5 h-3.5"></i>
+            <span>ผู้ดูแล พยาน &amp; ลายเซ็นสด (E-Signature)</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="block text-slate-400 mb-1">เซลล์ผู้ดูแล (เว้นว่างได้หากไม่มี):</label>
+              <input type="text" id="caretaker_name" placeholder="เช่น คุณบัว / พี่ไห้ (SW_HAI) หรือเว้นว่าง" class="glass-input w-full p-2.5 rounded-xl">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">ชื่อพยาน (ถ้ามี):</label>
+              <input type="text" id="witness_name" placeholder="ชื่อ-นามสกุลพยาน" class="glass-input w-full p-2.5 rounded-xl">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between">
+                <label class="text-slate-300 font-semibold">ลายเซ็นผู้ให้สัญญา (เจ้าของ):</label>
+                <button type="button" onclick="clearSignaturePad('owner')" class="text-[10px] text-rose-400 hover:underline">ล้างลายเซ็น</button>
+              </div>
+              <canvas id="sig-canvas-owner" width="360" height="120" class="w-full h-28 rounded-xl bg-white border border-slate-600 touch-none cursor-crosshair"></canvas>
+            </div>
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between">
+                <label class="text-slate-300 font-semibold">ลายเซ็นตัวแทน / ผู้รับมอบอำนาจ:</label>
+                <button type="button" onclick="clearSignaturePad('agent')" class="text-[10px] text-rose-400 hover:underline">ล้างลายเซ็น</button>
+              </div>
+              <canvas id="sig-canvas-agent" width="360" height="120" class="w-full h-28 rounded-xl bg-white border border-slate-600 touch-none cursor-crosshair"></canvas>
             </div>
           </div>
         </div>
@@ -591,21 +661,159 @@
       });
     }
 
-    // --- ZERO-TYPING OCR FILE HANDLER ---
-    async function handleFileUpload(event, docType) {
-      const file = event.target.files[0];
-      if (!file) return;
+    if (window.pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+    const loadedPdfDocs = { id_card: null, title_deed: null };
+    const sigHasInk = { owner: false, agent: false };
 
+    function escapeHtml(str) {
+      return String(str ?? '').replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[ch]));
+    }
+
+    async function renderPdfPageToBase64(pdfDoc, pageNum, maxDim = 2048, quality = 0.88) {
+      const page = await pdfDoc.getPage(pageNum);
+      const baseVp = page.getViewport({ scale: 1.0 });
+      const maxSide = Math.max(baseVp.width, baseVp.height) || 1;
+      const scale = Math.min(3.0, Math.max(1.2, maxDim / maxSide));
+      const vp = page.getViewport({ scale });
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(vp.width);
+      canvas.height = Math.round(vp.height);
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      await page.render({ canvasContext: ctx, viewport: vp }).promise;
+      return canvas.toDataURL('image/jpeg', quality);
+    }
+
+    async function runOcrWithBase64(docType, base64Data) {
       const previewImg = document.getElementById(docType === 'id_card' ? 'preview-id-img' : 'preview-deed-img');
       const placeholder = document.getElementById(docType === 'id_card' ? 'placeholder-id' : 'placeholder-deed');
       const statusBadge = document.getElementById(docType === 'id_card' ? 'badge-id-status' : 'badge-deed-status');
       const spinner = document.getElementById('ocr-scanning-spinner');
 
-      statusBadge.textContent = "กำลังบีบอัดรูป & สแกน...";
+      previewImg.src = base64Data;
+      previewImg.classList.remove('hidden');
+      placeholder.classList.add('hidden');
+      statusBadge.textContent = "กำลังอ่านข้อมูล AI...";
+      statusBadge.className = "text-[10px] text-amber-400 font-bold animate-pulse";
+      spinner.classList.remove('hidden');
+
+      const token = localStorage.getItem('siwasup_session') || '';
+      if (!token) {
+        throw new Error("กรุณาเข้าสู่ระบบ LINE จากหน้าหลัก/แคตตาล็อกก่อนใช้งาน OCR");
+      }
+
+      const resp = await fetch(`${BACKEND_URL}/api/ocr/contract`, {
+        method: 'POST',
+        headers: getAuthHeaders(true),
+        body: jsonPayload(docType, base64Data, 'image/jpeg')
+      });
+
+      if (resp.status === 401) {
+        throw new Error("เซสชันหมดอายุ (401) กรุณาเข้าสู่ระบบ LINE ใหม่อีกครั้ง");
+      }
+      if (!resp.ok) {
+        throw new Error(`Server returned HTTP ${resp.status}`);
+      }
+
+      const result = await resp.json();
+      spinner.classList.add('hidden');
+
+      if (result && result.status === 'success' && result.data) {
+        statusBadge.textContent = "✓ อ่านข้อมูลสำเร็จ";
+        statusBadge.className = "text-[10px] text-emerald-400 font-bold";
+        applyOcrDataToForm(docType, result.data);
+        showToast(`✨ อ่านข้อมูล ${docType === 'id_card' ? 'บัตร ปชช.' : 'โฉนด'} สำเร็จ กรอกข้อมูลลงสัญญาเรียบร้อย!`);
+      } else {
+        statusBadge.textContent = "อ่านไม่ชัด";
+        statusBadge.className = "text-[10px] text-rose-400 font-bold";
+        showToast("ไม่สามารถสกัดข้อมูลได้ชัดเจน กรุณาถ่ายภาพใหม่");
+      }
+    }
+
+    async function scanSelectedPdfPage(docType) {
+      const pdfDoc = loadedPdfDocs[docType];
+      if (!pdfDoc) return;
+      const sel = document.getElementById(`pdf-page-${docType}`);
+      const pageNum = parseInt((sel && sel.value) || '1', 10) || 1;
+      const statusBadge = document.getElementById(docType === 'id_card' ? 'badge-id-status' : 'badge-deed-status');
+      const spinner = document.getElementById('ocr-scanning-spinner');
+      try {
+        statusBadge.textContent = `กำลังแปลงหน้า ${pageNum}/${pdfDoc.numPages}...`;
+        statusBadge.className = "text-[10px] text-amber-400 font-bold animate-pulse";
+        spinner.classList.remove('hidden');
+        const maxDim = (docType === 'title_deed') ? 2048 : 1600;
+        const imgQuality = (docType === 'title_deed') ? 0.88 : 0.82;
+        const base64Data = await renderPdfPageToBase64(pdfDoc, pageNum, maxDim, imgQuality);
+        await runOcrWithBase64(docType, base64Data);
+      } catch (err) {
+        spinner.classList.add('hidden');
+        statusBadge.textContent = "ผิดพลาด";
+        statusBadge.className = "text-[10px] text-rose-400 font-bold";
+        console.error("PDF OCR error:", err);
+        showToast("เกิดข้อผิดพลาดในการสแกน PDF: " + (err.message || "กรุณาลองใหม่"));
+      }
+    }
+
+    // --- ZERO-TYPING OCR FILE HANDLER ---
+    async function handleFileUpload(event, docType) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const statusBadge = document.getElementById(docType === 'id_card' ? 'badge-id-status' : 'badge-deed-status');
+      const spinner = document.getElementById('ocr-scanning-spinner');
+      const pickerBox = document.getElementById(`pdf-picker-${docType}`);
+      const isPdf = (file.type === 'application/pdf' || /\.pdf$/i.test(file.name || ''));
+      const isImg = (file.type && file.type.startsWith('image/'));
+
+      statusBadge.textContent = isPdf ? "กำลังเปิดอ่าน PDF..." : "กำลังบีบอัดรูป & สแกน...";
       statusBadge.className = "text-[10px] text-amber-400 font-bold animate-pulse";
       spinner.classList.remove('hidden');
 
       try {
+        if (isPdf) {
+          if (!window.pdfjsLib) {
+            throw new Error("ตัวอ่าน PDF ยังโหลดไม่เสร็จ กรุณารอสักครู่แล้วลองใหม่");
+          }
+          const buf = await file.arrayBuffer();
+          const pdfDoc = await pdfjsLib.getDocument({ data: buf }).promise;
+          loadedPdfDocs[docType] = pdfDoc;
+          const infoEl = document.getElementById(`pdf-info-${docType}`);
+          const pageSel = document.getElementById(`pdf-page-${docType}`);
+          if (infoEl) infoEl.textContent = `📄 ${pdfDoc.numPages} หน้า`;
+          if (pageSel) {
+            pageSel.innerHTML = Array.from({ length: pdfDoc.numPages }, (_, i) =>
+              `<option value="${i + 1}">หน้า ${i + 1}/${pdfDoc.numPages}</option>`
+            ).join('');
+          }
+          if (pdfDoc.numPages > 1) {
+            if (pickerBox) pickerBox.classList.remove('hidden');
+            spinner.classList.add('hidden');
+            statusBadge.textContent = `เลือกหน้า (${pdfDoc.numPages} หน้า)`;
+            statusBadge.className = "text-[10px] text-sky-400 font-bold";
+            showToast(`พบ PDF ${pdfDoc.numPages} หน้า — เลือกหน้าที่ต้องการแล้วกด "สแกนหน้านี้"`);
+            return;
+          }
+          if (pickerBox) pickerBox.classList.add('hidden');
+          const maxDim = (docType === 'title_deed') ? 2048 : 1600;
+          const imgQuality = (docType === 'title_deed') ? 0.88 : 0.82;
+          const base64Data = await renderPdfPageToBase64(pdfDoc, 1, maxDim, imgQuality);
+          await runOcrWithBase64(docType, base64Data);
+          return;
+        }
+
+        if (!isImg) {
+          throw new Error("รองรับเฉพาะไฟล์รูปภาพ หรือ PDF เท่านั้น");
+        }
+        if (file.size > 25 * 1024 * 1024) {
+          throw new Error("ไฟล์รูปใหญ่เกิน 25 MB กรุณาลดขนาดรูปก่อนอัปโหลด");
+        }
+        if (pickerBox) pickerBox.classList.add('hidden');
+
         // 1. Client-side fast compression (Higher res 2048px for title deeds with small handwritten Thai numerals)
         let base64Data;
         const maxDim = (docType === 'title_deed') ? 2048 : 1600;
@@ -614,6 +822,9 @@
           base64Data = await compressImageFile(file, maxDim, maxDim, imgQuality);
         } catch (compErr) {
           console.warn("Canvas compression fallback to raw file", compErr);
+          if (file.size > 7 * 1024 * 1024) {
+            throw new Error("ไม่สามารถบีบอัดรูปขนาดใหญ่ได้ กรุณาย่อรูปไม่เกิน 7 MB");
+          }
           base64Data = await new Promise((res, rej) => {
             const r = new FileReader();
             r.onload = () => res(r.target.result);
@@ -622,51 +833,15 @@
           });
         }
 
-        // 2. Show Preview immediately
-        previewImg.src = base64Data;
-        previewImg.classList.remove('hidden');
-        placeholder.classList.add('hidden');
-
-        statusBadge.textContent = "กำลังอ่านข้อมูล AI...";
-
-        // 3. Send lightweight compressed base64 to OCR backend
-        const token = localStorage.getItem('siwasup_session') || '';
-        if (!token) {
-          throw new Error("กรุณาเข้าสู่ระบบ LINE จากหน้าหลัก/แคตตาล็อกก่อนใช้งาน OCR");
-        }
-
-        const resp = await fetch(`${BACKEND_URL}/api/ocr/contract`, {
-          method: 'POST',
-          headers: getAuthHeaders(true),
-          body: jsonPayload(docType, base64Data, 'image/jpeg')
-        });
-
-        if (resp.status === 401) {
-          throw new Error("เซสชันหมดอายุ (401) กรุณาเข้าสู่ระบบ LINE ใหม่อีกครั้ง");
-        }
-        if (!resp.ok) {
-          throw new Error(`Server returned HTTP ${resp.status}`);
-        }
-
-        const result = await resp.json();
-        spinner.classList.add('hidden');
-
-        if (result && result.status === 'success' && result.data) {
-          statusBadge.textContent = "✓ อ่านข้อมูลสำเร็จ";
-          statusBadge.className = "text-[10px] text-emerald-400 font-bold";
-          applyOcrDataToForm(docType, result.data);
-          showToast(`✨ อ่านข้อมูล ${docType === 'id_card' ? 'บัตร ปชช.' : 'โฉนด'} สำเร็จ กรอกข้อมูลลงสัญญาเรียบร้อย!`);
-        } else {
-          statusBadge.textContent = "อ่านไม่ชัด";
-          statusBadge.className = "text-[10px] text-rose-400 font-bold";
-          showToast("ไม่สามารถสกัดข้อมูลได้ชัดเจน กรุณาถ่ายภาพใหม่");
-        }
+        await runOcrWithBase64(docType, base64Data);
       } catch (err) {
         spinner.classList.add('hidden');
         statusBadge.textContent = "ผิดพลาด";
         statusBadge.className = "text-[10px] text-rose-400 font-bold";
         console.error("OCR API error:", err);
         showToast("เกิดข้อผิดพลาดในการเชื่อมต่อ OCR: " + (err.message || "กรุณาลองใหม่"));
+      } finally {
+        event.target.value = '';
       }
     }
 
@@ -740,19 +915,86 @@
       window.open('https://landsmaps.dol.go.th/', '_blank', 'noopener');
     }
 
+    function updateContractExpiryDisplay() {
+      const dateEl = document.getElementById('contract_date');
+      const durEl = document.getElementById('contract_duration');
+      const prevEl = document.getElementById('contract_expiry_preview');
+      if (!dateEl || !durEl || !prevEl || !dateEl.value) return;
+      const start = new Date(dateEl.value + 'T00:00:00');
+      const days = parseInt(durEl.value || '90', 10);
+      const end = new Date(start.getTime() + days * 86400000);
+      prevEl.textContent = `สิ้นสุดสัญญา: ${end.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' })}`;
+    }
+
+    function initSignaturePad(who) {
+      const canvas = document.getElementById(`sig-canvas-${who}`);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.strokeStyle = '#0f172a';
+      ctx.lineWidth = 2.4;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      let drawing = false;
+
+      const getPos = (e) => {
+        const r = canvas.getBoundingClientRect();
+        return {
+          x: (e.clientX - r.left) * (canvas.width / (r.width || 1)),
+          y: (e.clientY - r.top) * (canvas.height / (r.height || 1))
+        };
+      };
+
+      canvas.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        drawing = true;
+        sigHasInk[who] = true;
+        const p = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+      });
+      canvas.addEventListener('pointermove', (e) => {
+        if (!drawing) return;
+        e.preventDefault();
+        const p = getPos(e);
+        ctx.lineTo(p.x, p.y);
+        ctx.stroke();
+      });
+      const stopDraw = () => { drawing = false; };
+      canvas.addEventListener('pointerup', stopDraw);
+      canvas.addEventListener('pointercancel', stopDraw);
+      canvas.addEventListener('pointerleave', stopDraw);
+    }
+
+    function clearSignaturePad(who) {
+      const canvas = document.getElementById(`sig-canvas-${who}`);
+      if (!canvas) return;
+      canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+      sigHasInk[who] = false;
+    }
+
+    function getSignatureDataUrl(who) {
+      if (!sigHasInk[who]) return '';
+      const canvas = document.getElementById(`sig-canvas-${who}`);
+      return canvas ? canvas.toDataURL('image/png') : '';
+    }
+
     function applyOcrDataToForm(docType, data) {
       const v = (data && data.validation) ? data.validation : {};
       if (docType === 'id_card') {
-        if (data.full_name_th) document.getElementById('owner_name').value = data.full_name_th;
-        if (data.id_number) document.getElementById('owner_id_card').value = data.id_number;
-        if (data.full_address) document.getElementById('owner_address').value = data.full_address;
+        document.getElementById('owner_name').value = data.full_name_th || '';
+        document.getElementById('owner_id_card').value = data.id_number || '';
+        document.getElementById('owner_address').value = data.full_address || '';
         validateThaiIdInput();
       } else if (docType === 'title_deed') {
-        if (data.deed_number) document.getElementById('deed_no').value = data.deed_number;
-        if (data.land_number) document.getElementById('land_no').value = data.land_number;
-        if (data.survey_page) document.getElementById('survey_no').value = data.survey_page;
-        if (data.rawang) document.getElementById('rawang_no').value = data.rawang;
+        document.getElementById('deed_no').value = data.deed_number || '';
+        document.getElementById('land_no').value = data.land_number || '';
+        document.getElementById('survey_no').value = data.survey_page || '';
+        document.getElementById('rawang_no').value = data.rawang || '';
+        document.getElementById('land_size').value = '';
+        document.getElementById('deed_location').value = '';
+        setPrecheckBadge('location-precheck-badge', true, '');
         validateRawangInput();
+
         if (data.area_total_sqw) {
           const r = data.area_rai ? `${data.area_rai} ไร่ ` : '';
           const n = data.area_ngan ? `${data.area_ngan} งาน ` : '';
@@ -791,6 +1033,9 @@
       const newContract = {
         id: `SW-CNT-${Date.now().toString().slice(-6)}`,
         agent_ref: CURRENT_AGENT_REF,
+        contract_type: document.getElementById('contract_type').value,
+        contract_date: document.getElementById('contract_date').value,
+        contract_place: document.getElementById('contract_place').value.trim() || 'บริษัท ศิวาทรัพย์ แอสเซท จำกัด',
         owner_name: document.getElementById('owner_name').value.trim(),
         owner_id_card: document.getElementById('owner_id_card').value.trim(),
         owner_address: document.getElementById('owner_address').value.trim(),
@@ -803,9 +1048,14 @@
         deed_location: document.getElementById('deed_location').value.trim(),
         land_size: document.getElementById('land_size').value.trim(),
         property_type: document.getElementById('property_type').value,
+        property_project: document.getElementById('property_project').value.trim(),
         selling_price: document.getElementById('selling_price').value.trim(),
         commission_rate: document.getElementById('commission_rate').value,
         contract_days: document.getElementById('contract_duration').value,
+        caretaker_name: document.getElementById('caretaker_name').value.trim(),
+        witness_name: document.getElementById('witness_name').value.trim(),
+        owner_signature: getSignatureDataUrl('owner'),
+        agent_signature: getSignatureDataUrl('agent'),
         status: "active",
         created_at: new Date().toISOString()
       };
@@ -1157,42 +1407,58 @@
 </head>
         <body>
           <div class="header">
-            <div class="title">สัญญาแต่งตั้งตัวแทนเพื่อการขายอสังหาริมทรัพย์แบบปิด (Exclusive Agreement)</div>
-            <div class="subtitle">ศิวาทรัพย์ แอสเซท โค-โบรกเกอร์ (Siwasup Asset Co-Broker OS) • เลขที่สัญญา: ${c.id}</div>
+            <div class="title">${c.contract_type === 'open' ? 'สัญญาแต่งตั้งตัวแทนเพื่อการขายอสังหาริมทรัพย์แบบเปิด (Open Listing Agreement)' : 'สัญญาแต่งตั้งตัวแทนเพื่อการขายอสังหาริมทรัพย์แบบปิด (Exclusive Agreement)'}</div>
+            <div class="subtitle">ศิวาทรัพย์ แอสเซท โค-โบรกเกอร์ (Siwasup Asset Co-Broker OS) • เลขที่สัญญา: ${escapeHtml(c.id)}</div>
           </div>
 
           <div class="section">
-            <div class="row">ทำที่ บริษัท ศิวาทรัพย์ แอสเซท จำกัด วันที่ ${new Date().toLocaleDateString('th-TH')}</div>
-            <div class="row"><strong>ฝ่ายผู้ให้สัญญา (เจ้าของกรรมสิทธิ์):</strong> ${c.owner_name} บัตรประชาชนเลขที่ ${c.owner_id_card}</div>
-            <div class="row">ที่อยู่: ${c.owner_address} เบอร์โทรศัพท์: ${c.owner_phone}</div>
-            <div class="row"><strong>ฝ่ายตัวแทนจำหน่ายแต่เพียงผู้เดียว:</strong> ศิวาทรัพย์ แอสเซท (รหัสตัวแทนผู้ดูแล: ${c.agent_ref})</div>
+            ${(() => {
+              const startDateObj = c.contract_date ? new Date(c.contract_date + 'T00:00:00') : new Date(c.created_at || Date.now());
+              const endDateObj = new Date(startDateObj.getTime() + (parseInt(c.contract_days || '90', 10) * 86400000));
+              const fmtOpts = { year: 'numeric', month: 'long', day: 'numeric' };
+              const startStr = isNaN(startDateObj.getTime()) ? '-' : startDateObj.toLocaleDateString('th-TH', fmtOpts);
+              const endStr = isNaN(endDateObj.getTime()) ? '-' : endDateObj.toLocaleDateString('th-TH', fmtOpts);
+              return `<div class="row">ทำที่ <strong>${escapeHtml(c.contract_place || 'บริษัท ศิวาทรัพย์ แอสเซท จำกัด')}</strong> วันที่ <strong>${startStr}</strong> (สิ้นสุดวันที่ <strong>${endStr}</strong>)</div>`;
+            })()}
+            <div class="row"><strong>ฝ่ายผู้ให้สัญญา (เจ้าของกรรมสิทธิ์):</strong> ${escapeHtml(c.owner_name)} บัตรประชาชนเลขที่ ${escapeHtml(c.owner_id_card)}</div>
+            <div class="row">ที่อยู่: ${escapeHtml(c.owner_address)} เบอร์โทรศัพท์: ${escapeHtml(c.owner_phone)}</div>
+            <div class="row"><strong>ฝ่ายตัวแทน:</strong> บริษัท ศิวาทรัพย์ แอสเซท จำกัด (รหัสตัวแทนผู้ทำสัญญา: ${escapeHtml(c.agent_ref)}${c.caretaker_name ? ` • เซลล์ผู้ดูแล: ${escapeHtml(c.caretaker_name)}` : ''})</div>
           </div>
 
           <div class="section">
             <div class="section-title">ข้อ 1. ทรัพย์สินที่แต่งตั้งให้ขาย</div>
-            <div class="row">ประเภท: <strong>${c.property_type}</strong> โฉนดที่ดินเลขที่: <strong>${c.deed_no}</strong> เลขที่ดิน: <strong>${c.land_no}</strong> หน้าสำรวจ: <strong>${c.survey_no}</strong> ระวาง: <strong>${c.rawang_no}</strong></div>
-            <div class="row">ทำเลที่ตั้ง: ${c.deed_location} | เนื้อที่ดิน: <strong>${c.land_size}</strong></div>
+            ${c.property_project ? `<div class="row">โครงการ / ที่ตั้งทรัพย์: <strong>${escapeHtml(c.property_project)}</strong></div>` : ''}
+            <div class="row">ประเภท: <strong>${escapeHtml(c.property_type)}</strong> โฉนดที่ดินเลขที่: <strong>${escapeHtml(c.deed_no)}</strong> เลขที่ดิน: <strong>${escapeHtml(c.land_no)}</strong> หน้าสำรวจ: <strong>${escapeHtml(c.survey_no)}</strong> ระวาง: <strong>${escapeHtml(c.rawang_no)}</strong></div>
+            <div class="row">ทำเลที่ตั้ง: ${escapeHtml(c.deed_location)} | เนื้อที่ดิน: <strong>${escapeHtml(c.land_size)}</strong></div>
           </div>
 
           <div class="section">
             <div class="section-title">ข้อ 2. ราคาและเงื่อนไขค่าตอบแทน</div>
-            <div class="row">ราคาเสนอขายสุทธิ: <strong>${c.selling_price} บาท</strong></div>
-            <div class="row">อัตราค่านายหน้าเมื่อปิดการขายได้สำเร็จ: <strong>ร้อยละ ${c.commission_rate} (${c.commission_rate}%)</strong> ของราคาที่ตกลงซื้อขายได้จริง</div>
-            <div class="row">ระยะเวลาสัญญาแต่งตั้งแบบปิด: <strong>${c.contract_days} วัน</strong> นับตั้งแต่วันทำสัญญานี้เป็นต้นไป</div>
+            <div class="row">ราคาเสนอขายสุทธิ: <strong>${escapeHtml(c.selling_price)} บาท</strong></div>
+            <div class="row">อัตราค่านายหน้าเมื่อปิดการขายได้สำเร็จ: <strong>ร้อยละ ${escapeHtml(c.commission_rate)} (${escapeHtml(c.commission_rate)}%)</strong> ของราคาที่ตกลงซื้อขายได้จริง</div>
+            <div class="row">ระยะเวลาสัญญา${c.contract_type === 'open' ? 'แบบเปิด' : 'แต่งตั้งแบบปิด'}: <strong>${escapeHtml(c.contract_days)} วัน</strong> นับตั้งแต่วันทำสัญญานี้เป็นต้นไป</div>
           </div>
 
           <div class="sign-grid">
             <div class="sign-box">
+              ${c.owner_signature ? `<img src="${c.owner_signature}" style="height:48px;margin:0 auto -8px;display:block;" alt="ลายเซ็นเจ้าของ">` : ''}
               <div class="sign-line"></div>
               <div>ลงชื่อ .............................................................. ผู้ให้สัญญา (เจ้าของ)</div>
-              <div>(${c.owner_name})</div>
+              <div>(${escapeHtml(c.owner_name)})</div>
             </div>
             <div class="sign-box">
+              ${c.agent_signature ? `<img src="${c.agent_signature}" style="height:48px;margin:0 auto -8px;display:block;" alt="ลายเซ็นตัวแทน">` : ''}
               <div class="sign-line"></div>
               <div>ลงชื่อ .............................................................. ตัวแทนจำหน่าย</div>
-              <div>(ศิวาทรัพย์ แอสเซท / ${c.agent_ref})</div>
+              <div>(ศิวาทรัพย์ แอสเซท / ${escapeHtml(c.agent_ref)})</div>
             </div>
           </div>
+          ${c.witness_name ? `
+          <div style="margin-top:32px;text-align:center;">
+            <div class="sign-line" style="width:240px;margin:0 auto 8px;"></div>
+            <div>ลงชื่อ .............................................................. พยาน</div>
+            <div>(${escapeHtml(c.witness_name)})</div>
+          </div>` : ''}
         </body>
         </html>
       `);
@@ -1205,6 +1471,29 @@
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('agent-ref-badge').textContent = CURRENT_AGENT_REF;
       document.getElementById('agent-avatar-text').textContent = CURRENT_AGENT_REF.slice(0, 2).toUpperCase();
+      const dateEl = document.getElementById('contract_date');
+      if (dateEl && !dateEl.value) {
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        dateEl.value = `${yyyy}-${mm}-${dd}`;
+      }
+      updateContractExpiryDisplay();
+
+      const qp = new URLSearchParams(window.location.search);
+      const qTitle = qp.get('title');
+      const qPrice = qp.get('price');
+      if (qTitle && document.getElementById('property_project')) {
+        document.getElementById('property_project').value = qTitle;
+      }
+      if (qPrice && document.getElementById('selling_price')) {
+        const num = parseInt(String(qPrice).replace(/\D/g, ''), 10);
+        document.getElementById('selling_price').value = isNaN(num) ? qPrice : num.toLocaleString('en-US');
+      }
+
+      initSignaturePad('owner');
+      initSignaturePad('agent');
       loadMyContracts();
       if (window.lucide) { lucide.createIcons(); }
     });
