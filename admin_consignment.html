@@ -71,15 +71,15 @@
         </button>
       </div>
       <div class="flex flex-wrap items-center gap-1.5" id="roleSimBar">
-        <button onclick="setSimulatedRole('bua')" data-sim="bua" class="px-3 py-1 rounded-lg bg-[#C2A460] text-[#241A0E] font-bold transition flex items-center gap-1.5">
+        <button onclick="setSimulatedRole('bua')" data-sim="bua" class="px-3 py-1.5 sm:py-1 min-h-[38px] sm:min-h-0 rounded-lg bg-[#C2A460] text-[#241A0E] font-bold transition flex items-center gap-1.5">
           <i data-lucide="crown" class="w-3.5 h-3.5" stroke-width="1.5"></i>
           <span>หน้าจอผู้บริหาร (ปล่อยขึ้นระบบ &amp; แจกสิทธิ์)</span>
         </button>
-        <button onclick="setSimulatedRole('poppy')" data-sim="poppy" class="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5">
+        <button onclick="setSimulatedRole('poppy')" data-sim="poppy" class="px-3 py-1.5 sm:py-1 min-h-[38px] sm:min-h-0 rounded-lg bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5">
           <i data-lucide="pen-line" class="w-3.5 h-3.5" stroke-width="1.5"></i>
           <span>หน้าจอที่ทีมงานเห็น</span>
         </button>
-        <button onclick="setSimulatedRole('agent')" data-sim="agent" class="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5">
+        <button onclick="setSimulatedRole('agent')" data-sim="agent" class="px-3 py-1.5 sm:py-1 min-h-[38px] sm:min-h-0 rounded-lg bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1.5">
           <i data-lucide="user" class="w-3.5 h-3.5" stroke-width="1.5"></i>
           <span>หน้าจอที่เซลล์เห็น</span>
         </button>
@@ -87,9 +87,9 @@
     </div>
   </div>
 
-  <!-- HEADER -->
-  <header class="bg-white/95 backdrop-blur-md border-b border-[#E5D5B5] sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+  <!-- HEADER (unsticky on mobile so cards stay visible) -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-[#E5D5B5] sm:sticky sm:top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-3.5 flex flex-wrap items-center justify-between gap-2.5 sm:gap-3">
       <div class="flex items-center gap-3">
         <img src="https://assets.siwasup.com/siwasup_logo.svg" alt="ศิวาทรัพย์" class="h-9 w-auto object-contain" onerror="this.style.display='none'">
         <div>
@@ -120,95 +120,95 @@
   <!-- MAIN -->
   <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex-1 space-y-6">
 
-    <!-- KPI BAR -->
-    <div id="kpiBarSection" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
-      <div class="gold-card rounded-2xl p-3.5">
+    <!-- KPI BAR (horizontal scroll on mobile, clickable to filter) -->
+    <div id="kpiBarSection" class="flex overflow-x-auto sm:grid sm:grid-cols-4 lg:grid-cols-8 gap-2.5 sm:gap-3 pb-1">
+      <div onclick="setFilter('all')" class="gold-card rounded-2xl p-3 sm:p-3.5 shrink-0 min-w-[112px] sm:min-w-0 cursor-pointer hover:border-[#967332] transition">
         <div class="text-[11px] text-[#6E5A44] font-semibold flex items-center gap-1.5">
           <i data-lucide="layers" class="w-3.5 h-3.5 text-[#8A6525]" stroke-width="1.5"></i>
           <span>ทั้งหมด</span>
         </div>
-        <div id="kpiAll" class="text-2xl font-black text-[#2C2218] mt-1">0</div>
+        <div id="kpiAll" class="text-xl sm:text-2xl font-black text-[#2C2218] mt-1">0</div>
       </div>
-      <div class="gold-card rounded-2xl p-3.5 border-amber-300 bg-amber-50/40">
+      <div onclick="setFilter('pending_photos')" class="gold-card rounded-2xl p-3 sm:p-3.5 border-amber-300 bg-amber-50/40 shrink-0 min-w-[112px] sm:min-w-0 cursor-pointer hover:border-amber-500 transition">
         <div class="text-[11px] text-amber-800 font-bold flex items-center gap-1.5">
           <i data-lucide="image" class="w-3.5 h-3.5" stroke-width="1.5"></i>
           <span>รอลงรูป</span>
         </div>
-        <div id="kpiPendingPhotos" class="text-2xl font-black text-amber-700 mt-1">0</div>
+        <div id="kpiPendingPhotos" class="text-xl sm:text-2xl font-black text-amber-700 mt-1">0</div>
       </div>
-      <div class="gold-card rounded-2xl p-3.5 border-blue-300 bg-blue-50/40">
+      <div onclick="setFilter('ready_for_review')" class="gold-card rounded-2xl p-3 sm:p-3.5 border-blue-300 bg-blue-50/40 shrink-0 min-w-[112px] sm:min-w-0 cursor-pointer hover:border-blue-500 transition">
         <div class="text-[11px] text-blue-800 font-bold flex items-center gap-1.5">
           <i data-lucide="clipboard-list" class="w-3.5 h-3.5" stroke-width="1.5"></i>
           <span>รอบัวปล่อย</span>
         </div>
-        <div id="kpiReadyForReview" class="text-2xl font-black text-blue-700 mt-1">0</div>
+        <div id="kpiReadyForReview" class="text-xl sm:text-2xl font-black text-blue-700 mt-1">0</div>
       </div>
-      <div class="gold-card rounded-2xl p-3.5 border-emerald-300 bg-emerald-50/40">
+      <div onclick="setFilter('available')" class="gold-card rounded-2xl p-3 sm:p-3.5 border-emerald-300 bg-emerald-50/40 shrink-0 min-w-[112px] sm:min-w-0 cursor-pointer hover:border-emerald-500 transition">
         <div class="text-[11px] text-emerald-800 font-bold flex items-center gap-1.5">
           <i data-lucide="check-check" class="w-3.5 h-3.5" stroke-width="1.5"></i>
           <span>ขึ้นระบบแล้ว</span>
         </div>
-        <div id="kpiAvailable" class="text-2xl font-black text-emerald-700 mt-1">0</div>
+        <div id="kpiAvailable" class="text-xl sm:text-2xl font-black text-emerald-700 mt-1">0</div>
       </div>
-      <div class="gold-card rounded-2xl p-3.5">
+      <div onclick="setFilter('no_contract')" class="gold-card rounded-2xl p-3 sm:p-3.5 shrink-0 min-w-[112px] sm:min-w-0 cursor-pointer hover:border-emerald-500 transition">
         <div class="text-[11px] text-emerald-700 font-bold flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
           <span>ไม่ติดสัญญา</span>
         </div>
-        <div id="kpiNoContract" class="text-2xl font-black text-[#2C2218] mt-1">0</div>
+        <div id="kpiNoContract" class="text-xl sm:text-2xl font-black text-[#2C2218] mt-1">0</div>
       </div>
-      <div class="gold-card rounded-2xl p-3.5">
+      <div onclick="setFilter('open_contract')" class="gold-card rounded-2xl p-3 sm:p-3.5 shrink-0 min-w-[112px] sm:min-w-0 cursor-pointer hover:border-amber-500 transition">
         <div class="text-[11px] text-amber-700 font-bold flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-amber-500"></span>
           <span>สัญญาเปิด</span>
         </div>
-        <div id="kpiOpenContract" class="text-2xl font-black text-[#2C2218] mt-1">0</div>
+        <div id="kpiOpenContract" class="text-xl sm:text-2xl font-black text-[#2C2218] mt-1">0</div>
       </div>
-      <div class="gold-card rounded-2xl p-3.5">
+      <div onclick="setFilter('exclusive_contract')" class="gold-card rounded-2xl p-3 sm:p-3.5 shrink-0 min-w-[112px] sm:min-w-0 cursor-pointer hover:border-rose-500 transition">
         <div class="text-[11px] text-rose-700 font-bold flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-rose-500"></span>
           <span>สัญญาปิด</span>
         </div>
-        <div id="kpiExclusive" class="text-2xl font-black text-[#2C2218] mt-1">0</div>
+        <div id="kpiExclusive" class="text-xl sm:text-2xl font-black text-[#2C2218] mt-1">0</div>
       </div>
-      <div class="gold-card rounded-2xl p-3.5 bg-slate-50/70 border-slate-200">
+      <div onclick="setFilter('expired')" class="gold-card rounded-2xl p-3 sm:p-3.5 bg-slate-50/70 border-slate-200 shrink-0 min-w-[112px] sm:min-w-0 cursor-pointer hover:border-slate-400 transition">
         <div class="text-[11px] text-slate-600 font-bold flex items-center gap-1.5">
           <i data-lucide="archive" class="w-3.5 h-3.5" stroke-width="1.5"></i>
           <span>หมดสัญญา</span>
         </div>
-        <div id="kpiExpired" class="text-2xl font-black text-slate-700 mt-1">0</div>
+        <div id="kpiExpired" class="text-xl sm:text-2xl font-black text-slate-700 mt-1">0</div>
       </div>
     </div>
 
-    <!-- FILTER & SEARCH BAR -->
-    <div class="gold-card rounded-2xl p-3.5 flex flex-wrap items-center justify-between gap-3">
-      <div class="flex flex-wrap items-center gap-1.5" id="filterPills">
-        <button onclick="setFilter('all')" data-filter="all" class="px-3 py-1.5 rounded-xl bg-[#2C2218] text-white text-xs font-bold">ทั้งหมด</button>
-        <button onclick="setFilter('pending_photos')" data-filter="pending_photos" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-[#6E5A44] text-xs font-bold flex items-center gap-1">
+    <!-- FILTER & SEARCH BAR (single-row horizontal scroll on mobile) -->
+    <div class="gold-card rounded-2xl p-3 sm:p-3.5 flex flex-wrap items-center justify-between gap-2.5 sm:gap-3">
+      <div class="flex overflow-x-auto sm:flex-wrap items-center gap-1.5 w-full sm:w-auto pb-1 sm:pb-0" id="filterPills">
+        <button onclick="setFilter('all')" data-filter="all" class="px-3 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 shrink-0 rounded-xl bg-[#2C2218] text-white text-xs font-bold">ทั้งหมด</button>
+        <button onclick="setFilter('pending_photos')" data-filter="pending_photos" class="px-3 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 shrink-0 rounded-xl bg-[#FAF5EB] text-[#6E5A44] text-xs font-bold flex items-center gap-1">
           <i data-lucide="image" class="w-3.5 h-3.5" stroke-width="1.5"></i><span>รอลงรูป</span>
         </button>
-        <button onclick="setFilter('ready_for_review')" data-filter="ready_for_review" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-blue-800 text-xs font-bold flex items-center gap-1">
+        <button onclick="setFilter('ready_for_review')" data-filter="ready_for_review" class="px-3 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 shrink-0 rounded-xl bg-[#FAF5EB] text-blue-800 text-xs font-bold flex items-center gap-1">
           <i data-lucide="clipboard-list" class="w-3.5 h-3.5" stroke-width="1.5"></i><span>รอบัวปล่อย</span>
         </button>
-        <button onclick="setFilter('available')" data-filter="available" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-emerald-800 text-xs font-bold flex items-center gap-1">
+        <button onclick="setFilter('available')" data-filter="available" class="px-3 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 shrink-0 rounded-xl bg-[#FAF5EB] text-emerald-800 text-xs font-bold flex items-center gap-1">
           <i data-lucide="check-check" class="w-3.5 h-3.5" stroke-width="1.5"></i><span>ขึ้นระบบแล้ว</span>
         </button>
-        <button onclick="setFilter('no_contract')" data-filter="no_contract" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-emerald-800 text-xs font-bold flex items-center gap-1.5">
+        <button onclick="setFilter('no_contract')" data-filter="no_contract" class="px-3 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 shrink-0 rounded-xl bg-[#FAF5EB] text-emerald-800 text-xs font-bold flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>ไม่ติดสัญญา</span>
         </button>
-        <button onclick="setFilter('open_contract')" data-filter="open_contract" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-amber-800 text-xs font-bold flex items-center gap-1.5">
+        <button onclick="setFilter('open_contract')" data-filter="open_contract" class="px-3 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 shrink-0 rounded-xl bg-[#FAF5EB] text-amber-800 text-xs font-bold flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-amber-500"></span><span>สัญญาเปิด</span>
         </button>
-        <button onclick="setFilter('exclusive_contract')" data-filter="exclusive_contract" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-rose-800 text-xs font-bold flex items-center gap-1.5">
+        <button onclick="setFilter('exclusive_contract')" data-filter="exclusive_contract" class="px-3 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 shrink-0 rounded-xl bg-[#FAF5EB] text-rose-800 text-xs font-bold flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-rose-500"></span><span>สัญญาปิด</span>
         </button>
-        <button onclick="setFilter('expired')" data-filter="expired" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-slate-700 text-xs font-bold flex items-center gap-1.5">
+        <button onclick="setFilter('expired')" data-filter="expired" class="px-3 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 shrink-0 rounded-xl bg-[#FAF5EB] text-slate-700 text-xs font-bold flex items-center gap-1.5">
           <i data-lucide="archive" class="w-3.5 h-3.5" stroke-width="1.5"></i><span>หมดสัญญา / พับเก็บ</span>
         </button>
       </div>
       <div class="relative w-full sm:w-64">
         <i data-lucide="search" class="w-3.5 h-3.5 text-[#8A755E] absolute left-3 top-1/2 -translate-y-1/2"></i>
-        <input type="text" id="searchInput" oninput="renderCards()" placeholder="ค้นหาชื่อโครงการ, โซน, รหัส..." class="w-full pl-8 pr-3.5 py-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A] text-xs focus:outline-none focus:border-[#967332]">
+        <input type="text" id="searchInput" oninput="renderCards()" placeholder="ค้นหาชื่อโครงการ, โซน, รหัส..." class="w-full pl-8 pr-3.5 py-2.5 sm:py-2 min-h-[42px] sm:min-h-0 rounded-xl bg-[#FAF7F2] border border-[#D8C39A] text-xs focus:outline-none focus:border-[#967332]">
       </div>
     </div>
 
@@ -961,7 +961,10 @@
 
                 ${!isAgentView ? `
                 <div class="p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E5D5B5] text-xs space-y-1">
-                  <div class="text-[10px] text-[#6E5A44]">ผู้ดูแลลูกค้า:</div>
+                  <div class="flex items-center justify-between gap-2 text-[10px] text-[#6E5A44]">
+                    <span>ผู้ดูแลลูกค้า:</span>
+                    <span class="text-[#8A755E]">${escapeHtml(p.updated_at || p.created_at || 'ชุดตั้งต้น')} • ${escapeHtml(p.updated_by_name || p.submitted_by_name || 'seed_init')}</span>
+                  </div>
                   <div class="font-bold text-[#2C2218]">${caretakerLabel}</div>
                   ${p.internal_note ? `<div class="text-[10px] text-[#8A755E] pt-0.5 flex items-start gap-1"><i data-lucide="sticky-note" class="w-3 h-3 shrink-0 mt-0.5"></i><span>${escapeHtml(p.internal_note)}</span></div>` : ''}
                 </div>

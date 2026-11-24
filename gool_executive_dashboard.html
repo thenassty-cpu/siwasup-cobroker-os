@@ -17,6 +17,8 @@
       font-family: 'Prompt', 'Tahoma', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: var(--bg-surface);
       color: var(--text-main);
+      word-break: keep-all;
+      overflow-wrap: break-word;
       transition: background-color 0.25s ease, color 0.25s ease;
     }
 
@@ -203,6 +205,9 @@
       </div>
 
       <!-- Responsive Table -->
+      <div class="sm:hidden text-[10px] text-exec-muted mb-1.5 flex items-center justify-end gap-1">
+        <span>← เลื่อนซ้าย-ขวาเพื่อดูตารางสิทธิ์ทั้งหมด →</span>
+      </div>
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs border-collapse min-w-[680px]">
           <thead>
