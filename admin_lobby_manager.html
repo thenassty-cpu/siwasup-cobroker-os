@@ -1192,6 +1192,40 @@
       return data;
     }
 
+    async function assignApprovedPreset(memberId, presetKey) {
+      const preset = ROLE_PRESETS[presetKey];
+      if (!preset) return;
+      const member = (lobbyData.approved || []).find(m => m.id === memberId);
+      if (!member) return;
+      if (member.id === 'app_office_004' && !isSuperTechRootActive()) {
+        showToastAlert('🔒 บัญชี [NASSTY] (Super Tech Root) ได้รับการคุ้มครอง ห้ามผู้อื่นแก้ไขสิทธิ์', 'error');
+        return;
+      }
+      try {
+        const resData = await persistPermissionsToCloud({
+          id: member.id,
+          role: preset.role,
+          role_code: preset.role_code || '',
+          title: preset.title,
+          zone: member.zone || '',
+          badges: [...(preset.badges || [])],
+          permissions: { ...(preset.permissions || {}) }
+        });
+        Object.assign(member, resData.member || {
+          role: preset.role,
+          role_code: preset.role_code || '',
+          title: preset.title,
+          badges: [...(preset.badges || [])],
+          permissions: { ...(preset.permissions || {}) }
+        });
+        saveLobbyData();
+        renderLobby();
+        showToastAlert(`✅ เปลี่ยนบทบาทของ ${member.name || member.nickname} เป็น "${preset.role}" แล้ว`, 'success');
+      } catch (err) {
+        showToastAlert(`❌ เปลี่ยนบทบาทไม่สำเร็จ: ${err.message}`, 'error');
+      }
+    }
+
     async function handleCardBadgeDrop(e, targetMemberId) {
       e.preventDefault();
       e.currentTarget.classList.remove('border-amber-400', 'bg-amber-50/50');
@@ -1766,17 +1800,16 @@
                     <!-- MOBILE TAP-TO-ASSIGN ROLE (replaces Drag & Drop on touchscreens) -->
                     ${!(item.id === 'app_office_004' || item.is_tech || (item.permissions && item.permissions.systemAdmin) || theme.isLocked) ? `
                     <div class="pt-1">
-                      <select onchange="if(this.value){ approveWithPreset('${item.id}', this.value); this.value=''; }" class="w-full min-h-[38px] px-2.5 py-1.5 rounded-xl bg-white border border-slate-200 text-[11px] font-bold text-slate-700 focus:outline-none focus:border-amber-500">
+                      <select onchange="if(this.value){ assignApprovedPreset('${item.id}', this.value); this.value=''; }" class="w-full min-h-[38px] px-2.5 py-1.5 rounded-xl bg-white border border-slate-200 text-[11px] font-bold text-slate-700 focus:outline-none focus:border-amber-500">
                         <option value="">⚡ แตะเพื่อเปลี่ยนบทบาท (Tap-to-Assign)...</option>
                         <option value="gool">👑 เจี๊ยบ(กูล) — CEO / เคาะราคา</option>
-                        <option value="bua">📑 บัว — Ops &amp; จัดการสัญญา</option>
+                        <option value="bua">👑 บัว — Executive Partner</option>
                         <option value="lily">🔑 พี่ลิลลี่ — Head of Viewing</option>
-                        <option value="poppy">📸 ป๊อบปี้ — Content &amp; Admin</option>
-                        <option value="support">🎧 ซัพพอร์ต — ดูแลระบบ</option>
-                        <option value="inhouse">💼 เซลล์ประจำ — ทีมบริษัท</option>
-                        <option value="freeagent">🏃 Free Agent — นายหน้าอิสระ</option>
-                        <option value="cobroker">🤝 Co-Broker — พันธมิตร</option>
-                        <option value="seller">🏠 Seller — เจ้าของทรัพย์</option>
+                        <option value="support">🏢 เจ้าหน้าที่ซัพพอร์ตออฟฟิศ</option>
+                        <option value="contract_agent">📑 Contract Agent (ตัวแทนสัญญา)</option>
+                        <option value="free_agent">🤝 Free Agent (ตัวแทนอิสระ)</option>
+                        <option value="vip_client">👑 VIP Client (ลูกค้า VIP)</option>
+                        <option value="seller">🏠 Seller (เจ้าของทรัพย์ฝากขาย)</option>
                       </select>
                     </div>
                     ` : ''}
