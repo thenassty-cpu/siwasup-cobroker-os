@@ -2876,12 +2876,13 @@ def record_client_tracking_event(payload: dict) -> dict:
     root_vid = cons_vis.get("vid", raw_vid)
     eff_score = cons_vis.get("trust_score", score)
     eff_label = cons_vis.get("trust_label", label)
+    eff_name = str(cons_vis.get("primary_name") or "").strip()
+    is_identified = bool(str(avatar_name or "").strip()) or bool(eff_name) or bool(cons_vis.get("confirmed"))
 
-    # Async LINE Push Notification to owning agent (with per-vid + per-ref anti-spam rate-limit)
-    if _should_send_client_alert(raw_vid, event_type, property_id, ref=ref):
+    # Async LINE Push Notification to owning agent (identified leads only; raw traffic is logged without push)
+    if is_identified and _should_send_client_alert(raw_vid, event_type, property_id, ref=ref):
         target_uid = find_agent_line_uid(ref)
         if target_uid and LINE_ACCESS_TOKEN:
-            eff_name = cons_vis.get("primary_name") or ""
             eff_note = cons_vis.get("agent_note") or ""
             disp_name = (eff_name if eff_name.startswith("คุณ") else f"คุณ{eff_name}") if eff_name else "ลูกค้า (ลิงก์รวมไม่ระบุชื่อ)"
             merged_tag = f" (พ่วงจาก #{raw_vid})" if root_vid != raw_vid else ""
