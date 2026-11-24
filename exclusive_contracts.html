@@ -181,17 +181,46 @@
     html[data-theme="cyber-clay"] input,
     html[data-theme="light-neumorphic"] select,
     html[data-theme="sage-minimal"] select,
-    html[data-theme="cyber-clay"] select {
+    html[data-theme="cyber-clay"] select,
+    html[data-theme="light-neumorphic"] textarea,
+    html[data-theme="sage-minimal"] textarea,
+    html[data-theme="cyber-clay"] textarea {
       background-color: var(--inset-bg) !important;
       color: var(--text-main) !important;
       border-color: var(--panel-border) !important;
+    }
+
+    html[data-theme="light-neumorphic"] .glass-card,
+    html[data-theme="sage-minimal"] .glass-card,
+    html[data-theme="cyber-clay"] .glass-card,
+    html[data-theme="light-neumorphic"] header,
+    html[data-theme="sage-minimal"] header,
+    html[data-theme="cyber-clay"] header {
+      background: var(--card-bg) !important;
+      border-color: var(--panel-border) !important;
+      color: var(--text-main) !important;
+    }
+
+    html[data-theme="light-neumorphic"] .glass-input,
+    html[data-theme="sage-minimal"] .glass-input,
+    html[data-theme="cyber-clay"] .glass-input {
+      background: var(--inset-bg) !important;
+      border-color: var(--panel-border) !important;
+      color: var(--text-main) !important;
+    }
+
+    html[data-theme="light-neumorphic"] .text-gold,
+    html[data-theme="sage-minimal"] .text-gold,
+    html[data-theme="cyber-clay"] .text-gold {
+      color: var(--accent-primary) !important;
     }
 </style>
 </head>
 <body class="min-h-screen pb-24">
 
-  <!-- Floating 4-Theme Switcher Bar (inline above header on mobile to avoid overlap) -->
-  <div class="sm:fixed sm:top-3 sm:right-3 z-50 flex items-center justify-end gap-1 p-1 mx-3 mt-2 sm:m-0 rounded-2xl bg-slate-900/90 border border-slate-700 shadow-xl backdrop-blur-md text-xs" id="adminThemeBar">
+  <!-- 4-Theme Switcher Bar (placed cleanly above header so it never overlaps action buttons) -->
+  <div class="max-w-4xl mx-auto px-3 sm:px-4 pt-2 flex justify-end">
+    <div class="inline-flex items-center gap-1 p-1 rounded-2xl bg-slate-900/90 border border-slate-700 shadow-sm backdrop-blur-md text-xs" id="adminThemeBar">
     <span class="px-2 py-0.5 text-[10px] font-bold text-slate-400 flex items-center gap-1">
       <i data-lucide="palette" class="w-3.5 h-3.5 text-amber-500"></i>
       <span class="hidden sm:inline">ธีม:</span>
@@ -200,6 +229,7 @@
     <button onclick="switchAdminTheme('dark-obsidian')" id="themeBtn-dark-obsidian" class="px-2 py-0.5 text-[10px] font-bold rounded-lg transition cursor-pointer">🖤 ดาร์ก</button>
     <button onclick="switchAdminTheme('sage-minimal')" id="themeBtn-sage-minimal" class="px-2 py-0.5 text-[10px] font-bold rounded-lg transition cursor-pointer">🌿 เซจ</button>
     <button onclick="switchAdminTheme('cyber-clay')" id="themeBtn-cyber-clay" class="px-2 py-0.5 text-[10px] font-bold rounded-lg transition cursor-pointer">⚡ ไซเบอร์</button>
+    </div>
   </div>
 
 

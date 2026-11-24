@@ -105,20 +105,20 @@
       </div>
     </div>
 
-    <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-      <a href="https://assets.siwasup.com/agent_onboarding_qr.html" target="_blank" class="flex-1 sm:flex-initial justify-center px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-[11px] sm:text-xs font-semibold text-slate-700 border border-slate-300 flex items-center gap-1.5 shadow-sm transition">
+    <div class="flex flex-wrap lg:flex-nowrap items-center gap-2 w-full sm:w-auto shrink-0">
+      <a href="https://assets.siwasup.com/agent_onboarding_qr.html" target="_blank" class="flex-1 sm:flex-initial justify-center px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-[11px] sm:text-xs font-semibold text-slate-700 border border-slate-300 flex items-center gap-1.5 shadow-sm transition whitespace-nowrap">
         <i data-lucide="qr-code" class="w-3.5 h-3.5 text-amber-600"></i>
         <span>ป้ายสแกน QR หน้างาน</span>
       </a>
-      <a href="https://assets.siwasup.com/agent_registration.html" target="_blank" class="flex-1 sm:flex-initial justify-center px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[11px] sm:text-xs font-semibold text-blue-700 border border-blue-200 flex items-center gap-1.5 shadow-sm transition">
+      <a href="https://assets.siwasup.com/agent_registration.html" target="_blank" class="flex-1 sm:flex-initial justify-center px-2.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[11px] sm:text-xs font-semibold text-blue-700 border border-blue-200 flex items-center gap-1.5 shadow-sm transition whitespace-nowrap">
         <i data-lucide="smartphone" class="w-3.5 h-3.5 text-blue-600"></i>
         <span>เปิดจอมือถือผู้สมัคร</span>
       </a>
-      <button onclick="fetchCloudLobby().then(() => showToastAlert('🔄 อัปเดตข้อมูลล่าสุดจาก Cloud แล้ว', 'success'))" class="flex-1 sm:flex-initial justify-center px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-[11px] sm:text-xs font-semibold text-emerald-700 border border-emerald-200 flex items-center gap-1.5 shadow-sm transition active:scale-95">
+      <button onclick="fetchCloudLobby().then(() => showToastAlert('🔄 อัปเดตข้อมูลล่าสุดจาก Cloud แล้ว', 'success'))" class="flex-1 sm:flex-initial justify-center px-2.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-[11px] sm:text-xs font-semibold text-emerald-700 border border-emerald-200 flex items-center gap-1.5 shadow-sm transition active:scale-95 whitespace-nowrap">
         <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-emerald-600"></i>
         <span>รีเฟรช</span>
       </button>
-      <a href="https://assets.siwasup.com/gool_executive_dashboard.html" class="w-full sm:w-auto justify-center px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-[11px] sm:text-xs font-bold text-amber-800 border border-amber-300 flex items-center gap-1.5 shadow-sm transition">
+      <a href="https://assets.siwasup.com/gool_executive_dashboard.html" class="w-full sm:w-auto justify-center px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-[11px] sm:text-xs font-bold text-amber-800 border border-amber-300 flex items-center gap-1.5 shadow-sm transition whitespace-nowrap">
         <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-amber-600"></i>
         <span>Executive Dashboard</span>
       </a>
@@ -233,7 +233,7 @@
           <span class="text-[10px] text-slate-400">ลากการ์ดมาปล่อยลงในช่องที่ต้องการ</span>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 text-xs">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 text-xs">
 
           <!-- Drop Zone 1: Gool -->
           <div class="drop-zone p-3 rounded-2xl bg-amber-50/50 hover:bg-amber-50 border-2 border-dashed border-amber-300 text-center space-y-1"
