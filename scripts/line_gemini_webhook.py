@@ -4982,9 +4982,44 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     store = load_content_data()
                     items = list(store.get("items", []))
                     cid = re.sub(r"[^A-Za-z0-9_-]", "", str(payload.get("id") or "").strip())
-                    if action == "delete":
+                    if action in ("delete", "trash", "restore"):
                         if not cid:
-                            self._send_json(400, {"error": "กรุณาระบุรหัสคอนเทนต์ที่ต้องการลบ"})
+                            self._send_json(400, {"error": "กรุณาระบุรหัสคอนเทนต์ที่ต้องการดำเนินการ"})
+                            return
+                        if action == "trash":
+                            found = None
+                            for it in items:
+                                if it.get("id") == cid:
+                                    it["prev_status"] = it.get("status") if it.get("status") != "trash" else it.get("prev_status", "draft")
+                                    it["status"] = "trash"
+                                    it["trashed_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+                                    it["trashed_by"] = actor_name
+                                    found = it
+                                    break
+                            if not found:
+                                self._send_json(404, {"error": "ไม่พบคอนเทนต์ที่ต้องการย้ายลงถังขยะ"})
+                                return
+                            store["items"] = items
+                            save_content_data(store)
+                            self._send_json(200, {"status": "success", "trashed": cid, "item": found})
+                            return
+                        if action == "restore":
+                            found = None
+                            for it in items:
+                                if it.get("id") == cid:
+                                    it["status"] = it.pop("prev_status", "draft") or "draft"
+                                    it.pop("trashed_at", None)
+                                    it.pop("trashed_by", None)
+                                    it["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+                                    it["updated_by"] = actor_name
+                                    found = it
+                                    break
+                            if not found:
+                                self._send_json(404, {"error": "ไม่พบคอนเทนต์ในถังขยะ"})
+                                return
+                            store["items"] = items
+                            save_content_data(store)
+                            self._send_json(200, {"status": "success", "restored": cid, "item": found})
                             return
                         store["items"] = [it for it in items if it.get("id") != cid]
                         save_content_data(store)
