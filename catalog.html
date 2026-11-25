@@ -2303,9 +2303,10 @@
         const low = clean.toLowerCase();
         if (!low.startsWith('http')) return;
         if (junk.some(kw => low.includes(kw))) return;
-        // Skip duplicate gallery_0 when thumb is already present
-        if (valid.length > 0 && (low.endsWith('/gallery_0.jpg') || low.endsWith('/gallery_0.png')) && (valid[0].toLowerCase().endsWith('/thumb.jpg') || valid[0].toLowerCase().endsWith('/thumb.png'))) {
-          return;
+        // Skip duplicate gallery_0 (or broken TTB gallery_1) when thumb is already present
+        if (valid.length > 0 && (valid[0].toLowerCase().endsWith('/thumb.jpg') || valid[0].toLowerCase().endsWith('/thumb.png'))) {
+          if (low.endsWith('/gallery_0.jpg') || low.endsWith('/gallery_0.png')) return;
+          if (low.includes('/ttb/') && low.endsWith('/gallery_1.jpg')) return;
         }
         if (!seen.has(clean)) {
           seen.add(clean);
@@ -2372,13 +2373,28 @@
             </button>
           `).join('');
         } else {
-          thumbsRow.classList.add('hidden');
-          thumbsRow.innerHTML = '';
+          renderSinglePhotoHelperBar(thumbsRow, p);
         }
       }
 
       setupDetailCarouselScrollEvents(track);
       if (window.lucide) lucide.createIcons();
+    }
+
+    function renderSinglePhotoHelperBar(thumbsRow, p) {
+      if (!thumbsRow) return;
+      const pid = String((p && (p.id || p.code)) || activeDetailPropertyId || '').replace(/'/g, '');
+      const oaMsg = encodeURIComponent('ขอรูปภาพเพิ่มเติมทรัพย์รหัส ' + pid);
+      thumbsRow.classList.remove('hidden');
+      thumbsRow.innerHTML = `
+        <div class="w-full flex flex-wrap items-center justify-between gap-2 bg-[#FAF7F2] border border-[#E6DFD3] rounded-xl px-3 py-2 text-xs">
+          <span class="text-[#5C4B37] font-medium">📸 มีภาพหน้าปก 1 มุมจากธนาคาร</span>
+          <div class="flex items-center gap-1.5">
+            <button type="button" onclick="openPropertyStreetView('${pid}')" class="px-2.5 py-1 rounded-lg bg-white border border-[#D4C5AE] text-[#2C2218] font-semibold hover:bg-[#F3ECE0] transition cursor-pointer">🌍 ดู Street View</button>
+            <a href="https://line.me/R/oaMessage/@813nyyia/?${oaMsg}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-[#06C755] text-white font-semibold hover:bg-[#05b34c] transition">💬 ขอรูปเพิ่ม</a>
+          </div>
+        </div>
+      `;
     }
 
     function handleDetailSlideImageError(imgEl, idx) {
@@ -2413,6 +2429,13 @@
       });
       detailCarouselUrls = remainingSlides.map(sl => sl.querySelector('img')?.src || fallback);
       syncDetailCarouselActive(Math.min(detailCarouselCurrentIdx, newTotal - 1), false);
+      if (newTotal <= 1) {
+        const controls = document.getElementById('detail-carousel-controls');
+        if (controls) controls.classList.add('hidden');
+        const thumbsRow = document.getElementById('detail-thumbs-row');
+        const curProp = (window.allProperties || []).find(x => String(x.id) === String(activeDetailPropertyId));
+        renderSinglePhotoHelperBar(thumbsRow, curProp);
+      }
     }
 
     function syncDetailCarouselActive(idx, announce = false) {
@@ -7972,7 +7995,7 @@
     // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=20261125-1450').then((reg) => {
+        navigator.serviceWorker.register('./sw.js?v=20261125-1505').then((reg) => {
           console.log('Siwasup PWA Service Worker Registered (v2):', reg.scope);
           // Auto check for updates on each load
           if (reg.update) reg.update();
@@ -8359,6 +8382,18 @@
       });
       if (window.lastMapProperties) {
         initOrUpdateLeafletMap(window.lastMapProperties);
+      }
+    }
+
+    function openPropertyStreetView(propId) {
+      const p = (window.allProperties || []).find(x => String(x.id) === String(propId));
+      if (!p) return;
+      const coords = getPropertyCoords(p);
+      if (coords && coords.isExact) {
+        window.open(`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${coords.lat},${coords.lng}`, '_blank');
+      } else {
+        const q = encodeURIComponent(`${p.title || ''} ${p.location || ''} ${coords ? (coords.district || '') : ''}`);
+        window.open(`https://www.google.com/maps/search/?api=1&query=${q}`, '_blank');
       }
     }
 
