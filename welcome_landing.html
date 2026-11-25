@@ -24,6 +24,8 @@
   <style>
     body {
       font-family: 'Prompt', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      word-break: keep-all;
+      overflow-wrap: break-word;
     }
     .hero-gradient {
       background: linear-gradient(180deg, rgba(255, 252, 246, 0.86) 0%, rgba(247, 239, 225, 0.94) 100%), 
@@ -319,7 +321,7 @@
 
       <!-- ⚠️ ADMIN WARNING BANNER -->
       <div id="articles-placeholder-banner" class="mb-8 p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 flex items-start gap-3 text-amber-900 text-xs sm:text-sm">
-        <span class="text-lg shrink-0">⚠️</span>
+        <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-700 shrink-0 mt-0.5"></i>
         <div>
           <strong class="block text-amber-950 font-black">[ADMIN ONLY — ซ่อนจากบุคคลทั่วไปชั่วคราว]</strong>
           <span>โซนบทความนี้ยังเป็นเนื้อหาตัวอย่าง (Placeholder) และปุ่ม "อ่านบทความเต็ม" ยังเป็นลิงก์ว่าง (<code>#</code>) — เดี๋ยวต้องขอบทความจริงจาก <strong>ป๊อบปี้และบัว</strong> มาใส่ก่อนเปิดแสดงสาธารณะ</span>
@@ -329,20 +331,20 @@
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
         <div>
           <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#8A6525] bg-[#FAF2E1] border border-[#D8C39A] px-3 py-1 rounded-full mb-2">
-            <i data-lucide="flame" class="w-3.5 h-3.5 text-[#A58442]"></i>
+            <i data-lucide="newspaper" class="w-3.5 h-3.5 text-[#967332]"></i>
             <span>SIWASUP MARKET INSIGHTS & NEWS</span>
           </div>
           <h2 class="text-2xl sm:text-3xl font-bold text-[#2C2218] tracking-tight">สาระน่ารู้เรื่องบ้าน & ข่าวสารอสังหาฯ ด่วน</h2>
           <p class="text-xs sm:text-sm text-[#6E5A44] mt-1">บทความวิเคราะห์เจาะลึก เคล็ดลับสินเชื่อบ้าน และข่าวสารบ้านราคาพิเศษ</p>
         </div>
 
-        <!-- Hot News Badge -->
-        <div class="inline-flex items-center gap-2 bg-[#FAF2E1] border border-[#C2A460] text-[#7A5B22] text-xs font-semibold px-3 py-1.5 rounded-xl">
+        <!-- Hot News Badge (ซ่อนอัตโนมัติเมื่อมีบทความจริงจาก Content Hub) -->
+        <div id="articles-hotnews-badge" class="inline-flex items-center gap-2 bg-[#FAF2E1] border border-[#C2A460] text-[#7A5B22] text-xs font-semibold px-3 py-1.5 rounded-xl">
           <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C2A460] opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-[#967332]"></span>
           </span>
-          <span>[HOT NEWS] ดอกเบี้ยกู้บ้านปรับลดระลอกใหม่ปลายปี 2569</span>
+          <span>อัปเดตข่าวสารและบทความอสังหาฯ</span>
         </div>
       </div>
 
@@ -446,14 +448,15 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-900 bg-amber-100 border border-amber-300 px-3 py-1 rounded-full mb-2">
-            <span>🏆</span>
+          <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#7A5B22] bg-[#FAF2E1] border border-[#C2A460] px-3 py-1 rounded-full mb-2">
+            <i data-lucide="award" class="w-3.5 h-3.5 text-[#967332]"></i>
             <span>AGENT &amp; STAFF INTERNAL HUB</span>
           </div>
           <h2 class="text-xl sm:text-2xl font-bold text-[#2C2218]">ประกาศทีมขาย • Top Agent • นัดหมายสำคัญ</h2>
         </div>
         <a id="btn-open-content-studio" href="admin_content_hub.html" class="hidden inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-900 text-amber-300 text-xs font-bold hover:bg-neutral-800 transition-colors shadow-sm">
-          <span>🎨 เปิด Content Hub Studio</span>
+          <i data-lucide="pen-tool" class="w-3.5 h-3.5 text-amber-300"></i>
+          <span>เปิด Content Hub Studio</span>
         </a>
       </div>
       <div id="agentContentGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
@@ -464,11 +467,11 @@
   <div id="contentReaderModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onclick="if(event.target===this) closeContentReader()">
     <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[88vh] overflow-y-auto shadow-2xl border border-[#D8C39A]">
       <div class="sticky top-0 bg-white/95 backdrop-blur-md px-6 py-4 border-b border-[#E5D5B5] flex items-center justify-between gap-3">
-        <span id="cr-category" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-[#FAF7F2] text-[#8A6525] border border-[#D8C39A]"></span>
-        <button type="button" onclick="closeContentReader()" class="px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-xs font-bold text-neutral-700">ปิดหน้าต่าง ✕</button>
+        <span id="cr-category" class="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-lg bg-[#FAF7F2] text-[#8A6525] border border-[#D8C39A]"></span>
+        <button type="button" onclick="closeContentReader()" class="px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-xs font-bold text-neutral-700 cursor-pointer">ปิดหน้าต่าง ✕</button>
       </div>
       <div class="p-6 space-y-4">
-        <img id="cr-cover" src="" alt="" class="hidden w-full max-h-72 object-cover rounded-2xl border border-[#E5D5B5]">
+        <img id="cr-cover" src="" alt="" class="hidden w-full aspect-[16/9] object-cover rounded-2xl border border-[#E5D5B5]">
         <h3 id="cr-title" class="text-xl sm:text-2xl font-bold text-[#2C2218] leading-snug"></h3>
         <div id="cr-meta" class="text-xs text-[#8A755E]"></div>
         <div id="cr-body" class="text-sm text-[#3D3124] leading-relaxed whitespace-pre-line"></div>
@@ -752,13 +755,22 @@
     }
 
     const _CONTENT_CAT_LABEL = {
-      just_sold: '🎉 ปิดการขาย (Just Sold)',
-      howto: '📘 คู่มือ & How-To',
-      article: '📰 บทความอสังหาฯ',
-      news: '🔥 ข่าวสาร / โปรโมชัน',
-      top_agent: '🏆 Top Agent',
-      announcement: '📣 ประกาศภายใน',
-      meeting: '📅 นัดหมายสำคัญ'
+      just_sold: 'ปิดการขาย (Just Sold)',
+      howto: 'How-to / เคล็ดลับ',
+      article: 'บทความอสังหาฯ',
+      news: 'ข่าวสาร / โปรโมชัน',
+      top_agent: 'Top Agent',
+      announcement: 'ประกาศบริษัท',
+      meeting: 'นัดหมายสำคัญ'
+    };
+    const _CONTENT_CAT_ICON = {
+      just_sold: 'check-circle-2',
+      howto: 'book-open',
+      article: 'file-text',
+      news: 'sparkles',
+      top_agent: 'award',
+      announcement: 'megaphone',
+      meeting: 'calendar'
     };
     const _contentStore = {};
 
@@ -771,7 +783,10 @@
       if (!item) return;
       const modal = document.getElementById('contentReaderModal');
       if (!modal) return;
-      document.getElementById('cr-category').textContent = _CONTENT_CAT_LABEL[item.category] || item.category || 'บทความ';
+      const catEl = document.getElementById('cr-category');
+      const catIcon = _CONTENT_CAT_ICON[item.category] || 'file-text';
+      const catText = _CONTENT_CAT_LABEL[item.category] || item.category || 'บทความ';
+      catEl.innerHTML = `<i data-lucide="${_escHtml(catIcon)}" class="w-3.5 h-3.5 text-[#8A6525]"></i><span>${_escHtml(catText)}</span>`;
       const img = document.getElementById('cr-cover');
       if (item.cover_image && /^https?:\/\//i.test(item.cover_image)) {
         img.src = item.cover_image;
@@ -786,31 +801,37 @@
       document.getElementById('cr-meta').textContent = `${dt ? dt + ' • ' : ''}โดย ${item.author_name || 'ทีมงานศิวาทรัพย์'}`;
       document.getElementById('cr-body').textContent = item.body || item.summary || '';
       modal.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+      if (window.lucide) lucide.createIcons();
     }
 
     function closeContentReader() {
       const modal = document.getElementById('contentReaderModal');
       if (modal) modal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
     }
 
     function _renderContentCards(containerId, items) {
       const el = document.getElementById(containerId);
       if (!el) return;
+      const isAgentBoard = containerId === 'agentContentGrid';
       el.innerHTML = items.map(item => {
         _contentStore[String(item.id)] = item;
         const cat = _escHtml(_CONTENT_CAT_LABEL[item.category] || item.category || 'อัปเดต');
+        const catIcon = _escHtml(_CONTENT_CAT_ICON[item.category] || 'file-text');
         const safeImg = (item.cover_image && /^https?:\/\//i.test(item.cover_image)) ? _escHtml(item.cover_image) : '';
         const dt = _escHtml((item.published_at || '').slice(0, 10));
+        const pinBadge = item.pinned ? ' <span class="inline-flex items-center gap-0.5 text-[#8A6525] font-semibold"><i data-lucide="pin" class="w-3 h-3 inline"></i> ปักหมุด</span>' : '';
         return `
-          <article onclick="openContentReader('${_escHtml(item.id)}')" class="cursor-pointer bronze-card rounded-3xl overflow-hidden transition-all flex flex-col group bg-white">
+          <article role="button" tabindex="0" onclick="openContentReader('${_escHtml(item.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openContentReader('${_escHtml(item.id)}');}" class="cursor-pointer bronze-card ${isAgentBoard ? 'border-t-4 border-t-[#967332]' : ''} rounded-3xl overflow-hidden transition-all flex flex-col group bg-white">
             ${safeImg ? `<div class="aspect-[16/9] w-full bg-[#EFE7D8] relative overflow-hidden">
               <img src="${safeImg}" alt="${_escHtml(item.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-md text-[#7A5B22] border border-[#D8C39A] text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-2xs">${cat}</span>
-            </div>` : `<div class="px-6 pt-5"><span class="inline-block bg-[#FAF7F2] text-[#7A5B22] border border-[#D8C39A] text-[11px] font-semibold px-2.5 py-1 rounded-lg">${cat}</span></div>`}
+              <span class="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-md text-[#7A5B22] border border-[#D8C39A] text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-2xs"><i data-lucide="${catIcon}" class="w-3 h-3 text-[#8A6525]"></i><span>${cat}</span></span>
+            </div>` : `<div class="px-6 pt-5"><span class="inline-flex items-center gap-1.5 bg-[#FAF7F2] text-[#7A5B22] border border-[#D8C39A] text-[11px] font-semibold px-2.5 py-1 rounded-lg"><i data-lucide="${catIcon}" class="w-3 h-3 text-[#8A6525]"></i><span>${cat}</span></span></div>`}
             <div class="p-6 flex-1 flex flex-col justify-between">
               <div>
-                <span class="text-[11px] text-[#8A755E] block mb-1">${dt}${item.pinned ? ' • 📌 ปักหมุด' : ''}</span>
-                <h3 class="text-base font-bold text-[#2C2218] group-hover:text-[#967332] transition-colors leading-snug">${_escHtml(item.title)}</h3>
+                <span class="text-[11px] text-[#8A755E] flex items-center gap-1.5 mb-1">${dt}${pinBadge}</span>
+                <h3 class="text-base font-bold text-[#2C2218] group-hover:text-[#967332] transition-colors leading-snug line-clamp-2">${_escHtml(item.title)}</h3>
                 <p class="text-xs text-[#6E5A44] mt-2.5 line-clamp-3 leading-relaxed">${_escHtml(item.summary || item.body || '')}</p>
               </div>
               <div class="mt-5 pt-4 border-t border-[#E5D5B5] flex items-center justify-between">
@@ -821,6 +842,7 @@
           </article>
         `;
       }).join('');
+      if (window.lucide) lucide.createIcons();
     }
 
     async function loadPublicContentHub() {
@@ -837,6 +859,8 @@
           if (sec) sec.classList.remove('hidden');
           if (phBanner) phBanner.classList.add('hidden');
           if (phGrid) phGrid.classList.add('hidden');
+          const hnBadge = document.getElementById('articles-hotnews-badge');
+          if (hnBadge) hnBadge.classList.add('hidden');
           if (pubGrid) {
             pubGrid.classList.remove('hidden');
             _renderContentCards('publicContentGrid', items);
