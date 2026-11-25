@@ -1989,6 +1989,40 @@ def _fetch_r2_json(key, timeout=12):
             return json.loads(r.read().decode("utf-8"))
     return None
 
+def _ensure_approved_member_codes(store: dict) -> bool:
+    """Backfill missing SA/SW codes on approved members (e.g. SA001 Bua, SA002 Lily, SA004+ staff)."""
+    if not isinstance(store, dict):
+        return False
+    changed = False
+    for m in store.get("approved", []):
+        if str(m.get("code") or "").strip():
+            continue
+        mid = str(m.get("id") or "").strip()
+        phone = re.sub(r'\D', '', str(m.get("phone") or ""))
+        name_low = str(m.get("name") or "").lower()
+        if mid == "app_office_004":
+            m["code"] = "SA000"
+            changed = True
+        elif mid == "app_office_001":
+            m["code"] = "SW001"
+            changed = True
+        elif mid == "SW-APP-252" or phone == "0853365703" or "ภมรมาศ" in name_low:
+            m["code"] = "SA001"
+            changed = True
+        elif mid == "SW-APP-866" or phone == "0925836565" or "ลิลลี่" in str(m.get("nickname") or ""):
+            m["code"] = "SA002"
+            changed = True
+        else:
+            perms = m.get("permissions") or {}
+            is_staff = (
+                m.get("affiliation") == "office"
+                or any(bool(perms.get(k)) for k in ("standardAdmin", "keyboxAdmin", "executiveAuthority", "systemAdmin", "catalogCurator"))
+            )
+            m["code"] = _next_admin_sa_code(store) if is_staff else _next_agent_sw_code(store)
+            changed = True
+    return changed
+
+
 def load_lobby_data():
     global _R2_LOBBY_RESTORED
     if not _R2_LOBBY_RESTORED and os.environ.get("PORT"):
@@ -1996,9 +2030,15 @@ def load_lobby_data():
             try:
                 cloud_store = _fetch_r2_json(r2_key, timeout=12)
                 if isinstance(cloud_store, dict) and ("approved" in cloud_store or "pending" in cloud_store):
+                    backfilled = _ensure_approved_member_codes(cloud_store)
                     with open(LOBBY_PATH, "w", encoding="utf-8") as f:
                         json.dump(cloud_store, f, ensure_ascii=False, indent=2)
                     _R2_LOBBY_RESTORED = True
+                    if backfilled:
+                        try:
+                            save_lobby_data(cloud_store, create_snapshot=False)
+                        except Exception:
+                            pass
                     print(f"[Vault] Restored lobby_applicants from R2 ({r2_key}: {len(cloud_store.get('approved', []))} approved, {len(cloud_store.get('pending', []))} pending)")
                     return cloud_store
             except Exception as e:
@@ -2006,7 +2046,9 @@ def load_lobby_data():
     if os.path.exists(LOBBY_PATH):
         try:
             with open(LOBBY_PATH, "r", encoding="utf-8") as f:
-                return json.load(f)
+                local_store = json.load(f)
+            _ensure_approved_member_codes(local_store)
+            return local_store
         except Exception as e:
             print(f"[Warn] Failed to read lobby_applicants.json: {e}")
     return {"updated_at": bkk_now().strftime("%Y-%m-%d %H:%M:%S"), "pending": [], "approved": []}
