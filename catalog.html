@@ -3216,6 +3216,17 @@
       sel.innerHTML = `<option value="all">ทุกจังหวัด ตจว. (${totalUp.toLocaleString()} หลัง)</option>` +
         sorted.map(([pv, cnt]) => `<option value="${pv}">${pv} (${cnt.toLocaleString()} หลัง)</option>`).join('');
       if (prev !== 'all' && counts[prev]) sel.value = prev;
+      else if (window._pendingUrlProvince) {
+        const pProv = window._pendingUrlProvince;
+        if (!counts[pProv]) {
+          const opt = document.createElement('option');
+          opt.value = pProv;
+          opt.textContent = `${pProv} (0 หลัง)`;
+          sel.appendChild(opt);
+        }
+        sel.value = pProv;
+        window._pendingUrlProvince = null;
+      }
     }
 
     function onLocationFilterChange() {
@@ -3408,9 +3419,14 @@
           if (!pBank.includes(targetBank)) return false;
         }
 
-        // Category Filter
+        // Category Filter (supports grouped 'บ้าน' = บ้านเดี่ยว/บ้านแฝด/ทาวน์โฮม/ทาวน์เฮ้าส์)
         if (cat !== 'all') {
-          if (!(p.category || '').includes(cat)) return false;
+          if (cat === 'บ้าน') {
+            const pCat = (p.category || '');
+            if (!['บ้านเดี่ยว', 'บ้านแฝด', 'ทาวน์โฮม', 'ทาวน์เฮ้าส์'].some(c => pCat.includes(c))) return false;
+          } else if (!(p.category || '').includes(cat)) {
+            return false;
+          }
         }
 
         // Location Filter (BKK+Metro zones + Contextual Upcountry Province)
@@ -3439,7 +3455,7 @@
         // Search Query (รองรับทั้งรหัสทรัพย์, ชื่อโครงการ, โซนทำเลไทย/อังกฤษ และประโยคค้นหาธรรมชาติ)
         if (query) {
           const searchableBank = currentMode === 'client' ? '' : (p.bank_source || '');
-          const text = (getDisplayTitle(p) + ' ' + getDisplayDesc(p) + ' ' + (p.location || '') + ' ' + (p.search_keywords || '') + ' ' + (p.price || '') + ' ' + (p.category || '') + ' ' + searchableBank + ' ' + (p.id || '') + ' ' + (p.code || '')).toLowerCase();
+          const text = (getDisplayTitle(p) + ' ' + getDisplayDesc(p) + ' ' + (p.location || '') + ' ' + (p.subdistrict_th || '') + ' ' + (p.district_th || '') + ' ' + (p.province_th || '') + ' ' + (p.search_keywords || '') + ' ' + (p.price || '') + ' ' + (p.category || '') + ' ' + searchableBank + ' ' + (p.id || '') + ' ' + (p.code || '')).toLowerCase();
           let cleanQ = query.replace(/^#/, '').replace(/(?:หาบ้าน|ขอบ้าน|อยากได้บ้าน|ดูบ้าน|บ้านโซน|บ้านแถว|บ้านย่าน|หาคอนโด|คอนโดโซน|โซน|แถว|ย่าน|ทางแถบ|รหัสทรัพย์|รหัส)/g, ' ').trim();
           if (!cleanQ) cleanQ = query.replace(/^#/, '').trim();
           // Also split 'บ้านสายไหม' -> 'บ้าน สายไหม' if starts with บ้าน followed by non-type
@@ -8077,6 +8093,57 @@
       if (typeof window.sendSiwasupClientBeacon === 'function') {
         window.sendSiwasupClientBeacon('catalog_open');
       }
+
+      // Apply Deep-Link Search/Filter URL Parameters (?q=, ?province=, ?cat=, ?budget=)
+      try {
+        const urlQ = params.get('q');
+        const urlProv = params.get('province');
+        const urlCat = params.get('cat') || params.get('type');
+        const urlBudget = params.get('budget');
+        if (urlQ) {
+          const sEl = document.getElementById('search-input');
+          if (sEl) sEl.value = urlQ;
+        }
+        if (urlCat) {
+          const cEl = document.getElementById('filter-category');
+          if (cEl) {
+            if (urlCat === 'บ้าน' && !Array.from(cEl.options).some(o => o.value === 'บ้าน')) {
+              const opt = document.createElement('option');
+              opt.value = 'บ้าน';
+              opt.textContent = 'บ้าน (บ้านเดี่ยว/ทาวน์โฮม)';
+              cEl.appendChild(opt);
+            }
+            cEl.value = urlCat;
+          }
+        }
+        if (urlBudget) {
+          const bEl = document.getElementById('filter-budget');
+          if (bEl) bEl.value = urlBudget;
+        }
+        if (urlProv) {
+          window._pendingUrlProvince = urlProv;
+          const locEl = document.getElementById('filter-location');
+          if (locEl) {
+            if (typeof BKK_METRO_PROVINCES !== 'undefined' && BKK_METRO_PROVINCES.has(urlProv)) {
+              locEl.value = 'bkk_metro';
+              if (!urlQ) {
+                const sEl = document.getElementById('search-input');
+                if (sEl) sEl.value = urlProv;
+              }
+            } else {
+              locEl.value = 'upcountry';
+              if (typeof onLocationFilterChange === 'function') onLocationFilterChange();
+              const upSel = document.getElementById('filter-upcountry-province');
+              if (upSel && Array.from(upSel.options).some(o => o.value === urlProv)) {
+                upSel.value = urlProv;
+              }
+            }
+          }
+        }
+        if ((urlQ || urlCat || urlBudget || urlProv) && typeof updateMiniBarSummary === 'function') {
+          updateMiniBarSummary();
+        }
+      } catch (e) { console.warn('URL filter init warn:', e); }
     }
 
     function initPlatformEnvironment() {

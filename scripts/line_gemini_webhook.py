@@ -106,12 +106,235 @@ def _load_geo_lookup():
 
 _load_geo_lookup()
 
+# ---------------------------------------------------------------------------
+# Nationwide Thai Geo Centroids (77 Provinces, 924 Districts, 7,436 Subdistricts)
+# Used for Greedy Longest-Match parsing ("คานหามอยุธยา") & Haversine Nearest Fallback
+# ---------------------------------------------------------------------------
+_THAI_GEO = {"provinces": {}, "districts": [], "subdistricts": []}
+_THAI_PROV_NAMES: list[str] = []
+_THAI_DIST_NAMES: list[str] = []
+_THAI_SUB_NAMES: list[str] = []
+
+_THAI_PROV_ALIASES = {
+    "กทม": "กรุงเทพมหานคร", "กรุงเทพฯ": "กรุงเทพมหานคร", "กรุงเทพ": "กรุงเทพมหานคร",
+    "อยุธยา": "พระนครศรีอยุธยา", "โคราช": "นครราชสีมา", "นครศรี": "นครศรีธรรมราช",
+    "สุราษฎร์": "สุราษฎร์ธานี", "อุบล": "อุบลราชธานี", "อุดร": "อุดรธานี",
+    "พิษณุโลก": "พิษณุโลก", "แปดริ้ว": "ฉะเชิงเทรา", "เมืองชล": "ชลบุรี",
+    "ปากน้ำ": "สมุทรปราการ", "นนท์": "นนทบุรี", "ปทุม": "ปทุมธานี",
+    "ประจวบ": "ประจวบคีรีขันธ์", "กาญจน์": "กาญจนบุรี", "เพชรบุรี": "เพชรบุรี",
+    "ราชบุรี": "ราชบุรี", "สุพรรณ": "สุพรรณบุรี", "สมุทรสาคร": "สมุทรสาคร",
+    "มหาชัย": "สมุทรสาคร", "พัทยา": "ชลบุรี", "หัวหิน": "ประจวบคีรีขันธ์",
+    "หาดใหญ่": "สงขลา", "รังสิต": "ปทุมธานี", "ศาลายา": "นครปฐม",
+}
+_THAI_SPECIAL_ZONE_COORDS = {
+    "โรจนะ": ("พระนครศรีอยุธยา", "อุทัย", 14.3266, 100.6596),
+    "นวนคร": ("ปทุมธานี", "คลองหลวง", 14.1135, 100.6145),
+    "ไฮเทค": ("พระนครศรีอยุธยา", "บางปะอิน", 14.1983, 100.6122),
+    "บางกะดี": ("ปทุมธานี", "เมืองปทุมธานี", 13.9806, 100.5539),
+    "อมตะนคร": ("ชลบุรี", "เมืองชลบุรี", 13.4281, 101.0267),
+    "อมตะซิตี้": ("ระยอง", "ปลวกแดง", 12.9972, 101.1489),
+    "อีสเทิร์นซีบอร์ด": ("ระยอง", "ปลวกแดง", 13.0278, 101.1981),
+    "แหลมฉบัง": ("ชลบุรี", "ศรีราชา", 13.0819, 100.9169),
+    "มาบตาพุด": ("ระยอง", "เมืองระยอง", 12.7161, 101.1486),
+    "นิคมบางปู": ("สมุทรปราการ", "เมืองสมุทรปราการ", 13.5411, 100.6428),
+    "บางปู": ("สมุทรปราการ", "เมืองสมุทรปราการ", 13.5411, 100.6428),
+    "เมกาบางนา": ("สมุทรปราการ", "บางพลี", 13.6464, 100.6803),
+    "ฟิวเจอร์": ("ปทุมธานี", "ธัญบุรี", 13.9888, 100.6184),
+    "เซียร์รังสิต": ("ปทุมธานี", "ลำลูกกา", 13.9619, 100.6222),
+    "ธรรมศาสตร์": ("ปทุมธานี", "คลองหลวง", 14.0734, 100.6015),
+    "รังสิต": ("ปทุมธานี", "ธัญบุรี", 13.9888, 100.6184),
+    "ศาลายา": ("นครปฐม", "พุทธมณฑล", 13.8022, 100.3219),
+    "เวสต์เกต": ("นนทบุรี", "บางใหญ่", 13.8772, 100.4114),
+    "เมืองทอง": ("นนทบุรี", "ปากเกร็ด", 13.9122, 100.5486),
+    "แจ้งวัฒนะ": ("นนทบุรี", "ปากเกร็ด", 13.9039, 100.5300),
+    "เลียบด่วน": ("กรุงเทพมหานคร", "ลาดพร้าว", 13.8167, 100.6194),
+    "เกษตรนวมินทร์": ("กรุงเทพมหานคร", "ลาดพร้าว", 13.8344, 100.6144),
+    "พระราม 2": ("กรุงเทพมหานคร", "บางขุนเทียน", 13.6625, 100.4342),
+    "พระราม 9": ("กรุงเทพมหานคร", "ห้วยขวาง", 13.7536, 100.5819),
+    "ทองหล่อ": ("กรุงเทพมหานคร", "วัฒนา", 13.7308, 100.5825),
+    "เอกมัย": ("กรุงเทพมหานคร", "วัฒนา", 13.7269, 100.5858),
+    "อารีย์": ("กรุงเทพมหานคร", "พญาไท", 13.7797, 100.5447),
+    "อ่อนนุช": ("กรุงเทพมหานคร", "สวนหลวง", 13.7086, 100.6056),
+    "แบริ่ง": ("สมุทรปราการ", "เมืองสมุทรปราการ", 13.6611, 100.6019),
+    "ศิริราช": ("กรุงเทพมหานคร", "บางกอกน้อย", 13.7592, 100.4856),
+    "ปิ่นเกล้า": ("กรุงเทพมหานคร", "บางพลัด", 13.7764, 100.4783),
+    "พัทยา": ("ชลบุรี", "บางละมุง", 12.9236, 100.8825),
+    "หัวหิน": ("ประจวบคีรีขันธ์", "หัวหิน", 12.5684, 99.9577),
+    "หาดใหญ่": ("สงขลา", "หาดใหญ่", 7.0086, 100.4747),
+    "มหาชัย": ("สมุทรสาคร", "เมืองสมุทรสาคร", 13.5475, 100.2747),
+}
+
+def _load_thai_geo_centroids():
+    global _THAI_GEO, _THAI_PROV_NAMES, _THAI_DIST_NAMES, _THAI_SUB_NAMES
+    geo_path = os.path.join(BASE_DIR, "data", "thai_geo_centroids.json")
+    if not os.path.exists(geo_path):
+        print("[GEO-CENTROIDS] File not found:", geo_path)
+        return
+    try:
+        with open(geo_path, "r", encoding="utf-8") as f:
+            _THAI_GEO = json.load(f)
+        _THAI_PROV_NAMES = sorted(
+            set(list(_THAI_GEO.get("provinces", {}).keys()) + list(_THAI_PROV_ALIASES.keys())),
+            key=len, reverse=True
+        )
+        _THAI_DIST_NAMES = sorted({d["d"] for d in _THAI_GEO.get("districts", []) if len(d.get("d", "")) >= 2}, key=len, reverse=True)
+        _THAI_SUB_NAMES = sorted({s["t"] for s in _THAI_GEO.get("subdistricts", []) if len(s.get("t", "")) >= 3}, key=len, reverse=True)
+        print(f"[GEO-CENTROIDS] Loaded {len(_THAI_GEO.get('provinces', {}))} provs, {len(_THAI_GEO.get('districts', []))} dists, {len(_THAI_GEO.get('subdistricts', []))} subs")
+    except Exception as e:
+        print(f"[GEO-CENTROIDS] Load error: {e}")
+
+_load_thai_geo_centroids()
+
+
+def _haversine_km(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
+    import math
+    R = 6371.0
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dp = math.radians(lat2 - lat1)
+    dl = math.radians(lng2 - lng1)
+    a = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
+    return 2 * R * math.asin(math.sqrt(a))
+
+
+_SHORT_AMBIGUOUS_PROVS = {"เลย", "ตาก", "ตราด", "น่าน", "ตรัง", "แพร่", "นนท์"}
+
+def _extract_thai_geo(text: str) -> dict | None:
+    """
+    Extract Thai province / district / subdistrict (even concatenated like 'คานหามอยุธยา')
+    using Greedy Longest-Match against 77 provinces, 924 districts, 7,436 subdistricts.
+    """
+    if not text or not _THAI_GEO.get("subdistricts"):
+        return None
+    raw_text = str(text)
+    has_geo_prefix = bool(re.search(r'(?:จังหวัด|จ\.|อำเภอ|อ\.|เขต|ตำบล|ต\.|แขวง|โซน|แถว|ย่าน)', raw_text))
+    clean = re.sub(r'(?:ตำบล|ต\.|แขวง|อำเภอ|อ\.|เขต|จังหวัด|จ\.)', ' ', raw_text)
+    clean = re.sub(r'\s+', ' ', clean).strip()
+
+    # Check special famous zones first
+    for zk, (zp, zd, zlat, zlng) in _THAI_SPECIAL_ZONE_COORDS.items():
+        if zk in clean:
+            return {"province": zp, "district": zd, "subdistrict": "", "lat": zlat, "lng": zlng, "ambiguous": []}
+
+    matched_prov = ""
+    rem = clean
+    for pn in _THAI_PROV_NAMES:
+        if pn in rem:
+            if pn in _SHORT_AMBIGUOUS_PROVS:
+                # Guard against common Thai words like "ขอลิงก์บ้านเลย" or "จัดมาเลย"
+                if pn == "เลย" and not has_geo_prefix and not re.search(r'(?:^|\s)เลย(?:\s|$)', clean):
+                    continue
+                if pn != "เลย" and not has_geo_prefix and not re.search(rf'(?:^|\s){re.escape(pn)}(?:\s|$)', clean):
+                    continue
+            matched_prov = _THAI_PROV_ALIASES.get(pn, pn)
+            rem = rem.replace(pn, " ", 1).strip()
+            break
+
+    matched_dist = ""
+    dist_pool = [d for d in _THAI_GEO.get("districts", []) if not matched_prov or d["p"] == matched_prov]
+    dist_names = sorted({d["d"] for d in dist_pool if len(d.get("d", "")) >= 2}, key=len, reverse=True)
+    for dn in dist_names:
+        if dn in rem:
+            matched_dist = dn
+            rem = rem.replace(dn, " ", 1).strip()
+            if not matched_prov:
+                cand_p = [d["p"] for d in dist_pool if d["d"] == dn]
+                if len(set(cand_p)) == 1:
+                    matched_prov = cand_p[0]
+            break
+
+    matched_sub = ""
+    ambiguous = []
+    sub_pool = [
+        s for s in _THAI_GEO.get("subdistricts", [])
+        if (not matched_prov or s["p"] == matched_prov) and (not matched_dist or s["d"] == matched_dist)
+    ]
+    sub_names = sorted({s["t"] for s in sub_pool if len(s.get("t", "")) >= 3}, key=len, reverse=True)
+    for sn in sub_names:
+        if sn in rem:
+            hits = [s for s in sub_pool if s["t"] == sn]
+            matched_sub = sn
+            if len(hits) == 1:
+                matched_prov = hits[0]["p"]
+                matched_dist = hits[0]["d"]
+                return {"province": matched_prov, "district": matched_dist, "subdistrict": matched_sub, "lat": hits[0]["lat"], "lng": hits[0]["lng"], "ambiguous": []}
+            else:
+                ambiguous = hits
+                if not matched_prov:
+                    return {"province": "", "district": "", "subdistrict": matched_sub, "lat": hits[0]["lat"], "lng": hits[0]["lng"], "ambiguous": hits}
+                return {"province": matched_prov, "district": hits[0]["d"], "subdistrict": matched_sub, "lat": hits[0]["lat"], "lng": hits[0]["lng"], "ambiguous": hits}
+
+    if matched_dist and matched_prov:
+        d_hit = next((d for d in _THAI_GEO.get("districts", []) if d["p"] == matched_prov and d["d"] == matched_dist), None)
+        if d_hit:
+            return {"province": matched_prov, "district": matched_dist, "subdistrict": "", "lat": d_hit["lat"], "lng": d_hit["lng"], "ambiguous": []}
+    if matched_prov:
+        p_hit = _THAI_GEO.get("provinces", {}).get(matched_prov)
+        if p_hit:
+            return {"province": matched_prov, "district": "", "subdistrict": "", "lat": p_hit["lat"], "lng": p_hit["lng"], "ambiguous": []}
+    return None
+
+
+def _parse_prop_lat_lng(sp: dict):
+    for lk, gk in (("latitude", "longitude"), ("lat", "lng")):
+        try:
+            la = float(sp.get(lk) or 0)
+            ln = float(sp.get(gk) or 0)
+            if la != 0.0 and ln != 0.0:
+                return (la, ln)
+        except (TypeError, ValueError):
+            continue
+    return None
+
+
+def _find_nearest_siwasup_props(target_lat: float, target_lng: float, allowed_cats: list = None, max_p: int = None, limit: int = 5) -> list[dict]:
+    """Cross-Province Haversine Radius Search: Tier 1 (0-5 km), Tier 2 (5-15 km), or nearest >15 km."""
+    scored = []
+    for sp in SIWASUP_PROPS:
+        if sp.get("status") in ("sold_archive", "transferred") or sp.get("is_image_soldout"):
+            continue
+        sp_cat = sp.get("category") or ""
+        if allowed_cats and not any(ac in sp_cat for ac in allowed_cats):
+            continue
+        pr_str = re.sub(r'[^0-9]', '', str(sp.get("price") or "0"))
+        pr = int(pr_str) if pr_str.isdigit() else 0
+        if max_p and pr > max_p:
+            continue
+        coords = _parse_prop_lat_lng(sp)
+        if not coords:
+            continue
+        dist_km = _haversine_km(target_lat, target_lng, coords[0], coords[1])
+        scored.append((dist_km, sp, pr))
+    scored.sort(key=lambda x: x[0])
+    out = []
+    for dist_km, sp, pr in scored[:limit]:
+        loc_parts = [x.strip() for x in (sp.get("location") or "").split("•") if x.strip()]
+        dist_name = sp.get("district_th") or (loc_parts[0] if loc_parts else "")
+        prov_name = sp.get("province_th") or (loc_parts[-1] if loc_parts else "")
+        tier = 1 if dist_km <= 5.0 else (2 if dist_km <= 15.0 else 3)
+        out.append({
+            "code": str(sp.get("id")),
+            "bank": sp.get("bank_source") or "Siwasup",
+            "type": sp.get("category") or "บ้านเดี่ยว",
+            "district": dist_name,
+            "subdistrict": sp.get("subdistrict_th") or "",
+            "province": prov_name,
+            "price": f"{pr:,} บาท" if pr else (sp.get("price") or "-"),
+            "land_sqw": (sp.get("size") or "-").replace(" ตร.ว.", ""),
+            "living_sqm": (sp.get("usable_area") or "-").replace(" ตร.ม.", ""),
+            "distance_km": round(dist_km, 1),
+            "tier": tier,
+            "status": "พร้อมเปิดให้เข้าชม"
+        })
+    return out
+
 # Session & Multi-Turn Memory Tracking
 USER_LAST_SEEN = {}
 USER_PROFILE_CACHE = {}
 USER_CHAT_HISTORY = {}  # user_id -> list of {"user": ..., "bot": ...}
 USER_SEARCH_CONTEXT = {}  # user_id -> {"types": [], "locs": [], "max_p": None, "unlimited": False, "updated_at": 0}
 SESSION_TIMEOUT = 15 * 60
+_MSG_DEBOUNCE_LOCK = threading.Lock()
+_MSG_DEBOUNCE_BUF = {}  # uid -> {"texts": [...], "token": ..., "continuous": bool, "timer": Timer}
 
 CHAT_LOG_PATH = os.path.join(DATA_DIR, "line_chat_logs.json")
 LOG_LOCK = threading.Lock()
@@ -751,6 +974,15 @@ def search_properties(query, user_id=None):
                     elif c_hit not in new_locs:
                         new_locs.append(c_hit)
 
+    # Nationwide Thai Geo extraction (handles 'คานหามอยุธยา', 'โคราช', etc. before TOO_VAGUE check)
+    if not new_locs:
+        _q_geo = _extract_thai_geo(query)
+        if _q_geo:
+            for _gk in ("subdistrict", "district", "province"):
+                _gv = _q_geo.get(_gk)
+                if _gv and _gv not in new_locs:
+                    new_locs.append(_gv)
+
     # Fallback fuzzy check on standalone Thai/Eng tokens if still no location matched
     if not new_locs:
         tokens_chk = [t for t in re.findall(r'[ก-๙a-zA-Z]{4,24}', query) if t not in ("อยากได้", "ต้องการ", "แนะนำ", "มัดรวม", "ส่งมา", "บ้านเดี่ยว", "ทาวน์โฮม", "ทาวน์เฮ้าส์", "คอนโด", "ที่ดิน", "ราคา", "ไม่เกิน")]
@@ -865,7 +1097,15 @@ def search_properties(query, user_id=None):
         if not eff_max_p and not eff_unlimited:
             if pr < 800000 or pr > 15000000:
                 continue
-        haystack = ((sp.get("title") or "") + " " + (sp.get("description") or "") + " " + (sp.get("location") or "") + " " + (sp.get("search_keywords") or "")).lower()
+        haystack = " ".join([
+            str(sp.get("title") or ""),
+            str(sp.get("description") or ""),
+            str(sp.get("location") or ""),
+            str(sp.get("subdistrict_th") or ""),
+            str(sp.get("district_th") or ""),
+            str(sp.get("province_th") or ""),
+            str(sp.get("search_keywords") or "")
+        ]).lower()
         if eff_locs:
             if not any(loc.lower() in haystack for loc in eff_locs):
                 continue
@@ -873,13 +1113,26 @@ def search_properties(query, user_id=None):
             "c": str(sp.get("id")),
             "b": sp.get("bank_source") or "Siwasup",
             "tn": sp.get("category") or "บ้านเดี่ยว",
-            "d": (sp.get("location") or sp.get("title") or "กรุงเทพฯ").split("•")[0].strip(),
-            "p": (sp.get("location") or "กรุงเทพมหานคร").split("•")[-1].strip(),
+            "d": sp.get("district_th") or (sp.get("location") or sp.get("title") or "กรุงเทพฯ").split("•")[0].strip(),
+            "p": sp.get("province_th") or (sp.get("location") or "กรุงเทพมหานคร").split("•")[-1].strip(),
             "pr": pr,
             "sqw": (sp.get("size") or "-").replace(" ตร.ว.", ""),
             "sqm": (sp.get("usable_area") or "-").replace(" ตร.ม.", ""),
             "_web": True
         })
+
+    # Nationwide Geo + Haversine Nearest Fallback when standard keyword search returns empty
+    if not web_results and not results:
+        geo_hit = _extract_thai_geo(query)
+        if geo_hit and geo_hit.get("lat") and geo_hit.get("lng"):
+            nearest = _find_nearest_siwasup_props(
+                geo_hit["lat"], geo_hit["lng"],
+                allowed_cats=allowed_cats or None,
+                max_p=eff_max_p,
+                limit=target_count
+            )
+            if nearest:
+                return nearest, "NEAREST_GEO_FALLBACK"
 
     # Sorting (Web catalog properties with photos always come first!)
     if eff_unlimited:
@@ -2705,6 +2958,15 @@ def resolve_catalog_link_request(text_raw: str, matched_member: dict, is_admin: 
     has_agent_code = bool(re.search(r'(?:ตัวแทน|เอเจนต์?|แอดมิน|รหัส)\s*(?:s[wa])?\d{3}\b', tl, re.IGNORECASE))
     if not (has_direct_catalog_phrase or starts_with_catalog_req or has_agent_code):
         return None
+
+    # Do NOT hijack queries that specify a location, budget, or specific search filter
+    # e.g. "ขอลิงก์บ้าน คานหามอยุธยา" should run geo search + filtered link instead of generic link!
+    if not has_agent_code and not any(w in tl for w in ("ของฉัน", "ส่วนตัว", "แปะกลุ่ม", "กลุ่มสาธารณะ", "โพสต์กลุ่ม", "ลิงก์สาธารณะ", "ลิงก์กลุ่ม", "ทุกโซน")):
+        if _extract_thai_geo(tl) or parse_price(tl):
+            return None
+        stripped_generic = re.sub(r'^(?:สร้าง|ขอ|ส่ง)?(?:ลิงก์|ลิงค์|ลิ้งก์|ลิ้งค์)\s*(?:บ้าน|ทรัพย์|แคตตาล็อก|แค็ตตาล็อก|catalog|ขายบ้าน)?\s*', '', tl).strip()
+        if len(stripped_generic) >= 3:
+            return None
 
     ag_ref = resolve_agent_ref_for_member(matched_member)
     if is_admin:
@@ -5637,11 +5899,16 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                 _onboarding_public_kw = _onboarding_strict_kw + ['เอเจนต์', 'เอเจน', 'ตัวแทน', 'ร่วมงาน', 'ขอเข้ากลุ่ม', 'เข้ากลุ่ม', 'นายหน้า', 'co-broker', 'cobroker', 'ขอลิงก์', 'ขอลิงค์', 'อยากเป็นเอเจนต์']
                                 is_onboarding_link_req = any(k in text_clean for k in (_onboarding_strict_kw if matched_member else _onboarding_public_kw))
                                 is_prop_or_cmd_link = False
+                                _link_geo_hit = None
                                 if m_link:
                                     _raw_link_arg = m_link.group(1).strip()
                                     _raw_link_lower = _raw_link_arg.lower()
                                     _first_tok = _raw_link_arg.split()[0].lstrip('#').strip() if _raw_link_arg.split() else ''
+                                    _is_explicit_client_name = _raw_link_arg.startswith("คุณ")
+                                    _link_geo_hit = None if _is_explicit_client_name else _extract_thai_geo(_raw_link_arg)
                                     if any(_raw_link_lower.startswith(p) for p in ('โฉนด', 'บ้าน', 'ทาวน์โฮม', 'ทาวน์เฮ้าส์', 'คอนโด', 'ที่ดิน', 'อาคาร', 'สมัคร', 'ลงทะเบียน', 'นามบัตร')):
+                                        is_prop_or_cmd_link = True
+                                    elif _link_geo_hit:
                                         is_prop_or_cmd_link = True
                                     elif ('/' not in _raw_link_arg and '|' not in _raw_link_arg) and _first_tok and find_property_by_id_or_code(_first_tok):
                                         is_prop_or_cmd_link = True
@@ -5678,6 +5945,84 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                         f"`ลิงก์ ชื่อลูกค้า`"
                                     )
                                     matched_codes, search_mode, matched_props, flex_carousel = [], 'AGENT_CATALOG_LINK', [], None
+                                elif matched_member and m_link and is_prop_or_cmd_link and _link_geo_hit:
+                                    ag_ref = resolve_agent_ref_for_member(matched_member)
+                                    # Mandatory Parameter / Ambiguity Gate: if tambon matches multiple provinces without province specified, ask first!
+                                    ambig = _link_geo_hit.get("ambiguous") or []
+                                    if ambig and not _link_geo_hit.get("province"):
+                                        prov_choices = list(dict.fromkeys(a["p"] for a in ambig))[:5]
+                                        sub_name = _link_geo_hit.get("subdistrict") or ""
+                                        ai_reply = (
+                                            f"📍 พบชื่อตำบล/แขวง **\"{sub_name}\"** ซ้ำกันหลายจังหวัดครับ รบกวนระบุจังหวัดที่ต้องการเพิ่มเติมสักนิดนะครับ:\n"
+                                            + "\n".join(f"• {p}" for p in prov_choices)
+                                            + f"\n\nตัวอย่าง: `ขอลิงก์บ้าน {sub_name} {prov_choices[0]}`"
+                                        )
+                                        matched_codes, search_mode, matched_props, flex_carousel = [], 'GEO_AMBIGUOUS_CONFIRM', [], None
+                                    else:
+                                        req_cat = ""
+                                        allowed_cats = []
+                                        if any(w in text_clean for w in ("บ้านเดี่ยว", "บ้านแฝด")):
+                                            req_cat, allowed_cats = "บ้านเดี่ยว", ["บ้านเดี่ยว", "บ้านแฝด"]
+                                        elif any(w in text_clean for w in ("ทาวน์โฮม", "ทาวน์เฮ้าส์")):
+                                            req_cat, allowed_cats = "ทาวน์โฮม", ["ทาวน์โฮม", "ทาวน์เฮ้าส์"]
+                                        elif "คอนโด" in text_clean or "ห้องชุด" in text_clean:
+                                            req_cat, allowed_cats = "คอนโด", ["คอนโด", "ห้องชุด"]
+                                        elif "ที่ดิน" in text_clean:
+                                            req_cat, allowed_cats = "ที่ดิน", ["ที่ดิน"]
+                                        elif "อาคารพาณิชย์" in text_clean or "ตึกแถว" in text_clean:
+                                            req_cat, allowed_cats = "อาคารพาณิชย์", ["อาคารพาณิชย์", "ตึกแถว", "โฮมออฟฟิศ"]
+                                        elif "บ้าน" in text_clean:
+                                            req_cat, allowed_cats = "บ้าน", ["บ้านเดี่ยว", "บ้านแฝด", "ทาวน์โฮม", "ทาวน์เฮ้าส์"]
+
+                                        req_budget = parse_price(text_raw)
+                                        g_prov = _link_geo_hit.get("province") or ""
+                                        g_dist = _link_geo_hit.get("district") or ""
+                                        g_sub = _link_geo_hit.get("subdistrict") or ""
+                                        g_lat = _link_geo_hit.get("lat")
+                                        g_lng = _link_geo_hit.get("lng")
+
+                                        # Cross-Province Haversine Radius Search (Tier 1: 0-5km, Tier 2: 5-15km, no province lock)
+                                        ranked = _find_nearest_siwasup_props(g_lat, g_lng, allowed_cats=allowed_cats or None, max_p=req_budget, limit=5) if (g_lat and g_lng) else []
+                                        tier1 = [p for p in ranked if p.get("tier") == 1]
+                                        tier2 = [p for p in ranked if p.get("tier") == 2]
+                                        show_props = (tier1 + tier2)[:5] if (tier1 or tier2) else ranked[:3]
+
+                                        q_params = [("ref", ag_ref), ("view", "client")]
+                                        if req_cat:
+                                            q_params.append(("cat", req_cat))
+                                        if show_props:
+                                            link_prov = show_props[0].get("province") or g_prov
+                                            if link_prov:
+                                                q_params.append(("province", link_prov))
+                                        elif g_prov:
+                                            q_params.append(("province", g_prov))
+                                        filtered_url = "https://assets.siwasup.com/catalog.html?" + urllib.parse.urlencode(q_params)
+
+                                        area_label = " ".join(x for x in [
+                                            f"ต.{g_sub}" if g_sub else "",
+                                            f"อ.{g_dist}" if g_dist else "",
+                                            f"จ.{g_prov}" if g_prov else ""
+                                        ] if x) or "พื้นที่ที่ระบุ"
+
+                                        lines = []
+                                        if tier1 and tier2:
+                                            lines.append(f"🏠 พิกัด **{area_label}**: พบในระยะเป้าหมาย (0–5 กม.) {len(tier1)} หลัง และโซนใกล้เคียง (5–15 กม.) อีก {len(tier2)} หลังครับ:")
+                                        elif tier1:
+                                            lines.append(f"🏠 พิกัด **{area_label}**: พบในระยะเป้าหมาย (0–5 กม.) จำนวน {len(tier1)} หลังครับ:")
+                                        elif tier2:
+                                            lines.append(f"📍 โซน **{area_label}** (0–5 กม.) ยังไม่มี{req_cat or 'ทรัพย์'}ว่าง — น้องศิวาคัดโซนใกล้เคียง (5–15 กม.) ที่ใกล้ที่สุด {len(tier2)} หลังมาให้ครับ:")
+                                        elif show_props:
+                                            lines.append(f"📍 โซน **{area_label}** (0–15 กม.) ยังไม่มี{req_cat or 'ทรัพย์'}ว่าง — น้องศิวาคัดแปลงที่ **ใกล้ที่สุดในระบบ** มาให้แทนครับ:")
+                                        else:
+                                            lines.append(f"🏠 ลิงก์แคตตาล็อกโซน **{area_label}** (มุมมองลูกค้า) พร้อมส่งต่อครับ:")
+
+                                        for idx_p, hp in enumerate(show_props, 1):
+                                            lines.append(f"{idx_p}. **{hp['code']}** | {hp['type']} | {hp['district']} {hp['province']} — {hp['price']} (ห่าง ~{hp['distance_km']} กม.)")
+                                        lines.append(f"\n🔗 ลิงก์แคตตาล็อกมุมมองลูกค้า:\n{filtered_url}")
+                                        ai_reply = "\n".join(lines)
+                                        matched_codes = [p["code"] for p in show_props]
+                                        search_mode = "GEO_RADIUS_TIER1_2" if (tier1 or tier2) else "GEO_RADIUS_FALLBACK"
+                                        matched_props, flex_carousel = show_props, None
                                 elif matched_member and m_link and not is_onboarding_link_req and not is_prop_or_cmd_link:
                                     raw_arg = m_link.group(1).strip()
                                     av_name, ag_note, prop_id = parse_agent_link_input(raw_arg)
@@ -5771,11 +6116,34 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         except Exception as th_err:
                             print(f"[Thread Error]: {th_err}")
 
-                    threading.Thread(
-                        target=process_msg,
-                        args=(reply_token, user_id, user_text, msg_type, is_continuous),
-                        daemon=True
-                    ).start()
+                    if msg_type == 'text' and user_id:
+                        def _flush_debounced_msg(target_uid):
+                            with _MSG_DEBOUNCE_LOCK:
+                                entry = _MSG_DEBOUNCE_BUF.pop(target_uid, None)
+                            if entry:
+                                combined_text = " ".join(entry["texts"]).strip()
+                                process_msg(entry["token"], target_uid, combined_text, "text", entry["continuous"])
+
+                        with _MSG_DEBOUNCE_LOCK:
+                            buf = _MSG_DEBOUNCE_BUF.get(user_id)
+                            if buf and buf.get("timer"):
+                                buf["timer"].cancel()
+                                buf["texts"].append(user_text)
+                                buf["token"] = reply_token
+                                buf["continuous"] = is_continuous
+                            else:
+                                buf = {"texts": [user_text], "token": reply_token, "continuous": is_continuous, "timer": None}
+                                _MSG_DEBOUNCE_BUF[user_id] = buf
+                            t_obj = threading.Timer(1.6, _flush_debounced_msg, args=(user_id,))
+                            t_obj.daemon = True
+                            buf["timer"] = t_obj
+                            t_obj.start()
+                    else:
+                        threading.Thread(
+                            target=process_msg,
+                            args=(reply_token, user_id, user_text, msg_type, is_continuous),
+                            daemon=True
+                        ).start()
         except Exception as e:
             print(f"[Webhook Error]: {e}")
 
