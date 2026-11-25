@@ -2949,6 +2949,9 @@ def resolve_catalog_link_request(text_raw: str, matched_member: dict, is_admin: 
         return None
     if any(w in tl for w in ("สมัคร", "ลงทะเบียน", "นามบัตร", "login", "เข้าสู่ระบบ")):
         return None
+    # Detect explicit request for Internal Agent View (showing bank names/codes) vs Client View
+    if any(w in tl for w in ("มุม agent", "มุมตัวแทน", "ฝั่งตัวแทน", "ฝั่งเอเจน", "สำหรับ agent", "สำหรับตัวแทน", "ธนาคารไหน", "ทรัพย์ธนาคาร", "ดูในระบบ")) or re.match(r'^(?:สร้าง|ขอ|ส่ง)?(?:ลิงก์|ลิงค์|ลิ้งก์|ลิ้งค์)\s*(?:ตัวแทน|เอเจนต์?|agent)\s*$', tl):
+        return None
     has_direct_catalog_phrase = any(
         w in tl for w in (
             "ลิงก์บ้าน", "ลิงค์บ้าน", "ลิงก์ทรัพย์", "ลิงค์ทรัพย์",
@@ -5904,6 +5907,10 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                 _onboarding_strict_kw = ['สมัคร', 'ลงทะเบียน', 'login', 'เข้าสู่ระบบ', 'ขอนามบัตร', 'นามบัตร', 'โปรไฟล์', 'profile', 'วิธีสมัคร', 'ลิงก์สมัคร']
                                 _onboarding_public_kw = _onboarding_strict_kw + ['เอเจนต์', 'เอเจน', 'ตัวแทน', 'ร่วมงาน', 'ขอเข้ากลุ่ม', 'เข้ากลุ่ม', 'นายหน้า', 'co-broker', 'cobroker', 'ขอลิงก์', 'ขอลิงค์', 'อยากเป็นเอเจนต์']
                                 is_onboarding_link_req = any(k in text_clean for k in (_onboarding_strict_kw if matched_member else _onboarding_public_kw))
+                                _is_agent_view_req = any(w in text_clean for w in (
+                                    "มุม agent", "มุมตัวแทน", "ฝั่งตัวแทน", "ฝั่งเอเจน", "สำหรับ agent", "สำหรับตัวแทน",
+                                    "ธนาคารไหน", "ทรัพย์ธนาคาร", "ดูในระบบ", "เข้าสู่ระบบตัวแทน"
+                                )) or bool(re.match(r'^(?:สร้าง|ขอ|ส่ง)?(?:ลิงก์|ลิงค์|ลิ้งก์|ลิ้งค์)\s*(?:ตัวแทน|เอเจนต์?|agent)\s*$', text_clean))
                                 is_prop_or_cmd_link = False
                                 _link_geo_hit = None
                                 if m_link:
@@ -5912,7 +5919,9 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                     _first_tok = _raw_link_arg.split()[0].lstrip('#').strip() if _raw_link_arg.split() else ''
                                     _is_explicit_client_name = _raw_link_arg.startswith("คุณ")
                                     _link_geo_hit = None if _is_explicit_client_name else _extract_thai_geo(_raw_link_arg)
-                                    if any(_raw_link_lower.startswith(p) for p in ('โฉนด', 'บ้าน', 'ทาวน์โฮม', 'ทาวน์เฮ้าส์', 'คอนโด', 'ที่ดิน', 'อาคาร', 'ข้อมูล', 'ทรัพย์', 'สมัคร', 'ลงทะเบียน', 'นามบัตร')):
+                                    if _is_agent_view_req:
+                                        is_prop_or_cmd_link = True
+                                    elif any(_raw_link_lower.startswith(p) for p in ('โฉนด', 'บ้าน', 'ทาวน์โฮม', 'ทาวน์เฮ้าส์', 'คอนโด', 'ที่ดิน', 'อาคาร', 'ข้อมูล', 'ทรัพย์', 'สมัคร', 'ลงทะเบียน', 'นามบัตร', 'สำหรับ', 'ตัวแทน', 'เอเจน')):
                                         is_prop_or_cmd_link = True
                                     elif not _is_explicit_client_name and any(kw in _raw_link_lower for kw in ('โซน', 'แถว', 'ย่าน', 'ทำเล', 'หลัง', 'แปลง', 'ไม่เกิน', 'งบ', 'ล้าน')):
                                         is_prop_or_cmd_link = True
@@ -5944,6 +5953,17 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                     else:
                                         ai_reply = '🗺️ หากต้องการค้นหาแปลงที่ดิน กรุณาระบุเลขที่โฉนด พร้อมจังหวัดและอำเภอครับ\nตัวอย่าง: โฉนด 52696 ชลบุรี อ.เมือง'
                                         matched_codes, search_mode, matched_props, flex_carousel = [], 'DEED_PROMPT_GEO', [], None
+                                elif _is_agent_view_req:
+                                    ai_reply = (
+                                        "🔐 ลิงก์เข้าใช้งาน **มุมมองตัวแทน / หลังบ้าน (Agent View)** เพื่อดูข้อมูลธนาคารเจ้าของทรัพย์, รหัสแบงก์ และค่าคอมมิชชัน:\n\n"
+                                        "1️⃣ **หน้าแคตตาล็อกมุมมองตัวแทน:**\n"
+                                        "https://assets.siwasup.com/catalog.html\n\n"
+                                        "2️⃣ **ศูนย์รวมเครื่องมือตัวแทน (Launchpad):**\n"
+                                        "https://assets.siwasup.com/launchpad.html\n\n"
+                                        "💡 **วิธีเปิดมุมมอง Agent:** กดเข้าลิงก์ด้านบน แล้วกดปุ่ม **เข้าสู่ระบบ (LINE Login)** ด้วยบัญชีที่อนุมัติแล้ว ระบบจะปลดล็อกชื่อธนาคารและรหัสทรัพย์ให้เห็นทันทีครับ\n"
+                                        "(ส่วนลิงก์ที่มี `&view=client` จะเป็นมุมมองลูกค้าที่ซ่อนชื่อธนาคารไว้ครับ)"
+                                    )
+                                    matched_codes, search_mode, matched_props, flex_carousel = [], 'AGENT_VIEW_PORTAL_LINK', [], None
                                 elif catalog_link_res:
                                     ag_ref, catalog_url = catalog_link_res
                                     ai_reply = (
