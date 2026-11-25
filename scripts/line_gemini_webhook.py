@@ -178,7 +178,6 @@ LOC_MAP = {
     "ลาดพร้าว": ["Lat Phrao", "ลาดพร้าว", "โชคชัย 4"],
     "วังทองหลาง": ["Wang Thong Lang", "วังทองหลาง", "ทาวน์อินทาวน์"],
     "ห้วยขวาง": ["Huai Khwang", "ห้วยขวาง", "รัชดา", "พระราม 9"],
-    "รัชดา": ["Huai Khwang", "Din Daeng", "Chatuchak", "รัชดา"],
     "ดินแดง": ["Din Daeng", "ดินแดง"],
     "พญาไท": ["Phaya Thai", "พญาไท", "อารีย์", "สะพานควาย"],
     "อารีย์": ["Phaya Thai", "อารีย์"],
@@ -221,36 +220,33 @@ LOC_MAP = {
     "พุทธมณฑลสาย 2": ["Thawi Watthana", "Bang Khae", "ทวีวัฒนา", "บางแค"],
     "พุทธมณฑลสาย 3": ["Thawi Watthana", "Nong Khaem", "ทวีวัฒนา", "หนองแขม"],
     "พุทธมณฑลสาย 4": ["Nong Khaem", "Sam Phran", "กระทุ่มแบน"],
-    "ราชพฤกษ์": ["ราชพฤกษ์", "Ratchaphruek", "Nonthaburi", "Mueang Nonthaburi", "Bang Kruai", "Pak Kret", "Taling Chan", "นนทบุรี", "บางกรวย", "ปากเกร็ด", "ตลิ่งชัน"],
-    "ราชพฤษ": ["ราชพฤกษ์", "Ratchaphruek", "Nonthaburi", "Mueang Nonthaburi", "Bang Kruai", "Pak Kret", "Taling Chan", "นนทบุรี", "บางกรวย", "ปากเกร็ด", "ตลิ่งชัน"],
-    "ราชพฤษ์": ["ราชพฤกษ์", "Ratchaphruek", "Nonthaburi", "Mueang Nonthaburi", "Bang Kruai", "Pak Kret", "Taling Chan", "นนทบุรี", "บางกรวย", "ปากเกร็ด", "ตลิ่งชัน"],
-    "ราชพฤก": ["ราชพฤกษ์", "Ratchaphruek", "Nonthaburi", "Mueang Nonthaburi", "Bang Kruai", "Pak Kret", "Taling Chan", "นนทบุรี", "บางกรวย", "ปากเกร็ด", "ตลิ่งชัน"],
-    "รัตนาธิเบศร์": ["รัตนาธิเบศร์", "Rattanathibet", "Mueang Nonthaburi", "Bang Yai", "Bang Bua Thong", "Nonthaburi", "เมืองนนทบุรี", "บางใหญ่", "บางบัวทอง", "นนทบุรี"],
-    "รัตนาธิเบศ": ["รัตนาธิเบศร์", "Rattanathibet", "Mueang Nonthaburi", "Bang Yai", "Bang Bua Thong", "Nonthaburi", "เมืองนนทบุรี", "บางใหญ่", "บางบัวทอง", "นนทบุรี"],
-    "รัตนาทิเบศ": ["รัตนาธิเบศร์", "Rattanathibet", "Mueang Nonthaburi", "Bang Yai", "Bang Bua Thong", "Nonthaburi", "เมืองนนทบุรี", "บางใหญ่", "บางบัวทอง", "นนทบุรี"],
-    "รัตนาทิเบส": ["รัตนาธิเบศร์", "Rattanathibet", "Mueang Nonthaburi", "Bang Yai", "Bang Bua Thong", "Nonthaburi", "เมืองนนทบุรี", "บางใหญ่", "บางบัวทอง", "นนทบุรี"],
-    "ชัยพฤกษ์": ["ชัยพฤกษ์", "Pak Kret", "Bang Bua Thong", "Nonthaburi", "ปากเกร็ด", "บางบัวทอง", "นนทบุรี"],
-    "แจ้งวัฒนะ": ["แจ้งวัฒนะ", "Chaeng Watthana", "Pak Kret", "Lak Si", "Nonthaburi", "ปากเกร็ด", "หลักสี่", "นนทบุรี"],
-    "งามวงศ์วาน": ["งามวงศ์วาน", "Ngam Wong Wan", "Mueang Nonthaburi", "Lak Si", "Nonthaburi", "เมืองนนทบุรี", "หลักสี่", "นนทบุรี"],
-    "ติวานนท์": ["ติวานนท์", "Tiwanon", "Mueang Nonthaburi", "Pak Kret", "Nonthaburi", "เมืองนนทบุรี", "ปากเกร็ด", "นนทบุรี"],
+    "ราชพฤกษ์": ["ราชพฤกษ์", "Ratchaphruek", "Mueang Nonthaburi", "Bang Kruai", "Pak Kret", "Taling Chan", "เมืองนนทบุรี", "บางกรวย", "ปากเกร็ด", "ตลิ่งชัน"],
+    "ราชพฤษ": ["ราชพฤกษ์", "Ratchaphruek", "Mueang Nonthaburi", "Bang Kruai", "Pak Kret", "Taling Chan", "เมืองนนทบุรี", "บางกรวย", "ปากเกร็ด", "ตลิ่งชัน"],
+    "ราชพฤษ์": ["ราชพฤกษ์", "Ratchaphruek", "Mueang Nonthaburi", "Bang Kruai", "Pak Kret", "Taling Chan", "เมืองนนทบุรี", "บางกรวย", "ปากเกร็ด", "ตลิ่งชัน"],
+    "ราชพฤก": ["ราชพฤกษ์", "Ratchaphruek", "Mueang Nonthaburi", "Bang Kruai", "Pak Kret", "Taling Chan", "เมืองนนทบุรี", "บางกรวย", "ปากเกร็ด", "ตลิ่งชัน"],
+    "รัตนาธิเบศร์": ["รัตนาธิเบศร์", "Rattanathibet", "Mueang Nonthaburi", "Bang Yai", "Bang Bua Thong", "เมืองนนทบุรี", "บางใหญ่", "บางบัวทอง"],
+    "รัตนาธิเบศ": ["รัตนาธิเบศร์", "Rattanathibet", "Mueang Nonthaburi", "Bang Yai", "Bang Bua Thong", "เมืองนนทบุรี", "บางใหญ่", "บางบัวทอง"],
+    "รัตนาทิเบศ": ["รัตนาธิเบศร์", "Rattanathibet", "Mueang Nonthaburi", "Bang Yai", "Bang Bua Thong", "เมืองนนทบุรี", "บางใหญ่", "บางบัวทอง"],
+    "รัตนาทิเบส": ["รัตนาธิเบศร์", "Rattanathibet", "Mueang Nonthaburi", "Bang Yai", "Bang Bua Thong", "เมืองนนทบุรี", "บางใหญ่", "บางบัวทอง"],
+    "ชัยพฤกษ์": ["ชัยพฤกษ์", "Pak Kret", "Bang Bua Thong", "ปากเกร็ด", "บางบัวทอง"],
+    "แจ้งวัฒนะ": ["แจ้งวัฒนะ", "Chaeng Watthana", "Pak Kret", "Lak Si", "ปากเกร็ด", "หลักสี่"],
+    "งามวงศ์วาน": ["งามวงศ์วาน", "Ngam Wong Wan", "Mueang Nonthaburi", "Lak Si", "เมืองนนทบุรี", "หลักสี่"],
+    "ติวานนท์": ["ติวานนท์", "Tiwanon", "Mueang Nonthaburi", "Pak Kret", "เมืองนนทบุรี", "ปากเกร็ด"],
     "กาญจนาภิเษก": ["กาญจนาภิเษก", "Bang Yai", "Bang Bua Thong", "Bang Kruai", "Taling Chan", "Bang Khae", "บางใหญ่", "บางบัวทอง", "บางกรวย", "ตลิ่งชัน"],
     "กัลปพฤกษ์": ["กัลปพฤกษ์", "Phasi Charoen", "Bang Khae", "Bang Bon", "Chom Thong", "ภาษีเจริญ", "บางแค", "บางบอน", "จอมทอง"],
-    "ศรีนครินทร์": ["ศรีนครินทร์", "Srinakarin", "Prawet", "Suan Luang", "Mueang Samut Prakan", "Bang Phli", "ประเวศ", "สวนหลวง", "สมุทรปราการ"],
-    "ศรีนคริน": ["ศรีนครินทร์", "Srinakarin", "Prawet", "Suan Luang", "Mueang Samut Prakan", "ประเวศ", "สวนหลวง", "สมุทรปราการ"],
-    "เทพารักษ์": ["เทพารักษ์", "Theparak", "Mueang Samut Prakan", "Bang Phli", "สมุทรปราการ", "บางพลี"],
+    "ศรีนครินทร์": ["ศรีนครินทร์", "Srinakarin", "Prawet", "Suan Luang", "Mueang Samut Prakan", "Bang Phli", "ประเวศ", "สวนหลวง"],
+    "ศรีนคริน": ["ศรีนครินทร์", "Srinakarin", "Prawet", "Suan Luang", "Mueang Samut Prakan", "ประเวศ", "สวนหลวง"],
+    "เทพารักษ์": ["เทพารักษ์", "Theparak", "Mueang Samut Prakan", "Bang Phli", "บางพลี"],
     "เพชรเกษม": ["เพชรเกษม", "Phasi Charoen", "Bang Khae", "Nong Khaem", "ภาษีเจริญ", "บางแค", "หนองแขม"],
     "สุขสวัสดิ์": ["สุขสวัสดิ์", "Rat Burana", "Phra Pradaeng", "Thung Khu", "ราษฎร์บูรณะ", "พระประแดง", "ทุ่งครุ"],
-    "สุขุมวิท": ["สุขุมวิท", "Sukhumvit", "Watthana", "Khlong Toei", "Phra Khanong", "Bang Na", "Mueang Samut Prakan", "วัฒนา", "คลองเตย", "พระโขนง", "บางนา"],
+    "สุขุมวิท": ["สุขุมวิท", "Sukhumvit", "Watthana", "Khlong Toei", "Phra Khanong", "Bang Na", "วัฒนา", "คลองเตย", "พระโขนง", "บางนา"],
     "พระราม 9": ["พระราม 9", "Rama 9", "Huai Khwang", "Suan Luang", "ห้วยขวาง", "สวนหลวง"],
-    "ลำลูกกา": ["ลำลูกกา", "Lam Luk Ka", "Pathum Thani", "ปทุมธานี"],
-    "รังสิต": ["รังสิต", "Rangsit", "Thanyaburi", "Khlong Luang", "Pathum Thani", "ธัญบุรี", "คลองหลวง", "ปทุมธานี"],
-    "คลองหลวง": ["คลองหลวง", "Khlong Luang", "Pathum Thani", "ปทุมธานี"],
-    "ธัญบุรี": ["ธัญบุรี", "Thanyaburi", "Pathum Thani", "ปทุมธานี"],
-    "ไทรน้อย": ["ไทรน้อย", "Sai Noi", "Nonthaburi", "นนทบุรี"],
-    "ศาลายา": ["ศาลายา", "Phutthamonthon", "Salaya", "Nakhon Pathom", "พุทธมณฑล", "นครปฐม"],
+    "ไทรน้อย": ["ไทรน้อย", "Sai Noi"],
+    "ศาลายา": ["ศาลายา", "Phutthamonthon", "Salaya", "พุทธมณฑล"],
     "หทัยราษฎร์": ["หทัยราษฎร์", "Khlong Sam Wa", "Min Buri", "คลองสามวา", "มีนบุรี"],
     "นิมิตใหม่": ["นิมิตใหม่", "Khlong Sam Wa", "Min Buri", "คลองสามวา", "มีนบุรี"],
     "คู้บอน": ["คู้บอน", "Khan Na Yao", "Khlong Sam Wa", "คันนายาว", "คลองสามวา"],
+    "แสมดำ": ["แสมดำ", "Bang Khun Thian", "บางขุนเทียน", "พระราม 2"],
     "ธนบุรี": ["Thon Buri", "Bangkok Yai", "Khlong San", "ธนบุรี", "คลองสาน"],
     "คลองสาน": ["Khlong San", "Thon Buri", "คลองสาน", "ธนบุรี"],
     "ภาษีเจริญ": ["Phasi Charoen", "ภาษีเจริญ", "บางแค"],
@@ -279,14 +275,23 @@ LOC_MAP = {
     "บางบ่อ": ["Bang Bo", "Samut Prakan", "บางบ่อ"],
     "บางเสาธง": ["Bang Sao Thong", "Samut Prakan", "บางเสาธง"],
     "ปทุมธานี": ["Pathum Thani", "Khlong Luang", "Thanyaburi", "Lam Luk Ka", "ปทุมธานี"],
-    "ลำลูกกา": ["Lam Luk Ka", "Pathum Thani", "ลำลูกกา"],
-    "ธัญบุรี": ["Thanyaburi", "Pathum Thani", "ธัญบุรี"],
-    "รังสิต": ["Thanyaburi", "Khlong Luang", "รังสิต", "ปทุมธานี"],
-    "คลองหลวง": ["Khlong Luang", "Pathum Thani", "คลองหลวง"],
+    "ลำลูกกา": ["ลำลูกกา", "Lam Luk Ka"],
+    "ธัญบุรี": ["ธัญบุรี", "Thanyaburi"],
+    "รังสิต": ["รังสิต", "Rangsit", "Thanyaburi", "Khlong Luang"],
+    "คลองหลวง": ["คลองหลวง", "Khlong Luang"],
+    "สมุทรสาคร": ["Samut Sakhon", "Mueang Samut Sakhon", "Krathum Baen", "สมุทรสาคร"],
+    "มหาชัย": ["Mueang Samut Sakhon", "Samut Sakhon", "มหาชัย", "สมุทรสาคร"],
+    "กระทุ่มแบน": ["Krathum Baen", "Samut Sakhon", "กระทุ่มแบน"],
+    "นครปฐม": ["Nakhon Pathom", "Mueang Nakhon Pathom", "Sam Phran", "Phutthamonthon", "นครปฐม"],
     "เชียงใหม่": ["Chiang Mai", "Mueang Chiang Mai", "เชียงใหม่"],
     "พัทยา": ["Bang Lamung", "Chon Buri", "พัทยา"],
+    "ศรีราชา": ["Si Racha", "Chon Buri", "ศรีราชา"],
+    "บางแสน": ["Mueang Chon Buri", "Chon Buri", "บางแสน", "แสนสุข"],
     "ชลบุรี": ["Chon Buri", "Mueang Chon Buri", "Si Racha", "ชลบุรี"]
 }
+
+_LOC_KEYS_SORTED = sorted(LOC_MAP.keys(), key=len, reverse=True)
+_GEO_INDEX_LOCK = threading.Lock()
 
 TYPE_MAP = {
     "ทาวน์โฮม": ["TH"],
@@ -607,9 +612,9 @@ def search_properties(query, user_id=None):
 
     # 2. Project / Title Keyword Match in Siwasup Portfolio (Smart Substring & Brand Parsing)
     known_project_brands = [
-        "ซิกเนเจอร์", "รามอินทรา", "มัณฑนา", "พาทิโอ", "ลุมพินี", "lumpini", "เพลส",
-        "รัชโยธิน", "รัชดา", "ศุภาลัย", "ยูดีไลท์", "ชวนชื่น", "พฤกษา", "เซ็นทริค",
-        "ไอดีโอ", "แอสปาย", "ดีคอนโด", "พลัมคอนโด", "บางแค", "พระราม 9", "สุขุมวิท"
+        "ซิกเนเจอร์", "มัณฑนา", "พาทิโอ", "ลุมพินี", "lumpini", "เพลส",
+        "ศุภาลัย", "ยูดีไลท์", "ชวนชื่น", "พฤกษา", "เซ็นทริค",
+        "ไอดีโอ", "แอสปาย", "ดีคอนโด", "พลัมคอนโด"
     ]
     detected_brand_kws = [k for k in known_project_brands if k.lower() in q_low]
     stop_words = ["เป๊ะนะครับ", "เป็น", "ทวาน์โฮม", "ทาวน์โฮม", "บ้านเดี่ยว", "คอนโด", "ช่วยตรวจสอบให้หน่อย", "อยากนัดเปิดบ้าน", "ใกล้สถานีรถไฟฟ้า"]
@@ -683,32 +688,36 @@ def search_properties(query, user_id=None):
     if new_types:
         ctx["types"] = list(set(new_types))
 
-    # Detect new locations in current message (longest LOC_MAP keys first + all districts/provinces + fuzzy typo match)
+    # Detect new locations in current message (precomputed longest LOC_MAP keys first + all districts/provinces + fuzzy typo match)
     new_locs = []
-    for k in sorted(LOC_MAP.keys(), key=len, reverse=True):
+    for k in _LOC_KEYS_SORTED:
         if k in query:
             new_locs.extend(LOC_MAP[k])
 
-    # Auto-match any district/province present in CATALOG (covers all 77 provinces / 930 amphurs)
+    # Thread-safe lazy auto-index of district/province names from CATALOG + SIWASUP_PROPS
     if not hasattr(search_properties, "_geo_terms"):
-        geo_map = {}
-        for cp in CATALOG:
-            for fld in ("d", "p", "pe"):
-                val = str(cp.get(fld) or "").strip()
-                if len(val) >= 3:
-                    geo_map.setdefault(val.lower(), val)
-        for sp in SIWASUP_PROPS:
-            loc_s = str(sp.get("location") or "").strip()
-            for part in re.split(r"[•,/|\s]+", loc_s):
-                part = part.strip()
-                if len(part) >= 3 and not part.isdigit():
-                    geo_map.setdefault(part.lower(), part)
-        search_properties._geo_terms = geo_map
+        with _GEO_INDEX_LOCK:
+            if not hasattr(search_properties, "_geo_terms"):
+                geo_map = {}
+                for cp in CATALOG:
+                    for fld in ("d", "p", "pe"):
+                        val = str(cp.get(fld) or "").strip()
+                        if len(val) >= 4:
+                            geo_map.setdefault(val.lower(), val)
+                for sp in SIWASUP_PROPS:
+                    loc_s = str(sp.get("location") or "").strip()
+                    for part in re.split(r"[•,/|\s]+", loc_s):
+                        part = part.strip()
+                        if len(part) >= 4 and not part.isdigit():
+                            geo_map.setdefault(part.lower(), part)
+                search_properties._geo_terms = geo_map
+                search_properties._all_candidates = list(LOC_MAP.keys()) + list(geo_map.values())
     geo_terms = search_properties._geo_terms
+    all_candidates = search_properties._all_candidates
 
-    # Direct match against known district/province names
+    # Direct match against known district/province names (len >= 4 avoids short false positives)
     for gk, gval in geo_terms.items():
-        if len(gk) >= 3 and gk in q_low and gval not in new_locs:
+        if gk in q_low and gval not in new_locs:
             new_locs.append(gval)
 
     # Dynamic regex matcher for terms like โซน..., แถว..., เขต..., ย่าน..., อำเภอ... + fuzzy typo matching
@@ -719,7 +728,7 @@ def search_properties(query, user_id=None):
             if len(zm_clean) < 3 or zm_clean in ["บ้าน", "คอนโด", "ที่ดิน", "ไหน", "นี้", "ราคา", "งบ"]:
                 continue
             matched_sub = False
-            for k in sorted(LOC_MAP.keys(), key=len, reverse=True):
+            for k in _LOC_KEYS_SORTED:
                 if k in zm_clean or zm_clean in k:
                     new_locs.extend(LOC_MAP[k])
                     matched_sub = True
@@ -735,7 +744,6 @@ def search_properties(query, user_id=None):
                         matched_sub = True
                         break
             if not matched_sub:
-                all_candidates = list(LOC_MAP.keys()) + list(geo_terms.values())
                 close = difflib.get_close_matches(zm_clean, all_candidates, n=2, cutoff=0.75)
                 for c_hit in close:
                     if c_hit in LOC_MAP:
@@ -745,9 +753,8 @@ def search_properties(query, user_id=None):
 
     # Fallback fuzzy check on standalone Thai/Eng tokens if still no location matched
     if not new_locs:
-        tokens_chk = [t for t in re.findall(r'[ก-๙a-zA-Z]{4,}', query) if t not in ("อยากได้", "ต้องการ", "แนะนำ", "มัดรวม", "ส่งมา", "บ้านเดี่ยว", "ทาวน์โฮม", "ทาวน์เฮ้าส์", "คอนโด", "ที่ดิน", "ราคา", "ไม่เกิน")]
-        all_candidates = list(LOC_MAP.keys()) + list(geo_terms.values())
-        for tok in tokens_chk:
+        tokens_chk = [t for t in re.findall(r'[ก-๙a-zA-Z]{4,24}', query) if t not in ("อยากได้", "ต้องการ", "แนะนำ", "มัดรวม", "ส่งมา", "บ้านเดี่ยว", "ทาวน์โฮม", "ทาวน์เฮ้าส์", "คอนโด", "ที่ดิน", "ราคา", "ไม่เกิน")]
+        for tok in tokens_chk[:6]:
             close = difflib.get_close_matches(tok, all_candidates, n=1, cutoff=0.80)
             for c_hit in close:
                 if c_hit in LOC_MAP:
@@ -2473,25 +2480,50 @@ def _derive_tag_keystream(nonce: bytes, length: int) -> bytes:
 
 
 def encode_client_tag(avatar_name: str, agent_note: str = "") -> str:
-    """Authenticated salted stream encoding (4B nonce + 6B HMAC-SHA256 + XOR keystream)."""
+    """Short 8-char URL-safe token backed by client_tracking_data (with legacy HMAC fallback in decode)."""
     av = re.sub(r"[\t\r\n]+", " ", str(avatar_name or "")).strip()[:25]
     note = re.sub(r"[\t\r\n]+", " ", str(agent_note or "")).strip()[:60]
     if not av:
         return ""
-    raw_str = f"{av}\t{note}" if note else av
-    raw_bytes = raw_str.encode("utf-8")
-    nonce = secrets.token_bytes(4)
-    stream = _derive_tag_keystream(nonce, len(raw_bytes))
-    cipher = bytes(b ^ s for b, s in zip(raw_bytes, stream))
-    mac = hmac.new(_TAG_MASK_KEY, nonce + cipher, hashlib.sha256).digest()[:6]
-    return base64.urlsafe_b64encode(nonce + mac + cipher).decode("ascii").rstrip("=")
+    try:
+        with CLIENT_TRACKING_LOCK:
+            store = load_client_tracking_data()
+            st = store.setdefault("short_tags", {})
+            for k_ex, v_ex in st.items():
+                if isinstance(v_ex, dict) and v_ex.get("name") == av and v_ex.get("note", "") == note:
+                    return k_ex
+            alphabet = "23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+            short_code = "S" + "".join(secrets.choice(alphabet) for _ in range(7))
+            while short_code in st:
+                short_code = "S" + "".join(secrets.choice(alphabet) for _ in range(7))
+            st[short_code] = {"name": av, "note": note, "ts": int(time.time())}
+            if len(st) > 5000:
+                oldest_keys = sorted(st.keys(), key=lambda k: st[k].get("ts", 0))[:len(st) - 5000]
+                for ok in oldest_keys:
+                    st.pop(ok, None)
+            save_client_tracking_data(store)
+        return short_code
+    except Exception:
+        raw_str = f"{av}\t{note}" if note else av
+        raw_bytes = raw_str.encode("utf-8")
+        nonce = secrets.token_bytes(4)
+        stream = _derive_tag_keystream(nonce, len(raw_bytes))
+        cipher = bytes(b ^ s for b, s in zip(raw_bytes, stream))
+        mac = hmac.new(_TAG_MASK_KEY, nonce + cipher, hashlib.sha256).digest()[:6]
+        return base64.urlsafe_b64encode(nonce + mac + cipher).decode("ascii").rstrip("=")
 
 
 def decode_client_tag(token: str):
-    """Verify HMAC and decode &t= token back into (avatar_name, agent_note)."""
+    """Resolve Short Token from client_tracking_data or verify legacy HMAC &t= token."""
     tok = str(token or "").strip()
     if not tok or len(tok) > 300:
         return ("", "")
+    if re.match(r"^S[A-Za-z0-9]{7}$", tok):
+        with CLIENT_TRACKING_LOCK:
+            store = load_client_tracking_data()
+            entry = (store.get("short_tags") or {}).get(tok)
+            if isinstance(entry, dict):
+                return (str(entry.get("name") or "").strip()[:25], str(entry.get("note") or "").strip()[:60])
     try:
         padded = tok + ("=" * (-len(tok) % 4))
         blob = base64.urlsafe_b64decode(padded.encode("ascii"))
@@ -4718,6 +4750,9 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     if "zone" in payload and payload["zone"]: m["zone"] = payload["zone"]
                     if "badges" in payload: m["badges"] = payload["badges"]
                     if "permissions" in payload: m["permissions"] = payload["permissions"]
+                    perms_now = m.get("permissions") or {}
+                    if not str(m.get("code") or "").strip() and any(bool(perms_now.get(k)) for k in ("standardAdmin", "keyboxAdmin", "executiveAuthority", "systemAdmin")):
+                        m["code"] = _next_admin_sa_code(store)
                     m["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
                     
                     audit_entry = f"[{m['updated_at']}] ⚙️ ปรับสิทธิ์: {m.get('name')} เป็น {m.get('role')} ({len(m.get('badges', []))} สิทธิ์)"

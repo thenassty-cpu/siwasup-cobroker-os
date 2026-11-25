@@ -94,14 +94,14 @@
                 </label>
                 <div class="flex items-center gap-1">
                   <span id="agent-tier-badge" class="text-[9.5px] text-amber-800 font-bold bg-amber-50 px-1.5 py-0.2 rounded border border-amber-200">
-                    🌱 S90 - นัญ
+                    🏢 SW000 - ศิวาทรัพย์
                   </span>
-                  <span class="text-[9px] text-emerald-600 font-medium">จำค่า 60 วัน</span>
+                  <span class="text-[9px] text-emerald-600 font-medium">จำค่าล่าสุด</span>
                 </div>
               </div>
               <div class="relative">
-                <input type="text" id="agent-ref-input" value="S90" 
-                       placeholder="พิมพ์รหัส S02-S126 หรือชื่อเล่น..."
+                <input type="text" id="agent-ref-input" value="SW000" 
+                       placeholder="พิมพ์รหัส SW/SA หรือชื่อเล่น..."
                        oninput="handleAgentAutocomplete(this.value)"
                        onfocus="handleAgentAutocomplete(this.value)"
                        autocomplete="off"
@@ -974,8 +974,8 @@
             <span id="bundle-track-badge" class="text-[9.5px] font-medium text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded border border-gray-200">กำลังเตรียม &amp;t=...</span>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-            <input type="text" id="bundle-client-name" value="คุณวิชัย" maxlength="25" oninput="scheduleBundleTrackTag(); updateBundlePreview()"
-                   placeholder="เช่น คุณวิชัย, คุณสมชาย" 
+            <input type="text" id="bundle-client-name" value="" maxlength="25" oninput="scheduleBundleTrackTag(); updateBundlePreview()"
+                   placeholder="ใส่ชื่อลูกค้า เช่น คุณวิชัย (ไม่บังคับ)" 
                    class="w-full border rounded-lg p-2 text-xs font-semibold focus:ring-1 focus:ring-neutral-900 focus:border-neutral-900 outline-none bg-gray-50">
             <input type="text" id="bundle-client-note" maxlength="60" oninput="scheduleBundleTrackTag(); updateBundlePreview()"
                    placeholder="โน้ตส่วนตัว (ไม่แสดงให้ลูกค้าเห็น เช่น งบ 4 ล.)"
@@ -1120,7 +1120,7 @@
             <!-- Ticker_AgentInfo -->
             <div>
               <label class="block font-medium mb-1 text-gray-700">ข้อมูลตัวแทนประจำป้าย (Ticker_AgentInfo):</label>
-              <input type="text" id="vinyl-agent-info" value="ติดต่อ: คุณเอ (ตัวแทนพื้นที่โซนบางนา) LINE ID: ของตัวแทน" oninput="renderVinylCanvas()" 
+              <input type="text" id="vinyl-agent-info" value="" placeholder="ติดต่อ: ชื่อตัวแทน (โซนพื้นที่) LINE ID: ..." oninput="renderVinylCanvas()" 
                      class="w-full border rounded-lg p-1.5 text-xs font-medium text-red-700 outline-none focus:ring-1 focus:ring-red-700 bg-red-50/30 border-red-200">
             </div>
           </div>
@@ -1391,7 +1391,7 @@
           <div id="detail-agent-card" class="hidden rounded-2xl bg-[#FAF9F6] border border-[#C2A460]/40 p-3.5 shadow-sm space-y-2.5">
             <div class="flex items-center justify-between text-[11px]">
               <span class="font-semibold text-neutral-500 uppercase tracking-wider text-[10px]">ผู้ดูแลการเข้าชม & เสนอราคา</span>
-              <span id="detail-card-cert-id" class="font-mono font-bold text-neutral-800 bg-white px-2 py-0.5 rounded border border-neutral-200 text-[10px]">ID: SW-042</span>
+              <span id="detail-card-cert-id" class="font-mono font-bold text-neutral-800 bg-white px-2 py-0.5 rounded border border-neutral-200 text-[10px]">ID: SW000</span>
             </div>
             <div class="flex items-center gap-3">
               <div class="relative shrink-0">
@@ -1401,17 +1401,17 @@
                 </div>
               </div>
               <div class="min-w-0 flex-1">
-                <h3 id="detail-card-agent-name" class="text-sm font-bold text-neutral-900 truncate">คุณธนภัทร วงศ์สุวรรณ</h3>
+                <h3 id="detail-card-agent-name" class="text-sm font-bold text-neutral-900 truncate">ทีมผู้ดูแลทรัพย์ ศิวาทรัพย์</h3>
                 <div id="detail-card-title-badge" class="inline-flex items-center gap-1 mt-0.5 px-2 py-0.5 rounded text-[10px] font-semibold bg-neutral-900 text-[#C2A460]">
                   <i data-lucide="award" class="w-3 h-3"></i>
-                  <span id="detail-card-agent-title">Verified Property Consultant</span>
+                  <span id="detail-card-agent-title">Siwasup Official Asset Desk</span>
                 </div>
                 <p class="text-[10px] text-neutral-500 mt-1 leading-snug">ตัวแทนรับรองโดย ศิวาทรัพย์ แอสเซท • ประสานงานเปิดบ้านและยื่นสินเชื่อครบวงจร</p>
               </div>
             </div>
             <button type="button" onclick="contactViaLine('booking', document.getElementById('detail-title').textContent)" class="w-full py-2.5 px-3 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold flex items-center justify-center gap-2 transition shadow-sm cursor-pointer">
               <i data-lucide="calendar-check" class="w-4 h-4 text-[#C2A460]"></i>
-              <span id="detail-card-btn-text">นัดหมายเข้าชมบ้านหลังนี้กับ คุณธนภัทร</span>
+              <span id="detail-card-btn-text">นัดหมายเข้าชมบ้านหลังนี้กับ ทีมศิวาทรัพย์</span>
             </button>
           </div>
 
@@ -1499,7 +1499,7 @@
                 </button>
                 <button id="detail-admin-btn-appointments" type="button" class="w-full bg-white hover:bg-neutral-50 text-neutral-900 font-bold py-2.5 rounded-xl border border-neutral-300 text-xs shadow-2xs flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer">
                   <i data-lucide="calendar" class="w-4 h-4 text-neutral-700"></i>
-                  <span>คิวนัดชมเคสนี้ (<span id="detail-admin-app-count" class="text-[#8B0000] font-black">2</span>)</span>
+                  <span>คิวนัดชมเคสนี้ (<span id="detail-admin-app-count" class="text-[#8B0000] font-black">0</span>)</span>
                 </button>
               </div>
               <div class="grid grid-cols-2 gap-2">
@@ -2450,65 +2450,20 @@
           <!-- Timeline Showing Queue (กฎเหล็ก: 1 บ้าน รับสูงสุดวันละ 2 รอบ เผื่อเวลาทำคอนเทนต์) -->
           <div class="space-y-2.5">
             <div class="flex items-center justify-between text-xs font-bold text-neutral-800">
-              <span>ตารางคิวเปิดบ้าน (สูงสุด 2 รอบ/วัน • เผื่อเวลาชมบ้าน + ถ่ายคอนเทนต์):</span>
-              <span class="text-[11px] text-[#8B0000] font-semibold">เต็มโควตา 2/2 รอบวันนี้</span>
+              <span>ตารางคิวเปิดบ้าน (สูงสุด 2 รอบ/วัน):</span>
+              <span class="text-[11px] text-emerald-700 font-semibold">ว่าง 0/2 รอบวันนี้</span>
             </div>
 
-            <!-- Slot 1: Morning Slot (09:00 - 12:30) -->
-            <div class="bg-white border border-neutral-200/90 rounded-2xl p-3.5 space-y-2 shadow-2xs hover:border-[#C2A460]/60 transition">
-              <div class="flex items-center justify-between text-xs">
-                <div class="flex items-center gap-2">
-                  <span class="w-7 h-7 rounded-lg bg-neutral-900 text-[#E5C985] text-[10px] font-bold flex items-center justify-center">S90</span>
-                  <div>
-                    <div class="font-bold text-neutral-900 flex items-center gap-1.5">
-                      <span>คุณนัญ — อนัญญา</span>
-                      <span class="px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 text-[9px] font-bold">⭐ Alpha Agent</span>
-                    </div>
-                    <div class="text-[10px] text-neutral-400">รับกุญแจหลัก + Smart Keybox พกพาจากพี่ลิลลี่</div>
-                  </div>
-                </div>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
-                  🌅 รอบเช้า (3.5 ชม.)
-                </span>
-              </div>
-              <div class="text-xs text-neutral-700 pt-1.5 border-t border-neutral-100 flex items-center justify-between">
-                <span>🕘 <strong>09:00 – 12:30 น.</strong> (ชมบ้าน + ถ่ายคลิป Reels)</span>
-                <span class="text-neutral-600 font-semibold">ผู้ซื้อ: คุณวิชัย นพรัตน์ (ล็อกลีด 60 วัน)</span>
-              </div>
-              <div class="text-[11px] text-emerald-900 bg-emerald-50/80 border border-emerald-200/70 p-2 rounded-xl">
-                🔐 <strong>การส่งไม้ต่อ (12:00 น.):</strong> ล็อกบ้าน ➔ เก็บกุญแจหลักใส่ Smart Keybox คล้องรั้วหน้าบ้าน ➔ ถ่ายรูปส่งระบบครบ ➔ <strong>Auto-Pass</strong> ส่งรหัส OTP ชุดบ่ายให้คิวที่ 2 อัตโนมัติ (พี่ลิลลี่ไม่ต้องโอเวอร์โหลดตอนพักเที่ยง)
-              </div>
+            <div class="bg-neutral-50 border border-dashed border-neutral-300 rounded-2xl p-5 text-center space-y-1.5">
+              <div class="text-sm font-bold text-neutral-700">📅 ยังไม่มีคิวนัดหมายเข้าชมสำหรับทรัพย์นี้</div>
+              <p class="text-[11px] text-neutral-500 leading-relaxed">
+                เมื่อตัวแทนแจ้งนัดเปิดบ้านผ่านระบบหรือ LINE OA น้องศิวา รายชื่อรอบเช้า (09:00–12:30 น.) และรอบบ่าย (13:30–17:00 น.) จะมาแสดงที่นี่อัตโนมัติ
+              </p>
             </div>
 
-            <!-- Slot 2: Afternoon Slot (13:30 - 17:00) -->
-            <div class="bg-white border border-neutral-200/90 rounded-2xl p-3.5 space-y-2 shadow-2xs hover:border-[#C2A460]/60 transition">
-              <div class="flex items-center justify-between text-xs">
-                <div class="flex items-center gap-2">
-                  <span class="w-7 h-7 rounded-lg bg-[#8B0000] text-[#E5C985] text-[10px] font-bold flex items-center justify-center">S94</span>
-                  <div>
-                    <div class="font-bold text-neutral-900 flex items-center gap-1.5">
-                      <span>คุณหลิว — พัณณ์นิกา</span>
-                      <span class="px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 text-[9px] font-bold">⭐ Alpha Agent</span>
-                    </div>
-                    <div class="text-[10px] text-neutral-400">รับรหัส OTP ชุดบ่ายจากระบบเมื่อ S90 ส่งรูปคืนกุญแจครบ</div>
-                  </div>
-                </div>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
-                  🌇 รอบบ่าย (3.5 ชม.)
-                </span>
-              </div>
-              <div class="text-xs text-neutral-700 pt-1.5 border-t border-neutral-100 flex items-center justify-between">
-                <span>🕜 <strong>13:30 – 17:00 น.</strong> (ชมบ้าน + ถ่ายคอนเทนต์)</span>
-                <span class="text-neutral-600 font-semibold">ผู้ซื้อ: คุณพัชราภา วงศ์สุวรรณ (ล็อกลีด 60 วัน)</span>
-              </div>
-              <div class="text-[11px] text-neutral-600 bg-neutral-50 border border-neutral-200/80 p-2 rounded-xl">
-                🏢 <strong>จบภารกิจรอบบ่าย (17:00 น.):</strong> ล็อกบ้าน ➔ <strong>หิ้วทั้งพวงกุญแจหลัก + กล่อง Smart Keybox กลับคืนพี่ลิลลี่ที่ออฟฟิศ</strong> (ไม่ทิ้งกล่องค้างคืนหน้าบ้าน NPA ป้องกันโจร 100%)
-              </div>
-            </div>
-
-            <!-- Anti-Hoarding Notice -->
+            <!-- Anti-Hoarding & Lock Policy Notice -->
             <div class="p-2.5 rounded-xl bg-rose-50/70 border border-rose-200/80 text-[10.5px] text-rose-900 leading-relaxed">
-              🛡️ <strong>กฎป้องกันการกั๊กบ้าน & แอบดีล:</strong> บ้าน 1 หลังรับสูงสุด 2 รอบ/วัน (คิวที่ 3 ปัดไปวันถัดไปอัตโนมัติ) • ไม่ลงชื่อลูกค้าผู้ซื้อจริง = ไม่คุ้มครองสิทธิ์คอมมิชชัน (0 วัน) • คิวที่มีลูกค้าผู้ซื้อจริงได้สิทธิ์ชนะคิวถ่ายคอนเทนต์เสมอ
+              🛡️ <strong>กฎล็อกสิทธิ์ลูกค้า (มติ 25-11-69):</strong> ล็อกสิทธิ์ลูกค้าได้ <strong>15 วัน</strong> (Admin ต่ออายุได้หากเกิดเหตุขัดข้องจากระบบ) • กรณีเซลล์ชนกันให้ลูกค้าเป็นผู้เลือก • หากมีการจองบ้านแล้วห้ามเปลี่ยนเซลล์ • บ้าน 1 หลังรับสูงสุด 2 รอบ/วัน
             </div>
 
           </div>

@@ -2071,7 +2071,7 @@
       localStorage.removeItem('siwasup_agents_cache_v1');
       localStorage.removeItem('siwasup_point_transactions_v1');
       if (localStorage.getItem('siwasup_my_agent_ref') === 'S22') {
-        localStorage.setItem('siwasup_my_agent_ref', 'S90');
+        localStorage.setItem('siwasup_my_agent_ref', 'SW000');
       }
     } catch (e) {}
 
@@ -2114,15 +2114,15 @@
     );
 
     if (!found) {
-      let newCode = 'TON';
+      let newCode = 'SA000';
       if (!(mId === 'app_office_004' || mName.includes('ต้น') || mNick === 'ต้น' || mName.includes('nassty'))) {
-        if (mId && /^S\d+$/i.test(mId)) {
+        if (mId && /^(?:S|SW|SA)\d+$/i.test(mId)) {
           newCode = mId.toUpperCase();
         } else {
           const maxNum = currentAgents.reduce((mx, a) => {
             const n = parseInt(String(a.code || '').replace(/\D/g, ''), 10);
             return (!isNaN(n) && n < 900 && n > mx) ? n : mx;
-          }, 126);
+          }, 127);
           newCode = 'S' + (maxNum + 1);
         }
       }
@@ -2132,7 +2132,7 @@
         const newAgent = {
           code: newCode,
           name: memberData.name || 'สมาชิกศิวาทรัพย์',
-          nickname: memberData.nickname || (newCode === 'TON' ? 'ต้น' : memberData.name),
+          nickname: memberData.nickname || (newCode === 'SA000' ? 'ต้น' : memberData.name),
           status: 'active',
           startDate: 'Season 1 (2569)',
           phone: memberData.phone || '',
