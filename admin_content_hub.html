@@ -77,7 +77,7 @@
   </main>
 
   <!-- Editor Modal -->
-  <div id="editorModal" class="hidden fixed inset-0 z-50 bg-black/55 backdrop-blur-sm flex items-center justify-center p-4" onclick="if(event.target===this) closeEditorModal()">
+  <div id="editorModal" class="hidden fixed inset-0 z-50 bg-black/55 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-lg w-full p-6 border-2 border-[#C2A460] shadow-2xl space-y-3 max-h-[92vh] overflow-y-auto text-xs">
       <div class="flex items-center justify-between pb-2 border-b border-[#E5D5B5]">
         <h3 id="editorModalTitle" class="text-base font-extrabold text-[#2C2218]">📝 สร้าง / แก้ไขคอนเทนต์</h3>
@@ -165,8 +165,10 @@
   <script>
     const API_BASE = 'https://siwasup-cobroker-os.onrender.com';
     const SESSION_KEY = 'siwasup_session';
+    const DRAFT_KEY = 'siwasup_content_draft_v1';
     let allItems = [];
     let currentAud = 'all';
+    let _editorDirty = false;
 
     const CAT_LABELS = {
       just_sold: '🎉 บ้านเพิ่งขาย (Just Sold)',
@@ -326,9 +328,47 @@
       if (selectedVal && opts.some(([k]) => k === selectedVal)) sel.value = selectedVal;
     }
 
+    function saveLocalDraft() {
+      try {
+        const draft = {
+          id: document.getElementById('edId').value,
+          title: document.getElementById('edTitle').value,
+          audience: document.getElementById('edAudience').value,
+          category: document.getElementById('edCategory').value,
+          status: document.getElementById('edStatus').value,
+          pinned: document.getElementById('edPinned').checked,
+          cover_image: document.getElementById('edCover').value,
+          summary: document.getElementById('edSummary').value,
+          body: document.getElementById('edBody').value
+        };
+        if (draft.title || draft.summary || draft.body || draft.cover_image) {
+          localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+          _editorDirty = true;
+        }
+      } catch (e) {}
+    }
+
+    function clearLocalDraft() {
+      try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
+      _editorDirty = false;
+    }
+
     function openEditorModal(id) {
-      const it = id ? allItems.find(x => x.id === id) : null;
-      document.getElementById('edId').value = it ? it.id : '';
+      let it = id ? allItems.find(x => x.id === id) : null;
+      let restored = false;
+      if (!id) {
+        try {
+          const raw = localStorage.getItem(DRAFT_KEY);
+          if (raw) {
+            const d = JSON.parse(raw);
+            if (d && !d.id && (d.title || d.summary || d.body || d.cover_image)) {
+              it = d;
+              restored = true;
+            }
+          }
+        } catch (e) {}
+      }
+      document.getElementById('edId').value = it ? (it.id || '') : '';
       document.getElementById('edTitle').value = it ? (it.title || '') : '';
       document.getElementById('edAudience').value = it ? (it.audience || 'public') : 'public';
       syncCategoryOptions(it ? it.category : '');
@@ -338,10 +378,23 @@
       updateCoverPreview();
       document.getElementById('edSummary').value = it ? (it.summary || '') : '';
       document.getElementById('edBody').value = it ? (it.body || '') : '';
-      document.getElementById('edUploadStatus').classList.add('hidden');
+      const stEl = document.getElementById('edUploadStatus');
+      if (restored) {
+        stEl.textContent = '💾 กู้คืนข้อความที่พิมพ์ค้างไว้ให้อัตโนมัติแล้ว';
+        stEl.classList.remove('hidden');
+      } else {
+        stEl.classList.add('hidden');
+      }
+      _editorDirty = restored;
       document.getElementById('editorModal').classList.remove('hidden');
     }
-    function closeEditorModal() { document.getElementById('editorModal').classList.add('hidden'); }
+    function closeEditorModal(force) {
+      if (!force && _editorDirty) {
+        const hasText = document.getElementById('edTitle').value.trim() || document.getElementById('edBody').value.trim();
+        if (hasText && !confirm('มีข้อความที่ยังไม่ได้กดบันทึก (ระบบจำร่างไว้ให้แล้ว) ต้องการปิดหน้าต่างหรือไม่?')) return;
+      }
+      document.getElementById('editorModal').classList.add('hidden');
+    }
     function closePreviewModal() { document.getElementById('previewModal').classList.add('hidden'); }
 
     function updateCoverPreview() {
@@ -445,7 +498,8 @@
           const err = await res.json().catch(() => ({}));
           return alert('❌ บันทึกไม่สำเร็จ: ' + (err.error || res.status));
         }
-        closeEditorModal();
+        clearLocalDraft();
+        closeEditorModal(true);
         await loadAllContents();
       } catch (e) {
         alert('❌ เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ: ' + e.message);
@@ -478,12 +532,16 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         if (!document.getElementById('previewModal').classList.contains('hidden')) closePreviewModal();
-        else if (!document.getElementById('editorModal').classList.contains('hidden')) closeEditorModal();
       }
     });
 
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) lucide.createIcons();
+      const edModal = document.getElementById('editorModal');
+      if (edModal) {
+        edModal.addEventListener('input', saveLocalDraft);
+        edModal.addEventListener('change', saveLocalDraft);
+      }
       bootContentHub();
     });
   </script>
