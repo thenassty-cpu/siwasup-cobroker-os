@@ -1402,7 +1402,7 @@ def build_property_flex_bubble(prop, client_name="คุณลูกค้า", 
     if not img_url.startswith("http"):
         img_url = "https://assets.siwasup.com/fallback_property.jpg"
 
-    detail_url = f"https://assets.siwasup.com/catalog.html?id={pid}&property={pid}&ref={agent_ref}&src=flex_carousel#prop-{pid}"
+    detail_url = f"https://assets.siwasup.com/catalog.html?id={pid}&property={pid}&ref={agent_ref}&view=client&src=flex_carousel#prop-{pid}"
 
     bubble = {
         "type": "bubble",
@@ -1745,7 +1745,7 @@ def ensure_super_tech_seat(store, uid, name="", picture=""):
     if not seat:
         seat = {
             "id": "app_office_004",
-            "code": "SW004",
+            "code": "SA000",
             "name": "[NASSTY]",
             "nickname": "NASSTY",
             "phone": "0815555555",
@@ -1773,8 +1773,8 @@ def ensure_super_tech_seat(store, uid, name="", picture=""):
         store.setdefault("approved", []).insert(0, seat)
         changed = True
     else:
-        if seat.get("code") != "SW004":
-            seat["code"] = "SW004"
+        if seat.get("code") != "SA000":
+            seat["code"] = "SA000"
             changed = True
         if seat.get("name") != "[NASSTY]":
             seat["name"] = "[NASSTY]"
@@ -2448,6 +2448,20 @@ def parse_agent_link_input(raw_input: str):
     return (avatar_name, agent_note, prop_id)
 
 
+def _next_admin_sa_code(store: dict) -> str:
+    """Assign next available SA003+ code for newly approved admin/staff members."""
+    used_nums = {0, 1, 2}  # Reserved: SA000 (Tech/Ton), SA001 (Bua), SA002 (Lily)
+    for m in (store or {}).get("approved", []):
+        c = str(m.get("code") or m.get("agent_ref") or "").strip().upper()
+        m_sa = re.match(r"^SA(\d{3,})$", c)
+        if m_sa:
+            used_nums.add(int(m_sa.group(1)))
+    nxt = 3
+    while nxt in used_nums:
+        nxt += 1
+    return f"SA{nxt:03d}"
+
+
 def resolve_agent_ref_for_member(member):
     if not isinstance(member, dict):
         return "SW000"
@@ -2456,8 +2470,13 @@ def resolve_agent_ref_for_member(member):
     if mid == "app_office_001" or nick_u == "SW001" or nick_u.startswith("SW001 "):
         return "SW001"
     if mid == "app_office_004" or nick_u in ("NASSTY", "[NASSTY]"):
-        return "SW000"
-    return str(member.get("agent_ref") or member.get("code") or mid or "SW000").strip()
+        return "SA000"
+    if mid == "app_office_002":
+        return str(member.get("agent_ref") or member.get("code") or "SA001").strip()
+    if mid == "app_office_003":
+        return str(member.get("agent_ref") or member.get("code") or "SA002").strip()
+    explicit = str(member.get("agent_ref") or member.get("code") or "").strip()
+    return explicit if explicit else "SW000"
 
 
 def find_agent_line_uid(agent_ref: str) -> str:
@@ -2509,16 +2528,16 @@ def resolve_catalog_link_request(text_raw: str, matched_member: dict, is_admin: 
         r'^(?:สร้าง|ขอ|ส่ง)?(?:ลิงก์|ลิงค์)\s*(?:บ้าน|ทรัพย์|แคตตาล็อก|แค็ตตาล็อก|catalog|ขายบ้าน|ของฉัน|ส่วนตัว|ของตัวแทน|ตัวแทน)',
         tl
     ))
-    has_agent_code = bool(re.search(r'(?:ตัวแทน|เอเจนต์?|รหัส)\s*(?:sw)?\d{3}\b', tl, re.IGNORECASE))
+    has_agent_code = bool(re.search(r'(?:ตัวแทน|เอเจนต์?|แอดมิน|รหัส)\s*(?:s[wa])?\d{3}\b', tl, re.IGNORECASE))
     if not (has_direct_catalog_phrase or starts_with_catalog_req or has_agent_code):
         return None
 
     ag_ref = resolve_agent_ref_for_member(matched_member)
     if is_admin:
-        m_code = re.search(r'\b(sw\d{3}|\d{3})\b', tl, re.IGNORECASE)
+        m_code = re.search(r'\b(s[wa]\d{3}|\d{3})\b', tl, re.IGNORECASE)
         if m_code:
             raw_code = m_code.group(1).upper()
-            ag_ref = raw_code if raw_code.startswith("SW") else f"SW{raw_code}"
+            ag_ref = raw_code if raw_code.startswith(("SW", "SA")) else f"SW{raw_code}"
     url = f"https://assets.siwasup.com/catalog.html?ref={urllib.parse.quote(ag_ref)}&view=client"
     return (ag_ref, url)
 
@@ -2922,9 +2941,9 @@ def format_client_tracking_report(agent_ref: str = "", target_query: str = "", i
     queried_ref = ""
     if q_clean in ("กูล", "คุณกูล", "เจี๊ยบ", "คุณเจี๊ยบ", "gool", "jeab", "sw001", "sw001 jeab"):
         queried_ref = "SW001"
-    elif q_clean in ("ต้น", "พี่ต้น", "คุณต้น", "ton", "nassty", "[nassty]"):
-        queried_ref = "NASSTY"
-    elif re.match(r"^sw\d{3,}$", q_clean):
+    elif q_clean in ("ต้น", "พี่ต้น", "คุณต้น", "ton", "nassty", "[nassty]", "sa000"):
+        queried_ref = "SA000"
+    elif re.match(r"^s[wa]\d{3,}$", q_clean):
         queried_ref = q_clean.upper()
 
     if queried_ref and not is_admin and queried_ref.upper() != ref_u:
@@ -4517,8 +4536,13 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         save_lobby_data(store)
                         self._send_json(200, {"status": "success", "approved": sanitize_member(existing), "linked": True})
                         return
+                    perms_req = payload.get("permissions", {}) or {}
+                    assigned_code = str(payload.get("code") or applicant.get("code") or "").strip().upper()
+                    if not assigned_code and any(bool(perms_req.get(k)) for k in ("standardAdmin", "keyboxAdmin", "executiveAuthority", "systemAdmin")):
+                        assigned_code = _next_admin_sa_code(store)
                     approved_item = {
                         "id": applicant.get("id"),
+                        "code": assigned_code,
                         "name": applicant.get("name"),
                         "nickname": applicant.get("nickname"),
                         "phone": applicant.get("phone"),

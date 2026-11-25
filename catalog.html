@@ -1546,12 +1546,14 @@
 
     function resolveVerifiedMemberRef(m) {
       if (!m) return '';
+      const mid = String(m.id || '').trim().toLowerCase();
+      if (mid === 'app_office_004') return 'SA000';
+      if (mid === 'app_office_001') return 'SW001';
       const rawCode = String(m.code || m.agent_ref || '').trim().toUpperCase();
       if (rawCode) return rawCode;
-      const mid = String(m.id || '').trim().toLowerCase();
-      if (mid === 'app_office_001') return 'SW001';
-      if (mid === 'app_office_004') return 'SW000';
-      return String(m.nickname || m.phone || m.name || '').trim();
+      if (mid === 'app_office_002') return 'SA001';
+      if (mid === 'app_office_003') return 'SA002';
+      return 'SW000';
     }
 
     function syncAdminLobbyBadge(pendingCount, isAdm) {
@@ -6859,10 +6861,10 @@
         avatar: 'https://sprofile.line-scdn.net/0h755WNVbraBoYLnbBTMoWJGh-a3A7XzEIZB0ufXgqYS4mGXxFZklyeSUuM3pxGC1NYEx3KCp-Yyw6GUg-MU19dU56NSJ2TioeNwhTfU8pT3FjZH8XXCp1JSxQQnNxZGYKZjwgJVt5REphRGYSRjpHCVJ0X2taZ1YHPXkETB0cBpl3LB9PNUgkfyoqPium',
         phone: '094-462-9796'
       },
-      // 💻 [NASSTY] (Tech Architect - Mapped to SW000)
-      'SW004': {
-        agentId: 'SW000',
-        name: 'ทีมผู้ดูแลทรัพย์ ศิวาทรัพย์ (Official)',
+      // 💻 [NASSTY] (Tech Architect - Mapped to SA000)
+      'SA000': {
+        agentId: 'SA000',
+        name: 'ทีมผู้ดูแลระบบ ศิวาทรัพย์ (Official Admin)',
         shortName: 'ทีมศิวาทรัพย์',
         tier: 'gryphon',
         publicTitle: 'Siwasup Official Asset Desk',
@@ -6944,8 +6946,14 @@
       if (upper === 'SW000' || upper === 'TON') {
         return AGENT_PROFILES['SW000'];
       }
-      if (upper === 'SW004' || upper.includes('NASSTY') || upper.includes('TON') || upper.includes('SW004') || cleanId.includes('ต้น') || digitsOnly === '0815555555') {
-        return AGENT_PROFILES['SW000'];
+      if (upper === 'SA000' || upper.includes('NASSTY') || digitsOnly === '0815555555') {
+        return AGENT_PROFILES['SA000'];
+      }
+      if (upper === 'SA001') {
+        return AGENT_PROFILES['SW-002'];
+      }
+      if (upper === 'SA002') {
+        return AGENT_PROFILES['SW-003'];
       }
 
       // 2. 🏆 Look up in the official 125 Siwasup Agents roster (siwasup_agents.js)
@@ -6988,12 +6996,13 @@
       }
 
       // 3. Dynamic Fallback for any other custom ref code
+      const isAdminSaCode = /^SA\d+$/i.test(cleanId);
       return {
-        agentId: cleanId || 'SW001',
-        name: cleanId ? `ตัวแทนรหัส ${cleanId}` : 'คุณวรินทร กูลจีรัง (คุณเจี๊ยบ)',
-        shortName: cleanId ? `ตัวแทน ${cleanId}` : 'คุณเจี๊ยบ',
+        agentId: cleanId || 'SW000',
+        name: isAdminSaCode ? `ทีมผู้ดูแลทรัพย์ ศิวาทรัพย์ (Admin ${upper})` : (cleanId ? `ตัวแทนรหัส ${cleanId}` : 'ทีมผู้ดูแลทรัพย์ ศิวาทรัพย์ (Official)'),
+        shortName: isAdminSaCode ? `ทีมศิวาทรัพย์ (${upper})` : (cleanId ? `ตัวแทน ${cleanId}` : 'ทีมศิวาทรัพย์'),
         tier: 'gryphon',
-        publicTitle: 'Verified Property Consultant',
+        publicTitle: isAdminSaCode ? 'Siwasup Official Admin Desk' : 'Verified Property Consultant',
         badgeClass: 'bg-neutral-900 text-[#C2A460] border border-neutral-700',
         avatar: cleanId ? 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80' : 'https://sprofile.line-scdn.net/0h755WNVbraBoYLnbBTMoWJGh-a3A7XzEIZB0ufXgqYS4mGXxFZklyeSUuM3pxGC1NYEx3KCp-Yyw6GUg-MU19dU56NSJ2TioeNwhTfU8pT3FjZH8XXCp1JSxQQnNxZGYKZjwgJVt5REphRGYSRjpHCVJ0X2taZ1YHPXkETB0cBpl3LB9PNUgkfyoqPium',
         phone: '094-462-9796'
@@ -7200,7 +7209,7 @@
 
     function getBundleMessageText() {
       const clientName = (document.getElementById('bundle-client-name').value || 'คุณลูกค้า').trim();
-      const savedRef = localStorage.getItem('siwasup_my_agent_ref') || 'AG-บัวรา';
+      const savedRef = (typeof resolveVerifiedMemberRef === 'function' ? resolveVerifiedMemberRef(window._siwasupVerifiedMember) : '') || localStorage.getItem('siwasup_my_agent_ref') || 'SW000';
       const items = allProperties.filter(p => selectedBundleIds.has(p.id));
       const bundleIds = Array.from(selectedBundleIds).join(',');
       const tParam = (typeof getActiveBundleTrackParam === 'function') ? getActiveBundleTrackParam() : '';
@@ -7963,7 +7972,7 @@
     // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=20261118-0050').then((reg) => {
+        navigator.serviceWorker.register('./sw.js?v=20261125-1450').then((reg) => {
           console.log('Siwasup PWA Service Worker Registered (v2):', reg.scope);
           // Auto check for updates on each load
           if (reg.update) reg.update();
