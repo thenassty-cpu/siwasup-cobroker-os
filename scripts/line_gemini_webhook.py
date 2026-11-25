@@ -12,6 +12,7 @@ import sys
 import threading
 import time
 import re
+import difflib
 from datetime import datetime, timezone, timedelta
 
 TH_TZ = timezone(timedelta(hours=7))
@@ -220,7 +221,36 @@ LOC_MAP = {
     "พุทธมณฑลสาย 2": ["Thawi Watthana", "Bang Khae", "ทวีวัฒนา", "บางแค"],
     "พุทธมณฑลสาย 3": ["Thawi Watthana", "Nong Khaem", "ทวีวัฒนา", "หนองแขม"],
     "พุทธมณฑลสาย 4": ["Nong Khaem", "Sam Phran", "กระทุ่มแบน"],
-    "ราชพฤกษ์": ["Taling Chan", "Phasi Charoen", "ตลิ่งชัน", "ภาษีเจริญ"],
+    "ราชพฤกษ์": ["ราชพฤกษ์", "Ratchaphruek", "Nonthaburi", "Mueang Nonthaburi", "Bang Kruai", "Pak Kret", "Taling Chan", "นนทบุรี", "บางกรวย", "ปากเกร็ด", "ตลิ่งชัน"],
+    "ราชพฤษ": ["ราชพฤกษ์", "Ratchaphruek", "Nonthaburi", "Mueang Nonthaburi", "Bang Kruai", "Pak Kret", "Taling Chan", "นนทบุรี", "บางกรวย", "ปากเกร็ด", "ตลิ่งชัน"],
+    "ราชพฤษ์": ["ราชพฤกษ์", "Ratchaphruek", "Nonthaburi", "Mueang Nonthaburi", "Bang Kruai", "Pak Kret", "Taling Chan", "นนทบุรี", "บางกรวย", "ปากเกร็ด", "ตลิ่งชัน"],
+    "ราชพฤก": ["ราชพฤกษ์", "Ratchaphruek", "Nonthaburi", "Mueang Nonthaburi", "Bang Kruai", "Pak Kret", "Taling Chan", "นนทบุรี", "บางกรวย", "ปากเกร็ด", "ตลิ่งชัน"],
+    "รัตนาธิเบศร์": ["รัตนาธิเบศร์", "Rattanathibet", "Mueang Nonthaburi", "Bang Yai", "Bang Bua Thong", "Nonthaburi", "เมืองนนทบุรี", "บางใหญ่", "บางบัวทอง", "นนทบุรี"],
+    "รัตนาธิเบศ": ["รัตนาธิเบศร์", "Rattanathibet", "Mueang Nonthaburi", "Bang Yai", "Bang Bua Thong", "Nonthaburi", "เมืองนนทบุรี", "บางใหญ่", "บางบัวทอง", "นนทบุรี"],
+    "รัตนาทิเบศ": ["รัตนาธิเบศร์", "Rattanathibet", "Mueang Nonthaburi", "Bang Yai", "Bang Bua Thong", "Nonthaburi", "เมืองนนทบุรี", "บางใหญ่", "บางบัวทอง", "นนทบุรี"],
+    "รัตนาทิเบส": ["รัตนาธิเบศร์", "Rattanathibet", "Mueang Nonthaburi", "Bang Yai", "Bang Bua Thong", "Nonthaburi", "เมืองนนทบุรี", "บางใหญ่", "บางบัวทอง", "นนทบุรี"],
+    "ชัยพฤกษ์": ["ชัยพฤกษ์", "Pak Kret", "Bang Bua Thong", "Nonthaburi", "ปากเกร็ด", "บางบัวทอง", "นนทบุรี"],
+    "แจ้งวัฒนะ": ["แจ้งวัฒนะ", "Chaeng Watthana", "Pak Kret", "Lak Si", "Nonthaburi", "ปากเกร็ด", "หลักสี่", "นนทบุรี"],
+    "งามวงศ์วาน": ["งามวงศ์วาน", "Ngam Wong Wan", "Mueang Nonthaburi", "Lak Si", "Nonthaburi", "เมืองนนทบุรี", "หลักสี่", "นนทบุรี"],
+    "ติวานนท์": ["ติวานนท์", "Tiwanon", "Mueang Nonthaburi", "Pak Kret", "Nonthaburi", "เมืองนนทบุรี", "ปากเกร็ด", "นนทบุรี"],
+    "กาญจนาภิเษก": ["กาญจนาภิเษก", "Bang Yai", "Bang Bua Thong", "Bang Kruai", "Taling Chan", "Bang Khae", "บางใหญ่", "บางบัวทอง", "บางกรวย", "ตลิ่งชัน"],
+    "กัลปพฤกษ์": ["กัลปพฤกษ์", "Phasi Charoen", "Bang Khae", "Bang Bon", "Chom Thong", "ภาษีเจริญ", "บางแค", "บางบอน", "จอมทอง"],
+    "ศรีนครินทร์": ["ศรีนครินทร์", "Srinakarin", "Prawet", "Suan Luang", "Mueang Samut Prakan", "Bang Phli", "ประเวศ", "สวนหลวง", "สมุทรปราการ"],
+    "ศรีนคริน": ["ศรีนครินทร์", "Srinakarin", "Prawet", "Suan Luang", "Mueang Samut Prakan", "ประเวศ", "สวนหลวง", "สมุทรปราการ"],
+    "เทพารักษ์": ["เทพารักษ์", "Theparak", "Mueang Samut Prakan", "Bang Phli", "สมุทรปราการ", "บางพลี"],
+    "เพชรเกษม": ["เพชรเกษม", "Phasi Charoen", "Bang Khae", "Nong Khaem", "ภาษีเจริญ", "บางแค", "หนองแขม"],
+    "สุขสวัสดิ์": ["สุขสวัสดิ์", "Rat Burana", "Phra Pradaeng", "Thung Khu", "ราษฎร์บูรณะ", "พระประแดง", "ทุ่งครุ"],
+    "สุขุมวิท": ["สุขุมวิท", "Sukhumvit", "Watthana", "Khlong Toei", "Phra Khanong", "Bang Na", "Mueang Samut Prakan", "วัฒนา", "คลองเตย", "พระโขนง", "บางนา"],
+    "พระราม 9": ["พระราม 9", "Rama 9", "Huai Khwang", "Suan Luang", "ห้วยขวาง", "สวนหลวง"],
+    "ลำลูกกา": ["ลำลูกกา", "Lam Luk Ka", "Pathum Thani", "ปทุมธานี"],
+    "รังสิต": ["รังสิต", "Rangsit", "Thanyaburi", "Khlong Luang", "Pathum Thani", "ธัญบุรี", "คลองหลวง", "ปทุมธานี"],
+    "คลองหลวง": ["คลองหลวง", "Khlong Luang", "Pathum Thani", "ปทุมธานี"],
+    "ธัญบุรี": ["ธัญบุรี", "Thanyaburi", "Pathum Thani", "ปทุมธานี"],
+    "ไทรน้อย": ["ไทรน้อย", "Sai Noi", "Nonthaburi", "นนทบุรี"],
+    "ศาลายา": ["ศาลายา", "Phutthamonthon", "Salaya", "Nakhon Pathom", "พุทธมณฑล", "นครปฐม"],
+    "หทัยราษฎร์": ["หทัยราษฎร์", "Khlong Sam Wa", "Min Buri", "คลองสามวา", "มีนบุรี"],
+    "นิมิตใหม่": ["นิมิตใหม่", "Khlong Sam Wa", "Min Buri", "คลองสามวา", "มีนบุรี"],
+    "คู้บอน": ["คู้บอน", "Khan Na Yao", "Khlong Sam Wa", "คันนายาว", "คลองสามวา"],
     "ธนบุรี": ["Thon Buri", "Bangkok Yai", "Khlong San", "ธนบุรี", "คลองสาน"],
     "คลองสาน": ["Khlong San", "Thon Buri", "คลองสาน", "ธนบุรี"],
     "ภาษีเจริญ": ["Phasi Charoen", "ภาษีเจริญ", "บางแค"],
@@ -653,29 +683,82 @@ def search_properties(query, user_id=None):
     if new_types:
         ctx["types"] = list(set(new_types))
 
-    # Detect new locations in current message
+    # Detect new locations in current message (longest LOC_MAP keys first + all districts/provinces + fuzzy typo match)
     new_locs = []
-    for k, v in LOC_MAP.items():
+    for k in sorted(LOC_MAP.keys(), key=len, reverse=True):
         if k in query:
-            new_locs.extend(v)
+            new_locs.extend(LOC_MAP[k])
 
-    # Dynamic regex matcher for terms like โซน..., แถว..., เขต..., ย่าน...
-    zone_matches = re.findall(r'(?:โซน|แถว|เขต|ย่าน|อำเภอ)\s*([ก-๙a-zA-Z0-9]+)', query)
+    # Auto-match any district/province present in CATALOG (covers all 77 provinces / 930 amphurs)
+    if not hasattr(search_properties, "_geo_terms"):
+        geo_map = {}
+        for cp in CATALOG:
+            for fld in ("d", "p", "pe"):
+                val = str(cp.get(fld) or "").strip()
+                if len(val) >= 3:
+                    geo_map.setdefault(val.lower(), val)
+        for sp in SIWASUP_PROPS:
+            loc_s = str(sp.get("location") or "").strip()
+            for part in re.split(r"[•,/|\s]+", loc_s):
+                part = part.strip()
+                if len(part) >= 3 and not part.isdigit():
+                    geo_map.setdefault(part.lower(), part)
+        search_properties._geo_terms = geo_map
+    geo_terms = search_properties._geo_terms
+
+    # Direct match against known district/province names
+    for gk, gval in geo_terms.items():
+        if len(gk) >= 3 and gk in q_low and gval not in new_locs:
+            new_locs.append(gval)
+
+    # Dynamic regex matcher for terms like โซน..., แถว..., เขต..., ย่าน..., อำเภอ... + fuzzy typo matching
+    zone_matches = re.findall(r'(?:โซน|แถว|เขต|ย่าน|อำเภอ|ทำเล)\s*([ก-๙a-zA-Z0-9\-\.]+)', query)
     for zm in zone_matches:
-        zm_clean = zm.strip()
-        if len(zm_clean) >= 3 and zm_clean not in ["บ้าน", "คอนโด", "ที่ดิน", "ไหน", "นี้", "ราคา", "งบ"]:
-            for cp in CATALOG:
-                d_val = str(cp.get('d', ''))
-                p_val = str(cp.get('p', ''))
-                if zm_clean.lower() in d_val.lower() or zm_clean in p_val:
-                    if d_val and d_val not in new_locs:
-                        new_locs.append(d_val)
-                    if zm_clean not in new_locs:
-                        new_locs.append(zm_clean)
-                    break
+        for sub_zm in re.split(r'[\-\s]+', zm.strip()):
+            zm_clean = sub_zm.strip()
+            if len(zm_clean) < 3 or zm_clean in ["บ้าน", "คอนโด", "ที่ดิน", "ไหน", "นี้", "ราคา", "งบ"]:
+                continue
+            matched_sub = False
+            for k in sorted(LOC_MAP.keys(), key=len, reverse=True):
+                if k in zm_clean or zm_clean in k:
+                    new_locs.extend(LOC_MAP[k])
+                    matched_sub = True
+            if not matched_sub:
+                for cp in CATALOG:
+                    d_val = str(cp.get('d', ''))
+                    p_val = str(cp.get('p', ''))
+                    if zm_clean.lower() in d_val.lower() or zm_clean in p_val:
+                        if d_val and d_val not in new_locs:
+                            new_locs.append(d_val)
+                        if zm_clean not in new_locs:
+                            new_locs.append(zm_clean)
+                        matched_sub = True
+                        break
+            if not matched_sub:
+                all_candidates = list(LOC_MAP.keys()) + list(geo_terms.values())
+                close = difflib.get_close_matches(zm_clean, all_candidates, n=2, cutoff=0.75)
+                for c_hit in close:
+                    if c_hit in LOC_MAP:
+                        new_locs.extend(LOC_MAP[c_hit])
+                    elif c_hit not in new_locs:
+                        new_locs.append(c_hit)
+
+    # Fallback fuzzy check on standalone Thai/Eng tokens if still no location matched
+    if not new_locs:
+        tokens_chk = [t for t in re.findall(r'[ก-๙a-zA-Z]{4,}', query) if t not in ("อยากได้", "ต้องการ", "แนะนำ", "มัดรวม", "ส่งมา", "บ้านเดี่ยว", "ทาวน์โฮม", "ทาวน์เฮ้าส์", "คอนโด", "ที่ดิน", "ราคา", "ไม่เกิน")]
+        all_candidates = list(LOC_MAP.keys()) + list(geo_terms.values())
+        for tok in tokens_chk:
+            close = difflib.get_close_matches(tok, all_candidates, n=1, cutoff=0.80)
+            for c_hit in close:
+                if c_hit in LOC_MAP:
+                    new_locs.extend(LOC_MAP[c_hit])
+                elif c_hit not in new_locs:
+                    new_locs.append(c_hit)
 
     if new_locs:
-        ctx["locs"] = list(set(new_locs))
+        ctx["locs"] = list(dict.fromkeys(new_locs))
+    elif zone_matches:
+        ctx["locs"] = []
 
     # Detect budget changes
     if any(w in q_low for w in ["ไม่อั้น", "ทุ่มเพิ่ม", "งบเปิด", "ไม่จำกัด", "เท่าไหร่ก็ได้", "กี่บาทก็ได้", "แพงแค่ไหน"]):
@@ -733,9 +816,9 @@ def search_properties(query, user_id=None):
                 continue
         results.append(p)
 
-    # Automatic geographic expansion if results < target_count in western/Bangkok area
-    if len(results) < target_count and eff_locs and any(w in str(eff_locs) for w in ['Bangkok Noi', 'Taling Chan', 'Bang Phlat', 'Thon Buri', 'Bang Khae']):
-        west_expand = ['Taling Chan', 'Bangkok Noi', 'Bang Phlat', 'Thawi Watthana', 'Phasi Charoen', 'Bang Khae', 'Thon Buri']
+    # Automatic geographic expansion ONLY when explicitly searching Siriraj / inner-Thonburi core
+    if len(results) < target_count and eff_locs and any(w in str(eff_locs) for w in ['Bangkok Noi', 'Bang Phlat', 'Thon Buri']) and 'Nonthaburi' not in str(eff_locs):
+        west_expand = ['Taling Chan', 'Bangkok Noi', 'Bang Phlat', 'Thawi Watthana', 'Phasi Charoen', 'Thon Buri']
         existing_cat_codes = {p.get('c') for p in results}
         for p in CATALOG:
             if len(results) >= target_count * 2:
