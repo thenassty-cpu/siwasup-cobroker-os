@@ -280,6 +280,60 @@ def _extract_thai_geo(text: str) -> dict | None:
     return None
 
 
+def _detect_conflicting_zones(text: str, threshold_km: float = 20.0) -> list[str]:
+    """Detect 2+ distinct zones/districts/provinces in one query that are > threshold_km apart."""
+    if not text or not _THAI_GEO.get("districts"):
+        return []
+    raw_text = str(text)
+    has_geo_prefix = bool(re.search(r'(?:จังหวัด|จ\.|อำเภอ|อ\.|เขต|ตำบล|ต\.|แขวง|โซน|แถว|ย่าน)', raw_text))
+    clean = re.sub(r'(?:ตำบล|ต\.|แขวง|อำเภอ|อ\.|เขต|จังหวัด|จ\.)', ' ', raw_text)
+    clean = re.sub(r'\s+', ' ', clean).strip()
+
+    hits = []  # list of (label, lat, lng)
+    rem = clean
+
+    for zk, (zp, zd, zlat, zlng) in sorted(_THAI_SPECIAL_ZONE_COORDS.items(), key=lambda x: len(x[0]), reverse=True):
+        if zk in rem:
+            hits.append((zk, zlat, zlng))
+            rem = rem.replace(zk, " ", 1)
+
+    for pn in _THAI_PROV_NAMES:
+        if pn in rem:
+            if pn in _SHORT_AMBIGUOUS_PROVS and not has_geo_prefix and not re.search(rf'(?:^|\s){re.escape(pn)}(?:\s|$)', clean):
+                continue
+            canon_p = _THAI_PROV_ALIASES.get(pn, pn)
+            p_hit = _THAI_GEO.get("provinces", {}).get(canon_p)
+            if p_hit:
+                hits.append((canon_p, p_hit["lat"], p_hit["lng"]))
+                rem = rem.replace(pn, " ", 1)
+
+    # Check unique/major districts (len >= 3) in remaining text
+    dist_by_name = {}
+    for d in _THAI_GEO.get("districts", []):
+        dn = d.get("d", "")
+        if len(dn) >= 3 and not dn.startswith("เมือง"):
+            dist_by_name.setdefault(dn, []).append(d)
+    for dn in sorted(dist_by_name.keys(), key=len, reverse=True):
+        if dn in rem and len(dist_by_name[dn]) == 1:
+            d0 = dist_by_name[dn][0]
+            hits.append((dn, d0["lat"], d0["lng"]))
+            rem = rem.replace(dn, " ", 1)
+
+    if len(hits) < 2:
+        return []
+
+    # Check if any pair is > threshold_km apart
+    for i in range(len(hits)):
+        for j in range(i + 1, len(hits)):
+            if _haversine_km(hits[i][1], hits[i][2], hits[j][1], hits[j][2]) > threshold_km:
+                seen = []
+                for lbl, _, _ in hits:
+                    if lbl not in seen:
+                        seen.append(lbl)
+                return seen[:3]
+    return []
+
+
 def _parse_prop_lat_lng(sp: dict):
     for lk, gk in (("latitude", "longitude"), ("lat", "lng")):
         try:
@@ -789,6 +843,11 @@ def parse_price(text):
 def search_properties(query, user_id=None):
     q_low = query.lower().strip()
 
+    # Guard against conflicting distant zones in one query (e.g. "ขอบ้าน ทุ่งครุ มีนบุรี")
+    conflicts = _detect_conflicting_zones(query, threshold_km=20.0)
+    if len(conflicts) >= 2:
+        return [], "GEO_CONFLICT_CONFIRM:" + "|".join(conflicts)
+
     # Detect requested quantity (e.g. "ขอ 5", "ขอไป 5", "ขอ 5 หลัง", "มี 4 ที่มั้ย")
     target_count = 3  # default fallback
     m_count = re.search(r'(?:ขอไป|ขอ|เอา|ดู|สัก|ส่งมา|มี)\s*(\d{1,2})\s*(?:หลัง|ที่|แปลง|รายการ|ห้อง|แห่ง)?(?!\s*(?:ล้าน|บาท))', query)
@@ -1194,6 +1253,14 @@ SYSTEM_INSTRUCTION = """คุณคือ "น้องศิวา" (Siwasup A
 
 def ask_gemini(user_id, user_text, is_continuous=False, retries=2):
     matched_props, search_mode = search_properties(user_text, user_id=user_id)
+    if str(search_mode).startswith("GEO_CONFLICT_CONFIRM:"):
+        zones = search_mode.split(":", 1)[1].split("|")
+        z_str = " กับ ".join(zones[:2]) if len(zones) == 2 else ", ".join(zones)
+        msg = (
+            f"📍 เห็นระบุมา {len(zones)} โซนที่อยู่คนละฝั่งกัน ({z_str}) — "
+            f"อยากให้คัดเน้นโซนไหนก่อน หรือให้ส่งแยกทีละโซนดีครับ?"
+        )
+        return msg, [], "GEO_CONFLICT_CONFIRM", []
     history = USER_CHAT_HISTORY.get(user_id, [])
 
     prompt_parts = []
@@ -5987,9 +6054,17 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                     matched_codes, search_mode, matched_props, flex_carousel = [], 'AGENT_CATALOG_LINK', [], None
                                 elif matched_member and m_link and is_prop_or_cmd_link and _link_geo_hit:
                                     ag_ref = resolve_agent_ref_for_member(matched_member)
-                                    # Mandatory Parameter / Ambiguity Gate: if tambon matches multiple provinces without province specified, ask first!
+                                    conflicts = _detect_conflicting_zones(text_raw, threshold_km=20.0)
                                     ambig = _link_geo_hit.get("ambiguous") or []
-                                    if ambig and not _link_geo_hit.get("province"):
+                                    if len(conflicts) >= 2:
+                                        z_str = " กับ ".join(conflicts[:2]) if len(conflicts) == 2 else ", ".join(conflicts)
+                                        ai_reply = (
+                                            f"📍 เห็นระบุมา {len(conflicts)} โซนที่อยู่คนละฝั่งกัน ({z_str}) — "
+                                            f"อยากให้คัดเน้นโซนไหนก่อน หรือให้ส่งแยกทีละโซนดีครับ?"
+                                        )
+                                        matched_codes, search_mode, matched_props, flex_carousel = [], 'GEO_CONFLICT_CONFIRM', [], None
+                                    # Mandatory Parameter / Ambiguity Gate: if tambon matches multiple provinces without province specified, ask first!
+                                    elif ambig and not _link_geo_hit.get("province"):
                                         prov_choices = list(dict.fromkeys(a["p"] for a in ambig))[:5]
                                         sub_name = _link_geo_hit.get("subdistrict") or ""
                                         ai_reply = (
