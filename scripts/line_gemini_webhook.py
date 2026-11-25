@@ -2079,12 +2079,37 @@ def _is_consignment_founder(member: dict) -> bool:
         return False
     mid = str(member.get("id") or "").strip().lower()
     code = str(member.get("code") or "").strip().upper()
-    if mid in ("app_office_001", "app_office_002", "app_office_004") or code in ("SW001", "SW002", "SW004"):
+    if mid in ("app_office_001", "app_office_002", "app_office_004") or code in ("SW001", "SW002", "SW004", "SA000", "SA001"):
         return True
     perms = member.get("permissions") or {}
     if bool(perms.get("executiveAuthority") or perms.get("systemAdmin") or member.get("is_leader")):
         return True
     return clean_phone_str(member.get("phone") or "") == "0853365703"
+
+
+def _is_gool_approver(member: dict) -> bool:
+    """Only Gool (SW001) or systemAdmin may approve new agent-submitted consignment properties."""
+    if not isinstance(member, dict):
+        return False
+    mid = str(member.get("id") or "").strip().lower()
+    code = str(member.get("code") or "").strip().upper()
+    perms = member.get("permissions") or {}
+    return mid == "app_office_001" or code == "SW001" or bool(perms.get("systemAdmin"))
+
+
+def _is_bua_publisher(member: dict) -> bool:
+    """Only Bua (SA001) or systemAdmin may publish Sandbox consignment properties to Public."""
+    if not isinstance(member, dict):
+        return False
+    mid = str(member.get("id") or "").strip().lower()
+    code = str(member.get("code") or "").strip().upper()
+    perms = member.get("permissions") or {}
+    return (
+        mid == "app_office_002"
+        or code in ("SA001", "SW002")
+        or clean_phone_str(member.get("phone") or "") == "0853365703"
+        or bool(perms.get("systemAdmin"))
+    )
 
 
 def _consignment_role(member: dict) -> str:
@@ -3610,7 +3635,10 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             out = []
             for p in store.get("properties", []):
                 if p.get("status") == "available" and _is_contract_verified(p):
-                    safe_p = {k: v for k, v in p.items() if k not in ("contract_files", "internal_note")}
+                    safe_p = {
+                        k: v for k, v in p.items()
+                        if k not in ("contract_files", "internal_note", "owner_phone", "owner_id_card", "deed_no", "land_no", "survey_page", "survey_no", "house_no")
+                    }
                     out.append(safe_p)
             self._send_json(200, {
                 "status": "success",
@@ -4244,6 +4272,11 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                             if role == "founder":
                                 tprop["contract_verified"] = True
                             tprop["linked_contract_id"] = cid
+                            for f_key in ("owner_phone", "deed_no", "land_no", "survey_page", "survey_no", "project_name", "house_no", "subdistrict", "district"):
+                                if payload.get(f_key) is not None and str(payload.get(f_key)).strip():
+                                    tprop[f_key] = str(payload.get(f_key)).strip()
+                            if payload.get("survey_no") and not tprop.get("survey_page"):
+                                tprop["survey_page"] = str(payload.get("survey_no")).strip()
                             tprop["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
                             tprop["updated_by"] = actor_name
                             cstore["properties"] = cprops
@@ -4294,6 +4327,8 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                             pid = str(prop.get("id")).strip()
                             existing_idx = next((i for i, x in enumerate(props) if str(x.get("id") or "").strip() == pid), None)
                             existing = props[existing_idx] if existing_idx is not None else None
+                        if not prop.get("office_post_commission"):
+                            prop["office_post_commission"] = 1
                         if role == "agent":
                             if existing is not None and not _is_consignment_owner(existing, acting):
                                 self._send_json(403, {"error": "ไม่มีสิทธิ์แก้ไขทรัพย์ของผู้อื่น"})
@@ -4303,14 +4338,24 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                             prop["submitted_by_name"] = existing.get("submitted_by_name") if existing else actor_name
                             prop["assigned_agent_code"] = existing.get("assigned_agent_code", "") if existing else actor_code
                             prop["assigned_agent_name"] = existing.get("assigned_agent_name", "") if existing else actor_name
-                            if str(prop.get("status") or "") not in ("pending_photos", "ready_for_review"):
+                            if is_new or (existing and existing.get("status") == "pending_gool_approval"):
+                                prop["status"] = "pending_gool_approval"
+                            elif str(prop.get("status") or "") not in ("pending_photos", "ready_for_review", "pending_gool_approval"):
                                 prop["status"] = "pending_photos" if not (prop.get("images") or []) else "ready_for_review"
                         elif role == "staff":
-                            if existing is not None:
-                                prop["assigned_agent_code"] = existing.get("assigned_agent_code", "")
-                                prop["assigned_agent_name"] = existing.get("assigned_agent_name", "")
-                            if str(prop.get("status") or "") == "available" and (not existing or existing.get("status") != "available"):
+                            if existing and existing.get("status") == "pending_gool_approval" and str(prop.get("status") or "") != "pending_gool_approval":
+                                prop["status"] = "pending_gool_approval"
+                            elif str(prop.get("status") or "") == "available" and (not existing or existing.get("status") != "available"):
                                 prop["status"] = "ready_for_review"
+                        elif role == "founder":
+                            prev_status = existing.get("status") if existing else ""
+                            next_status = str(prop.get("status") or "")
+                            if prev_status == "pending_gool_approval" and next_status != "pending_gool_approval" and not _is_gool_approver(acting):
+                                self._send_json(403, {"error": "เฉพาะคุณกูล (SW001) เท่านั้นที่อนุมัติบ้านใหม่จากเซลล์ได้"})
+                                return
+                            if next_status == "available" and prev_status != "available" and not _is_bua_publisher(acting):
+                                self._send_json(403, {"error": "เฉพาะคุณบัว (SA001) เท่านั้นที่กดปล่อยบ้านออก Public ได้"})
+                                return
                         if role != "founder":
                             prop["contract_verified"] = bool(existing.get("contract_verified")) if existing else False
                         prop["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")

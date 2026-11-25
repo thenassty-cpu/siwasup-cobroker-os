@@ -184,6 +184,9 @@
     <div class="gold-card rounded-2xl p-3 sm:p-3.5 flex flex-wrap items-center justify-between gap-2.5 sm:gap-3">
       <div class="flex overflow-x-auto sm:flex-wrap items-center gap-1.5 w-full sm:w-auto pb-1 sm:pb-0" id="filterPills">
         <button onclick="setFilter('all')" data-filter="all" class="px-3 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 shrink-0 rounded-xl bg-[#2C2218] text-white text-xs font-bold">ทั้งหมด</button>
+        <button onclick="setFilter('pending_gool_approval')" data-filter="pending_gool_approval" class="px-3 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 shrink-0 rounded-xl bg-[#FAF5EB] text-orange-800 text-xs font-bold flex items-center gap-1">
+          <i data-lucide="user-check" class="w-3.5 h-3.5" stroke-width="1.5"></i><span>รอกูลอนุมัติ</span>
+        </button>
         <button onclick="setFilter('pending_photos')" data-filter="pending_photos" class="px-3 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 shrink-0 rounded-xl bg-[#FAF5EB] text-[#6E5A44] text-xs font-bold flex items-center gap-1">
           <i data-lucide="image" class="w-3.5 h-3.5" stroke-width="1.5"></i><span>รอลงรูป</span>
         </button>
@@ -353,9 +356,29 @@
             <input id="addExpiry" type="date" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
           </div>
         </div>
-        <div>
-          <label class="font-bold block mb-1">โซน / ทำเล</label>
-          <input id="addZone" type="text" placeholder="เช่น โซนพระราม 2-บางขุนเทียน" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold block mb-1">โซน / ทำเล</label>
+            <input id="addZone" type="text" placeholder="เช่น โซนพระราม 2-บางขุนเทียน" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+          </div>
+          <div>
+            <label class="font-bold block mb-1">เบอร์โทรศัพท์เจ้าของ (หลังบ้าน)</label>
+            <input id="addOwnerPhone" type="tel" placeholder="08X-XXX-XXXX" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+          </div>
+        </div>
+        <div class="p-2.5 rounded-xl bg-[#FAF7F2] border border-[#E5D5B5] space-y-2">
+          <div class="font-bold text-[#6E5A44]">📍 ที่อยู่แยกส่วน &amp; ข้อมูลโฉนด (กรอกทีหลังได้ใน Sandbox)</div>
+          <div class="grid grid-cols-2 gap-2">
+            <input id="addProjectName" type="text" placeholder="ชื่อโครงการ / หมู่บ้าน" class="w-full p-2 rounded-lg bg-white border border-[#D8C39A]">
+            <input id="addHouseNo" type="text" placeholder="บ้านเลขที่" class="w-full p-2 rounded-lg bg-white border border-[#D8C39A]">
+            <input id="addSubdistrict" type="text" placeholder="แขวง / ตำบล" class="w-full p-2 rounded-lg bg-white border border-[#D8C39A]">
+            <input id="addDistrict" type="text" placeholder="เขต / อำเภอ" class="w-full p-2 rounded-lg bg-white border border-[#D8C39A]">
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <input id="addDeedNo" type="text" placeholder="เลขโฉนด" class="w-full p-2 rounded-lg bg-white border border-[#D8C39A]">
+            <input id="addLandNo" type="text" placeholder="เลขที่ดิน" class="w-full p-2 rounded-lg bg-white border border-[#D8C39A]">
+            <input id="addSurveyPage" type="text" placeholder="หน้าสำรวจ" class="w-full p-2 rounded-lg bg-white border border-[#D8C39A]">
+          </div>
         </div>
         <div>
           <label class="font-bold block mb-1">หมายเหตุภายใน (ซ่อนจากลูกค้า)</label>
@@ -366,8 +389,93 @@
         <button onclick="closeAddPropertyModal()" class="flex-1 py-2.5 rounded-xl border border-slate-300 font-bold text-slate-600">ยกเลิก</button>
         <button onclick="saveNewProperty()" class="flex-1 py-2.5 rounded-xl gold-btn font-extrabold shadow-sm flex items-center justify-center gap-1.5">
           <i data-lucide="save" class="w-4 h-4" stroke-width="1.5"></i>
-          <span>บันทึกเป็น "รอลงรูป"</span>
+          <span>บันทึกเข้า Sandbox</span>
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3.5: EDIT PROPERTY INFO IN SANDBOX (Admin/Staff/Founder) -->
+  <div id="editInfoModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 border-2 border-[#C2A460] shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto text-xs">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E5D5B5]">
+        <div>
+          <h3 class="text-base font-extrabold text-[#2C2218]">✏️ แก้ไขข้อมูลบ้านฝากขาย (Sandbox)</h3>
+          <p id="editInfoModalId" class="text-[11px] font-mono text-[#967332]"></p>
+        </div>
+        <button onclick="closeEditInfoModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div class="space-y-2.5">
+        <div>
+          <label class="font-bold block mb-1">ชื่อโครงการ / หัวข้อบ้าน *</label>
+          <input id="eiTitle" type="text" class="w-full p-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold block mb-1">ราคาขาย (บาท) *</label>
+            <input id="eiPrice" type="number" class="w-full p-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+          </div>
+          <div>
+            <label class="font-bold block mb-1">เบอร์โทรศัพท์เจ้าของ</label>
+            <input id="eiOwnerPhone" type="tel" class="w-full p-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold block mb-1">ชื่อโครงการ</label>
+            <input id="eiProjectName" type="text" class="w-full p-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+          </div>
+          <div>
+            <label class="font-bold block mb-1">บ้านเลขที่</label>
+            <input id="eiHouseNo" type="text" class="w-full p-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+          </div>
+          <div>
+            <label class="font-bold block mb-1">แขวง / ตำบล</label>
+            <input id="eiSubdistrict" type="text" class="w-full p-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+          </div>
+          <div>
+            <label class="font-bold block mb-1">เขต / อำเภอ</label>
+            <input id="eiDistrict" type="text" class="w-full p-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="font-bold block mb-1">เลขโฉนด</label>
+            <input id="eiDeedNo" type="text" class="w-full p-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+          </div>
+          <div>
+            <label class="font-bold block mb-1">เลขที่ดิน</label>
+            <input id="eiLandNo" type="text" class="w-full p-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+          </div>
+          <div>
+            <label class="font-bold block mb-1">หน้าสำรวจ</label>
+            <input id="eiSurveyPage" type="text" class="w-full p-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold block mb-1">รหัสเซลล์ผู้ดูแล (เช่น SW128)</label>
+            <input id="eiCaretakerCode" type="text" placeholder="SWxxx" class="w-full p-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A] font-mono">
+          </div>
+          <div>
+            <label class="font-bold block mb-1">ชื่อเซลล์ผู้ดูแล</label>
+            <input id="eiCaretakerName" type="text" placeholder="ระบุชื่อผู้ดูแล" class="w-full p-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+          </div>
+        </div>
+        <div>
+          <label class="font-bold block mb-1">โซน / ทำเล</label>
+          <input id="eiZone" type="text" class="w-full p-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+        </div>
+        <div>
+          <label class="font-bold block mb-1">หมายเหตุภายใน (ซ่อนจากลูกค้า)</label>
+          <input id="eiNote" type="text" class="w-full p-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+        </div>
+      </div>
+      <div class="flex items-center gap-2 pt-2">
+        <button onclick="closeEditInfoModal()" class="flex-1 py-2.5 rounded-xl border border-slate-300 font-bold text-slate-600">ยกเลิก</button>
+        <button onclick="saveEditInfo()" class="flex-1 py-2.5 rounded-xl gold-btn font-extrabold shadow-sm">💾 บันทึกการแก้ไข</button>
       </div>
     </div>
   </div>
@@ -560,10 +668,12 @@
         const phone = String(m.phone || '').replace(/\D/g, '');
         const isFounder = (
           id === 'app_office_001' || id === 'app_office_002' || id === 'app_office_004' ||
-          code === 'SW001' || code === 'SW002' || code === 'SW004' ||
+          code === 'SW001' || code === 'SW002' || code === 'SW004' || code === 'SA000' || code === 'SA001' ||
           Boolean(perms.executiveAuthority || perms.systemAdmin || m.is_leader) ||
           phone === '0853365703'
         );
+        window._isGoolApprover = (id === 'app_office_001' || code === 'SW001' || Boolean(perms.systemAdmin));
+        window._isBuaPublisher = (id === 'app_office_002' || code === 'SA001' || code === 'SW002' || phone === '0853365703' || Boolean(perms.systemAdmin));
         const isStaff = !isFounder && Boolean(perms.standardAdmin || perms.keyboxAdmin);
         actualRole = isFounder ? 'founder' : (isStaff ? 'staff' : 'agent');
 
@@ -861,22 +971,24 @@
       const SIM_AGENT_CODE = 'SW_HAI';
       const list = properties.filter(p => {
         if (isAgentView && !isRealAgent && (p.status !== 'available' || p.assigned_agent_code !== SIM_AGENT_CODE)) return false;
+        if (currentFilter === 'pending_gool_approval' && p.status !== 'pending_gool_approval') return false;
         if (currentFilter === 'pending_photos' && p.status !== 'pending_photos') return false;
         if (currentFilter === 'ready_for_review' && p.status !== 'ready_for_review') return false;
         if (currentFilter === 'available' && p.status !== 'available') return false;
         if (currentFilter === 'expired' && p.status !== 'expired') return false;
         if (['no_contract', 'open_contract', 'exclusive_contract'].includes(currentFilter) && p.consignment_type !== currentFilter) return false;
         if (q) {
-          const hay = `${p.id} ${p.title} ${p.zone} ${p.district || ''} ${p.province || ''} ${p.address || ''} ${p.assigned_agent_name}`.toLowerCase();
+          const hay = `${p.id} ${p.title} ${p.zone} ${p.project_name || ''} ${p.house_no || ''} ${p.subdistrict || ''} ${p.district || ''} ${p.province || ''} ${p.address || ''} ${p.deed_no || ''} ${p.owner_phone || ''} ${p.assigned_agent_code || ''} ${p.assigned_agent_name}`.toLowerCase();
           if (!hay.includes(q)) return false;
         }
         return true;
       });
 
       const grid = document.getElementById('cardsGrid');
+      const isFounderView = (simRole === 'bua' && actualRole === 'founder');
       const canUpload = (simRole === 'bua' || simRole === 'poppy' || isRealAgent);
       const canArchive = (simRole === 'bua' || simRole === 'poppy');
-      const canAssign = (simRole === 'bua' && actualRole === 'founder');
+      const canAssign = isFounderView;
 
       if (!list.length) {
         const emptyTitle = (isAgentView && !isRealAgent)
@@ -904,17 +1016,20 @@
         const cInfo = CONTRACT_BADGES[p.consignment_type] || CONTRACT_BADGES.no_contract;
         const imgUrl = (p.images && p.images.length > 0) ? safeUrl(p.images[0]) : '';
         const hasImg = Boolean(imgUrl);
+        const isGoolPending = p.status === 'pending_gool_approval';
         const isPending = p.status === 'pending_photos';
         const isReview = p.status === 'ready_for_review';
         const isExpired = p.status === 'expired';
 
         const statusBadge = isExpired
           ? `<span class="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold bg-slate-600 text-white flex items-center gap-1"><i data-lucide="archive" class="w-3 h-3"></i><span>หมดสัญญา / พับเก็บ</span></span>`
-          : isPending
-            ? `<span class="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold bg-amber-500 text-white flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i><span>รอลงรูป (Sandbox)</span></span>`
-            : isReview
-              ? `<span class="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold bg-blue-600 text-white flex items-center gap-1"><i data-lucide="clipboard-list" class="w-3 h-3"></i><span>พร้อมรอคุณบัวปล่อย</span></span>`
-              : `<span class="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold bg-emerald-600 text-white flex items-center gap-1"><i data-lucide="check-check" class="w-3 h-3"></i><span>ขึ้นระบบจริงแล้ว</span></span>`;
+          : isGoolPending
+            ? `<span class="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold bg-orange-600 text-white flex items-center gap-1"><i data-lucide="user-check" class="w-3 h-3"></i><span>รอกูลอนุมัติเข้า Sandbox</span></span>`
+            : isPending
+              ? `<span class="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold bg-amber-500 text-white flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i><span>รอลงรูป (Sandbox)</span></span>`
+              : isReview
+                ? `<span class="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold bg-blue-600 text-white flex items-center gap-1"><i data-lucide="clipboard-list" class="w-3 h-3"></i><span>พร้อมรอคุณบัวปล่อย</span></span>`
+                : `<span class="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-lg text-[10px] font-extrabold bg-emerald-600 text-white flex items-center gap-1"><i data-lucide="check-check" class="w-3 h-3"></i><span>ขึ้นระบบจริงแล้ว</span></span>`;
 
         const caretakerLabel = p.assigned_agent_name
           ? `<span class="inline-flex items-center gap-1"><i data-lucide="user-check" class="w-3.5 h-3.5 text-[#967332]"></i><span>${escapeHtml(p.assigned_agent_name)}</span><span class="text-[10px] text-[#6E5A44] font-normal">(บัวมอบหมาย)</span></span>`
@@ -965,7 +1080,15 @@
                     <span>ผู้ดูแลลูกค้า:</span>
                     <span class="text-[#8A755E]">${escapeHtml(p.updated_at || p.created_at || 'ชุดตั้งต้น')} • ${escapeHtml(p.updated_by_name || p.submitted_by_name || 'seed_init')}</span>
                   </div>
-                  <div class="font-bold text-[#2C2218]">${caretakerLabel}</div>
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="font-bold text-[#2C2218]">${caretakerLabel}</div>
+                    <span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 text-[9.5px] font-bold">ออฟฟิศโพสต์ได้ ${Number(p.office_post_commission || 1)}%</span>
+                  </div>
+                  ${(p.owner_phone || p.deed_no || p.house_no) ? `<div class="text-[10px] text-[#5C4B37] pt-0.5 flex flex-wrap gap-x-2">
+                    ${p.owner_phone ? `<span>📞 ${escapeHtml(p.owner_phone)}</span>` : ''}
+                    ${p.house_no ? `<span>🏠 ${escapeHtml(p.house_no)} ${escapeHtml(p.subdistrict || '')} ${escapeHtml(p.district || '')}</span>` : ''}
+                    ${p.deed_no ? `<span>📜 โฉนด ${escapeHtml(p.deed_no)} (ดิน ${escapeHtml(p.land_no || '-')}/สำรวจ ${escapeHtml(p.survey_page || p.survey_no || '-')})</span>` : ''}
+                  </div>` : ''}
                   ${p.internal_note ? `<div class="text-[10px] text-[#8A755E] pt-0.5 flex items-start gap-1"><i data-lucide="sticky-note" class="w-3 h-3 shrink-0 mt-0.5"></i><span>${escapeHtml(p.internal_note)}</span></div>` : ''}
                 </div>
                 ` : `
@@ -979,6 +1102,9 @@
 
             <div class="p-3 bg-[#FAF5EB] border-t border-[#E5D5B5] flex flex-wrap items-center gap-2 text-xs">
               ${canUpload ? `
+                <button onclick="openEditInfoModal('${pid}')" class="py-2 px-2.5 rounded-xl bg-white hover:bg-[#FAF7F2] border border-[#C2A460] text-[#7A5B22] font-bold transition whitespace-nowrap flex items-center justify-center gap-1" title="แก้ไขข้อมูลบ้าน/ที่อยู่/โฉนด">
+                  <span>✏️ แก้ไข</span>
+                </button>
                 <button onclick="openPhotoModal('${pid}')" class="flex-1 py-2 px-2.5 rounded-xl bg-white hover:bg-[#FAF7F2] border border-[#C2A460] text-[#7A5B22] font-bold transition whitespace-nowrap flex items-center justify-center gap-1.5">
                   <i data-lucide="image" class="w-4 h-4" stroke-width="1.25"></i>
                   <span>${hasImg ? `รูป (${p.images.length})` : 'ลงรูป'}</span>
@@ -994,19 +1120,25 @@
                   <span>${isExpired ? 'กู้คืน' : 'หมดสัญญา'}</span>
                 </button>
               ` : ''}
-              ${canAssign ? `
+              ${(isGoolPending && isFounderView && window._isGoolApprover) ? `
+                <button onclick="approveGoolEntry('${pid}')" class="w-full py-2 px-3 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-extrabold transition flex items-center justify-center gap-1.5">
+                  <i data-lucide="user-check" class="w-4 h-4" stroke-width="1.5"></i>
+                  <span>👑 กูลอนุมัติรับเข้า Sandbox</span>
+                </button>
+              ` : ''}
+              ${(canAssign && !isGoolPending && window._isBuaPublisher) ? `
                 <button onclick="openAssignModal('${pid}')" class="flex-1 py-2 px-2.5 rounded-xl bg-white hover:bg-[#FAF7F2] border border-[#C2A460] text-[#2C2218] font-bold transition whitespace-nowrap flex items-center justify-center gap-1.5">
                   <i data-lucide="user-check" class="w-4 h-4" stroke-width="1.25"></i>
                   <span>แจกผู้ดูแล</span>
                 </button>
                 <button onclick="togglePublishLive('${pid}')" class="w-full py-2 px-3 rounded-xl ${p.status === 'available' ? 'bg-slate-200 text-slate-700 hover:bg-slate-300' : 'bg-emerald-600 hover:bg-emerald-700 text-white'} font-extrabold transition flex items-center justify-center gap-1.5">
                   <i data-lucide="${p.status === 'available' ? 'pause-circle' : 'check-check'}" class="w-4 h-4" stroke-width="1.5"></i>
-                  <span>${p.status === 'available' ? 'ดึงกลับ Sandbox' : 'ปล่อยขึ้นระบบจริง'}</span>
+                  <span>${p.status === 'available' ? 'ดึงกลับ Sandbox' : 'ปล่อยขึ้นระบบจริง (บัว)'}</span>
                 </button>
               ` : `
                 <div class="flex-1 py-2 px-3 rounded-xl bg-slate-100 text-slate-500 font-bold text-center text-[11px] border border-slate-200 flex items-center justify-center gap-1.5">
                   <i data-lucide="lock" class="w-3.5 h-3.5" stroke-width="1.5"></i>
-                  <span>ปล่อยขึ้นระบบ &amp; แจกสิทธิ์เฉพาะคุณบัว</span>
+                  <span>${isGoolPending ? 'รอคุณกูลอนุมัติรับบ้านใหม่' : 'ปล่อยขึ้นระบบจริงเฉพาะคุณบัว (SA001)'}</span>
                 </div>
               `}
             </div>
@@ -1271,11 +1403,20 @@
         property_type: document.getElementById('addPropType').value,
         condition: document.getElementById('addCondition').value,
         commission_rate: Number(document.getElementById('addCommission').value || 3),
+        office_post_commission: 1,
         price,
         zone: document.getElementById('addZone').value.trim() || 'กรุงเทพฯ-ปริมณฑล',
+        owner_phone: (document.getElementById('addOwnerPhone')?.value || '').trim(),
+        project_name: (document.getElementById('addProjectName')?.value || '').trim(),
+        house_no: (document.getElementById('addHouseNo')?.value || '').trim(),
+        subdistrict: (document.getElementById('addSubdistrict')?.value || '').trim(),
+        district: (document.getElementById('addDistrict')?.value || '').trim(),
+        deed_no: (document.getElementById('addDeedNo')?.value || '').trim(),
+        land_no: (document.getElementById('addLandNo')?.value || '').trim(),
+        survey_page: (document.getElementById('addSurveyPage')?.value || '').trim(),
         consignment_type: document.getElementById('addContractType').value,
         contract_expiry: document.getElementById('addExpiry').value || '',
-        status: 'pending_photos',
+        status: actualRole === 'agent' ? 'pending_gool_approval' : 'pending_photos',
         caretaker_name: actualRole === 'agent' ? actorName : 'คุณบัว (ดูแลหลัก)',
         assigned_agent_code: actualRole === 'agent' ? actorCode : '',
         assigned_agent_name: actualRole === 'agent' ? actorName : '',
@@ -1292,13 +1433,71 @@
         properties = properties.filter(x => x.id !== tempId);
         return;
       }
-      document.getElementById('addTitle').value = '';
-      document.getElementById('addPrice').value = '';
-      document.getElementById('addZone').value = '';
-      document.getElementById('addNote').value = '';
-      document.getElementById('addExpiry').value = '';
+      ['addTitle', 'addPrice', 'addZone', 'addNote', 'addExpiry', 'addOwnerPhone', 'addProjectName', 'addHouseNo', 'addSubdistrict', 'addDistrict', 'addDeedNo', 'addLandNo', 'addSurveyPage'].forEach(fid => {
+        const el = document.getElementById(fid);
+        if (el) el.value = '';
+      });
       renderCards();
       closeAddPropertyModal();
+    }
+
+    let activeEditInfoId = null;
+    function openEditInfoModal(id) {
+      const p = properties.find(x => x.id === id);
+      if (!p) return;
+      activeEditInfoId = id;
+      document.getElementById('editInfoModalId').textContent = `${p.id} • ออฟฟิศโพสต์ขายได้ ${Number(p.office_post_commission || 1)}%`;
+      document.getElementById('eiTitle').value = p.title || '';
+      document.getElementById('eiPrice').value = p.price || '';
+      document.getElementById('eiOwnerPhone').value = p.owner_phone || '';
+      document.getElementById('eiProjectName').value = p.project_name || '';
+      document.getElementById('eiHouseNo').value = p.house_no || '';
+      document.getElementById('eiSubdistrict').value = p.subdistrict || '';
+      document.getElementById('eiDistrict').value = p.district || '';
+      document.getElementById('eiDeedNo').value = p.deed_no || '';
+      document.getElementById('eiLandNo').value = p.land_no || '';
+      document.getElementById('eiSurveyPage').value = p.survey_page || p.survey_no || '';
+      document.getElementById('eiCaretakerCode').value = p.assigned_agent_code || '';
+      document.getElementById('eiCaretakerName').value = p.assigned_agent_name || '';
+      document.getElementById('eiZone').value = p.zone || '';
+      document.getElementById('eiNote').value = p.internal_note || '';
+      document.getElementById('editInfoModal').classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
+    function closeEditInfoModal() { document.getElementById('editInfoModal').classList.add('hidden'); }
+    async function saveEditInfo() {
+      const p = properties.find(x => x.id === activeEditInfoId);
+      if (!p) return;
+      const title = document.getElementById('eiTitle').value.trim();
+      const price = Number(document.getElementById('eiPrice').value || 0);
+      if (!title || !price) return alert('กรุณากรอกชื่อโครงการและราคาขาย');
+      p.title = title;
+      p.price = price;
+      p.owner_phone = document.getElementById('eiOwnerPhone').value.trim();
+      p.project_name = document.getElementById('eiProjectName').value.trim();
+      p.house_no = document.getElementById('eiHouseNo').value.trim();
+      p.subdistrict = document.getElementById('eiSubdistrict').value.trim();
+      p.district = document.getElementById('eiDistrict').value.trim();
+      p.deed_no = document.getElementById('eiDeedNo').value.trim();
+      p.land_no = document.getElementById('eiLandNo').value.trim();
+      p.survey_page = document.getElementById('eiSurveyPage').value.trim();
+      p.assigned_agent_code = document.getElementById('eiCaretakerCode').value.trim().toUpperCase();
+      p.assigned_agent_name = document.getElementById('eiCaretakerName').value.trim();
+      p.zone = document.getElementById('eiZone').value.trim() || p.zone;
+      p.internal_note = document.getElementById('eiNote').value.trim();
+      if (!p.office_post_commission) p.office_post_commission = 1;
+      await saveProperty(p);
+      renderCards();
+      closeEditInfoModal();
+    }
+
+    async function approveGoolEntry(id) {
+      if (!window._isGoolApprover) return alert('เฉพาะคุณกูล (SW001) เท่านั้นที่อนุมัติบ้านใหม่จากเซลล์ได้');
+      const p = properties.find(x => x.id === id);
+      if (!p) return;
+      p.status = (p.images && p.images.length > 0) ? 'ready_for_review' : 'pending_photos';
+      await saveProperty(p);
+      renderCards();
     }
 
     function parseCsvLine(line) {

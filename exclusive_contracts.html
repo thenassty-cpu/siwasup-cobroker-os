@@ -511,9 +511,27 @@
                 <option value="ที่ดินเปล่า">ที่ดินเปล่า</option>
               </select>
             </div>
+            <div class="col-span-2 sm:col-span-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div>
+                <label class="block text-slate-400 mb-1">ชื่อโครงการ / หมู่บ้าน:</label>
+                <input type="text" id="project_name" oninput="syncProjectAddressFields()" placeholder="เช่น มบ.เดอะ ซีนิท" class="glass-input w-full p-2.5 rounded-xl">
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">บ้านเลขที่:</label>
+                <input type="text" id="house_no" oninput="syncProjectAddressFields()" placeholder="เช่น 88/12" class="glass-input w-full p-2.5 rounded-xl">
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">แขวง / ตำบล:</label>
+                <input type="text" id="subdistrict" oninput="syncProjectAddressFields()" placeholder="เช่น วังทองหลาง" class="glass-input w-full p-2.5 rounded-xl">
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">เขต / อำเภอ:</label>
+                <input type="text" id="district" oninput="syncProjectAddressFields()" placeholder="เช่น วังทองหลาง" class="glass-input w-full p-2.5 rounded-xl">
+              </div>
+            </div>
             <div class="col-span-2 sm:col-span-4">
-              <label class="block text-slate-400 mb-1">ชื่อโครงการ / หมู่บ้าน / บ้านเลขที่ทรัพย์ (ถ้าคนละที่กับบัตร ปชช.):</label>
-              <input type="text" id="property_project" placeholder="เช่น มบ.เดอะ ซีนิท วังทองหลาง บ้านเลขที่ 88/12" class="glass-input w-full p-2.5 rounded-xl">
+              <label class="block text-slate-400 mb-1">สรุปที่อยู่ทรัพย์บนหน้าสัญญา (ซิงก์อัตโนมัติ):</label>
+              <input type="text" id="property_project" placeholder="เช่น มบ.เดอะ ซีนิท บ้านเลขที่ 88/12 แขวงวังทองหลาง เขตวังทองหลาง" class="glass-input w-full p-2.5 rounded-xl">
             </div>
           </div>
         </div>
@@ -705,6 +723,10 @@
         CURRENT_AGENT_NAME = String(m.name || m.nickname || CURRENT_AGENT_REF).trim();
         CURRENT_AGENT_ROLE = String(m.title || m.role || 'Siwasup Co-Broker OS').trim();
         localStorage.setItem('siwasup_my_agent_ref', CURRENT_AGENT_REF);
+        const ctEl = document.getElementById('caretaker_name');
+        if (ctEl && !ctEl.value.trim() && CURRENT_AGENT_NAME) {
+          ctEl.value = `${CURRENT_AGENT_NAME} (${CURRENT_AGENT_REF})`;
+        }
         if (overlay) overlay.classList.add('hidden');
         return true;
       } catch (e) {
@@ -1231,13 +1253,22 @@
         }
         
         let locParts = [];
-        if (data.subdistrict) locParts.push(data.subdistrict);
-        if (data.district) locParts.push(data.district);
+        if (data.subdistrict) {
+          locParts.push(data.subdistrict);
+          const sdEl = document.getElementById('subdistrict');
+          if (sdEl) sdEl.value = data.subdistrict;
+        }
+        if (data.district) {
+          locParts.push(data.district);
+          const dtEl = document.getElementById('district');
+          if (dtEl) dtEl.value = data.district;
+        }
         if (data.province) locParts.push(data.province);
         if (locParts.length > 0) {
           const noteSuffix = data.location_note ? ` (${data.location_note})` : '';
           document.getElementById('deed_location').value = locParts.join(' • ') + noteSuffix;
         }
+        syncProjectAddressFields();
         if (v.location_verified === true) {
           setPrecheckBadge('location-precheck-badge', true, data.location_note
             ? `✓ ตำบลมีอยู่จริงในทำเนียบไทย (${data.location_note})`
@@ -1252,8 +1283,34 @@
       }
     }
 
+    function syncProjectAddressFields() {
+      const proj = (document.getElementById('project_name')?.value || '').trim();
+      const hno = (document.getElementById('house_no')?.value || '').trim();
+      const sd = (document.getElementById('subdistrict')?.value || '').trim();
+      const dt = (document.getElementById('district')?.value || '').trim();
+      const parts = [];
+      if (proj) parts.push(proj);
+      if (hno) parts.push('บ้านเลขที่ ' + hno);
+      if (sd) parts.push('แขวง/ตำบล ' + sd);
+      if (dt) parts.push('เขต/อำเภอ ' + dt);
+      const summaryEl = document.getElementById('property_project');
+      if (summaryEl && parts.length > 0) {
+        summaryEl.value = parts.join(' ');
+      }
+      const deedLocEl = document.getElementById('deed_location');
+      if (deedLocEl && !deedLocEl.value.trim() && (sd || dt)) {
+        deedLocEl.value = [sd, dt].filter(Boolean).join(' • ');
+      }
+    }
+
     async function saveContract(event) {
       event.preventDefault();
+      const _surveyVal = document.getElementById('survey_no').value.trim();
+      const _projName = (document.getElementById('project_name')?.value || '').trim();
+      const _houseNo = (document.getElementById('house_no')?.value || '').trim();
+      const _subdist = (document.getElementById('subdistrict')?.value || '').trim();
+      const _dist = (document.getElementById('district')?.value || '').trim();
+      const _caretakerVal = document.getElementById('caretaker_name').value.trim() || (CURRENT_AGENT_NAME ? `${CURRENT_AGENT_NAME} (${CURRENT_AGENT_REF})` : '');
 
       const newContract = {
         id: `SW-CNT-${Date.now().toString().slice(-6)}`,
@@ -1269,16 +1326,21 @@
         owner_line_id: document.getElementById('owner_line_id').value.trim(),
         deed_no: document.getElementById('deed_no').value.trim(),
         land_no: document.getElementById('land_no').value.trim(),
-        survey_no: document.getElementById('survey_no').value.trim(),
+        survey_no: _surveyVal,
+        survey_page: _surveyVal,
         rawang_no: document.getElementById('rawang_no').value.trim(),
         deed_location: document.getElementById('deed_location').value.trim(),
         land_size: document.getElementById('land_size').value.trim(),
         property_type: document.getElementById('property_type').value,
+        project_name: _projName,
+        house_no: _houseNo,
+        subdistrict: _subdist,
+        district: _dist,
         property_project: document.getElementById('property_project').value.trim(),
         selling_price: document.getElementById('selling_price').value.trim(),
         commission_rate: document.getElementById('commission_rate').value,
         contract_days: document.getElementById('contract_duration').value,
-        caretaker_name: document.getElementById('caretaker_name').value.trim(),
+        caretaker_name: _caretakerVal,
         witness_name: document.getElementById('witness_name').value.trim(),
         owner_signature: getSignatureDataUrl('owner'),
         agent_signature: getSignatureDataUrl('agent'),
