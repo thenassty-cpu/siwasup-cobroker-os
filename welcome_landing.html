@@ -452,7 +452,7 @@
   </section>
 
   <!-- CONTENT READER MODAL -->
-  <div id="contentReaderModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" onclick="if(event.target===this) closeContentReader()">
+  <div id="contentReaderModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onclick="if(event.target===this) closeContentReader()">
     <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[88vh] overflow-y-auto shadow-2xl border border-[#D8C39A]">
       <div class="sticky top-0 bg-white/95 backdrop-blur-md px-6 py-4 border-b border-[#E5D5B5] flex items-center justify-between gap-3">
         <span id="cr-category" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-[#FAF7F2] text-[#8A6525] border border-[#D8C39A]"></span>
@@ -854,9 +854,18 @@
         if (items.length > 0 && board) {
           board.classList.remove('hidden');
           _renderContentCards('agentContentGrid', items);
+        } else if (canEditContent && board) {
+          const grid = document.getElementById('agentContentGrid');
+          if (grid) {
+            grid.innerHTML = '<div class="col-span-full bg-white rounded-2xl p-6 border border-[#D8C39A] text-center text-xs text-[#6E5A44]">ยังไม่มีประกาศหรือข่าวสารฝั่งตัวแทน — กดปุ่ม <strong>🎨 เปิด Content Hub Studio</strong> ด้านบนเพื่อสร้างรายการแรก</div>';
+          }
         }
       } catch (e) {}
     }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeContentReader();
+    });
 
     document.addEventListener('DOMContentLoaded', async () => {
       const params = new URLSearchParams(window.location.search);

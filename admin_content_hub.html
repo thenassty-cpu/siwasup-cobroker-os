@@ -8,7 +8,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap');
-    body { font-family: 'Prompt', sans-serif; background: #FAF7F2; color: #2C2218; }
+    body { font-family: 'Prompt', sans-serif; background: #FAF7F2; color: #2C2218; word-break: keep-all; overflow-wrap: break-word; }
     .gold-card { background: #FFFFFF; border: 1px solid #E5D5B5; box-shadow: 0 4px 18px rgba(150, 115, 50, 0.06); }
     .gold-btn { background: linear-gradient(135deg, #D4BA7A 0%, #B89347 100%); color: #241A0E; }
   </style>
@@ -24,14 +24,15 @@
       <h2 class="text-base font-extrabold text-[#2C2218]">ศูนย์จัดการข่าวสาร &amp; บทความ</h2>
       <p id="contentGateMsg" class="text-xs text-[#6E5A44] leading-relaxed">กำลังตรวจสอบสิทธิ์ผู้ดูแลคอนเทนต์ (Poppy / Admin)...</p>
       <div id="contentGateActions" class="hidden space-y-2">
-        <a id="contentGateLoginBtn" href="https://siwasup-cobroker-os.onrender.com/api/auth/line/start?return=content" class="block w-full py-2.5 rounded-xl bg-[#06C755] text-white font-bold text-xs">เข้าสู่ระบบด้วย LINE</a>
-        <a href="welcome_landing.html" class="block text-xs text-[#8A755E] hover:underline">← กลับหน้าหลัก</a>
+        <a id="contentGateLoginBtn" href="https://siwasup-cobroker-os.onrender.com/api/auth/line/start?return=content" class="block w-full py-3 rounded-xl bg-[#06C755] text-white font-bold text-xs">เข้าสู่ระบบด้วย LINE</a>
+        <button id="contentGateSwitchBtn" type="button" onclick="switchLineAccount()" class="hidden w-full py-2.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 font-bold text-xs cursor-pointer">🔄 ออกจากระบบ / สลับบัญชี LINE</button>
+        <a href="welcome_landing.html" class="block py-2 text-xs text-[#8A755E] hover:underline">← กลับหน้าหลัก</a>
       </div>
     </div>
   </div>
 
   <!-- Header -->
-  <header class="bg-[#2C2218] text-white border-b border-[#C2A460]/40 sticky top-0 z-40">
+  <header class="bg-[#2C2218] text-white border-b border-[#C2A460]/40 sm:sticky sm:top-0 z-40">
     <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-xl bg-[#C2A460] text-[#241A0E] flex items-center justify-center font-black">🎨</div>
@@ -52,14 +53,23 @@
   </header>
 
   <main class="max-w-6xl mx-auto px-4 pt-5 space-y-4">
-    <!-- Audience Filter Tabs -->
-    <div class="gold-card rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2">
+    <!-- Audience & Status Filter Tabs -->
+    <div class="gold-card rounded-2xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
       <div class="flex flex-wrap items-center gap-1.5 text-xs">
-        <button onclick="setAudFilter('all')" data-aud="all" class="px-3 py-1.5 rounded-xl bg-[#2C2218] text-white font-bold cursor-pointer">ทั้งหมด</button>
-        <button onclick="setAudFilter('public')" data-aud="public" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-emerald-800 font-bold cursor-pointer">🌐 มุมมองลูกค้า (เพิ่งขาย/How-to/บทความ/ข่าว)</button>
-        <button onclick="setAudFilter('agent')" data-aud="agent" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-amber-900 font-bold cursor-pointer">💼 มุมมองเซลล์ (Top Agent/ประกาศ/นัดหมาย)</button>
+        <button onclick="setAudFilter('all')" data-aud="all" class="px-3.5 py-2.5 rounded-xl bg-[#2C2218] text-white font-bold cursor-pointer">ทั้งหมด</button>
+        <button onclick="setAudFilter('public')" data-aud="public" class="px-3.5 py-2.5 rounded-xl bg-[#FAF5EB] text-emerald-800 font-bold cursor-pointer">🌐 มุมมองลูกค้า</button>
+        <button onclick="setAudFilter('agent')" data-aud="agent" class="px-3.5 py-2.5 rounded-xl bg-[#FAF5EB] text-amber-900 font-bold cursor-pointer">💼 มุมมองเซลล์</button>
       </div>
-      <span id="contentCountBadge" class="text-xs font-bold text-[#967332]">0 รายการ</span>
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <select id="filterStatus" onchange="renderContentGrid()" class="px-3 py-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A] font-semibold">
+          <option value="all">ทุกสถานะ</option>
+          <option value="published">✅ Published</option>
+          <option value="draft">📝 Draft</option>
+          <option value="archived">📦 Archived</option>
+        </select>
+        <input id="filterSearch" type="text" oninput="renderContentGrid()" placeholder="ค้นหาหัวข้อ..." class="px-3 py-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A] w-36 sm:w-44">
+        <span id="contentCountBadge" class="text-xs font-bold text-[#967332]">0 รายการ</span>
+      </div>
     </div>
 
     <!-- Content Cards Grid -->
@@ -67,11 +77,11 @@
   </main>
 
   <!-- Editor Modal -->
-  <div id="editorModal" class="hidden fixed inset-0 z-50 bg-black/55 backdrop-blur-xs flex items-center justify-center p-4">
+  <div id="editorModal" class="hidden fixed inset-0 z-50 bg-black/55 backdrop-blur-sm flex items-center justify-center p-4" onclick="if(event.target===this) closeEditorModal()">
     <div class="bg-white rounded-3xl max-w-lg w-full p-6 border-2 border-[#C2A460] shadow-2xl space-y-3 max-h-[92vh] overflow-y-auto text-xs">
       <div class="flex items-center justify-between pb-2 border-b border-[#E5D5B5]">
         <h3 id="editorModalTitle" class="text-base font-extrabold text-[#2C2218]">📝 สร้าง / แก้ไขคอนเทนต์</h3>
-        <button onclick="closeEditorModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center cursor-pointer">✕</button>
+        <button onclick="closeEditorModal()" aria-label="ปิดหน้าต่าง" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center cursor-pointer">✕</button>
       </div>
       <input type="hidden" id="edId">
       <div class="space-y-2.5">
@@ -110,12 +120,13 @@
         <div>
           <label class="font-bold block mb-1">รูปภาพปก (อัปโหลดเข้า R2 หรือวาง URL)</label>
           <div class="flex items-center gap-2">
-            <input id="edCover" type="text" placeholder="https://assets.siwasup.com/content_uploads/..." class="flex-1 p-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
-            <label class="px-3 py-2 rounded-xl bg-slate-900 text-[#E5C985] font-bold cursor-pointer shrink-0">
+            <input id="edCover" type="text" oninput="updateCoverPreview()" placeholder="https://assets.siwasup.com/content_uploads/..." class="flex-1 p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+            <label class="px-3 py-2.5 rounded-xl bg-slate-900 text-[#E5C985] font-bold cursor-pointer shrink-0">
               📷 อัปโหลดรูป
               <input type="file" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="uploadCoverImage(event)">
             </label>
           </div>
+          <img id="edCoverPreview" src="" alt="" class="hidden mt-2 w-full max-h-36 object-cover rounded-xl border border-[#E5D5B5]">
           <p id="edUploadStatus" class="text-[11px] text-emerald-700 mt-1 hidden"></p>
         </div>
         <div>
@@ -128,8 +139,25 @@
         </div>
       </div>
       <div class="flex items-center gap-2 pt-2">
-        <button onclick="closeEditorModal()" class="flex-1 py-2.5 rounded-xl border border-slate-300 font-bold text-slate-600 cursor-pointer">ยกเลิก</button>
-        <button onclick="saveContentItem()" class="flex-1 py-2.5 rounded-xl gold-btn font-extrabold shadow cursor-pointer">💾 บันทึก &amp; อัปเดต</button>
+        <button type="button" onclick="closeEditorModal()" class="py-2.5 px-4 rounded-xl border border-slate-300 font-bold text-slate-600 cursor-pointer">ยกเลิก</button>
+        <button type="button" onclick="previewContentItem()" class="py-2.5 px-4 rounded-xl bg-[#FAF5EB] border border-[#C2A460] font-bold text-[#7A5B22] cursor-pointer">👁️ ดูตัวอย่าง</button>
+        <button id="btnSaveContent" type="button" onclick="saveContentItem()" class="flex-1 py-2.5 rounded-xl gold-btn font-extrabold shadow cursor-pointer">💾 บันทึก &amp; อัปเดต</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview Modal -->
+  <div id="previewModal" class="hidden fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onclick="if(event.target===this) closePreviewModal()">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[88vh] overflow-y-auto shadow-2xl border border-[#D8C39A]">
+      <div class="sticky top-0 bg-white/95 backdrop-blur-md px-6 py-4 border-b border-[#E5D5B5] flex items-center justify-between gap-3">
+        <span id="pvCategory" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-[#FAF7F2] text-[#8A6525] border border-[#D8C39A]"></span>
+        <button type="button" onclick="closePreviewModal()" class="px-3.5 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-xs font-bold text-neutral-700 cursor-pointer">ปิดตัวอย่าง ✕</button>
+      </div>
+      <div class="p-6 space-y-4">
+        <img id="pvCover" src="" alt="" class="hidden w-full max-h-72 object-cover rounded-2xl border border-[#E5D5B5]">
+        <h3 id="pvTitle" class="text-xl sm:text-2xl font-bold text-[#2C2218] leading-snug"></h3>
+        <div id="pvMeta" class="text-xs text-[#8A755E]"></div>
+        <div id="pvBody" class="text-sm text-[#3D3124] leading-relaxed whitespace-pre-line"></div>
       </div>
     </div>
   </div>
@@ -159,6 +187,11 @@
       return t ? { 'Authorization': 'Bearer ' + t, 'Content-Type': 'application/json' } : { 'Content-Type': 'application/json' };
     }
 
+    function switchLineAccount() {
+      localStorage.removeItem(SESSION_KEY);
+      window.location.href = 'https://siwasup-cobroker-os.onrender.com/api/auth/line/start?return=content';
+    }
+
     async function bootContentHub() {
       const params = new URLSearchParams(window.location.search);
       const hash = window.location.hash || '';
@@ -170,14 +203,20 @@
       const gate = document.getElementById('contentGateOverlay');
       const msg = document.getElementById('contentGateMsg');
       const act = document.getElementById('contentGateActions');
+      const swBtn = document.getElementById('contentGateSwitchBtn');
+      const oauthErr = params.get('error');
+      if (oauthErr && msg) {
+        msg.textContent = 'เข้าสู่ระบบไม่สำเร็จ: ' + oauthErr;
+      }
       if (!sess) {
-        if (msg) msg.textContent = 'กรุณาเข้าสู่ระบบด้วย LINE ของ Poppy / ผู้ดูแลคอนเทนต์';
+        if (!oauthErr && msg) msg.textContent = 'กรุณาเข้าสู่ระบบด้วย LINE ของ Poppy / ผู้ดูแลคอนเทนต์';
         if (act) act.classList.remove('hidden');
         return;
       }
       try {
         const res = await fetch(`${API_BASE}/api/auth/me`, { headers: { 'Authorization': 'Bearer ' + sess }, cache: 'no-store' });
         if (!res.ok) {
+          localStorage.removeItem(SESSION_KEY);
           if (msg) msg.textContent = 'เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่';
           if (act) act.classList.remove('hidden');
           return;
@@ -187,7 +226,8 @@
         const p = m.permissions || {};
         const canEdit = Boolean(p.contentEditor || p.standardAdmin || p.executiveAuthority || p.systemAdmin || me.isAdmin);
         if (!canEdit) {
-          if (msg) msg.textContent = 'บัญชีนี้ยังไม่มีสิทธิ์ผู้ดูแลคอนเทนต์ (Content Hub) กรุณาให้ผู้บริหารเปิดสิทธิ์ contentEditor ใน Lobby';
+          if (msg) msg.textContent = 'บัญชีนี้ยังไม่มีสิทธิ์ผู้ดูแลคอนเทนต์ (Content Hub) กรุณาให้ผู้บริหารเปิดสิทธิ์ contentEditor ใน Lobby หรือสลับบัญชี LINE';
+          if (swBtn) swBtn.classList.remove('hidden');
           if (act) act.classList.remove('hidden');
           return;
         }
@@ -201,25 +241,43 @@
     }
 
     async function loadAllContents() {
-      const res = await fetch(`${API_BASE}/api/content/list?audience=all`, { headers: authHeaders(), cache: 'no-store' });
-      const data = await res.json();
-      allItems = Array.isArray(data.items) ? data.items : [];
-      renderContentGrid();
+      try {
+        const res = await fetch(`${API_BASE}/api/content/list?audience=all`, { headers: authHeaders(), cache: 'no-store' });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          alert('❌ โหลดรายการคอนเทนต์ไม่สำเร็จ: ' + (err.error || res.status));
+          return;
+        }
+        const data = await res.json();
+        allItems = Array.isArray(data.items) ? data.items : [];
+        renderContentGrid();
+      } catch (e) {
+        alert('❌ เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ: ' + e.message);
+      }
     }
 
     function setAudFilter(aud) {
       currentAud = aud;
       document.querySelectorAll('[data-aud]').forEach(b => {
-        const active = b.getAttribute('data-aud') === aud;
+        const bAud = b.getAttribute('data-aud');
+        const active = bAud === aud;
+        const inactiveColor = bAud === 'public' ? 'text-emerald-800' : (bAud === 'agent' ? 'text-amber-900' : 'text-[#6E5A44]');
         b.className = active
-          ? 'px-3 py-1.5 rounded-xl bg-[#2C2218] text-white font-bold cursor-pointer'
-          : 'px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-[#6E5A44] font-bold cursor-pointer';
+          ? 'px-3.5 py-2.5 rounded-xl bg-[#2C2218] text-white font-bold cursor-pointer'
+          : `px-3.5 py-2.5 rounded-xl bg-[#FAF5EB] ${inactiveColor} font-bold cursor-pointer`;
       });
       renderContentGrid();
     }
 
     function renderContentGrid() {
-      const list = allItems.filter(it => currentAud === 'all' || it.audience === currentAud || it.audience === 'both');
+      const stFilter = (document.getElementById('filterStatus') && document.getElementById('filterStatus').value) || 'all';
+      const q = ((document.getElementById('filterSearch') && document.getElementById('filterSearch').value) || '').trim().toLowerCase();
+      const list = allItems.filter(it => {
+        if (!(currentAud === 'all' || it.audience === currentAud || it.audience === 'both')) return false;
+        if (stFilter !== 'all' && it.status !== stFilter) return false;
+        if (q && !String(it.title || '').toLowerCase().includes(q) && !String(it.summary || '').toLowerCase().includes(q)) return false;
+        return true;
+      });
       document.getElementById('contentCountBadge').textContent = `${list.length} รายการ`;
       const grid = document.getElementById('contentGrid');
       if (!list.length) {
@@ -248,8 +306,8 @@
               </div>
             </div>
             <div class="p-3 bg-[#FAF5EB] border-t border-[#E5D5B5] flex items-center gap-2 text-xs">
-              <button onclick="openEditorModal('${escapeHtml(it.id)}')" class="flex-1 py-1.5 rounded-xl bg-white border border-[#C2A460] font-bold text-[#7A5B22] cursor-pointer">✏️ แก้ไข</button>
-              <button onclick="deleteContentItem('${escapeHtml(it.id)}')" class="py-1.5 px-3 rounded-xl bg-red-50 border border-red-200 font-bold text-red-700 cursor-pointer">ลบ</button>
+              <button onclick="openEditorModal('${escapeHtml(it.id)}')" class="flex-1 py-2.5 rounded-xl bg-white border border-[#C2A460] font-bold text-[#7A5B22] cursor-pointer">✏️ แก้ไข</button>
+              <button onclick="deleteContentItem('${escapeHtml(it.id)}')" class="py-2.5 px-4 rounded-xl bg-red-50 border border-red-200 font-bold text-red-700 cursor-pointer">ลบ</button>
             </div>
           </div>
         `;
@@ -277,18 +335,58 @@
       document.getElementById('edStatus').value = it ? (it.status || 'published') : 'published';
       document.getElementById('edPinned').checked = Boolean(it && it.pinned);
       document.getElementById('edCover').value = it ? (it.cover_image || '') : '';
+      updateCoverPreview();
       document.getElementById('edSummary').value = it ? (it.summary || '') : '';
       document.getElementById('edBody').value = it ? (it.body || '') : '';
       document.getElementById('edUploadStatus').classList.add('hidden');
       document.getElementById('editorModal').classList.remove('hidden');
     }
     function closeEditorModal() { document.getElementById('editorModal').classList.add('hidden'); }
+    function closePreviewModal() { document.getElementById('previewModal').classList.add('hidden'); }
+
+    function updateCoverPreview() {
+      const url = (document.getElementById('edCover').value || '').trim();
+      const img = document.getElementById('edCoverPreview');
+      if (!img) return;
+      if (url && /^https?:\/\//i.test(url)) {
+        img.src = url;
+        img.classList.remove('hidden');
+      } else {
+        img.src = '';
+        img.classList.add('hidden');
+      }
+    }
+
+    function previewContentItem() {
+      const cat = document.getElementById('edCategory').value;
+      const title = document.getElementById('edTitle').value.trim() || '(ยังไม่มีหัวข้อ)';
+      const cover = document.getElementById('edCover').value.trim();
+      const body = document.getElementById('edBody').value.trim() || document.getElementById('edSummary').value.trim() || '(ยังไม่มีเนื้อหา)';
+      document.getElementById('pvCategory').textContent = CAT_LABELS[cat] || cat;
+      document.getElementById('pvTitle').textContent = title;
+      document.getElementById('pvMeta').textContent = 'ตัวอย่างการแสดงผลหน้าเว็บ (Preview)';
+      document.getElementById('pvBody').textContent = body;
+      const img = document.getElementById('pvCover');
+      if (cover && /^https?:\/\//i.test(cover)) {
+        img.src = cover;
+        img.classList.remove('hidden');
+      } else {
+        img.src = '';
+        img.classList.add('hidden');
+      }
+      document.getElementById('previewModal').classList.remove('hidden');
+    }
 
     async function uploadCoverImage(e) {
       const file = e.target.files[0];
       e.target.value = '';
       if (!file) return;
       const stEl = document.getElementById('edUploadStatus');
+      if (file.size > 8 * 1024 * 1024) {
+        stEl.textContent = '❌ ไฟล์ใหญ่เกิน 8 MB กรุณาย่อขนาดภาพก่อนอัปโหลด';
+        stEl.classList.remove('hidden');
+        return;
+      }
       stEl.textContent = '⏳ กำลังอัปโหลดรูปขึ้น R2...';
       stEl.classList.remove('hidden');
       const reader = new FileReader();
@@ -302,6 +400,7 @@
           const data = await res.json();
           if (!res.ok) throw new Error(data.error || 'Upload failed');
           document.getElementById('edCover').value = data.url;
+          updateCoverPreview();
           stEl.textContent = '✅ อัปโหลดรูปสำเร็จ!';
         } catch (err) {
           stEl.textContent = '❌ อัปโหลดไม่สำเร็จ: ' + err.message;
@@ -313,6 +412,17 @@
     async function saveContentItem() {
       const title = document.getElementById('edTitle').value.trim();
       if (!title) return alert('กรุณากรอกหัวข้อคอนเทนต์');
+      const cover = document.getElementById('edCover').value.trim();
+      if (cover && !/^https?:\/\//i.test(cover)) {
+        return alert('URL รูปภาพต้องขึ้นต้นด้วย http:// หรือ https://');
+      }
+      const btn = document.getElementById('btnSaveContent');
+      if (btn && btn.disabled) return;
+      const origHtml = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '⏳ กำลังบันทึก...';
+      }
       const payload = {
         action: 'upsert',
         id: document.getElementById('edId').value,
@@ -321,32 +431,56 @@
         category: document.getElementById('edCategory').value,
         status: document.getElementById('edStatus').value,
         pinned: document.getElementById('edPinned').checked,
-        cover_image: document.getElementById('edCover').value.trim(),
+        cover_image: cover,
         summary: document.getElementById('edSummary').value.trim(),
         body: document.getElementById('edBody').value.trim()
       };
-      const res = await fetch(`${API_BASE}/api/content/save`, {
-        method: 'POST',
-        headers: authHeaders(),
-        body: JSON.stringify(payload)
-      });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        return alert('❌ บันทึกไม่สำเร็จ: ' + (err.error || res.status));
+      try {
+        const res = await fetch(`${API_BASE}/api/content/save`, {
+          method: 'POST',
+          headers: authHeaders(),
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          return alert('❌ บันทึกไม่สำเร็จ: ' + (err.error || res.status));
+        }
+        closeEditorModal();
+        await loadAllContents();
+      } catch (e) {
+        alert('❌ เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ: ' + e.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = origHtml;
+        }
       }
-      closeEditorModal();
-      await loadAllContents();
     }
 
     async function deleteContentItem(id) {
       if (!confirm('ยืนยันลบคอนเทนต์นี้?')) return;
-      const res = await fetch(`${API_BASE}/api/content/save`, {
-        method: 'POST',
-        headers: authHeaders(),
-        body: JSON.stringify({ action: 'delete', id })
-      });
-      if (res.ok) await loadAllContents();
+      try {
+        const res = await fetch(`${API_BASE}/api/content/save`, {
+          method: 'POST',
+          headers: authHeaders(),
+          body: JSON.stringify({ action: 'delete', id })
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          return alert('❌ ลบไม่สำเร็จ: ' + (err.error || res.status));
+        }
+        await loadAllContents();
+      } catch (e) {
+        alert('❌ เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ: ' + e.message);
+      }
     }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (!document.getElementById('previewModal').classList.contains('hidden')) closePreviewModal();
+        else if (!document.getElementById('editorModal').classList.contains('hidden')) closeEditorModal();
+      }
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) lucide.createIcons();

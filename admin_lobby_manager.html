@@ -108,6 +108,10 @@
     </div>
 
     <div class="flex flex-wrap lg:flex-nowrap items-center gap-2 w-full sm:w-auto shrink-0">
+      <a href="https://assets.siwasup.com/admin_content_hub.html" target="_blank" class="flex-1 sm:flex-initial justify-center px-2.5 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 rounded-xl bg-pink-50 hover:bg-pink-100 text-[11px] sm:text-xs font-semibold text-pink-700 border border-pink-200 flex items-center gap-1.5 shadow-sm transition whitespace-nowrap">
+        <i data-lucide="pen-tool" class="w-3.5 h-3.5 text-pink-600"></i>
+        <span>ศูนย์คอนเทนต์ (Poppy)</span>
+      </a>
       <a href="https://assets.siwasup.com/agent_onboarding_qr.html" target="_blank" class="flex-1 sm:flex-initial justify-center px-2.5 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 rounded-xl bg-white hover:bg-slate-50 text-[11px] sm:text-xs font-semibold text-slate-700 border border-slate-300 flex items-center gap-1.5 shadow-sm transition whitespace-nowrap">
         <i data-lucide="qr-code" class="w-3.5 h-3.5 text-amber-600"></i>
         <span>ป้ายสแกน QR หน้างาน</span>
@@ -2453,6 +2457,7 @@
       if (newPerms.catalogCurator) newBadges.push("🏷️ ช่วยคัดสต๊อก");
       if (newPerms.systemAdmin) newBadges.push("⚙️ Technical Admin");
       if (newPerms.standardAdmin) newBadges.push("🛡️ Standard Admin");
+      if (newPerms.contentEditor) newBadges.push("✍️ จัดการคอนเทนต์");
       if (!newPerms.editPrice) newBadges.push("🚫 ล็อกแก้ราคา");
       if (newBadges.length === 0) newBadges.push("📜 บัตรดิจิทัลทางการ");
 

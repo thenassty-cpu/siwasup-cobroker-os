@@ -3314,7 +3314,11 @@ CONTENT_HUB_PATH = os.path.join(DATA_DIR, "content_hub.json")
 CONTENT_HUB_LOCK = threading.RLock()
 _R2_CONTENT_VAULT_KEY = "_vault/content_hub_" + hmac.new(ADMIN_EXPORT_SECRET.encode("utf-8"), b"siwasup_content_hub_v1", hashlib.sha256).hexdigest()[:32] + ".json"
 _R2_CONTENT_RESTORED = False
+_R2_CONTENT_RESTORE_FAILED = False
 _CONTENT_MEM_CACHE = None
+_CONTENT_R2_UPLOAD_LOCK = threading.Lock()
+_CONTENT_R2_PENDING_BYTES = None
+_CONTENT_R2_WORKER_ACTIVE = False
 
 
 def _is_content_editor(member: dict) -> bool:
@@ -3324,8 +3328,24 @@ def _is_content_editor(member: dict) -> bool:
     return bool(perms.get("contentEditor") or perms.get("standardAdmin") or perms.get("executiveAuthority") or perms.get("systemAdmin")) or _is_lobby_approver(member)
 
 
+def _sequential_r2_content_upload():
+    global _CONTENT_R2_WORKER_ACTIVE, _CONTENT_R2_PENDING_BYTES
+    while True:
+        with _CONTENT_R2_UPLOAD_LOCK:
+            data_bytes = _CONTENT_R2_PENDING_BYTES
+            _CONTENT_R2_PENDING_BYTES = None
+            if data_bytes is None:
+                _CONTENT_R2_WORKER_ACTIVE = False
+                return
+        try:
+            if put_object_r2:
+                put_object_r2(_R2_CONTENT_VAULT_KEY, data_bytes, "application/json; charset=utf-8")
+        except Exception as e:
+            print(f"[Content Hub R2 Save Warn]: {e}")
+
+
 def load_content_data():
-    global _R2_CONTENT_RESTORED, _CONTENT_MEM_CACHE
+    global _R2_CONTENT_RESTORED, _R2_CONTENT_RESTORE_FAILED, _CONTENT_MEM_CACHE
     with CONTENT_HUB_LOCK:
         if not _R2_CONTENT_RESTORED:
             try:
@@ -3333,10 +3353,14 @@ def load_content_data():
                 if isinstance(parsed, dict) and isinstance(parsed.get("items"), list):
                     _CONTENT_MEM_CACHE = parsed
                     _R2_CONTENT_RESTORED = True
+                    _R2_CONTENT_RESTORE_FAILED = False
                     return parsed
+                if parsed is None:
+                    _R2_CONTENT_RESTORED = True
+                    _R2_CONTENT_RESTORE_FAILED = False
             except Exception as e:
                 print(f"[Content Hub R2 Load Warn]: {e}")
-            _R2_CONTENT_RESTORED = True
+                _R2_CONTENT_RESTORE_FAILED = True
         if _CONTENT_MEM_CACHE is not None:
             return _CONTENT_MEM_CACHE
         if os.path.exists(CONTENT_HUB_PATH):
@@ -3353,25 +3377,28 @@ def load_content_data():
 
 
 def save_content_data(store: dict):
-    global _CONTENT_MEM_CACHE, _R2_CONTENT_RESTORED
+    global _CONTENT_MEM_CACHE, _CONTENT_R2_PENDING_BYTES, _CONTENT_R2_WORKER_ACTIVE
     with CONTENT_HUB_LOCK:
         store["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
         _CONTENT_MEM_CACHE = store
-        _R2_CONTENT_RESTORED = True
         data_bytes = json.dumps(store, ensure_ascii=False, indent=2).encode("utf-8")
         try:
             os.makedirs(DATA_DIR, exist_ok=True)
-            with open(CONTENT_HUB_PATH, "wb") as f:
+            tmp_path = CONTENT_HUB_PATH + ".tmp"
+            with open(tmp_path, "wb") as f:
                 f.write(data_bytes)
+            os.replace(tmp_path, CONTENT_HUB_PATH)
         except Exception as e:
             print(f"[Content Hub Local Save Warn]: {e}")
         if put_object_r2:
-            def _bg_r2():
-                try:
-                    put_object_r2(_R2_CONTENT_VAULT_KEY, data_bytes, "application/json; charset=utf-8")
-                except Exception as e:
-                    print(f"[Content Hub R2 Save Warn]: {e}")
-            threading.Thread(target=_bg_r2, daemon=True).start()
+            if _R2_CONTENT_RESTORE_FAILED:
+                print("[Content Hub R2 Skip]: Skipping R2 overwrite because initial R2 restore failed")
+                return
+            with _CONTENT_R2_UPLOAD_LOCK:
+                _CONTENT_R2_PENDING_BYTES = data_bytes
+                if not _CONTENT_R2_WORKER_ACTIVE:
+                    _CONTENT_R2_WORKER_ACTIVE = True
+                    threading.Thread(target=_sequential_r2_content_upload, daemon=True).start()
 
 
 _THAI_TAMBONS_CACHE = None
@@ -3831,15 +3858,19 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 items = [
                     it for it in items
                     if it.get("status") == "published"
-                    and it.get("audience") in ("public", "both")
-                    and it.get("category") in ("just_sold", "howto", "article", "news")
+                    and (
+                        it.get("audience") == "both"
+                        or (it.get("audience") == "public" and it.get("category") in ("just_sold", "howto", "article", "news"))
+                    )
                 ]
             elif aud == "agent":
                 items = [
                     it for it in items
                     if it.get("status") == "published"
-                    and it.get("audience") in ("agent", "both")
-                    and it.get("category") in ("top_agent", "announcement", "meeting")
+                    and (
+                        it.get("audience") == "both"
+                        or (it.get("audience") == "agent" and it.get("category") in ("top_agent", "announcement", "meeting"))
+                    )
                 ]
             items.sort(key=lambda x: (1 if x.get("pinned") else 0, str(x.get("published_at") or x.get("updated_at") or "")), reverse=True)
             self._send_json(200, {"status": "success", "count": len(items), "items": items})
@@ -4551,10 +4582,17 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                     store = load_content_data()
                     items = list(store.get("items", []))
                     cid = re.sub(r"[^A-Za-z0-9_-]", "", str(payload.get("id") or "").strip())
-                    if action == "delete" and cid:
+                    if action == "delete":
+                        if not cid:
+                            self._send_json(400, {"error": "กรุณาระบุรหัสคอนเทนต์ที่ต้องการลบ"})
+                            return
                         store["items"] = [it for it in items if it.get("id") != cid]
                         save_content_data(store)
                         self._send_json(200, {"status": "success", "deleted": cid})
+                        return
+                    cover_image = str(payload.get("cover_image") or "").strip()[:500]
+                    if cover_image and not re.match(r"^https?://", cover_image, re.IGNORECASE):
+                        self._send_json(400, {"error": "URL รูปภาพต้องขึ้นต้นด้วย http:// หรือ https://"})
                         return
                     title = str(payload.get("title") or "").strip()[:160]
                     if not title:
@@ -4580,7 +4618,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         "title": title,
                         "summary": str(payload.get("summary") or "").strip()[:300],
                         "body": str(payload.get("body") or "").strip()[:10000],
-                        "cover_image": str(payload.get("cover_image") or "").strip()[:500],
+                        "cover_image": cover_image,
                         "status": st,
                         "pinned": bool(payload.get("pinned")),
                         "published_at": (existing.get("published_at") if existing else "") or (now_str if st == "published" else ""),
