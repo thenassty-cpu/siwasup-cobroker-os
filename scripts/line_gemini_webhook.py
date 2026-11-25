@@ -2833,8 +2833,19 @@ def decode_client_tag(token: str):
 
 
 def parse_agent_link_input(raw_input: str):
-    """Parse '<avatar_name> [private note...] [optional_prop_id]' safely."""
-    tokens = str(raw_input or "").strip().split()
+    """Parse '<avatar_name> [private note...] [optional_prop_id]' safely (supports 'ส่งให้คุณ5ที' -> '5')."""
+    s = str(raw_input or "").strip()
+    if not s:
+        return ("", "", "")
+    # Handle natural Thai phrases like "3หลังส่งให้คุณ5ที" or "ส่งให้คุณAหน่อย"
+    m_khun = re.search(r'(?:ส่งให้|ให้)?คุณ\s*([0-9]+|[ก-๙a-zA-Z0-9_]+)', s)
+    if m_khun and not s.startswith("คุณ"):
+        raw_name = m_khun.group(1)
+        # Strip trailing polite particles glued to numbers/names like "5ที", "5หน่อย", "5ครับ"
+        raw_name = re.sub(r'(?:ที|หน่อย|ด้วย|ครับ|ค่ะ|นะ)$', '', raw_name).strip() or m_khun.group(1)
+        prefix_note = s[:m_khun.start()].strip()
+        return (raw_name[:25], prefix_note[:60], "")
+    tokens = s.split()
     if not tokens:
         return ("", "", "")
     prop_id = ""
@@ -2843,7 +2854,8 @@ def parse_agent_link_input(raw_input: str):
         if find_property_by_id_or_code(last_tok):
             prop_id = last_tok
             tokens.pop()
-    avatar_name = tokens[0][:25]
+    avatar_name = re.sub(r'(?:ที|หน่อย|ด้วย|ครับ|ค่ะ|นะ)$', '', tokens[0]).strip() if re.match(r'^(?:คุณ)?\d+(?:ที|หน่อย|ด้วย|ครับ|ค่ะ|นะ)$', tokens[0]) else tokens[0]
+    avatar_name = avatar_name[:25]
     agent_note = " ".join(tokens[1:])[:60] if len(tokens) > 1 else ""
     return (avatar_name, agent_note, prop_id)
 
@@ -5917,7 +5929,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                     _raw_link_arg = m_link.group(1).strip()
                                     _raw_link_lower = _raw_link_arg.lower()
                                     _first_tok = _raw_link_arg.split()[0].lstrip('#').strip() if _raw_link_arg.split() else ''
-                                    _is_explicit_client_name = _raw_link_arg.startswith("คุณ")
+                                    _is_explicit_client_name = _raw_link_arg.startswith("คุณ") or (bool(re.search(r'(?:ส่งให้|ให้)คุณ\s*[ก-๙a-zA-Z0-9]+', _raw_link_arg)) and not _extract_thai_geo(_raw_link_arg))
                                     _link_geo_hit = None if _is_explicit_client_name else _extract_thai_geo(_raw_link_arg)
                                     if _is_agent_view_req:
                                         is_prop_or_cmd_link = True
