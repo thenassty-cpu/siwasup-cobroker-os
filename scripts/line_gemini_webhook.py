@@ -150,6 +150,12 @@ _THAI_SPECIAL_ZONE_COORDS = {
     "เลียบด่วน": ("กรุงเทพมหานคร", "ลาดพร้าว", 13.8167, 100.6194),
     "เกษตรนวมินทร์": ("กรุงเทพมหานคร", "ลาดพร้าว", 13.8344, 100.6144),
     "พระราม 2": ("กรุงเทพมหานคร", "บางขุนเทียน", 13.6625, 100.4342),
+    "ประชาอุทิศ": ("กรุงเทพมหานคร", "ทุ่งครุ", 13.6433, 100.4964),
+    "ทุ่งครุ": ("กรุงเทพมหานคร", "ทุ่งครุ", 13.6472, 100.4958),
+    "พุทธบูชา": ("กรุงเทพมหานคร", "ทุ่งครุ", 13.6531, 100.4836),
+    "ราษฎร์บูรณะ": ("กรุงเทพมหานคร", "ราษฎร์บูรณะ", 13.6822, 100.5056),
+    "สุขสวัสดิ์": ("กรุงเทพมหานคร", "ราษฎร์บูรณะ", 13.6714, 100.5117),
+    "พระประแดง": ("สมุทรปราการ", "พระประแดง", 13.6586, 100.5336),
     "พระราม 9": ("กรุงเทพมหานคร", "ห้วยขวาง", 13.7536, 100.5819),
     "ทองหล่อ": ("กรุงเทพมหานคร", "วัฒนา", 13.7308, 100.5825),
     "เอกมัย": ("กรุงเทพมหานคร", "วัฒนา", 13.7269, 100.5858),
@@ -5906,7 +5912,9 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                     _first_tok = _raw_link_arg.split()[0].lstrip('#').strip() if _raw_link_arg.split() else ''
                                     _is_explicit_client_name = _raw_link_arg.startswith("คุณ")
                                     _link_geo_hit = None if _is_explicit_client_name else _extract_thai_geo(_raw_link_arg)
-                                    if any(_raw_link_lower.startswith(p) for p in ('โฉนด', 'บ้าน', 'ทาวน์โฮม', 'ทาวน์เฮ้าส์', 'คอนโด', 'ที่ดิน', 'อาคาร', 'สมัคร', 'ลงทะเบียน', 'นามบัตร')):
+                                    if any(_raw_link_lower.startswith(p) for p in ('โฉนด', 'บ้าน', 'ทาวน์โฮม', 'ทาวน์เฮ้าส์', 'คอนโด', 'ที่ดิน', 'อาคาร', 'ข้อมูล', 'ทรัพย์', 'สมัคร', 'ลงทะเบียน', 'นามบัตร')):
+                                        is_prop_or_cmd_link = True
+                                    elif not _is_explicit_client_name and any(kw in _raw_link_lower for kw in ('โซน', 'แถว', 'ย่าน', 'ทำเล', 'หลัง', 'แปลง', 'ไม่เกิน', 'งบ', 'ล้าน')):
                                         is_prop_or_cmd_link = True
                                     elif _link_geo_hit:
                                         is_prop_or_cmd_link = True
@@ -5975,6 +5983,8 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                             req_cat, allowed_cats = "บ้าน", ["บ้านเดี่ยว", "บ้านแฝด", "ทาวน์โฮม", "ทาวน์เฮ้าส์"]
 
                                         req_budget = parse_price(text_raw)
+                                        m_req_cnt = re.search(r'(\d{1,2})\s*(?:หลัง|ที่|แปลง|รายการ|ห้อง)', text_raw)
+                                        req_limit = min(max(int(m_req_cnt.group(1)), 1), 10) if m_req_cnt else 5
                                         g_prov = _link_geo_hit.get("province") or ""
                                         g_dist = _link_geo_hit.get("district") or ""
                                         g_sub = _link_geo_hit.get("subdistrict") or ""
@@ -5982,10 +5992,10 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                         g_lng = _link_geo_hit.get("lng")
 
                                         # Cross-Province Haversine Radius Search (Tier 1: 0-5km, Tier 2: 5-15km, no province lock)
-                                        ranked = _find_nearest_siwasup_props(g_lat, g_lng, allowed_cats=allowed_cats or None, max_p=req_budget, limit=5) if (g_lat and g_lng) else []
+                                        ranked = _find_nearest_siwasup_props(g_lat, g_lng, allowed_cats=allowed_cats or None, max_p=req_budget, limit=req_limit) if (g_lat and g_lng) else []
                                         tier1 = [p for p in ranked if p.get("tier") == 1]
                                         tier2 = [p for p in ranked if p.get("tier") == 2]
-                                        show_props = (tier1 + tier2)[:5] if (tier1 or tier2) else ranked[:3]
+                                        show_props = (tier1 + tier2)[:req_limit] if (tier1 or tier2) else ranked[:min(req_limit, 3)]
 
                                         q_params = [("ref", ag_ref), ("view", "client")]
                                         if req_cat:
