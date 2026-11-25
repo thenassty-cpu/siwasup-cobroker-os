@@ -4971,6 +4971,115 @@
 
       modal.classList.remove('hidden');
       if (window.lucide) lucide.createIcons();
+      loadAdminCustomerLocks();
+    }
+
+    function _p2EscHtml(str) {
+      return String(str || '').replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+    }
+
+    async function loadAdminCustomerLocks() {
+      const box = document.getElementById('admin-lock-list-container');
+      if (!box) return;
+      const sess = localStorage.getItem('siwasup_session') || '';
+      if (!sess) {
+        box.innerHTML = '<div class="text-xs text-red-600">กรุณาเข้าสู่ระบบด้วย LINE เพื่อดูรายการล็อกสิทธิ์ลูกค้า</div>';
+        return;
+      }
+      box.innerHTML = '<div class="text-xs text-neutral-500">กำลังโหลดข้อมูลสิทธิ์ล็อกลูกค้า 15 วัน...</div>';
+      try {
+        const res = await fetch('https://siwasup-cobroker-os.onrender.com/api/track/summary', {
+          headers: { 'Authorization': 'Bearer ' + sess },
+          cache: 'no-store'
+        });
+        if (!res.ok) {
+          box.innerHTML = '<div class="text-xs text-red-600">ไม่สามารถโหลดข้อมูลได้ (เฉพาะ Admin/Approver)</div>';
+          return;
+        }
+        const data = await res.json();
+        const visitors = (data.visitors || []).filter(v => v.lock && v.lock.owner_ref);
+        if (visitors.length === 0) {
+          box.innerHTML = '<div class="text-xs text-neutral-500 py-2">ยังไม่มีรายการล็อกลูกค้าที่ Active ในขณะนี้</div>';
+          return;
+        }
+        box.innerHTML = visitors.slice(0, 30).map(v => {
+          const lk = v.lock || {};
+          const st = lk.status || 'active';
+          const badge = st === 'booked'
+            ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">🔒 Booked (ล็อกถาวร)</span>'
+            : (st === 'conflict_pending'
+              ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">⚠️ รอลูกค้าเลือกเซล</span>'
+              : '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">⏳ Active 15 วัน</span>');
+          const exp = lk.expires_at ? lk.expires_at.slice(0, 10) : '-';
+          const propNote = lk.booked_property_id ? ` • ทรัพย์ #${_p2EscHtml(lk.booked_property_id)}` : '';
+          return `
+            <div class="p-3 rounded-xl border border-neutral-200 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+              <div>
+                <div class="font-bold text-neutral-900">${_p2EscHtml(v.primary_name || v.vid)} ${badge}</div>
+                <div class="text-[11px] text-neutral-500 mt-0.5">ผู้ดูแล: <strong>${_p2EscHtml(lk.owner_ref)}</strong> • หมดอายุ: ${_p2EscHtml(exp)}${propNote}</div>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                ${st !== 'booked' ? `<button type="button" onclick="markCustomerBooked('${_p2EscHtml(v.vid)}', '${_p2EscHtml(lk.owner_ref)}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold">จองแล้ว</button>` : ''}
+                <button type="button" onclick="extendCustomerLock('${_p2EscHtml(v.vid)}')" class="px-2.5 py-1 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-amber-300 text-[11px] font-bold">ต่อเวลา</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (e) {
+        box.innerHTML = '<div class="text-xs text-red-600">เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์</div>';
+      }
+    }
+
+    async function extendCustomerLock(vid) {
+      const daysStr = prompt('ระบุจำนวนวันที่ต้องการต่อสิทธิ์ (1 - 30 วัน):', '7');
+      if (!daysStr) return;
+      const extraDays = parseInt(daysStr, 10);
+      if (isNaN(extraDays) || extraDays < 1 || extraDays > 30) {
+        alert('กรุณาระบุจำนวนวันระหว่าง 1 ถึง 30 วัน');
+        return;
+      }
+      const reason = prompt('ระบุเหตุผลการต่อสิทธิ์ (จำเป็น เช่น ระบบมีปัญหา / รอเปิด Keybox):', 'ขอขยายเวลานัดดูบ้าน');
+      if (!reason || !reason.trim()) return;
+      const sess = localStorage.getItem('siwasup_session') || '';
+      try {
+        const res = await fetch('https://siwasup-cobroker-os.onrender.com/api/track/extend-lock', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + sess },
+          body: JSON.stringify({ vid, extra_days: extraDays, reason: reason.trim() })
+        });
+        const d = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          alert(d.error || d.detail || 'ไม่สามารถต่อเวลาได้');
+          return;
+        }
+        alert(`ต่อเวลาสิทธิ์สำเร็จ (+${extraDays} วัน)`);
+        loadAdminCustomerLocks();
+      } catch (e) {
+        alert('เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ');
+      }
+    }
+
+    async function markCustomerBooked(vid, ownerRef) {
+      const defaultProp = currentAdminAppPropId ? String(currentAdminAppPropId) : '';
+      const propId = prompt('ระบุรหัสทรัพย์ที่ลูกค้าจอง (เช่น 1178451 หรือ p01004):', defaultProp);
+      if (!propId || !propId.trim()) return;
+      const sess = localStorage.getItem('siwasup_session') || '';
+      try {
+        const res = await fetch('https://siwasup-cobroker-os.onrender.com/api/track/lock-booking', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + sess },
+          body: JSON.stringify({ vid, property_id: propId.trim(), owner_ref: ownerRef || '' })
+        });
+        const d = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          alert(d.error || d.detail || 'ไม่สามารถบันทึกสถานะจองได้');
+          return;
+        }
+        alert('ล็อกสิทธิ์แบบ Booked (จองแล้ว) เรียบร้อย');
+        loadAdminCustomerLocks();
+      } catch (e) {
+        alert('เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ');
+      }
     }
 
     function closeAdminCaseAppointments() {
@@ -6035,7 +6144,7 @@
         'diamond': 'สิทธิพิเศษ: สิทธิ์ผู้บริหารทีมระดับสูง + โบนัสพิเศษตามเกณฑ์บริษัท + รางวัลเกียรติยศประจำปี',
         'gold': 'สิทธิพิเศษ: สิทธิ์จองทรัพย์ Hot Deals ล่วงหน้า 24 ชม. ก่อนปล่อยสาธารณะ',
         'silver': 'สิทธิพิเศษ: สิทธิ์รับ Lead กลางที่ลูกค้าทักเข้ามาที่เพจบริษัท',
-        'active': 'สิทธิพิเศษ: สิทธิ์แชร์คลังทรัพย์พร้อมล็อกลีด 60 วัน + มีชื่อในทำเนียบตัวแทนศิวาทรัพย์',
+        'active': 'สิทธิพิเศษ: สิทธิ์แชร์คลังทรัพย์พร้อมล็อกลีด 15 วัน + มีชื่อในทำเนียบตัวแทนศิวาทรัพย์',
         'trainee': 'ภารกิจ: ส่งทรัพย์เข้าพอร์ตครบ 3 หลังเพื่อปลดล็อก Active Agent'
       };
       if (perkEl) perkEl.textContent = perkMap[agent.tierId] || '';
@@ -7744,10 +7853,112 @@
             if (data && data.avatar_name) {
               _siwasupSafeStorage('session', 'set', 'siwasup_client_avatar', data.avatar_name);
             }
+            if (data && data.lock_status === 'conflict_pending' && Array.isArray(data.conflict_candidates) && data.conflict_candidates.length >= 2) {
+              _showSiwasupAgentChooserModal(data.vid || payload.vid, data.conflict_candidates);
+            }
           })
           .catch(() => {});
       } catch (e) {}
     };
+
+    function _showSiwasupAgentChooserModal(vid, candidates) {
+      if (document.getElementById('siwasup-agent-chooser-modal')) return;
+      const wrap = document.createElement('div');
+      wrap.id = 'siwasup-agent-chooser-modal';
+      wrap.className = 'fixed inset-0 z-[9990] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4';
+      const cards = candidates.map(c => {
+        const ref = typeof c === 'string' ? c : (c.ref || c.code || '');
+        const name = typeof c === 'string' ? c : (c.name || ref);
+        return `
+          <button type="button" data-ref="${_p2EscHtml(ref)}" class="chooser-agent-btn w-full text-left p-3.5 rounded-2xl border-2 border-neutral-200 hover:border-amber-500 hover:bg-amber-50 transition flex items-center justify-between gap-3">
+            <div>
+              <div class="font-bold text-sm text-neutral-900">${_p2EscHtml(name)}</div>
+              <div class="text-xs text-neutral-500">รหัสผู้ดูแล: ${_p2EscHtml(ref)}</div>
+            </div>
+            <span class="px-3 py-1 rounded-xl bg-neutral-900 text-amber-300 text-xs font-bold shrink-0">เลือกท่านนี้</span>
+          </button>
+        `;
+      }).join('');
+      wrap.innerHTML = `
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-amber-200 space-y-4">
+          <div class="text-center space-y-1">
+            <div class="text-2xl">🤝</div>
+            <h3 class="text-lg font-extrabold text-neutral-900">เลือกผู้ดูแลส่วนตัวของคุณ</h3>
+            <p class="text-xs text-neutral-600">ระบบพบลิงก์จากที่ปรึกษาหลายท่าน กรุณาเลือกท่านที่ท่านสะดวกให้ดูแลข้อมูลทรัพย์และนัดชมบ้านค่ะ</p>
+          </div>
+          <div class="space-y-2.5">${cards}</div>
+          <button type="button" id="chooser-close-btn" class="w-full py-2 text-xs text-neutral-500 hover:text-neutral-800">ไว้เลือกภายหลัง</button>
+        </div>
+      `;
+      document.body.appendChild(wrap);
+      wrap.querySelector('#chooser-close-btn').onclick = () => wrap.remove();
+      wrap.querySelectorAll('.chooser-agent-btn').forEach(btn => {
+        btn.onclick = async () => {
+          const chosenRef = btn.getAttribute('data-ref');
+          try {
+            const res = await fetch('https://siwasup-cobroker-os.onrender.com/api/track/choose-agent', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ vid, chosen_ref: chosenRef })
+            });
+            if (res.ok) {
+              _siwasupSafeStorage('local', 'set', 'siwasup_referred_by', chosenRef);
+              wrap.remove();
+            }
+          } catch (e) {}
+        };
+      });
+    }
+
+    async function _loadCatalogContentHubBanner() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const isClient = params.get('view') === 'client' || params.get('mode') === 'client' || Boolean(params.get('agent') || params.get('ref'));
+        const sess = localStorage.getItem('siwasup_session') || '';
+        const audience = (!isClient && sess) ? 'agent' : 'public';
+        const headers = (!isClient && sess) ? { 'Authorization': 'Bearer ' + sess } : {};
+        const res = await fetch(`https://siwasup-cobroker-os.onrender.com/api/content/list?audience=${audience}`, { headers, cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        const items = Array.isArray(data.items) ? data.items : [];
+        if (items.length === 0) return;
+        const latest = items[0];
+        if (document.getElementById('siwasup-content-hub-pill')) return;
+        const pill = document.createElement('button');
+        pill.id = 'siwasup-content-hub-pill';
+        pill.type = 'button';
+        pill.className = 'fixed bottom-20 left-4 z-40 max-w-[260px] px-3.5 py-2 rounded-2xl bg-neutral-900/95 text-amber-200 border border-amber-500/40 shadow-xl text-left text-xs flex items-center gap-2 hover:bg-neutral-800 transition';
+        pill.innerHTML = `<span class="shrink-0">${audience === 'agent' ? '📣' : '📰'}</span><span class="truncate font-bold">${_p2EscHtml(latest.title)}</span>`;
+        pill.onclick = () => {
+          const modal = document.createElement('div');
+          modal.className = 'fixed inset-0 z-[9991] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4';
+          modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+          const listHtml = items.slice(0, 8).map(it => `
+            <div class="p-3.5 rounded-2xl border border-neutral-200 bg-neutral-50 space-y-1.5">
+              ${it.cover_image && /^https?:\/\//i.test(it.cover_image) ? `<img src="${_p2EscHtml(it.cover_image)}" alt="" class="w-full max-h-44 object-cover rounded-xl">` : ''}
+              <div class="text-xs font-extrabold text-neutral-900">${_p2EscHtml(it.title)}</div>
+              <div class="text-[11px] text-neutral-600 whitespace-pre-line">${_p2EscHtml(it.body || it.summary || '')}</div>
+            </div>
+          `).join('');
+          modal.innerHTML = `
+            <div class="bg-white rounded-3xl max-w-lg w-full max-h-[82vh] overflow-y-auto p-5 shadow-2xl space-y-3">
+              <div class="flex items-center justify-between border-b pb-2.5">
+                <h3 class="font-extrabold text-sm text-neutral-900">${audience === 'agent' ? '📣 ประกาศทีมขาย & Top Agent' : '📰 ข่าวสาร & คู่มือผู้ซื้อ'}</h3>
+                <button type="button" class="px-2.5 py-1 rounded-lg bg-neutral-100 text-xs font-bold" onclick="this.closest('.fixed').remove()">ปิด ✕</button>
+              </div>
+              ${listHtml}
+            </div>
+          `;
+          document.body.appendChild(modal);
+        };
+        document.body.appendChild(pill);
+      } catch (e) {}
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', _loadCatalogContentHubBanner);
+    } else {
+      _loadCatalogContentHubBanner();
+    }
 
     // --- INIT & URL QUERY PARSER ---
     function checkUrlParameters() {
@@ -7985,7 +8196,7 @@
     // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=20261125-1600').then((reg) => {
+        navigator.serviceWorker.register('./sw.js?v=20261125-1700').then((reg) => {
           console.log('Siwasup PWA Service Worker Registered (v2):', reg.scope);
           // Auto check for updates on each load
           if (reg.update) reg.update();

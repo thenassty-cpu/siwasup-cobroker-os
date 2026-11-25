@@ -2378,6 +2378,8 @@
       document.getElementById('chk_keyboxAdmin').checked = !!p.keyboxAdmin;
       document.getElementById('chk_leadInspector').checked = !!p.leadInspector;
       document.getElementById('chk_catalogCurator').checked = !!p.catalogCurator;
+      const chkCE = document.getElementById('chk_contentEditor');
+      if (chkCE) chkCE.checked = !!p.contentEditor;
       document.getElementById('chk_systemAdmin').checked = !!p.systemAdmin;
       const editScopeEl = document.getElementById('editSalesScope');
       if (editScopeEl) editScopeEl.value = p.salesScope || 'both';
@@ -2422,6 +2424,7 @@
         keyboxAdmin: document.getElementById('chk_keyboxAdmin').checked,
         leadInspector: document.getElementById('chk_leadInspector').checked,
         catalogCurator: document.getElementById('chk_catalogCurator').checked,
+        contentEditor: document.getElementById('chk_contentEditor') ? document.getElementById('chk_contentEditor').checked : false,
         systemAdmin: document.getElementById('chk_systemAdmin').checked,
         contractAgent: isContractChecked,
         vipClient: isVipChecked,
@@ -2786,6 +2789,14 @@
                 <option value="consign_only">🏠 เฉพาะทรัพย์ฝากขาย (Consignment Only)</option>
               </select>
             </div>
+
+            <label class="flex items-start gap-2.5 p-2 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer border border-slate-200">
+              <input type="checkbox" id="chk_contentEditor" class="mt-0.5 rounded text-pink-600 focus:ring-0">
+              <div>
+                <strong class="text-pink-900">🎨 ผู้ดูแลคอนเทนต์ (Content Hub / Poppy)</strong>
+                <p class="text-[11px] text-slate-500">อัปโหลดรูปและจัดการข่าว/บทความ/Top Agent แยกมุมมองลูกค้าและเซลล์</p>
+              </div>
+            </label>
 
             <label class="flex items-start gap-2.5 p-2 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer border border-slate-200">
               <input type="checkbox" id="chk_standardAdmin" class="mt-0.5 rounded text-amber-600 focus:ring-0">

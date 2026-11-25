@@ -226,7 +226,7 @@
                 <span class="icon-circle w-6 h-6 shrink-0 bg-amber-700 text-white"><i data-lucide="qr-code" class="w-3.5 h-3.5 stroke-[1.5]"></i></span>
                 <div class="truncate">
                   <div class="font-bold text-amber-950 text-xs">QR Code ป้ายหน้าบ้าน / นามบัตร</div>
-                  <div class="text-[10px] text-amber-700 truncate">สแกนป้ายแล้วล็อกค่าคอม 60 วัน</div>
+                  <div class="text-[10px] text-amber-700 truncate">สแกนป้ายแล้วล็อกค่าคอม 15 วัน</div>
                 </div>
               </div>
               <button onclick="toggleQrView()" class="shrink-0 ml-2 bg-neutral-900 hover:bg-neutral-800 text-white font-medium py-1 px-3 rounded-lg text-[11px] shadow-xs flex items-center gap-1 active:scale-95 transition-all">
@@ -249,7 +249,7 @@
                 </div>
                 <div>
                   <span class="inline-block text-[9px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-medium border border-emerald-200">
-                    ✓ ล็อกสิทธิ์ 60 วัน
+                    ✓ ล็อกสิทธิ์ 15 วัน
                   </span>
                 </div>
               </div>
@@ -300,7 +300,7 @@
 
         <div>
           <span class="inline-block text-[10px] bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-medium border border-emerald-200">
-            ✓ สแกนแล้วระบบล็อกสิทธิ์เอเจนต์ 60 วัน
+            ✓ สแกนแล้วระบบล็อกสิทธิ์เอเจนต์ 15 วัน
           </span>
           <p class="text-[10px] text-gray-400 mt-1">แตะค้างที่รูปเพื่อบันทึก หรือกดปุ่มด้านล่าง</p>
         </div>
@@ -2207,7 +2207,7 @@
                 </div>
                 <ul class="list-disc pl-4 space-y-1 text-neutral-500 text-[10.5px]">
                   <li><strong>กรณีมีคิวเช้า-บ่ายต่อกัน:</strong> ภาคเช้าเก็บกุญแจใส่ Smart Keybox คล้องรั้วหน้าบ้านและถ่ายรูปส่งระบบ (พี่ลิลลี่คุมรหัส OTP ผ่านแอปคนเดียว 100% ภาคเช้าเปลี่ยนรหัสไม่ได้) แล้วภาคบ่ายเก็บทั้งกุญแจ+กล่องกลับคืนออฟฟิศ</li>
-                  <li><strong>กฎคุ้มครองลีด:</strong> ต้องลงชื่อผู้ซื้อจริงจึงจะล็อกสิทธิ์คอมมิชชัน 60 วัน (หากอ้างว่าไปถ่ายคอนเทนต์อย่างเดียว จะไม่ล็อกสิทธิ์ผู้ซื้อ 0 วัน และต้องส่งลิงก์คลิปที่โพสต์จริงใน 48 ชม.)</li>
+                  <li><strong>กฎคุ้มครองลีด:</strong> ต้องลงชื่อผู้ซื้อจริงจึงจะล็อกสิทธิ์คอมมิชชัน 15 วัน (หากอ้างว่าไปถ่ายคอนเทนต์อย่างเดียว จะไม่ล็อกสิทธิ์ผู้ซื้อ 0 วัน และต้องส่งลิงก์คลิปที่โพสต์จริงใน 48 ชม.)</li>
                 </ul>
               </div>
             </div>
@@ -2454,11 +2454,22 @@
               <span class="text-[11px] text-emerald-700 font-semibold">ว่าง 0/2 รอบวันนี้</span>
             </div>
 
-            <div class="bg-neutral-50 border border-dashed border-neutral-300 rounded-2xl p-5 text-center space-y-1.5">
+            <div class="bg-neutral-50 border border-dashed border-neutral-300 rounded-2xl p-4 text-center space-y-1.5">
               <div class="text-sm font-bold text-neutral-700">📅 ยังไม่มีคิวนัดหมายเข้าชมสำหรับทรัพย์นี้</div>
               <p class="text-[11px] text-neutral-500 leading-relaxed">
                 เมื่อตัวแทนแจ้งนัดเปิดบ้านผ่านระบบหรือ LINE OA น้องศิวา รายชื่อรอบเช้า (09:00–12:30 น.) และรอบบ่าย (13:30–17:00 น.) จะมาแสดงที่นี่อัตโนมัติ
               </p>
+            </div>
+
+            <!-- Live Customer Lock 15-Day Console -->
+            <div class="space-y-2 pt-1">
+              <div class="flex items-center justify-between text-xs font-bold text-neutral-800">
+                <span>🔐 รายการล็อกสิทธิ์ลูกค้า (15 วัน • ข้อมูลจริง):</span>
+                <button type="button" onclick="if(typeof loadAdminCustomerLocks==='function')loadAdminCustomerLocks()" class="text-[10px] px-2 py-0.5 rounded bg-neutral-900 text-[#E5C985] font-bold cursor-pointer">🔄 รีเฟรช</button>
+              </div>
+              <div id="admin-lock-list-container" class="space-y-2 max-h-56 overflow-y-auto custom-scrollbar text-xs">
+                <div class="p-3 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-500 text-center">กำลังโหลดรายการล็อกลูกค้า...</div>
+              </div>
             </div>
 
             <!-- Anti-Hoarding & Lock Policy Notice -->

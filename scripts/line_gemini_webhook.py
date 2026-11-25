@@ -1778,6 +1778,7 @@ FRONTEND_URLS = {
     "exec": "https://assets.siwasup.com/gool_executive_dashboard.html",
     "consignment": "https://assets.siwasup.com/admin_consignment.html",
     "contracts": "https://assets.siwasup.com/exclusive_contracts.html",
+    "content": "https://assets.siwasup.com/admin_content_hub.html",
     "catalog": "https://assets.siwasup.com/catalog.html",
     "seller": "https://assets.siwasup.com/catalog.html?view=seller",
 }
@@ -2844,6 +2845,21 @@ def merge_visitor_ids(master_vid: str, alias_vid: str, actor_name: str = "", age
             for check_id in (m_id, m_root, a_id):
                 if ref_u not in [r.upper() for r in (visitors[check_id].get("refs") or [])]:
                     return (False, "สิทธิ์เฉพาะเจ้าของลูกค้าหรือผู้บริหารเท่านั้น")
+        m_lock = visitors[m_root].get("lock") or {}
+        a_lock = visitors[a_id].get("lock") or {}
+        now_dt = bkk_now()
+        _sync_lock_expiry(visitors[m_root], now_dt)
+        _sync_lock_expiry(visitors[a_id], now_dt)
+        if a_lock.get("status") == "booked" and m_lock.get("status") != "booked":
+            visitors[m_root]["lock"] = dict(a_lock)
+        elif m_lock.get("status") in ("active", "conflict_pending") and a_lock.get("status") in ("active", "conflict_pending"):
+            o1 = str(m_lock.get("owner_ref") or "").upper()
+            o2 = str(a_lock.get("owner_ref") or "").upper()
+            if o1 and o2 and o1 != o2:
+                cands = list(dict.fromkeys([o1, o2] + list(m_lock.get("conflict_candidates") or [])))
+                m_lock["status"] = "conflict_pending"
+                m_lock["conflict_candidates"] = cands
+                visitors[m_root]["lock"] = m_lock
         visitors[a_id]["merged_into"] = m_root
         for k, v in visitors.items():
             if k != a_id and v.get("merged_into") == a_id:
@@ -2969,6 +2985,97 @@ def _prune_old_visitors(visitors: dict):
         visitors.pop(k, None)
 
 
+def _parse_bkk_dt(s: str):
+    try:
+        return datetime.strptime(str(s or "").strip(), "%Y-%m-%d %H:%M:%S").replace(tzinfo=TH_TZ)
+    except Exception:
+        return None
+
+
+def _sync_lock_expiry(vis: dict, now_dt=None) -> bool:
+    """Lazy expiry: if active/conflict_pending lock is past expires_at, mark expired and clear owner_ref."""
+    if not isinstance(vis, dict):
+        return False
+    lk = vis.get("lock")
+    if not isinstance(lk, dict):
+        return False
+    st = str(lk.get("status") or "")
+    if st == "booked":
+        return False
+    if st in ("active", "conflict_pending"):
+        exp_dt = _parse_bkk_dt(lk.get("expires_at"))
+        now_dt = now_dt or bkk_now()
+        if exp_dt and now_dt >= exp_dt:
+            lk["status"] = "expired"
+            lk["owner_ref"] = ""
+            lk["conflict_candidates"] = []
+            return True
+    return False
+
+
+def _apply_lock_on_visit(visitors: dict, root_vid: str, ref: str, is_identified: bool, now_dt=None):
+    """Apply 15-day Customer Lock rule on identified visit."""
+    vis = visitors.get(root_vid)
+    if not isinstance(vis, dict):
+        return {}
+    now_dt = now_dt or bkk_now()
+    _sync_lock_expiry(vis, now_dt)
+    ref_u = str(ref or "").strip().upper()
+    if not is_identified or not ref_u or ref_u == "SW000":
+        return vis.get("lock") or {}
+    lk = vis.get("lock")
+    now_str = now_dt.strftime("%Y-%m-%d %H:%M:%S")
+    exp_str = (now_dt + timedelta(days=15)).strftime("%Y-%m-%d %H:%M:%S")
+    if not isinstance(lk, dict) or lk.get("status") in (None, "", "expired"):
+        vis["lock"] = {
+            "owner_ref": ref_u,
+            "locked_at": now_str,
+            "expires_at": exp_str,
+            "extended_days": 0,
+            "extended_by": "",
+            "extend_reason": "",
+            "status": "active",
+            "booked_property_id": "",
+            "booked_at": "",
+            "conflict_candidates": [],
+            "chosen_by_client_at": "",
+            "history": [{"action": "LOCK_15D", "ref": ref_u, "at": now_str}],
+        }
+        return vis["lock"]
+    if lk.get("status") == "booked":
+        return lk
+    owner_u = str(lk.get("owner_ref") or "").strip().upper()
+    if owner_u and owner_u != ref_u:
+        cands = list(dict.fromkeys([owner_u] + [str(c).upper() for c in (lk.get("conflict_candidates") or []) if c] + [ref_u]))
+        lk["status"] = "conflict_pending"
+        lk["conflict_candidates"] = cands
+        lk.setdefault("history", []).append({"action": "CONFLICT", "ref": ref_u, "at": now_str})
+    return lk
+
+
+def _format_lock_badge(vis: dict, now_dt=None) -> str:
+    lk = (vis or {}).get("lock")
+    if not isinstance(lk, dict) or not lk.get("status"):
+        return ""
+    now_dt = now_dt or bkk_now()
+    _sync_lock_expiry(vis, now_dt)
+    st = lk.get("status")
+    owner = lk.get("owner_ref") or "-"
+    if st == "booked":
+        pid = lk.get("booked_property_id") or "-"
+        return f" | 🏠 จองแล้ว [{pid}] (ล็อกถาวร: {owner})"
+    if st == "conflict_pending":
+        cands = ", ".join(lk.get("conflict_candidates") or [])
+        return f" | ⚠️ ชนกัน ({cands}) รอลูกค้าเลือก"
+    if st == "active":
+        exp_dt = _parse_bkk_dt(lk.get("expires_at"))
+        days_left = max(0, (exp_dt - now_dt).days) if exp_dt else 15
+        return f" | 🔒 ล็อก [{owner}] เหลือ {days_left} วัน"
+    if st == "expired":
+        return " | 🔓 ล็อกหมดอายุแล้ว"
+    return ""
+
+
 def record_client_tracking_event(payload: dict) -> dict:
     raw_vid = re.sub(r"[^A-Z0-9\-]", "", str(payload.get("vid") or "").strip().upper())[:24]
     tag_token = str(payload.get("t") or "").strip()
@@ -3061,15 +3168,15 @@ def record_client_tracking_event(payload: dict) -> dict:
         })
         store["events"] = events[:5000]
         _prune_old_visitors(visitors)
+        cons_vis = get_consolidated_visitor(visitors, raw_vid, ref_filter=ref)
+        root_vid = cons_vis.get("vid", raw_vid)
+        eff_name = str(cons_vis.get("primary_name") or "").strip()
+        is_identified = bool(str(avatar_name or "").strip()) or bool(eff_name) or bool(cons_vis.get("confirmed"))
+        lock_info = _apply_lock_on_visit(visitors, root_vid, ref, is_identified, bkk_now())
         save_client_tracking_data(store)
 
-        cons_vis = get_consolidated_visitor(visitors, raw_vid, ref_filter=ref)
-
-    root_vid = cons_vis.get("vid", raw_vid)
     eff_score = cons_vis.get("trust_score", score)
     eff_label = cons_vis.get("trust_label", label)
-    eff_name = str(cons_vis.get("primary_name") or "").strip()
-    is_identified = bool(str(avatar_name or "").strip()) or bool(eff_name) or bool(cons_vis.get("confirmed"))
 
     # Async LINE Push Notification to owning agent (identified leads only; raw traffic is logged without push)
     if is_identified and _should_send_client_alert(raw_vid, event_type, property_id, ref=ref):
@@ -3101,8 +3208,12 @@ def record_client_tracking_event(payload: dict) -> dict:
     return {
         "status": "ok",
         "vid": raw_vid,
+        "root_vid": root_vid,
         "avatar_name": avatar_name,
-        "trust_score": eff_score
+        "trust_score": eff_score,
+        "lock_status": (lock_info or {}).get("status", ""),
+        "lock_owner": (lock_info or {}).get("owner_ref", ""),
+        "conflict_candidates": (lock_info or {}).get("conflict_candidates", []) if (lock_info or {}).get("status") == "conflict_pending" else []
     }
 
 
@@ -3189,10 +3300,78 @@ def format_client_tracking_report(agent_ref: str = "", target_query: str = "", i
         prop_txt = f" | ดูบ้าน: {', '.join(props[:3])}" if props else ""
         alias_txt = f" [พ่วง: {','.join(it['_aliases'])}]" if it.get("_aliases") else ""
         warn_txt = " ⚠️หลายชื่อ" if it.get("shared_link_warning") else ""
-        lines.append(f"{idx}. {disp}{note} [#{vid}]{alias_txt}\n   🛡️ Trust {score}% | เปิด {opens} ครั้ง | ดูบ้าน {clicks} ครั้ง | ล่าสุด {last_seen}{prop_txt}{warn_txt}")
+        lock_txt = _format_lock_badge(it)
+        lines.append(f"{idx}. {disp}{note} [#{vid}]{alias_txt}\n   🛡️ Trust {score}% | เปิด {opens} ครั้ง | ดูบ้าน {clicks} ครั้ง | ล่าสุด {last_seen}{prop_txt}{warn_txt}{lock_txt}")
 
     lines.append("\n💡 คำสั่งเสริม:\n• ลิงก์ [ชื่อ] [โน้ต] — สร้างลิงก์เฉพาะคน\n• ยืนยัน V-XXXX — อัป Trust เป็น 100%\n• รวม V-XXXX V-YYYY / แยก V-YYYY")
     return "\n".join(lines)
+
+
+# ==============================================================================
+# CONTENT HUB STORE (Poppy & Admins - Public vs Agent Audience)
+# ==============================================================================
+CONTENT_HUB_PATH = os.path.join(DATA_DIR, "content_hub.json")
+CONTENT_HUB_LOCK = threading.RLock()
+_R2_CONTENT_VAULT_KEY = "_vault/content_hub_" + hmac.new(ADMIN_EXPORT_SECRET.encode("utf-8"), b"siwasup_content_hub_v1", hashlib.sha256).hexdigest()[:32] + ".json"
+_R2_CONTENT_RESTORED = False
+_CONTENT_MEM_CACHE = None
+
+
+def _is_content_editor(member: dict) -> bool:
+    if not isinstance(member, dict):
+        return False
+    perms = member.get("permissions") or {}
+    return bool(perms.get("contentEditor") or perms.get("standardAdmin") or perms.get("executiveAuthority") or perms.get("systemAdmin")) or _is_lobby_approver(member)
+
+
+def load_content_data():
+    global _R2_CONTENT_RESTORED, _CONTENT_MEM_CACHE
+    with CONTENT_HUB_LOCK:
+        if not _R2_CONTENT_RESTORED:
+            try:
+                parsed = _fetch_r2_json(_R2_CONTENT_VAULT_KEY, timeout=8)
+                if isinstance(parsed, dict) and isinstance(parsed.get("items"), list):
+                    _CONTENT_MEM_CACHE = parsed
+                    _R2_CONTENT_RESTORED = True
+                    return parsed
+            except Exception as e:
+                print(f"[Content Hub R2 Load Warn]: {e}")
+            _R2_CONTENT_RESTORED = True
+        if _CONTENT_MEM_CACHE is not None:
+            return _CONTENT_MEM_CACHE
+        if os.path.exists(CONTENT_HUB_PATH):
+            try:
+                with open(CONTENT_HUB_PATH, "r", encoding="utf-8") as f:
+                    parsed = json.load(f)
+                    if isinstance(parsed, dict) and isinstance(parsed.get("items"), list):
+                        _CONTENT_MEM_CACHE = parsed
+                        return parsed
+            except Exception:
+                pass
+        _CONTENT_MEM_CACHE = {"items": [], "updated_at": ""}
+        return _CONTENT_MEM_CACHE
+
+
+def save_content_data(store: dict):
+    global _CONTENT_MEM_CACHE, _R2_CONTENT_RESTORED
+    with CONTENT_HUB_LOCK:
+        store["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+        _CONTENT_MEM_CACHE = store
+        _R2_CONTENT_RESTORED = True
+        data_bytes = json.dumps(store, ensure_ascii=False, indent=2).encode("utf-8")
+        try:
+            os.makedirs(DATA_DIR, exist_ok=True)
+            with open(CONTENT_HUB_PATH, "wb") as f:
+                f.write(data_bytes)
+        except Exception as e:
+            print(f"[Content Hub Local Save Warn]: {e}")
+        if put_object_r2:
+            def _bg_r2():
+                try:
+                    put_object_r2(_R2_CONTENT_VAULT_KEY, data_bytes, "application/json; charset=utf-8")
+                except Exception as e:
+                    print(f"[Content Hub R2 Save Warn]: {e}")
+            threading.Thread(target=_bg_r2, daemon=True).start()
 
 
 _THAI_TAMBONS_CACHE = None
@@ -3627,6 +3806,45 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             })
             return
 
+        if path == "/api/content/list":
+            aud = str(query.get("audience", ["public"])[0] or "public").strip().lower()
+            if aud not in ("public", "agent", "all"):
+                aud = "public"
+            if aud == "agent":
+                acting = self._require("member")
+                if not acting:
+                    return
+                perms = acting.get("permissions") or {}
+                rc = str(acting.get("role_code") or "").upper()
+                if perms.get("vipClient") or perms.get("sellerClient") or rc in ("VIP_CLIENT", "SELLER"):
+                    self._send_json(403, {"error": "เฉพาะตัวแทนและทีมงานเท่านั้น"})
+                    return
+            elif aud == "all":
+                acting = self._require("member")
+                if not acting or not _is_content_editor(acting):
+                    if acting:
+                        self._send_json(403, {"error": "เฉพาะผู้ดูแลคอนเทนต์ (Poppy / Admin) เท่านั้น"})
+                    return
+            store = load_content_data()
+            items = list(store.get("items", []))
+            if aud == "public":
+                items = [
+                    it for it in items
+                    if it.get("status") == "published"
+                    and it.get("audience") in ("public", "both")
+                    and it.get("category") in ("just_sold", "howto", "article", "news")
+                ]
+            elif aud == "agent":
+                items = [
+                    it for it in items
+                    if it.get("status") == "published"
+                    and it.get("audience") in ("agent", "both")
+                    and it.get("category") in ("top_agent", "announcement", "meeting")
+                ]
+            items.sort(key=lambda x: (1 if x.get("pinned") else 0, str(x.get("published_at") or x.get("updated_at") or "")), reverse=True)
+            self._send_json(200, {"status": "success", "count": len(items), "items": items})
+            return
+
         if path == "/api/consignment/catalog":
             acting = self._require("member")
             if not acting:
@@ -3746,6 +3964,13 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 visitors = store.get("visitors", {})
                 events = store.get("events", [])
                 updated_at = store.get("updated_at")
+                now_bkk = bkk_now()
+                lock_changed = False
+                for v in visitors.values():
+                    if _sync_lock_expiry(v, now_bkk):
+                        lock_changed = True
+                if lock_changed:
+                    save_client_tracking_data(store)
             if not is_admin_req and req_ref:
                 ref_u = req_ref.upper()
                 vis_list = []
@@ -4177,6 +4402,244 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 self._send_json(200, {"status": "ok", "t": tok, "avatar_name": avatar_name})
             except Exception as e:
                 self._send_json(400, {"status": "error", "message": str(e)})
+            return
+
+        if path == "/api/track/choose-agent":
+            try:
+                content_length = int(self.headers.get('Content-Length', 0))
+                if content_length <= 0 or content_length > 4096:
+                    self._send_json(400, {"error": "Invalid payload size"})
+                    return
+                payload = json.loads(self.rfile.read(content_length).decode('utf-8'))
+                raw_vid = re.sub(r"[^A-Z0-9\-]", "", str(payload.get("vid") or "").strip().upper())[:24]
+                chosen_ref = re.sub(r"[^A-Za-z0-9_\-]", "", str(payload.get("chosen_ref") or "").strip().upper())[:24]
+                if not raw_vid or not chosen_ref:
+                    self._send_json(400, {"error": "Missing vid or chosen_ref"})
+                    return
+                with CLIENT_TRACKING_LOCK:
+                    store = load_client_tracking_data()
+                    visitors = store.setdefault("visitors", {})
+                    if raw_vid not in visitors:
+                        self._send_json(404, {"error": "Visitor not found"})
+                        return
+                    root_vid = _resolve_root_visitor(visitors, raw_vid)
+                    vis = visitors[root_vid]
+                    _sync_lock_expiry(vis, bkk_now())
+                    lk = vis.get("lock") or {}
+                    if lk.get("status") == "booked":
+                        self._send_json(409, {"error": "ลูกค้าจองบ้านแล้ว ไม่สามารถเปลี่ยนเซลล์ผู้ดูแลได้"})
+                        return
+                    cands = [str(c).upper() for c in (lk.get("conflict_candidates") or [])]
+                    if chosen_ref not in cands:
+                        self._send_json(400, {"error": "ตัวแทนที่เลือกไม่อยู่ในรายการที่ชนกัน"})
+                        return
+                    now_str = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+                    lk["owner_ref"] = chosen_ref
+                    lk["status"] = "active"
+                    lk["conflict_candidates"] = []
+                    lk["chosen_by_client_at"] = now_str
+                    lk.setdefault("history", []).append({"action": "CLIENT_CHOSE", "ref": chosen_ref, "at": now_str})
+                    vis["lock"] = lk
+                    save_client_tracking_data(store)
+                self._send_json(200, {"status": "ok", "root_vid": root_vid, "owner_ref": chosen_ref, "lock": lk})
+            except Exception as e:
+                self._send_json(400, {"error": str(e)})
+            return
+
+        if path == "/api/track/lock-booking":
+            acting = self._require("admin")
+            if not acting:
+                return
+            try:
+                content_length = int(self.headers.get('Content-Length', 0))
+                payload = json.loads(self.rfile.read(content_length).decode('utf-8'))
+                raw_vid = re.sub(r"[^A-Z0-9\-]", "", str(payload.get("vid") or "").strip().upper())[:24]
+                prop_id = re.sub(r"[^A-Za-z0-9_\-]", "", str(payload.get("property_id") or "").strip())[:40]
+                owner_ref = re.sub(r"[^A-Za-z0-9_\-]", "", str(payload.get("owner_ref") or "").strip().upper())[:24]
+                if not raw_vid:
+                    self._send_json(400, {"error": "Missing vid"})
+                    return
+                with CLIENT_TRACKING_LOCK:
+                    store = load_client_tracking_data()
+                    visitors = store.setdefault("visitors", {})
+                    if raw_vid not in visitors:
+                        self._send_json(404, {"error": "Visitor not found"})
+                        return
+                    root_vid = _resolve_root_visitor(visitors, raw_vid)
+                    vis = visitors[root_vid]
+                    lk = vis.setdefault("lock", {})
+                    if lk.get("status") == "booked":
+                        self._send_json(409, {"error": "เคสนี้จองแล้ว ไม่สามารถเปลี่ยนเซลล์ผู้ดูแลได้"})
+                        return
+                    now_str = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+                    eff_owner = owner_ref or str(lk.get("owner_ref") or (vis.get("refs") or ["SW001"])[0]).upper()
+                    lk["owner_ref"] = eff_owner
+                    lk["status"] = "booked"
+                    lk["booked_property_id"] = prop_id
+                    lk["booked_at"] = now_str
+                    lk["conflict_candidates"] = []
+                    lk.setdefault("history", []).append({"action": "BOOKED", "ref": eff_owner, "property_id": prop_id, "by": acting.get("name", ""), "at": now_str})
+                    save_client_tracking_data(store)
+                self._send_json(200, {"status": "ok", "root_vid": root_vid, "lock": lk})
+            except Exception as e:
+                self._send_json(400, {"error": str(e)})
+            return
+
+        if path == "/api/track/extend-lock":
+            acting = self._require("admin")
+            if not acting:
+                return
+            try:
+                content_length = int(self.headers.get('Content-Length', 0))
+                payload = json.loads(self.rfile.read(content_length).decode('utf-8'))
+                raw_vid = re.sub(r"[^A-Z0-9\-]", "", str(payload.get("vid") or "").strip().upper())[:24]
+                extra_days = int(payload.get("extra_days") or 15)
+                extra_days = max(1, min(30, extra_days))
+                reason = str(payload.get("reason") or "").strip()[:150]
+                if not raw_vid or not reason:
+                    self._send_json(400, {"error": "กรุณาระบุรหัสเครื่อง (vid) และเหตุผลในการต่ออายุล็อก"})
+                    return
+                with CLIENT_TRACKING_LOCK:
+                    store = load_client_tracking_data()
+                    visitors = store.setdefault("visitors", {})
+                    if raw_vid not in visitors:
+                        self._send_json(404, {"error": "Visitor not found"})
+                        return
+                    root_vid = _resolve_root_visitor(visitors, raw_vid)
+                    vis = visitors[root_vid]
+                    now_dt = bkk_now()
+                    _sync_lock_expiry(vis, now_dt)
+                    lk = vis.setdefault("lock", {})
+                    if lk.get("status") == "booked":
+                        self._send_json(200, {"status": "ok", "note": "เคสนี้จองแล้ว (ล็อกถาวร)", "lock": lk})
+                        return
+                    base_dt = _parse_bkk_dt(lk.get("expires_at"))
+                    if not base_dt or base_dt < now_dt:
+                        base_dt = now_dt
+                    new_exp = (base_dt + timedelta(days=extra_days)).strftime("%Y-%m-%d %H:%M:%S")
+                    now_str = now_dt.strftime("%Y-%m-%d %H:%M:%S")
+                    lk["expires_at"] = new_exp
+                    lk["extended_days"] = int(lk.get("extended_days") or 0) + extra_days
+                    lk["extended_by"] = str(acting.get("nickname") or acting.get("name") or acting.get("code") or "")
+                    lk["extend_reason"] = reason
+                    if not lk.get("owner_ref") and vis.get("refs"):
+                        lk["owner_ref"] = str(vis["refs"][-1]).upper()
+                    lk["status"] = "active"
+                    lk.setdefault("history", []).append({"action": "ADMIN_EXTEND", "days": extra_days, "reason": reason, "by": lk["extended_by"], "at": now_str})
+                    save_client_tracking_data(store)
+                self._send_json(200, {"status": "ok", "root_vid": root_vid, "lock": lk})
+            except Exception as e:
+                self._send_json(400, {"error": str(e)})
+            return
+
+        if path == "/api/content/save":
+            acting = self._require("member")
+            if not acting:
+                return
+            if not _is_content_editor(acting):
+                self._send_json(403, {"error": "เฉพาะผู้ดูแลคอนเทนต์ (Poppy / Admin) เท่านั้น"})
+                return
+            try:
+                content_length = int(self.headers.get('Content-Length', 0))
+                if content_length <= 0 or content_length > 512 * 1024:
+                    self._send_json(400, {"error": "Invalid payload size"})
+                    return
+                payload = json.loads(self.rfile.read(content_length).decode('utf-8'))
+                action = str(payload.get("action") or "upsert").strip()
+                actor_name = str(acting.get("nickname") or acting.get("name") or acting.get("code") or "Poppy").strip()
+                with CONTENT_HUB_LOCK:
+                    store = load_content_data()
+                    items = list(store.get("items", []))
+                    cid = re.sub(r"[^A-Za-z0-9_-]", "", str(payload.get("id") or "").strip())
+                    if action == "delete" and cid:
+                        store["items"] = [it for it in items if it.get("id") != cid]
+                        save_content_data(store)
+                        self._send_json(200, {"status": "success", "deleted": cid})
+                        return
+                    title = str(payload.get("title") or "").strip()[:160]
+                    if not title:
+                        self._send_json(400, {"error": "กรุณาระบุหัวข้อคอนเทนต์"})
+                        return
+                    aud = str(payload.get("audience") or "public").strip().lower()
+                    if aud not in ("public", "agent", "both"):
+                        aud = "public"
+                    cat = str(payload.get("category") or "article").strip().lower()
+                    if cat not in ("just_sold", "howto", "article", "news", "top_agent", "announcement", "meeting"):
+                        cat = "article" if aud == "public" else "announcement"
+                    st = str(payload.get("status") or "published").strip().lower()
+                    if st not in ("draft", "published", "archived"):
+                        st = "published"
+                    now_str = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+                    if not cid:
+                        cid = f"CNT-{bkk_now().strftime('%Y%m%d')}-{secrets.token_hex(2).upper()}"
+                    existing = next((it for it in items if it.get("id") == cid), None)
+                    item_obj = {
+                        "id": cid,
+                        "audience": aud,
+                        "category": cat,
+                        "title": title,
+                        "summary": str(payload.get("summary") or "").strip()[:300],
+                        "body": str(payload.get("body") or "").strip()[:10000],
+                        "cover_image": str(payload.get("cover_image") or "").strip()[:500],
+                        "status": st,
+                        "pinned": bool(payload.get("pinned")),
+                        "published_at": (existing.get("published_at") if existing else "") or (now_str if st == "published" else ""),
+                        "author_name": (existing.get("author_name") if existing else "") or actor_name,
+                        "updated_at": now_str,
+                        "updated_by": actor_name,
+                    }
+                    items = [it for it in items if it.get("id") != cid]
+                    items.insert(0, item_obj)
+                    store["items"] = items[:500]
+                    save_content_data(store)
+                self._send_json(200, {"status": "success", "item": item_obj})
+            except Exception as e:
+                self._send_json(500, {"error": str(e)})
+            return
+
+        if path == "/api/content/upload-image":
+            acting = self._require("member")
+            if not acting:
+                return
+            if not _is_content_editor(acting):
+                self._send_json(403, {"error": "เฉพาะผู้ดูแลคอนเทนต์ (Poppy / Admin) เท่านั้น"})
+                return
+            content_length = int(self.headers.get('Content-Length', 0))
+            if content_length <= 0 or content_length > 12 * 1024 * 1024:
+                self._send_json(400, {"error": "ไฟล์ใหญ่เกินกำหนด (สูงสุด 8MB)"})
+                return
+            try:
+                payload = json.loads(self.rfile.read(content_length).decode('utf-8'))
+                data_url = str(payload.get("data_url") or "")
+                if ";base64," not in data_url:
+                    self._send_json(400, {"error": "รูปแบบไฟล์ไม่ถูกต้อง"})
+                    return
+                raw_b64 = data_url.split(";base64,", 1)[1]
+                file_bytes = base64.b64decode(raw_b64, validate=True)
+                if len(file_bytes) == 0 or len(file_bytes) > 8 * 1024 * 1024:
+                    self._send_json(400, {"error": "ขนาดไฟล์ต้องไม่เกิน 8MB"})
+                    return
+                ext, ctype = None, None
+                if file_bytes.startswith(b"\xff\xd8\xff"):
+                    ext, ctype = "jpg", "image/jpeg"
+                elif file_bytes.startswith(b"\x89PNG\r\n\x1a\n"):
+                    ext, ctype = "png", "image/png"
+                elif file_bytes[:4] == b"RIFF" and file_bytes[8:12] == b"WEBP":
+                    ext, ctype = "webp", "image/webp"
+                if not ext:
+                    self._send_json(400, {"error": "รองรับเฉพาะไฟล์ JPG, PNG, WebP เท่านั้น"})
+                    return
+                if not put_object_r2:
+                    self._send_json(500, {"error": "R2 storage not available"})
+                    return
+                r2_key = f"content_uploads/cnt_{int(time.time())}_{secrets.token_hex(4)}.{ext}"
+                status_r2 = put_object_r2(r2_key, file_bytes, ctype)
+                if status_r2 not in (200, 201, 204):
+                    self._send_json(502, {"error": f"R2 upload failed ({status_r2})"})
+                    return
+                self._send_json(200, {"status": "success", "url": f"https://assets.siwasup.com/{r2_key}"})
+            except Exception as e:
+                self._send_json(500, {"error": str(e)})
             return
 
         if path == "/api/ocr/contract":
@@ -5304,6 +5767,12 @@ def handle_render_shutdown(signum, frame):
                     print("[+] Client tracking vault flushed to Cloudflare R2 before sleep!")
                 else:
                     print("[~] Skipped client tracking R2 flush (not restored or empty store).")
+            with CONTENT_HUB_LOCK:
+                ch_store = load_content_data()
+                if put_object_r2 and _R2_CONTENT_RESTORED and len(ch_store.get("items", [])) > 0:
+                    ch_bytes = json.dumps(ch_store, ensure_ascii=False, indent=2).encode("utf-8")
+                    put_object_r2(_R2_CONTENT_VAULT_KEY, ch_bytes, "application/json; charset=utf-8")
+                    print("[+] Content hub vault flushed to Cloudflare R2 before sleep!")
     except Exception as e:
         print(f"[-] Error during pre-sleep flush: {e}")
     sys.exit(0)

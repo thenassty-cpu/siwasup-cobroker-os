@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ศิวาทรัพย์ - ศูนย์จัดการคอนเทนต์ (Content Hub Studio)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Prompt', sans-serif; background: #FAF7F2; color: #2C2218; }
+    .gold-card { background: #FFFFFF; border: 1px solid #E5D5B5; box-shadow: 0 4px 18px rgba(150, 115, 50, 0.06); }
+    .gold-btn { background: linear-gradient(135deg, #D4BA7A 0%, #B89347 100%); color: #241A0E; }
+  </style>
+</head>
+<body class="min-h-screen pb-16">
+  <!-- LINE Auth Gate -->
+  <div id="contentGateOverlay" class="fixed inset-0 z-50 bg-[#FAF7F2]/98 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="gold-card rounded-3xl max-w-sm w-full p-6 text-center space-y-4 border-2 border-[#C2A460]">
+      <div class="w-12 h-12 mx-auto rounded-2xl bg-pink-50 border border-pink-200 text-pink-700 flex items-center justify-center">
+        <i data-lucide="pen-tool" class="w-6 h-6"></i>
+      </div>
+      <div class="text-[11px] font-bold tracking-widest text-[#967332]">SIWASUP CONTENT HUB</div>
+      <h2 class="text-base font-extrabold text-[#2C2218]">ศูนย์จัดการข่าวสาร &amp; บทความ</h2>
+      <p id="contentGateMsg" class="text-xs text-[#6E5A44] leading-relaxed">กำลังตรวจสอบสิทธิ์ผู้ดูแลคอนเทนต์ (Poppy / Admin)...</p>
+      <div id="contentGateActions" class="hidden space-y-2">
+        <a id="contentGateLoginBtn" href="https://siwasup-cobroker-os.onrender.com/api/auth/line/start?return=content" class="block w-full py-2.5 rounded-xl bg-[#06C755] text-white font-bold text-xs">เข้าสู่ระบบด้วย LINE</a>
+        <a href="welcome_landing.html" class="block text-xs text-[#8A755E] hover:underline">← กลับหน้าหลัก</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="bg-[#2C2218] text-white border-b border-[#C2A460]/40 sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-[#C2A460] text-[#241A0E] flex items-center justify-center font-black">🎨</div>
+        <div>
+          <h1 class="text-sm sm:text-base font-extrabold leading-tight">Content Hub Studio (Poppy &amp; Admin)</h1>
+          <p id="editorInfoText" class="text-[11px] text-[#E5C985]">แยกมุมมองลูกค้า (ข่าว/บทความ) &amp; มุมมองเซลล์ (Top Agent/ประกาศ)</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 text-xs">
+        <button onclick="openEditorModal()" class="px-3.5 py-2 rounded-xl gold-btn font-extrabold flex items-center gap-1.5 shadow cursor-pointer">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span>สร้างคอนเทนต์ใหม่</span>
+        </button>
+        <a href="welcome_landing.html" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold">หน้าแรก</a>
+        <a href="catalog.html" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold">คลังทรัพย์</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 pt-5 space-y-4">
+    <!-- Audience Filter Tabs -->
+    <div class="gold-card rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2">
+      <div class="flex flex-wrap items-center gap-1.5 text-xs">
+        <button onclick="setAudFilter('all')" data-aud="all" class="px-3 py-1.5 rounded-xl bg-[#2C2218] text-white font-bold cursor-pointer">ทั้งหมด</button>
+        <button onclick="setAudFilter('public')" data-aud="public" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-emerald-800 font-bold cursor-pointer">🌐 มุมมองลูกค้า (เพิ่งขาย/How-to/บทความ/ข่าว)</button>
+        <button onclick="setAudFilter('agent')" data-aud="agent" class="px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-amber-900 font-bold cursor-pointer">💼 มุมมองเซลล์ (Top Agent/ประกาศ/นัดหมาย)</button>
+      </div>
+      <span id="contentCountBadge" class="text-xs font-bold text-[#967332]">0 รายการ</span>
+    </div>
+
+    <!-- Content Cards Grid -->
+    <div id="contentGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  </main>
+
+  <!-- Editor Modal -->
+  <div id="editorModal" class="hidden fixed inset-0 z-50 bg-black/55 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 border-2 border-[#C2A460] shadow-2xl space-y-3 max-h-[92vh] overflow-y-auto text-xs">
+      <div class="flex items-center justify-between pb-2 border-b border-[#E5D5B5]">
+        <h3 id="editorModalTitle" class="text-base font-extrabold text-[#2C2218]">📝 สร้าง / แก้ไขคอนเทนต์</h3>
+        <button onclick="closeEditorModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center cursor-pointer">✕</button>
+      </div>
+      <input type="hidden" id="edId">
+      <div class="space-y-2.5">
+        <div>
+          <label class="font-bold block mb-1">หัวข้อคอนเทนต์ *</label>
+          <input id="edTitle" type="text" placeholder="เช่น ปิดการขายบ้านเดี่ยว พระราม 2 ภายใน 14 วัน!" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold block mb-1">กลุ่มผู้ชม (Audience) *</label>
+            <select id="edAudience" onchange="syncCategoryOptions()" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A] font-semibold">
+              <option value="public">🌐 ลูกค้าทั่วไป</option>
+              <option value="agent">💼 เซลล์ / ทีมงาน</option>
+              <option value="both">✨ ทั้งลูกค้าและเซลล์</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-bold block mb-1">หมวดหมู่ (Category) *</label>
+            <select id="edCategory" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A] font-semibold"></select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold block mb-1">สถานะ</label>
+            <select id="edStatus" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+              <option value="published">✅ เผยแพร่ทันที (Published)</option>
+              <option value="draft">📝 ฉบับร่าง (Draft)</option>
+              <option value="archived">📦 เก็บเข้าคลัง (Archived)</option>
+            </select>
+          </div>
+          <label class="flex items-center gap-2 pt-5 cursor-pointer font-bold text-[#967332]">
+            <input id="edPinned" type="checkbox" class="w-4 h-4 rounded text-amber-600">
+            <span>📌 ปักหมุดไว้บนสุด</span>
+          </label>
+        </div>
+        <div>
+          <label class="font-bold block mb-1">รูปภาพปก (อัปโหลดเข้า R2 หรือวาง URL)</label>
+          <div class="flex items-center gap-2">
+            <input id="edCover" type="text" placeholder="https://assets.siwasup.com/content_uploads/..." class="flex-1 p-2 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+            <label class="px-3 py-2 rounded-xl bg-slate-900 text-[#E5C985] font-bold cursor-pointer shrink-0">
+              📷 อัปโหลดรูป
+              <input type="file" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="uploadCoverImage(event)">
+            </label>
+          </div>
+          <p id="edUploadStatus" class="text-[11px] text-emerald-700 mt-1 hidden"></p>
+        </div>
+        <div>
+          <label class="font-bold block mb-1">สรุปย่อ (แสดงบนการ์ด)</label>
+          <input id="edSummary" type="text" placeholder="สรุปสั้นๆ 1-2 บรรทัด" class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]">
+        </div>
+        <div>
+          <label class="font-bold block mb-1">เนื้อหาฉบับเต็ม</label>
+          <textarea id="edBody" rows="5" placeholder="พิมพ์เนื้อหาบทความ ข่าวสาร ประกาศ หรือรายละเอียดนัดหมาย..." class="w-full p-2.5 rounded-xl bg-[#FAF7F2] border border-[#D8C39A]"></textarea>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 pt-2">
+        <button onclick="closeEditorModal()" class="flex-1 py-2.5 rounded-xl border border-slate-300 font-bold text-slate-600 cursor-pointer">ยกเลิก</button>
+        <button onclick="saveContentItem()" class="flex-1 py-2.5 rounded-xl gold-btn font-extrabold shadow cursor-pointer">💾 บันทึก &amp; อัปเดต</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'https://siwasup-cobroker-os.onrender.com';
+    const SESSION_KEY = 'siwasup_session';
+    let allItems = [];
+    let currentAud = 'all';
+
+    const CAT_LABELS = {
+      just_sold: '🎉 บ้านเพิ่งขาย (Just Sold)',
+      howto: '💡 How-to / เคล็ดลับ',
+      article: '📖 บทความอสังหาฯ',
+      news: '📰 ข่าวสาร',
+      top_agent: '🏆 Top Agent',
+      announcement: '📢 ประกาศบริษัท',
+      meeting: '📅 นัดหมายสำคัญ'
+    };
+
+    function escapeHtml(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
+    function authHeaders() {
+      const t = localStorage.getItem(SESSION_KEY) || '';
+      return t ? { 'Authorization': 'Bearer ' + t, 'Content-Type': 'application/json' } : { 'Content-Type': 'application/json' };
+    }
+
+    async function bootContentHub() {
+      const params = new URLSearchParams(window.location.search);
+      const hash = window.location.hash || '';
+      if (hash.startsWith('#session=')) {
+        localStorage.setItem(SESSION_KEY, decodeURIComponent(hash.slice(9)));
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+      const sess = localStorage.getItem(SESSION_KEY);
+      const gate = document.getElementById('contentGateOverlay');
+      const msg = document.getElementById('contentGateMsg');
+      const act = document.getElementById('contentGateActions');
+      if (!sess) {
+        if (msg) msg.textContent = 'กรุณาเข้าสู่ระบบด้วย LINE ของ Poppy / ผู้ดูแลคอนเทนต์';
+        if (act) act.classList.remove('hidden');
+        return;
+      }
+      try {
+        const res = await fetch(`${API_BASE}/api/auth/me`, { headers: { 'Authorization': 'Bearer ' + sess }, cache: 'no-store' });
+        if (!res.ok) {
+          if (msg) msg.textContent = 'เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่';
+          if (act) act.classList.remove('hidden');
+          return;
+        }
+        const me = await res.json();
+        const m = me.member || {};
+        const p = m.permissions || {};
+        const canEdit = Boolean(p.contentEditor || p.standardAdmin || p.executiveAuthority || p.systemAdmin || me.isAdmin);
+        if (!canEdit) {
+          if (msg) msg.textContent = 'บัญชีนี้ยังไม่มีสิทธิ์ผู้ดูแลคอนเทนต์ (Content Hub) กรุณาให้ผู้บริหารเปิดสิทธิ์ contentEditor ใน Lobby';
+          if (act) act.classList.remove('hidden');
+          return;
+        }
+        document.getElementById('editorInfoText').textContent = `ผู้ดูแล: ${m.nickname || m.name || m.code} • แยกมุมมองลูกค้า & เซลล์`;
+        if (gate) gate.classList.add('hidden');
+        await loadAllContents();
+      } catch (e) {
+        if (msg) msg.textContent = 'เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง';
+        if (act) act.classList.remove('hidden');
+      }
+    }
+
+    async function loadAllContents() {
+      const res = await fetch(`${API_BASE}/api/content/list?audience=all`, { headers: authHeaders(), cache: 'no-store' });
+      const data = await res.json();
+      allItems = Array.isArray(data.items) ? data.items : [];
+      renderContentGrid();
+    }
+
+    function setAudFilter(aud) {
+      currentAud = aud;
+      document.querySelectorAll('[data-aud]').forEach(b => {
+        const active = b.getAttribute('data-aud') === aud;
+        b.className = active
+          ? 'px-3 py-1.5 rounded-xl bg-[#2C2218] text-white font-bold cursor-pointer'
+          : 'px-3 py-1.5 rounded-xl bg-[#FAF5EB] text-[#6E5A44] font-bold cursor-pointer';
+      });
+      renderContentGrid();
+    }
+
+    function renderContentGrid() {
+      const list = allItems.filter(it => currentAud === 'all' || it.audience === currentAud || it.audience === 'both');
+      document.getElementById('contentCountBadge').textContent = `${list.length} รายการ`;
+      const grid = document.getElementById('contentGrid');
+      if (!list.length) {
+        grid.innerHTML = `<div class="col-span-full gold-card rounded-2xl p-8 text-center text-xs text-[#6E5A44]">ยังไม่มีคอนเทนต์ในหมวดนี้ — กด "สร้างคอนเทนต์ใหม่" ด้านบนได้เลย</div>`;
+        return;
+      }
+      grid.innerHTML = list.map(it => {
+        const audBadge = it.audience === 'agent'
+          ? '<span class="px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold text-[10px]">💼 เซลล์</span>'
+          : (it.audience === 'both' ? '<span class="px-2 py-0.5 rounded bg-purple-100 text-purple-900 font-bold text-[10px]">✨ ทั้งคู่</span>' : '<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 font-bold text-[10px]">🌐 ลูกค้า</span>');
+        const stBadge = it.status === 'published'
+          ? '<span class="px-2 py-0.5 rounded bg-emerald-600 text-white font-bold text-[10px]">Published</span>'
+          : `<span class="px-2 py-0.5 rounded bg-slate-500 text-white font-bold text-[10px]">${escapeHtml(it.status)}</span>`;
+        return `
+          <div class="gold-card rounded-2xl overflow-hidden flex flex-col justify-between">
+            <div>
+              ${it.cover_image && /^https?:\/\//i.test(it.cover_image) ? `<img src="${escapeHtml(it.cover_image)}" class="w-full h-40 object-cover bg-slate-100">` : `<div class="w-full h-24 bg-[#FAF5EB] flex items-center justify-center text-xs text-[#8A755E]">ไม่มีภาพปก</div>`}
+              <div class="p-4 space-y-2">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  ${audBadge} ${stBadge}
+                  ${it.pinned ? '<span class="text-[10px] font-bold text-rose-700">📌 ปักหมุด</span>' : ''}
+                  <span class="text-[10px] text-[#8A755E]">${escapeHtml(CAT_LABELS[it.category] || it.category)}</span>
+                </div>
+                <h3 class="text-sm font-extrabold text-[#2C2218]">${escapeHtml(it.title)}</h3>
+                <p class="text-xs text-[#6E5A44] line-clamp-2">${escapeHtml(it.summary || it.body || '')}</p>
+              </div>
+            </div>
+            <div class="p-3 bg-[#FAF5EB] border-t border-[#E5D5B5] flex items-center gap-2 text-xs">
+              <button onclick="openEditorModal('${escapeHtml(it.id)}')" class="flex-1 py-1.5 rounded-xl bg-white border border-[#C2A460] font-bold text-[#7A5B22] cursor-pointer">✏️ แก้ไข</button>
+              <button onclick="deleteContentItem('${escapeHtml(it.id)}')" class="py-1.5 px-3 rounded-xl bg-red-50 border border-red-200 font-bold text-red-700 cursor-pointer">ลบ</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function syncCategoryOptions(selectedVal) {
+      const aud = document.getElementById('edAudience').value;
+      const sel = document.getElementById('edCategory');
+      const opts = aud === 'agent'
+        ? [['top_agent', '🏆 Top Agent'], ['announcement', '📢 ประกาศบริษัท'], ['meeting', '📅 นัดหมายสำคัญ']]
+        : (aud === 'both'
+          ? Object.entries(CAT_LABELS)
+          : [['just_sold', '🎉 บ้านเพิ่งขาย'], ['howto', '💡 How-to'], ['article', '📖 บทความ'], ['news', '📰 ข่าวสาร']]);
+      sel.innerHTML = opts.map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
+      if (selectedVal && opts.some(([k]) => k === selectedVal)) sel.value = selectedVal;
+    }
+
+    function openEditorModal(id) {
+      const it = id ? allItems.find(x => x.id === id) : null;
+      document.getElementById('edId').value = it ? it.id : '';
+      document.getElementById('edTitle').value = it ? (it.title || '') : '';
+      document.getElementById('edAudience').value = it ? (it.audience || 'public') : 'public';
+      syncCategoryOptions(it ? it.category : '');
+      document.getElementById('edStatus').value = it ? (it.status || 'published') : 'published';
+      document.getElementById('edPinned').checked = Boolean(it && it.pinned);
+      document.getElementById('edCover').value = it ? (it.cover_image || '') : '';
+      document.getElementById('edSummary').value = it ? (it.summary || '') : '';
+      document.getElementById('edBody').value = it ? (it.body || '') : '';
+      document.getElementById('edUploadStatus').classList.add('hidden');
+      document.getElementById('editorModal').classList.remove('hidden');
+    }
+    function closeEditorModal() { document.getElementById('editorModal').classList.add('hidden'); }
+
+    async function uploadCoverImage(e) {
+      const file = e.target.files[0];
+      e.target.value = '';
+      if (!file) return;
+      const stEl = document.getElementById('edUploadStatus');
+      stEl.textContent = '⏳ กำลังอัปโหลดรูปขึ้น R2...';
+      stEl.classList.remove('hidden');
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const res = await fetch(`${API_BASE}/api/content/upload-image`, {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify({ data_url: reader.result })
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Upload failed');
+          document.getElementById('edCover').value = data.url;
+          stEl.textContent = '✅ อัปโหลดรูปสำเร็จ!';
+        } catch (err) {
+          stEl.textContent = '❌ อัปโหลดไม่สำเร็จ: ' + err.message;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function saveContentItem() {
+      const title = document.getElementById('edTitle').value.trim();
+      if (!title) return alert('กรุณากรอกหัวข้อคอนเทนต์');
+      const payload = {
+        action: 'upsert',
+        id: document.getElementById('edId').value,
+        title,
+        audience: document.getElementById('edAudience').value,
+        category: document.getElementById('edCategory').value,
+        status: document.getElementById('edStatus').value,
+        pinned: document.getElementById('edPinned').checked,
+        cover_image: document.getElementById('edCover').value.trim(),
+        summary: document.getElementById('edSummary').value.trim(),
+        body: document.getElementById('edBody').value.trim()
+      };
+      const res = await fetch(`${API_BASE}/api/content/save`, {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        return alert('❌ บันทึกไม่สำเร็จ: ' + (err.error || res.status));
+      }
+      closeEditorModal();
+      await loadAllContents();
+    }
+
+    async function deleteContentItem(id) {
+      if (!confirm('ยืนยันลบคอนเทนต์นี้?')) return;
+      const res = await fetch(`${API_BASE}/api/content/save`, {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ action: 'delete', id })
+      });
+      if (res.ok) await loadAllContents();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+      bootContentHub();
+    });
+  </script>
+</body>
+</html>

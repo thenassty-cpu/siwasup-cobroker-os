@@ -309,7 +309,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <!-- ⚠️ ADMIN WARNING BANNER -->
-      <div class="mb-8 p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 flex items-start gap-3 text-amber-900 text-xs sm:text-sm">
+      <div id="articles-placeholder-banner" class="mb-8 p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 flex items-start gap-3 text-amber-900 text-xs sm:text-sm">
         <span class="text-lg shrink-0">⚠️</span>
         <div>
           <strong class="block text-amber-950 font-black">[ADMIN ONLY — ซ่อนจากบุคคลทั่วไปชั่วคราว]</strong>
@@ -337,8 +337,11 @@
         </div>
       </div>
 
+      <!-- DYNAMIC PUBLIC CONTENT GRID (จาก Content Hub) -->
+      <div id="publicContentGrid" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+
       <!-- ARTICLES GRID (SEO FOCUSED) -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div id="articles-placeholder-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
         <!-- Article 1: NPA Buying Guide -->
         <article class="bronze-card rounded-3xl overflow-hidden transition-all flex flex-col group">
@@ -428,6 +431,41 @@
 
     </div>
   </section>
+
+  <!-- 10B. AGENT INTERNAL CONTENT HUB (Top Agent, ประกาศ, นัดหมายสำคัญ — เฉพาะตัวแทนที่อนุมัติแล้ว) -->
+  <section id="agent-hub-board" class="hidden py-12 sm:py-16 bg-[#F5EFE4] border-b border-[#D8C39A]/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-900 bg-amber-100 border border-amber-300 px-3 py-1 rounded-full mb-2">
+            <span>🏆</span>
+            <span>AGENT &amp; STAFF INTERNAL HUB</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold text-[#2C2218]">ประกาศทีมขาย • Top Agent • นัดหมายสำคัญ</h2>
+        </div>
+        <a id="btn-open-content-studio" href="admin_content_hub.html" class="hidden inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-900 text-amber-300 text-xs font-bold hover:bg-neutral-800 transition-colors shadow-sm">
+          <span>🎨 เปิด Content Hub Studio</span>
+        </a>
+      </div>
+      <div id="agentContentGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+    </div>
+  </section>
+
+  <!-- CONTENT READER MODAL -->
+  <div id="contentReaderModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" onclick="if(event.target===this) closeContentReader()">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[88vh] overflow-y-auto shadow-2xl border border-[#D8C39A]">
+      <div class="sticky top-0 bg-white/95 backdrop-blur-md px-6 py-4 border-b border-[#E5D5B5] flex items-center justify-between gap-3">
+        <span id="cr-category" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-[#FAF7F2] text-[#8A6525] border border-[#D8C39A]"></span>
+        <button type="button" onclick="closeContentReader()" class="px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-xs font-bold text-neutral-700">ปิดหน้าต่าง ✕</button>
+      </div>
+      <div class="p-6 space-y-4">
+        <img id="cr-cover" src="" alt="" class="hidden w-full max-h-72 object-cover rounded-2xl border border-[#E5D5B5]">
+        <h3 id="cr-title" class="text-xl sm:text-2xl font-bold text-[#2C2218] leading-snug"></h3>
+        <div id="cr-meta" class="text-xs text-[#8A755E]"></div>
+        <div id="cr-body" class="text-sm text-[#3D3124] leading-relaxed whitespace-pre-line"></div>
+      </div>
+    </div>
+  </div>
 
   <!-- 4. SIWASUP CO-BROKER OS CORE TOOLS (4 เครื่องมือมาตรฐานวิชาชีพสำหรับตัวแทน) -->
   <section id="activities" class="py-16 sm:py-20 bg-[#F5EFE4] border-b border-[#D8C39A]/60">
@@ -704,12 +742,129 @@
       }
     }
 
+    const _CONTENT_CAT_LABEL = {
+      just_sold: '🎉 ปิดการขาย (Just Sold)',
+      howto: '📘 คู่มือ & How-To',
+      article: '📰 บทความอสังหาฯ',
+      news: '🔥 ข่าวสาร / โปรโมชัน',
+      top_agent: '🏆 Top Agent',
+      announcement: '📣 ประกาศภายใน',
+      meeting: '📅 นัดหมายสำคัญ'
+    };
+    const _contentStore = {};
+
+    function _escHtml(str) {
+      return String(str || '').replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+    }
+
+    function openContentReader(id) {
+      const item = _contentStore[String(id)];
+      if (!item) return;
+      const modal = document.getElementById('contentReaderModal');
+      if (!modal) return;
+      document.getElementById('cr-category').textContent = _CONTENT_CAT_LABEL[item.category] || item.category || 'บทความ';
+      const img = document.getElementById('cr-cover');
+      if (item.cover_image && /^https?:\/\//i.test(item.cover_image)) {
+        img.src = item.cover_image;
+        img.alt = item.title || '';
+        img.classList.remove('hidden');
+      } else {
+        img.classList.add('hidden');
+        img.src = '';
+      }
+      document.getElementById('cr-title').textContent = item.title || '';
+      const dt = (item.published_at || '').slice(0, 10);
+      document.getElementById('cr-meta').textContent = `${dt ? dt + ' • ' : ''}โดย ${item.author_name || 'ทีมงานศิวาทรัพย์'}`;
+      document.getElementById('cr-body').textContent = item.body || item.summary || '';
+      modal.classList.remove('hidden');
+    }
+
+    function closeContentReader() {
+      const modal = document.getElementById('contentReaderModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function _renderContentCards(containerId, items) {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      el.innerHTML = items.map(item => {
+        _contentStore[String(item.id)] = item;
+        const cat = _escHtml(_CONTENT_CAT_LABEL[item.category] || item.category || 'อัปเดต');
+        const safeImg = (item.cover_image && /^https?:\/\//i.test(item.cover_image)) ? _escHtml(item.cover_image) : '';
+        const dt = _escHtml((item.published_at || '').slice(0, 10));
+        return `
+          <article onclick="openContentReader('${_escHtml(item.id)}')" class="cursor-pointer bronze-card rounded-3xl overflow-hidden transition-all flex flex-col group bg-white">
+            ${safeImg ? `<div class="aspect-[16/9] w-full bg-[#EFE7D8] relative overflow-hidden">
+              <img src="${safeImg}" alt="${_escHtml(item.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-md text-[#7A5B22] border border-[#D8C39A] text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-2xs">${cat}</span>
+            </div>` : `<div class="px-6 pt-5"><span class="inline-block bg-[#FAF7F2] text-[#7A5B22] border border-[#D8C39A] text-[11px] font-semibold px-2.5 py-1 rounded-lg">${cat}</span></div>`}
+            <div class="p-6 flex-1 flex flex-col justify-between">
+              <div>
+                <span class="text-[11px] text-[#8A755E] block mb-1">${dt}${item.pinned ? ' • 📌 ปักหมุด' : ''}</span>
+                <h3 class="text-base font-bold text-[#2C2218] group-hover:text-[#967332] transition-colors leading-snug">${_escHtml(item.title)}</h3>
+                <p class="text-xs text-[#6E5A44] mt-2.5 line-clamp-3 leading-relaxed">${_escHtml(item.summary || item.body || '')}</p>
+              </div>
+              <div class="mt-5 pt-4 border-t border-[#E5D5B5] flex items-center justify-between">
+                <span class="text-xs text-[#8A755E] font-medium">โดย ${_escHtml(item.author_name || 'ทีมงาน')}</span>
+                <span class="text-xs font-semibold text-[#8A6525] group-hover:underline">อ่านฉบับเต็ม →</span>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function loadPublicContentHub() {
+      try {
+        const res = await fetch('https://siwasup-cobroker-os.onrender.com/api/content/list?audience=public', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        const items = Array.isArray(data.items) ? data.items : [];
+        if (items.length > 0) {
+          const sec = document.getElementById('articles');
+          const pubGrid = document.getElementById('publicContentGrid');
+          const phBanner = document.getElementById('articles-placeholder-banner');
+          const phGrid = document.getElementById('articles-placeholder-grid');
+          if (sec) sec.classList.remove('hidden');
+          if (phBanner) phBanner.classList.add('hidden');
+          if (phGrid) phGrid.classList.add('hidden');
+          if (pubGrid) {
+            pubGrid.classList.remove('hidden');
+            _renderContentCards('publicContentGrid', items);
+          }
+        }
+      } catch (e) {}
+    }
+
+    async function loadAgentContentHub(sess, canEditContent) {
+      try {
+        const board = document.getElementById('agent-hub-board');
+        const studioBtn = document.getElementById('btn-open-content-studio');
+        if (canEditContent && studioBtn) {
+          studioBtn.classList.remove('hidden');
+          if (board) board.classList.remove('hidden');
+        }
+        const res = await fetch('https://siwasup-cobroker-os.onrender.com/api/content/list?audience=agent', {
+          headers: { 'Authorization': 'Bearer ' + sess },
+          cache: 'no-store'
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const items = Array.isArray(data.items) ? data.items : [];
+        if (items.length > 0 && board) {
+          board.classList.remove('hidden');
+          _renderContentCards('agentContentGrid', items);
+        }
+      } catch (e) {}
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
       const params = new URLSearchParams(window.location.search);
       // 1. Admin preview via ?admin=1
       if (params.get('admin') === '1') {
         revealAdminOnlyElements();
       }
+      loadPublicContentHub();
 
       // 2. Check genuine LINE Login session from Render Backend
       const sess = localStorage.getItem('siwasup_session');
@@ -725,7 +880,13 @@
               const code = (me.member.code || '').toUpperCase();
               const id = (me.member.id || '').toLowerCase();
               const isAdminUser = Boolean(me.isAdmin || code === 'SW001' || code === 'SA000' || id === 'app_office_001' || id === 'app_office_004' || me.member.role === 'admin');
+              const perms = me.member.permissions || {};
+              const canEditContent = Boolean(perms.contentEditor || perms.standardAdmin || perms.executiveAuthority || perms.systemAdmin || isAdminUser);
               showMyWelcomePass(me.member, isAdminUser);
+              const roleCode = String(me.member.role_code || '').toUpperCase();
+              if (roleCode !== 'VIP_CLIENT' && roleCode !== 'SELLER' && !perms.vipClient && !perms.sellerClient) {
+                loadAgentContentHub(sess, canEditContent);
+              }
               if (isAdminUser) {
                 revealAdminOnlyElements();
                 const pendingCnt = Number(me.lobbyPendingCount || 0);
