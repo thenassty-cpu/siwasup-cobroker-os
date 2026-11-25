@@ -6078,13 +6078,16 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                         disp_av = av_name if av_name.startswith("คุณ") else f"คุณ{av_name}"
                                         note_info = f"\n📝 โน้ตหลังบ้าน (ลูกค้าไม่เห็น): {ag_note}" if ag_note else ""
                                         prop_info = f"\n📌 ล็อกเปิดบ้านรหัส: {prop_id}" if prop_id else ""
+                                        zone_ask_hint = ""
+                                        if not prop_id and re.search(r'\d+\s*(?:หลัง|ห้อง|แปลง)', f"{ag_note} {raw_arg}") and not _extract_thai_geo(f"{ag_note} {raw_arg}"):
+                                            zone_ask_hint = f"\n\n💡 เห็นระบุจำนวนไว้แต่ยังไม่ได้ระบุทำเล — อยากเจาะจงโซนไหนหรืองบประมาณเท่าไหร่ บอกน้องศิวาช่วยคัดส่งให้ {disp_av} เพิ่มเติมได้เลยนะครับ (เช่น 'บ้าน โซนบางแค งบ 3 ล้าน')"
                                         ai_reply = (
                                             f"🔗 ลิงก์เฉพาะสำหรับ {disp_av} พร้อมส่งต่อให้ลูกค้าแล้วค่ะ!\n"
                                             f"(ลิงก์นี้ซ่อนชื่อเป็นรหัสปลอดภัย ลูกค้าไม่เห็นโน้ตหลังบ้าน){note_info}{prop_info}\n\n"
                                             f"👇 กดค้าง/ส่งต่อข้อความด้านล่างให้ลูกค้าได้เลยค่ะ:\n"
                                             f"คัดสรรบ้านสวยและทรัพย์คุณภาพไว้ให้ {disp_av} เลือกชมแล้วนะคะ คลิกดูทั้งหมดได้ที่นี่เลยค่ะ 👇\n"
                                             f"{client_url}\n\n"
-                                            f"🔔 ทันทีที่ลูกค้ากดเปิดดู น้องศิวาจะแจ้งเตือนกลับมาในแชทนี้ทันทีค่ะ"
+                                            f"🔔 ทันทีที่ลูกค้ากดเปิดดู น้องศิวาจะแจ้งเตือนกลับมาในแชทนี้ทันทีค่ะ{zone_ask_hint}"
                                         )
                                     matched_codes, search_mode, matched_props, flex_carousel = [], 'CLIENT_LINK_GEN', [], None
                                 elif matched_member and m_check:
