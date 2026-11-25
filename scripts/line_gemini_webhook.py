@@ -6016,23 +6016,25 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
 
                                         lines = []
                                         if tier1 and tier2:
-                                            lines.append(f"🏠 พิกัด **{area_label}**: พบในระยะเป้าหมาย (0–5 กม.) {len(tier1)} หลัง และโซนใกล้เคียง (5–15 กม.) อีก {len(tier2)} หลังครับ:")
+                                            lines.append(f"🏠 พิกัด {area_label}: พบในระยะเป้าหมาย (0–5 กม.) {len(tier1)} หลัง และโซนใกล้เคียง (5–15 กม.) อีก {len(tier2)} หลังครับ:")
                                         elif tier1:
-                                            lines.append(f"🏠 พิกัด **{area_label}**: พบในระยะเป้าหมาย (0–5 กม.) จำนวน {len(tier1)} หลังครับ:")
+                                            lines.append(f"🏠 พิกัด {area_label}: พบในระยะเป้าหมาย (0–5 กม.) จำนวน {len(tier1)} หลังครับ:")
                                         elif tier2:
-                                            lines.append(f"📍 โซน **{area_label}** (0–5 กม.) ยังไม่มี{req_cat or 'ทรัพย์'}ว่าง — น้องศิวาคัดโซนใกล้เคียง (5–15 กม.) ที่ใกล้ที่สุด {len(tier2)} หลังมาให้ครับ:")
+                                            lines.append(f"📍 โซน {area_label} (0–5 กม.) ยังไม่มี{req_cat or 'ทรัพย์'}ว่าง — น้องศิวาคัดโซนใกล้เคียง (5–15 กม.) ที่ใกล้ที่สุด {len(tier2)} หลังมาให้ครับ:")
                                         elif show_props:
-                                            lines.append(f"📍 โซน **{area_label}** (0–15 กม.) ยังไม่มี{req_cat or 'ทรัพย์'}ว่าง — น้องศิวาคัดแปลงที่ **ใกล้ที่สุดในระบบ** มาให้แทนครับ:")
+                                            lines.append(f"📍 โซน {area_label} (0–15 กม.) ยังไม่มี{req_cat or 'ทรัพย์'}ว่าง — น้องศิวาคัดแปลงที่ใกล้ที่สุดในระบบมาให้แทนครับ:")
                                         else:
-                                            lines.append(f"🏠 ลิงก์แคตตาล็อกโซน **{area_label}** (มุมมองลูกค้า) พร้อมส่งต่อครับ:")
+                                            lines.append(f"🏠 ลิงก์แคตตาล็อกโซน {area_label} (มุมมองลูกค้า) พร้อมส่งต่อครับ:")
 
                                         for idx_p, hp in enumerate(show_props, 1):
-                                            lines.append(f"{idx_p}. **{hp['code']}** | {hp['type']} | {hp['district']} {hp['province']} — {hp['price']} (ห่าง ~{hp['distance_km']} กม.)")
+                                            lines.append(f"{idx_p}. {hp['code']} | {hp['type']} | {hp['district']} {hp['province']} — {hp['price']} (ห่าง ~{hp['distance_km']} กม.)")
                                         lines.append(f"\n🔗 ลิงก์แคตตาล็อกมุมมองลูกค้า:\n{filtered_url}")
                                         ai_reply = "\n".join(lines)
                                         matched_codes = [p["code"] for p in show_props]
                                         search_mode = "GEO_RADIUS_TIER1_2" if (tier1 or tier2) else "GEO_RADIUS_FALLBACK"
-                                        matched_props, flex_carousel = show_props, None
+                                        matched_props = show_props
+                                        full_flex_props = [fp for fp in (find_property_by_id_or_code(c) for c in matched_codes) if fp]
+                                        flex_carousel = build_property_flex_carousel(full_flex_props, client_name=prof.get("displayName", "คุณลูกค้า"), agent_ref=ag_ref) if full_flex_props else None
                                 elif matched_member and m_link and not is_onboarding_link_req and not is_prop_or_cmd_link:
                                     raw_arg = m_link.group(1).strip()
                                     av_name, ag_note, prop_id = parse_agent_link_input(raw_arg)
