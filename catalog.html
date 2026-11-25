@@ -1644,6 +1644,12 @@
           );
           const mPerms = (me.member && me.member.permissions) ? me.member.permissions : {};
           window._siwasupCanSwitchRoles = !isCustomerOnly && (
+            Boolean(window._siwasupVerifiedIsAdmin) ||
+            Boolean(mPerms.systemAdmin) ||
+            code === 'SA000' ||
+            id === 'app_office_004'
+          );
+          window._siwasupFullDevSwitcher = !isCustomerOnly && (
             Boolean(mPerms.systemAdmin) ||
             code === 'SA000' ||
             id === 'app_office_004'
@@ -1674,13 +1680,22 @@
           if (typeof setMode === 'function') {
             if (isCustomerOnly) {
               setMode('client');
-            } else if (typeof currentMode !== 'undefined' && currentMode !== 'client') {
+            } else {
               const p = new URLSearchParams(window.location.search);
               const explicitView = p.get('view') || p.get('mode');
-              if (window._siwasupVerifiedIsAdmin && !explicitView && p.get('admin') !== '0' && p.get('user') !== '1') {
-                setMode('owner');
+              const isClientIntent = (explicitView === 'client') || p.has('ref') || p.has('agent') || p.has('bundle');
+              if (isClientIntent) {
+                setMode('client');
+              } else if (window._siwasupVerifiedIsAdmin && p.get('admin') !== '0' && p.get('user') !== '1') {
+                if (explicitView === 'free_agent' || explicitView === 'employee' || explicitView === 'trainee') {
+                  setMode(explicitView);
+                } else {
+                  setMode('owner');
+                }
+              } else if (explicitView === 'employee' || explicitView === 'trainee') {
+                setMode(explicitView);
               } else {
-                setMode(currentMode);
+                setMode('free_agent');
               }
             }
           }
@@ -1769,9 +1784,15 @@
     }
 
     function toggleAdminConsoleUnlock() {
+      const _isProd = typeof window !== 'undefined' && window.location && window.location.hostname && window.location.hostname.includes('siwasup.com');
       if (window._siwasupVerifiedMember && isVerifiedCustomerMember(window._siwasupVerifiedMember)) {
         adminUnlockedManual = false;
         setMode('client');
+        return;
+      }
+      if (_isProd && !window._siwasupVerifiedIsAdmin) {
+        adminUnlockedManual = false;
+        if (!window._siwasupVerifiedMember) setMode('client');
         return;
       }
       adminUnlockedManual = !adminUnlockedManual;
@@ -1782,13 +1803,19 @@
     }
 
     function setMode(mode) {
+      const _isProd = typeof window !== 'undefined' && window.location && window.location.hostname && window.location.hostname.includes('siwasup.com');
       if (window._siwasupVerifiedMember && isVerifiedCustomerMember(window._siwasupVerifiedMember)) {
         mode = 'client';
+      } else if (_isProd) {
+        const _hasVerifiedAgent = Boolean(window._siwasupVerifiedMember) && !isVerifiedCustomerMember(window._siwasupVerifiedMember);
+        if (!_hasVerifiedAgent) {
+          mode = 'client';
+        }
       }
       const isAdmin = isAdminSession();
       // ป้องกันผู้ใช้ทั่วไปเข้าโหมด owner โดยไม่มีสิทธิ์ Admin
       if (!isAdmin && mode === 'owner') {
-        mode = 'free_agent';
+        mode = (_isProd && !window._siwasupVerifiedMember) ? 'client' : 'free_agent';
       }
       currentMode = mode;
       window.currentMode = mode;
@@ -1814,16 +1841,27 @@
           topUtilityBar.classList.remove('hidden');
         }
       }
-      const canSwitchRoles = Boolean(window._siwasupCanSwitchRoles) || (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+      const canSwitchRoles = Boolean(window._siwasupCanSwitchRoles) || !_isProd;
+      const use3ViewOnly = _isProd && !window._siwasupFullDevSwitcher;
       if (canSwitchRoles) {
         if (mobileRoleSelect) {
           mobileRoleSelect.classList.remove('hidden');
           mobileRoleSelect.classList.add('lg:hidden');
+          Array.from(mobileRoleSelect.options).forEach(opt => {
+            if (opt.value === 'employee' || opt.value === 'trainee') {
+              opt.hidden = use3ViewOnly;
+            } else if (opt.value === 'free_agent') {
+              opt.textContent = use3ViewOnly ? 'โหมด: Agent' : 'โหมด: Free Agent';
+            }
+          });
         }
         if (roleSwitcherPills) {
           roleSwitcherPills.classList.remove('hidden');
           roleSwitcherPills.classList.add('hidden', 'lg:flex');
         }
+        if (btnEmployee) btnEmployee.classList.toggle('hidden', use3ViewOnly);
+        if (btnTrainee) btnTrainee.classList.toggle('hidden', use3ViewOnly);
+        if (btnFreeAgent) btnFreeAgent.textContent = use3ViewOnly ? 'Agent' : 'Free';
         if (modeText) {
           modeText.className = 'hidden lg:inline text-white font-semibold text-[11px] whitespace-nowrap';
         }
@@ -8007,7 +8045,11 @@
           else setMode('owner');
         }
       } else {
-        if (typeof setMode === 'function') setMode('free_agent');
+        const _isProdUrl = typeof window !== 'undefined' && window.location && window.location.hostname && window.location.hostname.includes('siwasup.com');
+        const _hasVerifiedAgent = Boolean(window._siwasupVerifiedMember) && !isVerifiedCustomerMember(window._siwasupVerifiedMember);
+        if (typeof setMode === 'function') {
+          setMode((_isProdUrl && !_hasVerifiedAgent) ? 'client' : 'free_agent');
+        }
       }
 
       if (typeof window.sendSiwasupClientBeacon === 'function') {
@@ -8196,7 +8238,7 @@
     // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=20261125-1700').then((reg) => {
+        navigator.serviceWorker.register('./sw.js?v=20261125-1745').then((reg) => {
           console.log('Siwasup PWA Service Worker Registered (v2):', reg.scope);
           // Auto check for updates on each load
           if (reg.update) reg.update();
