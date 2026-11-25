@@ -1390,7 +1390,7 @@ def _push_flex_message_raw(flex_msg: dict, user_id: str):
         print(f"[LINE Push Flex Error]: {e}")
 
 
-def build_property_flex_bubble(prop, client_name="คุณลูกค้า", agent_ref="TON"):
+def build_property_flex_bubble(prop, client_name="คุณลูกค้า", agent_ref="SW000"):
     pid = str(prop.get("id") or prop.get("code") or "")
     title = str(prop.get("title") or "ทรัพย์คัดสรรพิเศษ ศิวาทรัพย์")
     price = str(prop.get("price") or "กรุณาสอบถาม")
@@ -1509,7 +1509,7 @@ def build_property_flex_bubble(prop, client_name="คุณลูกค้า", 
     return bubble
 
 
-def build_property_flex_carousel(props, client_name="คุณลูกค้า", agent_ref="TON"):
+def build_property_flex_carousel(props, client_name="คุณลูกค้า", agent_ref="SW000"):
     bubbles = [build_property_flex_bubble(p, client_name, agent_ref) for p in props[:10] if p]
     if not bubbles:
         return None
@@ -2450,14 +2450,14 @@ def parse_agent_link_input(raw_input: str):
 
 def resolve_agent_ref_for_member(member):
     if not isinstance(member, dict):
-        return "AGENT"
+        return "SW000"
     mid = str(member.get("id", "")).strip()
     nick_u = str(member.get("nickname", "")).strip().upper()
     if mid == "app_office_001" or nick_u == "SW001" or nick_u.startswith("SW001 "):
         return "SW001"
     if mid == "app_office_004" or nick_u in ("NASSTY", "[NASSTY]"):
-        return "NASSTY"
-    return str(member.get("agent_ref") or member.get("code") or mid or "AGENT").strip()
+        return "SW000"
+    return str(member.get("agent_ref") or member.get("code") or mid or "SW000").strip()
 
 
 def find_agent_line_uid(agent_ref: str) -> str:
@@ -3591,7 +3591,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
         if path == "/api/bundle/flex":
             bundle_raw = query.get("bundle", [""])[0]
             client_name = query.get("for", ["คุณลูกค้า"])[0]
-            agent_ref = query.get("ref", ["TON"])[0]
+            agent_ref = query.get("ref", ["SW000"])[0]
             
             bids = [b.strip() for b in bundle_raw.split(",") if b.strip()]
             props = []
@@ -5001,7 +5001,8 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                             if found:
                                                 full_props.append(found)
                                         if full_props:
-                                            flex_carousel = build_property_flex_carousel(full_props, client_name=prof.get("displayName", "คุณลูกค้า"))
+                                            req_agent_ref = resolve_agent_ref_for_member(matched_member) if matched_member else "SW000"
+                                            flex_carousel = build_property_flex_carousel(full_props, client_name=prof.get("displayName", "คุณลูกค้า"), agent_ref=req_agent_ref)
                             else:
                                 ai_reply = "น้องศิวาได้รับไฟล์/สติกเกอร์เรียบร้อยครับ หากต้องการค้นหาทรัพย์ พิมพ์รหัสทรัพย์หรือทำเล เช่น '1090965' หรือ 'บ้านเดี่ยว นนทบุรี งบ 4 ล้าน' ได้เลยครับ!"
                                 matched_codes, search_mode, matched_props, flex_carousel = [], "NON_TEXT", [], None
