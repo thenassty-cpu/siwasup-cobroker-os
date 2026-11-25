@@ -3347,6 +3347,8 @@ def _sequential_r2_content_upload():
 def load_content_data():
     global _R2_CONTENT_RESTORED, _R2_CONTENT_RESTORE_FAILED, _CONTENT_MEM_CACHE
     with CONTENT_HUB_LOCK:
+        if _CONTENT_MEM_CACHE is not None and len(_CONTENT_MEM_CACHE.get("items", [])) > 0:
+            return json.loads(json.dumps(_CONTENT_MEM_CACHE))
         if not _R2_CONTENT_RESTORED:
             try:
                 parsed = _fetch_r2_json(_R2_CONTENT_VAULT_KEY, timeout=8)
@@ -3354,7 +3356,7 @@ def load_content_data():
                     _CONTENT_MEM_CACHE = parsed
                     _R2_CONTENT_RESTORED = True
                     _R2_CONTENT_RESTORE_FAILED = False
-                    return parsed
+                    return json.loads(json.dumps(_CONTENT_MEM_CACHE))
                 if parsed is None:
                     _R2_CONTENT_RESTORED = True
                     _R2_CONTENT_RESTORE_FAILED = False
@@ -3369,26 +3371,26 @@ def load_content_data():
                 print(f"[Content Hub R2 Load Warn]: {e}")
                 _R2_CONTENT_RESTORE_FAILED = True
         if _CONTENT_MEM_CACHE is not None:
-            return _CONTENT_MEM_CACHE
+            return json.loads(json.dumps(_CONTENT_MEM_CACHE))
         if os.path.exists(CONTENT_HUB_PATH):
             try:
                 with open(CONTENT_HUB_PATH, "r", encoding="utf-8") as f:
                     parsed = json.load(f)
                     if isinstance(parsed, dict) and isinstance(parsed.get("items"), list):
                         _CONTENT_MEM_CACHE = parsed
-                        return parsed
+                        return json.loads(json.dumps(_CONTENT_MEM_CACHE))
             except Exception:
                 pass
         _CONTENT_MEM_CACHE = {"items": [], "updated_at": ""}
-        return _CONTENT_MEM_CACHE
+        return json.loads(json.dumps(_CONTENT_MEM_CACHE))
 
 
 def save_content_data(store: dict):
-    global _CONTENT_MEM_CACHE, _CONTENT_R2_PENDING_BYTES, _CONTENT_R2_WORKER_ACTIVE
+    global _CONTENT_MEM_CACHE
     with CONTENT_HUB_LOCK:
         store["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
-        _CONTENT_MEM_CACHE = store
-        data_bytes = json.dumps(store, ensure_ascii=False, indent=2).encode("utf-8")
+        _CONTENT_MEM_CACHE = json.loads(json.dumps(store))
+        data_bytes = json.dumps(_CONTENT_MEM_CACHE, ensure_ascii=False, indent=2).encode("utf-8")
         try:
             os.makedirs(DATA_DIR, exist_ok=True)
             tmp_path = CONTENT_HUB_PATH + ".tmp"
@@ -3401,11 +3403,10 @@ def save_content_data(store: dict):
             if _R2_CONTENT_RESTORE_FAILED:
                 print("[Content Hub R2 Skip]: Skipping R2 overwrite because initial R2 restore failed")
                 return
-            with _CONTENT_R2_UPLOAD_LOCK:
-                _CONTENT_R2_PENDING_BYTES = data_bytes
-                if not _CONTENT_R2_WORKER_ACTIVE:
-                    _CONTENT_R2_WORKER_ACTIVE = True
-                    threading.Thread(target=_sequential_r2_content_upload, daemon=True).start()
+            try:
+                put_object_r2(_R2_CONTENT_VAULT_KEY, data_bytes, "application/json; charset=utf-8")
+            except Exception as e:
+                print(f"[Content Hub R2 Save Warn]: {e}")
 
 
 _THAI_TAMBONS_CACHE = None
@@ -5814,7 +5815,7 @@ def handle_render_shutdown(signum, frame):
                     print("[~] Skipped client tracking R2 flush (not restored or empty store).")
             with CONTENT_HUB_LOCK:
                 ch_store = load_content_data()
-                if put_object_r2 and _R2_CONTENT_RESTORED and len(ch_store.get("items", [])) > 0:
+                if put_object_r2 and _R2_CONTENT_RESTORED and not _R2_CONTENT_RESTORE_FAILED:
                     ch_bytes = json.dumps(ch_store, ensure_ascii=False, indent=2).encode("utf-8")
                     put_object_r2(_R2_CONTENT_VAULT_KEY, ch_bytes, "application/json; charset=utf-8")
                     print("[+] Content hub vault flushed to Cloudflare R2 before sleep!")
