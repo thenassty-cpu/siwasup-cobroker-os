@@ -86,10 +86,10 @@
           <span class="sm:hidden">คลังบ้าน</span>
         </a>
 
-        <!-- สมัคร Co-Broker -->
-        <a id="nav-register-btn" href="agent_registration.html" class="hidden md:flex bg-[#FAF5EB] hover:bg-[#F3E9D4] border border-[#C2A460]/60 text-[#7A5B22] font-semibold px-3.5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm items-center gap-1.5 transition-all">
-          <i data-lucide="user-plus" class="w-4 h-4 text-[#967332]"></i>
-          <span>สมัครตัวแทน</span>
+        <!-- ฝากขายบ้านกับศิวาทรัพย์ -->
+        <a id="nav-register-btn" href="catalog.html?view=seller" class="hidden md:flex bg-[#FAF5EB] hover:bg-[#F3E9D4] border border-[#C2A460]/60 text-[#7A5B22] font-semibold px-3.5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm items-center gap-1.5 transition-all">
+          <i data-lucide="home" class="w-4 h-4 text-[#967332]"></i>
+          <span>ฝากขายบ้าน</span>
         </a>
 
         <!-- เข้าสู่ระบบสมาชิก -->
@@ -143,7 +143,7 @@
         </a>
         <a id="hero-login-btn" href="agent_registration.html?mode=login" class="w-full sm:w-auto bg-white/90 hover:bg-white text-[#7A5B22] border border-[#C2A460]/60 font-bold px-6 py-4 rounded-2xl text-sm sm:text-base flex items-center justify-center gap-2 backdrop-blur-sm shadow-sm transition-all">
           <i data-lucide="log-in" class="w-4 h-4 text-[#967332]"></i>
-          <span id="hero-login-text">เข้าสู่ระบบ / สมัครตัวแทน</span>
+          <span id="hero-login-text">เข้าสู่ระบบสมาชิก</span>
         </a>
       </div>
 
@@ -243,16 +243,16 @@
                 <span class="px-2.5 py-1 rounded-lg bg-[#06C755] text-white text-[11px] font-bold shrink-0">แอดเพื่อน &rarr;</span>
               </a>
 
-              <!-- Step 2: Register & Connect LINE -->
-              <a href="agent_registration.html" class="w-full p-3.5 rounded-2xl bg-[#FAF2E1] hover:bg-[#F5E7CA] border border-[#C2A460] flex items-center justify-between transition group">
+              <!-- Step 2: Login with LINE (Walk-in approved members) -->
+              <a href="agent_registration.html?mode=login" class="w-full p-3.5 rounded-2xl bg-[#FAF2E1] hover:bg-[#F5E7CA] border border-[#C2A460] flex items-center justify-between transition group">
                 <div class="flex items-center gap-3">
                   <span class="w-7 h-7 rounded-xl bg-[#C2A460] text-white font-black text-xs flex items-center justify-center shrink-0">2</span>
                   <div class="text-left">
-                    <div class="text-xs sm:text-sm font-black text-[#7A5B22] group-hover:text-[#2C2218] transition">สมัครสมาชิก / เข้าสู่ระบบด้วย LINE</div>
-                    <div class="text-[11px] text-[#6E5A44]">ยืนยันตัวตนครั้งเดียว ไม่ต้องตั้งรหัสผ่าน</div>
+                    <div class="text-xs sm:text-sm font-black text-[#7A5B22] group-hover:text-[#2C2218] transition">เข้าสู่ระบบตัวแทนด้วย LINE</div>
+                    <div class="text-[11px] text-[#6E5A44]">ตัวแทนใหม่นัด Walk-in ยืนยันตัวตนที่สำนักงานท่าข้าม 12</div>
                   </div>
                 </div>
-                <span class="px-2.5 py-1 rounded-lg gold-gradient-btn text-[11px] font-black shrink-0">เริ่มต้นเลย &rarr;</span>
+                <span class="px-2.5 py-1 rounded-lg gold-gradient-btn text-[11px] font-black shrink-0">เข้าสู่ระบบ &rarr;</span>
               </a>
             </div>
           </div>
@@ -458,7 +458,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         
         <!-- Tool 1: Digital Card -->
-        <a href="agent_registration.html" class="bronze-card p-6 rounded-3xl flex flex-col justify-between transition group">
+        <a href="agent_registration.html?mode=login" class="bronze-card p-6 rounded-3xl flex flex-col justify-between transition group">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-[#FAF2E1] border border-[#D8C39A] text-[#967332] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <i data-lucide="credit-card" class="w-6 h-6"></i>
@@ -470,21 +470,21 @@
             </p>
           </div>
           <div class="mt-5 pt-3 border-t border-[#E5D5B5] text-xs font-bold text-[#8A6525] flex items-center justify-between">
-            <span>สมัคร / เปิดนามบัตร</span>
+            <span>เข้าสู่ระบบ / เปิดนามบัตร</span>
             <i data-lucide="chevron-right" class="w-4 h-4"></i>
           </div>
         </a>
 
-        <!-- Tool 2: Smart Share & 60-Day Lead Lock -->
+        <!-- Tool 2: Smart Share & 15-Day Lead Lock -->
         <a href="catalog.html" class="bronze-card p-6 rounded-3xl flex flex-col justify-between transition group">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <i data-lucide="shield-check" class="w-6 h-6"></i>
             </div>
-            <span class="text-[11px] text-emerald-700 font-bold">2. 60-DAY LEAD LOCK</span>
+            <span class="text-[11px] text-emerald-700 font-bold">2. 15-DAY LEAD LOCK</span>
             <h3 class="text-base font-bold text-[#2C2218] mt-1">แชร์ทรัพย์ & ล็อกสิทธิ์ลูกค้า</h3>
             <p class="text-xs text-[#6E5A44] mt-2 leading-relaxed">
-              ส่งลิงก์บ้านให้ลูกค้าพร้อมฝังรหัสตัวแทนอัตโนมัติ ล็อกสิทธิ์คุ้มครองคอมมิชชั่นนาน 60 วัน (+5 แต้มต่อการแชร์)
+              ส่งลิงก์บ้านให้ลูกค้าพร้อมฝังรหัสตัวแทนอัตโนมัติ ล็อกสิทธิ์คุ้มครองคอมมิชชั่นนาน 15 วัน (+5 แต้มต่อการแชร์)
             </p>
           </div>
           <div class="mt-5 pt-3 border-t border-[#E5D5B5] text-xs font-bold text-emerald-700 flex items-center justify-between">
@@ -570,7 +570,7 @@
       <div class="flex items-center gap-6 text-[#5C4B37] flex-wrap font-medium">
         <a href="#welcome" class="hover:text-[#967332]">หน้าแรก</a>
         <a href="catalog.html" class="hover:text-[#967332]">แคตาล็อกทรัพย์</a>
-        <a href="agent_registration.html" class="hover:text-[#967332]">สมัคร Co-Broker</a>
+        <a href="catalog.html?view=seller" class="hover:text-[#967332]">ฝากขายบ้านกับเรา</a>
         <a href="agent_registration.html?mode=login" class="hover:text-[#967332]">เข้าสู่ระบบสมาชิก</a>
       </div>
 
@@ -624,7 +624,7 @@
         agent: {
           badge: 'พอร์ตทำงานของคุณพร้อมแล้ว • คลังทรัพย์ 4,000+ รายการ',
           head: 'คลังบ้านพร้อมขาย 4,000+ หลัง <br class="hidden sm:inline"><span class="gold-gradient-text">อยู่ในมือคุณแล้ว</span>',
-          sub: 'แชร์ลิงก์บ้านติดนามบัตรของคุณ ล็อกสิทธิ์ลูกค้า 60 วัน และจองคิวเปิดบ้านผ่านระบบได้ทันที'
+          sub: 'แชร์ลิงก์บ้านติดนามบัตรของคุณ ล็อกสิทธิ์ลูกค้า 15 วัน และจองคิวเปิดบ้านผ่านระบบได้ทันที'
         },
         vip: {
           badge: 'เอกสิทธิ์พิเศษสำหรับลูกค้า VIP ศิวาทรัพย์',
@@ -724,7 +724,7 @@
             if (me && me.status === 'approved' && me.member) {
               const code = (me.member.code || '').toUpperCase();
               const id = (me.member.id || '').toLowerCase();
-              const isAdminUser = Boolean(me.isAdmin || code === 'SW001' || code === 'SW004' || id === 'app_office_001' || id === 'app_office_004' || me.member.role === 'admin');
+              const isAdminUser = Boolean(me.isAdmin || code === 'SW001' || code === 'SA000' || id === 'app_office_001' || id === 'app_office_004' || me.member.role === 'admin');
               showMyWelcomePass(me.member, isAdminUser);
               if (isAdminUser) {
                 revealAdminOnlyElements();

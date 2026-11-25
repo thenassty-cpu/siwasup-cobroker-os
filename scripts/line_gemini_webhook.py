@@ -2563,6 +2563,38 @@ def parse_agent_link_input(raw_input: str):
     return (avatar_name, agent_note, prop_id)
 
 
+_LOBBY_OP_LOCK = threading.Lock()
+
+
+def _is_lobby_approver(member: dict) -> bool:
+    """Only Bua (SA001), Lily (SA002), Gool (SW001), and Ton (SA000) may approve/reject Lobby registrations."""
+    if not isinstance(member, dict):
+        return False
+    mid = str(member.get("id") or "").strip().lower()
+    code = str(member.get("code") or member.get("agent_ref") or "").strip().upper()
+    perms = member.get("permissions") or {}
+    if mid in ("app_office_001", "app_office_002", "app_office_003", "app_office_004"):
+        return True
+    if code in ("SW001", "SA000", "SA001", "SA002"):
+        return True
+    if bool(perms.get("executiveAuthority") or perms.get("systemAdmin")):
+        return True
+    return False
+
+
+def _next_agent_sw_code(store: dict) -> str:
+    """Assign next sequential SW128+ code for new sales agents (runs after legacy 02-127)."""
+    max_num = 127
+    for m in (store or {}).get("approved", []):
+        c = str(m.get("code") or m.get("agent_ref") or "").strip().upper()
+        m_sw = re.match(r"^SW(\d{3,})$", c)
+        if m_sw:
+            n = int(m_sw.group(1))
+            if n < 9000 and n > max_num:
+                max_num = n
+    return f"SW{max_num + 1}"
+
+
 def _next_admin_sa_code(store: dict) -> str:
     """Assign next available SA003+ code for newly approved admin/staff members."""
     used_nums = {0, 1, 2}  # Reserved: SA000 (Tech/Ton), SA001 (Bua), SA002 (Lily)
@@ -3496,6 +3528,8 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
         perms = m.get("permissions") or {}
         if level == "member":
             ok = True
+        elif level == "lobby_approver":
+            ok = _is_lobby_approver(m)
         elif level == "exec":
             ok = bool(perms.get("executiveAuthority") or perms.get("systemAdmin"))
         else:
@@ -4050,8 +4084,8 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
         path = parsed_url.path
 
         ADMIN_POST_LEVELS = {
-            "/api/lobby/approve": "admin",
-            "/api/lobby/reject": "admin",
+            "/api/lobby/approve": "lobby_approver",
+            "/api/lobby/reject": "lobby_approver",
             "/api/lobby/revoke": "admin",
             "/api/lobby/rollback": "admin",
             "/api/lobby/backup": "admin",
@@ -4581,7 +4615,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 if any(a.get("lineUserId") == uid for a in store.get("approved", [])):
                     self._send_json(409, {"error": "บัญชี LINE นี้เป็นสมาชิกอยู่แล้ว"})
                     return
-                allowed = ("id", "name", "nickname", "phone", "line_id", "zone", "affiliation", "affiliation_label", "avatar", "submitted_at")
+                allowed = ("id", "name", "nickname", "phone", "line_id", "zone", "affiliation", "affiliation_label", "avatar", "submitted_at", "is_legacy_agent", "legacy_code", "legacy_match_status", "sales_scope")
                 safe = {k: payload.get(k) for k in allowed if payload.get(k) is not None}
                 safe["lineUserId"] = uid
                 safe["lineDisplayName"] = s.get("name", "")
@@ -4596,7 +4630,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 try:
                     admin_uids = {
                         a.get("lineUserId") for a in store.get("approved", [])
-                        if is_admin_member(a) and a.get("lineUserId")
+                        if _is_lobby_approver(a) and a.get("lineUserId")
                     } | {u for u in SUPER_ADMIN_LINE_USER_IDS if u}
                     pending_total = len(store.get("pending", []))
                     if LINE_ACCESS_TOKEN and admin_uids:
@@ -4608,14 +4642,15 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                             _line_id = _app_snap.get("line_id") or "-"
                             _zone = _app_snap.get("zone") or "-"
                             _aff = _app_snap.get("affiliation_label") or _app_snap.get("affiliation") or "-"
+                            _leg = f"\n🏷️ รหัสเดิมที่แจ้ง: {_app_snap.get('legacy_code')} ({_app_snap.get('legacy_match_status')})" if _app_snap.get("is_legacy_agent") else ""
                             _msg = (
                                 "🏛️ [แจ้งเตือน Lobby] มีผู้สมัครตัวแทนใหม่รอการอนุมัติ!\n"
                                 f"👤 ชื่อ: {_name} (ชื่อเล่น: {_nick})\n"
                                 f"📱 โทร: {_phone} | LINE: {_line_id}\n"
                                 f"📍 โซน: {_zone}\n"
-                                f"🏢 สังกัด: {_aff}\n"
+                                f"🏢 สังกัด: {_aff}{_leg}\n"
                                 f"⏳ คิวรอใน Lobby ทั้งหมด: {pending_total} ท่าน\n"
-                                "👉 กดตรวจสอบและอนุมัติ:\n"
+                                "👉 กดตรวจสอบและอนุมัติ (บัว / พี่ลิลลี่):\n"
                                 "https://assets.siwasup.com/admin_lobby_manager.html"
                             )
                             for auid in admin_uids:
@@ -4634,17 +4669,21 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             try:
                 payload = json.loads(body.decode('utf-8'))
                 app_id = payload.get("applicantId")
-                store = load_lobby_data()
-                target_idx = -1
-                for idx, p in enumerate(store.get("pending", [])):
-                    if p.get("id") == app_id:
-                        target_idx = idx
-                        break
-                if target_idx != -1:
-                    applicant = store["pending"].pop(target_idx)
+                with _LOBBY_OP_LOCK:
+                    store = load_lobby_data()
+                    target_idx = -1
+                    for idx, p in enumerate(store.get("pending", [])):
+                        if p.get("id") == app_id:
+                            target_idx = idx
+                            break
+                    if target_idx == -1:
+                        self._send_json(404, {"error": "Applicant not found"})
+                        return
+                    applicant = store["pending"][target_idx]
                     _digits = lambda v: re.sub(r"\D", "", v or "")
                     existing = next((a for a in store.get("approved", []) if not a.get("lineUserId") and _digits(a.get("phone")) and _digits(a.get("phone")) == _digits(applicant.get("phone"))), None)
                     if existing and applicant.get("lineUserId"):
+                        store["pending"].pop(target_idx)
                         existing["lineUserId"] = applicant["lineUserId"]
                         if applicant.get("avatar") and not existing.get("avatar"):
                             existing["avatar"] = applicant["avatar"]
@@ -4652,10 +4691,26 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         save_lobby_data(store)
                         self._send_json(200, {"status": "success", "approved": sanitize_member(existing), "linked": True})
                         return
-                    perms_req = payload.get("permissions", {}) or {}
+                    perms_req = dict(payload.get("permissions", {}) or {})
+                    sales_scope = str(payload.get("salesScope") or perms_req.get("salesScope") or applicant.get("sales_scope") or "both").strip()
+                    if sales_scope not in ("npa_only", "consign_only", "both"):
+                        sales_scope = "both"
+                    perms_req["salesScope"] = sales_scope
+                    is_admin_role = any(bool(perms_req.get(k)) for k in ("standardAdmin", "keyboxAdmin", "executiveAuthority", "systemAdmin"))
                     assigned_code = str(payload.get("code") or applicant.get("code") or "").strip().upper()
-                    if not assigned_code and any(bool(perms_req.get(k)) for k in ("standardAdmin", "keyboxAdmin", "executiveAuthority", "systemAdmin")):
-                        assigned_code = _next_admin_sa_code(store)
+                    if not assigned_code:
+                        if is_admin_role:
+                            assigned_code = _next_admin_sa_code(store)
+                        elif applicant.get("is_legacy_agent") and applicant.get("legacy_code") and applicant.get("legacy_match_status") in ("matched_verified", "matched_need_phone_confirm", "matched_phone_diff"):
+                            assigned_code = str(applicant.get("legacy_code")).strip().upper()
+                        else:
+                            assigned_code = _next_agent_sw_code(store)
+                    # Prevent duplicate code takeover
+                    dup_holder = next((a for a in store.get("approved", []) if str(a.get("code") or "").strip().upper() == assigned_code and a.get("lineUserId") and a.get("lineUserId") != applicant.get("lineUserId")), None)
+                    if dup_holder:
+                        self._send_json(409, {"error": f"รหัส {assigned_code} ถูกใช้งานแล้วโดย {dup_holder.get('name', '-')}"})
+                        return
+                    store["pending"].pop(target_idx)
                     approved_item = {
                         "id": applicant.get("id"),
                         "code": assigned_code,
@@ -4665,6 +4720,8 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         "line_id": applicant.get("line_id"),
                         "zone": applicant.get("zone"),
                         "affiliation": applicant.get("affiliation", ""),
+                        "is_legacy_agent": bool(applicant.get("is_legacy_agent")),
+                        "legacy_match_status": applicant.get("legacy_match_status", ""),
                         "submitted_at": applicant.get("submitted_at", ""),
                         "avatar": applicant.get("avatar", ""),
                         "lineUserId": applicant.get("lineUserId"),
@@ -4672,31 +4729,17 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                         "role_code": payload.get("role_code", ""),
                         "title": payload.get("title", ""),
                         "badges": payload.get("badges", []),
-                        "permissions": payload.get("permissions", {}),
+                        "permissions": perms_req,
                         "approved_at": bkk_now().strftime("%Y-%m-%d %H:%M:%S")
                     }
                     store.setdefault("approved", []).insert(0, approved_item)
-                    audit_entry = f"[{approved_item['approved_at']}] 🟢 อนุมัติสิทธิ์: {approved_item.get('name')} ({approved_item.get('role')})"
+                    audit_entry = f"[{approved_item['approved_at']}] 🟢 อนุมัติสิทธิ์: {approved_item.get('name')} ({assigned_code} • {sales_scope})"
                     store.setdefault("audit_log", []).insert(0, audit_entry)
                     store["audit_log"] = store["audit_log"][:100]
                     save_lobby_data(store, create_snapshot=True, snapshot_reason=f"approve:{approved_item.get('name', app_id)}")
-                    self.send_response(200)
-                    self.send_header('Content-Type', 'application/json; charset=utf-8')
-                    self.send_header('Access-Control-Allow-Origin', '*')
-                    self.end_headers()
-                    self.wfile.write(json.dumps({"status": "success", "approved": sanitize_member(approved_item)}, ensure_ascii=False).encode('utf-8'))
-                else:
-                    self.send_response(404)
-                    self.send_header('Content-Type', 'application/json; charset=utf-8')
-                    self.send_header('Access-Control-Allow-Origin', '*')
-                    self.end_headers()
-                    self.wfile.write(json.dumps({"error": "Applicant not found"}).encode('utf-8'))
+                    self._send_json(200, {"status": "success", "approved": sanitize_member(approved_item)})
             except Exception as e:
-                self.send_response(500)
-                self.send_header('Content-Type', 'application/json; charset=utf-8')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+                self._send_json(500, {"error": str(e)})
             return
 
         if path == "/api/lobby/reject":
@@ -4966,15 +5009,14 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                             print(f"[Auto-Heal Hook Warn]: {_ahe}")
                         user_name = prof.get("displayName", "ท่าน")
                         welcome_msg = (
-                            f"สวัสดีครับคุณ {user_name}! ยินดีต้อนรับสู่ Siwasup Co-Broker OS ครับ 🏠✨\n\n"
+                            f"สวัสดีครับคุณ {user_name}! ยินดีต้อนรับสู่ ศิวาทรัพย์ แอสเซท (Siwasup Co-Broker OS) ครับ 🏠✨\n\n"
                             "น้องศิวาเป็น AI ผู้ช่วยค้นหาทรัพย์และประสานงานนำชมบ้าน พร้อมทำงาน 24 ชั่วโมงครับ\n\n"
-                            "📋 สำหรับทีมงานออฟฟิศและตัวแทนพันธมิตร เพื่อเริ่มต้นใช้งานและรับ 'นามบัตรดิจิทัลทางการ' "
-                            "กรุณาลงทะเบียนเข้าสู่ระบบที่นี่ได้เลยครับ:\n"
-                            "👉 https://assets.siwasup.com/agent_registration.html\n\n"
+                            "🔑 หากท่านเป็นสมาชิกที่ยืนยันตัวตนแล้ว สามารถเข้าสู่ระบบได้ที่:\n"
+                            "👉 https://assets.siwasup.com/agent_registration.html?mode=login\n\n"
+                            "🏢 หากสนใจสมัครเป็นตัวแทนร่วมขาย (Co-Broker) บริษัทเปิดรับสมัครแบบ Walk-in พบทีมผู้บริหารที่สำนักงานท่าข้าม 12 เท่านั้นครับ\n\n"
                             "💡 หรือพิมพ์ค้นหาบ้านได้ทันที เช่น:\n"
                             "• 'บ้านเดี่ยว นนทบุรี งบ 4 ล้าน'\n"
-                            "• 'ค้นหาทรัพย์ 1090965'\n"
-                            "• พิมพ์ 'นามบัตร' หรือ 'ลงทะเบียน' เพื่อเปิดดูหรือสร้างนามบัตรของคุณได้ตลอดเวลาครับ"
+                            "• 'ค้นหาทรัพย์ 1090965'"
                         )
                         if rtoken:
                             reply_line(rtoken, welcome_msg)
@@ -5127,12 +5169,17 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                     ai_reply = ("✅ " if ok else "⚠️ ") + msg_res
                                     matched_codes, search_mode, matched_props, flex_carousel = [], 'CLIENT_CONFIRM', [], None
                                 elif is_onboarding_link_req:
-                                    ai_reply = (
-                                        f"สวัสดีครับคุณ {prof.get('displayName', '')}! สำหรับการลงทะเบียนทีมงานออฟฟิศ หรือรับนามบัตรดิจิทัลทางการของ Siwasup Co-Broker OS:\n\n"
-                                        "👉 คลิกที่นี่เพื่อลงทะเบียน/เข้าสู่ระบบได้ทันทีครับ:\n"
-                                        "https://assets.siwasup.com/agent_registration.html\n\n"
-                                        "เมื่อลงทะเบียนเสร็จ ท่านจะได้นามบัตรเฉพาะตัวพร้อมลิงก์และ QR Code ส่งต่อให้ลูกค้าดูได้ทันทีครับ ✨"
-                                    )
+                                    if matched_member:
+                                        ai_reply = (
+                                            f"สวัสดีครับคุณ {prof.get('displayName', '')}! ท่านสามารถเข้าสู่ระบบหรือเปิดดูนามบัตรดิจิทัลทางการได้ที่นี่ครับ:\n\n"
+                                            "👉 https://assets.siwasup.com/agent_registration.html?mode=login"
+                                        )
+                                    else:
+                                        ai_reply = (
+                                            f"สวัสดีครับคุณ {prof.get('displayName', '')}! การสมัครเป็นตัวแทนร่วมขาย (Co-Broker) กับศิวาทรัพย์ แอสเซท "
+                                            "เปิดรับสมัครแบบ Walk-in เข้ามาพบทีมผู้บริหารและเซ็นสัญญาที่สำนักงานท่าข้าม 12 เท่านั้นครับ\n\n"
+                                            "📍 สามารถนัดหมายวันเวลาเข้ามาสมัครได้ในแชทนี้ หรือติดต่อคุณบัว / พี่ลิลลี่ได้เลยครับ ✨"
+                                        )
                                     matched_codes, search_mode, matched_props, flex_carousel = [], "ONBOARDING_REGISTRATION", [], None
                                 else:
                                     ai_reply, matched_codes, search_mode, matched_props = ask_gemini(uid, text, is_continuous=continuous)

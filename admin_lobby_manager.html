@@ -1592,6 +1592,7 @@
                     <span>โซน: <strong class="text-slate-800">${item.zone}</strong></span>
                     <span>•</span>
                     <span class="text-amber-800 font-medium">${item.affiliation_label || 'ขอสมัครทั่วไป'}</span>
+                    ${item.is_legacy_agent ? `<span>•</span><span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 font-bold text-[10px]">🏷️ รหัสเดิม: ${item.legacy_code || '-'} (${item.legacy_match_status || ''})</span>` : ''}
                     <span>•</span>
                     <span class="text-slate-400">${item.submitted_at || 'เมื่อสักครู่'}</span>
                   </div>
@@ -1599,15 +1600,26 @@
               </div>
 
               <div>
+                ${isCurrentLobbyApprover() ? `
                 <button onclick="rejectApplicant('${item.id}')" class="px-2.5 py-1 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold border border-red-200 transition flex items-center gap-1 shadow-2xs">
                   <i data-lucide="user-x" class="w-3.5 h-3.5"></i>
                   <span>ปฏิเสธ</span>
-                </button>
+                </button>` : `<span class="text-[10px] px-2 py-1 rounded-lg bg-slate-100 text-slate-500 font-semibold">🔒 เฉพาะ บัว/พี่ลิลลี่/ผู้บริหาร</span>`}
               </div>
             </div>
 
+            <!-- Sales Scope Selector (NPA / Consignment / Both) -->
+            <div class="flex flex-wrap items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+              <span class="font-bold text-slate-700">🎯 สิทธิ์กลุ่มทรัพย์ที่ขายได้:</span>
+              <select id="salesScope-${item.id}" class="bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-xs font-semibold text-slate-800 focus:outline-none focus:border-amber-500">
+                <option value="both">🏠🏦 ทั้ง NPA + ฝากขาย (Both)</option>
+                <option value="npa_only">🏦 เฉพาะบ้านแบงก์ (NPA Only)</option>
+                <option value="consign_only">🏠 เฉพาะทรัพย์ฝากขาย (Consignment Only)</option>
+              </select>
+            </div>
+
             <!-- Mobile Safe Action Button (prevents accidental 1-tap while scrolling) -->
-            <div class="sm:hidden pt-1 flex items-center justify-between gap-2">
+            <div class="sm:hidden pt-1 flex items-center justify-between gap-2 ${isCurrentLobbyApprover() ? '' : 'hidden'}">
               <button onclick="openRolePickerModal('${item.id}')" class="flex-1 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-sm active:scale-95 transition flex items-center justify-center gap-1.5">
                 <i data-lucide="user-check" class="w-4 h-4"></i>
                 <span>🎯 เลือกกลุ่ม & อนุมัติ...</span>
@@ -1615,7 +1627,7 @@
             </div>
 
             <!-- Quick 1-Click Buttons for Desktop (hidden on mobile for safe scrolling) -->
-            <div class="hidden sm:block space-y-1.5 pt-1">
+            <div class="hidden ${isCurrentLobbyApprover() ? 'sm:block' : ''} space-y-1.5 pt-1">
               <div class="flex items-center justify-between text-[11px] text-slate-600 font-bold">
                 <span class="flex items-center gap-1.5">
                   <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-600"></i>
@@ -1943,10 +1955,16 @@
       const preset = ROLE_PRESETS[presetKey];
       if (!preset) return;
 
-      if (!confirm(`ยืนยันแต่งตั้งผู้สมัคร:\n• ชื่อ: ${applicant.name}\n• เบอร์: ${applicant.phone || '-'}\n• กลุ่ม: ${preset.role}\n\nต้องการดำเนินการต่อใช่หรือไม่?`)) {
+      const scopeEl = document.getElementById(`salesScope-${applicantId}`);
+      const salesScope = scopeEl ? scopeEl.value : 'both';
+      const scopeLabels = { both: 'ทั้ง NPA + ฝากขาย', npa_only: 'เฉพาะ NPA (บ้านแบงก์)', consign_only: 'เฉพาะทรัพย์ฝากขาย' };
+
+      if (!confirm(`ยืนยันแต่งตั้งผู้สมัคร:\n• ชื่อ: ${applicant.name}\n• เบอร์: ${applicant.phone || '-'}\n• กลุ่ม: ${preset.role}\n• สิทธิ์ขาย: ${scopeLabels[salesScope] || salesScope}\n\nต้องการดำเนินการต่อใช่หรือไม่?`)) {
         return;
       }
       if (typeof closeRolePickerModal === 'function') closeRolePickerModal();
+
+      const mergedPerms = Object.assign({}, preset.permissions, { salesScope });
 
       try {
         const res = await fetch(`${API_BASE}/api/lobby/approve`, {
@@ -1958,7 +1976,8 @@
             title: preset.title,
             role_code: preset.role_code || '',
             badges: preset.badges,
-            permissions: preset.permissions
+            salesScope: salesScope,
+            permissions: mergedPerms
           })
         });
         if (!res.ok) {
@@ -2348,6 +2367,8 @@
       document.getElementById('chk_leadInspector').checked = !!p.leadInspector;
       document.getElementById('chk_catalogCurator').checked = !!p.catalogCurator;
       document.getElementById('chk_systemAdmin').checked = !!p.systemAdmin;
+      const editScopeEl = document.getElementById('editSalesScope');
+      if (editScopeEl) editScopeEl.value = p.salesScope || 'both';
       const isRootTarget = (member.id === 'app_office_004' || member.is_tech);
       ['chk_standardAdmin', 'chk_executiveAuthority', 'chk_systemAdmin'].forEach(cid => {
         const el = document.getElementById(cid);
@@ -2392,7 +2413,8 @@
         systemAdmin: document.getElementById('chk_systemAdmin').checked,
         contractAgent: isContractChecked,
         vipClient: isVipChecked,
-        sellerClient: isSellerChecked
+        sellerClient: isSellerChecked,
+        salesScope: (document.getElementById('editSalesScope') ? document.getElementById('editSalesScope').value : 'both')
       };
 
       // Derive badges
@@ -2525,6 +2547,19 @@
     // ==========================================
     // ADMIN GATE (LINE session verified by server)
     // ==========================================
+    function isCurrentLobbyApprover() {
+      const m = window._lobbyActingMember;
+      if (!m) return true;
+      const mid = String(m.id || '').trim().toLowerCase();
+      const code = String(m.code || m.agent_ref || '').trim().toUpperCase();
+      const perms = m.permissions || {};
+      return (
+        ['app_office_001', 'app_office_002', 'app_office_003', 'app_office_004'].includes(mid) ||
+        ['SW001', 'SA000', 'SA001', 'SA002'].includes(code) ||
+        Boolean(perms.executiveAuthority || perms.systemAdmin)
+      );
+    }
+
     async function checkAdminSecurityGate() {
       if (!localStorage.getItem(SESSION_KEY)) { showAdminGate(401); return; }
       try {
@@ -2532,6 +2567,7 @@
         if (res.ok) {
           const me = await res.json();
           if (me.status === 'approved' && me.isAdmin) {
+            window._lobbyActingMember = me.member;
             document.getElementById('adminSecurityGateModal').classList.add('hidden');
             return;
           }
@@ -2717,6 +2753,15 @@
                 <p class="text-[11px] text-teal-700">เจ้าของทรัพย์ที่ลงทะเบียนฝากขายบ้าน (ล็อกให้อยู่ในโหมดลูกค้า ซ่อนข้อมูลหลังบ้าน 100%)</p>
               </div>
             </label>
+
+            <div class="p-2.5 rounded-xl bg-amber-50/70 border border-amber-200 space-y-1">
+              <label for="editSalesScope" class="block text-xs font-bold text-amber-900">🎯 สิทธิ์กลุ่มทรัพย์ที่ขายได้ (Sales Scope):</label>
+              <select id="editSalesScope" class="w-full bg-white border border-amber-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-800 focus:outline-none">
+                <option value="both">🏠🏦 ทั้ง NPA + ฝากขาย (Both)</option>
+                <option value="npa_only">🏦 เฉพาะบ้านแบงก์ (NPA Only)</option>
+                <option value="consign_only">🏠 เฉพาะทรัพย์ฝากขาย (Consignment Only)</option>
+              </select>
+            </div>
 
             <label class="flex items-start gap-2.5 p-2 rounded-xl bg-slate-50 hover:bg-slate-100 cursor-pointer border border-slate-200">
               <input type="checkbox" id="chk_standardAdmin" class="mt-0.5 rounded text-amber-600 focus:ring-0">

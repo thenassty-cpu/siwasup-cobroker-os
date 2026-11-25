@@ -240,7 +240,7 @@
             <i data-lucide="user" class="w-3.5 h-3.5 text-amber-600"></i>
             <span>ชื่อ - นามสกุลจริง (สำหรับออกนามบัตรดิจิทัล) *</span>
           </label>
-          <input type="text" id="regName" placeholder="ระบุชื่อ - นามสกุลจริงของท่าน" class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 transition">
+          <input type="text" id="regName" oninput="evaluateLegacyAgentMatch()" placeholder="ระบุชื่อ - นามสกุลจริงของท่าน" class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 transition">
         </div>
 
         <!-- Nickname & Phone -->
@@ -251,7 +251,23 @@
           </div>
           <div class="space-y-1">
             <label class="text-xs font-bold text-slate-700">เบอร์โทรศัพท์มือถือ *</label>
-            <input type="tel" id="regPhone" placeholder="08X-XXX-XXXX" class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 transition">
+            <input type="tel" id="regPhone" oninput="evaluateLegacyAgentMatch()" placeholder="08X-XXX-XXXX" class="w-full bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 transition">
+          </div>
+        </div>
+
+        <!-- Legacy Agent Code Verification (สำหรับเซลล์เดิม S02-S127) -->
+        <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2.5">
+          <label class="flex items-center gap-2 cursor-pointer select-none">
+            <input type="checkbox" id="regHasLegacyCode" onchange="toggleLegacyCodeBox()" class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500">
+            <span class="text-xs font-bold text-slate-800">เคยได้รหัสเซลล์เดิมแล้ว (กรอกเพื่อใช้รหัสเดิม SW0xx)</span>
+          </label>
+          <div id="regLegacyBox" class="hidden space-y-2 pt-1">
+            <div class="flex items-center gap-2">
+              <input type="text" id="regLegacyCode" oninput="evaluateLegacyAgentMatch()" placeholder="ระบุรหัสเดิม เช่น S113 หรือ 113" class="flex-1 bg-white border border-amber-300 rounded-xl px-3.5 py-2 text-xs font-mono font-bold text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500">
+            </div>
+            <div id="regLegacyStatus" class="text-[11px] font-medium text-slate-600 leading-relaxed">
+              กรอกรหัสเดิมเพื่อให้ระบบเทียบชื่อและเบอร์โทรกับฐานข้อมูลเดิม
+            </div>
           </div>
         </div>
 
@@ -687,6 +703,84 @@
       }
     }
 
+    function _normalizeThaiPersonName(s) {
+      return String(s || '')
+        .replace(/^(?:นาย|นางสาว|นาง|น\.ส\.|คุณ)\s*/i, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+    }
+
+    function _normalizeLegacyCode(raw) {
+      const s = String(raw || '').trim().toUpperCase().replace(/\s+/g, '');
+      const m = s.match(/^(?:SW|S)?0*(\d{1,3})$/);
+      if (!m) return { seedCode: '', swCode: '' };
+      const num = parseInt(m[1], 10);
+      if (isNaN(num) || num < 2 || num > 127) return { seedCode: '', swCode: '' };
+      return {
+        seedCode: 'S' + (num < 10 ? '0' + num : String(num)),
+        swCode: 'SW' + String(num).padStart(3, '0')
+      };
+    }
+
+    function toggleLegacyCodeBox() {
+      const chk = document.getElementById('regHasLegacyCode');
+      const box = document.getElementById('regLegacyBox');
+      if (box) box.classList.toggle('hidden', !(chk && chk.checked));
+      evaluateLegacyAgentMatch();
+    }
+
+    function evaluateLegacyAgentMatch() {
+      const chk = document.getElementById('regHasLegacyCode');
+      const statusEl = document.getElementById('regLegacyStatus');
+      if (!chk || !chk.checked) {
+        return { isLegacy: false, legacyCode: '', matchStatus: 'new_agent' };
+      }
+      const rawCode = (document.getElementById('regLegacyCode')?.value || '').trim();
+      const { seedCode, swCode } = _normalizeLegacyCode(rawCode);
+      const inputName = _normalizeThaiPersonName(document.getElementById('regName')?.value || '');
+      const inputPhone = String(document.getElementById('regPhone')?.value || '').replace(/\D/g, '');
+
+      if (!rawCode) {
+        if (statusEl) statusEl.innerHTML = '<span class="text-slate-600">กรอกรหัสเดิม (เช่น S113 หรือ 113) เพื่อเทียบกับฐานข้อมูล</span>';
+        return { isLegacy: true, legacyCode: '', matchStatus: 'legacy_incomplete' };
+      }
+      if (!seedCode) {
+        if (statusEl) statusEl.innerHTML = '<span class="text-amber-700">⚠️ รูปแบบรหัสเก่าต้องเป็นเลข 02–127 (เช่น S113) หากไม่มีรหัสเดิมระบบจะออกรหัสใหม่ SW128+</span>';
+        return { isLegacy: true, legacyCode: rawCode.toUpperCase(), matchStatus: 'legacy_not_found' };
+      }
+
+      const roster = (window.SiwasupAgents && typeof window.SiwasupAgents.getAll === 'function')
+        ? window.SiwasupAgents.getAll()
+        : [];
+      const found = roster.find(a => String(a.code || '').toUpperCase() === seedCode.toUpperCase());
+      if (!found) {
+        if (statusEl) statusEl.innerHTML = `<span class="text-amber-700">⚠️ ไม่พบรหัส ${seedCode} ในตารางฐานข้อมูลเดิม (รอผู้พิจารณายืนยัน หรือรันรหัสใหม่ SW128+)</span>`;
+        return { isLegacy: true, legacyCode: swCode, matchStatus: 'legacy_not_found' };
+      }
+
+      const dbName = _normalizeThaiPersonName(found.name || '');
+      const dbPhone = String(found.phone || '').replace(/\D/g, '');
+      const nameMatch = Boolean(inputName && dbName && (dbName === inputName || dbName.includes(inputName) || inputName.includes(dbName)));
+
+      if (!nameMatch) {
+        if (statusEl) statusEl.innerHTML = `<span class="text-rose-700">❌ ชื่อ-นามสกุลไม่ตรงกับรหัส ${seedCode} ในตารางเดิม (กรุณาตรวจสอบตัวสะกด หรือเอาติ๊กออกเพื่อรับรหัสใหม่ SW128+)</span>`;
+        return { isLegacy: true, legacyCode: swCode, matchStatus: 'legacy_name_mismatch' };
+      }
+
+      if (dbPhone && dbPhone.length >= 9) {
+        if (inputPhone === dbPhone) {
+          if (statusEl) statusEl.innerHTML = `<span class="text-emerald-700 font-bold">✅ ยืนยันตัวตนสำเร็จทั้งชื่อและเบอร์โทร (${seedCode} → ใช้รหัส ${swCode})</span>`;
+          return { isLegacy: true, legacyCode: swCode, matchStatus: 'matched_verified' };
+        }
+        if (statusEl) statusEl.innerHTML = `<span class="text-amber-700">🟡 พบชื่อตรงกับ ${seedCode} แต่เบอร์โทรไม่ตรงกับเบอร์เก่า (${dbPhone.slice(0,3)}xxx${dbPhone.slice(-4)}) — รอคุณบัว/พี่ลิลลี่ยืนยันหน้างาน</span>`;
+        return { isLegacy: true, legacyCode: swCode, matchStatus: 'matched_phone_diff' };
+      }
+
+      if (statusEl) statusEl.innerHTML = `<span class="text-emerald-700 font-bold">🟡 พบชื่อตรงในฐานข้อมูลเดิม (${seedCode} → ${swCode} • ไม่มีเบอร์เก่าในตาราง รอคุณบัว/พี่ลิลลี่ยืนยันพร้อมบันทึกเบอร์ใหม่)</span>`;
+      return { isLegacy: true, legacyCode: swCode, matchStatus: 'matched_need_phone_confirm' };
+    }
+
     function validateAndGoStep3() {
       if (!getSession()) {
         alert('กรุณาเชื่อมบัญชี LINE ใน Step 1 ก่อนครับ');
@@ -704,6 +798,12 @@
       if (!/^(06|08|09)\d{8}$/.test(cleanPhone)) {
         alert('⚠️ กรุณาระบุเบอร์โทรศัพท์มือถือ 10 หลักให้ถูกต้องก่อนไปขั้นตอนถัดไปครับ');
         document.getElementById('regPhone').focus();
+        return;
+      }
+      const legChk = document.getElementById('regHasLegacyCode');
+      if (legChk && legChk.checked && !(document.getElementById('regLegacyCode')?.value || '').trim()) {
+        alert('⚠️ กรุณากรอกรหัสเซลล์เดิม หรือนำเครื่องหมายถูกออกหากเป็นเซลล์ใหม่ครับ');
+        document.getElementById('regLegacyCode').focus();
         return;
       }
       saveDraft();
@@ -806,6 +906,7 @@
       const randomSuffix = Math.floor(100 + Math.random() * 900);
       const appId = `SW-APP-${randomSuffix}`;
 
+      const legacyInfo = evaluateLegacyAgentMatch();
       currentApplicant = {
         id: appId,
         name: name,
@@ -814,6 +915,9 @@
         line_id: lineId || "ไม่ระบุ",
         zone: zone,
         affiliation: affiliation,
+        is_legacy_agent: legacyInfo.isLegacy,
+        legacy_code: legacyInfo.legacyCode,
+        legacy_match_status: legacyInfo.matchStatus,
         affiliation_label: affiliation === 'office'
           ? "🏢 พนักงาน/ทีมงานออฟฟิศ"
           : (affiliation === 'contract_agent'

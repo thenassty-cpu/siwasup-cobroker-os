@@ -3348,6 +3348,16 @@
           if (!match) return false;
         }
 
+        // Sales Scope RBAC Filter (NPA Only / Consignment Only / Both)
+        if (currentMode !== 'client' && window._siwasupVerifiedMember && !window._siwasupVerifiedIsAdmin) {
+          const scope = String((window._siwasupVerifiedMember.permissions || {}).salesScope || 'both').trim();
+          const pBank = String(p.bank_source || '').toLowerCase();
+          const pId = String(p.id || '').toUpperCase();
+          const isConsign = Boolean(p.is_consignment || p.consignment_type || pId.startsWith('SWC-') || pBank.includes('siwasup') || pBank.includes('ศิวาทรัพย์') || pBank.includes('ฝากขาย'));
+          if (scope === 'npa_only' && isConsign) return false;
+          if (scope === 'consign_only' && !isConsign) return false;
+        }
+
         // Bank NPA Filter (เฉพาะโหมดที่ไม่ใช่ลูกค้า)
         if (currentMode !== 'client' && bank !== 'all') {
           const pBank = (p.bank_source || '').toLowerCase();
@@ -7975,7 +7985,7 @@
     // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=20261125-1530').then((reg) => {
+        navigator.serviceWorker.register('./sw.js?v=20261125-1600').then((reg) => {
           console.log('Siwasup PWA Service Worker Registered (v2):', reg.scope);
           // Auto check for updates on each load
           if (reg.update) reg.update();
