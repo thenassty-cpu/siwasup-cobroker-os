@@ -823,7 +823,8 @@
         const dt = _escHtml((item.published_at || '').slice(0, 10));
         const pinBadge = item.pinned ? ' <span class="inline-flex items-center gap-0.5 text-[#8A6525] font-semibold"><i data-lucide="pin" class="w-3 h-3 inline"></i> ปักหมุด</span>' : '';
         return `
-          <article role="button" tabindex="0" onclick="openContentReader('${_escHtml(item.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openContentReader('${_escHtml(item.id)}');}" class="cursor-pointer bronze-card ${isAgentBoard ? 'border-t-4 border-t-[#967332]' : ''} rounded-3xl overflow-hidden transition-all flex flex-col group bg-white">
+          <article role="button" tabindex="0" onclick="openContentReader('${_escHtml(item.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openContentReader('${_escHtml(item.id)}');}" class="cursor-pointer bronze-card ${isAgentBoard ? 'ring-1 ring-[#C2A460]/60' : ''} rounded-3xl overflow-hidden transition-all flex flex-col group bg-white">
+            ${isAgentBoard ? '<div class="h-1.5 w-full bg-gradient-to-r from-[#8A6525] via-[#C2A460] to-[#8A6525] shrink-0"></div>' : ''}
             ${safeImg ? `<div class="aspect-[16/9] w-full bg-[#EFE7D8] relative overflow-hidden">
               <img src="${safeImg}" alt="${_escHtml(item.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
               <span class="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-md text-[#7A5B22] border border-[#D8C39A] text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow-2xs"><i data-lucide="${catIcon}" class="w-3 h-3 text-[#8A6525]"></i><span>${cat}</span></span>
