@@ -3358,6 +3358,13 @@ def load_content_data():
                 if parsed is None:
                     _R2_CONTENT_RESTORED = True
                     _R2_CONTENT_RESTORE_FAILED = False
+            except urllib.error.HTTPError as he:
+                if he.code == 404:
+                    _R2_CONTENT_RESTORED = True
+                    _R2_CONTENT_RESTORE_FAILED = False
+                else:
+                    print(f"[Content Hub R2 Load Warn]: HTTP {he.code} {he}")
+                    _R2_CONTENT_RESTORE_FAILED = True
             except Exception as e:
                 print(f"[Content Hub R2 Load Warn]: {e}")
                 _R2_CONTENT_RESTORE_FAILED = True
