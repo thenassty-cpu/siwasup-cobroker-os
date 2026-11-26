@@ -794,7 +794,27 @@ def load_chat_logs():
     }
 
 
+_CHAT_SYNC_STATUS_LOCK = threading.Lock()
+_CHAT_R2_UPLOAD_LOCK = threading.Lock()
+_CHAT_SYNC_SEQ = 0
+_CHAT_SHUTTING_DOWN = False
+_CHAT_R2_SYNC_STATUS = {
+    "last_sync_ok": None,
+    "last_sync_time": None,
+    "last_sync_error": None,
+    "last_http_status": None,
+}
+
+
+def _write_chat_log_atomic(data_bytes: bytes):
+    tmp_path = CHAT_LOG_PATH + ".tmp"
+    with open(tmp_path, "wb") as f:
+        f.write(data_bytes)
+    os.replace(tmp_path, CHAT_LOG_PATH)
+
+
 def append_chat_log(entry):
+    global _CHAT_SYNC_SEQ
     with LOG_LOCK:
         store = load_chat_logs()
         store["conversations"].insert(0, entry)
@@ -803,18 +823,51 @@ def append_chat_log(entry):
         store["updated_at"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
         data_bytes = json.dumps(store, ensure_ascii=False, indent=2).encode("utf-8")
         try:
-            with open(CHAT_LOG_PATH, "wb") as f:
-                f.write(data_bytes)
+            _write_chat_log_atomic(data_bytes)
         except Exception as e:
             print(f"[Log Save Error]: {e}")
 
-        # Persistent Cloud Backup: Sync to Cloudflare R2 asynchronously so logs survive Render restarts
+        _CHAT_SYNC_SEQ += 1
+        my_seq = _CHAT_SYNC_SEQ
+        total_logged = store["total_logged"]
+
+        # Persistent Cloud Backup: Sync to Cloudflare R2 asynchronously (ordered + retry) so logs survive Render restarts
         if put_object_r2:
             def sync_r2():
-                try:
-                    put_object_r2(_R2_CHAT_VAULT_KEY, data_bytes, "application/json; charset=utf-8")
-                except Exception as ex:
-                    print(f"[R2 Sync Log Warn]: {ex}")
+                with _CHAT_R2_UPLOAD_LOCK:
+                    if _CHAT_SHUTTING_DOWN or my_seq < _CHAT_SYNC_SEQ:
+                        return
+                    last_err = None
+                    last_status = None
+                    for attempt in range(2):
+                        if _CHAT_SHUTTING_DOWN or my_seq < _CHAT_SYNC_SEQ:
+                            return
+                        try:
+                            status_code = put_object_r2(_R2_CHAT_VAULT_KEY, data_bytes, "application/json; charset=utf-8")
+                            last_status = int(status_code) if status_code is not None else None
+                            if last_status is not None and 200 <= last_status < 300:
+                                with _CHAT_SYNC_STATUS_LOCK:
+                                    _CHAT_R2_SYNC_STATUS["last_http_status"] = last_status
+                                    _CHAT_R2_SYNC_STATUS["last_sync_ok"] = True
+                                    _CHAT_R2_SYNC_STATUS["last_sync_time"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+                                    _CHAT_R2_SYNC_STATUS["last_sync_error"] = None
+                                print(f"[R2 Chat Sync OK] total={total_logged} status={last_status}")
+                                return
+                            last_err = f"HTTP {last_status}"
+                        except urllib.error.HTTPError as he:
+                            last_status = getattr(he, "code", None)
+                            last_err = f"HTTPError {last_status}"
+                        except Exception as ex:
+                            last_status = None
+                            last_err = type(ex).__name__
+                        if attempt == 0:
+                            time.sleep(1.5)
+                    with _CHAT_SYNC_STATUS_LOCK:
+                        _CHAT_R2_SYNC_STATUS["last_http_status"] = last_status
+                        _CHAT_R2_SYNC_STATUS["last_sync_ok"] = False
+                        _CHAT_R2_SYNC_STATUS["last_sync_time"] = bkk_now().strftime("%Y-%m-%d %H:%M:%S")
+                        _CHAT_R2_SYNC_STATUS["last_sync_error"] = last_err
+                    print(f"[R2 Sync Log Error]: {last_err}")
             threading.Thread(target=sync_r2, daemon=True).start()
 
 
@@ -4284,12 +4337,33 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
         if path in ("/health", "/api/health", "/ping"):
             store = load_lobby_data()
             approved_count = len(store.get("approved", []))
+            chat_total = 0
+            chat_latest_ts = None
+            try:
+                if os.path.exists(CHAT_LOG_PATH):
+                    with open(CHAT_LOG_PATH, "r", encoding="utf-8") as cf:
+                        c_data = json.load(cf)
+                        if isinstance(c_data, dict):
+                            c_list = c_data.get("conversations")
+                            if isinstance(c_list, list):
+                                chat_total = len(c_list)
+                                if c_list and isinstance(c_list[0], dict):
+                                    chat_latest_ts = c_list[0].get("timestamp")
+            except Exception:
+                pass
+            with _CHAT_SYNC_STATUS_LOCK:
+                sync_status_snap = dict(_CHAT_R2_SYNC_STATUS)
             self._send_json(200, {
                 "status": "healthy",
                 "service": "Siwasup Co-Broker Webhook v2",
                 "server_time": bkk_now().strftime("%Y-%m-%d %H:%M:%S"),
                 "approved_members": approved_count,
                 "r2_sync": bool(put_object_r2),
+                "chat_logs": {
+                    "total": chat_total,
+                    "latest_timestamp": chat_latest_ts,
+                    "r2_sync_status": sync_status_snap,
+                },
                 "anti_downgrade": "ACTIVE",
                 "message": "Nong Siwa is wide awake and ready to serve!"
             })
@@ -6561,6 +6635,8 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
 import signal
 
 def handle_render_shutdown(signum, frame):
+    global _CHAT_SHUTTING_DOWN
+    _CHAT_SHUTTING_DOWN = True
     print(f"[*] Received shutdown signal ({signum}) from Render. Flushing all data to Cloudflare R2 before sleep...")
     try:
         if put_object_r2:
