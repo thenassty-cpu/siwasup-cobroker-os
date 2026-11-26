@@ -231,3 +231,29 @@ flowchart TD
 
 ---
 
+## 🚀 12. KBANK Integration, Promo Strikethrough, White-Label Routing & Ops Hub (26-27 พ.ย. 2569)
+`[Triggers: KBANK, กสิกร, Akamai, Playwright, Promo Strikethrough, Auto-Expire, Auto-Sync, KTB lodge, ผู้มีสิทธิประโยชน์, White-Label, public-card, NASSTY Hub, SW004, Bug Inbox, Daily Active Stats]`
+
+### 1. KBANK NPA Ingestion (ผ่าน Akamai WAF ด้วย Chrome จริง)
+- **Endpoint:** `POST https://www.kasikornbank.com/Custom/KWEB2020/NPA2023Backend13.aspx/GetProperties` (Payload: `{"filter": {"CurrentPageIndex": pg, "PageSize": 50, "Ordering": "New"}}`; Backend จำกัดสูงสุด 50/หน้า และ `Provinces` รับรหัสตัวเลข ไม่ใช่ชื่อไทย)
+- **Akamai Bypass Pattern (Healthy):** Python `requests`/`curl` และ `HeadlessChrome` ติด `403 AkamaiGHost` → ใช้ Playwright เปิด Chrome ตัวจริงในเครื่อง (`channel="chrome", headless=False, args=["--window-position=-2000,-2000"]`) เพื่อรับคุกกี้ผ่าน Akamai จากนั้นยิง `fetch()` ภายในหน้าเว็บด้วยความเร็วสุภาพ (`2 concurrent + 350ms sleep` ใน `--full` mode)
+- **Assets & Fields:** รูปจาก `https://pfsapp.kasikornbank.com/pfs-frontend-api/property-images<MediaPath>` โหลดได้ตรง (`HTTP 200`, 97% มีหลายรูป); เก็บ `PromotionPrice` (6,734 หลัง) และ `PMMaintenanceStatus` (`"อยู่ระหว่างสำรวจ"`, 1,886 หลัง) ลง `data/kbank_property_master.json` (14,676 หลัง) + คัด **500 หลัง Promo-First กทม.+ปริมณฑล** ขึ้น `siwasup_all_properties.json` (รวม 4,549 หลัง) และซิงก์เข้า `data/catalog_index.json` (รวม 29,793 หลัง)
+
+### 2. Multi-Bank Promo Strikethrough, Auto-Expire & Auto-Sync
+- **Data Sources:**
+  - **TTB/PAMCO:** ดึงจาก `https://property-api-prod.pamco.co.th/property-new/display` (`lowprice` vs `idEvent[].priceSp1` + `endDate`) แทน Homerun API ที่ `promotionalPrice: null` (`scripts/enrich_ttb_promo_prices.py`)
+  - **KTB:** `searchAll` (`nmlPrice` vs `price` + `priceEndDt`) และ `searchSaleDetail` ดึง `lodge` (**ผู้มีสิทธิประโยชน์**) + `assetTypeDetail` (**หมายเหตุ**) (`scripts/enrich_ktb_beneficiary.py`, `scripts/enrich_ktb_gsb_promo_prices.py`)
+  - **GSB:** `https://npa-assets.gsb.or.th/asset/npa/all` (`current_offer_price` vs `xprice`)
+- **UI & Auto-Expire (`catalog.html`):** ใช้ `getEffectivePriceInfo(p)` แสดงป้าย Crimson `#990000` `ราคาพิเศษ -X%` + ราคาเดิมขีดฆ่า + `โปรฯ ถึง ...` และดีดกลับราคาเต็มอัตโนมัติเมื่อเลย `promo_end_date` (รวมถึงปุ่มเสนอราคา, Map Popup, Flex Carousel)
+- **Weekly Auto-Sync:** `.github/workflows/weekly_promo_price_sync.yml` (พุธ & อาทิตย์ 02:00 ICT) + `scripts/ci_upload_r2.py` (ใช้ GitHub Secrets, ไม่ hardcode credentials)
+
+### 3. LINE Bot Price Fix, Geo Centroids & White-Label Agent Routing
+- **LINE Bot `.00` Bug (`scripts/line_gemini_webhook.py`):** ห้ามใช้ `re.sub(r'[^0-9]', '', price)` กับสตริงราคาที่มีทศนิยม `.00` (ทำให้ศูนย์เกิน 2 หลัก) → ใช้ `_parse_prop_price_int` + `_format_prop_price_text` (แสดง `"กรุณาสอบถาม"` เมื่อ `<= 0` และกรอง `pr <= 0` ออกจากงบ)
+- **Auto-Geocode (`scripts/auto_geocode_missing.py`):** เติมพิกัด 562 หลังที่ไม่มี `lat/lng` จาก `data/thai_geo_centroids.json` (ระวัง strip `"กรุงเทพมหานคร"` ก่อนจับคู่เขต `"พระนคร"`) พร้อมบันทึก Log ย้อนกลับที่ `data/geocode_audit_log.json` / `.csv`
+- **White-Label & Direct Agent Routing:**
+  - Mask prefix แบงก์ (`ALPHA-`, `KTB-`, `KBANK-`, `SAM-`, `SCB-`, `TTB-`, `GSB-`, `PAMCO_`) → `SW-` และ sanitize ชื่อใน Map Popup, Offer Message, Flex Carousel, Client Search
+  - เพิ่ม `GET /api/agent/public-card` (กรอง `vipClient`/`sellerClient` ออก) + `buildAgentAwareLineUrl` ให้ปุ่ม LINE นัดชม/เสนอราคาเด้งตรงเข้า LINE ส่วนตัวของตัวแทนเจ้าของลิงก์ (`?ref=SWxxx`) เมื่อมี `line_id`
+
+### 4. Security Hardening (`SW004`) & NASSTY Ops Hub
+- **RBAC Security:** ถอด `SW004` ออกจากสิทธิ์ Founder/Admin ใน `admin_consignment.html`, `gool_executive_dashboard.html`, และ `line_gemini_webhook.py` (ใช้ `SA000` / `app_office_004` / `systemAdmin` เท่านั้น) และแก้ `/api/presence/heartbeat` ให้จับคู่ `lineUserId == sub` ตรงตัว
+- **NASSTY Hub & Team Bug Inbox:** เพิ่มปุ่มลอย `⚙️ NASSTY Hub` (เฉพาะ `SA000`/`systemAdmin` ที่ล็อกอินแล้ว) และ `🐛 แจ้งบั๊ก` (เฉพาะทีมงานที่ล็อกอิน, ซ่อนจากลูกค้า, ย่อรูป Canvas <= 1000px ส่ง `POST /api/bug-report`) พร้อม `Bug Inbox`, `Siwa Chat Monitor`, `Offline Chat Log` (แก้ Contrast 4 ธีม), และ `Daily Active Stats` (Debounced R2 Vault 60s) บน `executive_quick_hub.html`
