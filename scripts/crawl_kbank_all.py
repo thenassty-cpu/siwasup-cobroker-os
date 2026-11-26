@@ -190,78 +190,92 @@ def normalize_kbank_item(it: dict) -> dict | None:
 
 def main():
     full_mode = "--full" in sys.argv
+    from_master = "--from-master" in sys.argv
     if not os.environ.get("CI"):
         os.makedirs(os.path.dirname(BACKUP_PATH), exist_ok=True)
         shutil.copy2(PROPS_PATH, BACKUP_PATH)
         print(f"[Backup] Saved to {BACKUP_PATH}")
 
-    raw_items = []
-    with sync_playwright() as pw:
-        browser = pw.chromium.launch(channel="chrome", headless=False, args=["--window-position=-2000,-2000"])
-        ctx = browser.new_context(locale="th-TH")
-        page = ctx.new_page()
-        with page.expect_response(lambda r: "GetProperties" in r.url, timeout=30000):
-            page.goto(
-                "https://www.kasikornbank.com/th/propertyforsale/search/pages/index.aspx",
-                wait_until="domcontentloaded",
-                timeout=30000,
-            )
+    if from_master and os.path.exists(KBANK_MASTER_PATH):
+        with open(KBANK_MASTER_PATH, "r", encoding="utf-8") as f:
+            normalized = json.load(f)
+        print(f"[From Master] Loaded {len(normalized)} KBANK items")
+    else:
+        raw_items = []
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(channel="chrome", headless=False, args=["--window-position=-2000,-2000"])
+            ctx = browser.new_context(locale="th-TH")
+            page = ctx.new_page()
+            with page.expect_response(lambda r: "GetProperties" in r.url, timeout=30000):
+                page.goto(
+                    "https://www.kasikornbank.com/th/propertyforsale/search/pages/index.aspx",
+                    wait_until="domcontentloaded",
+                    timeout=30000,
+                )
 
-        # Fetch pages with healthy pacing (2 concurrent + 350ms pause when --full)
-        res_js = page.evaluate(
-            """async (isFull) => {
-                const sleep = (ms) => new Promise(r => setTimeout(r, ms));
-                const fetchPage = async (pg) => {
-                    const r = await fetch('/Custom/KWEB2020/NPA2023Backend13.aspx/GetProperties', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json; charset=UTF-8', 'X-Requested-With': 'XMLHttpRequest'},
-                        body: JSON.stringify({filter: {CurrentPageIndex: pg, PageSize: 50, Ordering: 'New'}})
-                    });
-                    if (!r.ok) return {items: [], total: 0};
-                    const outer = await r.json();
-                    const d = typeof outer.d === 'string' ? JSON.parse(outer.d) : (outer.d || {});
-                    const data = d.Data || {};
-                    return {items: data.Items || [], total: data.TotalRows || 0};
-                };
-                const first = await fetchPage(1);
-                const total = first.total || 0;
-                const totalPages = Math.ceil(total / 50);
-                const maxPages = isFull ? totalPages : Math.min(totalPages, 40);
-                const conc = isFull ? 2 : 4;
-                let all = [...first.items];
-                for (let pg = 2; pg <= maxPages; pg += conc) {
-                    const batch = [];
-                    for (let k = pg; k < pg + conc && k <= maxPages; k++) {
-                        batch.push(fetchPage(k));
+            # Fetch pages with healthy pacing (2 concurrent + 350ms pause when --full)
+            res_js = page.evaluate(
+                """async (isFull) => {
+                    const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+                    const fetchPage = async (pg) => {
+                        const r = await fetch('/Custom/KWEB2020/NPA2023Backend13.aspx/GetProperties', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json; charset=UTF-8', 'X-Requested-With': 'XMLHttpRequest'},
+                            body: JSON.stringify({filter: {CurrentPageIndex: pg, PageSize: 50, Ordering: 'New'}})
+                        });
+                        if (!r.ok) return {items: [], total: 0};
+                        const outer = await r.json();
+                        const d = typeof outer.d === 'string' ? JSON.parse(outer.d) : (outer.d || {});
+                        const data = d.Data || {};
+                        return {items: data.Items || [], total: data.TotalRows || 0};
+                    };
+                    const first = await fetchPage(1);
+                    const total = first.total || 0;
+                    const totalPages = Math.ceil(total / 50);
+                    const maxPages = isFull ? totalPages : Math.min(totalPages, 40);
+                    const conc = isFull ? 2 : 4;
+                    let all = [...first.items];
+                    for (let pg = 2; pg <= maxPages; pg += conc) {
+                        const batch = [];
+                        for (let k = pg; k < pg + conc && k <= maxPages; k++) {
+                            batch.push(fetchPage(k));
+                        }
+                        const results = await Promise.all(batch);
+                        for (const res of results) all.push(...res.items);
+                        if (isFull) await sleep(350);
                     }
-                    const results = await Promise.all(batch);
-                    for (const res of results) all.push(...res.items);
-                    if (isFull) await sleep(350);
-                }
-                return {total, fetched: all.length, items: all};
-            }""",
-            full_mode,
-        )
-        print(f"[KBANK] Total={res_js['total']}, Fetched={res_js['fetched']}")
-        raw_items = res_js["items"]
-        browser.close()
+                    return {total, fetched: all.length, items: all};
+                }""",
+                full_mode,
+            )
+            print(f"[KBANK] Total={res_js['total']}, Fetched={res_js['fetched']}")
+            raw_items = res_js["items"]
+            browser.close()
 
-    normalized = []
-    seen = set()
-    for it in raw_items:
-        p = normalize_kbank_item(it)
-        if p and p["id"] not in seen:
-            seen.add(p["id"])
-            normalized.append(p)
+        normalized = []
+        seen = set()
+        for it in raw_items:
+            p = normalize_kbank_item(it)
+            if p and p["id"] not in seen:
+                seen.add(p["id"])
+                normalized.append(p)
 
-    with open(KBANK_MASTER_PATH, "w", encoding="utf-8") as f:
-        json.dump(normalized, f, ensure_ascii=False, indent=2)
-    print(f"[KBANK Master] Saved {len(normalized)} normalized items to {KBANK_MASTER_PATH}")
+        with open(KBANK_MASTER_PATH, "w", encoding="utf-8") as f:
+            json.dump(normalized, f, ensure_ascii=False, indent=2)
+        print(f"[KBANK Master] Saved {len(normalized)} normalized items to {KBANK_MASTER_PATH}")
 
-    # Select top 500 available items for main web catalog (prioritize BKK+Vicinity first)
-    bkk_avail = [p for p in normalized if p.get("status") == "available" and any(bv in p.get("province_th", "") for bv in BKK_VICINITY)]
-    other_avail = [p for p in normalized if p.get("status") == "available" and p not in bkk_avail]
-    for_catalog = (bkk_avail + other_avail)[:500]
+    # Select top 500 available items for main web catalog (Promo-First in BKK+Vicinity, highest discount % first)
+    def promo_score(p):
+        is_bkk = 1 if any(bv in p.get("province_th", "") for bv in BKK_VICINITY) else 0
+        orig = int(re.sub(r"[^0-9]", "", str(p.get("original_price") or "0").split(".")[0]) or 0)
+        spec = int(re.sub(r"[^0-9]", "", str(p.get("special_price") or "0").split(".")[0]) or 0)
+        has_promo = 1 if (orig > spec > 0) else 0
+        pct = ((orig - spec) / orig) if (orig > spec > 0) else 0.0
+        return (is_bkk, has_promo, round(pct, 4))
+
+    avail = [p for p in normalized if p.get("status") == "available"]
+    avail.sort(key=promo_score, reverse=True)
+    for_catalog = avail[:500]
     for p in normalized:
         p.pop("_eff_price", None)
 
