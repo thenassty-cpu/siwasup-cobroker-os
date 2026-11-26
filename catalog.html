@@ -7242,7 +7242,8 @@
             publicTitle: publicTitle,
             badgeClass: badgeClass,
             avatar: found.avatar || defaultAvatar,
-            phone: found.phone || '094-462-9796'
+            phone: found.phone || '094-462-9796',
+            lineId: found.lineId || found.line_id || ''
           };
         }
       }
@@ -7288,17 +7289,35 @@
       }
     }
 
+    function maskClientPropCode(rawId) {
+      return String(rawId || '').trim().replace(/^(?:ALPHA|KTB|PAMCO|SAM|SCB|TTB|GSB|GHB|BBL)[-_]/i, 'SW-');
+    }
+
     function contactViaLine(id, title, isReserve = false) {
       const ref = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : 'SW001';
-      const src = (typeof getStoredSource === 'function') ? getStoredSource() : 'client_view';
+      const src = (typeof getStoredSource === 'function') ? getStoredSource() : 'direct';
+      const cleanTitle = (typeof sanitizeForClientMode === 'function') ? sanitizeForClientMode(title || '') : (title || '');
+      const maskedId = maskClientPropCode(id);
       let msg = '';
       if (id === 'general') {
-        msg = `สวัสดีครับ สนใจปรึกษาข้อมูลทรัพย์กับตัวแทนผู้ดูแล [ผู้แนะนำ: ${ref} | ช่องทาง: ${src}]`;
+        msg = `สวัสดีครับ สนใจปรึกษาข้อมูลทรัพย์กับตัวแทนผู้ดูแล [Ref: ${ref}]`;
       } else {
         const prefix = isReserve ? 'สวัสดีครับ สนใจสอบถามสถานะคิวสำรอง (กรณีหลุดจอง) ทรัพย์: ' : 'สวัสดีครับ สนใจทรัพย์: ';
-        msg = `${prefix} ${title || ''} (รหัส ${id || ''}) [ผู้แนะนำ: ${ref} | ช่องทาง: ${src}]`;
+        msg = `${prefix}${cleanTitle} (รหัส ${maskedId}) [Ref: ${ref} | ${src}]`;
       }
-      const lineUrl = `https://line.me/R/oaMessage/@siwasup/?${encodeURIComponent(msg)}`;
+      const profile = (typeof getAgentProfile === 'function') ? getAgentProfile(ref) : null;
+      const agentLineId = (profile && profile.lineId) ? String(profile.lineId).trim() : '';
+      const isOfficeRef = ['SW000', 'SW001', 'SA000', 'SA001'].includes(String(ref || '').toUpperCase());
+      let lineUrl = '';
+      if (agentLineId && !isOfficeRef) {
+        if (agentLineId.startsWith('@')) {
+          lineUrl = `https://line.me/R/oaMessage/${encodeURIComponent(agentLineId)}/?${encodeURIComponent(msg)}`;
+        } else {
+          lineUrl = `https://line.me/ti/p/~${encodeURIComponent(agentLineId)}`;
+        }
+      } else {
+        lineUrl = `https://line.me/R/oaMessage/@siwasup/?${encodeURIComponent(msg)}`;
+      }
       window.open(lineUrl, '_blank');
     }
 
