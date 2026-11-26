@@ -820,7 +820,7 @@
     "id": "1333273",
     "title": "อาคาร ริมถนนพิษณุโลก-หล่มสัก แหล่งธุรกิจ-ชุมชน ใกล้ตลาดทรัพย์ไพรวัลย์ ซื้อเปิดกิจการได้หลากหลาย",
     "category": "บ้านเดี่ยว",
-    "price": "13,548,000 บาท",
+    "price": "11,888,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/tCX0eGKjtCC0cFhMRw4ETAuShpA=/28a091c8f4674ce8990f95db988e006c",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1333273",
@@ -835,7 +835,9 @@
     "is_npa_tagged": true,
     "location": "วังทอง • พิษณุโลก",
     "search_keywords": "วังทอง • พิษณุโลก พิษณุโลก",
-    "province_th": "พิษณุโลก"
+    "province_th": "พิษณุโลก",
+    "original_price": "13,548,000 บาท",
+    "special_price": "11,888,000 บาท"
   },
   {
     "id": "1333203",
@@ -882,7 +884,7 @@
     "id": "1332020",
     "title": "สิวารมณ์ เนเจอร์ พลัส พระราม 2-ท่าข้าม บ้านเดี่ยว 4 ห้องนอน ใกล้เซ็นทรัล ราคาจัดว่า คุ้ม! ลดทันที 8 แสน!!!",
     "category": "บ้านเดี่ยว",
-    "price": "6,610,000 บาท",
+    "price": "5,800,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/e4vD_INUdKg22yU5K9uu_dvOITI=/b2aeccf38231425aaadbb7520014d0e3",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1332020",
@@ -896,13 +898,15 @@
     "bua_verified": true,
     "location": "บ้านแพ้ว",
     "search_keywords": "บ้านแพ้ว สมุทรสาคร พระราม 2 บางบอน พระราม 2 เอกชัย กาญจนาภิเษก ท่าข้าม บางคอแหลม พระราม 3 เจริญกรุง สาทร",
-    "province_th": "สมุทรสาคร"
+    "province_th": "สมุทรสาคร",
+    "original_price": "6,610,000 บาท",
+    "special_price": "5,800,000 บาท"
   },
   {
     "id": "1331383",
     "title": "บ้านพฤกษา 114 เทพารักษ์-เมืองใหม่ฯ ใกล้ถ.เทพารักษ์ สะดวก เข้าเมืองง่าย ราคาไม่ถึง 3 ล้าน!",
     "category": "ทาวน์โฮม",
-    "price": "3,600,000 บาท",
+    "price": "2,818,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/Pi46qGGYEaZz_uw9KgrDVOro9UA=/f34bf7921d1f478b98c3068c14b6456e",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1331383",
@@ -917,13 +921,15 @@
     "is_npa_tagged": true,
     "location": "บางคอแหลม",
     "search_keywords": "บางคอแหลม พระราม 3 เจริญกรุง สาทร บางพลี บางนา บางนา-ตราด เทพารักษ์ กิ่งแก้ว สุวรรณภูมิ สมุทรปราการ บางเสาธง บางนา บางนา-ตราด เทพารักษ์ สมุทรปราการ",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "3,600,000 บาท",
+    "special_price": "2,818,000 บาท"
   },
   {
     "id": "1330100",
     "title": "ทฮ. เดอะคอนเนค สวนหลวง-อ่อนนุช ราคาพิเศษ ลดกว่าประเมิน 6 แสน!!! ทำเลฮิต ใกล้รถไฟฟ้า สถานีศรีนุช",
     "category": "บ้านเดี่ยว",
-    "price": "3,000,000 บาท",
+    "price": "2,365,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/vLWaqcna6TkJoHpIAYB-B4npwfM=/a7aa8f1b4586420da9cddbfca0b6592d",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1330100",
@@ -938,7 +944,9 @@
     "is_npa_tagged": true,
     "location": "บางคอแหลม",
     "search_keywords": "บางคอแหลม พระราม 3 เจริญกรุง สาทร ดินแดง รัชดา พระราม 9 ห้วยขวาง วิภาวดี ห้วยขวาง รัชดา พระราม 9 ลาดพร้าว เหม่งจ๋าย เลียบด่วน",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "3,000,000 บาท",
+    "special_price": "2,365,000 บาท"
   },
   {
     "id": "1328441",
@@ -985,7 +993,7 @@
     "id": "1326496",
     "title": "คอนโด วอเตอร์มาร์ค เจ้าพระยา ชั้นสูง วิวเมืองตัดโค้งน้ำ สวยเวอร์ เกินราคา!",
     "category": "คอนโด",
-    "price": "14,800,000 บาท",
+    "price": "12,580,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/bgO1ombVU_tcprUWr5aIM_DCJk0=/388753a5e0bf4c01a18c30e870237115",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1326496",
@@ -999,7 +1007,9 @@
     "bua_verified": true,
     "location": "บางคอแหลม",
     "search_keywords": "บางคอแหลม พระราม 3 เจริญกรุง สาทร ดินแดง รัชดา พระราม 9 ห้วยขวาง วิภาวดี ห้วยขวาง รัชดา พระราม 9 ลาดพร้าว เหม่งจ๋าย เลียบด่วน",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "14,800,000 บาท",
+    "special_price": "12,580,000 บาท"
   },
   {
     "id": "1325259",
@@ -1690,7 +1700,7 @@
     "id": "1090681",
     "title": "คอนโดเดอะพาร์คแลนด์ บางนา (ขายพร้อมผู้เช่า)",
     "category": "คอนโด",
-    "price": "2,150,000 บาท",
+    "price": "2,050,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/MJ43lkXwJ7fsCJIaf3uPUnlhVlM=/8367480377034d868a754b5ad7a6552b",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1090681",
@@ -1702,7 +1712,9 @@
     "bank_source": "Siwasup",
     "location": "บางนา",
     "search_keywords": "บางนา สุขุมวิท ศรีนครินทร์ แบริ่ง ลาซาล บางนา-ตราด บางพลี บางนา บางนา-ตราด เทพารักษ์ กิ่งแก้ว สุวรรณภูมิ สมุทรปราการ บางเสาธง บางนา บางนา-ตราด เทพารักษ์ สมุทรปราการ",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,150,000 บาท",
+    "special_price": "2,050,000 บาท"
   },
   {
     "id": "1090792",
@@ -1742,7 +1754,7 @@
     "id": "1090965",
     "title": "ด่วนราคาพิเศษ! ทาวน์โฮม ซิกเนเจอร์ รามอินทรา 109 ใกล้สถานีรถไฟฟ้า บางชัน",
     "category": "ทาวน์โฮม",
-    "price": "3,890,000 บาท",
+    "price": "3,400,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/1AsaKKeFgSC1jP1h-btiWqCYb-A=/b2d5e166f0194552bd1a6e6f2169fd7a",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1090965",
@@ -1754,13 +1766,15 @@
     "bank_source": "Siwasup",
     "location": "บางเขน",
     "search_keywords": "บางเขน รามอินทรา พหลโยธิน วัชรพล สายไหม สะพานใหม่ บึงกุ่ม นวมินทร์ เกษตร-นวมินทร์ รามอินทรา เสรีไทย ลาดพร้าว ดินแดง รัชดา พระราม 9 ห้วยขวาง วิภาวดี",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "3,890,000 บาท",
+    "special_price": "3,400,000 บาท"
   },
   {
     "id": "1090984",
     "title": "บ้านเดี่ยวหลังใหญ่ ใกล้เซ็นทรัลแจ้งวัฒนะ ใกล้สถานีรถไฟฟ้าแจ้งวัฒนะ-ปากเกร็ด 28 ชั้นบนรีโนเวทใหม่ทั้งชั้น เนื้อที่มากถึง 148 ตร.ว.",
     "category": "บ้านเดี่ยว",
-    "price": "300 บาท",
+    "price": "19,500,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/B1zZnYkJoC88qFQxA60r03X7OGo=/0460020638174e67901d4414bec6ad5c",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1090984",
@@ -1867,7 +1881,7 @@
     "id": "1106060",
     "title": "บ้านเดี่ยว ไลฟ์ บางกอก บูเลอวาร์ด รังสิต-คลอง 3 หลังมุม ริมด้านใน",
     "category": "บ้านเดี่ยว",
-    "price": "38 บาท",
+    "price": "5,600,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/pyIwW6HvwNCLI1jXlp-rCLDIxxk=/944dec48345941ea98bd919a90bf8427",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1106060",
@@ -2066,7 +2080,7 @@
     "id": "1174323",
     "title": "บ้านเดี่ยว หลังใหญ่ มบ.กัญญาเฮ้าส์ ซ.แจ้งวัฒนะ-ปากเกร็ด25 เข้าซอยเพียง 40 ม.",
     "category": "บ้านเดี่ยว",
-    "price": "50,000 บาท",
+    "price": "27,000,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/hJJ0Vjb3GICviHnPjZ1je08t3S8=/bf22a24bee134a30949d75379c9a9aff",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1174323",
@@ -2084,7 +2098,7 @@
     "id": "1178451",
     "title": "ทาวน์เฮาส์ หมู่บ้านธนารมณ์ @สายไหม",
     "category": "ทาวน์โฮม",
-    "price": "200,000 บาท",
+    "price": "1,790,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/9R-OPKYgLkH-lQEEEL3id1s4YNU=/8096ac2917184450b1968d1f927ffedc",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1178451",
@@ -2193,7 +2207,7 @@
     "id": "1186862",
     "title": "ขายบ้าน คาซ่าวิลล์ วัชรพล-สุขาภิบาล 5 ทำเลแรงส์ ที่ใครๆ ก็อยากมาอยู่ ในแหล่งชุมชน หาของกินสะดวก",
     "category": "บ้านเดี่ยว",
-    "price": "28 บาท",
+    "price": "5,280,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/xcU0PEYFlcRLe_5p5YigPyIuhiE=/4fa197d3e9d34a179fccab7159f62252",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1186862",
@@ -2355,7 +2369,7 @@
     "id": "1229180",
     "title": "ที่ดินเปล่า 2,550 ตร.ว. ซอยสายไหม 74 ราคาซุปเปอร์โปรฯ!",
     "category": "ที่ดิน",
-    "price": "57,375,000 บาท",
+    "price": "48,000,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/fftV5OJIH7SdpQHWj7obJTnAbo4=/3ae1df2bdb8946e8be0f1c34ab2b47ed",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1229180",
@@ -2367,7 +2381,9 @@
     "bank_source": "Siwasup",
     "location": "บ้านแพ้ว",
     "search_keywords": "บ้านแพ้ว สมุทรสาคร พระราม 2 บางบอน พระราม 2 เอกชัย กาญจนาภิเษก ท่าข้าม บางเขน รามอินทรา พหลโยธิน วัชรพล สายไหม สะพานใหม่",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "57,375,000 บาท",
+    "special_price": "48,000,000 บาท"
   },
   {
     "id": "1230955",
@@ -2572,7 +2588,7 @@
     "id": "1261510",
     "title": "ทาวน์โฮม เดินไม่กี่ก้าวถึงถนนใหญ่ลาดพร้าว ปากซอย 128/1 ตรงข้ามลาดพร้าว 101 ทำเลดี ใกล้สถานีรถไฟฟ้า",
     "category": "ทาวน์โฮม",
-    "price": "35,000 บาท",
+    "price": "7,500,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/OIa7F6h0F-on-5DLIjxX5J2QxUE=/94bb48a3c0ea42f2b021d50745e3c55b",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1261510",
@@ -2591,7 +2607,7 @@
     "id": "1266548",
     "title": "อาคาร หน้าซ.บ้านสวน-สุขุมวิท 10 เมืองชลบุรี ริมถนนหลัก ติดว.อาชีวศึกษาชลบุรี ทำเลศักยภาพ",
     "category": "อาคารพาณิชย์",
-    "price": "39,000,000 บาท",
+    "price": "36,000,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/QKPPOaK7uIDXTQC8o8-E3bWMT5g=/4d891fee916348dba716a427eb234489",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1266548",
@@ -2603,7 +2619,9 @@
     "bank_source": "Siwasup",
     "location": "เมืองชลบุรี • ชลบุรี",
     "search_keywords": "เมืองชลบุรี • ชลบุรี ชลบุรี",
-    "province_th": "ชลบุรี"
+    "province_th": "ชลบุรี",
+    "original_price": "39,000,000 บาท",
+    "special_price": "36,000,000 บาท"
   },
   {
     "id": "1267188",
@@ -2663,7 +2681,7 @@
     "id": "1271320",
     "title": "อาคาร ริมถนนเศรษฐกิจ 1 อ้อมน้อย มีที่จอดรถ ได้หลายคัน ทำเลศักยภาพ",
     "category": "อาคารพาณิชย์",
-    "price": "33,300,000 บาท",
+    "price": "28,466,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/9eU464Sik0WMxf5eEUOhxXPQgTk=/8f3b8da912084d9f88db4fda443249d8",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1271320",
@@ -2675,7 +2693,9 @@
     "bank_source": "Siwasup",
     "location": "กระทุ่มแบน",
     "search_keywords": "กระทุ่มแบน เพชรเกษม อ้อมน้อย พุทธสาคร สมุทรสาคร กระทุ่มแบน เพชรเกษม อ้อมน้อย พุทธสาคร สมุทรสาคร",
-    "province_th": "สมุทรสาคร"
+    "province_th": "สมุทรสาคร",
+    "original_price": "33,300,000 บาท",
+    "special_price": "28,466,000 บาท"
   },
   {
     "id": "1271369",
@@ -2911,7 +2931,7 @@
     "id": "1323558",
     "title": "ที่ดินเปล่า แจ้งวัฒนะ 30 ในกฤษดานคร เข้าซอยแค่ 840 ม. ใกล้ รถไฟฟ้า สถานีศรีรัช สถาบันปัญญาภิวัฒน์ เซ็นทรัล แจ้งวัฒนะ",
     "category": "ที่ดิน",
-    "price": "7,160,000 บาท",
+    "price": "6,780,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/9WNYGCrCjuBvYkef1lMIWHUOk3I=/1186d041c79949dab9c60561381bd36d",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/1323558",
@@ -2923,7 +2943,9 @@
     "bank_source": "Siwasup",
     "location": "บางคอแหลม",
     "search_keywords": "บางคอแหลม พระราม 3 เจริญกรุง สาทร ดอนเมือง วิภาวดี สรงประภา แจ้งวัฒนะ พหลโยธิน รังสิต คลองเตย สุขุมวิท พระราม 4 อโศก ทองหล่อ เอกมัย",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "7,160,000 บาท",
+    "special_price": "6,780,000 บาท"
   },
   {
     "id": "1324140",
@@ -3183,7 +3205,7 @@
     "id": "2206121-land-bang-kruai-sai-noi",
     "title": "ที่ดิน 11ไร่ 65 วา บางกรวย-ไทรน้อย ติดถนนสาย 3215",
     "category": "ที่ดิน",
-    "price": "34,000 บาท",
+    "price": "150,000,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/Wrj9UVV6I0K6GUedmuKAPDn0BX0=/7a03746ec08e4ed49746cc58ce72a5bb",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/2206121-land-bang-kruai-sai-noi",
@@ -3238,7 +3260,7 @@
     "id": "code-2003046",
     "title": "คอนโด Langsuan Ville ขนาดห้อง 165 ตารางเมตร",
     "category": "คอนโด",
-    "price": "70,000 บาท",
+    "price": "25,500,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/K1H0ZOFXVJeXLghQ4uSqsmZAm3M=/eaa4d331863a4c9bbb0b14ecb640d3f3",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/code-2003046",
@@ -3274,7 +3296,7 @@
     "id": "code-2004049",
     "title": "คอนโด The Address Sathorn ขนาดห้อง 66 ตารางเมตร",
     "category": "คอนโด",
-    "price": "55,000 บาท",
+    "price": "14,800,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/lpOBdvu7d_cmKQHs4jRs-Oba9ag=/4f05eee2199e459ea7c7d8a544b1c578",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/code-2004049",
@@ -3431,7 +3453,7 @@
     "id": "code-2202113",
     "title": "ที่ดินเปล่า ในซอยเทิดราชัน 27",
     "category": "ที่ดิน",
-    "price": "45,000 บาท",
+    "price": "32,000 บาท",
     "main_image": "https://shop-image.readyplanet.com/5KFd6whvVQzvi59zcs4QhPvy5zs=/f7667e60096e48f2be09fc6cb7bf36eb",
     "gallery_count": 1,
     "url": "https://www.allabout-assets.com/product/code-2202113",
