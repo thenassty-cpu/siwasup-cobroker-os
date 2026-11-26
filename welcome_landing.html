@@ -58,23 +58,23 @@
 <body class="bg-[#FAF7F2] text-[#2C2218] flex flex-col min-h-screen">
 
   <!-- TOP BRAND NAVBAR -->
-  <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#D8C39A]/60 shadow-2xs">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+  <nav class="sm:sticky sm:top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#D8C39A]/60 shadow-2xs">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2">
       
       <!-- LOGO & COMPANY NAME -->
-      <a href="#" class="flex items-center gap-3.5 group">
+      <a href="#" class="flex items-center gap-2 sm:gap-3.5 group min-w-0 shrink">
         <!-- SVG LOGO (Official Vector Art from Illustrator) -->
         <img 
           src="https://assets.siwasup.com/siwasup_logo.svg" 
           alt="ศิวาทรัพย์ แอสเซท" 
-          class="h-12 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform" 
+          class="h-9 sm:h-12 w-auto object-contain shrink-0 drop-shadow-sm group-hover:scale-105 transition-transform" 
           onerror="this.onerror=null; this.src='assets/siwasup_logo.png';"
         >
-        <div class="whitespace-nowrap">
-          <span class="text-base sm:text-xl lg:text-2xl font-black tracking-normal text-[#2C2218] block leading-none">
+        <div class="min-w-0">
+          <span class="text-sm sm:text-xl lg:text-2xl font-black tracking-normal text-[#2C2218] block leading-none truncate">
             SIWASUP <span class="gold-gradient-text font-bold">ASSET</span>
           </span>
-          <span class="text-[10px] sm:text-[11px] tracking-wider text-[#8A6D3B] uppercase font-semibold block mt-0.5">
+          <span class="text-[9px] sm:text-[11px] tracking-wider text-[#8A6D3B] uppercase font-semibold block mt-0.5 truncate">
             ศิวาทรัพย์ แอสเซท จำกัด
           </span>
         </div>
@@ -89,24 +89,24 @@
       </div>
 
       <!-- ACTION BUTTONS -->
-      <div class="flex items-center gap-2 sm:gap-3 shrink-0 whitespace-nowrap">
+      <div class="flex items-center gap-1.5 sm:gap-3 shrink-0 whitespace-nowrap">
         <!-- เข้าสู่แคตาล็อกบ้าน -->
-        <a href="catalog.html" class="gold-gradient-btn font-bold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2 shadow-md shadow-[#C2A460]/25 active:scale-95 transition-all">
-          <i data-lucide="home" class="w-4 h-4 text-[#241A0E]"></i>
+        <a href="catalog.html" class="gold-gradient-btn font-bold px-2.5 sm:px-5 py-2 sm:py-2.5 min-h-[40px] rounded-xl text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2 shadow-md shadow-[#C2A460]/25 active:scale-95 transition-all">
+          <i data-lucide="home" class="w-4 h-4 text-[#241A0E] shrink-0"></i>
           <span class="hidden sm:inline">แคตาล็อกบ้าน</span>
           <span class="sm:hidden">คลังบ้าน</span>
         </a>
 
         <!-- ฝากขายบ้านกับศิวาทรัพย์ -->
-        <a id="nav-register-btn" href="catalog.html?view=seller" class="hidden md:flex bg-[#FAF5EB] hover:bg-[#F3E9D4] border border-[#C2A460]/60 text-[#7A5B22] font-semibold px-3.5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm items-center gap-1.5 transition-all">
-          <i data-lucide="home" class="w-4 h-4 text-[#967332]"></i>
+        <a id="nav-register-btn" href="catalog.html?view=seller" class="hidden md:flex bg-[#FAF5EB] hover:bg-[#F3E9D4] border border-[#C2A460]/60 text-[#7A5B22] font-semibold px-3.5 py-2 sm:py-2.5 min-h-[40px] rounded-xl text-xs sm:text-sm items-center gap-1.5 transition-all">
+          <i data-lucide="home" class="w-4 h-4 text-[#967332] shrink-0"></i>
           <span>ฝากขายบ้าน</span>
         </a>
 
         <!-- เข้าสู่ระบบสมาชิก -->
-        <a id="nav-login-btn" href="agent_registration.html?mode=login" class="flex bg-white hover:bg-[#FAF5EB] border border-[#C2A460] text-[#7A5B22] font-bold px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm items-center gap-1.5 shadow-2xs transition-all">
-          <i data-lucide="log-in" class="w-4 h-4 text-[#967332]"></i>
-          <span id="nav-login-text">เข้าสู่ระบบ</span>
+        <a id="nav-login-btn" href="agent_registration.html?mode=login" class="flex bg-white hover:bg-[#FAF5EB] border border-[#C2A460] text-[#7A5B22] font-bold px-2.5 sm:px-3.5 py-2 sm:py-2.5 min-h-[40px] max-w-[140px] sm:max-w-none rounded-xl text-xs sm:text-sm items-center gap-1.5 shadow-2xs transition-all">
+          <i data-lucide="log-in" class="w-4 h-4 text-[#967332] shrink-0"></i>
+          <span id="nav-login-text" class="truncate">เข้าสู่ระบบ</span>
         </a>
       </div>
 
@@ -734,8 +734,16 @@
       const navLoginText = document.getElementById('nav-login-text');
       if (navLoginBtn && navLoginText) {
         navLoginBtn.href = 'catalog.html';
-        navLoginBtn.className = 'flex bg-emerald-50 hover:bg-emerald-100 border border-emerald-500 text-emerald-800 font-bold px-3.5 py-2 rounded-xl text-xs sm:text-sm items-center gap-1.5 shadow-2xs transition-all';
-        navLoginText.textContent = `✅ ${nick} (${code})`;
+        navLoginBtn.className = 'flex bg-emerald-50 hover:bg-emerald-100 border border-emerald-500 text-emerald-800 font-bold px-2.5 sm:px-3.5 py-2 sm:py-2.5 min-h-[40px] max-w-[135px] sm:max-w-none rounded-xl text-xs sm:text-sm items-center gap-1.5 shadow-2xs transition-all';
+        navLoginText.innerHTML = '';
+        const badgeText = document.createTextNode(`✅ ${nick}`);
+        navLoginText.appendChild(badgeText);
+        if (code) {
+          const codeSpan = document.createElement('span');
+          codeSpan.className = 'hidden sm:inline';
+          codeSpan.textContent = ` (${code})`;
+          navLoginText.appendChild(codeSpan);
+        }
       }
 
       const heroLoginBtn = document.getElementById('hero-login-btn');
