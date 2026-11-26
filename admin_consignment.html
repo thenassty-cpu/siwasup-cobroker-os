@@ -668,7 +668,7 @@
         const phone = String(m.phone || '').replace(/\D/g, '');
         const isFounder = (
           id === 'app_office_001' || id === 'app_office_002' || id === 'app_office_004' ||
-          code === 'SW001' || code === 'SW002' || code === 'SW004' || code === 'SA000' || code === 'SA001' ||
+          code === 'SW001' || code === 'SW002' || code === 'SA000' || code === 'SA001' ||
           Boolean(perms.executiveAuthority || perms.systemAdmin || m.is_leader) ||
           phone === '0853365703'
         );

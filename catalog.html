@@ -1661,6 +1661,14 @@
             code === 'SA000' ||
             id === 'app_office_004'
           );
+          if (window._siwasupFullDevSwitcher && !document.getElementById('nassty-hub-fab')) {
+            const fab = document.createElement('a');
+            fab.id = 'nassty-hub-fab';
+            fab.href = 'https://assets.siwasup.com/executive_quick_hub.html';
+            fab.className = 'fixed bottom-4 left-4 z-[90] px-3.5 py-2 rounded-full bg-slate-900/90 hover:bg-slate-800 text-[#E6CA85] border border-[#C2A460]/60 shadow-lg text-xs font-bold flex items-center gap-1.5 backdrop-blur-md transition';
+            fab.innerHTML = '<span>⚙️</span><span>NASSTY Hub</span>';
+            document.body.appendChild(fab);
+          }
           const resolvedCode = resolveVerifiedMemberRef(me.member);
           if (resolvedCode) {
             if (typeof _siwasupSafeStorage === 'function') {

@@ -2465,7 +2465,7 @@ def _is_consignment_founder(member: dict) -> bool:
         return False
     mid = str(member.get("id") or "").strip().lower()
     code = str(member.get("code") or "").strip().upper()
-    if mid in ("app_office_001", "app_office_002", "app_office_004") or code in ("SW001", "SW002", "SW004", "SA000", "SA001"):
+    if mid in ("app_office_001", "app_office_002", "app_office_004") or code in ("SW001", "SW002", "SA000", "SA001"):
         return True
     perms = member.get("permissions") or {}
     if bool(perms.get("executiveAuthority") or perms.get("systemAdmin") or member.get("is_leader")):

@@ -938,6 +938,26 @@
               if (roleCode !== 'VIP_CLIENT' && roleCode !== 'SELLER' && !perms.vipClient && !perms.sellerClient) {
                 loadAgentContentHub(sess, canEditContent);
               }
+              const isNassty = !Boolean(perms.vipClient || perms.sellerClient) && Boolean(perms.systemAdmin || code === 'SA000' || id === 'app_office_004');
+              if (isNassty) {
+                if (!document.getElementById('nassty-hub-fab')) {
+                  const fab = document.createElement('a');
+                  fab.id = 'nassty-hub-fab';
+                  fab.href = 'https://assets.siwasup.com/executive_quick_hub.html';
+                  fab.className = 'fixed bottom-4 left-4 z-50 px-3.5 py-2 rounded-full bg-slate-900/90 hover:bg-slate-800 text-[#E6CA85] border border-[#C2A460]/60 shadow-lg text-xs font-bold flex items-center gap-1.5 backdrop-blur-md transition';
+                  fab.innerHTML = '<span>⚙️</span><span>NASSTY Hub</span>';
+                  document.body.appendChild(fab);
+                }
+                const logoEl = document.querySelector('header img');
+                if (logoEl) {
+                  let pressTimer = null;
+                  logoEl.style.cursor = 'pointer';
+                  logoEl.title = 'กดค้างหรือดับเบิลคลิกเพื่อเปิด NASSTY Hub';
+                  logoEl.addEventListener('dblclick', (ev) => { ev.preventDefault(); window.location.href = 'https://assets.siwasup.com/executive_quick_hub.html'; });
+                  logoEl.addEventListener('touchstart', () => { pressTimer = setTimeout(() => { window.location.href = 'https://assets.siwasup.com/executive_quick_hub.html'; }, 1200); }, { passive: true });
+                  logoEl.addEventListener('touchend', () => { if (pressTimer) clearTimeout(pressTimer); });
+                }
+              }
               if (isAdminUser) {
                 revealAdminOnlyElements();
                 const pendingCnt = Number(me.lobbyPendingCount || 0);
