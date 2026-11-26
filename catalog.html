@@ -3522,8 +3522,11 @@
 
         // Search Query (รองรับทั้งรหัสทรัพย์, ชื่อโครงการ, โซนทำเลไทย/อังกฤษ และประโยคค้นหาธรรมชาติ)
         if (query) {
-          const searchableBank = currentMode === 'client' ? '' : (p.bank_source || '');
-          const text = (getDisplayTitle(p) + ' ' + getDisplayDesc(p) + ' ' + (p.location || '') + ' ' + (p.subdistrict_th || '') + ' ' + (p.district_th || '') + ' ' + (p.province_th || '') + ' ' + (p.search_keywords || '') + ' ' + (p.price || '') + ' ' + (p.category || '') + ' ' + searchableBank + ' ' + (p.id || '') + ' ' + (p.code || '')).toLowerCase();
+          const wl = isWhiteLabelMode();
+          const searchableBank = wl ? '' : (p.bank_source || '');
+          const searchableKw = wl ? '' : (p.search_keywords || '');
+          const searchableId = wl ? maskClientPropCode(p.id || '') : (p.id || '');
+          const text = (getDisplayTitle(p) + ' ' + getDisplayDesc(p) + ' ' + (p.location || '') + ' ' + (p.subdistrict_th || '') + ' ' + (p.district_th || '') + ' ' + (p.province_th || '') + ' ' + searchableKw + ' ' + (p.price || '') + ' ' + (p.category || '') + ' ' + searchableBank + ' ' + searchableId + ' ' + (p.code || '')).toLowerCase();
           let cleanQ = query.replace(/^#/, '').replace(/(?:หาบ้าน|ขอบ้าน|อยากได้บ้าน|ดูบ้าน|บ้านโซน|บ้านแถว|บ้านย่าน|หาคอนโด|คอนโดโซน|โซน|แถว|ย่าน|ทางแถบ|รหัสทรัพย์|รหัส)/g, ' ').trim();
           if (!cleanQ) cleanQ = query.replace(/^#/, '').trim();
           // Also split 'บ้านสายไหม' -> 'บ้าน สายไหม' if starts with บ้าน followed by non-type
@@ -4721,8 +4724,8 @@
       const lineMessage = [
         `📋 ใบเสนอราคาซื้อทรัพย์ (ศิวาทรัพย์)`,
         `━━━━━━━━━━━━━━`,
-        `🏠 รหัสทรัพย์: ${propId}`,
-        `📌 รายการ: ${propTitle}`,
+        `🏠 รหัสทรัพย์: ${maskClientPropCode(propId)}`,
+        `📌 รายการ: ${sanitizeForClientMode(propTitle)}`,
         `💰 ราคาก่อนต่อรอง: ฿${askPrice}`,
         `✨ ราคาที่เสนอซื้อ: ฿${formattedOfferPrice} บาท`,
         `🎯 การประเมินโอกาส: ${feasibilityTier}`,
@@ -8569,12 +8572,12 @@
                 layout: "baseline",
                 spacing: "xs",
                 contents: [
-                  { type: "text", text: `รหัส ${pid}`, size: "xxs", color: "#8C734B", weight: "bold", flex: 0 },
+                  { type: "text", text: `รหัส ${maskClientPropCode(pid)}`, size: "xxs", color: "#8C734B", weight: "bold", flex: 0 },
                   { type: "text", text: p.category || "อสังหาริมทรัพย์", size: "xxs", color: "#666666", align: "end" }
                 ]
               },
-              { type: "text", text: p.title || "ทรัพย์คัดสรรพิเศษ", weight: "bold", size: "sm", wrap: true, maxLines: 2, color: "#1D1D1D" },
-              { type: "text", text: p.price || "", weight: "bold", size: "md", color: "#8B0000" },
+              { type: "text", text: getDisplayTitle(p) || "ทรัพย์คัดสรรพิเศษ", weight: "bold", size: "sm", wrap: true, maxLines: 2, color: "#1D1D1D" },
+              { type: "text", text: (getEffectivePriceInfo(p).effectiveNum > 0 ? `${getEffectivePriceInfo(p).effectiveText} บาท` : (p.price || "")), weight: "bold", size: "md", color: "#8B0000" },
               {
                 type: "box",
                 layout: "vertical",
@@ -8946,8 +8949,9 @@
             popupAnchor: [0, -14]
           });
 
-          const pTitle = (p.title || p.name || 'ทรัพย์พร้อมอยู่').replace(/'/g, '');
-          const pPrice = p.price ? (typeof p.price === 'number' ? p.price.toLocaleString() + ' บาท' : p.price) : 'ติดต่อสอบถาม';
+          const pTitle = (getDisplayTitle(p) || p.name || 'ทรัพย์พร้อมอยู่').replace(/'/g, '');
+          const pInfo = getEffectivePriceInfo(p);
+          const pPrice = pInfo.effectiveNum > 0 ? `${pInfo.effectiveText} บาท` : (p.price || 'ติดต่อสอบถาม');
           const pImg = p.main_image || p.thumbnail || 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400';
           const badgeText = coords.isExact ? '📍 พิกัดตรงเป๊ะ' : `⭕ โซน${coords.district || 'โดยประมาณ'}`;
 
