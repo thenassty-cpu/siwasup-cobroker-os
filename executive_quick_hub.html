@@ -221,7 +221,7 @@
       </div>
 
       <!-- Controls: Theme Switcher & Actions -->
-      <div class="flex flex-wrap items-center justify-center gap-3">
+      <div class="flex flex-nowrap sm:flex-wrap items-center justify-start sm:justify-center gap-2.5 sm:gap-3 w-full overflow-x-auto pb-1 [&>*]:shrink-0">
         
         <!-- Interactive 4-Theme Quick Switcher Bar -->
         <div class="neu-inset p-1 sm:p-1.5 flex items-center gap-1 sm:gap-1.5 rounded-2xl">
@@ -913,6 +913,7 @@
         m = document.createElement('div');
         m.id = 'bugInboxModal';
         m.className = 'fixed inset-0 z-[100] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4';
+        m.onclick = (ev) => { if (ev.target === m) m.classList.add('hidden'); };
         m.innerHTML = `
           <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200">
             <div class="p-4 border-b border-slate-200 flex items-center justify-between">
@@ -941,7 +942,7 @@
         }
         listEl.innerHTML = reps.map(r => `
           <div class="p-3.5 rounded-xl border ${r.status === 'resolved' ? 'bg-slate-50 border-slate-200 opacity-70' : 'bg-rose-50/40 border-rose-200'} space-y-2">
-            <div class="flex items-center justify-between gap-2">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
               <div class="font-bold text-slate-900">${escBug(r.id)} • ${escBug(r.reporter_name)} (${escBug(r.reporter_code)})</div>
               <div class="flex items-center gap-2">
                 <span class="text-[11px] text-slate-500">${escBug(r.created_at)}</span>
@@ -949,7 +950,7 @@
               </div>
             </div>
             <div class="text-slate-800 whitespace-pre-wrap">${escBug(r.message)}</div>
-            <div class="text-[11px] text-slate-500">โหมด: ${escBug(r.mode)} | จอ: ${escBug(r.viewport)}${r.prop_id ? ` | ทรัพย์: ${escBug(r.prop_id)}` : ''}<br>URL: ${escBug(r.page_url)}</div>
+            <div class="text-[11px] text-slate-500 break-all">โหมด: ${escBug(r.mode)} | จอ: ${escBug(r.viewport)}${r.prop_id ? ` | ทรัพย์: ${escBug(r.prop_id)}` : ''}<br>URL: ${escBug(r.page_url)}</div>
             ${r.screenshot_data_url ? `<img src="${escBug(r.screenshot_data_url)}" class="max-h-56 rounded-lg border border-slate-200 cursor-pointer" onclick="window.open(this.src, '_blank')" />` : ''}
           </div>
         `).join('');
@@ -995,6 +996,7 @@
             m = document.createElement('div');
             m.id = 'onlineStatsModal';
             m.className = 'fixed inset-0 z-[100] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4';
+            m.onclick = (ev) => { if (ev.target === m) m.classList.add('hidden'); };
             m.innerHTML = `
               <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200">
                 <div class="p-4 border-b border-slate-200 flex items-center justify-between">
@@ -1032,9 +1034,9 @@
                 <div class="space-y-2">
                   ${days.map(d => `
                     <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 space-y-1">
-                      <div class="flex items-center justify-between font-bold text-slate-800">
+                      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 font-bold text-slate-800">
                         <span>📅 ${escBug(d.date)}</span>
-                        <span>เข้าใช้งาน ${Number((d.unique_members || []).length)} คน • ${Number(d.total_hits || 0)} ครั้ง • Peak พร้อมกัน ${Number(d.peak_online || 0)} คน</span>
+                        <span class="text-[11px] sm:text-xs">เข้าใช้งาน ${Number((d.unique_members || []).length)} คน • ${Number(d.total_hits || 0)} ครั้ง • Peak พร้อมกัน ${Number(d.peak_online || 0)} คน</span>
                       </div>
                       <div class="text-[11px] text-slate-600">${(d.unique_members || []).map(escBug).join(', ')}</div>
                     </div>
