@@ -4563,7 +4563,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             if s and s.get("sub"):
                 sub = s["sub"]
                 store = load_lobby_data()
-                mem = next((a for a in store.get("approved", []) if a.get("lineUserId") == sub or a.get("id") == "app_office_004"), None)
+                mem = next((a for a in store.get("approved", []) if a.get("lineUserId") == sub), None)
                 if mem:
                     mem["last_active_at"] = int(time.time())
                     save_lobby_data(store)
@@ -4603,7 +4603,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             return
 
         if path == "/api/agent/public-card":
-            ref_q = (qs.get("ref", [""])[0] or "").strip().upper()
+            ref_q = (query.get("ref", [""])[0] or "").strip().upper()
             if not ref_q:
                 self._send_json(200, {"found": False})
                 return
@@ -4614,7 +4614,9 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                  or str(a.get("id") or "").strip().upper() == ref_q),
                 None,
             )
-            if not hit:
+            perms = (hit.get("permissions") or {}) if hit else {}
+            rc = str((hit or {}).get("role_code") or "").upper()
+            if not hit or perms.get("vipClient") or perms.get("sellerClient") or rc in ("VIP_CLIENT", "SELLER"):
                 self._send_json(200, {"found": False})
                 return
             self._send_json(200, {
