@@ -18,9 +18,10 @@ def parse_price_int(val) -> int:
 
 
 def main():
-    os.makedirs(os.path.dirname(BACKUP_PATH), exist_ok=True)
-    shutil.copy2(MAIN_PATH, BACKUP_PATH)
-    print(f"[Backup] Saved to {BACKUP_PATH}")
+    if not os.environ.get("CI"):
+        os.makedirs(os.path.dirname(BACKUP_PATH), exist_ok=True)
+        shutil.copy2(MAIN_PATH, BACKUP_PATH)
+        print(f"[Backup] Saved to {BACKUP_PATH}")
 
     with open(MAIN_PATH, "r", encoding="utf-8") as f:
         main_props = json.load(f)
@@ -39,16 +40,20 @@ def main():
         if not p1 or not p2 or p1 == p2:
             continue
 
-        if p1 < 500_000 or p2 < 500_000:
+        if (p1 < 500_000 and p2 >= 500_000) or (p1 < 500_000 and p2 < 500_000):
             p["price"] = f"{p2:,} บาท"
             p.pop("original_price", None)
             p.pop("special_price", None)
+            p.pop("promo_start_date", None)
+            p.pop("promo_end_date", None)
             fixed_bad += 1
             print(f"  [Fix Price] {pid}: {p1:,} -> {p2:,}")
-        elif p1 > p2:
+        elif p1 > p2 and p2 >= 500_000:
             p["original_price"] = f"{p1:,} บาท"
             p["special_price"] = f"{p2:,} บาท"
             p["price"] = f"{p2:,} บาท"
+            p.pop("promo_start_date", None)
+            p.pop("promo_end_date", None)
             fixed_promo += 1
             print(f"  [Promo Sync] {pid}: orig={p1:,} -> spec={p2:,}")
 

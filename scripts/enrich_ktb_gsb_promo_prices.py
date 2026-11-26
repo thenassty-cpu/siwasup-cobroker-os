@@ -66,9 +66,10 @@ def fetch_gsb_page(page_num: int, page_size: int = 100):
 
 
 def main():
-    os.makedirs(os.path.dirname(BACKUP_PATH), exist_ok=True)
-    shutil.copy2(PROPS_PATH, BACKUP_PATH)
-    print(f"[Backup] Saved to {BACKUP_PATH}")
+    if not os.environ.get("CI"):
+        os.makedirs(os.path.dirname(BACKUP_PATH), exist_ok=True)
+        shutil.copy2(PROPS_PATH, BACKUP_PATH)
+        print(f"[Backup] Saved to {BACKUP_PATH}")
 
     today_iso = date.today().isoformat()
 
@@ -138,6 +139,13 @@ def main():
                 if end_dt:
                     p["promo_end_date"] = end_dt
                 ktb_updated += 1
+            elif p.get("special_price") and (nml_p > 0 or cur_p > 0):
+                rev_p = nml_p or cur_p
+                p["price"] = f"{rev_p:,} บาท"
+                p.pop("original_price", None)
+                p.pop("special_price", None)
+                p.pop("promo_start_date", None)
+                p.pop("promo_end_date", None)
 
         elif bank == "GSB":
             it = gsb_by_code.get(code) or gsb_by_code.get(str(p.get("id") or "").strip().upper())
@@ -145,14 +153,22 @@ def main():
                 continue
             promo_p = parse_price_int(it.get("xprice"))
             orig_p = parse_price_int(it.get("current_offer_price") or it.get("group_sell_price"))
-            if promo_p > 0 and orig_p > promo_p:
+            end_dt = str(it.get("end_date") or "")[:10]
+            if end_dt == "None":
+                end_dt = ""
+            if promo_p > 0 and orig_p > promo_p and (not end_dt or end_dt >= today_iso):
                 p["original_price"] = f"{orig_p:,} บาท"
                 p["special_price"] = f"{promo_p:,} บาท"
                 p["price"] = f"{promo_p:,} บาท"
-                end_dt = str(it.get("end_date") or "")[:10]
-                if end_dt and end_dt != "None":
+                if end_dt:
                     p["promo_end_date"] = end_dt
                 gsb_updated += 1
+            elif p.get("special_price") and orig_p > 0:
+                p["price"] = f"{orig_p:,} บาท"
+                p.pop("original_price", None)
+                p.pop("special_price", None)
+                p.pop("promo_start_date", None)
+                p.pop("promo_end_date", None)
 
     with open(PROPS_PATH, "w", encoding="utf-8") as f:
         json.dump(props, f, ensure_ascii=False, indent=2)

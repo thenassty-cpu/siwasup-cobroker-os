@@ -39,9 +39,10 @@ def fetch_pamco_page(page: int, limit: int = 100):
 
 
 def main():
-    os.makedirs(os.path.dirname(BACKUP_PATH), exist_ok=True)
-    shutil.copy2(PROPS_PATH, BACKUP_PATH)
-    print(f"[Backup] Saved to {BACKUP_PATH}")
+    if not os.environ.get("CI"):
+        os.makedirs(os.path.dirname(BACKUP_PATH), exist_ok=True)
+        shutil.copy2(PROPS_PATH, BACKUP_PATH)
+        print(f"[Backup] Saved to {BACKUP_PATH}")
 
     first = fetch_pamco_page(1, 100)
     total = int(first.get("total") or 0)
@@ -111,6 +112,12 @@ def main():
             if end_dt:
                 p["promo_end_date"] = end_dt
             promo_updated += 1
+        elif p.get("special_price") and normal_p > 0:
+            p["price"] = f"{normal_p:,} บาท"
+            p.pop("original_price", None)
+            p.pop("special_price", None)
+            p.pop("promo_start_date", None)
+            p.pop("promo_end_date", None)
 
     with open(PROPS_PATH, "w", encoding="utf-8") as f:
         json.dump(props, f, ensure_ascii=False, indent=2)
@@ -129,15 +136,23 @@ def main():
             if not it:
                 continue
             ev_list = it.get("idEvent") or []
+            promo_cand = 0
             if isinstance(ev_list, list) and ev_list:
                 for ev in ev_list:
                     if ev.get("active") and ev.get("activePrice"):
                         cand = parse_price_int(ev.get("priceSp1"))
                         e_dt = str(ev.get("endDate") or "")[:10]
                         if cand > 0 and (not e_dt or e_dt >= today_iso):
-                            c["pr"] = cand
-                            cat_updated += 1
+                            promo_cand = cand
                             break
+            if promo_cand > 0:
+                c["pr"] = promo_cand
+                cat_updated += 1
+            else:
+                lp_list = it.get("lowprice") or []
+                norm = parse_price_int(lp_list[0].get("lowprice")) if (isinstance(lp_list, list) and lp_list) else 0
+                if norm > 0 and c.get("pr") != norm:
+                    c["pr"] = norm
         with open(CATALOG_INDEX_PATH, "w", encoding="utf-8") as f:
             json.dump(cat, f, ensure_ascii=False)
         print(f"[Done] Synced {cat_updated} TTB promo prices in {CATALOG_INDEX_PATH}")

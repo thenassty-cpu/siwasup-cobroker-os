@@ -2794,18 +2794,22 @@
         }
         const beneficiary = p.beneficiary || (p.specs && p.specs.beneficiary);
         if (beneficiary && beneficiary !== '-') {
-          rows.push({ label: 'ผู้มีสิทธิประโยชน์', val: sanitizeForClientMode(beneficiary) });
+          let benVal = beneficiary;
+          if (isWhiteLabelMode()) {
+            benVal = beneficiary.includes('ไม่มี') ? 'ทรัพย์ว่าง พร้อมนัดชม' : 'มีผู้อาศัย/ใช้ประโยชน์ (สอบถามตัวแทน)';
+          }
+          rows.push({ label: 'ผู้มีสิทธิประโยชน์', val: benVal });
         }
         const remark = p.remark || (p.specs && p.specs.remark);
-        if (remark && remark !== '-') {
-          rows.push({ label: 'หมายเหตุ', val: sanitizeForClientMode(remark) });
+        if (remark && remark !== '-' && !isWhiteLabelMode()) {
+          rows.push({ label: 'หมายเหตุ', val: remark });
         }
 
         if (rows.length > 0) {
           deepGrid.innerHTML = rows.map(r => `
             <div class="flex items-baseline justify-between gap-2 py-1 border-b border-neutral-100/80 last:border-0">
-              <span class="text-neutral-400 text-[11px] shrink-0">${r.label}:</span>
-              <span class="font-semibold text-neutral-800 text-[11px] text-right">${r.val}</span>
+              <span class="text-neutral-400 text-[11px] shrink-0">${escapeHtmlIntake(r.label)}:</span>
+              <span class="font-semibold text-neutral-800 text-[11px] text-right">${escapeHtmlIntake(r.val)}</span>
             </div>
           `).join('');
           deepBox.classList.remove('hidden');
@@ -2959,7 +2963,7 @@
               <span class="text-lg font-black text-amber-700 tracking-tight">฿${pInfo.effectiveText}</span>
             </div>
             <div class="text-xs font-medium text-neutral-400 line-through">฿${pInfo.originalText}</div>
-            ${pInfo.endDateTh ? `<div class="text-[10px] font-medium text-amber-700">โปรโมชันถึง ${pInfo.endDateTh}</div>` : ''}
+            ${pInfo.endDateTh ? `<div class="text-[10px] font-medium text-amber-700">โปรโมชันถึง ${escapeHtmlIntake(pInfo.endDateTh)}</div>` : ''}
           </div>`;
         } else {
           detailPriceEl.textContent = `฿${pInfo.effectiveText}`;
@@ -3105,7 +3109,7 @@
           btnOffer.disabled = false;
           btnOffer.className = "w-full bg-[#C2A460] hover:bg-[#A98B45] text-white font-bold py-2.5 rounded-xl shadow-xs flex items-center justify-center gap-2 text-sm active:scale-95 transition-all";
           if (btnOfferLabel) btnOfferLabel.textContent = "เสนอราคา";
-          btnOffer.onclick = () => { closePropertyDetailModal(); openOfferModal(p.id, displayTitle, p.price); };
+          btnOffer.onclick = () => { closePropertyDetailModal(); openOfferModal(p.id, displayTitle, pInfo.effectiveNum > 0 ? `${pInfo.effectiveText} บาท` : p.price); };
           if (waitlistRow) waitlistRow.classList.add('hidden');
         }
       }
@@ -3826,7 +3830,7 @@
                 <div class="flex items-center justify-between text-xs">
                   <span class="text-neutral-500 flex items-center gap-1.5">
                     <span class="w-4 h-4 rounded-full border border-neutral-300 text-neutral-500 font-bold text-[10px] inline-flex items-center justify-center leading-none select-none">฿</span>
-                    <span>${pInfo.isPromo && pInfo.endDateTh ? `โปรฯ ถึง ${pInfo.endDateTh}` : 'หลักประกันเพื่อต่อรองราคา'}</span>
+                    <span>${pInfo.isPromo && pInfo.endDateTh ? `โปรฯ ถึง ${escapeHtmlIntake(pInfo.endDateTh)}` : 'หลักประกันเพื่อต่อรองราคา'}</span>
                   </span>
                   <span class="text-xs font-semibold text-neutral-600 tracking-tight">฿${calcDeposit(pInfo.effectiveNum)}</span>
                 </div>
@@ -3854,7 +3858,7 @@
                     <span>LINE นัดชม</span>
                   </button>
                 ` : `
-                  <button onclick="openOfferModal('${p.id}', '${safeTitleAttr}', '${p.price}')" class="py-2.5 px-3 rounded-xl bg-[#b89d68] hover:bg-[#a68b56] text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs transition active:scale-[0.98]">
+                  <button onclick="openOfferModal('${p.id}', '${safeTitleAttr}', '${getEffectivePriceInfo(p).effectiveNum > 0 ? getEffectivePriceInfo(p).effectiveText + ' บาท' : ''}')" class="py-2.5 px-3 rounded-xl bg-[#b89d68] hover:bg-[#a68b56] text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs transition active:scale-[0.98]">
                     <i data-lucide="badge-dollar-sign" class="w-3.5 h-3.5"></i>
                     <span>เสนอราคา</span>
                   </button>

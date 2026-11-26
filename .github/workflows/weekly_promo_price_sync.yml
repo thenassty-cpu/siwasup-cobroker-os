@@ -1,0 +1,60 @@
+name: Weekly Bank Promo Price Auto-Sync
+
+on:
+  schedule:
+    # Run twice a week: Wednesday & Sunday at 02:00 ICT (19:00 UTC Tue & Sat)
+    - cron: '0 19 * * 2,6'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-promo-price-sync
+  cancel-in-progress: false
+
+jobs:
+  sync-promo-prices:
+    runs-on: ubuntu-latest
+    env:
+      CI: "true"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Sync TTB/PAMCO promo prices
+        run: python scripts/enrich_ttb_promo_prices.py
+
+      - name: Sync KTB & GSB promo prices
+        run: python scripts/enrich_ktb_gsb_promo_prices.py
+
+      - name: Sync curation overrides to main catalog
+        run: python scripts/sync_curation_prices_to_main.py
+
+      - name: Rebuild JS bundle
+        run: python update_js_bundle.py
+
+      - name: Upload updated catalog to Cloudflare R2 (if secrets configured)
+        env:
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+        run: python scripts/ci_upload_r2.py
+
+      - name: Commit and push updated prices if changed
+        run: |
+          git config user.name "siwasup-bot"
+          git config user.email "bot@siwasup.com"
+          git add siwasup_all_properties.json siwasup_all_properties.js data/catalog_index.json
+          if git diff --cached --quiet; then
+            echo "No price changes detected."
+          else
+            git commit -m "chore(auto-sync): update bank promo prices [skip ci]"
+            git pull --rebase
+            git push
+          fi
