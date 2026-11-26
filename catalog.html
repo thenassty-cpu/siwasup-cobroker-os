@@ -4751,9 +4751,9 @@
       document.getElementById('admin-toast').classList.remove('hidden');
       if (window.lucide) { lucide.createIcons(); }
 
-      const lineUrl = `https://line.me/R/oaMessage/%40siwasup/?${encodeURIComponent(lineMessage)}`;
+      const lineUrl = buildAgentAwareLineUrl(lineMessage, (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : 'SW001');
       window.open(lineUrl, '_blank');
-      showToast("✅ บันทึกใบเสนอราคาและเปิดแชท LINE ศิวาทรัพย์ (@siwasup) เรียบร้อยแล้ว!");
+      showToast("✅ บันทึกใบเสนอราคาและเปิดแชท LINE เรียบร้อยแล้ว!");
     }
 
     // 4. Owner Leads Management
@@ -7176,10 +7176,44 @@
       }
     };
 
+    window._liveAgentProfileCache = window._liveAgentProfileCache || {};
+    (function prefetchLiveAgentProfile() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const ref = (params.get('ref') || localStorage.getItem('siwasup_referred_by') || '').trim();
+        if (!ref || ['SW000', 'SW001', 'SA000', 'SA001'].includes(ref.toUpperCase())) return;
+        fetch(`https://siwasup-cobroker-os.onrender.com/api/agent/public-card?ref=${encodeURIComponent(ref)}`)
+          .then(r => r.ok ? r.json() : null)
+          .then(data => {
+            if (data && data.found && data.agent) {
+              const ag = data.agent;
+              const cleanName = (ag.name || '').replace(/^(นาย|นางสาว|นาง)\s*/, '');
+              const firstName = cleanName.split(' ')[0] || cleanName;
+              window._liveAgentProfileCache[ref.toUpperCase()] = {
+                agentId: ag.code || ref,
+                name: ag.name || ag.nickname || `ตัวแทน ${ref}`,
+                shortName: ag.nickname ? `คุณ${ag.nickname}` : (firstName ? `คุณ${firstName}` : `ตัวแทน ${ref}`),
+                tier: 'active',
+                publicTitle: 'Verified Property Consultant',
+                badgeClass: 'bg-neutral-900 text-[#C2A460] border border-neutral-700',
+                avatar: ag.avatar || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+                phone: ag.phone || '094-462-9796',
+                lineId: ag.line_id || ''
+              };
+            }
+          }).catch(() => {});
+      } catch (e) {}
+    })();
+
     function getAgentProfile(refId) {
       const cleanId = (refId || '').trim();
       const upper = cleanId.toUpperCase();
       const digitsOnly = cleanId.replace(/\D/g, '');
+
+      // 0. Live approved Lobby agent cache (includes personal lineId & phone)
+      if (window._liveAgentProfileCache && window._liveAgentProfileCache[upper]) {
+        return window._liveAgentProfileCache[upper];
+      }
 
       // 1. Check in custom mock profiles first if exact match
       if (AGENT_PROFILES[cleanId]) return AGENT_PROFILES[cleanId];
@@ -7293,6 +7327,19 @@
       return String(rawId || '').trim().replace(/^(?:ALPHA|KTB|PAMCO|SAM|SCB|TTB|GSB|GHB|BBL)[-_]/i, 'SW-');
     }
 
+    function buildAgentAwareLineUrl(msg, ref) {
+      const profile = (typeof getAgentProfile === 'function') ? getAgentProfile(ref) : null;
+      const agentLineId = (profile && profile.lineId) ? String(profile.lineId).trim() : '';
+      const isOfficeRef = ['SW000', 'SW001', 'SA000', 'SA001'].includes(String(ref || '').toUpperCase());
+      if (agentLineId && !isOfficeRef) {
+        if (agentLineId.startsWith('@')) {
+          return `https://line.me/R/oaMessage/${encodeURIComponent(agentLineId)}/?${encodeURIComponent(msg)}`;
+        }
+        return `https://line.me/ti/p/~${encodeURIComponent(agentLineId)}`;
+      }
+      return `https://line.me/R/oaMessage/@siwasup/?${encodeURIComponent(msg)}`;
+    }
+
     function contactViaLine(id, title, isReserve = false) {
       const ref = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : 'SW001';
       const src = (typeof getStoredSource === 'function') ? getStoredSource() : 'direct';
@@ -7305,19 +7352,7 @@
         const prefix = isReserve ? 'สวัสดีครับ สนใจสอบถามสถานะคิวสำรอง (กรณีหลุดจอง) ทรัพย์: ' : 'สวัสดีครับ สนใจทรัพย์: ';
         msg = `${prefix}${cleanTitle} (รหัส ${maskedId}) [Ref: ${ref} | ${src}]`;
       }
-      const profile = (typeof getAgentProfile === 'function') ? getAgentProfile(ref) : null;
-      const agentLineId = (profile && profile.lineId) ? String(profile.lineId).trim() : '';
-      const isOfficeRef = ['SW000', 'SW001', 'SA000', 'SA001'].includes(String(ref || '').toUpperCase());
-      let lineUrl = '';
-      if (agentLineId && !isOfficeRef) {
-        if (agentLineId.startsWith('@')) {
-          lineUrl = `https://line.me/R/oaMessage/${encodeURIComponent(agentLineId)}/?${encodeURIComponent(msg)}`;
-        } else {
-          lineUrl = `https://line.me/ti/p/~${encodeURIComponent(agentLineId)}`;
-        }
-      } else {
-        lineUrl = `https://line.me/R/oaMessage/@siwasup/?${encodeURIComponent(msg)}`;
-      }
+      const lineUrl = buildAgentAwareLineUrl(msg, ref);
       window.open(lineUrl, '_blank');
     }
 

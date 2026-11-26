@@ -4521,6 +4521,34 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             self._send_json(410, {"error": "deprecated: use /api/auth/me"})
             return
 
+        if path == "/api/agent/public-card":
+            ref_q = (qs.get("ref", [""])[0] or "").strip().upper()
+            if not ref_q:
+                self._send_json(200, {"found": False})
+                return
+            store = load_lobby_data()
+            hit = next(
+                (a for a in store.get("approved", [])
+                 if str(a.get("code") or "").strip().upper() == ref_q
+                 or str(a.get("id") or "").strip().upper() == ref_q),
+                None,
+            )
+            if not hit:
+                self._send_json(200, {"found": False})
+                return
+            self._send_json(200, {
+                "found": True,
+                "agent": {
+                    "code": hit.get("code") or hit.get("id") or ref_q,
+                    "name": hit.get("name") or "",
+                    "nickname": hit.get("nickname") or "",
+                    "phone": hit.get("phone") or "",
+                    "line_id": hit.get("line_id") or hit.get("lineId") or "",
+                    "avatar": hit.get("avatar") or hit.get("picture") or "",
+                },
+            })
+            return
+
         if path == "/api/auth/me":
             s = self._session()
             if not s or not s.get("sub"):
