@@ -346,6 +346,25 @@ def _parse_prop_lat_lng(sp: dict):
     return None
 
 
+def _parse_prop_price_int(raw_price) -> int:
+    """Parse property price string/number to integer baht, ignoring decimals (e.g. '10,500,000.00 บาท' -> 10500000)."""
+    if isinstance(raw_price, (int, float)):
+        return int(raw_price)
+    s = str(raw_price or "").replace(",", "")
+    m_unit = re.search(r'(\d+(?:\.\d+)?)\s*(ล้าน|แสน)', s)
+    if m_unit:
+        mult = 1_000_000 if m_unit.group(2) == "ล้าน" else 100_000
+        return int(float(m_unit.group(1)) * mult)
+    m = re.search(r'(\d+)(?:\.\d+)?', s)
+    return int(m.group(1)) if m else 0
+
+
+def _format_prop_price_text(raw_price) -> str:
+    """Format property price for display/Gemini/Flex, returning 'กรุณาสอบถาม' when price <= 0."""
+    pr = _parse_prop_price_int(raw_price)
+    return f"{pr:,} บาท" if pr > 0 else "กรุณาสอบถาม"
+
+
 def _find_nearest_siwasup_props(target_lat: float, target_lng: float, allowed_cats: list = None, max_p: int = None, limit: int = 5) -> list[dict]:
     """Cross-Province Haversine Radius Search: Tier 1 (0-5 km), Tier 2 (5-15 km), or nearest >15 km."""
     scored = []
@@ -355,9 +374,8 @@ def _find_nearest_siwasup_props(target_lat: float, target_lng: float, allowed_ca
         sp_cat = sp.get("category") or ""
         if allowed_cats and not any(ac in sp_cat for ac in allowed_cats):
             continue
-        pr_str = re.sub(r'[^0-9]', '', str(sp.get("price") or "0"))
-        pr = int(pr_str) if pr_str.isdigit() else 0
-        if max_p and pr > max_p:
+        pr = _parse_prop_price_int(sp.get("price"))
+        if max_p and (pr <= 0 or pr > max_p):
             continue
         coords = _parse_prop_lat_lng(sp)
         if not coords:
@@ -378,7 +396,7 @@ def _find_nearest_siwasup_props(target_lat: float, target_lng: float, allowed_ca
             "district": dist_name,
             "subdistrict": sp.get("subdistrict_th") or "",
             "province": prov_name,
-            "price": f"{pr:,} บาท" if pr else (sp.get("price") or "-"),
+            "price": _format_prop_price_text(pr),
             "land_sqw": (sp.get("size") or "-").replace(" ตร.ว.", ""),
             "living_sqm": (sp.get("usable_area") or "-").replace(" ตร.ม.", ""),
             "distance_km": round(dist_km, 1),
@@ -878,7 +896,7 @@ def search_properties(query, user_id=None):
                 "title": sp.get("title"),
                 "type": sp.get("category") or "บ้าน",
                 "location": sp.get("location") or "กรุงเทพฯ และปริมณฑล",
-                "price": sp.get("price"),
+                "price": _format_prop_price_text(sp.get("price")),
                 "status": "ขายแล้ว/ตัดสต๊อก" if (sp.get("status") == "sold_archive" or sp.get("is_image_soldout")) else "พร้อมเปิดให้เข้าชม",
                 "description": (sp.get("description") or "")[:300]
             }], "EXACT_SIWASUP_CODE"
@@ -892,7 +910,7 @@ def search_properties(query, user_id=None):
                 "type": p.get('tn', 'บ้าน'),
                 "district": p.get('d'),
                 "province": p.get('p'),
-                "price": f"{p.get('pr', 0):,} บาท",
+                "price": _format_prop_price_text(p.get('pr')),
                 "land_sqw": p.get('sqw'),
                 "living_sqm": p.get('sqm'),
                 "status": "พร้อมเปิดให้เข้าชม"
@@ -926,7 +944,7 @@ def search_properties(query, user_id=None):
                     "title": sp.get("title"),
                     "type": sp.get("category") or "คอนโด",
                     "location": sp.get("location") or "กรุงเทพฯ",
-                    "price": sp.get("price"),
+                    "price": _format_prop_price_text(sp.get("price")),
                     "status": "ขายแล้ว/ตัดสต็อก" if (sp.get("status") == "sold_archive" or sp.get("is_image_soldout")) else "พร้อมเปิดให้เข้าชม"
                 })
             if user_id:
@@ -1155,9 +1173,8 @@ def search_properties(query, user_id=None):
         sp_cat = sp.get("category") or ""
         if allowed_cats and not any(ac in sp_cat for ac in allowed_cats):
             continue
-        pr_str = re.sub(r'[^0-9]', '', str(sp.get("price") or "0"))
-        pr = int(pr_str) if pr_str.isdigit() else 0
-        if eff_max_p and pr > eff_max_p:
+        pr = _parse_prop_price_int(sp.get("price"))
+        if eff_max_p and (pr <= 0 or pr > eff_max_p):
             continue
         if not eff_max_p and not eff_unlimited:
             if pr < 800000 or pr > 15000000:
@@ -1221,7 +1238,7 @@ def search_properties(query, user_id=None):
             "type": p.get('tn', 'บ้าน'),
             "district": p.get('d'),
             "province": p.get('p'),
-            "price": f"{p.get('pr', 0):,} บาท",
+            "price": _format_prop_price_text(p.get('pr')),
             "land_sqw": p.get('sqw'),
             "living_sqm": p.get('sqm'),
             "status": "พร้อมเปิดให้เข้าชม"
@@ -1361,7 +1378,7 @@ def find_property_by_id_or_code(pid):
                 "title": f"ทรัพย์ NPA {p.get('b', '')}: {p.get('tn', 'บ้าน')} โซน {p.get('d', '')}",
                 "category": p.get("tn", "บ้าน"),
                 "bank_source": p.get("b", "NPA"),
-                "price": f"{p.get('pr', 0):,} บาท" if isinstance(p.get('pr'), (int, float)) else str(p.get('pr', '')),
+                "price": _format_prop_price_text(p.get('pr')),
                 "location": f"{p.get('d', '')} • {p.get('p', 'กทม.')}",
                 "size": f"{p.get('sqw', '')} ตร.ว." if p.get('sqw') else "",
                 "usable_area": f"{p.get('sqm', '')} ตร.ม." if p.get('sqm') else "",
@@ -1809,7 +1826,7 @@ def _push_flex_message_raw(flex_msg: dict, user_id: str):
 def build_property_flex_bubble(prop, client_name="คุณลูกค้า", agent_ref="SW000"):
     pid = str(prop.get("id") or prop.get("code") or "")
     title = str(prop.get("title") or "ทรัพย์คัดสรรพิเศษ ศิวาทรัพย์")
-    price = str(prop.get("price") or "กรุณาสอบถาม")
+    price = _format_prop_price_text(prop.get("price"))
     category = str(prop.get("category") or "อสังหาริมทรัพย์")
     location = str(prop.get("location") or "กรุงเทพมหานครและปริมณฑล")
     size_str = str(prop.get("size") or prop.get("usable_area") or "")
