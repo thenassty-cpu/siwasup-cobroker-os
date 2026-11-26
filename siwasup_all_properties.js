@@ -349,7 +349,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: บ้านเดี่ยว โซนปากเกร็ด (นนทบุรี) รหัส NBI-LB-A-650006",
     "category": "บ้านเดี่ยว",
     "bank_source": "GSB",
-    "price": "4,030,000 บาท",
+    "price": "4,650,000 บาท",
     "location": "บ้านใหม่ • ปากเกร็ด • นนทบุรี",
     "size": "20.4 ตร.ว.",
     "usable_area": "-",
@@ -365,7 +365,9 @@ var ALL_PROPERTIES_DATA = [
     "source_url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBLB202107185",
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBLB202107185",
     "dimensions": "0 ไร่ 0 งาน 20.40 ตร.ว",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "6,000,000 บาท",
+    "special_price": "4,650,000 บาท"
   },
   {
     "id": "NBI-LB-A-680025",
@@ -373,7 +375,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: บ้านเดี่ยว โซนเมืองนนทบุรี (นนทบุรี) รหัส NBI-LB-A-680025",
     "category": "บ้านเดี่ยว",
     "bank_source": "GSB",
-    "price": "3,975,000 บาท",
+    "price": "4,240,000 บาท",
     "location": "บางศรีเมือง • เมืองนนทบุรี • นนทบุรี",
     "size": "46.7 ตร.ว.",
     "usable_area": "-",
@@ -390,7 +392,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBLB202410639",
     "dimensions": "0 ไร่ 0 งาน 46.70 ตร.ว",
     "project_name": "พฤกษา ไพร์ม (ราชพฤกษ์-ท่าน้ำนนท์)",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "5,300,000 บาท",
+    "special_price": "4,240,000 บาท"
   },
   {
     "id": "3A1191",
@@ -497,7 +501,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBLB202410634",
     "dimensions": "0 ไร่ 0 งาน 69.10 ตร.ว",
     "project_name": "เดอะแพลนท์ ซิมพลีส พหลโยธิน-สายไหม",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "5,600,000 บาท",
+    "special_price": "4,200,000 บาท"
   },
   {
     "id": "TL0049",
@@ -25497,7 +25503,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตภาษีเจริญ (กรุงเทพมหานคร) รหัส BKK620093",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,490,000 บาท",
+    "price": "1,494,000 บาท",
     "location": "แขวงบางหว้า • เขตภาษีเจริญ • กรุงเทพมหานคร",
     "size": "1139.5 ตร.ว.",
     "usable_area": "30.8 ตร.ม.",
@@ -25514,7 +25520,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100008",
     "dimensions": "2 ไร่ 3 งาน 39.50 ตร.ว",
     "project_name": "แบงค์คอก ฮอไรซอน เพชรเกษม",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,250,000 บาท",
+    "special_price": "1,494,000 บาท"
   },
   {
     "id": "BKK620094",
@@ -25523,7 +25531,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตภาษีเจริญ (กรุงเทพมหานคร) รหัส BKK620094",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,490,000 บาท",
+    "price": "1,493,000 บาท",
     "location": "แขวงบางหว้า • เขตภาษีเจริญ • กรุงเทพมหานคร",
     "size": "1139.5 ตร.ว.",
     "usable_area": "30.8 ตร.ม.",
@@ -25540,7 +25548,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100009",
     "dimensions": "2 ไร่ 3 งาน 39.50 ตร.ว",
     "project_name": "แบงค์คอก ฮอไรซอน เพชรเกษม",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,250,000 บาท",
+    "special_price": "1,493,000 บาท"
   },
   {
     "id": "BKK620098",
@@ -25575,7 +25585,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตบางคอแหลม (กรุงเทพมหานคร) รหัส BKK630006",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "7,656,000 บาท",
+    "price": "7,660,000 บาท",
     "location": "แขวงบางคอแหลม • เขตบางคอแหลม • กรุงเทพมหานคร",
     "size": "2431.6 ตร.ว.",
     "usable_area": "110.5 ตร.ม.",
@@ -25592,7 +25602,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100068",
     "dimensions": "6 ไร่ 0 งาน 31.60 ตร.ว",
     "project_name": "ริเวอร์ เฮ เว่น",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "9,390,000 บาท",
+    "special_price": "7,660,000 บาท"
   },
   {
     "id": "BKK630022",
@@ -25601,7 +25613,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตคลองสาน (กรุงเทพมหานคร) รหัส BKK630022",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "2,313,000 บาท",
+    "price": "2,317,000 บาท",
     "location": "แขวงคลองต้นไทร • เขตคลองสาน • กรุงเทพมหานคร",
     "size": "365.6 ตร.ว.",
     "usable_area": "36.6 ตร.ม.",
@@ -25618,7 +25630,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100128",
     "dimensions": "0 ไร่ 3 งาน 65.60 ตร.ว",
     "project_name": "ทัวร์มาลีนไลท์ สาทร-ตากสิน",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "3,000,000 บาท",
+    "special_price": "2,317,000 บาท"
   },
   {
     "id": "BKK630031",
@@ -25627,7 +25641,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตคันนายาว (กรุงเทพมหานคร) รหัส BKK630031",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,154,000 บาท",
+    "price": "1,157,000 บาท",
     "location": "แขวงรามอินทรา • เขตคันนายาว • กรุงเทพมหานคร",
     "size": "7441.1 ตร.ว.",
     "usable_area": "33 ตร.ม.",
@@ -25644,7 +25658,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100181",
     "dimensions": "18 ไร่ 2 งาน 41.10 ตร.ว",
     "project_name": "พาร์ค เอ็กโซ",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,490,000 บาท",
+    "special_price": "1,157,000 บาท"
   },
   {
     "id": "BKK630035",
@@ -25653,7 +25669,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตวัฒนา (กรุงเทพมหานคร) รหัส BKK630035",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,589,000 บาท",
+    "price": "1,593,000 บาท",
     "location": "แขวงพระโขนงเหนือ • เขตวัฒนา • กรุงเทพมหานคร",
     "size": "342 ตร.ว.",
     "usable_area": "39.2 ตร.ม.",
@@ -25670,7 +25686,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100185",
     "dimensions": "0 ไร่ 3 งาน 42 ตร.ว",
     "project_name": "พีพี พลัส สุขุมวิท 71",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,450,000 บาท",
+    "special_price": "1,593,000 บาท"
   },
   {
     "id": "BKK620024",
@@ -25679,7 +25697,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตประเวศ (กรุงเทพมหานคร) รหัส BKK620024",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "2,050,000 บาท",
+    "price": "2,054,000 บาท",
     "location": "แขวงหนองบอน • เขตประเวศ • กรุงเทพมหานคร",
     "size": "554.4 ตร.ว.",
     "usable_area": "40.2 ตร.ม.",
@@ -25696,7 +25714,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100239",
     "dimensions": "1 ไร่ 1 งาน 54.40 ตร.ว",
     "project_name": "อิลีเม้นท์ ศรีนครินทร์ 1-2",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,650,000 บาท",
+    "special_price": "2,054,000 บาท"
   },
   {
     "id": "BKK630052",
@@ -25731,7 +25751,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตจอมทอง (กรุงเทพมหานคร) รหัส BKK630058",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,391,000 บาท",
+    "price": "1,395,000 บาท",
     "location": "แขวงบางค้อ • เขตจอมทอง • กรุงเทพมหานคร",
     "size": "1694.7 ตร.ว.",
     "usable_area": "28.2 ตร.ม.",
@@ -25748,7 +25768,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100252",
     "dimensions": "4 ไร่ 0 งาน 94.70 ตร.ว",
     "project_name": "แอสปาย สาทร-ตากสิน (บริคโซน)",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,980,000 บาท",
+    "special_price": "1,395,000 บาท"
   },
   {
     "id": "BKK630062",
@@ -25757,7 +25779,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตบางซื่อ (กรุงเทพมหานคร) รหัส BKK630062",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,240,000 บาท",
+    "price": "1,244,000 บาท",
     "location": "แขวงวงศ์สว่าง • เขตบางซื่อ • กรุงเทพมหานคร",
     "size": "4080.7 ตร.ว.",
     "usable_area": "26.2 ตร.ม.",
@@ -25774,7 +25796,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100300",
     "dimensions": "10 ไร่ 0 งาน 80.70 ตร.ว",
     "project_name": "ลุมพินี วิลล์  ประชาชื่น-พงษ์เพชร 2",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,700,000 บาท",
+    "special_price": "1,244,000 บาท"
   },
   {
     "id": "BKK630063",
@@ -25783,7 +25807,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตบางซื่อ (กรุงเทพมหานคร) รหัส BKK630063",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,376,000 บาท",
+    "price": "1,380,000 บาท",
     "location": "แขวงวงศ์สว่าง • เขตบางซื่อ • กรุงเทพมหานคร",
     "size": "4080.7 ตร.ว.",
     "usable_area": "26.9 ตร.ม.",
@@ -25800,7 +25824,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100301",
     "dimensions": "10 ไร่ 0 งาน 80.70 ตร.ว",
     "project_name": "ลุมพินี วิลล์  ประชาชื่น-พงษ์เพชร 2",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,750,000 บาท",
+    "special_price": "1,380,000 บาท"
   },
   {
     "id": "BKK630071",
@@ -25809,7 +25835,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตภาษีเจริญ (กรุงเทพมหานคร) รหัส BKK630071",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,792,000 บาท",
+    "price": "1,796,000 บาท",
     "location": "แขวงบางหว้า • เขตภาษีเจริญ • กรุงเทพมหานคร",
     "size": "30.8 ตร.ม.",
     "usable_area": "30.8 ตร.ม.",
@@ -25826,7 +25852,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100309",
     "dimensions": "0 ไร่ 0 งาน 0 ตร.ว",
     "project_name": " แบงค์คอก ฮอไรซอน เพชรเกษม ",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,400,000 บาท",
+    "special_price": "1,796,000 บาท"
   },
   {
     "id": "BKK600030",
@@ -25913,7 +25941,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตบางกะปิ (กรุงเทพมหานคร) รหัส BKK630080",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "3,921,000 บาท",
+    "price": "3,965,000 บาท",
     "location": "แขวงหัวหมาก • เขตบางกะปิ • กรุงเทพมหานคร",
     "size": "1415.5 ตร.ว.",
     "usable_area": "91.1 ตร.ม.",
@@ -25930,7 +25958,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100363",
     "dimensions": "3 ไร่ 2 งาน 15.50 ตร.ว",
     "project_name": "แบงค์คอก ฮอไรซอน รามคำแหง",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "6,100,000 บาท",
+    "special_price": "3,965,000 บาท"
   },
   {
     "id": "BKK630083",
@@ -25939,7 +25969,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตวัฒนา (กรุงเทพมหานคร) รหัส BKK630083",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,578,000 บาท",
+    "price": "1,581,000 บาท",
     "location": "แขวงพระโขนงเหนือ • เขตวัฒนา • กรุงเทพมหานคร",
     "size": "342 ตร.ว.",
     "usable_area": "38.8 ตร.ม.",
@@ -25956,7 +25986,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100366",
     "dimensions": "0 ไร่ 3 งาน 42 ตร.ว",
     "project_name": "พีพี พลัส สุขุมวิท 71",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,790,000 บาท",
+    "special_price": "1,581,000 บาท"
   },
   {
     "id": "BKK630087",
@@ -25965,7 +25997,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตบางนา (กรุงเทพมหานคร) รหัส BKK630087",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,174,000 บาท",
+    "price": "1,177,000 บาท",
     "location": "แขวงบางนา • เขตบางนา • กรุงเทพมหานคร",
     "size": "746.8 ตร.ว.",
     "usable_area": "30.1 ตร.ม.",
@@ -25982,7 +26014,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100370",
     "dimensions": "1 ไร่ 3 งาน 46.80 ตร.ว",
     "project_name": "ไอคอนโด สุขุมวิท 105-1",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,440,000 บาท",
+    "special_price": "1,177,000 บาท"
   },
   {
     "id": "BKK610010",
@@ -26008,7 +26042,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100406",
     "dimensions": "0 ไร่ 3 งาน 20.10 ตร.ว",
     "project_name": "ทัวร์มาลีน สาทร-ตากสิน",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "3,000,000 บาท",
+    "special_price": "1,950,000 บาท"
   },
   {
     "id": "BKK630095",
@@ -26017,7 +26053,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตภาษีเจริญ (กรุงเทพมหานคร) รหัส BKK630095",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,792,000 บาท",
+    "price": "1,796,000 บาท",
     "location": "แขวงบางหว้า • เขตภาษีเจริญ • กรุงเทพมหานคร",
     "size": "1139.5 ตร.ว.",
     "usable_area": "30.8 ตร.ม.",
@@ -26034,7 +26070,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100423",
     "dimensions": "2 ไร่ 3 งาน 39.50 ตร.ว",
     "project_name": "แบงค์คอก ฮอไรชอน เพชรเกษม",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,945,000 บาท",
+    "special_price": "1,796,000 บาท"
   },
   {
     "id": "BKK640004",
@@ -26043,7 +26081,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตวัฒนา (กรุงเทพมหานคร) รหัส BKK640004",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,620,000 บาท",
+    "price": "1,788,000 บาท",
     "location": "แขวงพระโขนงเหนือ • เขตวัฒนา • กรุงเทพมหานคร",
     "size": "342 ตร.ว.",
     "usable_area": "39.2 ตร.ม.",
@@ -26060,7 +26098,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100429",
     "dimensions": "0 ไร่ 3 งาน 42 ตร.ว",
     "project_name": "พีพี พลัส สุขุมวิท 71",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,750,000 บาท",
+    "special_price": "1,788,000 บาท"
   },
   {
     "id": "BKK640007",
@@ -26086,7 +26126,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100432",
     "dimensions": "4 ไร่ 3 งาน 11.70 ตร.ว",
     "project_name": "เดอะนิช ไอดี พระราม 2 เฟส 1",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,880,000 บาท",
+    "special_price": "1,222,000 บาท"
   },
   {
     "id": "BKK610036",
@@ -26112,7 +26154,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100476",
     "dimensions": "5 ไร่ 1 งาน 31.60 ตร.ว",
     "project_name": "เมโทร สกาย รัชดา",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "3,570,000 บาท",
+    "special_price": "2,583,000 บาท"
   },
   {
     "id": "BKK610043",
@@ -26138,7 +26182,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100528",
     "dimensions": "1 ไร่ 0 งาน 42 ตร.ว",
     "project_name": "เวอรันดา เรสซิเดนส์",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "3,880,000 บาท",
+    "special_price": "2,749,000 บาท"
   },
   {
     "id": "BKK610055",
@@ -26164,7 +26210,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100585",
     "dimensions": "18 ไร่ 2 งาน 41.10 ตร.ว",
     "project_name": "พาร์ค เอ็กโซ",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,660,000 บาท",
+    "special_price": "1,140,000 บาท"
   },
   {
     "id": "BKK610064",
@@ -26225,7 +26273,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตคลองสาน (กรุงเทพมหานคร) รหัส BKK610066",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "2,431,000 บาท",
+    "price": "2,434,000 บาท",
     "location": "แขวงคลองต้นไทร • เขตคลองสาน • กรุงเทพมหานคร",
     "size": "320.1 ตร.ว.",
     "usable_area": "39.8 ตร.ม.",
@@ -26242,7 +26290,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100596",
     "dimensions": "0 ไร่ 3 งาน 20.10 ตร.ว",
     "project_name": "ทัวร์มาลีน สาทร - ตากสิน",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "3,180,000 บาท",
+    "special_price": "2,434,000 บาท"
   },
   {
     "id": "BKK610067",
@@ -26251,7 +26301,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตคลองสาน (กรุงเทพมหานคร) รหัส BKK610067",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "2,431,000 บาท",
+    "price": "2,434,000 บาท",
     "location": "แขวงคลองต้นไทร • เขตคลองสาน • กรุงเทพมหานคร",
     "size": "320.1 ตร.ว.",
     "usable_area": "39.8 ตร.ม.",
@@ -26268,7 +26318,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100597",
     "dimensions": "0 ไร่ 3 งาน 20.10 ตร.ว",
     "project_name": "ทัวร์มาลีน สาทร - ตากสิน",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "3,180,000 บาท",
+    "special_price": "2,434,000 บาท"
   },
   {
     "id": "BKK610074",
@@ -26277,7 +26329,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตสวนหลวง (กรุงเทพมหานคร) รหัส BKK610074",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,719,000 บาท",
+    "price": "1,723,000 บาท",
     "location": "แขวงสวนหลวง • เขตสวนหลวง • กรุงเทพมหานคร",
     "size": "3724 ตร.ว.",
     "usable_area": "29.6 ตร.ม.",
@@ -26294,7 +26346,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100648",
     "dimensions": "9 ไร่ 1 งาน 24 ตร.ว",
     "project_name": "ฟิวส์ โมเบียส",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,150,000 บาท",
+    "special_price": "1,723,000 บาท"
   },
   {
     "id": "BKK620009",
@@ -26329,7 +26383,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตประเวศ (กรุงเทพมหานคร) รหัส BKK620025",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,433,000 บาท",
+    "price": "1,437,000 บาท",
     "location": "แขวงประเวศ • เขตประเวศ • กรุงเทพมหานคร",
     "size": "6253.5 ตร.ว.",
     "usable_area": "26.1 ตร.ม.",
@@ -26346,7 +26400,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100716",
     "dimensions": "15 ไร่ 2 งาน 53.50 ตร.ว",
     "project_name": "ลุมพินี วิลล์ อ่อนนุช-พัฒนาการ",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,570,000 บาท",
+    "special_price": "1,437,000 บาท"
   },
   {
     "id": "BKK570003",
@@ -26381,7 +26437,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตวัฒนา (กรุงเทพมหานคร) รหัส BKK620031",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "5,577,000 บาท",
+    "price": "5,581,000 บาท",
     "location": "แขวงคลองตันเหนือ • เขตวัฒนา • กรุงเทพมหานคร",
     "size": "800 ตร.ว.",
     "usable_area": "65.2 ตร.ม.",
@@ -26398,7 +26454,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100765",
     "dimensions": "2 ไร่ 0 งาน 0 ตร.ว",
     "project_name": "อัพเอกมัย",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "6,850,000 บาท",
+    "special_price": "5,581,000 บาท"
   },
   {
     "id": "BKK620040",
@@ -26407,7 +26465,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตราษฎร์บูรณะ (กรุงเทพมหานคร) รหัส BKK620040",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,737,000 บาท",
+    "price": "1,740,000 บาท",
     "location": "แขวงราษฎร์บูรณะ • เขตราษฎร์บูรณะ • กรุงเทพมหานคร",
     "size": "6422.7 ตร.ว.",
     "usable_area": "29.3 ตร.ม.",
@@ -26424,7 +26482,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100774",
     "dimensions": "16 ไร่ 0 งาน 22.70 ตร.ว",
     "project_name": "แชปเตอร์วัน โมเดิร์นดัชต์",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,080,000 บาท",
+    "special_price": "1,740,000 บาท"
   },
   {
     "id": "BKK620041",
@@ -26433,7 +26493,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตบางนา (กรุงเทพมหานคร) รหัส BKK620041",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,103,000 บาท",
+    "price": "1,107,000 บาท",
     "location": "แขวงบางนาใต้ • เขตบางนา • กรุงเทพมหานคร",
     "size": "746.8 ตร.ว.",
     "usable_area": "31.1 ตร.ม.",
@@ -26450,7 +26510,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100775",
     "dimensions": "1 ไร่ 3 งาน 46.80 ตร.ว",
     "project_name": "ไอดอนโด สุขุมวิท 105-2",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,550,000 บาท",
+    "special_price": "1,107,000 บาท"
   },
   {
     "id": "BKK570031",
@@ -26511,7 +26573,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตวัฒนา (กรุงเทพมหานคร) รหัส BKK620054",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "3,648,000 บาท",
+    "price": "3,652,000 บาท",
     "location": "แขวงคลองตันเหนือ • เขตวัฒนา • กรุงเทพมหานคร",
     "size": "376 ตร.ว.",
     "usable_area": "44.5 ตร.ม.",
@@ -26528,7 +26590,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100845",
     "dimensions": "0 ไร่ 3 งาน 76 ตร.ว",
     "project_name": "ดี 25 ทองหล่อ คอนโดมิเนียม",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "5,400,000 บาท",
+    "special_price": "3,652,000 บาท"
   },
   {
     "id": "BKK620055",
@@ -26537,7 +26601,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตธนบุรี (กรุงเทพมหานคร) รหัส BKK620055",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,750,000 บาท",
+    "price": "1,754,000 บาท",
     "location": "แขวงดาวคะนอง • เขตธนบุรี • กรุงเทพมหานคร",
     "size": "1475.8 ตร.ว.",
     "usable_area": "34.2 ตร.ม.",
@@ -26554,7 +26618,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100846",
     "dimensions": "3 ไร่ 2 งาน 75.80 ตร.ว",
     "project_name": "แบงค์คอก ฮอไรซอน รัชดา-ท่าพระ",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,400,000 บาท",
+    "special_price": "1,754,000 บาท"
   },
   {
     "id": "NON640010",
@@ -26563,7 +26629,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON640010",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "848,000 บาท",
+    "price": "880,000 บาท",
     "location": "ท่าทราย • เมืองนนทบุรี • นนทบุรี",
     "size": "3501.1 ตร.ว.",
     "usable_area": "26.4 ตร.ม.",
@@ -26580,7 +26646,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100867",
     "dimensions": "8 ไร่ 3 งาน 1.10 ตร.ว",
     "project_name": "พลัม คอนโด สามัคคี",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,060,000 บาท",
+    "special_price": "880,000 บาท"
   },
   {
     "id": "BKK620063",
@@ -26589,7 +26657,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตดินแดง (กรุงเทพมหานคร) รหัส BKK620063",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "2,927,000 บาท",
+    "price": "2,931,000 บาท",
     "location": "แขวงดินแดง • เขตดินแดง • กรุงเทพมหานคร",
     "size": "2131.6 ตร.ว.",
     "usable_area": "43.8 ตร.ม.",
@@ -26606,7 +26674,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100882",
     "dimensions": "5 ไร่ 1 งาน 31.60 ตร.ว",
     "project_name": "เมโทร สกาย รัชดา",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "3,550,000 บาท",
+    "special_price": "2,931,000 บาท"
   },
   {
     "id": "NON640012",
@@ -26615,7 +26685,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนปากเกร็ด (นนทบุรี) รหัส NON640012",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "2,275,000 บาท",
+    "price": "2,375,000 บาท",
     "location": "ปากเกร็ด • ปากเกร็ด • นนทบุรี",
     "size": "507.7 ตร.ว.",
     "usable_area": "55.6 ตร.ม.",
@@ -26632,7 +26702,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100925",
     "dimensions": "1 ไร่ 1 งาน 7.70 ตร.ว",
     "project_name": "เดอะ ฟอเรสท์ แจ้งวัฒนะ",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "2,500,000 บาท",
+    "special_price": "2,375,000 บาท"
   },
   {
     "id": "BKK640024",
@@ -26641,7 +26713,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตบางแค (กรุงเทพมหานคร) รหัส BKK640024",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,164,000 บาท",
+    "price": "1,171,000 บาท",
     "location": "แขวงบางแค • เขตบางแค • กรุงเทพมหานคร",
     "size": "1627 ตร.ว.",
     "usable_area": "28.1 ตร.ม.",
@@ -26658,7 +26730,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100929",
     "dimensions": "4 ไร่ 0 งาน 27 ตร.ว",
     "project_name": "เดอะ นิช ไอดี บางแค เฟส 1",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,640,000 บาท",
+    "special_price": "1,171,000 บาท"
   },
   {
     "id": "BKK620074",
@@ -26667,7 +26741,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตคันนายาว (กรุงเทพมหานคร) รหัส BKK620074",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,403,000 บาท",
+    "price": "1,407,000 บาท",
     "location": "แขวงรามอินทรา • เขตคันนายาว • กรุงเทพมหานคร",
     "size": "7441.1 ตร.ว.",
     "usable_area": "33 ตร.ม.",
@@ -26684,7 +26758,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202100937",
     "dimensions": "18 ไร่ 2 งาน 41.10 ตร.ว",
     "project_name": "พาร์ค เอ็กโซ",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,820,000 บาท",
+    "special_price": "1,407,000 บาท"
   },
   {
     "id": "BKK580021",
@@ -26762,7 +26838,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202101147",
     "dimensions": "2 ไร่ 3 งาน 39.50 ตร.ว",
     "project_name": "แบงค์คอก ฮอไรซอน เพชรเกษม",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,250,000 บาท",
+    "special_price": "1,437,000 บาท"
   },
   {
     "id": "NTM630007",
@@ -26771,7 +26849,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนครปฐม (นครปฐม) รหัส NTM630007",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,247,000 บาท",
+    "price": "1,282,000 บาท",
     "location": "สนามจันทร์ • เมืองนครปฐม • นครปฐม",
     "size": "189.1 ตร.ว.",
     "usable_area": "50.1 ตร.ม.",
@@ -26788,7 +26866,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202101535",
     "dimensions": "0 ไร่ 1 งาน 89.10 ตร.ว",
     "project_name": "สุคนธ์ คอนโด",
-    "province_th": "นครปฐม"
+    "province_th": "นครปฐม",
+    "original_price": "1,550,000 บาท",
+    "special_price": "1,282,000 บาท"
   },
   {
     "id": "NON630008",
@@ -26797,7 +26877,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON630008",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,287,000 บาท",
+    "price": "1,320,000 บาท",
     "location": "บางกระสอ • เมืองนนทบุรี • นนทบุรี",
     "size": "5780.3 ตร.ว.",
     "usable_area": "23.4 ตร.ม.",
@@ -26814,7 +26894,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202101909",
     "dimensions": "14 ไร่ 1 งาน 80.30 ตร.ว",
     "project_name": "ลุมพินี พาร์ค รัตนาธิเบศร์-งามวงศ์วาน",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,650,000 บาท",
+    "special_price": "1,320,000 บาท"
   },
   {
     "id": "NON630009",
@@ -26823,7 +26905,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON630009",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,304,000 บาท",
+    "price": "1,337,000 บาท",
     "location": "บางกระสอ • เมืองนนทบุรี • นนทบุรี",
     "size": "5780.3 ตร.ว.",
     "usable_area": "22.6 ตร.ม.",
@@ -26840,7 +26922,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202101910",
     "dimensions": "14 ไร่ 1 งาน 80.30 ตร.ว",
     "project_name": "ลุมพินี พาร์ค รัตนาธิเบศร์-งามวงศ์วาน",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,650,000 บาท",
+    "special_price": "1,337,000 บาท"
   },
   {
     "id": "NON630017",
@@ -26849,7 +26933,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON630017",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,628,000 บาท",
+    "price": "1,672,000 บาท",
     "location": "ท่าทราย • เมืองนนทบุรี • นนทบุรี",
     "size": "636.9 ตร.ว.",
     "usable_area": "55.1 ตร.ม.",
@@ -26866,7 +26950,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202101960",
     "dimensions": "1 ไร่ 2 งาน 36.90 ตร.ว",
     "project_name": "ไนซ์สวีทส์ 2 สนามบินน้ำ",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "2,200,000 บาท",
+    "special_price": "1,672,000 บาท"
   },
   {
     "id": "NON630018",
@@ -26875,7 +26961,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON630018",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,444,000 บาท",
+    "price": "1,482,000 บาท",
     "location": "ท่าทราย • เมืองนนทบุรี • นนทบุรี",
     "size": "636.9 ตร.ว.",
     "usable_area": "41.7 ตร.ม.",
@@ -26892,7 +26978,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202101961",
     "dimensions": "1 ไร่ 2 งาน 36.90 ตร.ว",
     "project_name": "ไนซ์สวีทส์ 2 สนามบินน้ำ",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,900,000 บาท",
+    "special_price": "1,482,000 บาท"
   },
   {
     "id": "NON630023",
@@ -26901,7 +26989,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON630023",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,230,000 บาท",
+    "price": "1,245,000 บาท",
     "location": "ท่าทราย • เมืองนนทบุรี • นนทบุรี",
     "size": "636.9 ตร.ว.",
     "usable_area": "35.4 ตร.ม.",
@@ -26918,7 +27006,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202101966",
     "dimensions": "1 ไร่ 2 งาน 36.90 ตร.ว",
     "project_name": "ไนซ์สวีทส์ 2 สนามบินน้ำ",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,500,000 บาท",
+    "special_price": "1,245,000 บาท"
   },
   {
     "id": "NON630024",
@@ -26927,7 +27017,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON630024",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "909,000 บาท",
+    "price": "932,000 บาท",
     "location": "ท่าทราย • เมืองนนทบุรี • นนทบุรี",
     "size": "636.9 ตร.ว.",
     "usable_area": "26.4 ตร.ม.",
@@ -26944,7 +27034,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202101967",
     "dimensions": "1 ไร่ 2 งาน 36.90 ตร.ว",
     "project_name": "ไนซ์สวีทส์ 2 สนามบินน้ำ",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,150,000 บาท",
+    "special_price": "932,000 บาท"
   },
   {
     "id": "NON630026",
@@ -26953,7 +27045,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนปากเกร็ด (นนทบุรี) รหัส NON630026",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "876,000 บาท",
+    "price": "900,000 บาท",
     "location": "บ้านใหม่ • ปากเกร็ด • นนทบุรี",
     "size": "385.7 ตร.ว.",
     "usable_area": "47.7 ตร.ม.",
@@ -26970,7 +27062,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202101969",
     "dimensions": "0 ไร่ 3 งาน 85.70 ตร.ว",
     "project_name": "ฌ็องเซลิเซ่ บี",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,200,000 บาท",
+    "special_price": "900,000 บาท"
   },
   {
     "id": "NON630031",
@@ -26979,7 +27073,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนปากเกร็ด (นนทบุรี) รหัส NON630031",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "938,000 บาท",
+    "price": "980,000 บาท",
     "location": "ปากเกร็ด • ปากเกร็ด • นนทบุรี",
     "size": "507.7 ตร.ว.",
     "usable_area": "35.4 ตร.ม.",
@@ -26996,7 +27090,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202102003",
     "dimensions": "1 ไร่ 1 งาน 7.70 ตร.ว",
     "project_name": "เดอะ ฟอเรสท์ แจ้งวัฒนะ",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,400,000 บาท",
+    "special_price": "980,000 บาท"
   },
   {
     "id": "NON630037",
@@ -27005,7 +27101,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนปากเกร็ด (นนทบุรี) รหัส NON630037",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,262,000 บาท",
+    "price": "1,295,000 บาท",
     "location": "ปากเกร็ด • ปากเกร็ด • นนทบุรี",
     "size": "330.5 ตร.ว.",
     "usable_area": "33.2 ตร.ม.",
@@ -27022,7 +27118,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202102009",
     "dimensions": "0 ไร่ 3 งาน 30.50 ตร.ว",
     "project_name": "พายน์ คอนโดมิเนียม",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,660,000 บาท",
+    "special_price": "1,295,000 บาท"
   },
   {
     "id": "NON630038",
@@ -27031,7 +27129,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนปากเกร็ด (นนทบุรี) รหัส NON630038",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "2,408,000 บาท",
+    "price": "2,464,000 บาท",
     "location": "ปากเกร็ด • ปากเกร็ด • นนทบุรี",
     "size": "507.7 ตร.ว.",
     "usable_area": "70.1 ตร.ม.",
@@ -27048,7 +27146,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202102010",
     "dimensions": "1 ไร่ 1 งาน 7.70 ตร.ว",
     "project_name": "เดอะ ฟอเรสท์ แจ้งวัฒนะ",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "2,800,000 บาท",
+    "special_price": "2,464,000 บาท"
   },
   {
     "id": "NON630042",
@@ -27057,7 +27157,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON630042",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,496,000 บาท",
+    "price": "1,530,000 บาท",
     "location": "บางเขน • เมืองนนทบุรี • นนทบุรี",
     "size": "471.8 ตร.ว.",
     "usable_area": "32.1 ตร.ม.",
@@ -27074,7 +27174,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202102014",
     "dimensions": "1 ไร่ 0 งาน 71.80 ตร.ว",
     "project_name": "เดอะปาร์ค แอท ประชาชื่น",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,700,000 บาท",
+    "special_price": "1,530,000 บาท"
   },
   {
     "id": "NON630051",
@@ -27083,7 +27185,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนปากเกร็ด (นนทบุรี) รหัส NON630051",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,018,000 บาท",
+    "price": "1,295,000 บาท",
     "location": "ปากเกร็ด • ปากเกร็ด • นนทบุรี",
     "size": "507.7 ตร.ว.",
     "usable_area": "35.2 ตร.ม.",
@@ -27100,7 +27202,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202102064",
     "dimensions": "1 ไร่ 1 งาน 7.70 ตร.ว",
     "project_name": "เดอะฟอเรสท์ แจ้งวัฒนะ ",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,850,000 บาท",
+    "special_price": "1,295,000 บาท"
   },
   {
     "id": "NON630053",
@@ -27109,7 +27213,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON630053",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "897,000 บาท",
+    "price": "920,000 บาท",
     "location": "ท่าทราย • เมืองนนทบุรี • นนทบุรี",
     "size": "636.9 ตร.ว.",
     "usable_area": "26.4 ตร.ม.",
@@ -27126,7 +27230,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202102066",
     "dimensions": "1 ไร่ 2 งาน 36.90 ตร.ว",
     "project_name": "ไนซ์สวีทส์ 2 สนามบินน้ำ",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,150,000 บาท",
+    "special_price": "920,000 บาท"
   },
   {
     "id": "NON630057",
@@ -27135,7 +27241,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON630057",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "840,000 บาท",
+    "price": "864,000 บาท",
     "location": "ท่าทราย • เมืองนนทบุรี • นนทบุรี",
     "size": "3501.1 ตร.ว.",
     "usable_area": "26.4 ตร.ม.",
@@ -27152,7 +27258,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202102070",
     "dimensions": "8 ไร่ 3 งาน 1.10 ตร.ว",
     "project_name": "พลัม คอนโด สามัคคี",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,200,000 บาท",
+    "special_price": "864,000 บาท"
   },
   {
     "id": "NON640003",
@@ -27161,7 +27269,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON640003",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,118,000 บาท",
+    "price": "1,144,000 บาท",
     "location": "ตลาดขวัญ • เมืองนนทบุรี • นนทบุรี",
     "size": "230 ตร.ว.",
     "usable_area": "43 ตร.ม.",
@@ -27178,7 +27286,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202102180",
     "dimensions": "0 ไร่ 2 งาน 30 ตร.ว",
     "project_name": "เดอะบรีส คอนโดมิเนียม อาคารบี",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,250,000 บาท",
+    "special_price": "1,144,000 บาท"
   },
   {
     "id": "SPN620006",
@@ -27187,7 +27297,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนบางบ่อ (สมุทรปราการ) รหัส SPN620006",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,236,000 บาท",
+    "price": "1,264,000 บาท",
     "location": "บางบ่อ • บางบ่อ • สมุทรปราการ",
     "size": "569 ตร.ว.",
     "usable_area": "34.4 ตร.ม.",
@@ -27204,7 +27314,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105043",
     "dimensions": "1 ไร่ 1 งาน 69 ตร.ว",
     "project_name": "ฟรีซ คอนโดมิเนียม",
-    "province_th": "สมุทรปราการ"
+    "province_th": "สมุทรปราการ",
+    "original_price": "1,420,000 บาท",
+    "special_price": "1,264,000 บาท"
   },
   {
     "id": "SPN620007",
@@ -27213,7 +27325,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนบางบ่อ (สมุทรปราการ) รหัส SPN620007",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,104,000 บาท",
+    "price": "1,129,000 บาท",
     "location": "บางบ่อ • บางบ่อ • สมุทรปราการ",
     "size": "569 ตร.ว.",
     "usable_area": "28.8 ตร.ม.",
@@ -27230,7 +27342,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105044",
     "dimensions": "1 ไร่ 1 งาน 69 ตร.ว",
     "project_name": "ฟรีซ คอนโดมิเนียม",
-    "province_th": "สมุทรปราการ"
+    "province_th": "สมุทรปราการ",
+    "original_price": "1,240,000 บาท",
+    "special_price": "1,129,000 บาท"
   },
   {
     "id": "SPN620009",
@@ -27239,7 +27353,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนบางบ่อ (สมุทรปราการ) รหัส SPN620009",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,148,000 บาท",
+    "price": "1,176,000 บาท",
     "location": "บางบ่อ • บางบ่อ • สมุทรปราการ",
     "size": "569 ตร.ว.",
     "usable_area": "33.6 ตร.ม.",
@@ -27256,7 +27370,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105046",
     "dimensions": "1 ไร่ 1 งาน 69 ตร.ว",
     "project_name": "ฟรีซ คอนโดมิเนียม",
-    "province_th": "สมุทรปราการ"
+    "province_th": "สมุทรปราการ",
+    "original_price": "1,400,000 บาท",
+    "special_price": "1,176,000 บาท"
   },
   {
     "id": "SPN630005",
@@ -27265,7 +27381,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนบางบ่อ (สมุทรปราการ) รหัส SPN630005",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,098,000 บาท",
+    "price": "1,239,000 บาท",
     "location": "บางบ่อ • บางบ่อ • สมุทรปราการ",
     "size": "569 ตร.ว.",
     "usable_area": "31.1 ตร.ม.",
@@ -27282,7 +27398,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105097",
     "dimensions": "1 ไร่ 1 งาน 69 ตร.ว",
     "project_name": "ฟรีซ คอนโดมิเนียม",
-    "province_th": "สมุทรปราการ"
+    "province_th": "สมุทรปราการ",
+    "original_price": "1,770,000 บาท",
+    "special_price": "1,239,000 บาท"
   },
   {
     "id": "SPN630006",
@@ -27291,7 +27409,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนบางบ่อ (สมุทรปราการ) รหัส SPN630006",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,629,000 บาท",
+    "price": "1,701,000 บาท",
     "location": "บางบ่อ • บางบ่อ • สมุทรปราการ",
     "size": "569 ตร.ว.",
     "usable_area": "67.3 ตร.ม.",
@@ -27308,7 +27426,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105098",
     "dimensions": "1 ไร่ 1 งาน 69 ตร.ว",
     "project_name": " ฟรีซ คอนโดมิเนียม",
-    "province_th": "สมุทรปราการ"
+    "province_th": "สมุทรปราการ",
+    "original_price": "2,230,000 บาท",
+    "special_price": "1,701,000 บาท"
   },
   {
     "id": "SPN630007",
@@ -27317,7 +27437,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนบางบ่อ (สมุทรปราการ) รหัส SPN630007",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,215,000 บาท",
+    "price": "1,250,000 บาท",
     "location": "บางบ่อ • บางบ่อ • สมุทรปราการ",
     "size": "569 ตร.ว.",
     "usable_area": "31.6 ตร.ม.",
@@ -27334,7 +27454,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105099",
     "dimensions": "1 ไร่ 1 งาน 69 ตร.ว",
     "project_name": "ฟรีซ คอนโดเนียม",
-    "province_th": "สมุทรปราการ"
+    "province_th": "สมุทรปราการ",
+    "original_price": "1,735,000 บาท",
+    "special_price": "1,250,000 บาท"
   },
   {
     "id": "SPN640001",
@@ -27343,7 +27465,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนบางบ่อ (สมุทรปราการ) รหัส SPN640001",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,008,000 บาท",
+    "price": "1,031,000 บาท",
     "location": "บางบ่อ • บางบ่อ • สมุทรปราการ",
     "size": "569 ตร.ว.",
     "usable_area": "28.9 ตร.ม.",
@@ -27360,7 +27482,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105101",
     "dimensions": "1 ไร่ 1 งาน 69 ตร.ว",
     "project_name": " ฟรีซ คอนโดมิเนียม",
-    "province_th": "สมุทรปราการ"
+    "province_th": "สมุทรปราการ",
+    "original_price": "1,120,000 บาท",
+    "special_price": "1,031,000 บาท"
   },
   {
     "id": "NON640046",
@@ -27369,7 +27493,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนปากเกร็ด (นนทบุรี) รหัส NON640046",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,364,000 บาท",
+    "price": "1,540,000 บาท",
     "location": "ปากเกร็ด • ปากเกร็ด • นนทบุรี",
     "size": "423.2 ตร.ว.",
     "usable_area": "59.2 ตร.ม.",
@@ -27386,7 +27510,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105134",
     "dimensions": "1 ไร่ 0 งาน 23.20 ตร.ว",
     "project_name": "เดอะคิทท์ ติวานนท์ อาคาร เอ 2",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "2,200,000 บาท",
+    "special_price": "1,540,000 บาท"
   },
   {
     "id": "BKK640063",
@@ -27395,7 +27521,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตประเวศ (กรุงเทพมหานคร) รหัส BKK640063",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,810,000 บาท",
+    "price": "1,815,000 บาท",
     "location": "แขวงหนองบอน • เขตประเวศ • กรุงเทพมหานคร",
     "size": "366.9 ตร.ว.",
     "usable_area": "42.4 ตร.ม.",
@@ -27412,7 +27538,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105215",
     "dimensions": "0 ไร่ 3 งาน 66.90 ตร.ว",
     "project_name": "อิลีเม้นท์ ศรีนครินทร์ 3",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,460,000 บาท",
+    "special_price": "1,815,000 บาท"
   },
   {
     "id": "BKK640066",
@@ -27421,7 +27549,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตบึงกุ่ม (กรุงเทพมหานคร) รหัส BKK640066",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,042,000 บาท",
+    "price": "1,046,000 บาท",
     "location": "แขวงคลองกุ่ม • เขตบึงกุ่ม • กรุงเทพมหานคร",
     "size": "4030.7 ตร.ว.",
     "usable_area": "30 ตร.ม.",
@@ -27438,7 +27566,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105218",
     "dimensions": "10 ไร่ 0 งาน 30.70 ตร.ว",
     "project_name": "ไอคอนโด สุขาภิบาล 2",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,410,000 บาท",
+    "special_price": "1,046,000 บาท"
   },
   {
     "id": "SMN630001",
@@ -27447,7 +27577,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนกระทุ่มแบน (สมุทรสาคร) รหัส SMN630001",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "986,000 บาท",
+    "price": "1,016,000 บาท",
     "location": "อ้อมน้อย • กระทุ่มแบน • สมุทรสาคร",
     "size": "2844.2 ตร.ว.",
     "usable_area": "28.5 ตร.ม.",
@@ -27464,7 +27594,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105451",
     "dimensions": "7 ไร่ 0 งาน 44.20 ตร.ว",
     "project_name": "ทิวลิป ไลท์ คอนโดมิเนียม",
-    "province_th": "สมุทรสาคร"
+    "province_th": "สมุทรสาคร",
+    "original_price": "1,160,000 บาท",
+    "special_price": "1,016,000 บาท"
   },
   {
     "id": "NTM640009",
@@ -27473,7 +27605,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนพุทธมณฑล (นครปฐม) รหัส NTM640009",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,350,000 บาท",
+    "price": "1,410,000 บาท",
     "location": "ศาลายา • พุทธมณฑล • นครปฐม",
     "size": "193 ตร.ว.",
     "usable_area": "25.8 ตร.ม.",
@@ -27490,7 +27622,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105457",
     "dimensions": "0 ไร่ 1 งาน 93 ตร.ว",
     "project_name": "ศาลายา คอนโด 1",
-    "province_th": "นครปฐม"
+    "province_th": "นครปฐม",
+    "original_price": "1,500,000 บาท",
+    "special_price": "1,410,000 บาท"
   },
   {
     "id": "NON640056",
@@ -27499,7 +27633,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON640056",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "852,000 บาท",
+    "price": "900,000 บาท",
     "location": "ท่าทราย • เมืองนนทบุรี • นนทบุรี",
     "size": "3501.1 ตร.ว.",
     "usable_area": "26.4 ตร.ม.",
@@ -27516,7 +27650,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105458",
     "dimensions": "8 ไร่ 3 งาน 1.10 ตร.ว",
     "project_name": "พลัม คอนโด สามัคคี",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,200,000 บาท",
+    "special_price": "900,000 บาท"
   },
   {
     "id": "SMN630008",
@@ -27525,7 +27661,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนกระทุ่มแบน (สมุทรสาคร) รหัส SMN630008",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "995,000 บาท",
+    "price": "1,040,000 บาท",
     "location": "อ้อมน้อย • กระทุ่มแบน • สมุทรสาคร",
     "size": "2844.2 ตร.ว.",
     "usable_area": "28.6 ตร.ม.",
@@ -27542,7 +27678,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105500",
     "dimensions": "7 ไร่ 0 งาน 44.20 ตร.ว",
     "project_name": "ทิวลิป ไลท์ คอนโดมิเนียม",
-    "province_th": "สมุทรสาคร"
+    "province_th": "สมุทรสาคร",
+    "original_price": "1,300,000 บาท",
+    "special_price": "1,040,000 บาท"
   },
   {
     "id": "BKK640048",
@@ -27551,7 +27689,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตคลองเตย (กรุงเทพมหานคร) รหัส BKK640048",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "8,265,000 บาท",
+    "price": "8,269,000 บาท",
     "location": "แขวงคลองตัน • เขตคลองเตย • กรุงเทพมหานคร",
     "size": "1396.7 ตร.ว.",
     "usable_area": "55 ตร.ม.",
@@ -27568,7 +27706,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105531",
     "dimensions": "3 ไร่ 1 งาน 96.70 ตร.ว",
     "project_name": "เดอะ ลุมพินี 24",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "8,810,000 บาท",
+    "special_price": "8,269,000 บาท"
   },
   {
     "id": "BKK640032",
@@ -27577,7 +27717,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตคันนายาว (กรุงเทพมหานคร) รหัส BKK640032",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,061,000 บาท",
+    "price": "1,064,000 บาท",
     "location": "แขวงคันนายาว • เขตคันนายาว • กรุงเทพมหานคร",
     "size": "1497.5 ตร.ว.",
     "usable_area": "28.2 ตร.ม.",
@@ -27594,7 +27734,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105724",
     "dimensions": "3 ไร่ 2 งาน 97.50 ตร.ว",
     "project_name": "เดอะ นิช ไอดี เสรีไทย เฟส 1",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,500,000 บาท",
+    "special_price": "1,064,000 บาท"
   },
   {
     "id": "NON640018",
@@ -27603,7 +27745,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนปากเกร็ด (นนทบุรี) รหัส NON640018",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "2,200,000 บาท",
+    "price": "2,275,000 บาท",
     "location": "ปากเกร็ด • ปากเกร็ด • นนทบุรี",
     "size": "507.7 ตร.ว.",
     "usable_area": "55.8 ตร.ม.",
@@ -27620,7 +27762,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105727",
     "dimensions": "1 ไร่ 1 งาน 7.70 ตร.ว",
     "project_name": "เดอะ ฟอเรสท์ แจ้งวัฒนะ",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "2,500,000 บาท",
+    "special_price": "2,275,000 บาท"
   },
   {
     "id": "NON640019",
@@ -27629,7 +27773,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนปากเกร็ด (นนทบุรี) รหัส NON640019",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,476,000 บาท",
+    "price": "1,548,000 บาท",
     "location": "ปากเกร็ด • ปากเกร็ด • นนทบุรี",
     "size": "507.7 ตร.ว.",
     "usable_area": "35.3 ตร.ม.",
@@ -27646,7 +27790,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105728",
     "dimensions": "1 ไร่ 1 งาน 7.70 ตร.ว",
     "project_name": "เดอะ ฟอเรสท์ แจ้งวัฒนะ",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,800,000 บาท",
+    "special_price": "1,548,000 บาท"
   },
   {
     "id": "NON640034",
@@ -27655,7 +27801,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON640034",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,122,000 บาท",
+    "price": "1,172,000 บาท",
     "location": "ตลาดขวัญ • เมืองนนทบุรี • นนทบุรี",
     "size": "3238.9 ตร.ว.",
     "usable_area": "22.8 ตร.ม.",
@@ -27672,7 +27818,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105751",
     "dimensions": "8 ไร่ 0 งาน 38.90 ตร.ว",
     "project_name": "ลุมพินี วิลล์ นครอินทร์-ริเวอร์วิว",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,260,000 บาท",
+    "special_price": "1,172,000 บาท"
   },
   {
     "id": "NON640023",
@@ -27681,7 +27829,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON640023",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,161,000 บาท",
+    "price": "1,215,000 บาท",
     "location": "บางกระสอ • เมืองนนทบุรี • นนทบุรี",
     "size": "3791.7 ตร.ว.",
     "usable_area": "25.1 ตร.ม.",
@@ -27698,7 +27846,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105776",
     "dimensions": "9 ไร่ 1 งาน 91.70 ตร.ว",
     "project_name": "แอสปาย รัตนาธิเบศร์ 2",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,310,000 บาท",
+    "special_price": "1,215,000 บาท"
   },
   {
     "id": "BKK640053",
@@ -27724,7 +27874,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105807",
     "dimensions": "2 ไร่ 0 งาน 63.10 ตร.ว",
     "project_name": "ราชพฤกษ์ คอนโดมิเนียม",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,450,000 บาท",
+    "special_price": "943,000 บาท"
   },
   {
     "id": "NON640035",
@@ -27733,7 +27885,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON640035",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,444,000 บาท",
+    "price": "1,475,000 บาท",
     "location": "ตลาดขวัญ • เมืองนนทบุรี • นนทบุรี",
     "size": "3238.9 ตร.ว.",
     "usable_area": "26.4 ตร.ม.",
@@ -27750,7 +27902,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202105855",
     "dimensions": "8 ไร่ 0 งาน 38.90 ตร.ว",
     "project_name": "ลุมพินีวิลล์ นครอินทร์-ริเวอร์วิว",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,520,000 บาท",
+    "special_price": "1,475,000 บาท"
   },
   {
     "id": "NON640028",
@@ -27759,7 +27913,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON640028",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "814,000 บาท",
+    "price": "1,036,000 บาท",
     "location": "บางเขน • เมืองนนทบุรี • นนทบุรี",
     "size": "1821.7 ตร.ว.",
     "usable_area": "27.4 ตร.ม.",
@@ -27776,7 +27930,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202106385",
     "dimensions": "4 ไร่ 2 งาน 21.70 ตร.ว",
     "project_name": "ไอคอนโด งามวงศ์วาน 2",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,480,000 บาท",
+    "special_price": "1,036,000 บาท"
   },
   {
     "id": "SPK-CD-A-650001",
@@ -27785,7 +27941,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนบางพลี (สมุทรปราการ) รหัส SPK-CD-A-650001",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,199,000 บาท",
+    "price": "1,229,000 บาท",
     "location": "บางแก้ว • บางพลี • สมุทรปราการ",
     "size": "7029 ตร.ว.",
     "usable_area": "26.7 ตร.ม.",
@@ -27802,7 +27958,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202106673",
     "dimensions": "17 ไร่ 2 งาน 29 ตร.ว",
     "project_name": "ลุมพินี เมกะซิตี้ บางนา",
-    "province_th": "สมุทรปราการ"
+    "province_th": "สมุทรปราการ",
+    "original_price": "1,480,000 บาท",
+    "special_price": "1,229,000 บาท"
   },
   {
     "id": "BKK-CD-A-650100",
@@ -27811,7 +27969,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตดินแดง (กรุงเทพมหานคร) รหัส BKK-CD-A-650100",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "2,622,000 บาท",
+    "price": "2,626,000 บาท",
     "location": "แขวงดินแดง • เขตดินแดง • กรุงเทพมหานคร",
     "size": "983.7 ตร.ว.",
     "usable_area": "33.1 ตร.ม.",
@@ -27828,7 +27986,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202106774",
     "dimensions": "2 ไร่ 1 งาน 83.70 ตร.ว",
     "project_name": "เอสเปซ ไอ.ดี. อโศก-รัชดา",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "3,870,000 บาท",
+    "special_price": "2,626,000 บาท"
   },
   {
     "id": "SPK-CD-A-650003",
@@ -27837,7 +27997,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนบางพลี (สมุทรปราการ) รหัส SPK-CD-A-650003",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "985,000 บาท",
+    "price": "1,137,000 บาท",
     "location": "บางแก้ว • บางพลี • สมุทรปราการ",
     "size": "1317.1 ตร.ว.",
     "usable_area": "25.2 ตร.ม.",
@@ -27854,7 +28014,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202106780",
     "dimensions": "3 ไร่ 1 งาน 17.10 ตร.ว",
     "project_name": "เอ สเปซ มี บางนา",
-    "province_th": "สมุทรปราการ"
+    "province_th": "สมุทรปราการ",
+    "original_price": "1,515,000 บาท",
+    "special_price": "1,137,000 บาท"
   },
   {
     "id": "NBI-CD-A-660044",
@@ -27863,7 +28025,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NBI-CD-A-660044",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "966,000 บาท",
+    "price": "1,012,000 บาท",
     "location": "ตลาดขวัญ • เมืองนนทบุรี • นนทบุรี",
     "size": "263.8 ตร.ว.",
     "usable_area": "25.3 ตร.ม.",
@@ -27880,7 +28042,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202106819",
     "dimensions": "0 ไร่ 2 งาน 63.80 ตร.ว",
     "project_name": "ออคิด พาร์ค คอนโด",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,150,000 บาท",
+    "special_price": "1,012,000 บาท"
   },
   {
     "id": "NON640057",
@@ -27889,7 +28053,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NON640057",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,869,000 บาท",
+    "price": "1,911,000 บาท",
     "location": "ตลาดขวัญ • เมืองนนทบุรี • นนทบุรี",
     "size": "321.7 ตร.ว.",
     "usable_area": "50.2 ตร.ม.",
@@ -27906,7 +28070,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202106823",
     "dimensions": "0 ไร่ 3 งาน 21.70 ตร.ว",
     "project_name": "เดอะไพรเวซี่ เรวดี โครงการซี",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "2,100,000 บาท",
+    "special_price": "1,911,000 บาท"
   },
   {
     "id": "BKK-CD-A-680016",
@@ -27915,7 +28081,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตสวนหลวง (กรุงเทพมหานคร) รหัส BKK-CD-A-680016",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,092,000 บาท",
+    "price": "1,120,000 บาท",
     "location": "แขวงสวนหลวง • เขตสวนหลวง • กรุงเทพมหานคร",
     "size": "2811.3 ตร.ว.",
     "usable_area": "28.5 ตร.ม.",
@@ -27932,7 +28098,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202106907",
     "dimensions": "7 ไร่ 0 งาน 11.30 ตร.ว",
     "project_name": "เอ สเปซ มี สุขุมวิท 77",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,600,000 บาท",
+    "special_price": "1,120,000 บาท"
   },
   {
     "id": "BKK-CD-A-660063",
@@ -27958,7 +28126,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202106912",
     "dimensions": "0 ไร่ 3 งาน 42 ตร.ว",
     "project_name": "พีพี พลัส สุขุมวิท 71",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,700,000 บาท",
+    "special_price": "1,755,000 บาท"
   },
   {
     "id": "BKK-CD-A-660062",
@@ -27984,7 +28154,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202106913",
     "dimensions": "0 ไร่ 3 งาน 42 ตร.ว",
     "project_name": "พีพี พลัส สุขุมวิท 71",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,700,000 บาท",
+    "special_price": "1,755,000 บาท"
   },
   {
     "id": "BKK-CD-A-650128",
@@ -27993,7 +28165,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตห้วยขวาง (กรุงเทพมหานคร) รหัส BKK-CD-A-650128",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "4,922,000 บาท",
+    "price": "4,919,000 บาท",
     "location": "แขวงบางกะปิ • เขตห้วยขวาง • กรุงเทพมหานคร",
     "size": "1848.3 ตร.ว.",
     "usable_area": "66.9 ตร.ม.",
@@ -28010,7 +28182,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202106953",
     "dimensions": "4 ไร่ 2 งาน 48.30 ตร.ว",
     "project_name": "แอสปาย พระราม 9",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "6,690,000 บาท",
+    "special_price": "4,919,000 บาท"
   },
   {
     "id": "BKK-CD-A-660046",
@@ -28019,7 +28193,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตประเวศ (กรุงเทพมหานคร) รหัส BKK-CD-A-660046",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,698,000 บาท",
+    "price": "1,702,000 บาท",
     "location": "แขวงหนองบอน • เขตประเวศ • กรุงเทพมหานคร",
     "size": "366.9 ตร.ว.",
     "usable_area": "37.1 ตร.ม.",
@@ -28036,7 +28210,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202106968",
     "dimensions": "0 ไร่ 3 งาน 66.90 ตร.ว",
     "project_name": "อิลีเม้นท์ ศรีนครินทร์ 3",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,300,000 บาท",
+    "special_price": "1,702,000 บาท"
   },
   {
     "id": "NBI-CD-A-650040",
@@ -28045,7 +28221,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NBI-CD-A-650040",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,027,000 บาท",
+    "price": "1,061,000 บาท",
     "location": "บางเขน • เมืองนนทบุรี • นนทบุรี",
     "size": "2034.2 ตร.ว.",
     "usable_area": "30.1 ตร.ม.",
@@ -28062,7 +28238,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202106971",
     "dimensions": "5 ไร่ 0 งาน 34.20 ตร.ว",
     "project_name": "ไอคอนโด งามวงศ์วาน",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,360,000 บาท",
+    "special_price": "1,061,000 บาท"
   },
   {
     "id": "BKK-CD-A-650076",
@@ -28071,7 +28249,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตราษฎร์บูรณะ (กรุงเทพมหานคร) รหัส BKK-CD-A-650076",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,018,000 บาท",
+    "price": "1,026,000 บาท",
     "location": "แขวงบางปะกอก • เขตราษฎร์บูรณะ • กรุงเทพมหานคร",
     "size": "2582 ตร.ว.",
     "usable_area": "22.5 ตร.ม.",
@@ -28088,7 +28266,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107000",
     "dimensions": "6 ไร่ 1 งาน 82 ตร.ว",
     "project_name": "ลุมพินี วิลล์ ราษฎร์บูรณะ-ริเวอร์วิว 2",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,300,000 บาท",
+    "special_price": "1,026,000 บาท"
   },
   {
     "id": "BKK-CD-A-650097",
@@ -28097,7 +28277,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตจตุจักร (กรุงเทพมหานคร) รหัส BKK-CD-A-650097",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "2,305,000 บาท",
+    "price": "2,309,000 บาท",
     "location": "แขวงลาดยาว • เขตจตุจักร • กรุงเทพมหานคร",
     "size": "2552.6 ตร.ว.",
     "usable_area": "34.2 ตร.ม.",
@@ -28114,7 +28294,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107004",
     "dimensions": "6 ไร่ 1 งาน 52.60 ตร.ว",
     "project_name": "เดอะ นิช โมโน รัชวิภา",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,630,000 บาท",
+    "special_price": "2,309,000 บาท"
   },
   {
     "id": "BKK-CD-A-650077",
@@ -28123,7 +28305,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตราษฎร์บูรณะ (กรุงเทพมหานคร) รหัส BKK-CD-A-650077",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,041,000 บาท",
+    "price": "1,049,000 บาท",
     "location": "แขวงบางปะกอก • เขตราษฎร์บูรณะ • กรุงเทพมหานคร",
     "size": "2582 ตร.ว.",
     "usable_area": "23.1 ตร.ม.",
@@ -28140,7 +28322,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107005",
     "dimensions": "6 ไร่ 1 งาน 82 ตร.ว",
     "project_name": "ลุมพินี วิลล์ ราษฎร์บูรณะ-ริเวอร์วิว 2",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,340,000 บาท",
+    "special_price": "1,049,000 บาท"
   },
   {
     "id": "BKK-CD-A-660008",
@@ -28149,7 +28333,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตธนบุรี (กรุงเทพมหานคร) รหัส BKK-CD-A-660008",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,730,000 บาท",
+    "price": "1,736,000 บาท",
     "location": "แขวงบุคคโล • เขตธนบุรี • กรุงเทพมหานคร",
     "size": "2331 ตร.ว.",
     "usable_area": "21.8 ตร.ม.",
@@ -28166,7 +28350,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107007",
     "dimensions": "5 ไร่ 3 งาน 31 ตร.ว",
     "project_name": "ไอดีโอ สาทร ท่าพระ",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,400,000 บาท",
+    "special_price": "1,736,000 บาท"
   },
   {
     "id": "BKK-CD-A-660095",
@@ -28175,7 +28361,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตประเวศ (กรุงเทพมหานคร) รหัส BKK-CD-A-660095",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,755,000 บาท",
+    "price": "1,890,000 บาท",
     "location": "แขวงหนองบอน • เขตประเวศ • กรุงเทพมหานคร",
     "size": "554.4 ตร.ว.",
     "usable_area": "43 ตร.ม.",
@@ -28192,7 +28378,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107026",
     "dimensions": "1 ไร่ 1 งาน 54.40 ตร.ว",
     "project_name": "อิลีเม้นท์ ศรีนครินทร์ 1-2",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,700,000 บาท",
+    "special_price": "1,890,000 บาท"
   },
   {
     "id": "BKK-CD-A-650021",
@@ -28201,7 +28389,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตภาษีเจริญ (กรุงเทพมหานคร) รหัส BKK-CD-A-650021",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,707,000 บาท",
+    "price": "1,711,000 บาท",
     "location": "แขวงบางหว้า • เขตภาษีเจริญ • กรุงเทพมหานคร",
     "size": "1139.5 ตร.ว.",
     "usable_area": "30.6 ตร.ม.",
@@ -28218,7 +28406,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107028",
     "dimensions": "2 ไร่ 3 งาน 39.50 ตร.ว",
     "project_name": "แบงค์คอก ฮอไรซอน เพชรเกษม",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,850,000 บาท",
+    "special_price": "1,711,000 บาท"
   },
   {
     "id": "BKK-CD-A-650062",
@@ -28253,7 +28443,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตคันนายาว (กรุงเทพมหานคร) รหัส BKK-CD-A-650034",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,491,000 บาท",
+    "price": "1,495,000 บาท",
     "location": "แขวงรามอินทรา • เขตคันนายาว • กรุงเทพมหานคร",
     "size": "7441.1 ตร.ว.",
     "usable_area": "32.8 ตร.ม.",
@@ -28270,7 +28460,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107034",
     "dimensions": "18 ไร่ 2 งาน 41.10 ตร.ว",
     "project_name": "พาร์ค เอ็กโซ",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,800,000 บาท",
+    "special_price": "1,495,000 บาท"
   },
   {
     "id": "BKK-CD-A-650119",
@@ -28279,7 +28471,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตบางนา (กรุงเทพมหานคร) รหัส BKK-CD-A-650119",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,084,000 บาท",
+    "price": "1,091,000 บาท",
     "location": "แขวงบางนาใต้ • เขตบางนา • กรุงเทพมหานคร",
     "size": "746.8 ตร.ว.",
     "usable_area": "31.1 ตร.ม.",
@@ -28296,7 +28488,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107036",
     "dimensions": "1 ไร่ 3 งาน 46.80 ตร.ว",
     "project_name": "ไอคอนโด สุขุมวิท 105-2",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,440,000 บาท",
+    "special_price": "1,091,000 บาท"
   },
   {
     "id": "SPK-CD-A-650018",
@@ -28305,7 +28499,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนบางบ่อ (สมุทรปราการ) รหัส SPK-CD-A-650018",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,106,000 บาท",
+    "price": "1,148,000 บาท",
     "location": "บางบ่อ • บางบ่อ • สมุทรปราการ",
     "size": "569 ตร.ว.",
     "usable_area": "34.6 ตร.ม.",
@@ -28322,7 +28516,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107038",
     "dimensions": "1 ไร่ 1 งาน 69 ตร.ว",
     "project_name": "ฟรีซ คอนโดมิเนียม",
-    "province_th": "สมุทรปราการ"
+    "province_th": "สมุทรปราการ",
+    "original_price": "1,200,000 บาท",
+    "special_price": "1,148,000 บาท"
   },
   {
     "id": "BKK-CD-A-650039",
@@ -28331,7 +28527,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตบางแค (กรุงเทพมหานคร) รหัส BKK-CD-A-650039",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,455,000 บาท",
+    "price": "1,461,000 บาท",
     "location": "แขวงบางแคเหนือ • เขตบางแค • กรุงเทพมหานคร",
     "size": "2400 ตร.ว.",
     "usable_area": "26.7 ตร.ม.",
@@ -28348,7 +28544,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107040",
     "dimensions": "6 ไร่ 0 งาน 0 ตร.ว",
     "project_name": "ฟิวส์ เซนเซ่ บางแค",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,080,000 บาท",
+    "special_price": "1,461,000 บาท"
   },
   {
     "id": "BKK-CD-A-660031",
@@ -28357,7 +28555,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตลาดกระบัง (กรุงเทพมหานคร) รหัส BKK-CD-A-660031",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,003,000 บาท",
+    "price": "1,006,000 บาท",
     "location": "แขวงลาดกระบัง • เขตลาดกระบัง • กรุงเทพมหานคร",
     "size": "279.3 ตร.ว.",
     "usable_area": "30.4 ตร.ม.",
@@ -28374,7 +28572,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107042",
     "dimensions": "0 ไร่ 2 งาน 79.30 ตร.ว",
     "project_name": "สมาร์ท คอนโด อ่อนนุช อาคารเอ",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,340,000 บาท",
+    "special_price": "1,006,000 บาท"
   },
   {
     "id": "BKK-CD-A-660054",
@@ -28383,7 +28583,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตบางกะปิ (กรุงเทพมหานคร) รหัส BKK-CD-A-660054",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "2,021,000 บาท",
+    "price": "2,025,000 บาท",
     "location": "แขวงหัวหมาก • เขตบางกะปิ • กรุงเทพมหานคร",
     "size": "1415.5 ตร.ว.",
     "usable_area": "40 ตร.ม.",
@@ -28400,7 +28600,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107043",
     "dimensions": "3 ไร่ 2 งาน 15.50 ตร.ว",
     "project_name": "แบงค์คอก ฮอไรซอน รามคำแหง",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,200,000 บาท",
+    "special_price": "2,025,000 บาท"
   },
   {
     "id": "BKK-CD-A-660012",
@@ -28409,7 +28611,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตดินแดง (กรุงเทพมหานคร) รหัส BKK-CD-A-660012",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,973,000 บาท",
+    "price": "1,976,000 บาท",
     "location": "แขวงรัชดาภิเษก • เขตดินแดง • กรุงเทพมหานคร",
     "size": "418.2 ตร.ว.",
     "usable_area": "32.3 ตร.ม.",
@@ -28426,7 +28628,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107047",
     "dimensions": "1 ไร่ 0 งาน 18.20 ตร.ว",
     "project_name": "เดอะคริส 3",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,200,000 บาท",
+    "special_price": "1,976,000 บาท"
   },
   {
     "id": "BKK-CD-A-650083",
@@ -28461,7 +28665,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตพระโขนง (กรุงเทพมหานคร) รหัส BKK-CD-A-660102",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,135,000 บาท",
+    "price": "1,142,000 บาท",
     "location": "แขวงบางจาก • เขตพระโขนง • กรุงเทพมหานคร",
     "size": "869 ตร.ว.",
     "usable_area": "24.2 ตร.ม.",
@@ -28478,7 +28682,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107055",
     "dimensions": "2 ไร่ 0 งาน 69 ตร.ว",
     "project_name": "บี รีพับบลิค สุขุมวิท 101/1",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,550,000 บาท",
+    "special_price": "1,142,000 บาท"
   },
   {
     "id": "BKK-CD-A-660028",
@@ -28487,7 +28693,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตบางเขน (กรุงเทพมหานคร) รหัส BKK-CD-A-660028",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,848,000 บาท",
+    "price": "1,853,000 บาท",
     "location": "แขวงอนุสาวรีย์ • เขตบางเขน • กรุงเทพมหานคร",
     "size": "1160.5 ตร.ว.",
     "usable_area": "23.4 ตร.ม.",
@@ -28504,7 +28710,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107056",
     "dimensions": "2 ไร่ 3 งาน 60.50 ตร.ว",
     "project_name": "ไนท์บริดจ์ สกายซิตี้ สะพานใหม่",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,320,000 บาท",
+    "special_price": "1,853,000 บาท"
   },
   {
     "id": "BKK-CD-A-650028",
@@ -28513,7 +28721,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตภาษีเจริญ (กรุงเทพมหานคร) รหัส BKK-CD-A-650028",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,713,000 บาท",
+    "price": "1,719,000 บาท",
     "location": "แขวงบางหว้า • เขตภาษีเจริญ • กรุงเทพมหานคร",
     "size": "1662.2 ตร.ว.",
     "usable_area": "45.2 ตร.ม.",
@@ -28530,7 +28738,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107057",
     "dimensions": "4 ไร่ 0 งาน 62.20 ตร.ว",
     "project_name": "ไอคอนโด เพชรเกษม 39",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,350,000 บาท",
+    "special_price": "1,719,000 บาท"
   },
   {
     "id": "NBI-CD-A-660004",
@@ -28539,7 +28749,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NBI-CD-A-660004",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,387,000 บาท",
+    "price": "1,425,000 บาท",
     "location": "ไทรม้า • เมืองนนทบุรี • นนทบุรี",
     "size": "886 ตร.ว.",
     "usable_area": "29 ตร.ม.",
@@ -28556,7 +28766,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107064",
     "dimensions": "2 ไร่ 0 งาน 86 ตร.ว",
     "project_name": "ริชพาร์ค @ เจ้าพระยา",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,900,000 บาท",
+    "special_price": "1,425,000 บาท"
   },
   {
     "id": "BKK-CD-A-660076",
@@ -28565,7 +28777,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตบางแค (กรุงเทพมหานคร) รหัส BKK-CD-A-660076",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "2,236,000 บาท",
+    "price": "2,240,000 บาท",
     "location": "แขวงบางแคเหนือ • เขตบางแค • กรุงเทพมหานคร",
     "size": "2400 ตร.ว.",
     "usable_area": "45.8 ตร.ม.",
@@ -28582,7 +28794,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107079",
     "dimensions": "6 ไร่ 0 งาน 0 ตร.ว",
     "project_name": "ฟิวส์ เซนเซ่ บางแค",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "3,200,000 บาท",
+    "special_price": "2,240,000 บาท"
   },
   {
     "id": "BKK-CD-A-650082",
@@ -28617,7 +28831,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NBI-CD-A-680005",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,388,000 บาท",
+    "price": "1,480,000 บาท",
     "location": "สวนใหญ่ • เมืองนนทบุรี • นนทบุรี",
     "size": "1341.7 ตร.ว.",
     "usable_area": "28.2 ตร.ม.",
@@ -28634,7 +28848,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107121",
     "dimensions": "3 ไร่ 1 งาน 41.70 ตร.ว",
     "project_name": "ลุมพินีวิลล์ พิบูลสงคราม ริเวอร์วิว",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,850,000 บาท",
+    "special_price": "1,480,000 บาท"
   },
   {
     "id": "BKK-CD-A-650109",
@@ -28643,7 +28859,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตบางขุนเทียน (กรุงเทพมหานคร) รหัส BKK-CD-A-650109",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,138,000 บาท",
+    "price": "1,225,000 บาท",
     "location": "แขวงแสมดำ • เขตบางขุนเทียน • กรุงเทพมหานคร",
     "size": "1700 ตร.ว.",
     "usable_area": "27.7 ตร.ม.",
@@ -28660,7 +28876,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107147",
     "dimensions": "4 ไร่ 1 งาน 0 ตร.ว",
     "project_name": "เซอราโน่ พระราม 2 เฟส 1",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,750,000 บาท",
+    "special_price": "1,225,000 บาท"
   },
   {
     "id": "SKN-CD-A-650004",
@@ -28669,7 +28887,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนกระทุ่มแบน (สมุทรสาคร) รหัส SKN-CD-A-650004",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,000,000 บาท",
+    "price": "1,025,000 บาท",
     "location": "อ้อมน้อย • กระทุ่มแบน • สมุทรสาคร",
     "size": "2844.2 ตร.ว.",
     "usable_area": "28.3 ตร.ม.",
@@ -28686,7 +28904,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107219",
     "dimensions": "7 ไร่ 0 งาน 44.20 ตร.ว",
     "project_name": "ทิวลิป ไลท์ คอนโดมิเนียม",
-    "province_th": "สมุทรสาคร"
+    "province_th": "สมุทรสาคร",
+    "original_price": "1,250,000 บาท",
+    "special_price": "1,025,000 บาท"
   },
   {
     "id": "BKK-CD-A-660057",
@@ -28695,7 +28915,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตภาษีเจริญ (กรุงเทพมหานคร) รหัส BKK-CD-A-660057",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,594,000 บาท",
+    "price": "1,600,000 บาท",
     "location": "แขวงบางหว้า • เขตภาษีเจริญ • กรุงเทพมหานคร",
     "size": "1139.5 ตร.ว.",
     "usable_area": "30.7 ตร.ม.",
@@ -28712,7 +28932,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107220",
     "dimensions": "2 ไร่ 3 งาน 39.50 ตร.ว",
     "project_name": "แบงค์คอก ฮอไรซอน เพชรเกษม",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,100,000 บาท",
+    "special_price": "1,600,000 บาท"
   },
   {
     "id": "BKK-CD-A-650019",
@@ -28721,7 +28943,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตบางแค (กรุงเทพมหานคร) รหัส BKK-CD-A-650019",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,142,000 บาท",
+    "price": "1,150,000 บาท",
     "location": "แขวงบางแค • เขตบางแค • กรุงเทพมหานคร",
     "size": "1627 ตร.ว.",
     "usable_area": "27.9 ตร.ม.",
@@ -28738,7 +28960,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107250",
     "dimensions": "4 ไร่ 0 งาน 27 ตร.ว",
     "project_name": "เดอะ นิช ไอดี บางแค เฟส 1",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,595,000 บาท",
+    "special_price": "1,150,000 บาท"
   },
   {
     "id": "NBI-CD-A-670009",
@@ -28747,7 +28971,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนปากเกร็ด (นนทบุรี) รหัส NBI-CD-A-670009",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,875,000 บาท",
+    "price": "2,000,000 บาท",
     "location": "บางพูด • ปากเกร็ด • นนทบุรี",
     "size": "436.1 ตร.ว.",
     "usable_area": "70.4 ตร.ม.",
@@ -28764,7 +28988,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107269",
     "dimensions": "1 ไร่ 0 งาน 36.10 ตร.ว",
     "project_name": "ฌ็องเซลิเซ่ อเวนิว บี",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "2,460,000 บาท",
+    "special_price": "2,000,000 บาท"
   },
   {
     "id": "BKK-CD-A-650102",
@@ -28773,7 +28999,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตบึงกุ่ม (กรุงเทพมหานคร) รหัส BKK-CD-A-650102",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,031,000 บาท",
+    "price": "1,038,000 บาท",
     "location": "แขวงคลองกุ่ม • เขตบึงกุ่ม • กรุงเทพมหานคร",
     "size": "4030.7 ตร.ว.",
     "usable_area": "30 ตร.ม.",
@@ -28790,7 +29016,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107276",
     "dimensions": "10 ไร่ 0 งาน 30.70 ตร.ว",
     "project_name": "ไอคอนโด สุขาภิบาล 2",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,350,000 บาท",
+    "special_price": "1,038,000 บาท"
   },
   {
     "id": "SPK-CD-A-650010",
@@ -28799,7 +29027,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนบางบ่อ (สมุทรปราการ) รหัส SPK-CD-A-650010",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "884,000 บาท",
+    "price": "896,000 บาท",
     "location": "บางบ่อ • บางบ่อ • สมุทรปราการ",
     "size": "569 ตร.ว.",
     "usable_area": "33.7 ตร.ม.",
@@ -28816,7 +29044,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107306",
     "dimensions": "1 ไร่ 1 งาน 69 ตร.ว",
     "project_name": "ฟรีซ คอนโดมิเนียม",
-    "province_th": "สมุทรปราการ"
+    "province_th": "สมุทรปราการ",
+    "original_price": "1,280,000 บาท",
+    "special_price": "896,000 บาท"
   },
   {
     "id": "SPK-CD-A-650023",
@@ -28825,7 +29055,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนบางบ่อ (สมุทรปราการ) รหัส SPK-CD-A-650023",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "899,000 บาท",
+    "price": "920,000 บาท",
     "location": "บางบ่อ • บางบ่อ • สมุทรปราการ",
     "size": "569 ตร.ว.",
     "usable_area": "34 ตร.ม.",
@@ -28842,7 +29072,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107323",
     "dimensions": "1 ไร่ 1 งาน 69 ตร.ว",
     "project_name": "ฟรีซ คอนโดมิเนียม",
-    "province_th": "สมุทรปราการ"
+    "province_th": "สมุทรปราการ",
+    "original_price": "1,010,000 บาท",
+    "special_price": "920,000 บาท"
   },
   {
     "id": "SPK-CD-A-650022",
@@ -28851,7 +29083,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนบางบ่อ (สมุทรปราการ) รหัส SPK-CD-A-650022",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "869,000 บาท",
+    "price": "889,000 บาท",
     "location": "บางบ่อ • บางบ่อ • สมุทรปราการ",
     "size": "569 ตร.ว.",
     "usable_area": "35 ตร.ม.",
@@ -28868,7 +29100,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107328",
     "dimensions": "1 ไร่ 1 งาน 69 ตร.ว",
     "project_name": "ฟรีซ คอนโดมิเนียม",
-    "province_th": "สมุทรปราการ"
+    "province_th": "สมุทรปราการ",
+    "original_price": "1,010,000 บาท",
+    "special_price": "889,000 บาท"
   },
   {
     "id": "SPK-CD-A-660032",
@@ -28877,7 +29111,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนบางบ่อ (สมุทรปราการ) รหัส SPK-CD-A-660032",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,050,000 บาท",
+    "price": "1,120,000 บาท",
     "location": "บางบ่อ • บางบ่อ • สมุทรปราการ",
     "size": "569 ตร.ว.",
     "usable_area": "34.7 ตร.ม.",
@@ -28894,7 +29128,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107330",
     "dimensions": "1 ไร่ 1 งาน 69 ตร.ว",
     "project_name": "ฟรีซ คอนโดมิเนียม",
-    "province_th": "สมุทรปราการ"
+    "province_th": "สมุทรปราการ",
+    "original_price": "1,400,000 บาท",
+    "special_price": "1,120,000 บาท"
   },
   {
     "id": "SPK-CD-A-660031",
@@ -28903,7 +29139,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนบางบ่อ (สมุทรปราการ) รหัส SPK-CD-A-660031",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "975,000 บาท",
+    "price": "1,000,000 บาท",
     "location": "บางบ่อ • บางบ่อ • สมุทรปราการ",
     "size": "569 ตร.ว.",
     "usable_area": "32.7 ตร.ม.",
@@ -28920,7 +29156,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107332",
     "dimensions": "1 ไร่ 1 งาน 69 ตร.ว",
     "project_name": "ฟรีซ คอนโดมิเนียม",
-    "province_th": "สมุทรปราการ"
+    "province_th": "สมุทรปราการ",
+    "original_price": "1,250,000 บาท",
+    "special_price": "1,000,000 บาท"
   },
   {
     "id": "BKK-CD-A-650032",
@@ -29007,7 +29245,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนปากเกร็ด (นนทบุรี) รหัส NBI-CD-A-660016",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "2,990,000 บาท",
+    "price": "3,450,000 บาท",
     "location": "ปากเกร็ด • ปากเกร็ด • นนทบุรี",
     "size": "507.7 ตร.ว.",
     "usable_area": "95.6 ตร.ม.",
@@ -29024,7 +29262,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107375",
     "dimensions": "1 ไร่ 1 งาน 7.70 ตร.ว",
     "project_name": "เดอะ ฟอเรสท์ แจ้งวัฒนะ",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "4,600,000 บาท",
+    "special_price": "3,450,000 บาท"
   },
   {
     "id": "BKK-CD-A-650107",
@@ -29033,7 +29273,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตวัฒนา (กรุงเทพมหานคร) รหัส BKK-CD-A-650107",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "2,214,000 บาท",
+    "price": "2,384,000 บาท",
     "location": "แขวงพระโขนงเหนือ • เขตวัฒนา • กรุงเทพมหานคร",
     "size": "342 ตร.ว.",
     "usable_area": "52.4 ตร.ม.",
@@ -29050,7 +29290,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107381",
     "dimensions": "0 ไร่ 3 งาน 42 ตร.ว",
     "project_name": "พีพี พลัส สุขุมวิท 71",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "3,405,000 บาท",
+    "special_price": "2,384,000 บาท"
   },
   {
     "id": "BKK-CD-A-660077",
@@ -29059,7 +29301,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตภาษีเจริญ (กรุงเทพมหานคร) รหัส BKK-CD-A-660077",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,727,000 บาท",
+    "price": "1,731,000 บาท",
     "location": "แขวงบางหว้า • เขตภาษีเจริญ • กรุงเทพมหานคร",
     "size": "1662.2 ตร.ว.",
     "usable_area": "45.3 ตร.ม.",
@@ -29076,7 +29318,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107386",
     "dimensions": "4 ไร่ 0 งาน 62.20 ตร.ว",
     "project_name": "ไอคอนโด เพชรเกษม 39",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,500,000 บาท",
+    "special_price": "1,731,000 บาท"
   },
   {
     "id": "BKK-CD-A-650020",
@@ -29111,7 +29355,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตจตุจักร (กรุงเทพมหานคร) รหัส BKK-CD-A-660019",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,433,000 บาท",
+    "price": "1,439,000 บาท",
     "location": "แขวงจอมพล • เขตจตุจักร • กรุงเทพมหานคร",
     "size": "480 ตร.ว.",
     "usable_area": "26.6 ตร.ม.",
@@ -29128,7 +29372,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107391",
     "dimensions": "1 ไร่ 0 งาน 80 ตร.ว",
     "project_name": "ลิปป์ ลาดพร้าว 20",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,865,000 บาท",
+    "special_price": "1,439,000 บาท"
   },
   {
     "id": "BKK-CD-A-650101",
@@ -29180,7 +29426,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107395",
     "dimensions": "1 ไร่ 1 งาน 69 ตร.ว",
     "project_name": "ฟรีซ คอนโดมิเนียม",
-    "province_th": "สมุทรปราการ"
+    "province_th": "สมุทรปราการ",
+    "original_price": "1,140,000 บาท",
+    "special_price": "1,028,000 บาท"
   },
   {
     "id": "BKK-CD-A-650054",
@@ -29189,7 +29437,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตสวนหลวง (กรุงเทพมหานคร) รหัส BKK-CD-A-650054",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,217,000 บาท",
+    "price": "1,224,000 บาท",
     "location": "แขวงสวนหลวง • เขตสวนหลวง • กรุงเทพมหานคร",
     "size": "2811.3 ตร.ว.",
     "usable_area": "28.5 ตร.ม.",
@@ -29206,7 +29454,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107404",
     "dimensions": "7 ไร่ 0 งาน 11.30 ตร.ว",
     "project_name": "เอ สเปซ มี สุขุมวิท 77",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,490,000 บาท",
+    "special_price": "1,224,000 บาท"
   },
   {
     "id": "BKK-CD-A-660110",
@@ -29215,7 +29465,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตประเวศ (กรุงเทพมหานคร) รหัส BKK-CD-A-660110",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,829,000 บาท",
+    "price": "1,835,000 บาท",
     "location": "แขวงหนองบอน • เขตประเวศ • กรุงเทพมหานคร",
     "size": "557.5 ตร.ว.",
     "usable_area": "41.6 ตร.ม.",
@@ -29232,7 +29482,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107413",
     "dimensions": "1 ไร่ 1 งาน 57.50 ตร.ว",
     "project_name": "อิลีเม้น ศรีนครินทร์ 6-7",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,500,000 บาท",
+    "special_price": "1,835,000 บาท"
   },
   {
     "id": "NBI-CD-A-660022",
@@ -29241,7 +29493,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนนทบุรี (นนทบุรี) รหัส NBI-CD-A-660022",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "842,000 บาท",
+    "price": "880,000 บาท",
     "location": "ท่าทราย • เมืองนนทบุรี • นนทบุรี",
     "size": "3501.1 ตร.ว.",
     "usable_area": "26.4 ตร.ม.",
@@ -29258,7 +29510,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107414",
     "dimensions": "8 ไร่ 3 งาน 1.10 ตร.ว",
     "project_name": "พลัม คอนโด สามัคคี",
-    "province_th": "นนทบุรี"
+    "province_th": "นนทบุรี",
+    "original_price": "1,100,000 บาท",
+    "special_price": "880,000 บาท"
   },
   {
     "id": "BKK-CD-A-660001",
@@ -29267,7 +29521,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตสวนหลวง (กรุงเทพมหานคร) รหัส BKK-CD-A-660001",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,187,000 บาท",
+    "price": "1,194,000 บาท",
     "location": "แขวงสวนหลวง • เขตสวนหลวง • กรุงเทพมหานคร",
     "size": "2811.3 ตร.ว.",
     "usable_area": "28.5 ตร.ม.",
@@ -29284,7 +29538,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107415",
     "dimensions": "7 ไร่ 0 งาน 11.30 ตร.ว",
     "project_name": "เอ สเปซ มี สุขุมวิท 77",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,540,000 บาท",
+    "special_price": "1,194,000 บาท"
   },
   {
     "id": "BKK-CD-A-650120",
@@ -29310,7 +29566,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107458",
     "dimensions": "0 ไร่ 3 งาน 68 ตร.ว",
     "project_name": "ซีทู คอนโดมิเนียม",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "4,200,000 บาท",
+    "special_price": "2,730,000 บาท"
   },
   {
     "id": "NPT-CD-A-660026",
@@ -29319,7 +29577,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเมืองนครปฐม (นครปฐม) รหัส NPT-CD-A-660026",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,232,000 บาท",
+    "price": "1,264,000 บาท",
     "location": "สนามจันทร์ • เมืองนครปฐม • นครปฐม",
     "size": "1187.2 ตร.ว.",
     "usable_area": "28.8 ตร.ม.",
@@ -29336,7 +29594,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107468",
     "dimensions": "2 ไร่ 3 งาน 87.20 ตร.ว",
     "project_name": "เดอะแมททริค",
-    "province_th": "นครปฐม"
+    "province_th": "นครปฐม",
+    "original_price": "1,560,000 บาท",
+    "special_price": "1,264,000 บาท"
   },
   {
     "id": "BKK-CD-A-650093",
@@ -29345,7 +29605,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตจตุจักร (กรุงเทพมหานคร) รหัส BKK-CD-A-650093",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,463,000 บาท",
+    "price": "1,470,000 บาท",
     "location": "แขวงจอมพล • เขตจตุจักร • กรุงเทพมหานคร",
     "size": "480 ตร.ว.",
     "usable_area": "25.9 ตร.ม.",
@@ -29362,7 +29622,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107485",
     "dimensions": "1 ไร่ 0 งาน 80 ตร.ว",
     "project_name": "ลิปป์ ลาดพร้าว 20",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "2,100,000 บาท",
+    "special_price": "1,470,000 บาท"
   },
   {
     "id": "BKK-CD-A-650029",
@@ -29371,7 +29633,7 @@ var ALL_PROPERTIES_DATA = [
     "title": "ทรัพย์ NPA GSB: คอนโด โซนเขตภาษีเจริญ (กรุงเทพมหานคร) รหัส BKK-CD-A-650029",
     "category": "คอนโด",
     "bank_source": "GSB",
-    "price": "1,073,000 บาท",
+    "price": "1,080,000 บาท",
     "location": "แขวงบางหว้า • เขตภาษีเจริญ • กรุงเทพมหานคร",
     "size": "1662.2 ตร.ว.",
     "usable_area": "27.2 ตร.ม.",
@@ -29388,7 +29650,9 @@ var ALL_PROPERTIES_DATA = [
     "url": "https://npa-assets.gsb.or.th/asset/npa/detail/GSBCD202107504",
     "dimensions": "4 ไร่ 0 งาน 62.20 ตร.ว",
     "project_name": "ไอคอนโด เพชรเกษม 39",
-    "province_th": "กรุงเทพมหานคร"
+    "province_th": "กรุงเทพมหานคร",
+    "original_price": "1,470,000 บาท",
+    "special_price": "1,080,000 บาท"
   },
   {
     "id": "3A0822",
@@ -94805,7 +95069,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,265,000",
+    "price": "1,265,000 บาท",
     "size": "17 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -94829,7 +95093,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.903327,
     "lng": 100.646126,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,420,000 บาท",
+    "special_price": "1,265,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-57MT020300404",
@@ -94980,7 +95248,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "12,750,000",
+    "price": "12,750,000 บาท",
     "size": "147.7 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -95013,7 +95281,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.901578,
     "lng": 100.680932,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "16,500,000 บาท",
+    "special_price": "12,750,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60BK010501334",
@@ -95024,7 +95296,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,265,000",
+    "price": "1,265,000 บาท",
     "size": "17 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -95055,7 +95327,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.904155,
     "lng": 100.645645,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,420,000 บาท",
+    "special_price": "1,265,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60CC030102094",
@@ -95107,7 +95383,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "5,236,000",
+    "price": "3,332,000 บาท",
     "size": "50.1 ตร.ม.",
     "usable_area": "อาคาร 30 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -95140,7 +95416,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.708364,
     "lng": 100.599037,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,236,000 บาท",
+    "special_price": "3,332,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-51BK021100657",
@@ -95254,7 +95534,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "805,000",
+    "price": "805,000 บาท",
     "size": "16.7 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -95276,7 +95556,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.004869,
     "lng": 100.650308,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,265,000 บาท",
+    "special_price": "805,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010502120",
@@ -95287,7 +95571,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,615,000",
+    "price": "1,615,000 บาท",
     "size": "36 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -95312,7 +95596,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.554604,
     "lng": 100.816022,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,090,000 บาท",
+    "special_price": "1,615,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-67MT010300729",
@@ -95357,7 +95645,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,960,000",
+    "price": "1,960,000 บาท",
     "size": "36.9 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -95380,7 +95668,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.020864,
     "lng": 100.534263,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,080,000 บาท",
+    "special_price": "1,960,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK011102012",
@@ -95391,7 +95683,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,875,000",
+    "price": "1,364,000 บาท",
     "size": "27.49 ตร.ม.",
     "usable_area": "อาคาร 8 ชั้น",
     "bedrooms": "-",
@@ -95418,7 +95710,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.65652,
     "lng": 100.634649,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,875,000 บาท",
+    "special_price": "1,364,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-65MT010501092",
@@ -95429,7 +95725,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,040,000",
+    "price": "2,040,000 บาท",
     "size": "18 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "4 ห้องนอน",
@@ -95456,7 +95752,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.950917,
     "lng": 100.54987,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,640,000 บาท",
+    "special_price": "2,040,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62MT010302125",
@@ -95467,7 +95767,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,698,000",
+    "price": "2,698,000 บาท",
     "size": "99 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -95492,7 +95792,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.953974,
     "lng": 100.659528,
     "province_th": "ปทุมธานี",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "4,565,000 บาท",
+    "special_price": "2,698,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK010501364",
@@ -95503,7 +95807,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,265,000",
+    "price": "1,265,000 บาท",
     "size": "17 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -95529,7 +95833,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.90443,
     "lng": 100.64564,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,420,000 บาท",
+    "special_price": "1,265,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66BK010300698",
@@ -95540,7 +95848,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "19,892,000",
+    "price": "19,892,000 บาท",
     "size": "96.4 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -95568,7 +95876,11 @@ var ALL_PROPERTIES_DATA = [
     "lng": 100.689567,
     "province_th": "กรุงเทพมหานคร",
     "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
-    "remark": "รับชม VR 360 ํ : https://takealook360.com/vrtour/krungthainpa/index.htm"
+    "remark": "รับชม VR 360 ํ : https://takealook360.com/vrtour/krungthainpa/index.htm",
+    "original_price": "25,300,000 บาท",
+    "special_price": "19,892,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK011102408",
@@ -95616,7 +95928,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "4,675,000",
+    "price": "2,971,000 บาท",
     "size": "30.39 ตร.ม.",
     "usable_area": "อาคาร 22 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -95647,7 +95959,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.665411,
     "lng": 100.604102,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,845,000 บาท",
+    "special_price": "2,971,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-63MT010202926",
@@ -95695,7 +96011,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,200,000",
+    "price": "2,200,000 บาท",
     "size": "20.6 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -95724,7 +96040,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.91865,
     "lng": 100.435448,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,420,000 บาท",
+    "special_price": "2,200,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-68MT010300014",
@@ -95735,7 +96055,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "17,600,000",
+    "price": "17,600,000 บาท",
     "size": "133.4 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -95761,7 +96081,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.85788,
     "lng": 100.454399,
     "province_th": "นนทบุรี",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "19,360,000 บาท",
+    "special_price": "17,600,000 บาท",
+    "promo_start_date": "2026-10-29",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66MT011501037",
@@ -95772,7 +96096,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,025,000",
+    "price": "2,025,000 บาท",
     "size": "16 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -95800,7 +96124,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.925652,
     "lng": 100.353902,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,750,000 บาท",
+    "special_price": "2,025,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63MT010500409",
@@ -95811,7 +96139,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,169,000",
+    "price": "1,169,000 บาท",
     "size": "28.9 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -95837,7 +96165,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.044196,
     "lng": 100.413026,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,837,000 บาท",
+    "special_price": "1,169,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63MT010300499",
@@ -95848,7 +96180,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "4,017,000",
+    "price": "4,017,000 บาท",
     "size": "59.7 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -95882,7 +96214,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 18.708122,
     "lng": 100.811181,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,720,000 บาท",
+    "special_price": "4,017,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63MT010500775",
@@ -95893,7 +96229,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "938,000",
+    "price": "938,000 บาท",
     "size": "17 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -95918,7 +96254,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.976231,
     "lng": 100.445875,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,375,000 บาท",
+    "special_price": "938,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63BK011101423",
@@ -95929,7 +96269,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,511,000",
+    "price": "2,713,000 บาท",
     "size": "30.39 ตร.ม.",
     "usable_area": "อาคาร 14 ชั้น",
     "bedrooms": "-",
@@ -95964,7 +96304,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.66549,
     "lng": 100.60419,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,511,000 บาท",
+    "special_price": "2,713,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-66MT010501325",
@@ -95975,7 +96319,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,080,000",
+    "price": "1,080,000 บาท",
     "size": "17 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -95998,7 +96342,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.977831,
     "lng": 100.446616,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,485,000 บาท",
+    "special_price": "1,080,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-67MT010500681",
@@ -96009,7 +96357,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,338,000",
+    "price": "2,338,000 บาท",
     "size": "21.9 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -96035,7 +96383,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.94949,
     "lng": 100.548355,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,025,000 บาท",
+    "special_price": "2,338,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62BK010503042",
@@ -96193,7 +96545,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "2,790,000",
+    "price": "2,790,000 บาท",
     "size": "93 ตร.ว.",
     "usable_area": "-",
     "bedrooms": "-",
@@ -96229,7 +96581,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.617453,
     "lng": 100.722408,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,092,000 บาท",
+    "special_price": "2,790,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-68BK010500052",
@@ -96276,7 +96632,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,811,000",
+    "price": "2,811,000 บาท",
     "size": "32 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -96299,7 +96655,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.949191,
     "lng": 100.642006,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,354,000 บาท",
+    "special_price": "2,811,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-58MT010300513",
@@ -96342,7 +96702,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,120,000",
+    "price": "1,844,000 บาท",
     "size": "41.7 ตร.ม.",
     "usable_area": "อาคาร 6 ชั้น",
     "bedrooms": "-",
@@ -96366,7 +96726,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.720894,
     "lng": 100.600433,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,120,000 บาท",
+    "special_price": "1,844,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-61MT010500314",
@@ -96377,7 +96741,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,236,000",
+    "price": "1,236,000 บาท",
     "size": "24.8 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -96400,7 +96764,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.615809,
     "lng": 100.522472,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "1,760,000 บาท",
+    "special_price": "1,236,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-61BK011102349",
@@ -96411,7 +96779,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "5,993,000",
+    "price": "3,269,000 บาท",
     "size": "90.79 ตร.ม.",
     "usable_area": "อาคาร 27 ชั้น",
     "bedrooms": "-",
@@ -96435,7 +96803,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.762022,
     "lng": 100.648813,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,993,000 บาท",
+    "special_price": "3,269,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-61BK021102474",
@@ -96446,7 +96818,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "6,508,000",
+    "price": "3,550,000 บาท",
     "size": "29.58 ตร.ม.",
     "usable_area": "-",
     "bedrooms": "-",
@@ -96473,7 +96845,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.75443,
     "lng": 100.540107,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "6,508,000 บาท",
+    "special_price": "3,550,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-62BK011100718",
@@ -96484,7 +96860,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "4,421,000",
+    "price": "2,612,000 บาท",
     "size": "59.53 ตร.ม.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -96515,7 +96891,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.72083,
     "lng": 100.600536,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,421,000 บาท",
+    "special_price": "2,612,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-63MT010502523",
@@ -96526,7 +96906,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "1,575,000",
+    "price": "1,575,000 บาท",
     "size": "20.6 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -96552,7 +96932,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.808262,
     "lng": 100.387391,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,310,000 บาท",
+    "special_price": "1,575,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62BK011101065",
@@ -96596,7 +96980,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,655,000",
+    "price": "2,160,000 บาท",
     "size": "62.68 ตร.ม.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "2 ห้องนอน",
@@ -96620,7 +97004,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.827691,
     "lng": 100.621299,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,655,000 บาท",
+    "special_price": "2,160,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-62MT011502157",
@@ -96631,7 +97019,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,030,000",
+    "price": "1,030,000 บาท",
     "size": "16 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -96655,7 +97043,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.03026,
     "lng": 100.74576,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,595,000 บาท",
+    "special_price": "1,030,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65MT010301256",
@@ -96666,7 +97058,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "7,055,000",
+    "price": "7,055,000 บาท",
     "size": "71.8 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -96692,7 +97084,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.622515,
     "lng": 100.724093,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "9,130,000 บาท",
+    "special_price": "7,055,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-67MT010400678",
@@ -96703,7 +97099,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "3,200,000",
+    "price": "3,200,000 บาท",
     "size": "40 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -96729,7 +97125,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.579146,
     "lng": 100.65889,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "3,520,000 บาท",
+    "special_price": "3,200,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63MT010301031",
@@ -96740,7 +97140,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "2,520,000",
+    "price": "2,520,000 บาท",
     "size": "78.3 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -96765,7 +97165,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.644646,
     "lng": 100.279871,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "3,960,000 บาท",
+    "special_price": "2,520,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-61MT010301857",
@@ -96776,7 +97180,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,502,000",
+    "price": "2,502,000 บาท",
     "size": "65.3 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -96800,7 +97204,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.967658,
     "lng": 100.653222,
     "province_th": "ปทุมธานี",
-    "beneficiary": "กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์"
+    "beneficiary": "กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์",
+    "original_price": "4,785,000 บาท",
+    "special_price": "2,502,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-46MT030203368",
@@ -96898,7 +97306,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "9,493,000",
+    "price": "9,493,000 บาท",
     "size": "63 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -96926,7 +97334,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.743108,
     "lng": 100.423582,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "11,550,000 บาท",
+    "special_price": "9,493,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66BK010400515",
@@ -96937,7 +97349,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,228,000",
+    "price": "2,228,000 บาท",
     "size": "41.3 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -96961,7 +97373,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.859948,
     "lng": 100.847961,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,267,000 บาท",
+    "special_price": "2,228,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65BK010300869",
@@ -96972,7 +97388,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "6,962,000",
+    "price": "6,962,000 บาท",
     "size": "106.9 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "3 ห้องนอน",
@@ -97005,7 +97421,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.667012,
     "lng": 100.355481,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "8,360,000 บาท",
+    "special_price": "6,962,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66MT010300526",
@@ -97016,7 +97436,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,848,000",
+    "price": "1,848,000 บาท",
     "size": "39 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -97040,7 +97460,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.113682,
     "lng": 100.596324,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,310,000 บาท",
+    "special_price": "1,848,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60CC030102089",
@@ -97092,7 +97516,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "8,081,000",
+    "price": "8,081,000 บาท",
     "size": "51.2 ตร.ว.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -97126,7 +97550,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.602111,
     "lng": 100.701572,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "9,260,000 บาท",
+    "special_price": "8,081,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65MT010301790",
@@ -97137,7 +97565,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "3,135,000",
+    "price": "3,135,000 บาท",
     "size": "60 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -97162,7 +97590,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.962321,
     "lng": 100.397797,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,070,000 บาท",
+    "special_price": "3,135,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010002395",
@@ -97173,7 +97605,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,733,000",
+    "price": "1,103,000 บาท",
     "size": "45 ตร.ม.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -97198,7 +97630,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.602472,
     "lng": 100.838249,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,733,000 บาท",
+    "special_price": "1,103,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-67BK011100663",
@@ -97209,7 +97645,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "ติดต่อธนาคาร",
+    "price": "3,342,000 บาท",
     "size": "27.85 ตร.ม.",
     "usable_area": "อาคาร 8 ชั้น",
     "bedrooms": "820 ห้องนอน",
@@ -97247,7 +97683,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.888012,
     "lng": 100.604675,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,677,000 บาท",
+    "special_price": "3,342,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-58BK031100980",
@@ -97258,7 +97698,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "5,886,000",
+    "price": "3,211,000 บาท",
     "size": "90.68 ตร.ม.",
     "usable_area": "อาคาร 24 ชั้น",
     "bedrooms": "-",
@@ -97288,7 +97728,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.761978,
     "lng": 100.648667,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,886,000 บาท",
+    "special_price": "3,211,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-62MT010300372",
@@ -97299,7 +97743,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "4,680,000",
+    "price": "4,680,000 บาท",
     "size": "123.4 ตร.ว.",
     "usable_area": "อาคาร 1 ชั้น",
     "bedrooms": "-",
@@ -97323,7 +97767,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.604603,
     "lng": 100.644911,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "7,920,000 บาท",
+    "special_price": "4,680,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63BK011101763",
@@ -97334,7 +97782,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,853,000",
+    "price": "1,095,000 บาท",
     "size": "33.02 ตร.ม.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -97358,7 +97806,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.812217,
     "lng": 100.666684,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,853,000 บาท",
+    "special_price": "1,095,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-62MT010502165",
@@ -97369,7 +97821,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "813,000",
+    "price": "813,000 บาท",
     "size": "40.3 ตร.ว.",
     "usable_area": "อาคาร 1 ชั้น",
     "bedrooms": "-",
@@ -97392,7 +97844,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.044664,
     "lng": 100.850784,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,375,000 บาท",
+    "special_price": "813,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63MT010300817",
@@ -97403,7 +97859,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "9,200,000",
+    "price": "9,200,000 บาท",
     "size": "100 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -97431,7 +97887,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.998584,
     "lng": 100.563084,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "17,600,000 บาท",
+    "special_price": "9,200,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63MT010501614",
@@ -97442,7 +97902,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,470,000",
+    "price": "2,470,000 บาท",
     "size": "22.8 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -97467,7 +97927,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.867927,
     "lng": 100.450396,
     "province_th": "นนทบุรี",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "4,180,000 บาท",
+    "special_price": "2,470,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63MT010502352",
@@ -97478,7 +97942,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,289,000",
+    "price": "2,289,000 บาท",
     "size": "20.6 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -97500,7 +97964,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.960162,
     "lng": 100.551772,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,465,000 บาท",
+    "special_price": "2,289,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-61MT020700329",
@@ -97511,7 +97979,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,552,000",
+    "price": "1,552,000 บาท",
     "size": "14 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -97542,7 +98010,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.114773,
     "lng": 100.595601,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,520,000 บาท",
+    "special_price": "1,552,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64CC010300457",
@@ -97553,7 +98025,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "5,891,000",
+    "price": "5,891,000 บาท",
     "size": "197.9 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -97575,7 +98047,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.832416,
     "lng": 100.049522,
     "province_th": "นครปฐม",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "8,262,000 บาท",
+    "special_price": "5,891,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010300881",
@@ -97586,7 +98062,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "3,627,000",
+    "price": "3,627,000 บาท",
     "size": "63.4 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -97609,7 +98085,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.584671,
     "lng": 100.712534,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,060,000 บาท",
+    "special_price": "3,627,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK011502364",
@@ -97620,7 +98100,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,916,000",
+    "price": "2,916,000 บาท",
     "size": "32 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -97645,7 +98125,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.698031,
     "lng": 100.356376,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,960,000 บาท",
+    "special_price": "2,916,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK011101409",
@@ -97656,7 +98140,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,975,000",
+    "price": "1,758,000 บาท",
     "size": "65.95 ตร.ม.",
     "usable_area": "อาคาร 1 ชั้น",
     "bedrooms": "-",
@@ -97679,7 +98163,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.712979,
     "lng": 100.450588,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,975,000 บาท",
+    "special_price": "1,758,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-65BK010301604",
@@ -97690,7 +98178,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "8,330,000",
+    "price": "8,330,000 บาท",
     "size": "70.2 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "5 ห้องนอน",
@@ -97714,7 +98202,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.778528,
     "lng": 100.705806,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "10,780,000 บาท",
+    "special_price": "8,330,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66BK010500606",
@@ -97725,7 +98217,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,144,000",
+    "price": "2,144,000 บาท",
     "size": "20.1 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -97748,7 +98240,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.771399,
     "lng": 100.718688,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,475,000 บาท",
+    "special_price": "2,144,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60CC030102080",
@@ -97966,7 +98462,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "938,000",
+    "price": "938,000 บาท",
     "size": "17 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -97989,7 +98485,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.977852,
     "lng": 100.446587,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,375,000 บาท",
+    "special_price": "938,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62CC030203038",
@@ -98000,7 +98500,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "35,726,000",
+    "price": "35,726,000 บาท",
     "size": "71 ไร่ 1 งาน 50 ตร.ว. (28550 ตร.ว.)",
     "usable_area": "อาคาร 1 ชั้น",
     "bedrooms": "-",
@@ -98050,7 +98550,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.980842,
     "lng": 100.137502,
     "province_th": "นครปฐม",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "56,141,000 บาท",
+    "special_price": "35,726,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-61BK011101714",
@@ -98061,7 +98565,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "4,726,000",
+    "price": "2,793,000 บาท",
     "size": "9.99 ตร.ม.",
     "usable_area": "อาคาร 1 ชั้น",
     "bedrooms": "-",
@@ -98088,7 +98592,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.751534,
     "lng": 100.54234,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "4,726,000 บาท",
+    "special_price": "2,793,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-44MT020100103",
@@ -98153,7 +98661,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,477,000",
+    "price": "1,477,000 บาท",
     "size": "20 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -98176,7 +98684,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.693551,
     "lng": 100.790574,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,530,000 บาท",
+    "special_price": "1,477,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62MT010502259",
@@ -98187,7 +98699,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,448,000",
+    "price": "1,448,000 บาท",
     "size": "22.5 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -98210,7 +98722,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.987826,
     "lng": 100.572698,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,167,000 บาท",
+    "special_price": "1,448,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63BK011100159",
@@ -98221,7 +98737,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,962,000",
+    "price": "1,160,000 บาท",
     "size": "33.02 ตร.ม.",
     "usable_area": "อาคาร 6 ชั้น",
     "bedrooms": "-",
@@ -98245,7 +98761,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.812217,
     "lng": 100.666684,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,962,000 บาท",
+    "special_price": "1,160,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-62MT011102775",
@@ -98256,7 +98776,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "3,687,000",
+    "price": "2,011,000 บาท",
     "size": "105.78 ตร.ม.",
     "usable_area": "อาคาร 8 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -98283,7 +98803,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.928254,
     "lng": 100.532633,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,687,000 บาท",
+    "special_price": "2,011,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-63MT011501107",
@@ -98294,7 +98818,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "2,059,000",
+    "price": "2,059,000 บาท",
     "size": "31 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -98319,7 +98843,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.561061,
     "lng": 100.79911,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,190,000 บาท",
+    "special_price": "2,059,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63BK010502322",
@@ -98330,7 +98858,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,781,000",
+    "price": "2,781,000 บาท",
     "size": "20.5 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -98354,7 +98882,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.833988,
     "lng": 100.652847,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,960,000 บาท",
+    "special_price": "2,781,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63BK011502404",
@@ -98365,7 +98897,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "6,339,000",
+    "price": "6,339,000 บาท",
     "size": "25.8 ตร.ว.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -98393,7 +98925,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.805073,
     "lng": 100.608282,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "8,910,000 บาท",
+    "special_price": "6,339,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK011100497",
@@ -98404,7 +98940,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,586,000",
+    "price": "1,528,000 บาท",
     "size": "44.35 ตร.ม.",
     "usable_area": "อาคาร 6 ชั้น",
     "bedrooms": "-",
@@ -98429,7 +98965,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.776699,
     "lng": 100.66236,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,586,000 บาท",
+    "special_price": "1,528,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-64CC010300573",
@@ -98475,7 +99015,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "15,395,000",
+    "price": "15,395,000 บาท",
     "size": "159.3 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -98506,7 +99046,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.778664,
     "lng": 100.716434,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "22,440,000 บาท",
+    "special_price": "15,395,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT011500703",
@@ -98552,7 +99096,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "3,183,000",
+    "price": "3,183,000 บาท",
     "size": "30 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -98575,7 +99119,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.975187,
     "lng": 100.573817,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,070,000 บาท",
+    "special_price": "3,183,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010501156",
@@ -98586,7 +99134,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,775,000",
+    "price": "1,775,000 บาท",
     "size": "24.1 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -98610,7 +99158,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.615788,
     "lng": 100.691023,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,420,000 บาท",
+    "special_price": "1,775,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010501480",
@@ -98621,7 +99173,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "5,052,000",
+    "price": "5,052,000 บาท",
     "size": "42.2 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -98650,7 +99202,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.91026,
     "lng": 100.389806,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "7,409,000 บาท",
+    "special_price": "5,052,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010302006",
@@ -98661,7 +99217,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "3,500,000",
+    "price": "3,500,000 บาท",
     "size": "50.3 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -98687,7 +99243,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.999274,
     "lng": 100.659285,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,500,000 บาท",
+    "special_price": "3,500,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK011102127",
@@ -98742,7 +99302,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "9,040,000",
+    "price": "9,040,000 บาท",
     "size": "140.7 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "3 ห้องนอน",
@@ -98771,7 +99331,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.860807,
     "lng": 100.414988,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "12,430,000 บาท",
+    "special_price": "9,040,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65CC010500122",
@@ -98782,7 +99346,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "1,192,000",
+    "price": "1,192,000 บาท",
     "size": "20.7 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -98804,7 +99368,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.843379,
     "lng": 100.297499,
     "province_th": "นครปฐม",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "1,815,000 บาท",
+    "special_price": "1,192,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65MT010500214",
@@ -98815,7 +99383,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,612,000",
+    "price": "1,612,000 บาท",
     "size": "24.8 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -98837,7 +99405,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.969587,
     "lng": 100.63861,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,200,000 บาท",
+    "special_price": "1,612,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66BK011100565",
@@ -98848,7 +99420,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "4,752,000",
+    "price": "3,672,000 บาท",
     "size": "49.09 ตร.ม.",
     "usable_area": "อาคาร 14 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -98878,7 +99450,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.829093,
     "lng": 100.526186,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,752,000 บาท",
+    "special_price": "3,672,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-66MT011500809",
@@ -98889,7 +99465,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "7,290,000",
+    "price": "7,290,000 บาท",
     "size": "46.2 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -98928,7 +99504,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.066569,
     "lng": 100.694367,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "9,900,000 บาท",
+    "special_price": "7,290,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60CC030102088",
@@ -99103,7 +99683,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "6,552,000",
+    "price": "6,552,000 บาท",
     "size": "19.5 ตร.ว.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -99128,7 +99708,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.829897,
     "lng": 100.69931,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "7,920,000 บาท",
+    "special_price": "6,552,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66MT011101337",
@@ -99139,7 +99723,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,583,000",
+    "price": "1,644,000 บาท",
     "size": "36.12 ตร.ม.",
     "usable_area": "อาคาร 15 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -99165,7 +99749,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.899413,
     "lng": 100.539764,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,583,000 บาท",
+    "special_price": "1,644,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-59CC030200720",
@@ -99176,7 +99764,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "29,812,000",
+    "price": "29,812,000 บาท",
     "size": "11 ไร่ 0 งาน 21 ตร.ว. (4421 ตร.ว.)",
     "usable_area": "-",
     "bedrooms": "-",
@@ -99205,7 +99793,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.772485,
     "lng": 100.087558,
     "province_th": "นครปฐม",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "36,437,000 บาท",
+    "special_price": "29,812,000 บาท",
+    "promo_start_date": "2026-11-26",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62BK011102153",
@@ -99216,7 +99808,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,947,000",
+    "price": "2,512,000 บาท",
     "size": "57.87 ตร.ม.",
     "usable_area": "อาคาร 6 ชั้น",
     "bedrooms": "-",
@@ -99248,7 +99840,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.696839,
     "lng": 100.644852,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,947,000 บาท",
+    "special_price": "2,512,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-67CC010300695",
@@ -99259,7 +99855,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "3,500,000",
+    "price": "3,500,000 บาท",
     "size": "53.2 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -99280,7 +99876,11 @@ var ALL_PROPERTIES_DATA = [
     },
     "search_keywords": "KTB กรุงไทย 67CC010300695 หมู่บ้านนาราวดี ต.กระทุ่มล้ม อ.สามพราน นครปฐม บ้านเดี่ยว ท่าพระ ฝั่งธน บางแค เพชรเกษม",
     "province_th": "นครปฐม",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "3,850,000 บาท",
+    "special_price": "3,500,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60MT011500686",
@@ -99291,7 +99891,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "2,910,000",
+    "price": "2,910,000 บาท",
     "size": "31.2 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -99318,7 +99918,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.653486,
     "lng": 100.274827,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "6,600,000 บาท",
+    "special_price": "2,910,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-68MT010400054",
@@ -99363,7 +99967,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "3,315,000",
+    "price": "1,959,000 บาท",
     "size": "70.07 ตร.ม.",
     "usable_area": "อาคาร 7 ชั้น",
     "bedrooms": "-",
@@ -99389,7 +99993,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.910636,
     "lng": 100.502385,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,315,000 บาท",
+    "special_price": "1,959,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-66MT010500397",
@@ -99400,7 +100008,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,080,000",
+    "price": "1,080,000 บาท",
     "size": "21.8 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -99423,7 +100031,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.060601,
     "lng": 100.809083,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,320,000 บาท",
+    "special_price": "1,080,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT011100877",
@@ -99434,7 +100046,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,509,000",
+    "price": "892,000 บาท",
     "size": "27.98 ตร.ม.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -99467,7 +100079,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.650592,
     "lng": 100.605609,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,509,000 บาท",
+    "special_price": "892,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-61MT010302757",
@@ -99548,7 +100164,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,530,000",
+    "price": "2,530,000 บาท",
     "size": "34 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -99581,7 +100197,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.903512,
     "lng": 100.646129,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,840,000 บาท",
+    "special_price": "2,530,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60BK011100562",
@@ -99592,7 +100212,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,047,000",
+    "price": "1,801,000 บาท",
     "size": "41.34 ตร.ม.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -99617,7 +100237,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.720766,
     "lng": 100.600513,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,047,000 บาท",
+    "special_price": "1,801,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-62MT021100697",
@@ -99628,7 +100252,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,601,000",
+    "price": "946,000 บาท",
     "size": "28.53 ตร.ม.",
     "usable_area": "อาคาร 8 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -99661,7 +100285,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.650709,
     "lng": 100.605657,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,601,000 บาท",
+    "special_price": "946,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-64MT010501885",
@@ -99672,7 +100300,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "1,680,000",
+    "price": "1,680,000 บาท",
     "size": "44.7 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -99696,7 +100324,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.644216,
     "lng": 100.279612,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,640,000 บาท",
+    "special_price": "1,680,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63BK010502924",
@@ -99782,7 +100414,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "73,181,000",
+    "price": "73,181,000 บาท",
     "size": "17 ไร่ 0 งาน 88 ตร.ว. (6888 ตร.ว.)",
     "usable_area": "อาคาร 1 ชั้น",
     "bedrooms": "-",
@@ -99810,7 +100442,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.679329,
     "lng": 100.899882,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "100,623,000 บาท",
+    "special_price": "73,181,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-58BK011500379",
@@ -99821,7 +100457,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "6,451,000",
+    "price": "6,451,000 บาท",
     "size": "15.5 ตร.ว.",
     "usable_area": "-",
     "bedrooms": "-",
@@ -99854,7 +100490,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.719818,
     "lng": 100.518175,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "14,630,000 บาท",
+    "special_price": "6,451,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT011500882",
@@ -99865,7 +100505,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "2,625,000",
+    "price": "2,625,000 บาท",
     "size": "19 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -99889,7 +100529,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.606879,
     "lng": 100.55289,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,190,000 บาท",
+    "special_price": "2,625,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010200887",
@@ -99900,7 +100544,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,552,000",
+    "price": "1,552,000 บาท",
     "size": "50 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -99923,7 +100567,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.64183,
     "lng": 100.789101,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,002,000 บาท",
+    "special_price": "1,552,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-61BK010700572",
@@ -99934,7 +100582,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "4,340,000",
+    "price": "4,340,000 บาท",
     "size": "17.5 ตร.ว.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -99960,7 +100608,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.8394,
     "lng": 100.734728,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "6,270,000 บาท",
+    "special_price": "4,340,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-61BK011101021",
@@ -99971,7 +100623,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "5,293,000",
+    "price": "3,128,000 บาท",
     "size": "70.24 ตร.ม.",
     "usable_area": "อาคาร 5 ชั้น",
     "bedrooms": "-",
@@ -99999,7 +100651,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.72083,
     "lng": 100.600536,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,293,000 บาท",
+    "special_price": "3,128,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-59MT010200860",
@@ -100010,7 +100666,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,874,000",
+    "price": "2,874,000 บาท",
     "size": "192 ตร.ว.",
     "usable_area": "-",
     "bedrooms": "-",
@@ -100034,7 +100690,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.110974,
     "lng": 100.511344,
     "province_th": "ปทุมธานี",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "6,022,000 บาท",
+    "special_price": "2,874,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62MT010300978",
@@ -100045,7 +100705,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "9,488,000",
+    "price": "9,488,000 บาท",
     "size": "100 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -100082,7 +100742,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.99859,
     "lng": 100.563269,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "18,150,000 บาท",
+    "special_price": "9,488,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62MT011502293",
@@ -100093,7 +100757,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "927,000",
+    "price": "927,000 บาท",
     "size": "16 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -100118,7 +100782,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.029373,
     "lng": 100.393462,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,320,000 บาท",
+    "special_price": "927,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62MT011101149",
@@ -100129,7 +100797,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,762,000",
+    "price": "1,632,000 บาท",
     "size": "50.21 ตร.ม.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "2 ห้องนอน",
@@ -100158,7 +100826,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.883116,
     "lng": 100.513714,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,762,000 บาท",
+    "special_price": "1,632,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-62MT010500951",
@@ -100169,7 +100841,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "2,550,000",
+    "price": "2,550,000 บาท",
     "size": "33 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -100193,7 +100865,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.608015,
     "lng": 100.66376,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "3,740,000 บาท",
+    "special_price": "2,550,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT011500508",
@@ -100204,7 +100880,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "2,196,000",
+    "price": "2,196,000 บาท",
     "size": "18 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -100228,7 +100904,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.675773,
     "lng": 100.322691,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,960,000 บาท",
+    "special_price": "2,196,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63BK030302675",
@@ -100239,7 +100919,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "33,000,000",
+    "price": "33,000,000 บาท",
     "size": "208.4 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -100273,7 +100953,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.817111,
     "lng": 100.629917,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "38,500,000 บาท",
+    "special_price": "33,000,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010300360",
@@ -100284,7 +100968,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,498,000",
+    "price": "2,498,000 บาท",
     "size": "102 ตร.ว.",
     "usable_area": "อาคาร 1 ชั้น",
     "bedrooms": "-",
@@ -100322,7 +101006,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.991126,
     "lng": 100.635078,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,160,000 บาท",
+    "special_price": "2,498,000 บาท",
+    "promo_start_date": "2026-11-09",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010400854",
@@ -100378,7 +101066,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,030,000",
+    "price": "1,030,000 บาท",
     "size": "16 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -100407,7 +101095,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.028531,
     "lng": 100.745667,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,595,000 บาท",
+    "special_price": "1,030,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010500734",
@@ -100418,7 +101110,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,536,000",
+    "price": "1,536,000 บาท",
     "size": "23.1 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -100459,7 +101151,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.014541,
     "lng": 100.629343,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,760,000 บาท",
+    "special_price": "1,536,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT031101223",
@@ -100470,7 +101166,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,097,000",
+    "price": "1,239,000 บาท",
     "size": "60.5 ตร.ม.",
     "usable_area": "อาคาร 8 ชั้น",
     "bedrooms": "-",
@@ -100493,7 +101189,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.86314,
     "lng": 100.536147,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,097,000 บาท",
+    "special_price": "1,239,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-64MT010301412",
@@ -100504,7 +101204,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "6,121,000",
+    "price": "6,121,000 บาท",
     "size": "53.9 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -100534,7 +101234,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.607482,
     "lng": 100.664375,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "8,250,000 บาท",
+    "special_price": "6,121,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-69MT011500005",
@@ -100578,7 +101282,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "4,881,000",
+    "price": "2,885,000 บาท",
     "size": "19.72 ตร.ม.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -100602,7 +101306,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.754506,
     "lng": 100.540122,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,881,000 บาท",
+    "special_price": "2,885,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-65MT010300121",
@@ -100613,7 +101321,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "3,196,000",
+    "price": "3,196,000 บาท",
     "size": "56 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -100635,7 +101343,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.954578,
     "lng": 100.583315,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,620,000 บาท",
+    "special_price": "3,196,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK011102010",
@@ -100646,7 +101358,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,872,000",
+    "price": "1,191,000 บาท",
     "size": "30.93 ตร.ม.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -100674,7 +101386,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.657916,
     "lng": 100.61001,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,872,000 บาท",
+    "special_price": "1,191,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-65MT010300591",
@@ -100685,7 +101401,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "3,438,000",
+    "price": "3,438,000 บาท",
     "size": "93 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -100708,7 +101424,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.9934,
     "lng": 100.563704,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,730,000 บาท",
+    "special_price": "3,438,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-68MT010500019",
@@ -100719,7 +101439,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,700,000",
+    "price": "2,700,000 บาท",
     "size": "36.9 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -100740,7 +101460,11 @@ var ALL_PROPERTIES_DATA = [
     },
     "search_keywords": "KTB กรุงไทย 68MT010500019 หมู่บ้านพฤกษาวิลล์ 79 ต.สวนพริกไทย อ.เมืองปทุมธานี ปทุมธานี ทาวน์เฮ้าส์ รังสิต ลำลูกกา คลองหลวง ปทุมธานี",
     "province_th": "ปทุมธานี",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "2,970,000 บาท",
+    "special_price": "2,700,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-61BK010500775",
@@ -100751,7 +101475,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,822,000",
+    "price": "1,822,000 บาท",
     "size": "39.5 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -100780,7 +101504,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.90459,
     "lng": 100.645587,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,486,000 บาท",
+    "special_price": "1,822,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62BK011101623",
@@ -100791,7 +101519,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,641,000",
+    "price": "2,151,000 บาท",
     "size": "39.87 ตร.ม.",
     "usable_area": "อาคาร 7 ชั้น",
     "bedrooms": "-",
@@ -100818,7 +101546,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.722761,
     "lng": 100.501883,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,641,000 บาท",
+    "special_price": "2,151,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-62BK011102344",
@@ -100829,7 +101561,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "5,581,000",
+    "price": "3,045,000 บาท",
     "size": "24.51 ตร.ม.",
     "usable_area": "-",
     "bedrooms": "-",
@@ -100853,7 +101585,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.754003,
     "lng": 100.54023,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,581,000 บาท",
+    "special_price": "3,045,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-68MT010500002",
@@ -100864,7 +101600,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,400,000",
+    "price": "2,400,000 บาท",
     "size": "21.7 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -100887,7 +101623,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.962215,
     "lng": 100.552589,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,640,000 บาท",
+    "special_price": "2,400,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62BK011102890",
@@ -100898,7 +101638,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,353,000",
+    "price": "1,391,000 บาท",
     "size": "31.45 ตร.ม.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -100923,7 +101663,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.720827,
     "lng": 100.600541,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,353,000 บาท",
+    "special_price": "1,391,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-64MT010302420",
@@ -100968,7 +101712,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "566,000",
+    "price": "361,000 บาท",
     "size": "24.5 ตร.ม.",
     "usable_area": "อาคาร 5 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -100991,7 +101735,11 @@ var ALL_PROPERTIES_DATA = [
     },
     "search_keywords": "KTB กรุงไทย 65MT011101800 โครงการแพรกษาคอนโดมิเนียม ต.ท้ายบ้าน อ.เมืองสมุทรปราการ สมุทรปราการ คอนโดมิเนียม/อาคารชุด บางนา ศรีนครินทร์ สมุทรปราการ",
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "566,000 บาท",
+    "special_price": "361,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-65MT010501789",
@@ -101002,7 +101750,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,313,000",
+    "price": "2,313,000 บาท",
     "size": "21.4 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -101029,7 +101777,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.84463,
     "lng": 100.369476,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,750,000 บาท",
+    "special_price": "2,313,000 บาท",
+    "promo_start_date": "2026-10-30",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66BK011501334",
@@ -101040,7 +101792,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "21,331,000",
+    "price": "21,331,000 บาท",
     "size": "38.8 ตร.ว.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -101082,7 +101834,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.788603,
     "lng": 100.628516,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "24,530,000 บาท",
+    "special_price": "21,331,000 บาท",
+    "promo_start_date": "2026-10-07",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK010500328",
@@ -101093,7 +101849,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,210,000",
+    "price": "2,210,000 บาท",
     "size": "18.2 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "3 ห้องนอน",
@@ -101116,7 +101872,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.773858,
     "lng": 100.714339,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,190,000 บาท",
+    "special_price": "2,210,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60BK011101505",
@@ -101127,7 +101887,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,976,000",
+    "price": "2,350,000 บาท",
     "size": "52.38 ตร.ม.",
     "usable_area": "อาคาร 6 ชั้น",
     "bedrooms": "-",
@@ -101151,7 +101911,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.72083,
     "lng": 100.600536,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,976,000 บาท",
+    "special_price": "2,350,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-66BK010501350",
@@ -101162,7 +101926,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "6,150,000",
+    "price": "6,150,000 บาท",
     "size": "22.5 ตร.ว.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -101190,7 +101954,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.839977,
     "lng": 100.635597,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "6,765,000 บาท",
+    "special_price": "6,150,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-69MT010500015",
@@ -101235,7 +102003,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,892,000",
+    "price": "1,118,000 บาท",
     "size": "29.15 ตร.ม.",
     "usable_area": "อาคาร 7 ชั้น",
     "bedrooms": "-",
@@ -101258,7 +102026,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.65752,
     "lng": 100.60613,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,892,000 บาท",
+    "special_price": "1,118,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-64BK010501047",
@@ -101269,7 +102041,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,287,000",
+    "price": "3,287,000 บาท",
     "size": "28.4 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -101292,7 +102064,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.758283,
     "lng": 100.706316,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,730,000 บาท",
+    "special_price": "3,287,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010501410",
@@ -101303,7 +102079,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,530,000",
+    "price": "1,530,000 บาท",
     "size": "19.5 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -101328,7 +102104,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.58207,
     "lng": 100.503017,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,980,000 บาท",
+    "special_price": "1,530,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK010501846",
@@ -101339,7 +102119,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,940,000",
+    "price": "2,940,000 บาท",
     "size": "21.6 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -101367,7 +102147,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.847614,
     "lng": 100.632579,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,620,000 บาท",
+    "special_price": "2,940,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65BK011101171",
@@ -101378,7 +102162,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,410,000",
+    "price": "2,635,000 บาท",
     "size": "30.39 ตร.ม.",
     "usable_area": "อาคาร 10 ชั้น",
     "bedrooms": "-",
@@ -101407,7 +102191,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.665411,
     "lng": 100.604102,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,410,000 บาท",
+    "special_price": "2,635,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-64MT021502359",
@@ -101418,7 +102206,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "1,967,000",
+    "price": "1,967,000 บาท",
     "size": "20.1 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -101453,7 +102241,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.652793,
     "lng": 100.251575,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,530,000 บาท",
+    "special_price": "1,967,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62MT011500898",
@@ -101464,7 +102256,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "3,168,000",
+    "price": "3,168,000 บาท",
     "size": "35.2 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -101487,7 +102279,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.943708,
     "lng": 100.775933,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,280,000 บาท",
+    "special_price": "3,168,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62BK011501385",
@@ -101498,7 +102294,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,355,000",
+    "price": "3,355,000 บาท",
     "size": "30.2 ตร.ว.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -101521,7 +102317,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.730723,
     "lng": 100.733295,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "6,050,000 บาท",
+    "special_price": "3,355,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62MT010302669",
@@ -101532,7 +102332,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,395,000",
+    "price": "2,395,000 บาท",
     "size": "80.5 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -101557,7 +102357,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.083118,
     "lng": 100.736956,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,410,000 บาท",
+    "special_price": "2,395,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63BK011100905",
@@ -101568,7 +102372,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,642,000",
+    "price": "1,987,000 บาท",
     "size": "15.76 ตร.ม.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -101593,7 +102397,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.750936,
     "lng": 100.539565,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,642,000 บาท",
+    "special_price": "1,987,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-63BK011101353",
@@ -101637,7 +102445,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,685,000",
+    "price": "1,226,000 บาท",
     "size": "25.11 ตร.ม.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -101663,7 +102471,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.657095,
     "lng": 100.634761,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,685,000 บาท",
+    "special_price": "1,226,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-63BK010401401",
@@ -101674,7 +102486,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,363,000",
+    "price": "2,363,000 บาท",
     "size": "44 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -101697,7 +102509,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.860236,
     "lng": 100.847966,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,465,000 บาท",
+    "special_price": "2,363,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60CC030102078",
@@ -101750,7 +102566,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,438,000",
+    "price": "2,438,000 บาท",
     "size": "54 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -101772,7 +102588,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.992591,
     "lng": 100.56559,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,125,000 บาท",
+    "special_price": "2,438,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK010500168",
@@ -101783,7 +102603,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,714,000",
+    "price": "3,714,000 บาท",
     "size": "17.6 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -101814,7 +102634,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.791343,
     "lng": 100.62308,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,180,000 บาท",
+    "special_price": "3,714,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT011500625",
@@ -101825,7 +102649,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "3,420,000",
+    "price": "3,420,000 บาท",
     "size": "20 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -101853,7 +102677,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.874193,
     "lng": 100.405225,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,950,000 บาท",
+    "special_price": "3,420,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63MT010502754",
@@ -101864,7 +102692,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,191,000",
+    "price": "1,191,000 บาท",
     "size": "21.3 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -101887,7 +102715,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.58825,
     "lng": 100.49425,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,760,000 บาท",
+    "special_price": "1,191,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010500735",
@@ -101934,7 +102766,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,425,000",
+    "price": "1,425,000 บาท",
     "size": "22.5 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -101958,7 +102790,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.861664,
     "lng": 100.848513,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,090,000 บาท",
+    "special_price": "1,425,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK010301681",
@@ -101969,7 +102805,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "4,650,000",
+    "price": "4,650,000 บาท",
     "size": "91.9 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "3 ห้องนอน",
@@ -101995,7 +102831,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.789902,
     "lng": 100.734011,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "6,820,000 บาท",
+    "special_price": "4,650,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65BK010300794",
@@ -102006,7 +102846,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "4,249,000",
+    "price": "4,249,000 บาท",
     "size": "49 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -102030,7 +102870,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.849114,
     "lng": 100.651405,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "6,460,000 บาท",
+    "special_price": "4,249,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65CC010301211",
@@ -102041,7 +102885,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "3,763,000",
+    "price": "3,763,000 บาท",
     "size": "67.2 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -102063,7 +102907,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.736827,
     "lng": 100.246394,
     "province_th": "นครปฐม",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,730,000 บาท",
+    "special_price": "3,763,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66MT010400641",
@@ -102074,7 +102922,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,720,000",
+    "price": "2,720,000 บาท",
     "size": "50.3 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -102102,7 +102950,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.961811,
     "lng": 100.358404,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,520,000 บาท",
+    "special_price": "2,720,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60CC030102073",
@@ -102196,7 +103048,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,720,000",
+    "price": "2,720,000 บาท",
     "size": "50.3 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -102222,7 +103074,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.962138,
     "lng": 100.357443,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,520,000 บาท",
+    "special_price": "2,720,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65MT010500453",
@@ -102233,7 +103089,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "2,114,000",
+    "price": "2,114,000 บาท",
     "size": "18.1 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "3 ห้องนอน",
@@ -102257,7 +103113,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.600435,
     "lng": 100.689064,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,750,000 บาท",
+    "special_price": "2,114,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65MT010400467",
@@ -102302,7 +103162,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "2,201,000",
+    "price": "2,201,000 บาท",
     "size": "21.3 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -102324,7 +103184,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.576477,
     "lng": 100.362588,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,410,000 บาท",
+    "special_price": "2,201,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65MT010501006",
@@ -102335,7 +103199,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "4,529,000",
+    "price": "4,529,000 บาท",
     "size": "31.4 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -102362,7 +103226,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.831233,
     "lng": 100.503686,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,280,000 บาท",
+    "special_price": "4,529,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66MT010300871",
@@ -102373,7 +103241,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "3,485,000",
+    "price": "3,485,000 บาท",
     "size": "59.6 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -102397,7 +103265,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.600444,
     "lng": 100.268901,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,510,000 บาท",
+    "special_price": "3,485,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60CC030102079",
@@ -102857,7 +103729,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,061,000",
+    "price": "1,809,000 บาท",
     "size": "41.53 ตร.ม.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -102883,7 +103755,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.72083,
     "lng": 100.600536,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,061,000 บาท",
+    "special_price": "1,809,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-52MT030200292",
@@ -103048,7 +103924,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "4,795,000",
+    "price": "4,795,000 บาท",
     "size": "41.3 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -103072,7 +103948,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.88365,
     "lng": 100.588709,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "7,535,000 บาท",
+    "special_price": "4,795,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63MT010301609",
@@ -103083,7 +103963,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "4,550,000",
+    "price": "4,550,000 บาท",
     "size": "74.4 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -103106,7 +103986,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.997269,
     "lng": 100.559212,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "7,150,000 บาท",
+    "special_price": "4,550,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010300257",
@@ -103117,7 +104001,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "3,740,000",
+    "price": "3,740,000 บาท",
     "size": "54.8 ตร.ว.",
     "usable_area": "-",
     "bedrooms": "-",
@@ -103144,7 +104028,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.891612,
     "lng": 100.39023,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,840,000 บาท",
+    "special_price": "3,740,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT011500258",
@@ -103155,7 +104043,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "1,956,000",
+    "price": "1,956,000 บาท",
     "size": "27 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -103181,7 +104069,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.936408,
     "lng": 100.402994,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,695,000 บาท",
+    "special_price": "1,956,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK010400331",
@@ -103192,7 +104084,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,846,000",
+    "price": "2,846,000 บาท",
     "size": "43.2 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "3 ห้องนอน",
@@ -103217,7 +104109,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.835366,
     "lng": 100.730506,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,575,000 บาท",
+    "special_price": "2,846,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-68MT010300020",
@@ -103228,7 +104124,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "4,700,000",
+    "price": "4,700,000 บาท",
     "size": "68.1 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -103249,7 +104145,11 @@ var ALL_PROPERTIES_DATA = [
     },
     "search_keywords": "KTB กรุงไทย 68MT010300020 หมู่บ้านภัสสร ราชพฤกษ์-ติวานนท์ ต.บางคูวัด อ.เมืองปทุมธานี ปทุมธานี บ้านเดี่ยว บางใหญ่ บางบัวทอง นนทบุรี รังสิต ลำลูกกา คลองหลวง ปทุมธานี",
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,170,000 บาท",
+    "special_price": "4,700,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-49BK011100313",
@@ -103330,7 +104230,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,088,000",
+    "price": "1,088,000 บาท",
     "size": "17 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -103353,7 +104253,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.57807,
     "lng": 100.52266,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,595,000 บาท",
+    "special_price": "1,088,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT011101575",
@@ -103364,7 +104268,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "2,039,000",
+    "price": "1,205,000 บาท",
     "size": "29.42 ตร.ม.",
     "usable_area": "อาคาร 5 ชั้น",
     "bedrooms": "-",
@@ -103394,7 +104298,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.63761,
     "lng": 100.59543,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,039,000 บาท",
+    "special_price": "1,205,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-64MT011501823",
@@ -103405,7 +104313,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,775,000",
+    "price": "1,775,000 บาท",
     "size": "22 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -103430,7 +104338,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.560969,
     "lng": 100.799064,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,750,000 บาท",
+    "special_price": "1,775,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65MT010500061",
@@ -103441,7 +104353,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,380,000",
+    "price": "2,380,000 บาท",
     "size": "22.7 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -103467,7 +104379,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.949389,
     "lng": 100.548232,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,080,000 บาท",
+    "special_price": "2,380,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010302152",
@@ -103478,7 +104394,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,188,000",
+    "price": "2,188,000 บาท",
     "size": "53.1 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -103506,7 +104422,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.953575,
     "lng": 100.415395,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,750,000 บาท",
+    "special_price": "2,188,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65MT010500703",
@@ -103517,7 +104437,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,263,000",
+    "price": "1,263,000 บาท",
     "size": "20 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -103551,7 +104471,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.023873,
     "lng": 100.656846,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,870,000 บาท",
+    "special_price": "1,263,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65BK011100120",
@@ -103801,7 +104725,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "4,505,000",
+    "price": "4,505,000 บาท",
     "size": "54.4 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -103824,7 +104748,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.621114,
     "lng": 100.341042,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "5,830,000 บาท",
+    "special_price": "4,505,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60CC030102086",
@@ -104001,7 +104929,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "12,388,000",
+    "price": "12,388,000 บาท",
     "size": "33 ไร่ 1 งาน 23 ตร.ว. (13323 ตร.ว.)",
     "usable_area": "อาคาร 1 ชั้น",
     "bedrooms": "-",
@@ -104043,7 +104971,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.985204,
     "lng": 100.133018,
     "province_th": "นครปฐม",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "16,031,000 บาท",
+    "special_price": "12,388,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-67BK010400146",
@@ -104054,7 +104986,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,807,000",
+    "price": "2,807,000 บาท",
     "size": "36.1 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -104079,7 +105011,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.845202,
     "lng": 100.86059,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,355,000 บาท",
+    "special_price": "2,807,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-67MT011500698",
@@ -104090,7 +105026,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "7,392,000",
+    "price": "7,392,000 บาท",
     "size": "25.5 ตร.ว.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -104113,7 +105049,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.702228,
     "lng": 100.330315,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "8,470,000 บาท",
+    "special_price": "7,392,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-67MT010500744",
@@ -104198,7 +105138,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "4,270,000",
+    "price": "4,270,000 บาท",
     "size": "92.1 ตร.ว.",
     "usable_area": "-",
     "bedrooms": "-",
@@ -104227,7 +105167,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.955237,
     "lng": 100.703328,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "6,710,000 บาท",
+    "special_price": "4,270,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-61BK010500844",
@@ -104238,7 +105182,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,703,000",
+    "price": "2,703,000 บาท",
     "size": "37.4 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -104262,7 +105206,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.904455,
     "lng": 100.645638,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,170,000 บาท",
+    "special_price": "2,703,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60BK010500186",
@@ -104273,7 +105221,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,530,000",
+    "price": "2,530,000 บาท",
     "size": "34 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -104310,7 +105258,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.903513,
     "lng": 100.646039,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,840,000 บาท",
+    "special_price": "2,530,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60CC030102103",
@@ -104488,7 +105440,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,065,000",
+    "price": "1,065,000 บาท",
     "size": "16 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -104511,7 +105463,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.03017,
     "lng": 100.745518,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,650,000 บาท",
+    "special_price": "1,065,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-67MT010300677",
@@ -104522,7 +105478,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "6,500,000",
+    "price": "6,500,000 บาท",
     "size": "50.6 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -104552,7 +105508,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.915937,
     "lng": 100.461983,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "7,150,000 บาท",
+    "special_price": "6,500,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-68MT010500040",
@@ -104634,7 +105594,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,479,000",
+    "price": "1,690,000 บาท",
     "size": "36.69 ตร.ม.",
     "usable_area": "อาคาร 6 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -104658,7 +105618,11 @@ var ALL_PROPERTIES_DATA = [
     },
     "search_keywords": "KTB กรุงไทย 64BK011102404 โครงการอิลีเม้นท์ ศรีนครินทร์ แขวงหนองบอน เขตประเวศ กรุงเทพมหานคร คอนโดมิเนียม/อาคารชุด บางนา ศรีนครินทร์ สมุทรปราการ ลาดกระบัง อ่อนนุช สุวรรณภูมิ",
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,479,000 บาท",
+    "special_price": "1,690,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-65MT010501413",
@@ -104669,7 +105633,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "902,000",
+    "price": "902,000 บาท",
     "size": "18 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -104692,7 +105656,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.019049,
     "lng": 100.7775,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,210,000 บาท",
+    "special_price": "902,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010300176",
@@ -104703,7 +105671,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "4,739,000",
+    "price": "4,739,000 บาท",
     "size": "78.2 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -104728,7 +105696,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.56956,
     "lng": 100.84136,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "5,940,000 บาท",
+    "special_price": "4,739,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-61BK010500941",
@@ -104739,7 +105711,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,260,000",
+    "price": "1,260,000 บาท",
     "size": "17 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -104771,7 +105743,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.9038,
     "lng": 100.6459,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,409,000 บาท",
+    "special_price": "1,260,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-54MT030200279",
@@ -104816,7 +105792,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,200,000",
+    "price": "2,200,000 บาท",
     "size": "20.9 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -104839,7 +105815,11 @@ var ALL_PROPERTIES_DATA = [
     },
     "search_keywords": "KTB กรุงไทย 67MT010500676 หมู่บ้านพฤกษาวิลล์ 61(บางใหญ่-นครอินทร์) ต.บางม่วง อ.บางใหญ่ นนทบุรี ทาวน์เฮ้าส์ บางใหญ่ บางบัวทอง นนทบุรี",
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,420,000 บาท",
+    "special_price": "2,200,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65MT010501794",
@@ -104850,7 +105830,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,720,000",
+    "price": "2,720,000 บาท",
     "size": "22 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -104872,7 +105852,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.975192,
     "lng": 100.573402,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,520,000 บาท",
+    "special_price": "2,720,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63BK011101583",
@@ -104883,7 +105867,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,706,000",
+    "price": "1,722,000 บาท",
     "size": "34.16 ตร.ม.",
     "usable_area": "อาคาร 18 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -104916,7 +105900,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.831039,
     "lng": 100.539911,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,706,000 บาท",
+    "special_price": "1,722,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-63CC010300355",
@@ -104961,7 +105949,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,040,000",
+    "price": "2,040,000 บาท",
     "size": "21.2 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -104990,7 +105978,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.907022,
     "lng": 100.660016,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,640,000 บาท",
+    "special_price": "2,040,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62MT010300804",
@@ -105001,7 +105993,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "2,730,000",
+    "price": "2,730,000 บาท",
     "size": "78 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -105032,7 +106024,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.56871,
     "lng": 100.724816,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,620,000 บาท",
+    "special_price": "2,730,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65MT011101799",
@@ -105043,7 +106039,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "566,000",
+    "price": "361,000 บาท",
     "size": "24.5 ตร.ม.",
     "usable_area": "อาคาร 5 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -105066,7 +106062,11 @@ var ALL_PROPERTIES_DATA = [
     },
     "search_keywords": "KTB กรุงไทย 65MT011101799 โครงการแพรกษาคอนโดมิเนียม ต.ท้ายบ้าน อ.เมืองสมุทรปราการ สมุทรปราการ คอนโดมิเนียม/อาคารชุด บางนา ศรีนครินทร์ สมุทรปราการ",
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "566,000 บาท",
+    "special_price": "361,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-65CC010301787",
@@ -105077,7 +106077,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "4,050,000",
+    "price": "4,050,000 บาท",
     "size": "76.5 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -105102,7 +106102,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.789333,
     "lng": 100.24353,
     "province_th": "นครปฐม",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,940,000 บาท",
+    "special_price": "4,050,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63MT010301060",
@@ -105113,7 +106117,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "3,500,000",
+    "price": "3,500,000 บาท",
     "size": "50.6 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -105139,7 +106143,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.00104,
     "lng": 100.65921,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,500,000 บาท",
+    "special_price": "3,500,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-67MT011500688",
@@ -105150,7 +106158,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "3,072,000",
+    "price": "3,072,000 บาท",
     "size": "16.3 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -105174,7 +106182,11 @@ var ALL_PROPERTIES_DATA = [
     },
     "search_keywords": "KTB กรุงไทย 67MT011500688 หมู่บ้านธัญดา พาร์ควิว ต.แพรกษาใหม่ อ.เมืองสมุทรปราการ สมุทรปราการ อาคารพาณิชย์ บางนา ศรีนครินทร์ สมุทรปราการ",
     "province_th": "สมุทรปราการ",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "3,520,000 บาท",
+    "special_price": "3,072,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63MT011102632",
@@ -105185,7 +106197,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,523,000",
+    "price": "900,000 บาท",
     "size": "28.25 ตร.ม.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -105217,7 +106229,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.6507,
     "lng": 100.60561,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,523,000 บาท",
+    "special_price": "900,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-64MT010500813",
@@ -105228,7 +106244,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "2,042,000",
+    "price": "2,042,000 บาท",
     "size": "49.9 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -105259,7 +106275,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.651198,
     "lng": 100.295919,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,750,000 บาท",
+    "special_price": "2,042,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK010300924",
@@ -105270,7 +106290,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,933,000",
+    "price": "2,933,000 บาท",
     "size": "50.2 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -105293,7 +106313,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.86003,
     "lng": 100.843104,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,520,000 บาท",
+    "special_price": "2,933,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK031501222",
@@ -105337,7 +106361,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "3,249,000",
+    "price": "3,249,000 บาท",
     "size": "19 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -105367,7 +106391,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.123335,
     "lng": 100.631031,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,180,000 บาท",
+    "special_price": "3,249,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62BK010302541",
@@ -105378,7 +106406,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "4,160,000",
+    "price": "4,160,000 บาท",
     "size": "76.7 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -105402,7 +106430,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.681053,
     "lng": 100.430598,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "7,040,000 บาท",
+    "special_price": "4,160,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-52CC020102065",
@@ -105448,7 +106480,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,636,000",
+    "price": "1,636,000 บาท",
     "size": "24.2 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -105479,7 +106511,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.04645,
     "lng": 100.672527,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,046,000 บาท",
+    "special_price": "1,636,000 บาท",
+    "promo_start_date": "2026-11-09",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65BK010200826",
@@ -105490,7 +106526,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "7,376,000",
+    "price": "7,376,000 บาท",
     "size": "157.5 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -105519,7 +106555,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.797888,
     "lng": 100.369041,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "11,591,000 บาท",
+    "special_price": "7,376,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-59MT030101710",
@@ -105530,7 +106570,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "36,909,000",
+    "price": "36,909,000 บาท",
     "size": "60 ไร่ 1 งาน 23 ตร.ว. (24123 ตร.ว.)",
     "usable_area": "-",
     "bedrooms": "-",
@@ -105558,7 +106598,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.958344,
     "lng": 100.91096,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "47,764,000 บาท",
+    "special_price": "36,909,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-57MT030200975",
@@ -105653,7 +106697,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,678,000",
+    "price": "2,842,000 บาท",
     "size": "30.39 ตร.ม.",
     "usable_area": "อาคาร 17 ชั้น",
     "bedrooms": "-",
@@ -105687,7 +106731,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.665411,
     "lng": 100.604102,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,678,000 บาท",
+    "special_price": "2,842,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-65MT010301352",
@@ -105698,7 +106746,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,700,000",
+    "price": "2,700,000 บาท",
     "size": "71.1 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -105722,7 +106770,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.015046,
     "lng": 100.784176,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,300,000 บาท",
+    "special_price": "2,700,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65BK011101758",
@@ -105733,7 +106785,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,079,000",
+    "price": "2,520,000 บาท",
     "size": "32.93 ตร.ม.",
     "usable_area": "อาคาร 11 ชั้น",
     "bedrooms": "-",
@@ -105759,7 +106811,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.89032,
     "lng": 100.607975,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,079,000 บาท",
+    "special_price": "2,520,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-60CC030102097",
@@ -105812,7 +106868,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "22,574,000",
+    "price": "22,574,000 บาท",
     "size": "267 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -105840,7 +106896,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.000705,
     "lng": 100.56316,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "34,100,000 บาท",
+    "special_price": "22,574,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65BK011101791",
@@ -105851,7 +106911,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,362,000",
+    "price": "2,140,000 บาท",
     "size": "30.56 ตร.ม.",
     "usable_area": "อาคาร 1 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -105878,7 +106938,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.67552,
     "lng": 100.610985,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,362,000 บาท",
+    "special_price": "2,140,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-66BK010501359",
@@ -106074,7 +107138,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "1,795,000",
+    "price": "1,795,000 บาท",
     "size": "27.9 ตร.ว.",
     "usable_area": "-",
     "bedrooms": "-",
@@ -106098,7 +107162,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.653415,
     "lng": 100.275055,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,070,000 บาท",
+    "special_price": "1,795,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63BK010501226",
@@ -106109,7 +107177,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,800,000",
+    "price": "2,800,000 บาท",
     "size": "32.4 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -106141,7 +107209,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.949186,
     "lng": 100.615003,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,080,000 บาท",
+    "special_price": "2,800,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63MT010501386",
@@ -106152,7 +107224,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,645,000",
+    "price": "1,645,000 บาท",
     "size": "25.2 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -106176,7 +107248,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.988984,
     "lng": 100.542217,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,200,000 บาท",
+    "special_price": "1,645,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63BK011102018",
@@ -106187,7 +107263,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "4,850,000",
+    "price": "2,645,000 บาท",
     "size": "73.47 ตร.ม.",
     "usable_area": "อาคาร 8 ชั้น",
     "bedrooms": "-",
@@ -106220,7 +107296,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.703505,
     "lng": 100.590721,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,850,000 บาท",
+    "special_price": "2,645,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-60CC030102098",
@@ -106344,7 +107424,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "6,247,000",
+    "price": "3,408,000 บาท",
     "size": "94.64 ตร.ม.",
     "usable_area": "อาคาร 26 ชั้น",
     "bedrooms": "-",
@@ -106374,7 +107454,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.762022,
     "lng": 100.648813,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "6,247,000 บาท",
+    "special_price": "3,408,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-59MT030200601",
@@ -106427,7 +107511,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "26,000,000",
+    "price": "26,000,000 บาท",
     "size": "262.2 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -106454,7 +107538,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.644811,
     "lng": 100.402522,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "30,140,000 บาท",
+    "special_price": "26,000,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-61MT010301683",
@@ -106465,7 +107553,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "3,500,000",
+    "price": "3,500,000 บาท",
     "size": "118.9 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -106495,7 +107583,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.566812,
     "lng": 100.840761,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "5,500,000 บาท",
+    "special_price": "3,500,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-61MT030202403",
@@ -106587,7 +107679,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,625,000",
+    "price": "2,625,000 บาท",
     "size": "21.2 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -106613,7 +107705,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.910419,
     "lng": 100.389888,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,850,000 บาท",
+    "special_price": "2,625,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62MT010300717",
@@ -106624,7 +107720,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,917,000",
+    "price": "2,917,000 บาท",
     "size": "51.5 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -106648,7 +107744,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.984127,
     "lng": 100.66146,
     "province_th": "ปทุมธานี",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "4,356,000 บาท",
+    "special_price": "2,917,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010300411",
@@ -106659,7 +107759,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "3,150,000",
+    "price": "3,150,000 บาท",
     "size": "58.3 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -106686,7 +107786,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.027284,
     "lng": 100.738449,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,620,000 บาท",
+    "special_price": "3,150,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60CC030102117",
@@ -106857,7 +107961,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "1,846,000",
+    "price": "1,091,000 บาท",
     "size": "43.03 ตร.ม.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -106882,7 +107986,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.910634,
     "lng": 100.50239,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,846,000 บาท",
+    "special_price": "1,091,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-57BK021500218",
@@ -106893,7 +108001,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "6,354,000",
+    "price": "6,354,000 บาท",
     "size": "14.8 ตร.ว.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -106925,7 +108033,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.719787,
     "lng": 100.518295,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "14,410,000 บาท",
+    "special_price": "6,354,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-49BK011100140",
@@ -106936,7 +108048,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "121,000",
+    "price": "120,000 บาท",
     "size": "23.91 ตร.ม.",
     "usable_area": "อาคาร 5 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -106959,7 +108071,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.909693,
     "lng": 100.678341,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "121,000 บาท",
+    "special_price": "120,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-60BK011101406",
@@ -106970,7 +108086,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "4,552,000",
+    "price": "2,690,000 บาท",
     "size": "59.53 ตร.ม.",
     "usable_area": "อาคาร 7 ชั้น",
     "bedrooms": "-",
@@ -107000,7 +108116,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.72083,
     "lng": 100.600536,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,552,000 บาท",
+    "special_price": "2,690,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-61MT010700030",
@@ -107011,7 +108131,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,923,000",
+    "price": "2,923,000 บาท",
     "size": "25 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -107034,7 +108154,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.947108,
     "lng": 100.66458,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,630,000 บาท",
+    "special_price": "2,923,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62MT011501318",
@@ -107045,7 +108169,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "1,952,000",
+    "price": "1,952,000 บาท",
     "size": "20.5 ตร.ว.",
     "usable_area": "-",
     "bedrooms": "-",
@@ -107068,7 +108192,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.5767,
     "lng": 100.36254,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,520,000 บาท",
+    "special_price": "1,952,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62MT011101955",
@@ -107079,7 +108207,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "3,687,000",
+    "price": "2,011,000 บาท",
     "size": "105.78 ตร.ม.",
     "usable_area": "อาคาร 7 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -107106,7 +108234,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.928254,
     "lng": 100.532633,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,687,000 บาท",
+    "special_price": "2,011,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-62CC010502604",
@@ -107117,7 +108249,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "1,190,000",
+    "price": "1,190,000 บาท",
     "size": "17 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -107140,7 +108272,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.728868,
     "lng": 100.310939,
     "province_th": "นครปฐม",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "1,870,000 บาท",
+    "special_price": "1,190,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-61BK010500935",
@@ -107151,7 +108287,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,260,000",
+    "price": "1,260,000 บาท",
     "size": "17 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -107175,7 +108311,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.9038,
     "lng": 100.6459,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,409,000 บาท",
+    "special_price": "1,260,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-61BK010500938",
@@ -107186,7 +108326,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,530,000",
+    "price": "2,530,000 บาท",
     "size": "34 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -107210,7 +108350,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.903775,
     "lng": 100.645999,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,840,000 บาท",
+    "special_price": "2,530,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-68MT012400030",
@@ -107254,7 +108398,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,122,000",
+    "price": "1,254,000 บาท",
     "size": "47.05 ตร.ม.",
     "usable_area": "อาคาร 1 ชั้น",
     "bedrooms": "-",
@@ -107278,7 +108422,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.710389,
     "lng": 100.450387,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,122,000 บาท",
+    "special_price": "1,254,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-67CC010300656",
@@ -107356,7 +108504,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "4,800,000",
+    "price": "4,800,000 บาท",
     "size": "136.4 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -107383,7 +108531,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.597085,
     "lng": 100.874962,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,280,000 บาท",
+    "special_price": "4,800,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64CC010501108",
@@ -107394,7 +108546,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "4,272,000",
+    "price": "4,272,000 บาท",
     "size": "90 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -107416,7 +108568,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.761956,
     "lng": 100.324331,
     "province_th": "นครปฐม",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "7,229,000 บาท",
+    "special_price": "4,272,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-53BK031500446",
@@ -107471,7 +108627,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "3,749,000",
+    "price": "3,749,000 บาท",
     "size": "87.9 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -107495,7 +108651,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.600452,
     "lng": 100.502188,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "4,620,000 บาท",
+    "special_price": "3,749,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62MT011101147",
@@ -107506,7 +108666,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "3,987,000",
+    "price": "2,175,000 บาท",
     "size": "107.13 ตร.ม.",
     "usable_area": "อาคาร 13 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -107533,7 +108693,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.927521,
     "lng": 100.533314,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,987,000 บาท",
+    "special_price": "2,175,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-62BK010501776",
@@ -107544,7 +108708,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,530,000",
+    "price": "2,530,000 บาท",
     "size": "34 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -107567,7 +108731,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.903903,
     "lng": 100.64594,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,840,000 บาท",
+    "special_price": "2,530,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62BK011502568",
@@ -107578,7 +108746,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,414,000",
+    "price": "2,414,000 บาท",
     "size": "16.1 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -107604,7 +108772,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.936341,
     "lng": 100.634951,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,740,000 บาท",
+    "special_price": "2,414,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010500733",
@@ -107651,7 +108823,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,133,000",
+    "price": "1,260,000 บาท",
     "size": "44.05 ตร.ม.",
     "usable_area": "อาคาร 5 ชั้น",
     "bedrooms": "-",
@@ -107680,7 +108852,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.71224,
     "lng": 100.45209,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "2,133,000 บาท",
+    "special_price": "1,260,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-60CC030102074",
@@ -107733,7 +108909,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,720,000",
+    "price": "2,720,000 บาท",
     "size": "85.5 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -107755,7 +108931,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.082831,
     "lng": 100.736971,
     "province_th": "ปทุมธานี",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "3,520,000 บาท",
+    "special_price": "2,720,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-68MT010500039",
@@ -107835,7 +109015,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,228,000",
+    "price": "2,228,000 บาท",
     "size": "17.7 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "2 ห้องนอน",
@@ -107861,7 +109041,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.64179,
     "lng": 100.442163,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,025,000 บาท",
+    "special_price": "2,228,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65BK011101490",
@@ -107872,7 +109056,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,452,000",
+    "price": "1,895,000 บาท",
     "size": "28.21 ตร.ม.",
     "usable_area": "อาคาร 27 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -107899,7 +109083,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.856509,
     "lng": 100.547676,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,452,000 บาท",
+    "special_price": "1,895,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-66CC010500348",
@@ -107910,7 +109098,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "1,642,000",
+    "price": "1,642,000 บาท",
     "size": "31.1 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -107933,7 +109121,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.803529,
     "lng": 100.178685,
     "province_th": "นครปฐม",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,090,000 บาท",
+    "special_price": "1,642,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66BK010500673",
@@ -107944,7 +109136,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,689,000",
+    "price": "1,689,000 บาท",
     "size": "18.2 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -107973,7 +109165,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.895773,
     "lng": 100.624171,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,079,000 บาท",
+    "special_price": "1,689,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66MT011500882",
@@ -107984,7 +109180,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "3,153,000",
+    "price": "3,153,000 บาท",
     "size": "21.4 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -108008,7 +109204,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.697085,
     "lng": 100.317799,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,630,000 บาท",
+    "special_price": "3,153,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60CC030102072",
@@ -108259,7 +109459,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "4,505,000",
+    "price": "4,505,000 บาท",
     "size": "30.2 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -108291,7 +109491,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.868687,
     "lng": 100.658508,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,830,000 บาท",
+    "special_price": "4,505,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-68CC010300046",
@@ -108338,7 +109542,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "5,540,000",
+    "price": "5,540,000 บาท",
     "size": "40.3 ตร.ว.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -108360,7 +109564,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.721701,
     "lng": 100.31918,
     "province_th": "นครปฐม",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "7,491,000 บาท",
+    "special_price": "5,540,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-58CC020100342",
@@ -108418,7 +109626,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "4,249,000",
+    "price": "4,249,000 บาท",
     "size": "100 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -108449,7 +109657,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.007681,
     "lng": 100.520491,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "8,902,000 บาท",
+    "special_price": "4,249,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010501413",
@@ -108460,7 +109672,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "3,225,000",
+    "price": "3,225,000 บาท",
     "size": "36.4 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -108487,7 +109699,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.609482,
     "lng": 100.664313,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,730,000 บาท",
+    "special_price": "3,225,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-67MT010500738",
@@ -108532,7 +109748,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "3,876,000",
+    "price": "3,876,000 บาท",
     "size": "54.3 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -108558,7 +109774,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.925789,
     "lng": 100.424274,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,016,000 บาท",
+    "special_price": "3,876,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-61BK011101296",
@@ -108569,7 +109789,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,996,000",
+    "price": "1,771,000 บาท",
     "size": "40.05 ตร.ม.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -108596,7 +109816,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.72083,
     "lng": 100.600536,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,996,000 บาท",
+    "special_price": "1,771,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-69MT010300012",
@@ -108761,7 +109985,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "3,600,000",
+    "price": "3,600,000 บาท",
     "size": "56.9 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -108784,7 +110008,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.959381,
     "lng": 100.482982,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,280,000 บาท",
+    "special_price": "3,600,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65MT010301792",
@@ -108795,7 +110023,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "4,480,000",
+    "price": "4,480,000 บาท",
     "size": "80.1 ตร.ว.",
     "usable_area": "อาคาร 16 ชั้น",
     "bedrooms": "-",
@@ -108821,7 +110049,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.92628,
     "lng": 100.423599,
     "province_th": "นนทบุรี",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "5,797,000 บาท",
+    "special_price": "4,480,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62BK011101473",
@@ -108832,7 +110064,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,093,000",
+    "price": "1,828,000 บาท",
     "size": "41.34 ตร.ม.",
     "usable_area": "อาคาร 6 ชั้น",
     "bedrooms": "-",
@@ -108858,7 +110090,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.720761,
     "lng": 100.600524,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,093,000 บาท",
+    "special_price": "1,828,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-63BK011100574",
@@ -108869,7 +110105,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,904,000",
+    "price": "2,130,000 บาท",
     "size": "59.15 ตร.ม.",
     "usable_area": "อาคาร 8 ชั้น",
     "bedrooms": "-",
@@ -108899,7 +110135,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.703503,
     "lng": 100.590726,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,904,000 บาท",
+    "special_price": "2,130,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-63BK011501030",
@@ -108910,7 +110150,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,772,000",
+    "price": "2,772,000 บาท",
     "size": "18.7 ตร.ว.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -108933,7 +110173,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.910785,
     "lng": 100.583909,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,620,000 บาท",
+    "special_price": "2,772,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66MT011500561",
@@ -108944,7 +110188,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "4,860,000",
+    "price": "4,860,000 บาท",
     "size": "16 ตร.ว.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -108969,7 +110213,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.863333,
     "lng": 100.451278,
     "province_th": "นนทบุรี",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "6,600,000 บาท",
+    "special_price": "4,860,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65BK011500616",
@@ -108980,7 +110228,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "5,956,000",
+    "price": "5,956,000 บาท",
     "size": "29.7 ตร.ว.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -109007,7 +110255,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.80105,
     "lng": 100.642553,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "7,700,000 บาท",
+    "special_price": "5,956,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66BK010500861",
@@ -109018,7 +110270,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,925,000",
+    "price": "2,925,000 บาท",
     "size": "20.8 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -109046,7 +110298,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.669771,
     "lng": 100.433035,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,290,000 บาท",
+    "special_price": "2,925,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60CC030102102",
@@ -109098,7 +110354,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "6,906,000",
+    "price": "6,906,000 บาท",
     "size": "37 ตร.ว.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -109123,7 +110379,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.77961,
     "lng": 100.617262,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "8,958,000 บาท",
+    "special_price": "6,906,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66MT011501335",
@@ -109134,7 +110394,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "3,010,000",
+    "price": "3,010,000 บาท",
     "size": "29.4 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -109156,7 +110416,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.651318,
     "lng": 100.253304,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "3,850,000 บาท",
+    "special_price": "3,010,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-58BK021100211",
@@ -109167,7 +110431,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,954,000",
+    "price": "1,746,000 บาท",
     "size": "39.2 ตร.ม.",
     "usable_area": "อาคาร 7 ชั้น",
     "bedrooms": "-",
@@ -109194,7 +110458,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.720827,
     "lng": 100.600541,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,954,000 บาท",
+    "special_price": "1,746,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-59BK011100767",
@@ -109205,7 +110473,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,567,000",
+    "price": "926,000 บาท",
     "size": "34.74 ตร.ม.",
     "usable_area": "อาคาร 1 ชั้น",
     "bedrooms": "-",
@@ -109230,7 +110498,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.712877,
     "lng": 100.452206,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,567,000 บาท",
+    "special_price": "926,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-60BK011100589",
@@ -109241,7 +110513,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,070,000",
+    "price": "1,814,000 บาท",
     "size": "41.34 ตร.ม.",
     "usable_area": "อาคาร 5 ชั้น",
     "bedrooms": "-",
@@ -109266,7 +110538,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.7208,
     "lng": 100.6005,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,070,000 บาท",
+    "special_price": "1,814,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-61BK010500363",
@@ -109277,7 +110553,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,932,000",
+    "price": "3,932,000 บาท",
     "size": "36 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -109305,7 +110581,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.793272,
     "lng": 100.622288,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "6,380,000 บาท",
+    "special_price": "3,932,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-61MT030100496",
@@ -109316,7 +110596,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "9,212,000",
+    "price": "9,212,000 บาท",
     "size": "1 ไร่ 0 งาน 45 ตร.ว. (445 ตร.ว.)",
     "usable_area": "-",
     "bedrooms": "-",
@@ -109345,7 +110625,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.623821,
     "lng": 100.785034,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "11,259,000 บาท",
+    "special_price": "9,212,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-61MT011101685",
@@ -109356,7 +110640,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,569,000",
+    "price": "927,000 บาท",
     "size": "28.52 ตร.ม.",
     "usable_area": "อาคาร 7 ชั้น",
     "bedrooms": "-",
@@ -109388,7 +110672,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.650709,
     "lng": 100.605657,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,569,000 บาท",
+    "special_price": "927,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-59CC010300732",
@@ -109399,7 +110687,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "2,925,000",
+    "price": "2,925,000 บาท",
     "size": "54.2 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -109423,7 +110711,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.789979,
     "lng": 100.244763,
     "province_th": "นครปฐม",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,290,000 บาท",
+    "special_price": "2,925,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62BK010501158",
@@ -109434,7 +110726,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,914,000",
+    "price": "2,914,000 บาท",
     "size": "41.1 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -109457,7 +110749,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.876219,
     "lng": 100.611069,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "4,070,000 บาท",
+    "special_price": "2,914,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62BK010201262",
@@ -109468,7 +110764,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "ติดต่อธนาคาร",
+    "price": "4,638,000 บาท",
     "size": "1 ไร่ 1 งาน 40 ตร.ว. (540 ตร.ว.)",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -109491,7 +110787,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.87498,
     "lng": 100.811787,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "6,002,000 บาท",
+    "special_price": "4,638,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-62BK011102246",
@@ -109502,7 +110802,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,948,000",
+    "price": "1,151,000 บาท",
     "size": "32.78 ตร.ม.",
     "usable_area": "อาคาร 5 ชั้น",
     "bedrooms": "-",
@@ -109532,7 +110832,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.812217,
     "lng": 100.666684,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,948,000 บาท",
+    "special_price": "1,151,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-62BK010302388",
@@ -109543,7 +110847,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "9,298,000",
+    "price": "9,298,000 บาท",
     "size": "102 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -109567,7 +110871,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.794945,
     "lng": 100.734494,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "10,780,000 บาท",
+    "special_price": "9,298,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63BK011101678",
@@ -109578,7 +110886,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,845,000",
+    "price": "2,971,000 บาท",
     "size": "30.39 ตร.ม.",
     "usable_area": "อาคาร 22 ชั้น",
     "bedrooms": "-",
@@ -109610,7 +110918,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.665414,
     "lng": 100.604097,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,845,000 บาท",
+    "special_price": "2,971,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-63MT010502078",
@@ -109621,7 +110933,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,540,000",
+    "price": "1,540,000 บาท",
     "size": "22.5 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -109644,7 +110956,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.56794,
     "lng": 100.84033,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "2,420,000 บาท",
+    "special_price": "1,540,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63MT010202677",
@@ -109655,7 +110971,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "2,159,000",
+    "price": "2,159,000 บาท",
     "size": "80.9 ตร.ว.",
     "usable_area": "อาคาร 1 ชั้น",
     "bedrooms": "-",
@@ -109678,7 +110994,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.639002,
     "lng": 100.256112,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,300,000 บาท",
+    "special_price": "2,159,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010500312",
@@ -109689,7 +111009,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "968,000",
+    "price": "968,000 บาท",
     "size": "17 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -109717,7 +111037,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.977662,
     "lng": 100.446503,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,419,000 บาท",
+    "special_price": "968,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK011100376",
@@ -109728,7 +111052,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,245,000",
+    "price": "1,531,000 บาท",
     "size": "40.64 ตร.ม.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -109760,7 +111084,11 @@ var ALL_PROPERTIES_DATA = [
     "lng": 100.581912,
     "province_th": "กรุงเทพมหานคร",
     "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
-    "remark": "ห้องชุดสำหรับพาณิชยกรรม"
+    "remark": "ห้องชุดสำหรับพาณิชยกรรม",
+    "original_price": "2,245,000 บาท",
+    "special_price": "1,531,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-64MT010302418",
@@ -109805,7 +111133,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "4,999,000",
+    "price": "4,999,000 บาท",
     "size": "51 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -109830,7 +111158,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.746034,
     "lng": 100.714347,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "5,500,000 บาท",
+    "special_price": "4,999,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT011101611",
@@ -109841,7 +111173,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "1,457,000",
+    "price": "861,000 บาท",
     "size": "26.48 ตร.ม.",
     "usable_area": "อาคาร 5 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -109868,7 +111200,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.878909,
     "lng": 100.498659,
     "province_th": "นนทบุรี",
-    "beneficiary": "กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์"
+    "beneficiary": "กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์",
+    "original_price": "1,457,000 บาท",
+    "special_price": "861,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-64MT010401699",
@@ -109879,7 +111215,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "3,145,000",
+    "price": "3,145,000 บาท",
     "size": "38 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -109906,7 +111242,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.60774,
     "lng": 100.8301,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,070,000 บาท",
+    "special_price": "3,145,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010501821",
@@ -109917,7 +111257,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "1,431,000",
+    "price": "1,431,000 บาท",
     "size": "20.2 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -109945,7 +111285,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.879315,
     "lng": 100.371533,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,870,000 บาท",
+    "special_price": "1,431,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010502164",
@@ -109956,7 +111300,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "1,575,000",
+    "price": "1,575,000 บาท",
     "size": "18.8 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -109983,7 +111327,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.808397,
     "lng": 100.38827,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,310,000 บาท",
+    "special_price": "1,575,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT011502411",
@@ -109994,7 +111342,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,728,000",
+    "price": "1,728,000 บาท",
     "size": "18.8 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -110016,7 +111364,11 @@ var ALL_PROPERTIES_DATA = [
     },
     "search_keywords": "KTB กรุงไทย 64MT011502411 หมู่บ้านซิตี้ วิลเลจ ต.แพรกษา อ.เมืองสมุทรปราการ สมุทรปราการ อาคารพาณิชย์ บางนา ศรีนครินทร์ สมุทรปราการ",
     "province_th": "สมุทรปราการ",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "1,980,000 บาท",
+    "special_price": "1,728,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65MT010500163",
@@ -110027,7 +111379,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,216,000",
+    "price": "1,216,000 บาท",
     "size": "18.3 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -110051,7 +111403,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.580225,
     "lng": 100.521282,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,540,000 บาท",
+    "special_price": "1,216,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65MT010400506",
@@ -110062,7 +111418,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,620,000",
+    "price": "2,620,000 บาท",
     "size": "43.9 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -110089,7 +111445,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.829541,
     "lng": 100.396651,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,520,000 บาท",
+    "special_price": "2,620,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65BK010501729",
@@ -110100,7 +111460,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,200,000",
+    "price": "2,200,000 บาท",
     "size": "25.6 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -110124,7 +111484,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.853811,
     "lng": 100.852972,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,420,000 บาท",
+    "special_price": "2,200,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60CC030102077",
@@ -110331,7 +111695,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,222,000",
+    "price": "778,000 บาท",
     "size": "33.66 ตร.ม.",
     "usable_area": "อาคาร 1 ชั้น",
     "bedrooms": "-",
@@ -110354,7 +111718,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.783481,
     "lng": 100.682493,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,222,000 บาท",
+    "special_price": "778,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-62BK011102616",
@@ -110365,7 +111733,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,271,000",
+    "price": "1,933,000 บาท",
     "size": "72.51 ตร.ม.",
     "usable_area": "อาคาร 1 ชั้น",
     "bedrooms": "-",
@@ -110389,7 +111757,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.710735,
     "lng": 100.450584,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,271,000 บาท",
+    "special_price": "1,933,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-63MT011100508",
@@ -110400,7 +111772,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,969,000",
+    "price": "1,432,000 บาท",
     "size": "26.71 ตร.ม.",
     "usable_area": "อาคาร 8 ชั้น",
     "bedrooms": "-",
@@ -110424,7 +111796,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.629427,
     "lng": 100.587088,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,969,000 บาท",
+    "special_price": "1,432,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-63MT030200842",
@@ -110547,7 +111923,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "503,000",
+    "price": "503,000 บาท",
     "size": "18.6 ตร.ว.",
     "usable_area": "-",
     "bedrooms": "-",
@@ -110570,7 +111946,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.596,
     "lng": 100.69855,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "614,000 บาท",
+    "special_price": "503,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66BK010501332",
@@ -110581,7 +111961,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "3,423,000",
+    "price": "3,423,000 บาท",
     "size": "34 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -110612,7 +111992,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.936734,
     "lng": 100.61805,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,070,000 บาท",
+    "special_price": "3,423,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK010501048",
@@ -110623,7 +112007,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,435,000",
+    "price": "2,435,000 บาท",
     "size": "21.5 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "3 ห้องนอน",
@@ -110646,7 +112030,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.713347,
     "lng": 100.808918,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,860,000 บาท",
+    "special_price": "2,435,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT011500196",
@@ -110657,7 +112045,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "1,491,000",
+    "price": "1,491,000 บาท",
     "size": "19.1 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -110683,7 +112071,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.58755,
     "lng": 100.49273,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "2,310,000 บาท",
+    "special_price": "1,491,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK011101091",
@@ -110694,7 +112086,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,489,000",
+    "price": "880,000 บาท",
     "size": "64.44 ตร.ม.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "3 ห้องนอน",
@@ -110721,7 +112113,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.787858,
     "lng": 100.615586,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,489,000 บาท",
+    "special_price": "880,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-64BK010500830",
@@ -110732,7 +112128,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,275,000",
+    "price": "1,275,000 บาท",
     "size": "19.1 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -110755,7 +112151,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.863561,
     "lng": 100.848425,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,870,000 บาท",
+    "special_price": "1,275,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK011100862",
@@ -110766,7 +112166,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,936,000",
+    "price": "1,868,000 บาท",
     "size": "44.47 ตร.ม.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -110797,7 +112197,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.69564,
     "lng": 100.645082,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,936,000 บาท",
+    "special_price": "1,868,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-64CC011500925",
@@ -110808,7 +112212,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "1,575,000",
+    "price": "1,575,000 บาท",
     "size": "18 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -110833,7 +112237,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.705228,
     "lng": 100.26746,
     "province_th": "นครปฐม",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,475,000 บาท",
+    "special_price": "1,575,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK011101753",
@@ -110844,7 +112252,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,639,000",
+    "price": "1,680,000 บาท",
     "size": "39.07 ตร.ม.",
     "usable_area": "อาคาร 6 ชั้น",
     "bedrooms": "-",
@@ -110869,7 +112277,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.696836,
     "lng": 100.644857,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,639,000 บาท",
+    "special_price": "1,680,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-64MT010501825",
@@ -110880,7 +112292,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,040,000",
+    "price": "2,040,000 บาท",
     "size": "24.5 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -110906,7 +112318,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.865054,
     "lng": 100.417072,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,640,000 บาท",
+    "special_price": "2,040,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT010500316",
@@ -110917,7 +112333,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,230,000",
+    "price": "1,230,000 บาท",
     "size": "27.6 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -110951,7 +112367,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.977722,
     "lng": 100.446335,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,804,000 บาท",
+    "special_price": "1,230,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-52CC020200502",
@@ -111011,7 +112431,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "3,108,000",
+    "price": "1,696,000 บาท",
     "size": "104.64 ตร.ม.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -111037,7 +112457,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.928127,
     "lng": 100.532666,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,108,000 บาท",
+    "special_price": "1,696,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-58BK031100979",
@@ -111048,7 +112472,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "5,893,000",
+    "price": "3,214,000 บาท",
     "size": "90.79 ตร.ม.",
     "usable_area": "อาคาร 25 ชั้น",
     "bedrooms": "-",
@@ -111072,7 +112496,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.761985,
     "lng": 100.648792,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,893,000 บาท",
+    "special_price": "3,214,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-59CC011500077",
@@ -111083,7 +112511,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "1,698,000",
+    "price": "1,698,000 บาท",
     "size": "39 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -111106,7 +112534,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.810535,
     "lng": 100.63159,
     "province_th": "นครปฐม",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,850,000 บาท",
+    "special_price": "1,698,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-57CC021500135",
@@ -111117,7 +112549,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "2,602,000",
+    "price": "2,602,000 บาท",
     "size": "39 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -111146,7 +112578,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.812374,
     "lng": 100.323309,
     "province_th": "นครปฐม",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "7,244,000 บาท",
+    "special_price": "2,602,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60BK010301537",
@@ -111157,7 +112593,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,557,000",
+    "price": "1,557,000 บาท",
     "size": "55 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -111187,7 +112623,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.790455,
     "lng": 100.649341,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,141,000 บาท",
+    "special_price": "1,557,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65BK010500803",
@@ -111198,7 +112638,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,935,000",
+    "price": "2,935,000 บาท",
     "size": "22 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -111221,7 +112661,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.681567,
     "lng": 100.408511,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "4,235,000 บาท",
+    "special_price": "2,935,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-65MT010300950",
@@ -111232,7 +112676,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "4,361,000",
+    "price": "4,361,000 บาท",
     "size": "65.5 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -111259,7 +112703,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.925063,
     "lng": 100.424273,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,643,000 บาท",
+    "special_price": "4,361,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT021502360",
@@ -111270,7 +112718,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "1,967,000",
+    "price": "1,967,000 บาท",
     "size": "19.9 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -111307,7 +112755,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.65279,
     "lng": 100.251541,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,530,000 บาท",
+    "special_price": "1,967,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66MT010301317",
@@ -111318,7 +112770,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,400,000",
+    "price": "2,400,000 บาท",
     "size": "68.7 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -111341,7 +112793,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.948106,
     "lng": 100.767071,
     "province_th": "ปทุมธานี",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "3,300,000 บาท",
+    "special_price": "2,400,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60MT010302141",
@@ -111352,7 +112808,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "2,715,000",
+    "price": "2,715,000 บาท",
     "size": "98 ตร.ว.",
     "usable_area": "-",
     "bedrooms": "-",
@@ -111377,7 +112833,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.589953,
     "lng": 100.356824,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "5,687,000 บาท",
+    "special_price": "2,715,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-67MT010500683",
@@ -111388,7 +112848,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,400,000",
+    "price": "2,400,000 บาท",
     "size": "21.8 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -111412,7 +112872,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.964927,
     "lng": 100.552827,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,640,000 บาท",
+    "special_price": "2,400,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-50BK011100580",
@@ -111423,7 +112887,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "121,000",
+    "price": "120,000 บาท",
     "size": "23.91 ตร.ม.",
     "usable_area": "อาคาร 5 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -111447,7 +112911,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.90971,
     "lng": 100.677381,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "121,000 บาท",
+    "special_price": "120,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-49BK011100141",
@@ -111458,7 +112926,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "121,000",
+    "price": "120,000 บาท",
     "size": "23.91 ตร.ม.",
     "usable_area": "อาคาร 5 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -111482,7 +112950,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.909744,
     "lng": 100.678329,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "121,000 บาท",
+    "special_price": "120,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-61MT010700729",
@@ -111493,7 +112965,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "1,651,000",
+    "price": "1,651,000 บาท",
     "size": "22 ตร.ว.",
     "usable_area": "-",
     "bedrooms": "-",
@@ -111517,7 +112989,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 14.023216,
     "lng": 100.681579,
     "province_th": "ปทุมธานี",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "2,530,000 บาท",
+    "special_price": "1,651,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-60MT011101773",
@@ -111528,7 +113004,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "2,036,000",
+    "price": "1,203,000 บาท",
     "size": "43.03 ตร.ม.",
     "usable_area": "อาคาร 6 ชั้น",
     "bedrooms": "1 ห้องนอน",
@@ -111553,7 +113029,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.910648,
     "lng": 100.502356,
     "province_th": "นนทบุรี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,036,000 บาท",
+    "special_price": "1,203,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-61MT030200458",
@@ -111614,7 +113094,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "6,059,000",
+    "price": "6,059,000 บาท",
     "size": "25.4 ตร.ว.",
     "usable_area": "อาคาร 4 ชั้น",
     "bedrooms": "-",
@@ -111638,7 +113118,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.810741,
     "lng": 100.621685,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "8,250,000 บาท",
+    "special_price": "6,059,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66CC010301330",
@@ -111649,7 +113133,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "4,463,000",
+    "price": "4,463,000 บาท",
     "size": "93.4 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -111674,7 +113158,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.789115,
     "lng": 100.24398,
     "province_th": "นครปฐม",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "6,545,000 บาท",
+    "special_price": "4,463,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-58MT010300592",
@@ -111685,7 +113173,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นนทบุรี",
     "is_bkk_vicinity": true,
-    "price": "1,377,000",
+    "price": "1,377,000 บาท",
     "size": "73 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -111709,7 +113197,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.857482,
     "lng": 100.498846,
     "province_th": "นนทบุรี",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "1,893,000 บาท",
+    "special_price": "1,377,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-63CC010401227",
@@ -111720,7 +113212,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "4,680,000",
+    "price": "4,680,000 บาท",
     "size": "48 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -111745,7 +113237,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.759516,
     "lng": 100.327593,
     "province_th": "นครปฐม",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "7,920,000 บาท",
+    "special_price": "4,680,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-51MT010100747",
@@ -111891,7 +113387,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "2,947,000",
+    "price": "2,143,000 บาท",
     "size": "40.58 ตร.ม.",
     "usable_area": "อาคาร 7 ชั้น",
     "bedrooms": "-",
@@ -111915,7 +113411,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.629427,
     "lng": 100.587088,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,947,000 บาท",
+    "special_price": "2,143,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-63MT010302083",
@@ -111926,7 +113426,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "2,100,000",
+    "price": "2,100,000 บาท",
     "size": "72 ตร.ว.",
     "usable_area": "อาคาร 1 ชั้น",
     "bedrooms": "-",
@@ -111949,7 +113449,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.622014,
     "lng": 100.288733,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "3,300,000 บาท",
+    "special_price": "2,100,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66MT011500557",
@@ -111960,7 +113464,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรสาคร",
     "is_bkk_vicinity": true,
-    "price": "1,911,000",
+    "price": "1,911,000 บาท",
     "size": "17.5 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -111983,7 +113487,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.649364,
     "lng": 100.283044,
     "province_th": "สมุทรสาคร",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "2,420,000 บาท",
+    "special_price": "1,911,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-54MT032400280",
@@ -112241,7 +113749,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "5,253,000",
+    "price": "5,253,000 บาท",
     "size": "52.1 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -112270,7 +113778,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.649199,
     "lng": 100.476693,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "7,480,000 บาท",
+    "special_price": "5,253,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-44BK020100002",
@@ -112316,7 +113828,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "3,700,000",
+    "price": "3,700,000 บาท",
     "size": "82.2 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -112339,7 +113851,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.97036,
     "lng": 100.672733,
     "province_th": "ปทุมธานี",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "4,070,000 บาท",
+    "special_price": "3,700,000 บาท",
+    "promo_start_date": "2026-10-16",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-67MT011100736",
@@ -112386,7 +113902,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "นครปฐม",
     "is_bkk_vicinity": true,
-    "price": "7,249,000",
+    "price": "7,249,000 บาท",
     "size": "81 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -112412,7 +113928,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.813003,
     "lng": 100.322906,
     "province_th": "นครปฐม",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "8,393,000 บาท",
+    "special_price": "7,249,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64BK011102417",
@@ -112497,7 +114017,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "2,003,000",
+    "price": "1,275,000 บาท",
     "size": "31.38 ตร.ม.",
     "usable_area": "อาคาร 5 ชั้น",
     "bedrooms": "-",
@@ -112521,7 +114041,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.657919,
     "lng": 100.610005,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,003,000 บาท",
+    "special_price": "1,275,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-65MT010500376",
@@ -112532,7 +114056,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "2,052,000",
+    "price": "2,052,000 บาท",
     "size": "57.8 ตร.ว.",
     "usable_area": "อาคาร 2 ชั้น",
     "bedrooms": "-",
@@ -112555,7 +114079,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.997062,
     "lng": 100.527056,
     "province_th": "ปทุมธานี",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "2,772,000 บาท",
+    "special_price": "2,052,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-64MT011501300",
@@ -112566,7 +114094,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "ปทุมธานี",
     "is_bkk_vicinity": true,
-    "price": "3,550,000",
+    "price": "3,550,000 บาท",
     "size": "25.3 ตร.ว.",
     "usable_area": "อาคาร 3 ชั้น",
     "bedrooms": "-",
@@ -112589,7 +114117,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.950161,
     "lng": 100.635284,
     "province_th": "ปทุมธานี",
-    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)"
+    "beneficiary": "มีผู้อาศัย/ใช้ประโยชน์ในทรัพย์ (กรุณาติดต่อพนักงาน ก่อนเข้าชมทรัพย์)",
+    "original_price": "5,500,000 บาท",
+    "special_price": "3,550,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "KTB-66BK010201367",
@@ -112738,7 +114270,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "กรุงเทพมหานคร",
     "is_bkk_vicinity": true,
-    "price": "1,567,000",
+    "price": "926,000 บาท",
     "size": "34.74 ตร.ม.",
     "usable_area": "อาคาร 1 ชั้น",
     "bedrooms": "-",
@@ -112762,7 +114294,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.713199,
     "lng": 100.452117,
     "province_th": "กรุงเทพมหานคร",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "1,567,000 บาท",
+    "special_price": "926,000 บาท",
+    "promo_start_date": "2026-11-18",
+    "promo_end_date": "2027-06-30"
   },
   {
     "id": "KTB-69MT020100004",
@@ -112773,7 +114309,7 @@ var ALL_PROPERTIES_DATA = [
     "sub_source": "KTB",
     "province": "สมุทรปราการ",
     "is_bkk_vicinity": true,
-    "price": "6,210,000",
+    "price": "6,210,000 บาท",
     "size": "270 ตร.ว.",
     "usable_area": "-",
     "bedrooms": "-",
@@ -112807,7 +114343,11 @@ var ALL_PROPERTIES_DATA = [
     "lat": 13.603649,
     "lng": 100.532473,
     "province_th": "สมุทรปราการ",
-    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์"
+    "beneficiary": "ไม่มีผู้ใช้ประโยชน์ในทรัพย์",
+    "original_price": "6,831,000 บาท",
+    "special_price": "6,210,000 บาท",
+    "promo_start_date": "2026-10-06",
+    "promo_end_date": "2026-12-16"
   },
   {
     "id": "ALPHA-ZB_085_G01",
