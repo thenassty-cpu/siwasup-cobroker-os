@@ -295,6 +295,11 @@
           <span>Lobby อนุมัติทีม</span>
         </a>
 
+        <button type="button" onclick="openBugInboxModal()" class="neu-btn px-3.5 py-2.5 text-xs font-bold flex items-center gap-1.5 text-rose-700">
+          <i data-lucide="bug" class="w-4 h-4"></i>
+          <span>Bug Inbox</span>
+        </button>
+
       </div>
     </header>
 
@@ -881,6 +886,71 @@
           card.style.display = 'none';
         }
       });
+    }
+
+    function escBug(s) {
+      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    async function openBugInboxModal() {
+      let m = document.getElementById('bugInboxModal');
+      if (!m) {
+        m = document.createElement('div');
+        m.id = 'bugInboxModal';
+        m.className = 'fixed inset-0 z-[100] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4';
+        m.innerHTML = `
+          <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200">
+            <div class="p-4 border-b border-slate-200 flex items-center justify-between">
+              <h3 class="text-base font-extrabold text-slate-900">🐛 Team Bug Inbox (Siwasup OS)</h3>
+              <button type="button" onclick="document.getElementById('bugInboxModal').classList.add('hidden')" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 font-bold text-slate-600">✕</button>
+            </div>
+            <div id="bugInboxList" class="p-4 overflow-y-auto space-y-3 text-xs text-slate-700">กำลังโหลด...</div>
+          </div>`;
+        document.body.appendChild(m);
+      }
+      m.classList.remove('hidden');
+      const listEl = document.getElementById('bugInboxList');
+      listEl.innerHTML = 'กำลังโหลด...';
+      try {
+        const sess = localStorage.getItem('siwasup_session') || '';
+        const res = await fetch('https://siwasup-cobroker-os.onrender.com/api/bug-report/list', {
+          headers: { 'Authorization': 'Bearer ' + sess },
+          cache: 'no-store'
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'ต้องเข้าสู่ระบบ Admin ก่อน');
+        const reps = data.reports || [];
+        if (!reps.length) {
+          listEl.innerHTML = '<div class="text-center py-8 text-slate-400">ยังไม่มีรายการแจ้งบั๊กเข้ามาครับ 🎉</div>';
+          return;
+        }
+        listEl.innerHTML = reps.map(r => `
+          <div class="p-3.5 rounded-xl border ${r.status === 'resolved' ? 'bg-slate-50 border-slate-200 opacity-70' : 'bg-rose-50/40 border-rose-200'} space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <div class="font-bold text-slate-900">${escBug(r.id)} • ${escBug(r.reporter_name)} (${escBug(r.reporter_code)})</div>
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] text-slate-500">${escBug(r.created_at)}</span>
+                <button type="button" onclick="toggleBugResolve('${escBug(r.id)}', '${r.status === 'resolved' ? 'open' : 'resolved'}')" class="px-2.5 py-1 rounded-lg font-bold ${r.status === 'resolved' ? 'bg-slate-200 text-slate-700' : 'bg-emerald-600 text-white'}">${r.status === 'resolved' ? '✓ แก้แล้ว' : 'ปิดงาน'}</button>
+              </div>
+            </div>
+            <div class="text-slate-800 whitespace-pre-wrap">${escBug(r.message)}</div>
+            <div class="text-[11px] text-slate-500">โหมด: ${escBug(r.mode)} | จอ: ${escBug(r.viewport)}${r.prop_id ? ` | ทรัพย์: ${escBug(r.prop_id)}` : ''}<br>URL: ${escBug(r.page_url)}</div>
+            ${r.screenshot_data_url ? `<img src="${escBug(r.screenshot_data_url)}" class="max-h-56 rounded-lg border border-slate-200 cursor-pointer" onclick="window.open(this.src, '_blank')" />` : ''}
+          </div>
+        `).join('');
+      } catch (err) {
+        listEl.innerHTML = `<div class="text-center py-6 text-rose-600 font-bold">❌ ${escBug(err.message)}</div>`;
+      }
+    }
+
+    async function toggleBugResolve(id, status) {
+      const sess = localStorage.getItem('siwasup_session') || '';
+      await fetch('https://siwasup-cobroker-os.onrender.com/api/bug-report/resolve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + sess },
+        body: JSON.stringify({ id, status })
+      });
+      openBugInboxModal();
     }
   </script>
 </body>

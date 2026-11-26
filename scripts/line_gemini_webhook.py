@@ -2483,6 +2483,37 @@ def _is_gool_approver(member: dict) -> bool:
     return mid == "app_office_001" or code == "SW001" or bool(perms.get("systemAdmin"))
 
 
+_BUG_REPORT_LOCK = threading.RLock()
+_R2_BUG_REPORTS_KEY = "_vault/bug_reports_" + hmac.new(ADMIN_EXPORT_SECRET.encode("utf-8"), b"siwasup_bug_reports_v1", hashlib.sha256).hexdigest()[:32] + ".json"
+_BUG_REPORTS_MEM = None
+
+
+def _load_bug_reports() -> list:
+    global _BUG_REPORTS_MEM
+    with _BUG_REPORT_LOCK:
+        if isinstance(_BUG_REPORTS_MEM, list):
+            return _BUG_REPORTS_MEM
+        try:
+            data = _fetch_r2_json(_R2_BUG_REPORTS_KEY, timeout=8)
+            if isinstance(data, list):
+                _BUG_REPORTS_MEM = data
+                return _BUG_REPORTS_MEM
+        except Exception:
+            pass
+        _BUG_REPORTS_MEM = []
+        return _BUG_REPORTS_MEM
+
+
+def _save_bug_reports(items: list):
+    global _BUG_REPORTS_MEM
+    with _BUG_REPORT_LOCK:
+        trimmed = list(items)[:200]
+        _BUG_REPORTS_MEM = trimmed
+        if put_object_r2 is not None:
+            raw = json.dumps(trimmed, ensure_ascii=False).encode("utf-8")
+            threading.Thread(target=put_object_r2, args=(_R2_BUG_REPORTS_KEY, raw, "application/json; charset=utf-8"), daemon=True).start()
+
+
 def _is_bua_publisher(member: dict) -> bool:
     """Only Bua (SA001) or systemAdmin may publish Sandbox consignment properties to Public."""
     if not isinstance(member, dict):
@@ -4549,6 +4580,13 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             })
             return
 
+        if path == "/api/bug-report/list":
+            acting = self._require("admin")
+            if not acting:
+                return
+            self._send_json(200, {"status": "ok", "reports": _load_bug_reports()})
+            return
+
         if path == "/api/auth/me":
             s = self._session()
             if not s or not s.get("sub"):
@@ -5969,6 +6007,72 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                 snap_data["audit_log"] = snap_data["audit_log"][:100]
                 save_lobby_data(snap_data, allow_truncate=True, create_snapshot=True, snapshot_reason=f"restore:{snap_key}")
                 self._send_json(200, {"status": "success", "approved": len(snap_data.get("approved", [])), "pending": len(snap_data.get("pending", []))})
+            except Exception as e:
+                self._send_json(500, {"error": str(e)})
+            return
+
+        if path == "/api/bug-report":
+            s = self._session()
+            if not s or not s.get("sub"):
+                self._send_json(401, {"error": "login required"})
+                return
+            try:
+                content_length = int(self.headers.get('Content-Length', 0))
+                if content_length > 800_000:
+                    self._send_json(413, {"error": "Payload too large"})
+                    return
+                payload = json.loads(self.rfile.read(content_length).decode('utf-8'))
+                msg = str(payload.get("message") or "").strip()[:1000]
+                if not msg:
+                    self._send_json(400, {"error": "message is required"})
+                    return
+                shot = str(payload.get("screenshot_data_url") or "")
+                if shot and (not shot.startswith("data:image/") or len(shot) > 600_000):
+                    shot = ""
+                store = load_lobby_data()
+                mem = next((a for a in store.get("approved", []) if a.get("lineUserId") == s["sub"]), None)
+                if not mem:
+                    self._send_json(403, {"error": "approved member required"})
+                    return
+                rid = f"BUG-{bkk_now().strftime('%m%d%H%M%S')}-{uuid.uuid4().hex[:4].upper()}"
+                rec = {
+                    "id": rid,
+                    "reporter_name": mem.get("nickname") or mem.get("name") or s.get("name") or "ทีมงาน",
+                    "reporter_code": mem.get("code") or mem.get("id") or "",
+                    "message": msg,
+                    "screenshot_data_url": shot,
+                    "page_url": str(payload.get("page_url") or "")[:400],
+                    "mode": str(payload.get("mode") or "")[:30],
+                    "prop_id": str(payload.get("prop_id") or "")[:60],
+                    "viewport": str(payload.get("viewport") or "")[:30],
+                    "status": "open",
+                    "created_at": bkk_now().strftime("%Y-%m-%d %H:%M:%S"),
+                }
+                reports = _load_bug_reports()
+                reports.insert(0, rec)
+                _save_bug_reports(reports)
+                self._send_json(200, {"status": "ok", "id": rid})
+            except Exception as e:
+                self._send_json(500, {"error": str(e)})
+            return
+
+        if path == "/api/bug-report/resolve":
+            acting = self._require("admin")
+            if not acting:
+                return
+            try:
+                content_length = int(self.headers.get('Content-Length', 0))
+                payload = json.loads(self.rfile.read(content_length).decode('utf-8'))
+                rid = str(payload.get("id") or "").strip()
+                new_status = "open" if payload.get("status") == "open" else "resolved"
+                reports = _load_bug_reports()
+                for r in reports:
+                    if r.get("id") == rid:
+                        r["status"] = new_status
+                        r["resolved_by"] = acting.get("nickname") or acting.get("code") or "Admin"
+                        break
+                _save_bug_reports(reports)
+                self._send_json(200, {"status": "ok"})
             except Exception as e:
                 self._send_json(500, {"error": str(e)})
             return

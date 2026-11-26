@@ -1669,6 +1669,9 @@
             fab.innerHTML = '<span>⚙️</span><span>NASSTY Hub</span>';
             document.body.appendChild(fab);
           }
+          if (!isCustomerOnly && typeof initTeamBugReportWidget === 'function') {
+            initTeamBugReportWidget(me.member);
+          }
           const resolvedCode = resolveVerifiedMemberRef(me.member);
           if (resolvedCode) {
             if (typeof _siwasupSafeStorage === 'function') {
@@ -9072,6 +9075,149 @@
       }
 
       if (window.lucide) { lucide.createIcons(); }
+    }
+
+    // 🐛 Team-Only 1-Click Bug Report Widget (hidden from customers/guests)
+    function initTeamBugReportWidget(member) {
+      if (!member || document.getElementById('team-bug-fab')) return;
+      const hasNasstyFab = Boolean(document.getElementById('nassty-hub-fab'));
+      const fab = document.createElement('button');
+      fab.id = 'team-bug-fab';
+      fab.type = 'button';
+      fab.className = `fixed ${hasNasstyFab ? 'bottom-14' : 'bottom-4'} left-4 z-[88] px-3 py-1.5 rounded-full bg-rose-600/95 hover:bg-rose-700 text-white border border-rose-300/40 shadow-lg text-xs font-bold flex items-center gap-1.5 backdrop-blur-md transition`;
+      fab.innerHTML = '<span>🐛</span><span>แจ้งบั๊ก</span>';
+      fab.onclick = () => openTeamBugModal(member);
+      document.body.appendChild(fab);
+
+      if (!document.getElementById('teamBugModal')) {
+        const modal = document.createElement('div');
+        modal.id = 'teamBugModal';
+        modal.className = 'fixed inset-0 z-[120] hidden bg-black/60 backdrop-blur-xs flex items-center justify-center p-4';
+        modal.innerHTML = `
+          <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl border border-neutral-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-base font-extrabold text-neutral-900">🐛 แจ้งบั๊ก / จุดที่ต้องแก้</h3>
+              <button type="button" onclick="document.getElementById('teamBugModal').classList.add('hidden')" class="w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 flex items-center justify-center text-neutral-600 font-bold">✕</button>
+            </div>
+            <div id="bugAutoCtx" class="text-[11px] bg-neutral-50 border border-neutral-200 rounded-xl p-2.5 text-neutral-600 leading-relaxed"></div>
+            <div>
+              <label class="block text-xs font-bold text-neutral-700 mb-1">เจอปัญหาตรงไหน / อยากให้แก้ยังไง *</label>
+              <textarea id="bugMsgInput" rows="3" placeholder="เช่น กดดูรายละเอียดแล้วราคาไม่ตรง / หมุดแผนที่ผิด..." class="w-full rounded-xl border border-neutral-300 p-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-rose-500"></textarea>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-neutral-700 mb-1">แนบรูปแคปหน้าจอ (ถ้ามี)</label>
+              <input id="bugImgInput" type="file" accept="image/*" class="w-full text-xs text-neutral-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-neutral-100 file:text-neutral-800 file:font-bold" />
+              <div id="bugImgPreviewWrap" class="hidden mt-2"><img id="bugImgPreview" class="max-h-32 rounded-lg border border-neutral-200 object-contain" /></div>
+            </div>
+            <div id="bugSubmitStatus" class="hidden text-xs font-semibold"></div>
+            <div class="flex items-center gap-2 pt-1">
+              <button id="bugSubmitBtn" type="button" class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold transition">ส่งเข้า Bug Inbox</button>
+              <button id="bugCopyLineBtn" type="button" class="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition">📋 ก๊อปส่ง LINE</button>
+            </div>
+          </div>`;
+        document.body.appendChild(modal);
+
+        let compressedShot = '';
+        const imgInput = document.getElementById('bugImgInput');
+        imgInput.addEventListener('change', (ev) => {
+          const f = ev.target.files && ev.target.files[0];
+          if (!f) { compressedShot = ''; return; }
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+              const maxW = 1000;
+              const scale = img.width > maxW ? (maxW / img.width) : 1;
+              const canvas = document.createElement('canvas');
+              canvas.width = Math.round(img.width * scale);
+              canvas.height = Math.round(img.height * scale);
+              canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+              compressedShot = canvas.toDataURL('image/jpeg', 0.72);
+              document.getElementById('bugImgPreview').src = compressedShot;
+              document.getElementById('bugImgPreviewWrap').classList.remove('hidden');
+            };
+            img.src = e.target.result;
+          };
+          reader.readAsDataURL(f);
+        });
+
+        const buildCtx = () => {
+          const openCode = (document.getElementById('detail-code') && !document.getElementById('detail-modal')?.classList.contains('hidden')) ? document.getElementById('detail-code').textContent : '';
+          return {
+            reporter: `${member.nickname || member.name || 'ทีมงาน'} (${member.code || ''})`,
+            mode: typeof currentMode !== 'undefined' ? currentMode : 'unknown',
+            prop_id: openCode || (new URLSearchParams(window.location.search).get('id') || ''),
+            viewport: `${window.innerWidth}x${window.innerHeight}`,
+            page_url: window.location.href
+          };
+        };
+
+        document.getElementById('bugCopyLineBtn').onclick = () => {
+          const c = buildCtx();
+          const txt = (document.getElementById('bugMsgInput').value || '').trim();
+          const summary = `[แจ้งบั๊ก] ${txt || '(ระบุปัญหา)'}\n• ผู้แจ้ง: ${c.reporter}\n• โหมด: ${c.mode}${c.prop_id ? `\n• รหัสทรัพย์: ${c.prop_id}` : ''}\n• หน้าจอ: ${c.viewport}\n• ลิงก์: ${c.page_url}`;
+          if (navigator.clipboard) navigator.clipboard.writeText(summary).catch(() => {});
+          if (typeof showToast === 'function') showToast('📋 ก๊อปข้อความแจ้งบั๊กแล้ว วางใน LINE ได้เลย!');
+        };
+
+        document.getElementById('bugSubmitBtn').onclick = async () => {
+          const msg = (document.getElementById('bugMsgInput').value || '').trim();
+          const stEl = document.getElementById('bugSubmitStatus');
+          if (!msg) {
+            stEl.textContent = '⚠️ กรุณาพิมพ์รายละเอียดบั๊กสั้นๆ ก่อนส่งครับ';
+            stEl.className = 'text-xs font-semibold text-rose-600';
+            stEl.classList.remove('hidden');
+            return;
+          }
+          const btn = document.getElementById('bugSubmitBtn');
+          btn.disabled = true;
+          btn.textContent = 'กำลังส่ง...';
+          try {
+            const c = buildCtx();
+            const sess = (typeof _siwasupSafeStorage === 'function' ? _siwasupSafeStorage('local', 'get', 'siwasup_session') : localStorage.getItem('siwasup_session')) || '';
+            const res = await fetch('https://siwasup-cobroker-os.onrender.com/api/bug-report', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + sess },
+              body: JSON.stringify({
+                message: msg,
+                screenshot_data_url: compressedShot,
+                page_url: c.page_url,
+                mode: c.mode,
+                prop_id: c.prop_id,
+                viewport: c.viewport
+              })
+            });
+            const data = await res.json();
+            if (res.ok && data.status === 'ok') {
+              stEl.textContent = `✅ ส่งเข้า Bug Inbox แล้ว (${data.id}) ขอบคุณครับ!`;
+              stEl.className = 'text-xs font-semibold text-emerald-700';
+              stEl.classList.remove('hidden');
+              document.getElementById('bugMsgInput').value = '';
+              compressedShot = '';
+              document.getElementById('bugImgPreviewWrap').classList.add('hidden');
+            } else {
+              throw new Error(data.error || 'ส่งไม่สำเร็จ');
+            }
+          } catch (err) {
+            stEl.textContent = `❌ ส่งไม่สำเร็จ: ${err.message} (กด "ก๊อปส่ง LINE" แทนได้ครับ)`;
+            stEl.className = 'text-xs font-semibold text-rose-600';
+            stEl.classList.remove('hidden');
+          } finally {
+            btn.disabled = false;
+            btn.textContent = 'ส่งเข้า Bug Inbox';
+          }
+        };
+      }
+    }
+
+    function openTeamBugModal(member) {
+      const ctxEl = document.getElementById('bugAutoCtx');
+      const openCode = (document.getElementById('detail-code') && !document.getElementById('detail-modal')?.classList.contains('hidden')) ? document.getElementById('detail-code').textContent : '';
+      if (ctxEl) {
+        ctxEl.innerHTML = `<strong>ผู้แจ้ง:</strong> ${escapeHtmlIntake(member.nickname || member.name || '')} • <strong>โหมด:</strong> ${escapeHtmlIntake(typeof currentMode !== 'undefined' ? currentMode : '')} • <strong>จอ:</strong> ${window.innerWidth}×${window.innerHeight}${openCode ? ` • <strong>ทรัพย์:</strong> ${escapeHtmlIntake(openCode)}` : ''}`;
+      }
+      document.getElementById('bugSubmitStatus').classList.add('hidden');
+      document.getElementById('teamBugModal').classList.remove('hidden');
     }
     
   </script>
