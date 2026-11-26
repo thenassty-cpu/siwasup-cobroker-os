@@ -2514,6 +2514,56 @@ def _save_bug_reports(items: list):
             threading.Thread(target=put_object_r2, args=(_R2_BUG_REPORTS_KEY, raw, "application/json; charset=utf-8"), daemon=True).start()
 
 
+_DAILY_STATS_LOCK = threading.RLock()
+_R2_DAILY_STATS_KEY = "_vault/daily_active_stats_" + hmac.new(ADMIN_EXPORT_SECRET.encode("utf-8"), b"siwasup_daily_stats_v1", hashlib.sha256).hexdigest()[:32] + ".json"
+_DAILY_STATS_MEM = None
+_DAILY_STATS_LAST_R2_TS = 0
+
+
+def _load_daily_stats() -> dict:
+    global _DAILY_STATS_MEM
+    with _DAILY_STATS_LOCK:
+        if isinstance(_DAILY_STATS_MEM, dict):
+            return _DAILY_STATS_MEM
+        try:
+            data = _fetch_r2_json(_R2_DAILY_STATS_KEY, timeout=8)
+            if isinstance(data, dict):
+                _DAILY_STATS_MEM = data
+                return _DAILY_STATS_MEM
+        except Exception:
+            pass
+        _DAILY_STATS_MEM = {}
+        return _DAILY_STATS_MEM
+
+
+def _record_daily_active(mem: dict, store: dict):
+    global _DAILY_STATS_LAST_R2_TS
+    if not isinstance(mem, dict):
+        return
+    with _DAILY_STATS_LOCK:
+        stats = _load_daily_stats()
+        day_key = bkk_now().strftime("%Y-%m-%d")
+        day_rec = stats.setdefault(day_key, {"unique_members": [], "total_hits": 0, "peak_online": 0})
+        day_rec["total_hits"] = int(day_rec.get("total_hits") or 0) + 1
+        label = f"{mem.get('nickname') or mem.get('name') or mem.get('code') or 'ทีมงาน'} ({mem.get('code') or '-'})"
+        if label not in day_rec["unique_members"]:
+            day_rec["unique_members"].append(label)
+        now_ts = int(time.time())
+        approved = (store or {}).get("approved") or []
+        cur_online = sum(1 for a in approved if int(a.get("last_active_at") or 0) >= (now_ts - 300))
+        if cur_online > int(day_rec.get("peak_online") or 0):
+            day_rec["peak_online"] = cur_online
+        # Keep only last 60 days
+        keys_sorted = sorted(stats.keys(), reverse=True)
+        for old_k in keys_sorted[60:]:
+            stats.pop(old_k, None)
+        # Debounce R2 upload (max once per 60s)
+        if put_object_r2 is not None and (now_ts - _DAILY_STATS_LAST_R2_TS) >= 60:
+            _DAILY_STATS_LAST_R2_TS = now_ts
+            raw = json.dumps(stats, ensure_ascii=False).encode("utf-8")
+            threading.Thread(target=put_object_r2, args=(_R2_DAILY_STATS_KEY, raw, "application/json; charset=utf-8"), daemon=True).start()
+
+
 def _is_bua_publisher(member: dict) -> bool:
     """Only Bua (SA001) or systemAdmin may publish Sandbox consignment properties to Public."""
     if not isinstance(member, dict):
@@ -4587,6 +4637,15 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             self._send_json(200, {"status": "ok", "reports": _load_bug_reports()})
             return
 
+        if path == "/api/stats/daily-active":
+            acting = self._require("admin")
+            if not acting:
+                return
+            stats = _load_daily_stats()
+            days = [{"date": k, **stats[k]} for k in sorted(stats.keys(), reverse=True)[:30]]
+            self._send_json(200, {"status": "ok", "days": days})
+            return
+
         if path == "/api/auth/me":
             s = self._session()
             if not s or not s.get("sub"):
@@ -4599,6 +4658,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
             mem = next((a for a in store.get("approved", []) if a.get("lineUserId") == sub), None)
             if mem:
                 mem["last_active_at"] = int(time.time())
+                _record_daily_active(mem, store)
                 save_lobby_data(store)
                 is_adm = is_admin_member(mem)
                 me_payload = {

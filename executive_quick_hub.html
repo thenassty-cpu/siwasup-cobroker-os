@@ -990,8 +990,60 @@
         const online = approved.filter(m => Number(m.last_active_at || 0) >= (nowSec - 300));
         if (textEl) textEl.textContent = `ออนไลน์: ${online.length} / ${approved.length} คน`;
         if (showPopup) {
-          const names = online.map(m => `• ${m.nickname || m.name || m.code} (${m.code || '-'})`).join('\n');
-          alert(`🟢 ออนไลน์ใน 5 นาทีล่าสุด (${online.length} / ${approved.length} คน)\n\n${names || 'ยังไม่มีสมาชิกออนไลน์ใน 5 นาทีล่าสุด'}`);
+          let m = document.getElementById('onlineStatsModal');
+          if (!m) {
+            m = document.createElement('div');
+            m.id = 'onlineStatsModal';
+            m.className = 'fixed inset-0 z-[100] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4';
+            m.innerHTML = `
+              <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200">
+                <div class="p-4 border-b border-slate-200 flex items-center justify-between">
+                  <h3 class="text-base font-extrabold text-slate-900">🟢 สถิติคนออนไลน์ & ย้อนหลังรายวัน</h3>
+                  <button type="button" onclick="document.getElementById('onlineStatsModal').classList.add('hidden')" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 font-bold text-slate-600">✕</button>
+                </div>
+                <div id="onlineStatsBody" class="p-4 overflow-y-auto space-y-4 text-xs text-slate-700"></div>
+              </div>`;
+            document.body.appendChild(m);
+          }
+          m.classList.remove('hidden');
+          const bodyEl = document.getElementById('onlineStatsBody');
+          const namesHtml = online.length
+            ? online.map(u => `<span class="inline-block px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 font-semibold">${escBug(u.nickname || u.name || u.code)} (${escBug(u.code || '-')})</span>`).join(' ')
+            : '<span class="text-slate-400">ยังไม่มีสมาชิกออนไลน์ใน 5 นาทีล่าสุด</span>';
+          bodyEl.innerHTML = `
+            <div class="p-3 rounded-xl bg-emerald-50/50 border border-emerald-200 space-y-2">
+              <div class="font-bold text-emerald-900">🟢 ออนไลน์ใน 5 นาทีล่าสุด (${online.length} / ${approved.length} คน)</div>
+              <div class="flex flex-wrap gap-1.5">${namesHtml}</div>
+            </div>
+            <div id="dailyStatsWrap" class="text-slate-500">กำลังโหลดสถิติย้อนหลัง...</div>`;
+          try {
+            const sRes = await fetch('https://siwasup-cobroker-os.onrender.com/api/stats/daily-active', {
+              headers: { 'Authorization': 'Bearer ' + sess },
+              cache: 'no-store'
+            });
+            const sData = await sRes.json();
+            const days = (sData && Array.isArray(sData.days)) ? sData.days : [];
+            const wrap = document.getElementById('dailyStatsWrap');
+            if (!days.length) {
+              wrap.innerHTML = '<div class="text-center py-4 text-slate-400">เพิ่งเริ่มเก็บสถิติวันนี้ — ข้อมูลรายวันจะสะสมอัตโนมัติครับ</div>';
+            } else {
+              wrap.innerHTML = `
+                <div class="font-bold text-slate-900 mb-2">📊 สถิติย้อนหลังรายวัน (สูงสุด 30 วัน)</div>
+                <div class="space-y-2">
+                  ${days.map(d => `
+                    <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 space-y-1">
+                      <div class="flex items-center justify-between font-bold text-slate-800">
+                        <span>📅 ${escBug(d.date)}</span>
+                        <span>เข้าใช้งาน ${Number((d.unique_members || []).length)} คน • ${Number(d.total_hits || 0)} ครั้ง • Peak พร้อมกัน ${Number(d.peak_online || 0)} คน</span>
+                      </div>
+                      <div class="text-[11px] text-slate-600">${(d.unique_members || []).map(escBug).join(', ')}</div>
+                    </div>
+                  `).join('')}
+                </div>`;
+            }
+          } catch (err) {
+            document.getElementById('dailyStatsWrap').innerHTML = `<div class="text-rose-600">โหลดสถิติรายวันไม่สำเร็จ</div>`;
+          }
         }
       } catch (e) {
         if (textEl) textEl.textContent = 'ออนไลน์: -';
