@@ -2,6 +2,7 @@ import json
 import os
 import re
 import shutil
+import sys
 from playwright.sync_api import sync_playwright
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -188,6 +189,7 @@ def normalize_kbank_item(it: dict) -> dict | None:
 
 
 def main():
+    full_mode = "--full" in sys.argv
     if not os.environ.get("CI"):
         os.makedirs(os.path.dirname(BACKUP_PATH), exist_ok=True)
         shutil.copy2(PROPS_PATH, BACKUP_PATH)
@@ -205,9 +207,10 @@ def main():
                 timeout=30000,
             )
 
-        # Fetch 40 pages (2,000 newest properties) without Provinces filter (Provinces expects numeric IDs)
+        # Fetch pages with healthy pacing (2 concurrent + 350ms pause when --full)
         res_js = page.evaluate(
-            """async () => {
+            """async (isFull) => {
+                const sleep = (ms) => new Promise(r => setTimeout(r, ms));
                 const fetchPage = async (pg) => {
                     const r = await fetch('/Custom/KWEB2020/NPA2023Backend13.aspx/GetProperties', {
                         method: 'POST',
@@ -222,18 +225,22 @@ def main():
                 };
                 const first = await fetchPage(1);
                 const total = first.total || 0;
-                const maxPages = Math.min(Math.ceil(total / 50), 40);
+                const totalPages = Math.ceil(total / 50);
+                const maxPages = isFull ? totalPages : Math.min(totalPages, 40);
+                const conc = isFull ? 2 : 4;
                 let all = [...first.items];
-                for (let pg = 2; pg <= maxPages; pg += 4) {
+                for (let pg = 2; pg <= maxPages; pg += conc) {
                     const batch = [];
-                    for (let k = pg; k < pg + 4 && k <= maxPages; k++) {
+                    for (let k = pg; k < pg + conc && k <= maxPages; k++) {
                         batch.push(fetchPage(k));
                     }
                     const results = await Promise.all(batch);
                     for (const res of results) all.push(...res.items);
+                    if (isFull) await sleep(350);
                 }
                 return {total, fetched: all.length, items: all};
-            }"""
+            }""",
+            full_mode,
         )
         print(f"[KBANK] Total={res_js['total']}, Fetched={res_js['fetched']}")
         raw_items = res_js["items"]
