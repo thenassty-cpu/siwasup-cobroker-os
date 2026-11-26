@@ -310,6 +310,11 @@
           <span>Offline Chat Log</span>
         </a>
 
+        <button type="button" id="onlineCountPill" onclick="refreshOnlineUsers(true)" class="neu-btn px-3.5 py-2.5 text-xs font-bold flex items-center gap-1.5 text-emerald-700" title="คลิกเพื่อดูรายชื่อคนออนไลน์ (Active ใน 5 นาทีล่าสุด)">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span id="onlineCountText">ออนไลน์: ...</span>
+        </button>
+
       </div>
     </header>
 
@@ -962,6 +967,40 @@
       });
       openBugInboxModal();
     }
+
+    async function refreshOnlineUsers(showPopup = false) {
+      const textEl = document.getElementById('onlineCountText');
+      try {
+        const sess = localStorage.getItem('siwasup_session') || '';
+        if (!sess) {
+          if (textEl) textEl.textContent = 'ออนไลน์: (Login)';
+          return;
+        }
+        const res = await fetch('https://siwasup-cobroker-os.onrender.com/api/lobby/list', {
+          headers: { 'Authorization': 'Bearer ' + sess },
+          cache: 'no-store'
+        });
+        if (!res.ok) {
+          if (textEl) textEl.textContent = 'ออนไลน์: -';
+          return;
+        }
+        const data = await res.json();
+        const approved = Array.isArray(data.approved) ? data.approved : [];
+        const nowSec = Math.floor(Date.now() / 1000);
+        const online = approved.filter(m => Number(m.last_active_at || 0) >= (nowSec - 300));
+        if (textEl) textEl.textContent = `ออนไลน์: ${online.length} / ${approved.length} คน`;
+        if (showPopup) {
+          const names = online.map(m => `• ${m.nickname || m.name || m.code} (${m.code || '-'})`).join('\n');
+          alert(`🟢 ออนไลน์ใน 5 นาทีล่าสุด (${online.length} / ${approved.length} คน)\n\n${names || 'ยังไม่มีสมาชิกออนไลน์ใน 5 นาทีล่าสุด'}`);
+        }
+      } catch (e) {
+        if (textEl) textEl.textContent = 'ออนไลน์: -';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      refreshOnlineUsers(false);
+      setInterval(() => refreshOnlineUsers(false), 60000);
+    });
   </script>
 </body>
 </html>
