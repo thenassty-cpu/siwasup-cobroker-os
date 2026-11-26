@@ -2295,6 +2295,46 @@
       return num > 0 ? num.toLocaleString() : (price || 'ติดต่อสอบถาม');
     }
 
+    function formatThaiShortDate(iso) {
+      if (!iso || typeof iso !== 'string') return '';
+      const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (!m) return iso;
+      const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+      const yr = parseInt(m[1], 10) + 543;
+      const mo = months[Math.max(0, Math.min(11, parseInt(m[2], 10) - 1))];
+      const dy = parseInt(m[3], 10);
+      return `${dy} ${mo} ${yr}`;
+    }
+
+    function getEffectivePriceInfo(p) {
+      const origNum = parsePriceNumber(p && p.original_price);
+      const specNum = parsePriceNumber(p && (p.special_price || p.promo_price || p.price));
+      const baseNum = parsePriceNumber(p && p.price);
+      const endIso = (p && p.promo_end_date) ? String(p.promo_end_date).slice(0, 10) : '';
+      const isExpired = endIso ? (Date.now() > new Date(endIso + 'T23:59:59+07:00').getTime()) : false;
+
+      if (origNum > 0 && specNum > 0 && origNum > specNum && !isExpired) {
+        const pct = Math.round(((origNum - specNum) / origNum) * 100);
+        return {
+          isPromo: true,
+          effectiveNum: specNum,
+          effectiveText: specNum.toLocaleString(),
+          originalText: origNum.toLocaleString(),
+          endDateTh: formatThaiShortDate(endIso),
+          discountPct: pct
+        };
+      }
+      const effNum = (isExpired && origNum > 0) ? origNum : baseNum;
+      return {
+        isPromo: false,
+        effectiveNum: effNum,
+        effectiveText: effNum > 0 ? effNum.toLocaleString() : formatPriceClean(p && p.price),
+        originalText: '',
+        endDateTh: '',
+        discountPct: 0
+      };
+    }
+
     function getCategoryIcon(cat) {
       const c = (cat || '').toLowerCase();
       if (c.includes('ที่ดิน')) return 'trees';
@@ -2752,6 +2792,14 @@
         if (p.subdistrict_th && p.district_th) {
           rows.push({ label: 'แขวง/เขต', val: `${p.subdistrict_th} • ${p.district_th}` });
         }
+        const beneficiary = p.beneficiary || (p.specs && p.specs.beneficiary);
+        if (beneficiary && beneficiary !== '-') {
+          rows.push({ label: 'ผู้มีสิทธิประโยชน์', val: sanitizeForClientMode(beneficiary) });
+        }
+        const remark = p.remark || (p.specs && p.specs.remark);
+        if (remark && remark !== '-') {
+          rows.push({ label: 'หมายเหตุ', val: sanitizeForClientMode(remark) });
+        }
 
         if (rows.length > 0) {
           deepGrid.innerHTML = rows.map(r => `
@@ -2901,11 +2949,25 @@
         }
       }
       
-      const formattedPrice = formatPriceClean(p.price);
-      document.getElementById('detail-price').textContent = `฿${formattedPrice}`;
-      document.getElementById('detail-deposit').textContent = `฿${calcDeposit(p.price)}`;
+      const pInfo = getEffectivePriceInfo(p);
+      const detailPriceEl = document.getElementById('detail-price');
+      if (detailPriceEl) {
+        if (pInfo.isPromo) {
+          detailPriceEl.innerHTML = `<div class="text-right">
+            <div class="inline-flex items-center gap-1.5 flex-wrap justify-end">
+              <span class="px-1.5 py-0.5 rounded bg-amber-500 text-white text-[10px] font-extrabold leading-none">ราคาพิเศษ${pInfo.discountPct > 0 ? ` -${pInfo.discountPct}%` : ''}</span>
+              <span class="text-lg font-black text-amber-700 tracking-tight">฿${pInfo.effectiveText}</span>
+            </div>
+            <div class="text-xs font-medium text-neutral-400 line-through">฿${pInfo.originalText}</div>
+            ${pInfo.endDateTh ? `<div class="text-[10px] font-medium text-amber-700">โปรโมชันถึง ${pInfo.endDateTh}</div>` : ''}
+          </div>`;
+        } else {
+          detailPriceEl.textContent = `฿${pInfo.effectiveText}`;
+        }
+      }
+      document.getElementById('detail-deposit').textContent = `฿${calcDeposit(pInfo.effectiveNum)}`;
       
-      const priceNum = parsePriceNumber(p.price);
+      const priceNum = pInfo.effectiveNum;
       const monthly = priceNum > 0 ? Math.round((priceNum / 1000000) * 3500) : 10500;
       document.getElementById('detail-installment').textContent = `~ ${monthly.toLocaleString()} บ./เดือน (คำนวณล้านละ 3,500)`;
 
@@ -3748,23 +3810,28 @@
                 </div>
               </div>
 
-              <!-- Homerun 2-Row Financial Info with Bold Thai Baht (฿) Circles -->
+              <!-- Homerun 2-Row Financial Info with Promo Strikethrough & Auto-Expire -->
+              ${((pInfo) => `
               <div class="pt-2.5 border-t border-slate-100 space-y-1 mt-2">
-                <div class="flex items-center justify-between text-xs">
-                  <span class="text-neutral-500 flex items-center gap-1.5 font-medium">
-                    <span class="w-4 h-4 rounded-full border border-[#C2A460]/40 text-[#8A6A1F] font-bold text-[10px] inline-flex items-center justify-center leading-none select-none bg-[#F8F3E6]">฿</span>
-                    <span>${currentMode === 'owner' ? 'ราคาตั้งขาย' : 'ราคาก่อนต่อรอง'}</span>
+                <div class="flex items-start justify-between text-xs gap-2">
+                  <span class="text-neutral-500 flex items-center gap-1.5 font-medium pt-0.5">
+                    <span class="w-4 h-4 rounded-full border border-[#C2A460]/40 text-[#8A6A1F] font-bold text-[10px] inline-flex items-center justify-center leading-none select-none bg-[#F8F3E6] shrink-0">฿</span>
+                    ${pInfo.isPromo ? `<span class="px-1.5 py-0.5 rounded bg-amber-500 text-white text-[9.5px] font-extrabold leading-none">ราคาพิเศษ${pInfo.discountPct > 0 ? ` -${pInfo.discountPct}%` : ''}</span>` : `<span>${currentMode === 'owner' ? 'ราคาตั้งขาย' : 'ราคาก่อนต่อรอง'}</span>`}
                   </span>
-                  <span class="text-base font-extrabold text-neutral-900 tracking-tight">฿${formatPriceClean(p.price)}</span>
+                  <div class="text-right">
+                    <span class="text-base font-extrabold ${pInfo.isPromo ? 'text-amber-700' : 'text-neutral-900'} tracking-tight">฿${pInfo.effectiveText}</span>
+                    ${pInfo.isPromo ? `<span class="block text-[11px] text-neutral-400 line-through leading-tight">฿${pInfo.originalText}</span>` : ''}
+                  </div>
                 </div>
                 <div class="flex items-center justify-between text-xs">
                   <span class="text-neutral-500 flex items-center gap-1.5">
                     <span class="w-4 h-4 rounded-full border border-neutral-300 text-neutral-500 font-bold text-[10px] inline-flex items-center justify-center leading-none select-none">฿</span>
-                    <span>หลักประกันเพื่อต่อรองราคา</span>
+                    <span>${pInfo.isPromo && pInfo.endDateTh ? `โปรฯ ถึง ${pInfo.endDateTh}` : 'หลักประกันเพื่อต่อรองราคา'}</span>
                   </span>
-                  <span class="text-xs font-semibold text-neutral-600 tracking-tight">฿${calcDeposit(p.price)}</span>
+                  <span class="text-xs font-semibold text-neutral-600 tracking-tight">฿${calcDeposit(pInfo.effectiveNum)}</span>
                 </div>
               </div>
+              `)(getEffectivePriceInfo(p))}
 
               <!-- แถวที่ 1: Primary Actions (สำหรับทุกคน / ตัวแทน) -->
               <div class="grid grid-cols-2 gap-2 pt-2">
