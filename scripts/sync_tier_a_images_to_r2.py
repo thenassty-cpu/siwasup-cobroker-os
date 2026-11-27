@@ -7,6 +7,7 @@ import random
 import re
 import shutil
 import ssl
+import subprocess
 import time
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -148,14 +149,26 @@ def mirror_one(url: str, folder: str, healthy: bool = False) -> tuple[str, str |
     if dom in REFERER_MAP:
         headers["Referer"] = REFERER_MAP[dom]
     dl_ctx = ssl._create_unverified_context() if "alphacapamc.com" in dom else CTX
+    use_curl = "kasikornbank.com" in dom
     for attempt in range(2):
         try:
             if healthy:
                 time.sleep(random.uniform(0.35, 0.75))
-            req = urllib.request.Request(url, headers=headers)
-            with urllib.request.urlopen(req, context=dl_ctx, timeout=15) as r:
-                data = r.read()
-                ctype = r.headers.get("Content-Type", "")
+            if use_curl:
+                cmd = ["curl.exe", "-s", "-S", "-f", "--max-time", "15", "-A", headers["User-Agent"]]
+                if "Referer" in headers:
+                    cmd.extend(["-e", headers["Referer"]])
+                cmd.append(url)
+                res = subprocess.run(cmd, capture_output=True)
+                if res.returncode != 0 or len(res.stdout) < 500:
+                    raise RuntimeError(f"curl rc={res.returncode}")
+                data = res.stdout
+                ctype = ""
+            else:
+                req = urllib.request.Request(url, headers=headers)
+                with urllib.request.urlopen(req, context=dl_ctx, timeout=15) as r:
+                    data = r.read()
+                    ctype = r.headers.get("Content-Type", "")
             if len(data) < 500:
                 return url, None
             ext, final_ctype = detect_ext_and_ctype(data, ctype)
