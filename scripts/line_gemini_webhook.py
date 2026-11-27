@@ -1507,10 +1507,13 @@ def ask_gemini(user_id, user_text, is_continuous=False, retries=2):
 def find_property_by_id_or_code(pid):
     pid_clean = str(pid).strip().lower()
     for p in SIWASUP_PROPS:
-        if str(p.get("id", "")).strip().lower() == pid_clean or str(p.get("code", "")).strip().lower() == pid_clean:
+        raw_id = str(p.get("id", "")).strip()
+        raw_code = str(p.get("code", "")).strip()
+        if raw_id.lower() == pid_clean or raw_code.lower() == pid_clean or _mask_client_prop_code(raw_id).lower() == pid_clean:
             return p
     for p in CATALOG:
-        if str(p.get("c", "")).strip().lower() == pid_clean:
+        raw_c = str(p.get("c", "")).strip()
+        if raw_c.lower() == pid_clean or _mask_client_prop_code(raw_c).lower() == pid_clean:
             return {
                 "id": p.get("c"),
                 "code": p.get("c"),
@@ -1976,7 +1979,16 @@ def _push_flex_message_raw(flex_msg: dict, user_id: str):
 
 
 def _mask_client_prop_code(raw_id: str) -> str:
-    return re.sub(r"^(?:ALPHA|KTB|KBANK|BAM|PAMCO|SAM|SCB|TTB|GSB|GHB|BBL)[-_]", "SW-", str(raw_id or "").strip(), flags=re.IGNORECASE)
+    s = str(raw_id or "").strip().upper()
+    if not s:
+        return ""
+    if re.match(r"^SW-[0-9A-F]{6}$", s):
+        return s
+    h = 0x811C9DC5
+    for ch in s:
+        h ^= ord(ch)
+        h = (h * 0x01000193) & 0xFFFFFFFF
+    return "SW-" + f"{h:08X}"[:6]
 
 
 def build_property_flex_bubble(prop, client_name="คุณลูกค้า", agent_ref="SW000"):

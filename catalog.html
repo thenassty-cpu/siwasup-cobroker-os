@@ -1071,7 +1071,7 @@
   </div>
 
   <script src="siwasup_agents.js?v=20261104-conf"></script>
-  <script src="modals.js?v=20261127-1150"></script>
+  <script src="modals.js?v=20261127-1545"></script>
   <script src="vinyl_generator.js?v=20261019-2350"></script>
   <script src="siwasup_all_properties.js?v=20261117-0100"></script>
   <script>
@@ -3810,7 +3810,7 @@
               <div class="space-y-1.5">
                 <!-- Property Code -->
                 <div class="flex items-center justify-between text-[11px]">
-                  ${p.bua_verified && !isWhiteLabelMode() ? '<span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">✓ บัวคัดแล้ว</span>' : '<span>แชร์</span>'}
+                  ${p.bua_verified && !isWhiteLabelMode() ? '<span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">✓ บัวคัดแล้ว</span>' : ''}
                   ${isWhiteLabelMode() ? '' : `<span class="text-neutral-500 font-mono">รหัสทรัพย์: ${currentMode === 'client' ? maskClientPropCode(p.id) : p.id}</span>`}
                 </div>
                 
@@ -7343,7 +7343,15 @@
     }
 
     function maskClientPropCode(rawId) {
-      return String(rawId || '').trim().replace(/^(?:ALPHA|KTB|KBANK|BAM|PAMCO|SAM|SCB|TTB|GSB|GHB|BBL)[-_]/i, 'SW-');
+      const s = String(rawId || '').trim().toUpperCase();
+      if (!s) return '';
+      if (/^SW-[0-9A-F]{6}$/.test(s)) return s;
+      let h = 0x811c9dc5;
+      for (let i = 0; i < s.length; i++) {
+        h ^= s.charCodeAt(i);
+        h = Math.imul(h, 0x01000193) >>> 0;
+      }
+      return 'SW-' + h.toString(16).toUpperCase().padStart(8, '0').slice(0, 6);
     }
 
     function buildAgentAwareLineUrl(msg, ref) {
@@ -8505,7 +8513,7 @@
     // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=20261127-1348').then((reg) => {
+        navigator.serviceWorker.register('./sw.js?v=20261127-1545').then((reg) => {
           console.log('Siwasup PWA Service Worker Registered (v2):', reg.scope);
           // Auto check for updates on each load
           if (reg.update) reg.update();
