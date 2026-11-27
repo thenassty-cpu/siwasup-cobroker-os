@@ -270,7 +270,7 @@
     </div>
 
     <!-- Mobile Dedicated QR Code Sub-Modal (Popup ซ้อนขึ้นมาแบบคลีน ไม่มี Scrollbar) -->
-    <div id="mobile-qr-modal" class="hidden modal-backdrop !items-center px-3 pt-10 pb-6 sm:p-6 z-[60]" onclick="if(event.target === this) closeMobileQrModal()">
+    <div id="mobile-qr-modal" class="hidden modal-backdrop !items-center px-3 pt-10 pb-6 sm:p-6 z-[10060]" onclick="if(event.target === this) closeMobileQrModal()">
       <div class="modal-card-sm no-scrollbar space-y-3 text-center bg-white border border-amber-200 shadow-2xl p-4 rounded-2xl max-w-[320px] mx-auto animate-fadeIn">
         <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5">
           <div class="font-bold text-xs text-gray-800 flex items-center gap-1.5 text-left">

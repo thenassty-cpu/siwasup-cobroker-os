@@ -1055,10 +1055,14 @@ def search_properties(query, user_id=None):
     if any(w in q_low for w in WORKFLOW_KEYWORDS):
         return [], "WORKFLOW_QUESTION"
 
-    # 4. Multi-Turn Search Context Management
+    # 4. Multi-Turn Search Context Management (30-min TTL expiry)
     uid = user_id or "default"
+    existing_ctx = USER_SEARCH_CONTEXT.get(uid)
+    if existing_ctx and (time.time() - existing_ctx.get("updated_at", 0) > 1800):
+        USER_SEARCH_CONTEXT.pop(uid, None)
     ctx = USER_SEARCH_CONTEXT.setdefault(uid, {
         "types": [],
+        "sub_kws": [],
         "locs": [],
         "max_p": None,
         "unlimited": False,
@@ -1261,6 +1265,10 @@ def search_properties(query, user_id=None):
                 continue
             if eff_types and p.get('t') not in eff_types:
                 continue
+            if eff_sub_kws:
+                p_text = f"{p.get('tn', '')} {p.get('n', '')}".lower()
+                if not any(sk in p_text for sk in eff_sub_kws):
+                    continue
             pr = p.get('pr', 0)
             if eff_max_p and pr > eff_max_p:
                 continue
@@ -1967,8 +1975,13 @@ def _push_flex_message_raw(flex_msg: dict, user_id: str):
         print(f"[LINE Push Flex Error]: {e}")
 
 
+def _mask_client_prop_code(raw_id: str) -> str:
+    return re.sub(r"^(?:ALPHA|KTB|KBANK|BAM|PAMCO|SAM|SCB|TTB|GSB|GHB|BBL)[-_]", "SW-", str(raw_id or "").strip(), flags=re.IGNORECASE)
+
+
 def build_property_flex_bubble(prop, client_name="คุณลูกค้า", agent_ref="SW000"):
     pid = str(prop.get("id") or prop.get("code") or "")
+    masked_pid = _mask_client_prop_code(pid)
     title = str(prop.get("title") or "ทรัพย์คัดสรรพิเศษ ศิวาทรัพย์")
     price = _format_prop_price_text(prop.get("price"))
     category = str(prop.get("category") or "อสังหาริมทรัพย์")
@@ -1979,7 +1992,7 @@ def build_property_flex_bubble(prop, client_name="คุณลูกค้า", 
     if not img_url.startswith("http"):
         img_url = "https://assets.siwasup.com/fallback_property.jpg"
 
-    detail_url = f"https://assets.siwasup.com/catalog.html?id={pid}&property={pid}&ref={agent_ref}&view=client&src=flex_carousel#prop-{pid}"
+    detail_url = f"https://assets.siwasup.com/catalog.html?id={masked_pid}&property={masked_pid}&ref={agent_ref}&view=client&src=flex_carousel#prop-{masked_pid}"
 
     bubble = {
         "type": "bubble",
@@ -2008,7 +2021,7 @@ def build_property_flex_bubble(prop, client_name="คุณลูกค้า", 
                     "contents": [
                         {
                             "type": "text",
-                            "text": f"รหัส {pid}",
+                            "text": f"รหัส {masked_pid}",
                             "size": "xxs",
                             "color": "#8C734B",
                             "weight": "bold",

@@ -1331,7 +1331,8 @@
 
       const witness1 = localStorage.getItem('siwasup_default_witness') || 'นางสาว บัว ศิวาทรัพย์';
 
-      return `assets/documents/siwasup_sales_contract.html?code=${encodeURIComponent(p.id)}&title=${encodeURIComponent(cleanTitle)}&price=${priceNum}&deposit=${depositNum}&size=${encodeURIComponent(p.size || '-')}&loc=${encodeURIComponent(p.location || 'กรุงเทพฯ และปริมณฑล')}&agent=${encodeURIComponent(agentName)}&agent_code=${encodeURIComponent(agentCode)}&agent_phone=${encodeURIComponent(agentPhone)}&buyer=${encodeURIComponent(buyerName)}&idcard=${encodeURIComponent(buyerIdCard)}&phone=${encodeURIComponent(buyerPhone)}&witness1=${encodeURIComponent(witness1)}`;
+      const contractCode = (currentMode === 'client' || isWhiteLabelMode()) ? maskClientPropCode(p.id) : p.id;
+      return `assets/documents/siwasup_sales_contract.html?code=${encodeURIComponent(contractCode)}&title=${encodeURIComponent(cleanTitle)}&price=${priceNum}&deposit=${depositNum}&size=${encodeURIComponent(p.size || '-')}&loc=${encodeURIComponent(p.location || 'กรุงเทพฯ และปริมณฑล')}&agent=${encodeURIComponent(agentName)}&agent_code=${encodeURIComponent(agentCode)}&agent_phone=${encodeURIComponent(agentPhone)}&buyer=${encodeURIComponent(buyerName)}&idcard=${encodeURIComponent(buyerIdCard)}&phone=${encodeURIComponent(buyerPhone)}&witness1=${encodeURIComponent(witness1)}`;
     }
 
     function renderPropertyDocumentDownloads(p) {
@@ -1381,7 +1382,7 @@
                 </div>
                 <div class="min-w-0">
                   <div class="font-bold text-neutral-800 text-xs group-hover:text-neutral-900 truncate">สัญญาจะซื้อจะขายอสังหาริมทรัพย์ (ฉบับมาตรฐาน)</div>
-                  <div class="text-[10px] text-slate-500 truncate">ระบุรหัสทรัพย์ #${p.id} และราคาเบื้องต้น พร้อมสั่งพิมพ์/บันทึก PDF</div>
+                  <div class="text-[10px] text-slate-500 truncate">ระบุรหัสทรัพย์ #${maskClientPropCode(p.id)} และราคาเบื้องต้น พร้อมสั่งพิมพ์/บันทึก PDF</div>
                 </div>
               </div>
               <span class="shrink-0 bg-neutral-900 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 ml-2">
@@ -2973,16 +2974,16 @@
           detailPriceEl.innerHTML = `<div class="text-right">
             <div class="inline-flex items-center gap-1.5 flex-wrap justify-end">
               <span class="px-1.5 py-0.5 rounded bg-[#990000] text-white text-[10px] font-extrabold leading-none">ราคาพิเศษ${pInfo.discountPct > 0 ? ` -${pInfo.discountPct}%` : ''}</span>
-              <span class="text-lg font-black text-[#990000] tracking-tight whitespace-nowrap">฿${pInfo.effectiveText}</span>
+              <span class="text-lg font-black text-[#990000] tracking-tight whitespace-nowrap">฿ ${pInfo.effectiveText}</span>
             </div>
-            <div class="text-xs font-medium text-neutral-400 line-through">฿${pInfo.originalText}</div>
+            <div class="text-xs font-medium text-neutral-400 line-through">฿ ${pInfo.originalText}</div>
             ${pInfo.endDateTh ? `<div class="text-[10px] font-semibold text-amber-800">โปรโมชันถึง ${escapeHtmlIntake(pInfo.endDateTh)}</div>` : ''}
           </div>`;
         } else {
-          detailPriceEl.textContent = `฿${pInfo.effectiveText}`;
+          detailPriceEl.textContent = `฿ ${pInfo.effectiveText}`;
         }
       }
-      document.getElementById('detail-deposit').textContent = `฿${calcDeposit(pInfo.effectiveNum)}`;
+      document.getElementById('detail-deposit').textContent = `฿ ${calcDeposit(pInfo.effectiveNum)}`;
       
       const priceNum = pInfo.effectiveNum;
       const monthly = priceNum > 0 ? Math.round((priceNum / 1000000) * 3500) : 10500;
@@ -4540,8 +4541,8 @@
             </div>
             <div class="font-bold text-slate-900 text-xs sm:text-sm truncate">${cleanTitle}</div>
             <div class="text-[11px] text-slate-600 flex flex-wrap items-center gap-x-3 gap-y-0.5">
-              <span>ราคาก่อนต่อรอง: <strong class="text-neutral-900 font-extrabold">฿${formatPriceClean(price)}</strong></span>
-              <span>หลักประกัน: <strong class="text-slate-800">฿${calcDeposit(price)}</strong></span>
+              <span>ราคาก่อนต่อรอง: <strong class="text-neutral-900 font-extrabold">฿ ${formatPriceClean(price)}</strong></span>
+              <span>หลักประกัน: <strong class="text-slate-800">฿ ${calcDeposit(price)}</strong></span>
             </div>
           </div>
         </div>
@@ -7342,7 +7343,7 @@
     }
 
     function maskClientPropCode(rawId) {
-      return String(rawId || '').trim().replace(/^(?:ALPHA|KTB|PAMCO|SAM|SCB|TTB|GSB|GHB|BBL)[-_]/i, 'SW-');
+      return String(rawId || '').trim().replace(/^(?:ALPHA|KTB|KBANK|BAM|PAMCO|SAM|SCB|TTB|GSB|GHB|BBL)[-_]/i, 'SW-');
     }
 
     function buildAgentAwareLineUrl(msg, ref) {
@@ -7511,7 +7512,7 @@
 
     function renderBundleSelectedList() {
       const listEl = document.getElementById('bundle-selected-list');
-      const items = allProperties.filter(p => selectedBundleIds.has(p.id));
+      const items = allProperties.filter(p => selectedBundleIds.has(String(p.id)));
       listEl.innerHTML = items.map(p => {
         const img = p.main_image || "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=120";
         return `
@@ -7534,7 +7535,7 @@
     function getBundleMessageText() {
       const clientName = (document.getElementById('bundle-client-name').value || 'คุณลูกค้า').trim();
       const savedRef = (typeof resolveVerifiedMemberRef === 'function' ? resolveVerifiedMemberRef(window._siwasupVerifiedMember) : '') || localStorage.getItem('siwasup_my_agent_ref') || 'SW000';
-      const items = allProperties.filter(p => selectedBundleIds.has(p.id));
+      const items = allProperties.filter(p => selectedBundleIds.has(String(p.id)));
       const maskedIds = items.map(p => maskClientPropCode(p.id)).join(',');
       const tParam = (typeof getActiveBundleTrackParam === 'function') ? getActiveBundleTrackParam() : '';
       const bundleUrl = `${getBaseUrl()}?ids=${encodeURIComponent(maskedIds)}&view=client&for=${encodeURIComponent(clientName)}&ref=${encodeURIComponent(savedRef)}&src=bundle_line${tParam}`;
@@ -7584,7 +7585,7 @@
       const msg = getBundleMessageText();
       const clientName = (document.getElementById('bundle-client-name').value || 'คุณลูกค้า').trim();
       const savedRef = (typeof resolveVerifiedMemberRef === 'function' ? resolveVerifiedMemberRef(window._siwasupVerifiedMember) : '') || localStorage.getItem('siwasup_my_agent_ref') || 'SW000';
-      const items = allProperties.filter(p => selectedBundleIds.has(p.id));
+      const items = allProperties.filter(p => selectedBundleIds.has(String(p.id)));
       const maskedIds = items.map(p => maskClientPropCode(p.id)).join(',');
       const tParam = (typeof getActiveBundleTrackParam === 'function') ? getActiveBundleTrackParam() : '';
       const bundleUrl = getBaseUrl() + '?ids=' + encodeURIComponent(maskedIds) + '&view=client&for=' + encodeURIComponent(clientName) + '&ref=' + encodeURIComponent(savedRef) + '&src=bundle_line' + tParam;
@@ -7653,8 +7654,9 @@
           const displayTitle = typeof getDisplayTitle === 'function' ? getDisplayTitle(found) : (found.title || found.id);
           
           if (banner) {
+            const displayPropId = (currentMode === 'client') ? maskClientPropCode(found.id) : found.id;
             if (titleEl) titleEl.textContent = `กำลังดูข้อมูลทรัพย์: ${displayTitle}`;
-            if (subEl) subEl.textContent = `รหัส #${found.id} • ${found.category || 'อสังหาฯ'} • ${found.location || ''} • ฿${formatPriceClean(found.price)}`;
+            if (subEl) subEl.textContent = `รหัส #${displayPropId} • ${found.category || 'อสังหาฯ'} • ${found.location || ''} • ฿ ${formatPriceClean(found.price)}`;
             banner.classList.remove('hidden');
           }
 
@@ -8282,7 +8284,19 @@
         }
         if (urlBudget) {
           const bEl = document.getElementById('filter-budget');
-          if (bEl) bEl.value = urlBudget;
+          if (bEl) {
+            let mappedBudget = urlBudget;
+            if (/^\d+$/.test(String(urlBudget).trim())) {
+              const bNum = parseInt(urlBudget, 10);
+              if (bNum <= 2000000) mappedBudget = 'under2m';
+              else if (bNum <= 3500000) mappedBudget = '2to3.5m';
+              else if (bNum <= 5000000) mappedBudget = '3.5to5m';
+              else mappedBudget = 'above5m';
+            }
+            if (Array.from(bEl.options).some(o => o.value === mappedBudget)) {
+              bEl.value = mappedBudget;
+            }
+          }
         }
         if (urlProv) {
           window._pendingUrlProvince = urlProv;
@@ -8491,7 +8505,7 @@
     // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=20261127-1335').then((reg) => {
+        navigator.serviceWorker.register('./sw.js?v=20261127-1348').then((reg) => {
           console.log('Siwasup PWA Service Worker Registered (v2):', reg.scope);
           // Auto check for updates on each load
           if (reg.update) reg.update();
@@ -8582,7 +8596,8 @@
         : ((typeof getActiveBundleTrackParam === 'function') ? getActiveBundleTrackParam() : '');
       const bubbles = items.slice(0, 10).map(p => {
         const pid = String(p.id || p.code || '');
-        const detailUrl = `${getBaseUrl()}?id=${encodeURIComponent(pid)}&property=${encodeURIComponent(pid)}&ref=${encodeURIComponent(savedRef)}&src=flex_carousel${tParam}#prop-${encodeURIComponent(pid)}`;
+        const maskedPid = maskClientPropCode(pid);
+        const detailUrl = `${getBaseUrl()}?id=${encodeURIComponent(maskedPid)}&property=${encodeURIComponent(maskedPid)}&ref=${encodeURIComponent(savedRef)}&src=flex_carousel${tParam}#prop-${encodeURIComponent(maskedPid)}`;
         const img = p.main_image || "https://assets.siwasup.com/fallback_property.jpg";
         return {
           type: "bubble",
