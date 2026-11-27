@@ -958,6 +958,27 @@ def parse_price(text):
     return None
 
 
+def parse_price_range(text):
+    """Parse price ranges like '3 ล้านถึง 5', '3-5 ล้าน', '3 ถึง 5 ล้าน' -> (min_p, max_p)."""
+    cleaned = re.sub(r'รหัส(?:ทรัพย์)?\s*#?[A-Za-z0-9\-]+', '', text)
+    m_range = re.search(
+        r'(\d+(?:\.\d+)?)\s*(?:ล้าน|m)?\s*(?:-|–|ถึง|to)\s*(\d+(?:\.\d+)?)\s*(ล้าน|m)?',
+        cleaned,
+        re.IGNORECASE,
+    )
+    if m_range:
+        try:
+            v1 = float(m_range.group(1))
+            v2 = float(m_range.group(2))
+            has_million = bool(m_range.group(3)) or ('ล้าน' in m_range.group(0)) or ('m' in m_range.group(0).lower())
+            if has_million and v1 < 1000 and v2 < 1000:
+                lo, hi = min(v1, v2), max(v1, v2)
+                return int(lo * 1000000), int(hi * 1000000)
+        except Exception:
+            pass
+    return None, parse_price(text)
+
+
 def search_properties(query, user_id=None):
     q_low = query.lower().strip()
 
@@ -1220,11 +1241,13 @@ def search_properties(query, user_id=None):
     # Detect budget changes
     if any(w in q_low for w in ["ไม่อั้น", "ทุ่มเพิ่ม", "งบเปิด", "ไม่จำกัด", "เท่าไหร่ก็ได้", "กี่บาทก็ได้", "แพงแค่ไหน"]):
         ctx["unlimited"] = True
+        ctx["min_p"] = None
         ctx["max_p"] = None
     else:
-        parsed_p = parse_price(query)
-        if parsed_p:
-            ctx["max_p"] = parsed_p
+        parsed_min_p, parsed_max_p = parse_price_range(query)
+        if parsed_max_p:
+            ctx["min_p"] = parsed_min_p
+            ctx["max_p"] = parsed_max_p
             ctx["unlimited"] = False
 
     ctx["updated_at"] = time.time()
@@ -1233,7 +1256,7 @@ def search_properties(query, user_id=None):
     has_trigger = any(w in q_low for w in SEARCH_ACTION_KEYWORDS) or bool(m_count) or bool(m_count2) or any(w in q_low for w in ['ขอไป', 'ขอเพิ่ม', 'เอาอีก', 'ส่งมาอีก'])
     has_type = bool(new_types)
     has_loc = bool(new_locs)
-    has_price = bool(parse_price(query)) or ctx["unlimited"]
+    has_price = bool(parse_price_range(query)[1]) or ctx["unlimited"]
 
     if not (has_trigger or has_type or has_loc or has_price):
         return [], "NOT_PROPERTY_SEARCH"
@@ -1241,6 +1264,7 @@ def search_properties(query, user_id=None):
     # Search Catalog using effective Context
     eff_types = ctx["types"]
     eff_locs = ctx["locs"]
+    eff_min_p = ctx.get("min_p")
     eff_max_p = ctx["max_p"]
     eff_unlimited = ctx["unlimited"]
 
@@ -1269,6 +1293,8 @@ def search_properties(query, user_id=None):
             if not any(sk in p_text for sk in eff_sub_kws):
                 continue
         pr = p.get('pr', 0)
+        if eff_min_p and pr < eff_min_p:
+            continue
         if eff_max_p and pr > eff_max_p:
             continue
         if not eff_max_p and not eff_unlimited:
@@ -1332,6 +1358,8 @@ def search_properties(query, user_id=None):
             if not any(sk in sp_text for sk in eff_sub_kws):
                 continue
         pr = _parse_prop_price_int(sp.get("price"))
+        if eff_min_p and (pr <= 0 or pr < eff_min_p):
+            continue
         if eff_max_p and (pr <= 0 or pr > eff_max_p):
             continue
         if not eff_max_p and not eff_unlimited:
@@ -1353,6 +1381,13 @@ def search_properties(query, user_id=None):
             if not any(_loc_in_text(loc, haystack) for loc in eff_locs):
                 continue
         loc_tier = 0 if (not eff_locs or any(_loc_in_text(loc, admin_haystack) for loc in eff_locs)) else 1
+        want_corner = any(w in q_low for w in ("หัวมุม", "หลังมุม", "มุม"))
+        want_noflood = any(w in q_low for w in ("น้ำไม่ท่วม", "ไม่ท่วม", "ถมสูง"))
+        kw_boost = 0
+        if want_corner and not any(w in haystack for w in ("หัวมุม", "หลังมุม")):
+            kw_boost += 1
+        if want_noflood and not any(w in haystack for w in ("น้ำไม่ท่วม", "ไม่เคยท่วม", "ถมสูง")):
+            kw_boost += 1
         web_results.append({
             "c": str(sp.get("id")),
             "b": sp.get("bank_source") or "Siwasup",
@@ -1363,7 +1398,8 @@ def search_properties(query, user_id=None):
             "sqw": (sp.get("size") or "-").replace(" ตร.ว.", ""),
             "sqm": (sp.get("usable_area") or "-").replace(" ตร.ม.", ""),
             "_web": True,
-            "_loc_tier": loc_tier
+            "_loc_tier": loc_tier,
+            "_kw_boost": kw_boost
         })
 
     # Nationwide Geo + Haversine Nearest Fallback when standard keyword search returns empty
@@ -1379,15 +1415,16 @@ def search_properties(query, user_id=None):
             if nearest:
                 return nearest, "NEAREST_GEO_FALLBACK"
 
-    # Sorting (Web catalog properties with photos always come first; exact admin-area match ranks above keyword-only match)
+    # Sorting (Web catalog properties with photos always come first; exact admin-area + feature match rank highest)
+    target_p = ((eff_min_p + eff_max_p) / 2) if (eff_min_p and eff_max_p) else (eff_max_p or 4000000)
     if eff_unlimited:
-        web_results.sort(key=lambda x: (x.get('_loc_tier', 0), -(x.get('pr', 0) or 0)))
+        web_results.sort(key=lambda x: (x.get('_loc_tier', 0), x.get('_kw_boost', 0), -(x.get('pr', 0) or 0)))
         results.sort(key=lambda x: x.get('pr', 0), reverse=True)
     elif eff_max_p:
-        web_results.sort(key=lambda x: (x.get('_loc_tier', 0), abs((x.get('pr') or 0) - eff_max_p)))
-        results.sort(key=lambda x: abs((x.get('pr') or 0) - eff_max_p))
+        web_results.sort(key=lambda x: (x.get('_loc_tier', 0), x.get('_kw_boost', 0), abs((x.get('pr') or 0) - target_p)))
+        results.sort(key=lambda x: abs((x.get('pr') or 0) - target_p))
     else:
-        web_results.sort(key=lambda x: (x.get('_loc_tier', 0), abs((x.get('pr') or 0) - 4000000)))
+        web_results.sort(key=lambda x: (x.get('_loc_tier', 0), x.get('_kw_boost', 0), abs((x.get('pr') or 0) - 4000000)))
         results.sort(key=lambda x: abs((x.get('pr') or 0) - 4000000))
 
     seen_codes = {x.get('c') for x in web_results}
@@ -1470,10 +1507,13 @@ def ask_gemini(user_id, user_text, is_continuous=False, retries=2):
 
     if matched_props:
         prefiltered_url = _build_prefiltered_catalog_url(USER_SEARCH_CONTEXT.get(user_id, {}))
+        flood_guard = ""
+        if any(w in user_text for w in ("น้ำไม่ท่วม", "ไม่ท่วม", "น้ำท่วม")):
+            flood_guard = "\n[คำสั่งความปลอดภัย]: ผู้ใช้ระบุเรื่อง 'น้ำไม่ท่วม' — ห้ามรับรองหรือการันตีเองเด็ดขาดว่าทรัพย์เหล่านี้น้ำไม่ท่วม 100% ให้แนะนำทรัพย์ตามทำเล/งบ พร้อมระบุชัดเจนว่า 'ข้อมูลประวัติ/ความเสี่ยงน้ำท่วมของแต่ละแปลง แนะนำให้ตรวจสอบระดับถนนและสอบถามนิติบุคคลหน้างานจริงในวันเข้าชมครับ'"
         prompt_parts.append(
             f"\n[ข้อมูลทรัพย์จริงที่ระบบดึงมาให้ตอบ ({search_mode}) ทั้งหมด {len(matched_props)} หลัง]:\n"
             + json.dumps(matched_props, ensure_ascii=False, indent=2)
-            + f"\nคำสั่งสำคัญ: ผู้ใช้ขอดูทรัพย์ ให้ตอบแนะนำข้อมูลทรัพย์จริงครบทั้ง {len(matched_props)} หลัง อย่าตัดทิ้งหรือสรุปย่อ ระบุรหัสทรัพย์ ราคา และทำเลให้ครบถ้วนทุกแปลง และแนบลิงก์ดูทั้งหมดที่ตรงเงื่อนไข: {prefiltered_url}"
+            + f"\nคำสั่งสำคัญ: ผู้ใช้ขอดูทรัพย์ ให้ตอบแนะนำข้อมูลทรัพย์จริงครบทั้ง {len(matched_props)} หลัง อย่าตัดทิ้งหรือสรุปย่อ ระบุรหัสทรัพย์ ราคา และทำเลให้ครบถ้วนทุกแปลง และแนบลิงก์ดูทั้งหมดที่ตรงเงื่อนไข: {prefiltered_url}{flood_guard}"
         )
     elif search_mode == "TOO_VAGUE_NEEDS_MORE_INFO":
         ctx_types = USER_SEARCH_CONTEXT.get(user_id, {}).get("types", [])
