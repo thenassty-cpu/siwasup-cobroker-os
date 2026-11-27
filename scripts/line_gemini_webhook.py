@@ -3389,7 +3389,7 @@ def resolve_catalog_link_request(text_raw: str, matched_member: dict, is_admin: 
         )
     )
     starts_with_catalog_req = bool(re.match(
-        r'^(?:สร้าง|ขอ|ส่ง)?(?:ลิงก์|ลิงค์|ลิ้งก์|ลิ้งค์)\s*(?:บ้าน|ทรัพย์|แคตตาล็อก|แค็ตตาล็อก|catalog|ขายบ้าน|ของฉัน|ส่วนตัว|ของตัวแทน|ตัวแทน|แปะกลุ่ม|กลุ่ม|สาธารณะ|โพสต์|ทุกโซน)',
+        r'^(?:สร้าง|ขอ|ส่ง)?(?:ลิงก์|ลิงค์|ลิ้งก์|ลิ้งค์|ลิ้ง|ลิง|link)(?:\s*$|\s*(?:บ้าน|ทรัพย์|แคตตาล็อก|แค็ตตาล็อก|catalog|ขายบ้าน|ของฉัน|ส่วนตัว|ของตัวแทน|ตัวแทน|แปะกลุ่ม|กลุ่ม|สาธารณะ|โพสต์|ทุกโซน))',
         tl
     ))
     has_agent_code = bool(re.search(r'(?:ตัวแทน|เอเจนต์?|แอดมิน|รหัส)\s*(?:s[wa])?\d{3}\b', tl, re.IGNORECASE))
@@ -6497,7 +6497,7 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                             elif mtype == 'text':
                                 text_clean = text.strip().lower()
                                 text_raw = text.strip()
-                                m_link = re.match(r'^(?:สร้าง|ขอ|ส่ง)?(?:ลิงก์|ลิงค์|ลิ้งก์|ลิ้งค์|ลิ้ง|ลิง|link)\s*(.+)$', text_raw, re.IGNORECASE)
+                                m_link = re.match(r'^(?:สร้าง|ขอ|ส่ง)?(?:ลิงก์|ลิงค์|ลิ้งก์|ลิ้งค์|ลิ้ง|ลิง|link)(?:\s+|(?=คุณ))(.+)$', text_raw, re.IGNORECASE)
                                 m_check = re.match(r'^(?:เช็ก|เช็ค|ตรวจ)ลูกค้า(?:\s+(.+))?$|^(?:เช็ก|เช็ค|ตรวจ)\s+(v-[a-z0-9]+)$', text_raw, re.IGNORECASE)
                                 m_merge = re.match(r'^(?:รวม|merge)\s+(v-[a-z0-9]+)\s+(v-[a-z0-9]+)$', text_raw, re.IGNORECASE)
                                 m_unmerge = re.match(r'^(?:แยก|ยกเลิกรวม|unmerge)\s+(v-[a-z0-9]+)$', text_raw, re.IGNORECASE)
