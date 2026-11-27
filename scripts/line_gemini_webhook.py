@@ -961,6 +961,12 @@ def parse_price(text):
 def search_properties(query, user_id=None):
     q_low = query.lower().strip()
 
+    # Guard: policy / commission / rules / general FAQ queries (e.g. Quick Action "กฎเหล็ก & ค่าคอม") must never attach property cards
+    if any(w in q_low for w in ("กฎเหล็ก", "ค่าคอม", "คอมมิชชัน", "วิธีเปิดบ้าน", "กฎการจอง", "ส่งเอกสาร")) and not any(
+        w in q_low for w in ("หาบ้าน", "ค้นหาทรัพย์", "ขอดูบ้าน", "บ้านแถว", "บ้านโซน", "คอนโด", "ที่ดิน")
+    ):
+        return [], "NOT_PROPERTY_SEARCH"
+
     # Guard against conflicting distant zones in one query (e.g. "ขอบ้าน ทุ่งครุ มีนบุรี")
     conflicts = _detect_conflicting_zones(query, threshold_km=20.0)
     if len(conflicts) >= 2:
