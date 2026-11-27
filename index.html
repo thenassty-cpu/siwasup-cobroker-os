@@ -4025,7 +4025,7 @@
       if (window.lucide) { lucide.createIcons(); }
 
       const lineUrl = `https://line.me/R/oaMessage/%40siwasup/?${encodeURIComponent(lineMessage)}`;
-      window.open(lineUrl, '_blank');
+      openLineUrlSafe(lineUrl);
       showToast("✅ บันทึกใบเสนอราคาและเปิดแชท LINE ศิวาทรัพย์ (@siwasup) เรียบร้อยแล้ว!");
     }
 
@@ -4536,7 +4536,7 @@
       if (isMobile) {
         window.location.href = lineUrl;
       } else {
-        window.open(lineUrl, '_blank');
+        openLineUrlSafe(lineUrl);
       }
       showToast('🚀 กำลังเปิด LINE เพื่อส่งต่อ...');
     }
@@ -6068,6 +6068,19 @@
       }
     }
 
+    function openLineUrlSafe(lineUrl) {
+      if (!lineUrl) return;
+      const isInApp = /Line\/|FBAN|FBAV|Instagram/i.test(navigator.userAgent || '');
+      if (isInApp) {
+        window.location.href = lineUrl;
+        return;
+      }
+      const win = openLineUrlSafe(lineUrl);
+      if (!win || win.closed || typeof win.closed === 'undefined') {
+        window.location.href = lineUrl;
+      }
+    }
+
     function contactViaLine(id, title, isReserve = false) {
       const ref = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : 'SW001';
       const src = (typeof getStoredSource === 'function') ? getStoredSource() : 'client_view';
@@ -6079,7 +6092,7 @@
         msg = `${prefix} ${title || ''} (รหัส ${id || ''}) [ผู้แนะนำ: ${ref} | ช่องทาง: ${src}]`;
       }
       const lineUrl = `https://line.me/R/oaMessage/@siwasup/?${encodeURIComponent(msg)}`;
-      window.open(lineUrl, '_blank');
+      openLineUrlSafe(lineUrl);
     }
 
     let pendingInquiryProp = null;
@@ -6895,7 +6908,7 @@
       }
       const shareText = `คัดสรรทรัพย์พิเศษ ${count} หลัง สำหรับ ${clientName} (ศิวาทรัพย์ Co-Broker)`;
       const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(bundleUrl)}&text=${encodeURIComponent(shareText)}`;
-      window.open(lineUrl, '_blank');
+      openLineUrlSafe(lineUrl);
       showToast('🚀 เปิดแชร์การ์ดเข้า LINE เรียบร้อย! (รีเซ็ตถาดมัดรวมแล้ว)');
       closeBundleModal();
       clearBundleSelection();

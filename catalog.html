@@ -4771,7 +4771,7 @@
       if (window.lucide) { lucide.createIcons(); }
 
       const lineUrl = buildAgentAwareLineUrl(lineMessage, (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : 'SW001');
-      window.open(lineUrl, '_blank');
+      openLineUrlSafe(lineUrl);
       showToast("✅ บันทึกใบเสนอราคาและเปิดแชท LINE เรียบร้อยแล้ว!");
     }
 
@@ -5687,7 +5687,7 @@
       if (isMobile) {
         window.location.href = lineUrl;
       } else {
-        window.open(lineUrl, '_blank');
+        openLineUrlSafe(lineUrl);
       }
       showToast('🚀 กำลังเปิด LINE เพื่อส่งต่อ...');
     }
@@ -7367,6 +7367,19 @@
       return `https://line.me/R/oaMessage/@siwasup/?${encodeURIComponent(msg)}`;
     }
 
+    function openLineUrlSafe(lineUrl) {
+      if (!lineUrl) return;
+      const isInApp = /Line\/|FBAN|FBAV|Instagram/i.test(navigator.userAgent || '');
+      if (isInApp) {
+        window.location.href = lineUrl;
+        return;
+      }
+      const win = openLineUrlSafe(lineUrl);
+      if (!win || win.closed || typeof win.closed === 'undefined') {
+        window.location.href = lineUrl;
+      }
+    }
+
     function contactViaLine(id, title, isReserve = false) {
       const ref = (typeof getStoredAgentRef === 'function') ? getStoredAgentRef() : 'SW001';
       const src = (typeof getStoredSource === 'function') ? getStoredSource() : 'direct';
@@ -7380,7 +7393,7 @@
         msg = `${prefix}${cleanTitle} (รหัส ${maskedId}) [Ref: ${ref} | ${src}]`;
       }
       const lineUrl = buildAgentAwareLineUrl(msg, ref);
-      window.open(lineUrl, '_blank');
+      openLineUrlSafe(lineUrl);
     }
 
     let pendingInquiryProp = null;
@@ -8513,7 +8526,7 @@
     // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=20261127-1545').then((reg) => {
+        navigator.serviceWorker.register('./sw.js?v=20261127-1956').then((reg) => {
           console.log('Siwasup PWA Service Worker Registered (v2):', reg.scope);
           // Auto check for updates on each load
           if (reg.update) reg.update();
@@ -8710,7 +8723,7 @@
       }
       const shareText = `คัดสรรทรัพย์พิเศษ ${count} หลัง สำหรับ ${clientName} (ศิวาทรัพย์ Co-Broker)`;
       const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(bundleUrl)}&text=${encodeURIComponent(shareText)}`;
-      window.open(lineUrl, '_blank');
+      openLineUrlSafe(lineUrl);
       showToast('🚀 เปิดแชร์การ์ดเข้า LINE เรียบร้อย! (รีเซ็ตถาดมัดรวมแล้ว)');
       closeBundleModal();
       clearBundleSelection();
