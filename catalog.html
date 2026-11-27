@@ -1071,7 +1071,7 @@
   </div>
 
   <script src="siwasup_agents.js?v=20261104-conf"></script>
-  <script src="modals.js?v=20261127-1545"></script>
+  <script src="modals.js?v=20261127-2212"></script>
   <script src="vinyl_generator.js?v=20261019-2350"></script>
   <script src="siwasup_all_properties.js?v=20261117-0100"></script>
   <script>
@@ -7767,7 +7767,7 @@
       // Prevent touch scroll bleeding on mobile when touching outside the scrollable card
       document.addEventListener('touchmove', (e) => {
         if (isBodyScrollLocked) {
-          if (!e.target.closest('.modal-card, .modal-card-sm, #share-modal-card')) {
+          if (!e.target.closest('.modal-card, .modal-card-sm, #share-modal-card, .modal-backdrop:not(.hidden) .custom-scrollbar, .modal-backdrop:not(.hidden) .overflow-y-auto')) {
             e.preventDefault();
           }
         }
@@ -8526,7 +8526,7 @@
     // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=20261127-1956').then((reg) => {
+        navigator.serviceWorker.register('./sw.js?v=20261127-2212').then((reg) => {
           console.log('Siwasup PWA Service Worker Registered (v2):', reg.scope);
           // Auto check for updates on each load
           if (reg.update) reg.update();
