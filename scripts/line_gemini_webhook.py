@@ -1304,18 +1304,22 @@ def search_properties(query, user_id=None):
         if not eff_max_p and not eff_unlimited:
             if pr < 800000 or pr > 15000000:
                 continue
-        haystack = " ".join([
-            str(sp.get("title") or ""),
-            str(sp.get("description") or ""),
+        admin_haystack = " ".join([
             str(sp.get("location") or ""),
             str(sp.get("subdistrict_th") or ""),
             str(sp.get("district_th") or ""),
             str(sp.get("province_th") or ""),
+        ]).lower()
+        haystack = " ".join([
+            str(sp.get("title") or ""),
+            str(sp.get("description") or ""),
+            admin_haystack,
             str(sp.get("search_keywords") or "")
         ]).lower()
         if eff_locs:
             if not any(loc.lower() in haystack for loc in eff_locs):
                 continue
+        loc_tier = 0 if (not eff_locs or any(loc.lower() in admin_haystack for loc in eff_locs)) else 1
         web_results.append({
             "c": str(sp.get("id")),
             "b": sp.get("bank_source") or "Siwasup",
@@ -1325,7 +1329,8 @@ def search_properties(query, user_id=None):
             "pr": pr,
             "sqw": (sp.get("size") or "-").replace(" ตร.ว.", ""),
             "sqm": (sp.get("usable_area") or "-").replace(" ตร.ม.", ""),
-            "_web": True
+            "_web": True,
+            "_loc_tier": loc_tier
         })
 
     # Nationwide Geo + Haversine Nearest Fallback when standard keyword search returns empty
@@ -1341,15 +1346,15 @@ def search_properties(query, user_id=None):
             if nearest:
                 return nearest, "NEAREST_GEO_FALLBACK"
 
-    # Sorting (Web catalog properties with photos always come first!)
+    # Sorting (Web catalog properties with photos always come first; exact admin-area match ranks above keyword-only match)
     if eff_unlimited:
-        web_results.sort(key=lambda x: x.get('pr', 0), reverse=True)
+        web_results.sort(key=lambda x: (x.get('_loc_tier', 0), -(x.get('pr', 0) or 0)))
         results.sort(key=lambda x: x.get('pr', 0), reverse=True)
     elif eff_max_p:
-        web_results.sort(key=lambda x: abs((x.get('pr') or 0) - eff_max_p))
+        web_results.sort(key=lambda x: (x.get('_loc_tier', 0), abs((x.get('pr') or 0) - eff_max_p)))
         results.sort(key=lambda x: abs((x.get('pr') or 0) - eff_max_p))
     else:
-        web_results.sort(key=lambda x: abs((x.get('pr') or 0) - 4000000))
+        web_results.sort(key=lambda x: (x.get('_loc_tier', 0), abs((x.get('pr') or 0) - 4000000)))
         results.sort(key=lambda x: abs((x.get('pr') or 0) - 4000000))
 
     seen_codes = {x.get('c') for x in web_results}
@@ -1465,7 +1470,7 @@ def ask_gemini(user_id, user_text, is_continuous=False, retries=2):
         ],
         "generationConfig": {
             "temperature": 0.25,
-            "maxOutputTokens": 450
+            "maxOutputTokens": 1200
         }
     }
 
@@ -1486,6 +1491,13 @@ def ask_gemini(user_id, user_text, is_continuous=False, retries=2):
                     parts = candidates[0].get('content', {}).get('parts', [])
                     if parts:
                         reply = parts[0].get('text', '').strip()
+                        if matched_props and len(reply) < 40:
+                            prefiltered_url = _build_prefiltered_catalog_url(USER_SEARCH_CONTEXT.get(user_id, {}))
+                            lines = [f"น้องศิวาคัดทรัพย์ที่ตรงกับเงื่อนไขมาให้ {len(matched_props)} รายการครับ:\n"]
+                            for idx_p, mp in enumerate(matched_props, 1):
+                                lines.append(f"{idx_p}. รหัส {mp.get('code')} ({mp.get('type')})\n   - ทำเล: {mp.get('district')} {mp.get('province')}\n   - ราคา: {mp.get('price')}")
+                            lines.append(f"\nดูรูปภาพและรายละเอียดเพิ่มเติมได้ที่:\n👉 {prefiltered_url}")
+                            reply = "\n".join(lines)
                         if reply:
                             # Save to user memory
                             history.append({"user": user_text, "bot": reply})
@@ -6498,6 +6510,13 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                     _first_tok = _raw_link_arg.split()[0].lstrip('#').strip() if _raw_link_arg.split() else ''
                                     _is_explicit_client_name = _raw_link_arg.startswith("คุณ") or (bool(re.search(r'(?:ส่งให้|ให้)คุณ\s*[ก-๙a-zA-Z0-9]+', _raw_link_arg)) and not _extract_thai_geo(_raw_link_arg))
                                     _link_geo_hit = None if _is_explicit_client_name else _extract_thai_geo(_raw_link_arg)
+                                    _is_generic_post_link = (not _is_explicit_client_name) and ('/' not in _raw_link_arg and '|' not in _raw_link_arg) and (
+                                        any(kw in _raw_link_lower for kw in ('โพสต์', 'facebook', 'fb', 'tiktok', 'ติ๊กต๊อก', 'ประกาศขาย', 'ลงประกาศ', 'โปรโมท', 'ยิงแอด', 'แชร์เพจ'))
+                                        or any(_raw_link_lower.startswith(p) for p in ('ที่จะ', 'เพื่อ', 'สำหรับเอาไป', 'เอาไป'))
+                                    )
+                                    if _is_generic_post_link and matched_member and not catalog_link_res:
+                                        _ag_ref_fb = resolve_agent_ref_for_member(matched_member)
+                                        catalog_link_res = (_ag_ref_fb, f"https://assets.siwasup.com/catalog.html?ref={urllib.parse.quote(_ag_ref_fb)}&view=client")
                                     if _is_agent_view_req:
                                         is_prop_or_cmd_link = True
                                     elif any(_raw_link_lower.startswith(p) for p in ('โฉนด', 'บ้าน', 'ทาวน์โฮม', 'ทาวน์เฮ้าส์', 'คอนโด', 'ที่ดิน', 'อาคาร', 'ข้อมูล', 'ทรัพย์', 'สมัคร', 'ลงทะเบียน', 'นามบัตร', 'สำหรับ', 'ตัวแทน', 'เอเจน')):
