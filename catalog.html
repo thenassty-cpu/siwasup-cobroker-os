@@ -33,8 +33,8 @@
   </script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- PDF & QR Libraries for Vinyl Sign Generator -->
-  <script src="https://unpkg.com/pdf-lib@1.17.9/dist/pdf-lib.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1071,7 +1071,7 @@
   </div>
 
   <script src="siwasup_agents.js?v=20261104-conf"></script>
-  <script src="modals.js?v=20261117-0100"></script>
+  <script src="modals.js?v=20261127-1150"></script>
   <script src="vinyl_generator.js?v=20261019-2350"></script>
   <script src="siwasup_all_properties.js?v=20261117-0100"></script>
   <script>
@@ -3062,7 +3062,7 @@
           if (btnAdminKey) btnAdminKey.onclick = () => { closePropertyDetailModal(); openNpaKeyModal(p.id, 'track'); };
           if (btnAdminApp) btnAdminApp.onclick = () => { closePropertyDetailModal(); openAdminCaseAppointments(p.id); };
           if (btnAdminPrice) btnAdminPrice.onclick = () => { closePropertyDetailModal(); openEditPriceModal(p.id); };
-          if (btnAdminShare) btnAdminShare.onclick = () => { openSmartShare(p.id, displayTitle); };
+          if (btnAdminShare) btnAdminShare.onclick = () => { closePropertyDetailModal(); openSmartShare(p.id, displayTitle); };
         }
       } else if (currentMode === 'client' || isWhiteLabelMode()) {
         if (agentActionsRow) agentActionsRow.classList.add('hidden');
@@ -3084,7 +3084,7 @@
         }
 
         const btnShare = document.getElementById('detail-btn-share');
-        if (btnShare) btnShare.onclick = () => { openSmartShare(p.id, displayTitle); };
+        if (btnShare) btnShare.onclick = () => { closePropertyDetailModal(); openSmartShare(p.id, displayTitle); };
 
         const btnNpaKey = document.getElementById('detail-btn-npa-key');
         if (btnNpaKey) btnNpaKey.onclick = () => { closePropertyDetailModal(); openNpaKeyModal(p.id, 'req'); };
@@ -3838,8 +3838,8 @@
                     ${pInfo.isPromo ? `<span class="px-1.5 py-0.5 rounded bg-[#990000] text-white text-[9.5px] font-extrabold leading-none">ราคาพิเศษ${pInfo.discountPct > 0 ? ` -${pInfo.discountPct}%` : ''}</span>` : `<span class="w-4 h-4 rounded-full border border-[#C2A460]/40 text-[#8A6A1F] font-bold text-[10px] inline-flex items-center justify-center leading-none select-none bg-[#F8F3E6] shrink-0">฿</span><span>${currentMode === 'owner' ? 'ราคาตั้งขาย' : 'ราคาก่อนต่อรอง'}</span>`}
                   </span>
                   <div class="text-right">
-                    <span class="text-base font-extrabold ${pInfo.isPromo ? 'text-[#990000]' : 'text-neutral-900'} tracking-tight whitespace-nowrap">฿${pInfo.effectiveText}</span>
-                    ${pInfo.isPromo ? `<span class="block text-[11px] text-neutral-400 line-through leading-tight">฿${pInfo.originalText}</span>` : ''}
+                    <span class="text-base font-extrabold ${pInfo.isPromo ? 'text-[#990000]' : 'text-neutral-900'} tracking-tight whitespace-nowrap">฿ ${pInfo.effectiveText}</span>
+                    ${pInfo.isPromo ? `<span class="block text-[11px] text-neutral-400 line-through leading-tight">฿ ${pInfo.originalText}</span>` : ''}
                     ${pInfo.isPromo && pInfo.endDateTh ? `<span class="block text-[10px] font-semibold text-amber-800 leading-tight">โปรฯ ถึง ${escapeHtmlIntake(pInfo.endDateTh)}</span>` : ''}
                   </div>
                 </div>
@@ -3848,7 +3848,7 @@
                     <span class="w-4 h-4 rounded-full border border-neutral-300 text-neutral-500 font-bold text-[10px] inline-flex items-center justify-center leading-none select-none">฿</span>
                     <span>หลักประกันเพื่อต่อรองราคา</span>
                   </span>
-                  <span class="text-xs font-semibold text-neutral-600 tracking-tight">฿${calcDeposit(pInfo.effectiveNum)}</span>
+                  <span class="text-xs font-semibold text-neutral-600 tracking-tight">฿ ${calcDeposit(pInfo.effectiveNum)}</span>
                 </div>
               </div>
               `)(getEffectivePriceInfo(p))}
@@ -8062,23 +8062,33 @@
     };
 
     function _showSiwasupAgentChooserModal(vid, candidates) {
+      if (window._siwasupVerifiedIsAdmin) return;
       if (document.getElementById('siwasup-agent-chooser-modal')) return;
+      const hqAdminRefs = new Set(['SW000', 'SW001', 'SA000', 'SA001', 'SA002']);
+      const normalized = (candidates || []).map(c => {
+        const ref = String(typeof c === 'string' ? c : (c.ref || c.code || '')).trim();
+        const refU = ref.toUpperCase();
+        const prof = (typeof getAgentProfile === 'function' && ref) ? getAgentProfile(ref) : null;
+        const rawName = typeof c === 'string' ? '' : (c.name || '');
+        const displayName = (prof && (prof.shortName || prof.name)) || (rawName && rawName.toUpperCase() !== refU ? rawName : '') || `ที่ปรึกษา ${ref}`;
+        const roleLabel = (prof && prof.publicTitle) ? `${prof.publicTitle} • ` : '';
+        return { ref, refU, displayName, roleLabel };
+      }).filter(x => x.ref);
+      if (normalized.length < 2) return;
+      if (normalized.every(x => hqAdminRefs.has(x.refU))) return;
+
       const wrap = document.createElement('div');
       wrap.id = 'siwasup-agent-chooser-modal';
       wrap.className = 'fixed inset-0 z-[9990] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4';
-      const cards = candidates.map(c => {
-        const ref = typeof c === 'string' ? c : (c.ref || c.code || '');
-        const name = typeof c === 'string' ? c : (c.name || ref);
-        return `
-          <button type="button" data-ref="${_p2EscHtml(ref)}" class="chooser-agent-btn w-full text-left p-3.5 rounded-2xl border-2 border-neutral-200 hover:border-amber-500 hover:bg-amber-50 transition flex items-center justify-between gap-3">
+      const cards = normalized.map(c => `
+          <button type="button" data-ref="${_p2EscHtml(c.ref)}" class="chooser-agent-btn w-full text-left p-3.5 rounded-2xl border-2 border-neutral-200 hover:border-amber-500 hover:bg-amber-50 transition flex items-center justify-between gap-3">
             <div>
-              <div class="font-bold text-sm text-neutral-900">${_p2EscHtml(name)}</div>
-              <div class="text-xs text-neutral-500">รหัสผู้ดูแล: ${_p2EscHtml(ref)}</div>
+              <div class="font-bold text-sm text-neutral-900">${_p2EscHtml(c.displayName)}</div>
+              <div class="text-xs text-neutral-500">${_p2EscHtml(c.roleLabel)}รหัสผู้ดูแล: ${_p2EscHtml(c.ref)}</div>
             </div>
             <span class="px-3 py-1 rounded-xl bg-neutral-900 text-amber-300 text-xs font-bold shrink-0">เลือกท่านนี้</span>
           </button>
-        `;
-      }).join('');
+        `).join('');
       wrap.innerHTML = `
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-amber-200 space-y-4">
           <div class="text-center space-y-1">
@@ -8468,7 +8478,7 @@
     // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=20261126-1240').then((reg) => {
+        navigator.serviceWorker.register('./sw.js?v=20261127-1245').then((reg) => {
           console.log('Siwasup PWA Service Worker Registered (v2):', reg.scope);
           // Auto check for updates on each load
           if (reg.update) reg.update();

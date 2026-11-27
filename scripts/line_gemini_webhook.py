@@ -1318,7 +1318,8 @@ SYSTEM_INSTRUCTION = """คุณคือ "น้องศิวา" (Siwasup A
    - นอกเวลาทำการ / วันอาทิตย์ / ส่งไม้ต่อเช้า-บ่าย: ใช้ **Smart Keybox รุ่นห่วงคล้องพกพา (รหัส OTP)** ที่พี่ลิลลี่ควบคุมรหัสจากออฟฟิศ
 5. **กฎการทักทาย:** ถ้าคุยต่อเนื่อง ห้ามพูด "สวัสดีครับ" ซ้ำ ให้เข้าเรื่องทันที
 6. **ความตรงประเด็นเรื่องประเภททรัพย์:** หากผู้ใช้ขอ "บ้าน" (เช่น ขอบ้านแถวบางแค, หาบ้าน) ให้แนะนำเฉพาะ บ้านเดี่ยว, บ้านแฝด หรือทาวน์โฮม/ทาวน์เฮ้าส์ เท่านั้น **ห้ามใส่คอนโดหรือที่ดินมาเด็ดขาด** เว้นแต่ผู้ใช้จะระบุคำว่า "คอนโด" หรือ "ห้องชุด" โดยตรง
-7. **การสอบถามเพื่อคัดกรองความต้องการ (Qualifying Leads):** หากผู้ใช้บอกความต้องการลอยๆ แบบกว้างมาก (เช่น "อยากได้บ้าน", "หาบ้าน", "สนใจคอนโด", "มีบ้านไหม") โดยที่ยังไม่ได้ระบุทำเลหรือช่วงราคา **อย่าเพิ่งรีบสุ่มทรัพย์มาแนะนำ** ให้ตอบรับอย่างกระตือรือร้นและสุภาพ แล้วสอบถามข้อมูลเพิ่มเติมสั้นๆ (เช่น สะดวกโซน/ทำเลไหนเป็นพิเศษ และมีงบประมาณในใจประมาณเท่าไหร่) เพื่อคัดแปลงที่ตรงใจที่สุดให้ครับ"""
+7. **การสอบถามเพื่อคัดกรองความต้องการ (Qualifying Leads):** หากผู้ใช้บอกความต้องการลอยๆ แบบกว้างมาก (เช่น "อยากได้บ้าน", "หาบ้าน", "สนใจคอนโด", "มีบ้านไหม") โดยที่ยังไม่ได้ระบุทำเลหรือช่วงราคา **อย่าเพิ่งรีบสุ่มทรัพย์มาแนะนำ** ให้ตอบรับอย่างกระตือรือร้นและสุภาพ แล้วสอบถามข้อมูลเพิ่มเติมสั้นๆ (เช่น สะดวกโซน/ทำเลไหนเป็นพิเศษ และมีงบประมาณในใจประมาณเท่าไหร่) เพื่อคัดแปลงที่ตรงใจที่สุดให้ครับ
+8. กฎการจัดรูปแบบข้อความใน LINE (ห้ามใช้ Markdown): ห้ามใส่เครื่องหมาย ** หรือ __ หรือ ` ในคำตอบเด็ดขาด เพราะ LINE ไม่แปลงเป็นตัวหนา ให้ใช้การขึ้นบรรทัดใหม่ อิโมจิ หรือสัญลักษณ์ • / - แทนเพื่อให้อ่านง่ายบนมือถือครับ"""
 
 
 def ask_gemini(user_id, user_text, is_continuous=False, retries=2):
@@ -1836,12 +1837,25 @@ def handle_deed_image(message_id: str, reply_token: str, user_id: str, user_name
     })
 
 
+def strip_line_markdown(text: str) -> str:
+    """Remove Markdown bold/code tokens (** / __ / `) that LINE Text messages render literally."""
+    if not text:
+        return text
+    cleaned = str(text)
+    cleaned = re.sub(r"\*\*(.*?)\*\*", r"\1", cleaned, flags=re.DOTALL)
+    cleaned = cleaned.replace("**", "")
+    cleaned = re.sub(r"__(.*?)__", r"\1", cleaned, flags=re.DOTALL)
+    cleaned = re.sub(r"`([^`]+)`", r"\1", cleaned)
+    cleaned = re.sub(r"(?m)^\s*#{1,6}\s+", "", cleaned)
+    return cleaned
+
+
 def _push_line_message(user_id: str, text: str):
     """Push ข้อความ text ไปยัง user โดยตรง (ไม่ใช้ reply token)"""
     url = "https://api.line.me/v2/bot/message/push"
     payload = {
         "to": user_id,
-        "messages": [{"type": "text", "text": text}]
+        "messages": [{"type": "text", "text": strip_line_markdown(text)}]
     }
     req = urllib.request.Request(
         url,
@@ -2017,7 +2031,7 @@ def reply_line(reply_token, reply_text, flex_message=None):
     messages = [
         {
             "type": "text",
-            "text": reply_text
+            "text": strip_line_markdown(reply_text)
         }
     ]
     if flex_message and isinstance(flex_message, dict) and flex_message.get("type") == "flex":
@@ -3588,7 +3602,10 @@ def _apply_lock_on_visit(visitors: dict, root_vid: str, ref: str, is_identified:
     if lk.get("status") == "booked":
         return lk
     owner_u = str(lk.get("owner_ref") or "").strip().upper()
+    hq_admin_refs = {"SW000", "SW001", "SA000", "SA001", "SA002"}
     if owner_u and owner_u != ref_u:
+        if owner_u in hq_admin_refs and ref_u in hq_admin_refs:
+            return lk
         cands = list(dict.fromkeys([owner_u] + [str(c).upper() for c in (lk.get("conflict_candidates") or []) if c] + [ref_u]))
         lk["status"] = "conflict_pending"
         lk["conflict_candidates"] = cands

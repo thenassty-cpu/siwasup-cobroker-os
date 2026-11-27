@@ -55,7 +55,7 @@
     </div>
 
     <!-- Smart Share Center Modal (Omni-Channel Share) -->
-    <div id="share-modal" class="hidden modal-backdrop !items-center px-3 pt-10 pb-6 sm:p-6 sm:!p-4 z-50" onclick="if(event.target === this) closeShareModal()">
+    <div id="share-modal" class="hidden modal-backdrop !items-center px-3 pt-10 pb-6 sm:p-6 sm:!p-4 z-[10050]" onclick="if(event.target === this) closeShareModal()">
       <div id="share-modal-card" class="modal-card no-scrollbar w-full max-w-md transition-all duration-300 p-4 sm:p-5 my-auto overflow-hidden">
         <div class="flex justify-between items-center bg-white border-b border-neutral-100 pb-2.5 mb-2.5">
           <h3 class="font-bold text-sm sm:text-base text-gray-800 flex items-center gap-1.5">
