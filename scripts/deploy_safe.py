@@ -31,7 +31,8 @@ def pii_check(fname, data):
     # Strip URLs/filenames with 13-digit timestamps (e.g. crop-1753250280224.jpg) before checking 13-digit Thai IDs
     text_no_urls = re.sub(r'https?://[^\s"\'<>]+', '', text)
     text_no_urls = re.sub(r'crop-\d{13}', '', text_no_urls)
-    for m in re.finditer(r'(?<!\d)(\d{13})(?!\d)', text_no_urls):
+    text_no_urls = re.sub(r'LOG_\d{13}', '', text_no_urls)
+    for m in re.finditer(r'(?<![\d.])(\d{13})(?![\d.])', text_no_urls):
         cand = m.group(1)
         if is_valid_thai_id(cand):
             hits.append(f'13-digit Thai National ID ({cand[:3]}...{cand[-2:]})')
