@@ -2170,6 +2170,94 @@ def build_property_flex_carousel(props, client_name="คุณลูกค้า
         }
     }
 
+
+def build_property_gallery_flex_carousel(prop, agent_ref="SW000"):
+    if not prop:
+        return None
+    pid = str(prop.get("id") or prop.get("code") or "")
+    masked_pid = _mask_client_prop_code(pid)
+    detail_url = f"https://assets.siwasup.com/catalog.html?id={masked_pid}&property={masked_pid}&ref={agent_ref}&view=client&src=gallery_carousel#prop-{masked_pid}"
+    title = str(prop.get("title") or f"ทรัพย์รหัส {masked_pid}")[:60]
+
+    raw_imgs = []
+    if prop.get("main_image"):
+        raw_imgs.append(str(prop.get("main_image")).strip())
+    for g in (prop.get("gallery") or []):
+        if g:
+            raw_imgs.append(str(g).strip())
+
+    _junk_img_kws = ("social-ig", "social-tiktok", "social-youtube", "social-fb", "social-line", "images/editor/social", "favicon")
+    imgs = []
+    seen = set()
+    for u in raw_imgs:
+        u_low = u.lower()
+        if u.startswith("https://") and u not in seen and not any(jk in u_low for jk in _junk_img_kws):
+            seen.add(u)
+            imgs.append(u)
+
+    if not imgs:
+        return None
+
+    total = len(imgs)
+    show_imgs = imgs[:9] if total > 9 else imgs[:10]
+    bubbles = []
+    for idx, img_url in enumerate(show_imgs, 1):
+        bubbles.append({
+            "type": "bubble",
+            "size": "kilo",
+            "hero": {
+                "type": "image",
+                "url": img_url,
+                "size": "full",
+                "aspectRatio": "4:3",
+                "aspectMode": "cover",
+                "action": {
+                    "type": "uri",
+                    "uri": img_url
+                }
+            },
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "xs",
+                "paddingAll": "10px",
+                "contents": [
+                    {"type": "text", "text": f"📸 รูปที่ {idx}/{total}", "size": "xs", "weight": "bold", "color": "#111111"},
+                    {"type": "text", "text": title, "size": "xxs", "color": "#666666", "wrap": True, "maxLines": 1}
+                ]
+            }
+        })
+
+    if total > 9 or len(bubbles) < 10:
+        cta_heading = "🏠 ดูสเปกเต็มและแผนที่" if total == 1 else f"🖼️ มีรูปทั้งหมด {total} รูป"
+        cta_btn_label = "ดูรายละเอียดบน Catalog" if total == 1 else "ดูรูปทั้งหมดบน Catalog"
+        bubbles.append({
+            "type": "bubble",
+            "size": "kilo",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "justifyContent": "center",
+                "alignItems": "center",
+                "spacing": "md",
+                "paddingAll": "20px",
+                "contents": [
+                    {"type": "text", "text": cta_heading, "weight": "bold", "size": "md", "color": "#111111", "align": "center"},
+                    {"type": "text", "text": "กดเปิดดูรูปความละเอียดสูง แผนที่ และรายละเอียดครบถ้วนบน Catalog", "size": "xs", "color": "#666666", "wrap": True, "align": "center"},
+                    {"type": "button", "style": "primary", "color": "#990000", "action": {"type": "uri", "label": cta_btn_label, "uri": detail_url}}
+                ]
+            }
+        })
+
+    return {
+        "type": "flex",
+        "altText": f"📸 รูปภาพทรัพย์ {title} ({total} รูป)",
+        "contents": {
+            "type": "carousel",
+            "contents": bubbles[:10]
+        }
+    }
+
 def reply_line(reply_token, reply_text, flex_message=None):
     url = "https://api.line.me/v2/bot/message/reply"
     headers = {
@@ -6747,8 +6835,12 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                                 full_props.append(found)
                                         if full_props:
                                             req_agent_ref = resolve_agent_ref_for_member(matched_member) if matched_member else "SW000"
-                                            prefiltered_url = _build_prefiltered_catalog_url(USER_SEARCH_CONTEXT.get(uid, {}), agent_ref=req_agent_ref)
-                                            flex_carousel = build_property_flex_carousel(full_props, client_name=prof.get("displayName", "คุณลูกค้า"), agent_ref=req_agent_ref, view_all_url=prefiltered_url)
+                                            is_photo_req = any(w in text_clean for w in ("ขอรูป", "รูปภาพ", "รูปเพิ่ม", "ดูรูป", "ส่งรูป", "ภาพเพิ่ม"))
+                                            if is_photo_req and search_mode in ("EXACT_SIWASUP_CODE", "EXACT_NPA_CODE"):
+                                                flex_carousel = build_property_gallery_flex_carousel(full_props[0], agent_ref=req_agent_ref)
+                                            if not flex_carousel:
+                                                prefiltered_url = _build_prefiltered_catalog_url(USER_SEARCH_CONTEXT.get(uid, {}), agent_ref=req_agent_ref)
+                                                flex_carousel = build_property_flex_carousel(full_props, client_name=prof.get("displayName", "คุณลูกค้า"), agent_ref=req_agent_ref, view_all_url=prefiltered_url)
                             else:
                                 ai_reply = "น้องศิวาได้รับไฟล์/สติกเกอร์เรียบร้อยครับ หากต้องการค้นหาทรัพย์ พิมพ์รหัสทรัพย์หรือทำเล เช่น '1090965' หรือ 'บ้านเดี่ยว นนทบุรี งบ 4 ล้าน' ได้เลยครับ!"
                                 matched_codes, search_mode, matched_props, flex_carousel = [], "NON_TEXT", [], None
