@@ -6843,8 +6843,14 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                         )
                                     matched_codes, search_mode, matched_props, flex_carousel = [], "ONBOARDING_REGISTRATION", [], None
                                 else:
+                                    is_photo_req = any(w in text_clean for w in ("ขอรูป", "รูปภาพ", "รูปเพิ่ม", "ดูรูป", "ส่งรูป", "ภาพเพิ่ม"))
                                     ai_reply, matched_codes, search_mode, matched_props = ask_gemini(uid, text, is_continuous=continuous)
                                     flex_carousel = None
+                                    if is_photo_req and not matched_props and search_mode in ("NOT_PROPERTY_SEARCH", "EMPTY_SEARCH_RESULT"):
+                                        ai_reply = (
+                                            "ขออภัยครับ น้องศิวาไม่พบรหัสทรัพย์ดังกล่าวในระบบ — "
+                                            "รบกวนเช็กรหัสอีกครั้ง หรือแจ้ง ชื่อโครงการ / ทำเล / ช่วงราคา ของหลังที่ต้องการ เพื่อให้น้องศิวาช่วยค้นหาและส่งรูปให้ครับ"
+                                        )
                                     if matched_props:
                                         full_props = []
                                         for mp in matched_props:
@@ -6853,9 +6859,10 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                                 full_props.append(found)
                                         if full_props:
                                             req_agent_ref = resolve_agent_ref_for_member(matched_member) if matched_member else "SW000"
-                                            is_photo_req = any(w in text_clean for w in ("ขอรูป", "รูปภาพ", "รูปเพิ่ม", "ดูรูป", "ส่งรูป", "ภาพเพิ่ม"))
                                             if is_photo_req and search_mode in ("EXACT_SIWASUP_CODE", "EXACT_NPA_CODE"):
                                                 flex_carousel = build_property_gallery_flex_carousel(full_props[0], agent_ref=req_agent_ref)
+                                                if not flex_carousel:
+                                                    ai_reply = (ai_reply or "").rstrip() + "\n\n📌 หมายเหตุ: ทรัพย์นี้ยังไม่มีรูปภาพเพิ่มเติมในระบบครับ — หากต้องการดูหลังอื่นในโซนใกล้เคียง หรือให้ทีมงานประสานขอรูปเพิ่มเติม แจ้งได้เลยนะครับ"
                                             if not flex_carousel:
                                                 prefiltered_url = _build_prefiltered_catalog_url(USER_SEARCH_CONTEXT.get(uid, {}), agent_ref=req_agent_ref)
                                                 flex_carousel = build_property_flex_carousel(full_props, client_name=prof.get("displayName", "คุณลูกค้า"), agent_ref=req_agent_ref, view_all_url=prefiltered_url)
