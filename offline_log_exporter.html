@@ -100,12 +100,17 @@
     }
 
     /* Soft Inset Input containers */
-    .neu-inset, input, select {
+    .neu-inset, input:not([type="checkbox"]), select {
       background: var(--inset-bg) !important;
       border: 1px solid var(--card-border) !important;
       color: var(--text-main) !important;
       box-shadow: inset 2px 2px 5px var(--inset-shadow-dark), inset -2px -2px 5px var(--shadow-light) !important;
       border-radius: 14px;
+    }
+
+    .gold-gradient {
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important;
+      color: #020617 !important;
     }
 
     /* Theme override for text elements */
@@ -134,7 +139,10 @@
     }
     html[data-theme="light-neumorphic"] .text-sky-400,
     html[data-theme="sage-minimal"] .text-sky-400,
-    html[data-theme="cyber-clay"] .text-sky-400 {
+    html[data-theme="cyber-clay"] .text-sky-400,
+    html[data-theme="light-neumorphic"] .text-blue-400,
+    html[data-theme="sage-minimal"] .text-blue-400,
+    html[data-theme="cyber-clay"] .text-blue-400 {
       color: #0369A1 !important;
     }
     html[data-theme="light-neumorphic"] .text-purple-400,
@@ -147,12 +155,25 @@
     html[data-theme="cyber-clay"] .text-emerald-400 {
       color: #047857 !important;
     }
-    /* Keep white text white inside solid colored action buttons */
+    html[data-theme="light-neumorphic"] .text-rose-400,
+    html[data-theme="sage-minimal"] .text-rose-400,
+    html[data-theme="cyber-clay"] .text-rose-400 {
+      color: #BE123C !important;
+    }
+    /* Keep white text & icons white inside solid colored action buttons */
     button.bg-emerald-600.text-white,
+    button.bg-emerald-700.text-white,
+    button.bg-emerald-700 .text-emerald-300,
     a.bg-emerald-600.text-white,
     button.bg-rose-600.text-white,
     button.bg-indigo-600.text-white {
       color: #FFFFFF !important;
+    }
+
+    html[data-theme="light-neumorphic"] .text-slate-200,
+    html[data-theme="sage-minimal"] .text-slate-200,
+    html[data-theme="cyber-clay"] .text-slate-200 {
+      color: var(--text-main) !important;
     }
 
     html[data-theme="light-neumorphic"] .text-slate-400,
@@ -167,9 +188,25 @@
       color: var(--text-muted) !important;
     }
 
+    html[data-theme="dark-obsidian"] .text-slate-500,
+    body[data-theme="dark-obsidian"] .text-slate-500,
+    html[data-theme="dark-obsidian"] .text-slate-600,
+    body[data-theme="dark-obsidian"] .text-slate-600 {
+      color: #94A3B8 !important;
+    }
+
     html[data-theme="light-neumorphic"] .bg-slate-900,
     html[data-theme="sage-minimal"] .bg-slate-900,
     html[data-theme="cyber-clay"] .bg-slate-900,
+    html[data-theme="light-neumorphic"] .bg-slate-900\/60,
+    html[data-theme="sage-minimal"] .bg-slate-900\/60,
+    html[data-theme="cyber-clay"] .bg-slate-900\/60,
+    html[data-theme="light-neumorphic"] .bg-slate-900\/90,
+    html[data-theme="sage-minimal"] .bg-slate-900\/90,
+    html[data-theme="cyber-clay"] .bg-slate-900\/90,
+    html[data-theme="light-neumorphic"] .bg-slate-900\/30,
+    html[data-theme="sage-minimal"] .bg-slate-900\/30,
+    html[data-theme="cyber-clay"] .bg-slate-900\/30,
     html[data-theme="light-neumorphic"] .bg-slate-950,
     html[data-theme="sage-minimal"] .bg-slate-950,
     html[data-theme="cyber-clay"] .bg-slate-950 {
@@ -183,6 +220,42 @@
     html[data-theme="cyber-clay"] .bg-slate-800 {
       background-color: var(--card-bg) !important;
       border-color: var(--card-border) !important;
+      color: var(--text-main) !important;
+    }
+
+    html[data-theme="light-neumorphic"] .border-slate-800,
+    html[data-theme="sage-minimal"] .border-slate-800,
+    html[data-theme="cyber-clay"] .border-slate-800,
+    html[data-theme="light-neumorphic"] .border-slate-800\/80,
+    html[data-theme="sage-minimal"] .border-slate-800\/80,
+    html[data-theme="cyber-clay"] .border-slate-800\/80,
+    html[data-theme="light-neumorphic"] .border-slate-800\/60,
+    html[data-theme="sage-minimal"] .border-slate-800\/60,
+    html[data-theme="cyber-clay"] .border-slate-800\/60,
+    html[data-theme="light-neumorphic"] .border-slate-700,
+    html[data-theme="sage-minimal"] .border-slate-700,
+    html[data-theme="cyber-clay"] .border-slate-700,
+    html[data-theme="light-neumorphic"] .divide-slate-800\/60 > :not([hidden]) ~ :not([hidden]),
+    html[data-theme="sage-minimal"] .divide-slate-800\/60 > :not([hidden]) ~ :not([hidden]),
+    html[data-theme="cyber-clay"] .divide-slate-800\/60 > :not([hidden]) ~ :not([hidden]) {
+      border-color: var(--card-border) !important;
+    }
+
+    html[data-theme="light-neumorphic"] .hover\:bg-slate-700:hover,
+    html[data-theme="sage-minimal"] .hover\:bg-slate-700:hover,
+    html[data-theme="cyber-clay"] .hover\:bg-slate-700:hover,
+    html[data-theme="light-neumorphic"] .hover\:bg-slate-800:hover,
+    html[data-theme="sage-minimal"] .hover\:bg-slate-800:hover,
+    html[data-theme="cyber-clay"] .hover\:bg-slate-800:hover,
+    html[data-theme="light-neumorphic"] .hover\:bg-slate-800\/40:hover,
+    html[data-theme="sage-minimal"] .hover\:bg-slate-800\/40:hover,
+    html[data-theme="cyber-clay"] .hover\:bg-slate-800\/40:hover {
+      background-color: rgba(2, 132, 199, 0.12) !important;
+    }
+
+    html[data-theme="light-neumorphic"] .hover\:text-white:hover,
+    html[data-theme="sage-minimal"] .hover\:text-white:hover,
+    html[data-theme="cyber-clay"] .hover\:text-white:hover {
       color: var(--text-main) !important;
     }
 
