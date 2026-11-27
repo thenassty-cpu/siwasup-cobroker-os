@@ -992,7 +992,7 @@ def search_properties(query, user_id=None):
             except Exception:
                 pass
 
-    # 1. Exact Property Code Search in Siwasup Portfolio (e.g., 1090965) AND NPA Catalog
+    # 1. Exact Property Code Search in Siwasup Portfolio (e.g., 1090965 or 68BK010300034 -> KTB-68BK010300034) AND NPA Catalog
     for sp in SIWASUP_PROPS:
         sid = str(sp.get("id") or "").strip()
         if sid and len(sid) >= 5 and sid.lower() in q_low:
@@ -1005,6 +1005,24 @@ def search_properties(query, user_id=None):
                 "price": _format_prop_price_text(sp.get("price")),
                 "status": "ขายแล้ว/ตัดสต๊อก" if (sp.get("status") == "sold_archive" or sp.get("is_image_soldout")) else "พร้อมเปิดให้เข้าชม",
                 "description": (sp.get("description") or "")[:300]
+            }], "EXACT_SIWASUP_CODE"
+
+    # Fallback: match code tokens without bank prefix (e.g., 68BK010300034 -> KTB-68BK010300034)
+    for _tok in re.findall(r'\b([A-Za-z0-9_-]{5,30})\b', query):
+        if not any(ch.isdigit() for ch in _tok):
+            continue
+        _sp_hit = find_property_by_id_or_code(_tok)
+        if _sp_hit and _sp_hit.get("id"):
+            _sid = str(_sp_hit.get("id")).strip()
+            return [{
+                "code": _sid,
+                "bank": _sp_hit.get("bank_source") or "Siwasup",
+                "title": _sp_hit.get("title"),
+                "type": _sp_hit.get("category") or "บ้าน",
+                "location": _sp_hit.get("location") or "กรุงเทพฯ และปริมณฑล",
+                "price": _format_prop_price_text(_sp_hit.get("price")),
+                "status": "ขายแล้ว/ตัดสต๊อก" if (_sp_hit.get("status") == "sold_archive" or _sp_hit.get("is_image_soldout")) else "พร้อมเปิดให้เข้าชม",
+                "description": (_sp_hit.get("description") or "")[:300]
             }], "EXACT_SIWASUP_CODE"
 
     for p in CATALOG:
