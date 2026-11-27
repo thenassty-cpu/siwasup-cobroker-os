@@ -3,9 +3,11 @@ import hashlib
 import hmac
 import json
 import os
+import random
 import re
 import shutil
 import ssl
+import time
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
@@ -27,6 +29,14 @@ HOST_MAP = {
     "pamco": ("media.pamco.co.th", "pamco_images"),
     "alpha": ("alphacapamc.com", "alpha_images"),
     "kbank": ("pfsapp.kasikornbank.com", "kbank_images"),
+}
+
+REFERER_MAP = {
+    "shop-image.readyplanet.com": "https://www.allabout-assets.com/",
+    "alphacapamc.com": "https://www.alphacapamc.com/",
+    "pfsapp.kasikornbank.com": "https://properties.kasikornbank.com/",
+    "npa-assets.gsb.or.th": "https://properties.gsb.or.th/",
+    "media.pamco.co.th": "https://property.pamco.co.th/",
 }
 
 BKK_METRO = ("กรุงเทพ", "นนทบุรี", "ปทุมธานี", "สมุทรปราการ")
@@ -131,12 +141,19 @@ def parse_p(v) -> float:
         return 0.0
 
 
-def mirror_one(url: str, folder: str) -> tuple[str, str | None]:
+def mirror_one(url: str, folder: str, healthy: bool = False) -> tuple[str, str | None]:
     slug = hashlib.sha1(url.encode("utf-8")).hexdigest()[:20]
+    dom = urlparse(url).netloc
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+    if dom in REFERER_MAP:
+        headers["Referer"] = REFERER_MAP[dom]
+    dl_ctx = ssl._create_unverified_context() if "alphacapamc.com" in dom else CTX
     for attempt in range(2):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-            with urllib.request.urlopen(req, timeout=15) as r:
+            if healthy:
+                time.sleep(random.uniform(0.35, 0.75))
+            req = urllib.request.Request(url, headers=headers)
+            with urllib.request.urlopen(req, context=dl_ctx, timeout=15) as r:
                 data = r.read()
                 ctype = r.headers.get("Content-Type", "")
             if len(data) < 500:
@@ -149,12 +166,38 @@ def mirror_one(url: str, folder: str) -> tuple[str, str | None]:
         except Exception:
             if attempt == 1:
                 return url, None
+            time.sleep(1.5)
     return url, None
+
+
+def _save_catalog(props: list, url_map: dict, write_js: bool = False) -> int:
+    updated = 0
+    for p in props:
+        changed = False
+        mi = str(p.get("main_image") or "")
+        if mi in url_map:
+            p["main_image"] = url_map[mi]
+            changed = True
+        gal = p.get("gallery")
+        if isinstance(gal, list) and gal:
+            new_gal = [url_map.get(str(g or ""), g) for g in gal]
+            if new_gal != gal:
+                p["gallery"] = new_gal
+                changed = True
+        if changed:
+            updated += 1
+    with open(JSON_PATH, "w", encoding="utf-8") as f:
+        json.dump(props, f, ensure_ascii=False, indent=2)
+    if write_js and os.path.exists(JS_PATH):
+        with open(JS_PATH, "w", encoding="utf-8") as f:
+            f.write("var ALL_PROPERTIES_DATA = " + json.dumps(props, ensure_ascii=False) + ";\n")
+    return updated
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--hosts", default="readyplanet,gsb,supabase,pamco")
+    ap.add_argument("--healthy", action="store_true", help="Polite rate-limited mode (2 workers + jitter + checkpoints)")
     args = ap.parse_args()
 
     selected = [h.strip().lower() for h in args.hosts.split(",") if h.strip()]
@@ -191,12 +234,13 @@ def main():
             if dom in domain_to_folder:
                 tasks[u] = domain_to_folder[dom]
 
-    print(f"[Tier A R2 Sync] Hosts={selected} | Unique images={len(tasks)}", flush=True)
+    workers = 2 if args.healthy else 8
+    print(f"[Tier A R2 Sync] Hosts={selected} | Healthy={args.healthy} (workers={workers}) | Unique images={len(tasks)}", flush=True)
     url_map = {}
     ok_cnt = 0
     fail_cnt = 0
-    with ThreadPoolExecutor(max_workers=8) as ex:
-        futs = {ex.submit(mirror_one, u, fld): u for u, fld in tasks.items()}
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        futs = {ex.submit(mirror_one, u, fld, args.healthy): u for u, fld in tasks.items()}
         for i, fut in enumerate(as_completed(futs), 1):
             src, dst = fut.result()
             if dst:
@@ -204,32 +248,13 @@ def main():
                 ok_cnt += 1
             else:
                 fail_cnt += 1
-            if i % 150 == 0 or i == len(tasks):
+            if i % 200 == 0:
+                _save_catalog(props, url_map, write_js=False)
+                print(f"  Progress: {i}/{len(tasks)} (ok={ok_cnt}, fail={fail_cnt}) [checkpoint saved]", flush=True)
+            elif i == len(tasks):
                 print(f"  Progress: {i}/{len(tasks)} (ok={ok_cnt}, fail={fail_cnt})", flush=True)
 
-    updated_props = 0
-    for p in props:
-        changed = False
-        mi = str(p.get("main_image") or "")
-        if mi in url_map:
-            p["main_image"] = url_map[mi]
-            changed = True
-        gal = p.get("gallery")
-        if isinstance(gal, list) and gal:
-            new_gal = [url_map.get(str(g or ""), g) for g in gal]
-            if new_gal != gal:
-                p["gallery"] = new_gal
-                changed = True
-        if changed:
-            updated_props += 1
-
-    with open(JSON_PATH, "w", encoding="utf-8") as f:
-        json.dump(props, f, ensure_ascii=False, indent=2)
-
-    if os.path.exists(JS_PATH):
-        with open(JS_PATH, "w", encoding="utf-8") as f:
-            f.write("var ALL_PROPERTIES_DATA = " + json.dumps(props, ensure_ascii=False) + ";\n")
-
+    updated_props = _save_catalog(props, url_map, write_js=True)
     print(f"[Tier A R2 Sync] DONE! Updated {updated_props} properties ({ok_cnt} images -> R2, {fail_cnt} failed).", flush=True)
 
 
