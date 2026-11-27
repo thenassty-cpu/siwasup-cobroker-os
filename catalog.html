@@ -2937,7 +2937,7 @@
           property_title: displayTitle || ''
         });
       }
-      document.getElementById('detail-code').textContent = isWhiteLabelMode() ? '' : `รหัส: ${p.id}`;
+      document.getElementById('detail-code').textContent = isWhiteLabelMode() ? '' : `รหัส: ${currentMode === 'client' ? maskClientPropCode(p.id) : p.id}`;
       document.getElementById('detail-category-badge').textContent = p.category || 'อสังหาฯ';
       document.getElementById('detail-bank-badge').innerHTML = isWhiteLabelMode() ? '' : getBankBadge(p.bank_source);
       document.getElementById('detail-title').textContent = displayTitle;
@@ -3471,11 +3471,13 @@
           }
         }
 
-        // VIP Bundle Filter if active (Robust ID + Code Matching & Case-Insensitive)
+        // VIP Bundle Filter if active (Robust ID + Code + Public SW-xxxx Matching & Case-Insensitive)
         if (activeBundleFilter && activeBundleFilter.length > 0) {
           const match = activeBundleFilter.some(bid => {
             const cleanBid = String(bid).trim().toLowerCase();
-            return cleanBid === String(p.id || '').trim().toLowerCase() || 
+            const rawId = String(p.id || '').trim().toLowerCase();
+            const maskedId = (typeof maskClientPropCode === 'function' ? maskClientPropCode(p.id || '') : rawId).trim().toLowerCase();
+            return cleanBid === rawId || cleanBid === maskedId ||
                    (p.code && cleanBid === String(p.code || '').trim().toLowerCase());
           });
           if (!match) return false;
@@ -3808,7 +3810,7 @@
                 <!-- Property Code -->
                 <div class="flex items-center justify-between text-[11px]">
                   ${p.bua_verified && !isWhiteLabelMode() ? '<span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10px]">✓ บัวคัดแล้ว</span>' : '<span>แชร์</span>'}
-                  ${isWhiteLabelMode() ? '' : `<span class="text-neutral-500 font-mono">รหัสทรัพย์: ${p.id}</span>`}
+                  ${isWhiteLabelMode() ? '' : `<span class="text-neutral-500 font-mono">รหัสทรัพย์: ${currentMode === 'client' ? maskClientPropCode(p.id) : p.id}</span>`}
                 </div>
                 
                 <!-- Title (White-labeled in Client Mode) -->
@@ -7533,23 +7535,27 @@
       const clientName = (document.getElementById('bundle-client-name').value || 'คุณลูกค้า').trim();
       const savedRef = (typeof resolveVerifiedMemberRef === 'function' ? resolveVerifiedMemberRef(window._siwasupVerifiedMember) : '') || localStorage.getItem('siwasup_my_agent_ref') || 'SW000';
       const items = allProperties.filter(p => selectedBundleIds.has(p.id));
-      const bundleIds = Array.from(selectedBundleIds).join(',');
+      const maskedIds = items.map(p => maskClientPropCode(p.id)).join(',');
       const tParam = (typeof getActiveBundleTrackParam === 'function') ? getActiveBundleTrackParam() : '';
-      const bundleUrl = `${getBaseUrl()}?bundle=${bundleIds}&for=${encodeURIComponent(clientName)}&ref=${encodeURIComponent(savedRef)}&src=bundle_line${tParam}`;
+      const bundleUrl = `${getBaseUrl()}?ids=${encodeURIComponent(maskedIds)}&view=client&for=${encodeURIComponent(clientName)}&ref=${encodeURIComponent(savedRef)}&src=bundle_line${tParam}`;
 
       let text = `สวัสดีครับ ${clientName} 🌟\n`;
-      text += `ตามที่ได้คุยกันเรื่องมองหาบ้าน/คอนโด วันนี้ผมคัดสรรทรัพย์พิเศษที่คุ้มค่า น่าอยู่ และตรงโจทย์มาให้ชม ${items.length} หลังครับ:\n\n`;
+      text += `ตามที่ได้คุยกันเรื่องมองหาบ้าน/อสังหาฯ วันนี้คัดสรรทรัพย์พิเศษที่คุ้มค่า น่าอยู่ และตรงโจทย์มาให้ชม ${items.length} รายการครับ:\n\n`;
 
       items.forEach((p, idx) => {
-        text += `${idx + 1}. 🏠 ${p.title}\n`;
-        text += `   💰 ราคา: ${p.price}\n`;
+        const safeTitle = (typeof sanitizeForClientMode === 'function') ? sanitizeForClientMode(p.title || '') : (p.title || '');
+        const publicId = maskClientPropCode(p.id);
+        text += `${idx + 1}. 🏠 ${safeTitle}\n`;
+        text += `   🔖 รหัส: ${publicId}\n`;
+        text += `   💰 ราคา: ${formatPriceClean(p.price)} บาท\n`;
+        if (p.location) text += `   📍 ทำเล: ${p.location}\n`;
         if (p.category) text += `   🏷️ ประเภท: ${p.category}\n`;
         text += `\n`;
       });
 
-      text += `✨ ดูรูปภาพแกลเลอรีครบทุกมุม และรายละเอียดเต็มของทั้ง ${items.length} หลัง ในหน้า VIP ของคุณ ${clientName} ได้ที่ลิงก์นี้เลยครับ:\n`;
+      text += `✨ ดูรูปภาพแกลเลอรีครบทุกมุม และรายละเอียดเต็มของทั้ง ${items.length} รายการ ได้ที่ลิงก์นี้เลยครับ:\n`;
       text += `👉 ${bundleUrl}\n\n`;
-      text += `(หากสนใจหลังไหนเป็นพิเศษ แจ้งผมเพื่อนัดชมห้องจริงได้เลยนะครับ ยินดีช่วยดูแลเรื่องยื่นกู้สินเชื่อฟรีทุกขั้นตอนครับ 😊)`;
+      text += `(หากสนใจหลังไหนเป็นพิเศษ แจ้งเพื่อนัดชมสถานที่จริงได้เลยนะครับ ยินดีช่วยดูแลเรื่องยื่นกู้สินเชื่อฟรีทุกขั้นตอนครับ 😊)`;
 
       return text;
     }
@@ -7579,9 +7585,9 @@
       const clientName = (document.getElementById('bundle-client-name').value || 'คุณลูกค้า').trim();
       const savedRef = (typeof resolveVerifiedMemberRef === 'function' ? resolveVerifiedMemberRef(window._siwasupVerifiedMember) : '') || localStorage.getItem('siwasup_my_agent_ref') || 'SW000';
       const items = allProperties.filter(p => selectedBundleIds.has(p.id));
-      const bundleIds = Array.from(selectedBundleIds).join(',');
+      const maskedIds = items.map(p => maskClientPropCode(p.id)).join(',');
       const tParam = (typeof getActiveBundleTrackParam === 'function') ? getActiveBundleTrackParam() : '';
-      const bundleUrl = getBaseUrl() + '?bundle=' + bundleIds + '&for=' + encodeURIComponent(clientName) + '&ref=' + encodeURIComponent(savedRef) + '&src=bundle_line' + tParam;
+      const bundleUrl = getBaseUrl() + '?ids=' + encodeURIComponent(maskedIds) + '&view=client&for=' + encodeURIComponent(clientName) + '&ref=' + encodeURIComponent(savedRef) + '&src=bundle_line' + tParam;
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(msg).catch(() => {});
@@ -7628,9 +7634,10 @@
         const found = list.find(item => {
           if (!item) return false;
           const itemId = String(item.id || '').trim().toLowerCase();
+          const itemMasked = (typeof maskClientPropCode === 'function' ? maskClientPropCode(item.id || '') : itemId).trim().toLowerCase();
           const itemCode = String(item.code || '').trim().toLowerCase();
           const itemPropId = String(item.property_id || '').trim().toLowerCase();
-          return itemId === targetClean || itemCode === targetClean || itemPropId === targetClean;
+          return itemId === targetClean || itemMasked === targetClean || itemCode === targetClean || itemPropId === targetClean;
         });
 
         if (found) {
@@ -8201,7 +8208,7 @@
       }
       const incomingT = params.get('t');
       const incomingC = params.get('c');
-      const isFreshNav = Boolean(incomingRef || params.get('view') || params.get('mode') || params.has('bundle') || params.has('p') || params.has('id') || !window.location.search);
+      const isFreshNav = Boolean(incomingRef || params.get('view') || params.get('mode') || params.has('bundle') || params.has('ids') || params.has('p') || params.has('id') || !window.location.search);
       if (incomingT) {
         _siwasupSafeStorage('session', 'set', 'siwasup_track_t', incomingT);
         if (!incomingC) _siwasupSafeStorage('session', 'remove', 'siwasup_track_c');
@@ -8224,7 +8231,7 @@
             showToast('🤝 คุณกำลังลงทะเบียนเป็นตัวแทนภายใต้การแนะนำของ [' + inviter + ']');
           }
         }, 800);
-      } else if (view === 'client' || ((params.has('ref') || params.has('agent')) && !view) || params.has('bundle')) {
+      } else if (view === 'client' || ((params.has('ref') || params.has('agent')) && !view) || params.has('bundle') || params.has('ids')) {
         if (typeof setMode === 'function') setMode('client');
       } else if (typeof isAdminSession === 'function' && isAdminSession()) {
         if (typeof setMode === 'function') {
@@ -8243,6 +8250,12 @@
 
       if (typeof window.sendSiwasupClientBeacon === 'function') {
         window.sendSiwasupClientBeacon('catalog_open');
+      }
+
+      // Apply Multi-Select Bundle URL (?ids=SW-...,SW-... or ?bundle=...)
+      const urlBundleIds = params.get('ids') || params.get('bundle');
+      if (urlBundleIds) {
+        activeBundleFilter = urlBundleIds.split(',').map(s => s.trim()).filter(Boolean);
       }
 
       // Apply Deep-Link Search/Filter URL Parameters (?q=, ?province=, ?cat=, ?budget=)
@@ -8478,7 +8491,7 @@
     // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=20261127-1245').then((reg) => {
+        navigator.serviceWorker.register('./sw.js?v=20261127-1335').then((reg) => {
           console.log('Siwasup PWA Service Worker Registered (v2):', reg.scope);
           // Auto check for updates on each load
           if (reg.update) reg.update();

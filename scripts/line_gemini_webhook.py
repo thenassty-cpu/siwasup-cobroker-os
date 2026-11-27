@@ -605,8 +605,55 @@ TYPE_MAP = {
     "ห้องชุด": ["CD"],
     "ที่ดิน": ["LAND"],
     "อาคารพาณิชย์": ["COMM"],
-    "ตึกแถว": ["COMM"]
+    "ตึกแถว": ["COMM"],
+    "อพาร์ทเม้นท์": ["COMM"],
+    "อพาร์ทเมนท์": ["COMM"],
+    "อพาร์ตเมนต์": ["COMM"],
+    "หอพัก": ["COMM"],
+    "apartment": ["COMM"],
+    "โรงแรม": ["COMM"],
+    "รีสอร์ท": ["COMM"],
+    "hotel": ["COMM"],
+    "สำนักงาน": ["COMM"],
+    "ออฟฟิศ": ["COMM"],
+    "โฮมออฟฟิศ": ["COMM"],
+    "office": ["COMM"],
+    "โกดัง": ["COMM"],
+    "โรงงาน": ["COMM"],
 }
+
+SUB_TYPE_SYNONYMS = [
+    ["อพาร์ทเม้นท์", "อพาร์ทเมนท์", "อพาร์ตเมนต์", "หอพัก", "apartment"],
+    ["โรงแรม", "รีสอร์ท", "hotel", "resort"],
+    ["สำนักงาน", "ออฟฟิศ", "โฮมออฟฟิศ", "office"],
+    ["โกดัง", "โรงงาน", "คลังสินค้า"],
+]
+
+
+def _build_prefiltered_catalog_url(ctx: dict, agent_ref: str = "SW001") -> str:
+    """Build a pre-filtered client catalog URL matching the user's search context."""
+    from urllib.parse import urlencode
+    params = {"view": "client", "ref": agent_ref or "SW001"}
+    types = (ctx or {}).get("types") or []
+    sub_kws = (ctx or {}).get("sub_kws") or []
+    locs = (ctx or {}).get("locs") or []
+    max_p = (ctx or {}).get("max_p")
+    cat_map = {"SDH": "บ้านเดี่ยว", "TH": "ทาวน์โฮม", "CD": "คอนโด", "LAND": "ที่ดิน", "COMM": "อาคารพาณิชย์"}
+    if types:
+        if len(set(types) & {"SDH", "TH"}) == 2:
+            params["cat"] = "บ้าน"
+        elif types[0] in cat_map:
+            params["cat"] = cat_map[types[0]]
+    q_parts = []
+    if sub_kws:
+        q_parts.append(sub_kws[0])
+    if locs:
+        q_parts.append(locs[0])
+    if q_parts:
+        params["q"] = " ".join(q_parts)
+    if max_p:
+        params["budget"] = str(int(max_p))
+    return "https://assets.siwasup.com/catalog.html?" + urlencode(params)
 
 
 def get_line_profile(user_id):
@@ -920,7 +967,7 @@ def search_properties(query, user_id=None):
         return [], "GEO_CONFLICT_CONFIRM:" + "|".join(conflicts)
 
     # Detect requested quantity (e.g. "ขอ 5", "ขอไป 5", "ขอ 5 หลัง", "มี 4 ที่มั้ย")
-    target_count = 3  # default fallback
+    target_count = 5  # default 5 results (expandable up to 10)
     m_count = re.search(r'(?:ขอไป|ขอ|เอา|ดู|สัก|ส่งมา|มี)\s*(\d{1,2})\s*(?:หลัง|ที่|แปลง|รายการ|ห้อง|แห่ง)?(?!\s*(?:ล้าน|บาท))', query)
     if m_count:
         try:
@@ -1025,27 +1072,34 @@ def search_properties(query, user_id=None):
     # Clean query for type check (strip viewing verbs)
     q_for_type = re.sub(r'(?:เปิดบ้าน|ชมบ้าน|ดูบ้าน|กุญแจบ้าน|เข้าบ้าน|ล็อกบ้าน|หน้าบ้าน)', '', query)
 
-    # Detect new types in current message (Strict type discrimination)
+    # Detect new types in current message (Strict type discrimination + Commercial Sub-Type Synonyms)
     new_types = []
-    if any(k in q_for_type for k in ["บ้านเดี่ยว", "บ้านแฝด"]):
+    detected_sub_kws = []
+    for syn_group in SUB_TYPE_SYNONYMS:
+        if any(sk in q_for_type.lower() for sk in syn_group):
+            detected_sub_kws = syn_group
+            new_types.extend(["COMM"])
+            break
+    if not new_types and any(k in q_for_type for k in ["บ้านเดี่ยว", "บ้านแฝด"]):
         new_types.extend(["SDH"])
-    elif any(k in q_for_type for k in ["ทาวน์โฮม", "ทาวน์เฮ้าส์", "ทาวน์เฮาส์", "ทวาน์โฮม"]):
+    elif not new_types and any(k in q_for_type for k in ["ทาวน์โฮม", "ทาวน์เฮ้าส์", "ทาวน์เฮาส์", "ทวาน์โฮม"]):
         new_types.extend(["TH"])
-    elif any(k in q_for_type for k in ["คอนโด", "ห้องชุด", "condo"]):
+    elif not new_types and any(k in q_for_type for k in ["คอนโด", "ห้องชุด", "condo"]):
         new_types.extend(["CD"])
-    elif any(k in q_for_type for k in ["ที่ดิน", "แปลงที่ดิน"]):
+    elif not new_types and any(k in q_for_type for k in ["ที่ดิน", "แปลงที่ดิน"]):
         new_types.extend(["LAND"])
-    elif any(k in q_for_type for k in ["อาคารพาณิชย์", "ตึกแถว", "โฮมออฟฟิศ"]):
+    elif not new_types and any(k in q_for_type for k in ["อาคารพาณิชย์", "ตึกแถว"]):
         new_types.extend(["COMM"])
-    elif "บ้าน" in q_for_type:
+    elif not new_types and "บ้าน" in q_for_type:
         # General "บ้าน" = residential ground houses (SDH, TH) - strictly excludes Condo, Land, or Commercial!
         new_types.extend(["SDH", "TH"])
-    else:
+    elif not new_types:
         for k, v in TYPE_MAP.items():
-            if k in q_for_type:
+            if k in q_for_type.lower():
                 new_types.extend(v)
     if new_types:
         ctx["types"] = list(set(new_types))
+        ctx["sub_kws"] = detected_sub_kws
 
     # Detect new locations in current message (precomputed longest LOC_MAP keys first + all districts/provinces + fuzzy typo match)
     new_locs = []
@@ -1169,10 +1223,15 @@ def search_properties(query, user_id=None):
     if eff_types and not eff_locs and not eff_max_p and not eff_unlimited and not explicit_dump:
         return [], "TOO_VAGUE_NEEDS_MORE_INFO" 
 
+    eff_sub_kws = ctx.get("sub_kws") or []
     results = []
     for p in CATALOG:
         if eff_types and p.get('t') not in eff_types:
             continue
+        if eff_sub_kws:
+            p_text = f"{p.get('tn', '')} {p.get('n', '')}".lower()
+            if not any(sk in p_text for sk in eff_sub_kws):
+                continue
         pr = p.get('pr', 0)
         if eff_max_p and pr > eff_max_p:
             continue
@@ -1225,7 +1284,12 @@ def search_properties(query, user_id=None):
             continue
         sp_cat = sp.get("category") or ""
         if allowed_cats and not any(ac in sp_cat for ac in allowed_cats):
-            continue
+            if not eff_sub_kws:
+                continue
+        if eff_sub_kws:
+            sp_text = f"{sp_cat} {sp.get('title') or ''} {sp.get('description') or ''} {sp.get('search_keywords') or ''}".lower()
+            if not any(sk in sp_text for sk in eff_sub_kws):
+                continue
         pr = _parse_prop_price_int(sp.get("price"))
         if eff_max_p and (pr <= 0 or pr > eff_max_p):
             continue
@@ -1282,6 +1346,9 @@ def search_properties(query, user_id=None):
 
     seen_codes = {x.get('c') for x in web_results}
     results = web_results + [r for r in results if r.get('c') not in seen_codes]
+
+    if not results:
+        return [], "EMPTY_SEARCH_RESULT"
 
     out_list = []
     for p in results[:target_count]:
@@ -1346,11 +1413,21 @@ def ask_gemini(user_id, user_text, is_continuous=False, retries=2):
     if is_continuous:
         prompt_parts.append("[สถานะ: กำลังคุยต่อเนื่อง ห้ามสวัสดีซ้ำเด็ดขาด]")
 
+    if search_mode == "EMPTY_SEARCH_RESULT":
+        prefiltered_url = _build_prefiltered_catalog_url(USER_SEARCH_CONTEXT.get(user_id, {}))
+        msg = (
+            "ขออภัยครับ น้องศิวาค้นหาในระบบแล้วยังไม่พบทรัพย์ที่ตรงกับเงื่อนไขนี้ในขณะนี้ครับ\n\n"
+            "ลองปรับทำเล ขยายงบประมาณ หรือดูทรัพย์ทั้งหมดบนเว็บ Catalog ได้ที่ลิงก์นี้ครับ:\n"
+            f"👉 {prefiltered_url}"
+        )
+        return msg, [], "EMPTY_SEARCH_RESULT", []
+
     if matched_props:
+        prefiltered_url = _build_prefiltered_catalog_url(USER_SEARCH_CONTEXT.get(user_id, {}))
         prompt_parts.append(
             f"\n[ข้อมูลทรัพย์จริงที่ระบบดึงมาให้ตอบ ({search_mode}) ทั้งหมด {len(matched_props)} หลัง]:\n"
             + json.dumps(matched_props, ensure_ascii=False, indent=2)
-            + f"\nคำสั่งสำคัญ: ผู้ใช้ขอดูทรัพย์ ให้ตอบแนะนำข้อมูลทรัพย์จริงครบทั้ง {len(matched_props)} หลัง อย่าตัดทิ้งหรือสรุปย่อ ระบุรหัสทรัพย์ ราคา และทำเลให้ครบถ้วนทุกแปลง และแนะนำให้คลิกดูรูปรายละเอียด https://assets.siwasup.com/catalog.html หรือจองเปิดบ้านได้"
+            + f"\nคำสั่งสำคัญ: ผู้ใช้ขอดูทรัพย์ ให้ตอบแนะนำข้อมูลทรัพย์จริงครบทั้ง {len(matched_props)} หลัง อย่าตัดทิ้งหรือสรุปย่อ ระบุรหัสทรัพย์ ราคา และทำเลให้ครบถ้วนทุกแปลง และแนบลิงก์ดูทั้งหมดที่ตรงเงื่อนไข: {prefiltered_url}"
         )
     elif search_mode == "TOO_VAGUE_NEEDS_MORE_INFO":
         ctx_types = USER_SEARCH_CONTEXT.get(user_id, {}).get("types", [])
@@ -2009,13 +2086,32 @@ def build_property_flex_bubble(prop, client_name="คุณลูกค้า", 
     return bubble
 
 
-def build_property_flex_carousel(props, client_name="คุณลูกค้า", agent_ref="SW000"):
-    bubbles = [build_property_flex_bubble(p, client_name, agent_ref) for p in props[:10] if p]
+def build_property_flex_carousel(props, client_name="คุณลูกค้า", agent_ref="SW000", view_all_url=""):
+    max_items = 9 if view_all_url else 10
+    bubbles = [build_property_flex_bubble(p, client_name, agent_ref) for p in props[:max_items] if p]
     if not bubbles:
         return None
+    if view_all_url and len(bubbles) < 10:
+        bubbles.append({
+            "type": "bubble",
+            "size": "kilo",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "justifyContent": "center",
+                "alignItems": "center",
+                "spacing": "md",
+                "paddingAll": "20px",
+                "contents": [
+                    {"type": "text", "text": "🔎 ดูทรัพย์ทั้งหมดที่ตรงเงื่อนไข", "weight": "bold", "size": "md", "color": "#111111", "wrap": True, "align": "center"},
+                    {"type": "text", "text": "เปิดหน้าเว็บ Catalog แบบกรองให้แล้ว พร้อมรูปภาพและแผนที่ครบทุกหลัง", "size": "xs", "color": "#666666", "wrap": True, "align": "center"},
+                    {"type": "button", "style": "primary", "color": "#990000", "action": {"type": "uri", "label": "ดูทั้งหมดบน Catalog", "uri": view_all_url}}
+                ]
+            }
+        })
     return {
         "type": "flex",
-        "altText": f"🏠 คัดสรรทรัพย์พิเศษ {len(bubbles)} หลัง สำหรับ {client_name} (ศิวาทรัพย์ Co-Broker)",
+        "altText": f"🏠 คัดสรรทรัพย์พิเศษ {len(props[:max_items])} หลัง สำหรับ {client_name} (ศิวาทรัพย์ Co-Broker)",
         "contents": {
             "type": "carousel",
             "contents": bubbles
@@ -6592,7 +6688,8 @@ class WebhookHandler(http.server.BaseHTTPRequestHandler):
                                                 full_props.append(found)
                                         if full_props:
                                             req_agent_ref = resolve_agent_ref_for_member(matched_member) if matched_member else "SW000"
-                                            flex_carousel = build_property_flex_carousel(full_props, client_name=prof.get("displayName", "คุณลูกค้า"), agent_ref=req_agent_ref)
+                                            prefiltered_url = _build_prefiltered_catalog_url(USER_SEARCH_CONTEXT.get(uid, {}), agent_ref=req_agent_ref)
+                                            flex_carousel = build_property_flex_carousel(full_props, client_name=prof.get("displayName", "คุณลูกค้า"), agent_ref=req_agent_ref, view_all_url=prefiltered_url)
                             else:
                                 ai_reply = "น้องศิวาได้รับไฟล์/สติกเกอร์เรียบร้อยครับ หากต้องการค้นหาทรัพย์ พิมพ์รหัสทรัพย์หรือทำเล เช่น '1090965' หรือ 'บ้านเดี่ยว นนทบุรี งบ 4 ล้าน' ได้เลยครับ!"
                                 matched_codes, search_mode, matched_props, flex_carousel = [], "NON_TEXT", [], None
