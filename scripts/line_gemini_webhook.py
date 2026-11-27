@@ -1227,6 +1227,14 @@ def search_properties(query, user_id=None):
     if eff_types and not eff_locs and not eff_max_p and not eff_unlimited and not explicit_dump:
         return [], "TOO_VAGUE_NEEDS_MORE_INFO" 
 
+    def _loc_in_text(loc: str, text_low: str) -> bool:
+        l_low = loc.lower()
+        if l_low == "วัฒนา":
+            return bool(re.search(r'(?<!ทวี)วัฒนา', text_low))
+        if l_low == "watthana":
+            return bool(re.search(r'(?<!thawi\s)watthana', text_low))
+        return l_low in text_low
+
     eff_sub_kws = ctx.get("sub_kws") or []
     results = []
     for p in CATALOG:
@@ -1247,7 +1255,8 @@ def search_properties(query, user_id=None):
             d = p.get('d', '')
             pe = p.get('pe', '')
             p_th = p.get('p', '')
-            if not any(loc.lower() in d.lower() or loc.lower() in pe.lower() or loc in p_th for loc in eff_locs):
+            loc_hay = f"{d} {pe} {p_th}".lower()
+            if not any(_loc_in_text(loc, loc_hay) for loc in eff_locs):
                 continue
         else:
             if p.get('pe') not in {'Bangkok', 'Nonthaburi', 'Pathum Thani', 'Samut Prakan'}:
@@ -1317,9 +1326,9 @@ def search_properties(query, user_id=None):
             str(sp.get("search_keywords") or "")
         ]).lower()
         if eff_locs:
-            if not any(loc.lower() in haystack for loc in eff_locs):
+            if not any(_loc_in_text(loc, haystack) for loc in eff_locs):
                 continue
-        loc_tier = 0 if (not eff_locs or any(loc.lower() in admin_haystack for loc in eff_locs)) else 1
+        loc_tier = 0 if (not eff_locs or any(_loc_in_text(loc, admin_haystack) for loc in eff_locs)) else 1
         web_results.append({
             "c": str(sp.get("id")),
             "b": sp.get("bank_source") or "Siwasup",
