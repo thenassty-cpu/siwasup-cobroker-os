@@ -5124,7 +5124,7 @@
     }
 
     function _p2EscHtml(str) {
-      return String(str || '').replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+      return String(str ?? '').replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
     }
 
     async function loadAdminCustomerLocks() {
@@ -5961,10 +5961,24 @@
     }
 
     
+    function resolveMyProfileShareCode() {
+      const verifiedRef = (typeof resolveVerifiedMemberRef === 'function' && window._siwasupVerifiedMember)
+        ? resolveVerifiedMemberRef(window._siwasupVerifiedMember)
+        : '';
+      const switcherContainer = document.getElementById('profile-agent-switcher-container');
+      const switcherVisible = switcherContainer && !switcherContainer.classList.contains('hidden');
+      const switcher = document.getElementById('profile-agent-switcher');
+      if (switcherVisible && switcher && switcher.value) {
+        return switcher.value;
+      }
+      return verifiedRef
+        || localStorage.getItem('siwasup_my_agent_ref')
+        || (typeof getActiveAgentRef === 'function' ? getActiveAgentRef() : 'SW001');
+    }
+
     // --- MY FULL CATALOG SHARING (LEVEL 3 PROTECTED CLIENT LINK) ---
     function copyMyCatalogLink() {
-      const switcher = document.getElementById('profile-agent-switcher');
-      const code = (switcher && switcher.value) ? switcher.value : (localStorage.getItem('siwasup_my_agent_ref') || (typeof getActiveAgentRef === 'function' ? getActiveAgentRef() : 'SW001'));
+      const code = resolveMyProfileShareCode();
       const profile = (typeof getAgentProfile === 'function') ? getAgentProfile(code) : null;
       const agentName = profile ? (profile.shortName || profile.name) : code;
 
@@ -5989,8 +6003,7 @@
     }
 
     function previewMyCatalogClientMode() {
-      const switcher = document.getElementById('profile-agent-switcher');
-      const code = (switcher && switcher.value) ? switcher.value : (localStorage.getItem('siwasup_my_agent_ref') || (typeof getActiveAgentRef === 'function' ? getActiveAgentRef() : 'SW001'));
+      const code = resolveMyProfileShareCode();
       const base = (typeof window !== 'undefined' && window.location && window.location.hostname && window.location.hostname.includes('siwasup.com'))
         ? (typeof getBaseUrl === 'function' ? getBaseUrl() : window.location.href.split('?')[0])
         : 'https://assets.siwasup.com/catalog.html';
@@ -6226,15 +6239,21 @@
       // Populate Switcher Dropdown (Alpha 6 Pioneers grouped at Top)
       const switcher = document.getElementById('profile-agent-switcher');
       if (switcher) {
+        const esc = (typeof _p2EscHtml === 'function') ? _p2EscHtml : (s => String(s ?? ''));
         const all = window.SiwasupAgents.getActive();
+        const hasCurrent = all.some(a => String(a.code || '').toUpperCase() === String(agent.code || '').toUpperCase());
+        const currentOpt = !hasCurrent && agent.code ? `
+          <option value="${esc(agent.code)}" selected>
+            ${esc(agent.code)} - ${esc(agent.nickname || agent.name)}
+          </option>` : '';
         const checkedIn = all.filter(a => (a.totalPoints || 0) > 0 || a.checkedInToday);
         const others = all.filter(a => !((a.totalPoints || 0) > 0 || a.checkedInToday));
         const renderOpt = (a) => `
-          <option value="${a.code}" ${a.code === agent.code ? 'selected' : ''}>
-            ${a.code} - ${a.nickname || a.name} (${a.tierIcon} ${a.totalPoints} แต้ม)
+          <option value="${esc(a.code)}" ${a.code === agent.code ? 'selected' : ''}>
+            ${esc(a.code)} - ${esc(a.nickname || a.name)} (${esc(a.tierIcon)} ${esc(a.totalPoints)} แต้ม)
           </option>
         `;
-        switcher.innerHTML = (checkedIn.length > 0 ? `
+        switcher.innerHTML = currentOpt + (checkedIn.length > 0 ? `
           <optgroup label="🌟 สมาชิกที่ลงทะเบียน & เช็กอินเข้างานแล้ว (${checkedIn.length} ท่าน)">
             ${checkedIn.map(renderOpt).join('')}
           </optgroup>` : '') + `
@@ -7109,9 +7128,9 @@
         avatar: 'https://sprofile.line-scdn.net/0h755WNVbraBoYLnbBTMoWJGh-a3A7XzEIZB0ufXgqYS4mGXxFZklyeSUuM3pxGC1NYEx3KCp-Yyw6GUg-MU19dU56NSJ2TioeNwhTfU8pT3FjZH8XXCp1JSxQQnNxZGYKZjwgJVt5REphRGYSRjpHCVJ0X2taZ1YHPXkETB0cBpl3LB9PNUgkfyoqPium',
         phone: '094-462-9796'
       },
-      // 👑 คุณบัว (Supreme EXE)
-      'SW-002': {
-        agentId: 'SW-002',
+      // 👑 คุณบัว (Supreme EXE - SA001)
+      'SA001': {
+        agentId: 'SA001',
         name: 'คุณภมรมาศ ตัณฑุลทุกล (คุณบัว)',
         shortName: 'คุณบัว',
         tier: 'gryphon',
@@ -7120,9 +7139,9 @@
         avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80',
         phone: '085-336-5703'
       },
-      // 🔑 พี่ลิลลี่ (Key Master)
-      'SW-003': {
-        agentId: 'SW-003',
+      // 🔑 พี่ลิลลี่ (Key Master - SA002)
+      'SA002': {
+        agentId: 'SA002',
         name: 'คุณวรวงลักษณ์ ว่องสุวรรณวาร (พี่ลิลลี่)',
         shortName: 'พี่ลิลลี่',
         tier: 'eagle',
@@ -7243,10 +7262,10 @@
         return AGENT_PROFILES['SW001'];
       }
       if (upper.includes('BUA') || cleanId.includes('บัว') || digitsOnly === '0853365703') {
-        return AGENT_PROFILES['SW-002'];
+        return AGENT_PROFILES['SA001'];
       }
       if (upper.includes('LILY') || cleanId.includes('ลิลลี่') || digitsOnly === '0925836565') {
-        return AGENT_PROFILES['SW-003'];
+        return AGENT_PROFILES['SA002'];
       }
       if (upper === 'SW000' || upper === 'TON') {
         return AGENT_PROFILES['SW000'];
@@ -7255,10 +7274,10 @@
         return AGENT_PROFILES['SA000'];
       }
       if (upper === 'SA001') {
-        return AGENT_PROFILES['SW-002'];
+        return AGENT_PROFILES['SA001'];
       }
       if (upper === 'SA002') {
-        return AGENT_PROFILES['SW-003'];
+        return AGENT_PROFILES['SA002'];
       }
 
       // 2. 🏆 Look up in the official 125 Siwasup Agents roster (siwasup_agents.js)
@@ -8526,7 +8545,7 @@
     // 📲 Register PWA Service Worker (Enables 1-Click Install on Android, Chrome, Edge, and iOS)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js?v=20261127-2212').then((reg) => {
+        navigator.serviceWorker.register('./sw.js?v=20261128-2035').then((reg) => {
           console.log('Siwasup PWA Service Worker Registered (v2):', reg.scope);
           // Auto check for updates on each load
           if (reg.update) reg.update();
